@@ -1,0 +1,16 @@
+name: Sync Player Stats
+
+on:
+  schedule:
+    # Every 2 hours -- frequent enough that stats never feel stale,
+    # infrequent enough to be efficient and not hammer Sleeper's API.
+    - cron: "0 */2 * * *"
+  workflow_dispatch: {}   # lets you click "Run workflow" manually to test
+
+jobs:
+  sync-stats:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call the sync endpoint
+        run: |
+          curl -X POST "https://fantasyfootballcalc.com/api/sync-stats?secret=${{ secrets.SITE_PASSWORD }}"
