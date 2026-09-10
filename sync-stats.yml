@@ -1,0 +1,19 @@
+name: Sync Player Stats
+
+on:
+  schedule:
+    # Every 2 hours -- current season only. Lightweight and safe: this
+    # is the ongoing "keep this season fresh" job. Historical seasons
+    # don't change once finished, so they don't need this frequent a
+    # recheck -- that's handled separately by backfill-stats.yml,
+    # triggered occasionally rather than every 2 hours forever.
+    - cron: "0 */2 * * *"
+  workflow_dispatch: {}
+
+jobs:
+  sync-stats:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Sync the current season
+        run: |
+          curl -sS -X POST "https://fantasyfootballcalc.com/api/sync-stats?secret=${{ secrets.SITE_PASSWORD }}"
