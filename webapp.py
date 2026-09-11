@@ -3031,6 +3031,9 @@ RANKINGS_HTML = BASE_STYLE + make_header("rankings") + VOTE_MODAL_HTML + """
   .rk-format-toggle a.active{ background:var(--accent); color:var(--accent-on); border-color:var(--accent); }
   .rk-icon-btn{ width:36px; height:36px; border-radius:8px; background:var(--rk-surface); border:1px solid var(--rk-line); color:var(--rk-muted); display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:15px; }
   .rk-icon-btn.active{ color:var(--rk-text); border-color:var(--accent); }
+  .rk-rookie-toggle{ font-size:12px; font-weight:700; padding:0 13px; height:36px; border-radius:99px; border:1px solid var(--rk-line); background:var(--rk-surface); color:var(--rk-muted); cursor:pointer; display:flex; align-items:center; gap:6px; user-select:none; }
+  .rk-rookie-toggle svg{ flex:none; }
+  .rk-rookie-toggle.active{ background:#f0b429; color:#1a1206; border-color:#f0b429; }
   .rk-search{ background:var(--rk-surface); border:1px solid var(--rk-line); color:var(--rk-text); border-radius:8px; padding:9px 12px; font-size:13.5px; width:180px; font-family:inherit; }
 
   .rk-tier-bar{ display:flex; align-items:center; gap:10px; padding:8px 14px; margin-top:18px; border-radius:8px; font-family:"Big Shoulders Display"; font-weight:800; font-size:15px; letter-spacing:0.03em; }
@@ -3105,6 +3108,10 @@ RANKINGS_HTML = BASE_STYLE + make_header("rankings") + VOTE_MODAL_HTML + """
     <div class="rk-format-toggle">
       <a class="{{ 'active' if fmt=='1qb' else '' }}" href="/rankings?format=1qb&pos={{ pos_filter }}&view={{ view }}">1QB</a>
       <a class="{{ 'active' if fmt=='superflex' else '' }}" href="/rankings?format=superflex&pos={{ pos_filter }}&view={{ view }}">Superflex</a>
+    </div>
+    <div class="rk-rookie-toggle" id="rookieToggle" title="Show only rookies">
+      <svg viewBox="0 0 24 24" width="12" height="12"><path d="M12 1.5l2.98 6.63 7.27.7-5.5 4.83 1.63 7.13L12 17.06l-6.38 3.73 1.63-7.13-5.5-4.83 7.27-.7z" fill="currentColor"/></svg>
+      Rookies
     </div>
     <input class="rk-search" id="rkSearch" type="text" placeholder="Search player...">
     <div class="rk-icon-btn" id="viewList" title="List view">&#9776;</div>
@@ -3191,6 +3198,7 @@ let state = {
   sortKey: 'overall_rank',
   sortDir: 1,
   minSnap: 0, minGames: 0, minValue: 0,
+  rookiesOnly: false,
 };
 
 function playerUrl(sid) {
@@ -3214,6 +3222,7 @@ function percentileClass(values, val, higherIsBetter) {
 function getFiltered() {
   let rows = RK_DATA.filter(r => {
     if (state.pos !== 'overall' && r.position !== state.pos) return false;
+    if (state.rookiesOnly && !r.is_rookie) return false;
     if (state.search && !r.name.toLowerCase().includes(state.search.toLowerCase())) return false;
     if (r.snap_pct !== null && r.snap_pct < state.minSnap) return false;
     if (r.games < state.minGames) return false;
@@ -3396,6 +3405,11 @@ document.getElementById('posSelect').value = state.pos;
 document.getElementById('posSelect').addEventListener('change', e => { state.pos = e.target.value; render(); });
 document.getElementById('viewList').addEventListener('click', () => { state.view = 'list'; render(); });
 document.getElementById('viewGrid').addEventListener('click', () => { state.view = 'grid'; render(); });
+document.getElementById('rookieToggle').addEventListener('click', () => {
+  state.rookiesOnly = !state.rookiesOnly;
+  document.getElementById('rookieToggle').classList.toggle('active', state.rookiesOnly);
+  render();
+});
 document.getElementById('rkSearch').addEventListener('input', e => { state.search = e.target.value; render(); });
 
 const filterModal = document.getElementById('filterModal');
