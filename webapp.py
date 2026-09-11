@@ -1891,6 +1891,7 @@ BASE_STYLE = """
   .panel{ background:var(--paper-raised); border:1px solid var(--line); border-radius:16px; box-shadow:var(--shadow); padding:22px 24px; margin-top:18px; }
   .panel h2{ font-size:20px; margin-top:6px; margin-bottom:2px; }
   .eyebrow{ font-family:"IBM Plex Mono",monospace; font-size:11.5px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:var(--accent-ink); }
+  .eyebrow-desc{ font-family:"Source Sans 3"; font-size:13.5px; font-weight:600; letter-spacing:0.01em; color:var(--accent-ink); }
   .search-row{ display:flex; gap:10px; margin-top:14px; flex-wrap:wrap; }
   input[type=text],input[type=password]{ flex:1; min-width:180px; border:1px solid var(--line-strong); border-radius:8px; padding:12px 14px; font-size:15px; font-family:inherit; background:var(--paper-raised); color:var(--ink); }
   .btn{ display:inline-flex; align-items:center; justify-content:center; gap:8px; font-family:"Source Sans 3"; font-weight:700; font-size:15px; border-radius:8px; padding:12px 22px; text-decoration:none; cursor:pointer; border:1px solid transparent; background:var(--accent); color:var(--accent-on); }
@@ -3074,7 +3075,7 @@ render();
 TRADE_CALC_HTML = BASE_STYLE + make_header("trade") + """
 <main><div class="wrap">
   <div class="panel">
-    <p class="eyebrow">Real dynasty &amp; redraft values, incl. draft picks &middot; FantasyCalc</p>
+    <p class="eyebrow-desc">Real dynasty &amp; redraft values, including draft picks, powered by FantasyCalc</p>
     <h2>Trade calculator</h2>
 
     <div class="toggle-row">
