@@ -3,7 +3,7 @@ Dynasty League Explorer
 --------------------------
 Public site: type any Sleeper username, see every dynasty league, full
 standings, and a Flock-Fantasy-style positional value breakdown for every
-team using real dynasty trade values from FantasyCalc's public API.
+team using real dynasty trade values.
 Includes Rankings, a photo-based live-search Trade Calculator (Dynasty/
 Redraft + 1QB/Superflex, with real draft-pick pricing and optional league
 linking so you can click straight from a roster instead of typing), real
@@ -2522,7 +2522,7 @@ LEAGUE_DETAIL_HTML = BASE_STYLE + make_header("league") + """
     </div>
 
     <div class="legend-box">
-      <b>How to read this:</b> the badge in each colored header (e.g. "Rank 3") is this team's rank at that position among everyone in the league &mdash; 1 is the strongest. For each player: the small gray number on the left is their rank among all players at their position; the colored badge on the right is their rank among <em>every</em> player league-wide, colored green (top 12), yellow (top 36), or red (below that). Click a player's photo or name for full detail. Values from FantasyCalc.
+      <b>How to read this:</b> the badge in each colored header (e.g. "Rank 3") is this team's rank at that position among everyone in the league &mdash; 1 is the strongest. For each player: the small gray number on the left is their rank among all players at their position; the colored badge on the right is their rank among <em>every</em> player league-wide, colored green (top 12), yellow (top 36), or red (below that). Click a player's photo or name for full detail.
     </div>
   </div>
 </div></main>
@@ -3075,7 +3075,7 @@ render();
 TRADE_CALC_HTML = BASE_STYLE + make_header("trade") + """
 <main><div class="wrap">
   <div class="panel">
-    <p class="eyebrow-desc">Real dynasty &amp; redraft values, including draft picks, powered by FantasyCalc</p>
+    <p class="eyebrow-desc">Real dynasty &amp; redraft values, including draft picks</p>
     <h2>Trade calculator</h2>
 
     <div class="toggle-row">
