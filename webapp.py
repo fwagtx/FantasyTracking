@@ -1967,19 +1967,24 @@ BASE_STYLE = """
   .format-toggle a.active{ background:var(--ink); color:var(--paper-raised); border-color:var(--ink); }
 
   .trade-cols{ display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-top:16px; }
-  .trade-side-label{ font-weight:700; font-size:14px; margin-bottom:8px; }
+  .trade-side-box{ background:var(--paper-sunken); border:1px solid var(--line); border-radius:12px; padding:16px; }
+  .trade-side-label{ font-weight:700; font-size:14px; margin-bottom:10px; }
   .search-wrap{ position:relative; }
+  .search-wrap input[type=text]{ width:100%; }
   .search-dropdown{ position:absolute; top:100%; left:0; right:0; background:var(--paper-raised); border:1px solid var(--line-strong); border-radius:8px; box-shadow:var(--shadow); z-index:30; max-height:260px; overflow-y:auto; display:none; margin-top:4px; }
   .search-dropdown.open{ display:block; }
   .search-dropdown-item{ display:flex; align-items:center; gap:10px; padding:8px 10px; cursor:pointer; }
   .search-dropdown-item:hover{ background:var(--paper-sunken); }
   .search-dropdown-item img{ width:28px; height:28px; border-radius:50%; object-fit:cover; background:var(--paper-sunken); }
-  .chip-list{ display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; min-height:8px; }
-  .chip{ display:flex; align-items:center; gap:6px; background:var(--paper-sunken); border-radius:99px; padding:4px 10px 4px 4px; font-size:12.5px; font-weight:600; }
-  .chip img{ width:24px; height:24px; border-radius:50%; object-fit:cover; }
-  .chip .remove{ cursor:pointer; color:var(--ink-muted); font-weight:800; padding:0 2px; }
-  .chip .remove:hover{ color:var(--critical); }
-  .trade-total{ margin-top:10px; font-family:"IBM Plex Mono"; font-size:13px; color:var(--ink-secondary); }
+  .chip-list{ display:flex; flex-wrap:wrap; gap:10px; margin-top:14px; min-height:8px; }
+  .chip{ position:relative; width:92px; display:flex; flex-direction:column; align-items:center; text-align:center; gap:0; background:var(--paper-raised); border:1px solid var(--line); border-radius:10px; padding:8px 6px 9px; font-size:11.5px; font-weight:700; line-height:1.25; }
+  .chip img{ width:60px; height:60px; border-radius:8px; object-fit:cover; background:var(--paper-sunken); }
+  .chip .pos-chip{ position:absolute; top:6px; left:6px; }
+  .chip .team-tag{ position:absolute; top:6px; right:6px; font-family:"IBM Plex Mono"; font-size:9px; font-weight:700; color:var(--ink-muted); background:var(--paper-sunken); padding:1px 5px; border-radius:5px; }
+  .chip .pname-sm{ margin-top:7px; }
+  .chip .remove{ position:absolute; top:-7px; right:-7px; width:18px; height:18px; border-radius:50%; background:var(--paper-raised); border:1px solid var(--line-strong); display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--ink-muted); font-weight:800; font-size:12px; line-height:1; }
+  .chip .remove:hover{ color:#fff; background:var(--critical); border-color:var(--critical); }
+  .trade-total{ margin-top:14px; font-family:"IBM Plex Mono"; font-size:13px; font-weight:700; color:var(--ink-secondary); }
   .trade-result{ margin-top:20px; padding-top:18px; border-top:1px solid var(--line); }
   .verdict{ font-family:"Big Shoulders Display"; font-size:26px; font-weight:800; }
 
@@ -3097,7 +3102,7 @@ TRADE_CALC_HTML = BASE_STYLE + make_header("trade") + """
     </div>
 
     <div class="trade-cols">
-      <div>
+      <div class="trade-side-box">
         <div class="trade-side-label">You send</div>
         <div class="search-wrap">
           <input type="text" id="search1" placeholder="Type a player or pick name&hellip;" autocomplete="off">
@@ -3116,7 +3121,7 @@ TRADE_CALC_HTML = BASE_STYLE + make_header("trade") + """
         </div>
         {% endif %}
       </div>
-      <div>
+      <div class="trade-side-box">
         <div class="trade-side-label">You receive</div>
         <div class="search-wrap">
           <input type="text" id="search2" placeholder="Type a player or pick name&hellip;" autocomplete="off">
@@ -3170,6 +3175,11 @@ function setParam(key, val) {
 let selected1 = initialSide1.map(p => ({sid: p.sid, name: p.name, position: p.position, team: p.team, photo: p.photo, value: p.value}));
 let selected2 = initialSide2.map(p => ({sid: p.sid, name: p.name, position: p.position, team: p.team, photo: p.photo, value: p.value}));
 
+const POS_COLOR_VAR = {QB: '--pos-qb', RB: '--pos-rb', WR: '--pos-wr', TE: '--pos-te'};
+function posColorVar(pos) {
+  return `var(${POS_COLOR_VAR[pos] || '--accent'})`;
+}
+
 function renderChips(side) {
   const list = side === 1 ? selected1 : selected2;
   const container = document.getElementById('chips' + side);
@@ -3179,7 +3189,13 @@ function renderChips(side) {
     total += p.value || 0;
     const chip = document.createElement('div');
     chip.className = 'chip';
-    chip.innerHTML = `<img src="${p.photo}" onerror="this.style.visibility='hidden'"><span>${p.name}</span><span class="remove" data-sid="${p.sid}">&times;</span>`;
+    chip.innerHTML = `
+      <span class="remove" data-sid="${p.sid}">&times;</span>
+      <img src="${p.photo}" onerror="this.style.visibility='hidden'">
+      ${p.position ? `<span class="pos-chip" style="background:${posColorVar(p.position)};">${p.position}</span>` : ''}
+      ${p.team ? `<span class="team-tag">${p.team}</span>` : ''}
+      <span class="pname-sm">${p.name}</span>
+    `;
     chip.querySelector('.remove').onclick = () => removePlayer(side, p.sid);
     container.appendChild(chip);
   });
