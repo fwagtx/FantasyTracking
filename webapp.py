@@ -2321,6 +2321,9 @@ BASE_STYLE = """
   .rank-badge.warning{ background:var(--warning-wash); color:var(--warning); font-weight:700; }
   .rank-badge.critical{ background:var(--critical-wash); color:var(--critical); font-weight:700; }
   .rank-badge.flat{ background:var(--paper-sunken); color:var(--ink-muted); font-weight:700; }
+  .legend-key{ display:flex; flex-wrap:wrap; gap:10px 20px; align-items:center; }
+  .legend-key-item{ display:flex; align-items:center; gap:8px; font-size:12.5px; color:var(--ink-secondary); }
+  .col-head-sample{ display:inline-flex; padding:3px 6px; border-radius:5px; background:var(--ink-muted); flex:none; }
 
   .player-hero{ display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
   .player-hero img{ width:72px; height:72px; border-radius:14px; object-fit:cover; background:var(--paper-sunken); }
@@ -2915,7 +2918,14 @@ LEAGUE_DETAIL_HTML = BASE_STYLE + make_header("league") + """
     </div>
 
     <div class="legend-box">
-      <b>How to read this:</b> the badge in each colored header (e.g. "Rank 3") is this team's rank at that position among everyone in the league &mdash; 1 is the strongest. For each player: the small gray number on the left is their rank among all players at their position; the colored badge on the right is their rank among <em>every</em> player league-wide, colored green (top 12), yellow (top 36), or red (below that). Click a player's photo or name for full detail.
+      <div class="legend-key">
+        <span class="legend-key-item"><span class="col-head-sample"><span class="rank-badge-inline">Rank 3</span></span> Team's rank at that position</span>
+        <span class="legend-key-item"><span class="rank-pair"><span class="rank-plain">12</span></span> Player's rank at their position</span>
+        <span class="legend-key-item"><span class="rank-pair"><span class="rank-badge good">8</span></span> Top 12 player league-wide</span>
+        <span class="legend-key-item"><span class="rank-pair"><span class="rank-badge warning">28</span></span> Top 36 player league-wide</span>
+        <span class="legend-key-item"><span class="rank-pair"><span class="rank-badge critical">54</span></span> Outside the top 36</span>
+      </div>
+      <p class="muted" style="margin-top:10px;">Click a player's photo or name for full detail.</p>
     </div>
   </div>
 </div></main>
