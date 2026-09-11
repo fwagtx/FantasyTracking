@@ -1562,6 +1562,21 @@ def rankings():
     return render_template_string(RANKINGS_HTML, rows=rows[:300], fmt=fmt, pos_filter=pos_filter, view=view, stats_season=stats_season)
 
 
+def consolidation_adjusted_value(items):
+    """Package-size value adjustment, same idea most dynasty trade
+    calculators apply: a side's raw point total overstates uneven packages,
+    because roster spots are scarce and a 3rd or 4th piece has less
+    marginal usefulness than the 1st. Rank a side's own pieces by value and
+    decay each one 8% per rank below the top piece, compounding -- a
+    single-asset side is untouched (its one piece is always rank 0), while
+    a side stacked with role players loses a bit of its raw sum. Comparing
+    two sides' adjusted totals then naturally favors consolidating into
+    fewer, bigger pieces over spreading the same value across more of
+    them, without needing to know anything about the other side."""
+    ranked = sorted(items, key=lambda p: p.get("value") or 0, reverse=True)
+    return sum((p.get("value") or 0) * (0.92 ** i) for i, p in enumerate(ranked))
+
+
 @app.route("/trade-calculator")
 def trade_calculator():
     fmt = request.args.get("format", "1qb")
@@ -1603,12 +1618,15 @@ def trade_calculator():
 
     side1_items, side1_total = build_side(side1_ids)
     side2_items, side2_total = build_side(side2_ids)
+    side1_adjusted = round(consolidation_adjusted_value(side1_items))
+    side2_adjusted = round(consolidation_adjusted_value(side2_items))
     result = None
     if side1_ids or side2_ids:
         result = {
-            "side1_items": side1_items, "side1_total": side1_total,
-            "side2_items": side2_items, "side2_total": side2_total,
+            "side1_items": side1_items, "side1_total": side1_total, "side1_adjusted": side1_adjusted,
+            "side2_items": side2_items, "side2_total": side2_total, "side2_adjusted": side2_adjusted,
             "diff": side2_total - side1_total,
+            "adjusted_diff": side2_adjusted - side1_adjusted,
         }
 
     # ---- optional league link ----
@@ -1642,9 +1660,9 @@ def trade_calculator():
 
     # ---- balance suggestions ----
     suggestions = []
-    if result and result["diff"] != 0 and (my_quick or other_quick):
-        gap = abs(result["diff"])
-        if result["diff"] > 0:
+    if result and result["adjusted_diff"] != 0 and (my_quick or other_quick):
+        gap = abs(result["adjusted_diff"])
+        if result["adjusted_diff"] > 0:
             pool = [p for p in my_quick if p["sid"] not in side1_ids]
         else:
             pool = [p for p in other_quick if p["sid"] not in side2_ids]
@@ -1985,6 +2003,7 @@ BASE_STYLE = """
   .chip .remove{ position:absolute; top:-7px; right:-7px; width:18px; height:18px; border-radius:50%; background:var(--paper-raised); border:1px solid var(--line-strong); display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--ink-muted); font-weight:800; font-size:12px; line-height:1; }
   .chip .remove:hover{ color:#fff; background:var(--critical); border-color:var(--critical); }
   .trade-total{ margin-top:14px; font-family:"IBM Plex Mono"; font-size:13px; font-weight:700; color:var(--ink-secondary); }
+  .trade-total-adjusted{ margin-top:2px; font-family:"IBM Plex Mono"; font-size:11.5px; color:var(--ink-muted); }
   .trade-result{ margin-top:20px; padding-top:18px; border-top:1px solid var(--line); }
   .verdict{ font-family:"Big Shoulders Display"; font-size:26px; font-weight:800; }
 
@@ -3110,6 +3129,7 @@ TRADE_CALC_HTML = BASE_STYLE + make_header("trade") + """
         </div>
         <div class="chip-list" id="chips1"></div>
         <div class="trade-total" id="total1">Total: 0</div>
+        {% if result %}<div class="trade-total-adjusted">Adjusted: {{ result.side1_adjusted }}</div>{% endif %}
         {% if my_quick %}
         <p class="muted" style="margin-top:10px;">Your roster (click to add):</p>
         <div class="quick-add-grid">
@@ -3129,6 +3149,7 @@ TRADE_CALC_HTML = BASE_STYLE + make_header("trade") + """
         </div>
         <div class="chip-list" id="chips2"></div>
         <div class="trade-total" id="total2">Total: 0</div>
+        {% if result %}<div class="trade-total-adjusted">Adjusted: {{ result.side2_adjusted }}</div>{% endif %}
         {% if other_quick %}
         <p class="muted" style="margin-top:10px;">{{ league_link.other_team.owner_name }}'s roster (click to add):</p>
         <div class="quick-add-grid">
@@ -3144,9 +3165,10 @@ TRADE_CALC_HTML = BASE_STYLE + make_header("trade") + """
 
     {% if result %}
     <div class="trade-result">
-      <p class="verdict" style="color:{{ 'var(--good)' if result.diff >= 0 else 'var(--critical)' }};">
-        {{ 'You gain' if result.diff >= 0 else 'You lose' }} {{ result.diff|abs }} pts of value
+      <p class="verdict" style="color:{{ 'var(--good)' if result.adjusted_diff >= 0 else 'var(--critical)' }};">
+        {{ 'You gain' if result.adjusted_diff >= 0 else 'You lose' }} {{ result.adjusted_diff|abs }} pts of value
       </p>
+      <p class="muted" style="margin-top:4px;font-size:12px;">Adjusted for package size (fewer, bigger pieces carry a premium) &middot; raw value diff: {{ result.diff }}</p>
       {% if suggestions %}
       <p class="muted" style="margin-top:10px;">To get this closer to even, consider adding:</p>
       {% for s in suggestions %}
