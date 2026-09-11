@@ -1775,6 +1775,7 @@ def rankings():
             "sid": r["sid"], "photo": player_photo_url(r["sid"]),
             "name": f"{p.get('first_name','')} {p.get('last_name','')}".strip(),
             "position": v.get("position"), "team": p.get("team") or "FA",
+            "is_rookie": p.get("years_exp") == 0,
             "age": compute_age_decimal(p.get("birth_date")),
             "games": games,
             "fpts": round(fpts, 1) if games else 0,
@@ -3048,6 +3049,7 @@ RANKINGS_HTML = BASE_STYLE + make_header("rankings") + VOTE_MODAL_HTML + """
   table.rk-table tr.rk-row:hover{ background:var(--rk-surface); cursor:pointer; }
   table.rk-table img{ width:28px; height:28px; border-radius:50%; object-fit:cover; background:var(--rk-surface2); }
   .rk-pname{ display:flex; align-items:center; gap:9px; color:var(--rk-text); text-decoration:none; font-weight:700; }
+  .rookie-badge{ flex:none; vertical-align:middle; margin-left:5px; }
   .rk-pname:hover{ color:var(--accent); }
   .rk-tm{ color:var(--rk-muted); font-size:12px; font-weight:600; }
   .rk-stat{ font-family:"IBM Plex Mono",monospace; font-variant-numeric:tabular-nums; padding:3px 8px; border-radius:6px; display:inline-block; min-width:34px; text-align:center; }
@@ -3165,6 +3167,7 @@ RANKINGS_HTML = BASE_STYLE + make_header("rankings") + VOTE_MODAL_HTML + """
 const RK_DATA = [
   {% for r in rows %}
   {sid:{{ r.sid|tojson }}, photo:{{ r.photo|tojson }}, name:{{ r.name|tojson }}, position:{{ r.position|tojson }},
+   is_rookie:{{ r.is_rookie|tojson }},
    team:{{ r.team|tojson }}, age:{{ r.age|tojson }}, games:{{ r.games|tojson }}, fpts:{{ r.fpts|tojson }},
    fpts_per_game:{{ r.fpts_per_game|tojson }}, snap_pct:{{ r.snap_pct|tojson }}, position_rank:{{ r.position_rank|tojson }}, value:{{ r.value|tojson }},
    overall_rank:{{ r.overall_rank|tojson }}, tier:{{ r.tier|tojson }}},
@@ -3173,6 +3176,13 @@ const RK_DATA = [
 const RK_FMT = {{ fmt|tojson }};
 const RK_AUTHED = {{ current_user.is_authenticated | tojson }};
 const posColors = {QB:'#1baf7a', RB:'#2a78d6', WR:'#e0397a', TE:'#7b5ce0'};
+// Multi-point star with "R" for a rookie (years_exp === 0 in Sleeper's
+// own data) -- inline SVG so it scales crisply at any size instead of
+// relying on a font glyph.
+const ROOKIE_BADGE = '<svg class="rookie-badge" viewBox="0 0 24 24" width="15" height="15" title="Rookie" aria-label="Rookie">' +
+  '<path d="M12 1.5l2.98 6.63 7.27.7-5.5 4.83 1.63 7.13L12 17.06l-6.38 3.73 1.63-7.13-5.5-4.83 7.27-.7z" fill="#f0b429"/>' +
+  '<text x="12" y="13.5" text-anchor="middle" dominant-baseline="central" font-size="8.5" font-weight="800" fill="#1a1206" font-family="IBM Plex Mono, monospace">R</text>' +
+  '</svg>';
 
 let state = {
   pos: {{ pos_filter|tojson }},
@@ -3261,7 +3271,7 @@ function buildRowEl(r, cols, valArrays) {
   let cells = '';
   cols.forEach(c => {
     if (c.key === 'name') {
-      cells += `<td class="col-name"><span class="rk-pname"><img src="${r.photo}" onerror="this.style.visibility='hidden'">${r.name}</span></td>`;
+      cells += `<td class="col-name"><span class="rk-pname"><img src="${r.photo}" onerror="this.style.visibility='hidden'">${r.name}${r.is_rookie ? ROOKIE_BADGE : ''}</span></td>`;
     } else if (c.key === 'position' && state.pos === 'overall') {
       const rankSuffix = r.position_rank ? r.position_rank : '';
       cells += `<td class="col-position"><span class="rk-stat" style="background:${posColors[r.position]}22; color:${posColors[r.position]};">${r.position}${rankSuffix}</span></td>`;
@@ -3350,7 +3360,7 @@ function renderGrid(rows) {
         ${statCell(r.fpts_per_game, percentileClass(fpgVals, r.fpts_per_game, true))}
       </div>
       <div class="rk-card-band">
-        <div class="rk-card-name">${r.name}</div>
+        <div class="rk-card-name">${r.name}${r.is_rookie ? ROOKIE_BADGE : ''}</div>
         <div class="rk-card-tm">${r.position} &middot; ${r.team}</div>
       </div>`;
     grid.appendChild(card);
