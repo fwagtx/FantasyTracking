@@ -1720,6 +1720,10 @@ def api_player_search():
 @app.route("/rankings")
 def rankings():
     fmt = request.args.get("format", "1qb")
+    mode = request.args.get("mode", "dynasty")
+    if mode not in ("dynasty", "redraft"):
+        mode = "dynasty"
+    is_dynasty = mode == "dynasty"
     pos_filter = request.args.get("pos", "overall")
     view = request.args.get("view", "list")
     num_qbs = 2 if fmt == "superflex" else 1
@@ -1729,7 +1733,7 @@ def rankings():
     stats_season = str(int(SEASON) - 1)
 
     with ThreadPoolExecutor(max_workers=3) as executor:
-        fc_future = executor.submit(get_fantasycalc_values, num_qbs)
+        fc_future = executor.submit(get_fantasycalc_values, num_qbs, is_dynasty)
         players_future = executor.submit(get_all_players)
         stats_future = executor.submit(get_season_stats, stats_season)
         fc_players = fc_future.result()["players"]
@@ -1793,7 +1797,7 @@ def rankings():
     rows.sort(key=lambda r: r["overall_rank"])
     # 300 instead of 100 so filtering down to a single position (e.g. TE,
     # which ranks lower overall than WR/RB) still has a real list to show.
-    return render_template_string(RANKINGS_HTML, rows=rows[:300], fmt=fmt, pos_filter=pos_filter, view=view, stats_season=stats_season)
+    return render_template_string(RANKINGS_HTML, rows=rows[:300], fmt=fmt, mode=mode, pos_filter=pos_filter, view=view, stats_season=stats_season)
 
 
 def consolidation_adjusted_value(items):
@@ -3072,6 +3076,8 @@ RANKINGS_HTML = BASE_STYLE + make_header("rankings") + VOTE_MODAL_HTML + """
   .rk-format-toggle{ display:flex; gap:6px; }
   .rk-format-toggle a{ font-size:12px; font-weight:700; padding:7px 12px; border-radius:99px; border:1px solid var(--rk-line); text-decoration:none; color:var(--rk-muted); }
   .rk-format-toggle a.active{ background:var(--accent); color:var(--accent-on); border-color:var(--accent); }
+  .rk-toggle-group{ display:flex; align-items:center; gap:8px; }
+  .rk-glabel{ font-size:10.5px; color:var(--rk-muted); font-weight:700; text-transform:uppercase; letter-spacing:0.04em; }
   .rk-icon-btn{ width:36px; height:36px; border-radius:8px; background:var(--rk-surface); border:1px solid var(--rk-line); color:var(--rk-muted); display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:15px; }
   .rk-icon-btn.active{ color:var(--rk-text); border-color:var(--accent); }
   .rk-rookie-toggle{ font-size:12px; font-weight:700; padding:0 13px; height:36px; border-radius:99px; border:1px solid var(--rk-line); background:var(--rk-surface); color:var(--rk-muted); cursor:pointer; display:flex; align-items:center; gap:6px; user-select:none; }
@@ -3141,6 +3147,13 @@ RANKINGS_HTML = BASE_STYLE + make_header("rankings") + VOTE_MODAL_HTML + """
 <div class="wrap">
   <div class="rk-toolbar">
     <span class="rk-title">Rankings <span style="font-size:12px; color:var(--rk-muted); text-transform:none; font-family:'Source Sans 3';">&middot; GP/FPTS from {{ stats_season }}</span></span>
+    <div class="rk-toggle-group">
+      <span class="rk-glabel">Mode</span>
+      <div class="rk-format-toggle">
+        <a class="{{ 'active' if mode=='dynasty' else '' }}" href="/rankings?format={{ fmt }}&mode=dynasty&pos={{ pos_filter }}&view={{ view }}">Dynasty</a>
+        <a class="{{ 'active' if mode=='redraft' else '' }}" href="/rankings?format={{ fmt }}&mode=redraft&pos={{ pos_filter }}&view={{ view }}">Redraft</a>
+      </div>
+    </div>
     <select class="rk-select" id="posSelect">
       <option value="overall">Overall</option>
       <option value="QB">QB</option>
@@ -3148,9 +3161,12 @@ RANKINGS_HTML = BASE_STYLE + make_header("rankings") + VOTE_MODAL_HTML + """
       <option value="WR">WR</option>
       <option value="TE">TE</option>
     </select>
-    <div class="rk-format-toggle">
-      <a class="{{ 'active' if fmt=='1qb' else '' }}" href="/rankings?format=1qb&pos={{ pos_filter }}&view={{ view }}">1QB</a>
-      <a class="{{ 'active' if fmt=='superflex' else '' }}" href="/rankings?format=superflex&pos={{ pos_filter }}&view={{ view }}">Superflex</a>
+    <div class="rk-toggle-group">
+      <span class="rk-glabel">Format</span>
+      <div class="rk-format-toggle">
+        <a class="{{ 'active' if fmt=='1qb' else '' }}" href="/rankings?format=1qb&mode={{ mode }}&pos={{ pos_filter }}&view={{ view }}">1QB</a>
+        <a class="{{ 'active' if fmt=='superflex' else '' }}" href="/rankings?format=superflex&mode={{ mode }}&pos={{ pos_filter }}&view={{ view }}">Superflex</a>
+      </div>
     </div>
     <div class="rk-rookie-toggle" id="rookieToggle" title="Show only rookies">
       <svg viewBox="0 0 24 24" width="12" height="12"><path d="M12 1.5l2.98 6.63 7.27.7-5.5 4.83 1.63 7.13L12 17.06l-6.38 3.73 1.63-7.13-5.5-4.83 7.27-.7z" fill="currentColor"/></svg>
@@ -3224,6 +3240,7 @@ const RK_DATA = [
   {% endfor %}
 ];
 const RK_FMT = {{ fmt|tojson }};
+const RK_MODE = {{ mode|tojson }};
 const RK_AUTHED = {{ current_user.is_authenticated | tojson }};
 const posColors = {QB:'#1baf7a', RB:'#2a78d6', WR:'#e0397a', TE:'#7b5ce0'};
 // Multi-point star with "R" for a rookie (years_exp === 0 in Sleeper's
@@ -3246,7 +3263,7 @@ let state = {
 
 function playerUrl(sid) {
   const numqbs = RK_FMT === 'superflex' ? 2 : 1;
-  const ref = encodeURIComponent('/rankings?format=' + RK_FMT + '&pos=' + state.pos + '&view=' + state.view);
+  const ref = encodeURIComponent('/rankings?format=' + RK_FMT + '&mode=' + RK_MODE + '&pos=' + state.pos + '&view=' + state.view);
   return `/player?sid=${sid}&numqbs=${numqbs}&ref=${ref}`;
 }
 
