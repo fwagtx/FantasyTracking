@@ -3129,7 +3129,7 @@ TRADE_CALC_HTML = BASE_STYLE + make_header("trade") + """
         </div>
         <div class="chip-list" id="chips1"></div>
         <div class="trade-total" id="total1">Total: 0</div>
-        {% if result %}<div class="trade-total-adjusted">Adjusted: {{ result.side1_adjusted }}</div>{% endif %}
+        {% if result and result.side1_adjusted != result.side1_total %}<div class="trade-total-adjusted">Adjusted: {{ result.side1_adjusted }}</div>{% endif %}
         {% if my_quick %}
         <p class="muted" style="margin-top:10px;">Your roster (click to add):</p>
         <div class="quick-add-grid">
@@ -3149,7 +3149,7 @@ TRADE_CALC_HTML = BASE_STYLE + make_header("trade") + """
         </div>
         <div class="chip-list" id="chips2"></div>
         <div class="trade-total" id="total2">Total: 0</div>
-        {% if result %}<div class="trade-total-adjusted">Adjusted: {{ result.side2_adjusted }}</div>{% endif %}
+        {% if result and result.side2_adjusted != result.side2_total %}<div class="trade-total-adjusted">Adjusted: {{ result.side2_adjusted }}</div>{% endif %}
         {% if other_quick %}
         <p class="muted" style="margin-top:10px;">{{ league_link.other_team.owner_name }}'s roster (click to add):</p>
         <div class="quick-add-grid">
@@ -3168,7 +3168,9 @@ TRADE_CALC_HTML = BASE_STYLE + make_header("trade") + """
       <p class="verdict" style="color:{{ 'var(--good)' if result.adjusted_diff >= 0 else 'var(--critical)' }};">
         {{ 'You gain' if result.adjusted_diff >= 0 else 'You lose' }} {{ result.adjusted_diff|abs }} pts of value
       </p>
+      {% if result.adjusted_diff != result.diff %}
       <p class="muted" style="margin-top:4px;font-size:12px;">Adjusted for package size (fewer, bigger pieces carry a premium) &middot; raw value diff: {{ result.diff }}</p>
+      {% endif %}
       {% if suggestions %}
       <p class="muted" style="margin-top:10px;">To get this closer to even, consider adding:</p>
       {% for s in suggestions %}
