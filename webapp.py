@@ -665,24 +665,119 @@ def sorted_upcoming_picks(picks, num_years=3):
     return sorted(kept, key=pick_sort_key)
 
 
-def pick_search_terms(query, num_teams):
-    """Translate round.slot shorthand (e.g. "1.02", the common way
-    dynasty players refer to a specific pick) into the substring(s) that
-    actually appear in a FantasyCalc label. It never appears verbatim --
-    future picks are grouped into early/mid/late tiers within a round
-    since the exact future slot isn't known yet, so "1.02" in a
-    `num_teams`-team league maps to roughly the early part of round 1.
-    Returns candidate terms, best match first (exact tier, then a
-    round-only fallback for rounds FantasyCalc doesn't subdivide by
-    tier), or None if `query` isn't round.slot shorthand at all."""
-    slot_match = re.match(r"^(\d)\.(\d{1,2})$", query)
-    if not slot_match:
+def parse_pick_slot_query(query):
+    """Parse "1.02"-style round.slot shorthand (how dynasty players
+    actually refer to a specific pick) into (round, slot) ints, or None
+    if `query` isn't that shape at all."""
+    m = re.match(r"^(\d)\.(\d{1,2})$", query)
+    if not m:
         return None
-    rnd, slot = int(slot_match.group(1)), int(slot_match.group(2))
+    return int(m.group(1)), int(m.group(2))
+
+
+def pick_tier_value_map(picks):
+    """{(year, round): {"early"/"mid"/"late"/"flat": value}} built from
+    FantasyCalc's own labels -- "flat" means that round wasn't
+    tier-subdivided for that year (just a single published value)."""
+    out = {}
+    for pk in picks.values():
+        name = pk["name"]
+        round_match = re.search(r"(\d+)(?:st|nd|rd|th)", name)
+        tier_match = re.search(r"\b(early|mid|late)\b", name, re.I)
+        if pk["year"] is None or not round_match:
+            continue
+        key = (pk["year"], int(round_match.group(1)))
+        tier = tier_match.group(1).lower() if tier_match else "flat"
+        out.setdefault(key, {})[tier] = pk["value"]
+    return out
+
+
+def interpolate_pick_slot_value(slot, num_teams, tier_values):
+    """Derive a value for one exact slot (1..num_teams) from FantasyCalc's
+    published early/mid/late tier values for that round -- they don't
+    publish a value per individual slot, only per tier, so this linearly
+    interpolates between each tier's midpoint slot, holding flat past the
+    outermost tiers. With only one value available (a round FantasyCalc
+    doesn't subdivide by tier), every slot in it gets that same value --
+    there's nothing more granular to derive it from."""
+    real_tiers = {k: v for k, v in tier_values.items() if k != "flat"}
+    if not real_tiers:
+        return tier_values.get("flat")
+    if len(real_tiers) == 1:
+        return next(iter(real_tiers.values()))
+
     third = max(num_teams // 3, 1)
-    tier = "early" if slot <= third else "mid" if slot <= 2 * third else "late"
+    bounds = {
+        "early": (1, min(third, num_teams)),
+        "mid": (third + 1, min(2 * third, num_teams)),
+        "late": (2 * third + 1, num_teams),
+    }
+    anchors = sorted(
+        ((bounds[tier][0] + bounds[tier][1]) / 2, value)
+        for tier, value in real_tiers.items()
+        if bounds[tier][0] <= bounds[tier][1]
+    )
+    if not anchors:
+        return next(iter(real_tiers.values()))
+    if slot <= anchors[0][0]:
+        return anchors[0][1]
+    if slot >= anchors[-1][0]:
+        return anchors[-1][1]
+    for (s1, v1), (s2, v2) in zip(anchors, anchors[1:]):
+        if s1 <= slot <= s2:
+            return v1 if s2 == s1 else v1 + (slot - s1) / (s2 - s1) * (v2 - v1)
+    return anchors[-1][1]
+
+
+SLOT_PICK_SID_RE = re.compile(r"^pick_slot_(\d{4})_(\d+)_(\d+)_(\d+)$")
+
+
+def resolve_slot_pick(sid, picks, num_teams):
+    """Rebuild a synthetic exact-slot pick from its sid (e.g.
+    "pick_slot_2026_1_2_12"). Shared by search (building the result fresh)
+    and the trade calculator route (re-resolving a slot pick a side
+    already has, on every page render) so the two never disagree. Value
+    is recomputed against the CURRENT `num_teams` selection rather than
+    whatever's embedded in the sid, so a pick added under one league size
+    stays consistent if the user switches league size afterward. Returns
+    None if the sid isn't a slot-pick id, the slot's out of range for
+    `num_teams`, or that round isn't priced yet."""
+    m = SLOT_PICK_SID_RE.match(sid)
+    if not m:
+        return None
+    year, rnd, slot = int(m.group(1)), int(m.group(2)), int(m.group(3))
+    if slot < 1 or slot > num_teams:
+        return None
+    tier_values = pick_tier_value_map(picks).get((year, rnd))
+    if not tier_values:
+        return None
+    value = interpolate_pick_slot_value(slot, num_teams, tier_values)
+    if value is None:
+        return None
     ordinal = {1: "1st", 2: "2nd", 3: "3rd"}.get(rnd, f"{rnd}th")
-    return [f"{tier} {ordinal}", ordinal]
+    return {"name": f"{year} {rnd}.{slot:02d} ({ordinal}, {num_teams}-team, est.)", "value": round(value)}
+
+
+def exact_slot_picks(picks, num_teams, rnd, slot, num_years=3):
+    """Synthetic individual-pick search results for one exact slot (e.g.
+    "1.02") across the nearest `num_years` draft classes that actually
+    have that round priced. Values are interpolated (see
+    interpolate_pick_slot_value) since FantasyCalc only publishes
+    early/mid/late tiers, not individual slots -- labeled "(est.)" so
+    it's clear these are derived, not a directly-sourced number. Returns
+    [] if `slot` isn't valid for `num_teams`, or nothing is priced for
+    that round yet."""
+    if slot < 1 or slot > num_teams:
+        return []
+    tier_map = pick_tier_value_map(picks)
+    years = sorted(year for (year, r) in tier_map.keys() if r == rnd)[:num_years]
+    results = []
+    for year in years:
+        sid = f"pick_slot_{year}_{rnd}_{slot}_{num_teams}"
+        resolved = resolve_slot_pick(sid, picks, num_teams)
+        if resolved:
+            results.append({"sid": sid, "year": year, **resolved})
+    return results
 
 
 def normalize_name(name):
@@ -1527,12 +1622,13 @@ def api_player_search():
     q_low = q.lower()
     # Pick labels look like "2026 Mid 1st" -- they never contain the words
     # people actually type when looking for one. Treat a generic
-    # "pick"/"draft" query as "show me picks", and "1.02"-style round.slot
-    # shorthand (the common way dynasty players refer to a pick) as a
-    # translation into that same label format.
+    # "pick"/"draft" query as "show me picks" (for someone who doesn't
+    # know their exact draft position yet), and "1.02"-style round.slot
+    # shorthand as "give me that exact slot" (for someone who does),
+    # synthesizing a value FantasyCalc doesn't publish directly.
     q_is_generic_pick = q_low in ("pick", "picks", "draft", "draft pick", "draft picks")
-    pick_slot_terms = None if q_is_generic_pick else pick_search_terms(q_low, teams)
-    is_pick_query = q_is_generic_pick or pick_slot_terms is not None
+    slot_query = None if q_is_generic_pick else parse_pick_slot_query(q_low)
+    is_pick_query = q_is_generic_pick or slot_query is not None
 
     results = []
     for sid, p in all_players.items():
@@ -1547,24 +1643,26 @@ def api_player_search():
 
     if is_dynasty:
         if q_is_generic_pick:
-            matched_picks = list(fc["picks"].values())
-        elif pick_slot_terms:
-            matched_picks = []
-            for term in pick_slot_terms:
-                matched_picks = [pk for pk in fc["picks"].values() if term in pk["name"].lower()]
-                if matched_picks:
-                    break
+            matched_picks = sorted(fc["picks"].values(), key=pick_sort_key)
+            for pk in matched_picks:
+                results.append({
+                    "sid": pk["sid"], "name": pk["name"], "position": "PICK", "team": "",
+                    "photo": PICK_ICON, "value": pk["value"],
+                })
+        elif slot_query:
+            rnd, slot = slot_query
+            for pk in exact_slot_picks(fc["picks"], teams, rnd, slot):
+                results.append({
+                    "sid": pk["sid"], "name": pk["name"], "position": "PICK", "team": "",
+                    "photo": PICK_ICON, "value": pk["value"],
+                })
         else:
-            matched_picks = [pk for pk in fc["picks"].values() if q_low in pk["name"].lower()]
-
-        if is_pick_query:
-            matched_picks = sorted(matched_picks, key=pick_sort_key)
-
-        for pk in matched_picks:
-            results.append({
-                "sid": pk["sid"], "name": pk["name"], "position": "PICK", "team": "",
-                "photo": PICK_ICON, "value": pk["value"],
-            })
+            for pk in fc["picks"].values():
+                if q_low in pk["name"].lower():
+                    results.append({
+                        "sid": pk["sid"], "name": pk["name"], "position": "PICK", "team": "",
+                        "photo": PICK_ICON, "value": pk["value"],
+                    })
 
     if is_pick_query:
         # Chronological order from above (year -> round -> tier), not
@@ -1700,7 +1798,13 @@ def trade_calculator():
     def build_side(ids):
         items, total = [], 0
         for sid in ids:
-            if sid.startswith("pick_"):
+            if sid.startswith("pick_slot_"):
+                pk = resolve_slot_pick(sid, fc["picks"], teams)
+                if not pk:
+                    continue
+                items.append({"sid": sid, "name": pk["name"], "position": "PICK", "team": "", "photo": PICK_ICON, "value": pk["value"]})
+                total += pk["value"]
+            elif sid.startswith("pick_"):
                 pk = fc["picks"].get(sid)
                 if not pk:
                     continue
