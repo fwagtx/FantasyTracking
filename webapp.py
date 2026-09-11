@@ -1790,22 +1790,28 @@ def consolidation_adjusted_value(items):
     return sum((p.get("value") or 0) * (0.92 ** i) for i, p in enumerate(ranked))
 
 
-@app.route("/trade-calculator")
-def trade_calculator():
-    fmt = request.args.get("format", "1qb")
-    mode = request.args.get("mode", "dynasty")
-    teams = request.args.get("teams", default=12, type=int)
+def compute_trade_state(args):
+    """Everything the trade calculator page needs, computed once: parsed
+    format/mode/league-size, both sides' items/totals (raw and
+    package-size-adjusted), balance suggestions, and (if a Sleeper
+    username is linked) that league's roster quick-add lists. Shared by
+    the full page route and /api/trade-result (the lightweight JSON
+    endpoint the page's own JS calls on every add/remove so the verdict
+    updates without a full reload) so the two can never disagree."""
+    fmt = args.get("format", "1qb")
+    mode = args.get("mode", "dynasty")
+    teams = args.get("teams", default=12, type=int)
     if teams not in (8, 10, 12, 14):
         teams = 12
     num_qbs = 2 if fmt == "superflex" else 1
     is_dynasty = mode != "redraft"
-    side1_ids = [x for x in request.args.get("side1", "").split(",") if x]
-    side2_ids = [x for x in request.args.get("side2", "").split(",") if x]
+    side1_ids = [x for x in args.get("side1", "").split(",") if x]
+    side2_ids = [x for x in args.get("side2", "").split(",") if x]
 
-    u = request.args.get("u", "").strip()
-    league_id = request.args.get("league_id", "")
-    my_roster_id = request.args.get("my_roster_id", type=int)
-    other_roster_id = request.args.get("other_roster_id", type=int)
+    u = args.get("u", "").strip()
+    league_id = args.get("league_id", "")
+    my_roster_id = args.get("my_roster_id", type=int)
+    other_roster_id = args.get("other_roster_id", type=int)
 
     fc = get_fantasycalc_values(num_qbs, is_dynasty, teams)
     all_players = get_all_players()
@@ -1898,14 +1904,49 @@ def trade_calculator():
         pool_sorted = sorted(pool, key=lambda p: abs((p["value"] or 0) - gap))
         suggestions = pool_sorted[:3]
 
+    return {
+        "fmt": fmt, "mode": mode, "teams": teams,
+        "side1_ids": side1_ids, "side2_ids": side2_ids,
+        "result": result, "suggestions": suggestions,
+        "league_link": league_link, "my_quick": my_quick, "other_quick": other_quick,
+        "draft_picks_quick": draft_picks_quick,
+        "u": u, "league_id": league_id, "my_roster_id": my_roster_id, "other_roster_id": other_roster_id,
+    }
+
+
+@app.route("/trade-calculator")
+def trade_calculator():
+    s = compute_trade_state(request.args)
     return render_template_string(
-        TRADE_CALC_HTML, result=result, fmt=fmt, mode=mode, teams=teams,
-        side1_ids=",".join(side1_ids), side2_ids=",".join(side2_ids),
-        league_link=league_link, my_quick=my_quick, other_quick=other_quick,
-        draft_picks_quick=draft_picks_quick,
-        suggestions=suggestions, u=u, league_id=league_id,
-        my_roster_id=my_roster_id, other_roster_id=other_roster_id,
+        TRADE_CALC_HTML, result=s["result"], fmt=s["fmt"], mode=s["mode"], teams=s["teams"],
+        side1_ids=",".join(s["side1_ids"]), side2_ids=",".join(s["side2_ids"]),
+        league_link=s["league_link"], my_quick=s["my_quick"], other_quick=s["other_quick"],
+        draft_picks_quick=s["draft_picks_quick"],
+        suggestions=s["suggestions"], u=s["u"], league_id=s["league_id"],
+        my_roster_id=s["my_roster_id"], other_roster_id=s["other_roster_id"],
     )
+
+
+@app.route("/api/trade-result")
+def api_trade_result():
+    """JSON companion to /trade-calculator: the same calculation, no HTML.
+    The trade calculator's own JS calls this on every add/remove so the
+    verdict/adjusted-totals/suggestions update in place instead of a full
+    page reload. Deliberately omits side1_items/side2_items (the client
+    already has those in its own selected1/selected2 state) and
+    my_quick/other_quick/draft_picks_quick (those don't depend on
+    side1/side2 at all, so there's no reason to resend them on every
+    recalc) -- keeps the payload to just what actually changes."""
+    s = compute_trade_state(request.args)
+    result = s["result"]
+    result_json = None
+    if result:
+        result_json = {
+            "side1_total": result["side1_total"], "side1_adjusted": result["side1_adjusted"],
+            "side2_total": result["side2_total"], "side2_adjusted": result["side2_adjusted"],
+            "diff": result["diff"], "adjusted_diff": result["adjusted_diff"],
+        }
+    return jsonify({"result": result_json, "suggestions": s["suggestions"]})
 
 
 @app.route("/api/debug-fantasycalc")
@@ -3409,7 +3450,7 @@ TRADE_CALC_HTML = BASE_STYLE + make_header("trade") + """
         </div>
         <div class="chip-list" id="chips1"></div>
         <div class="trade-total" id="total1">Total: 0</div>
-        {% if result and result.side1_adjusted != result.side1_total %}<div class="trade-total-adjusted">Adjusted: {{ result.side1_adjusted }}</div>{% endif %}
+        <div class="trade-total-adjusted" id="adjusted1" style="display:none;"></div>
         {% if draft_picks_quick %}
         <p class="muted" style="margin-top:10px;">Draft picks (click to add):</p>
         <div class="quick-add-grid">
@@ -3439,7 +3480,7 @@ TRADE_CALC_HTML = BASE_STYLE + make_header("trade") + """
         </div>
         <div class="chip-list" id="chips2"></div>
         <div class="trade-total" id="total2">Total: 0</div>
-        {% if result and result.side2_adjusted != result.side2_total %}<div class="trade-total-adjusted">Adjusted: {{ result.side2_adjusted }}</div>{% endif %}
+        <div class="trade-total-adjusted" id="adjusted2" style="display:none;"></div>
         {% if draft_picks_quick %}
         <p class="muted" style="margin-top:10px;">Draft picks (click to add):</p>
         <div class="quick-add-grid">
@@ -3463,22 +3504,14 @@ TRADE_CALC_HTML = BASE_STYLE + make_header("trade") + """
       </div>
     </div>
 
-    {% if result %}
-    <div class="trade-result">
-      <p class="verdict" style="color:{{ 'var(--good)' if result.adjusted_diff >= 0 else 'var(--critical)' }};">
-        {{ 'You gain' if result.adjusted_diff >= 0 else 'You lose' }} {{ result.adjusted_diff|abs }} pts of value
-      </p>
-      {% if result.adjusted_diff != result.diff %}
-      <p class="muted" style="margin-top:4px;font-size:12px;">Adjusted for package size (fewer, bigger pieces carry a premium) &middot; raw value diff: {{ result.diff }}</p>
-      {% endif %}
-      {% if suggestions %}
-      <p class="muted" style="margin-top:10px;">To get this closer to even, consider adding:</p>
-      {% for s in suggestions %}
-      <div class="suggestion-row"><img src="{{ s.photo }}" onerror="this.style.visibility='hidden'"><span>{{ s.name }}</span><span class="mono muted">({{ s.value }} pts)</span></div>
-      {% endfor %}
-      {% endif %}
+    <div class="trade-result" id="tradeResult" style="display:none;">
+      <p class="verdict" id="verdictText"></p>
+      <p class="muted" id="verdictCaption" style="margin-top:4px;font-size:12px;display:none;"></p>
+      <div id="suggestionsBlock" style="display:none;">
+        <p class="muted" style="margin-top:10px;">To get this closer to even, consider adding:</p>
+        <div id="suggestionsList"></div>
+      </div>
     </div>
-    {% endif %}
   </div>
 </div></main>
 
@@ -3488,6 +3521,8 @@ const mode = {{ mode|tojson }};
 const teams = {{ teams|tojson }};
 const initialSide1 = {{ result.side1_items|tojson if result else '[]' }};
 const initialSide2 = {{ result.side2_items|tojson if result else '[]' }};
+const initialResult = {{ result|tojson if result else 'null' }};
+const initialSuggestions = {{ suggestions|tojson }};
 
 function setParam(key, val) {
   const url = new URL(window.location.href);
@@ -3531,7 +3566,7 @@ function removePlayer(side, sid) {
   if (side === 1) selected1 = selected1.filter(p => p.sid !== sid);
   else selected2 = selected2.filter(p => p.sid !== sid);
   renderChips(side);
-  recalc();
+  updateTradeResult();
 }
 
 function addPlayer(side, player) {
@@ -3543,7 +3578,7 @@ function addPlayer(side, player) {
   if (input) input.value = '';
   const dd = document.getElementById('dropdown' + side);
   if (dd) dd.classList.remove('open');
-  recalc();
+  updateTradeResult();
 }
 
 function quickAddClick(side, el) {
@@ -3553,18 +3588,89 @@ function quickAddClick(side, el) {
   });
 }
 
-function recalc() {
-  // Always navigate, even when a removal empties both sides -- the
-  // server clears the whole verdict/suggestions block when there's
-  // nothing left to calculate (result=None). Returning early here used
-  // to skip that reload, leaving the last real verdict ("You lose X pts
-  // of value") stuck on screen even after every pick/player was removed.
+function renderSuggestions(suggestions) {
+  const block = document.getElementById('suggestionsBlock');
+  const list = document.getElementById('suggestionsList');
+  list.innerHTML = '';
+  if (!suggestions || !suggestions.length) { block.style.display = 'none'; return; }
+  suggestions.forEach(s => {
+    const row = document.createElement('div');
+    row.className = 'suggestion-row';
+    row.innerHTML = `<img src="${s.photo}" onerror="this.style.visibility='hidden'"><span>${s.name}</span><span class="mono muted">(${s.value} pts)</span>`;
+    list.appendChild(row);
+  });
+  block.style.display = '';
+}
+
+function applyTradeResult(data) {
+  const result = data.result;
+
+  const adj1 = document.getElementById('adjusted1');
+  if (result && result.side1_adjusted !== result.side1_total) {
+    adj1.textContent = 'Adjusted: ' + result.side1_adjusted;
+    adj1.style.display = '';
+  } else {
+    adj1.style.display = 'none';
+  }
+
+  const adj2 = document.getElementById('adjusted2');
+  if (result && result.side2_adjusted !== result.side2_total) {
+    adj2.textContent = 'Adjusted: ' + result.side2_adjusted;
+    adj2.style.display = '';
+  } else {
+    adj2.style.display = 'none';
+  }
+
+  const tradeResult = document.getElementById('tradeResult');
+  if (!result) {
+    tradeResult.style.display = 'none';
+    renderSuggestions(null);
+    return;
+  }
+  tradeResult.style.display = '';
+
+  const verdict = document.getElementById('verdictText');
+  const diff = result.adjusted_diff;
+  verdict.style.color = diff >= 0 ? 'var(--good)' : 'var(--critical)';
+  verdict.textContent = (diff >= 0 ? 'You gain ' : 'You lose ') + Math.abs(diff) + ' pts of value';
+
+  const caption = document.getElementById('verdictCaption');
+  if (result.adjusted_diff !== result.diff) {
+    caption.textContent = 'Adjusted for package size (fewer, bigger pieces carry a premium) · raw value diff: ' + result.diff;
+    caption.style.display = '';
+  } else {
+    caption.style.display = 'none';
+  }
+
+  renderSuggestions(data.suggestions);
+}
+
+let tradeResultRequestId = 0;
+
+function updateTradeResult() {
+  // Was a full window.location.href navigation on every single
+  // add/remove -- reloaded the entire page (fonts, header, everything)
+  // just to update a verdict box. Now: update the URL in place (so the
+  // trade is still bookmarkable/shareable) and fetch just the
+  // verdict/suggestions JSON, patching the DOM instead of reloading it.
   const url = new URL(window.location.href);
   url.searchParams.set('format', fmt);
   url.searchParams.set('mode', mode);
+  url.searchParams.set('teams', teams);
   url.searchParams.set('side1', selected1.map(p => p.sid).join(','));
   url.searchParams.set('side2', selected2.map(p => p.sid).join(','));
-  window.location.href = url.toString();
+  history.replaceState(null, '', url.toString());
+
+  // Rapid-fire adds/removes (e.g. quickly clicking two roster tiles)
+  // fire overlapping fetches that can resolve out of order over a real
+  // network -- an earlier request's response arriving after a later
+  // one would otherwise overwrite the correct result with a stale one.
+  // Only the response to the MOST RECENT request is allowed to apply.
+  const thisRequestId = ++tradeResultRequestId;
+  fetch('/api/trade-result?' + url.searchParams.toString())
+    .then(r => r.json())
+    .then(data => { if (thisRequestId === tradeResultRequestId) applyTradeResult(data); })
+    .catch(() => {});
 }
 
 let debounceTimer;
@@ -3596,6 +3702,7 @@ function wireSearch(side) {
 
 renderChips(1);
 renderChips(2);
+applyTradeResult({result: initialResult, suggestions: initialSuggestions});
 wireSearch(1);
 wireSearch(2);
 </script>
