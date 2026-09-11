@@ -2339,6 +2339,19 @@ BASE_STYLE = """
   .trade-total-adjusted{ margin-top:2px; font-family:"IBM Plex Mono"; font-size:11.5px; color:var(--ink-muted); }
   .trade-result{ margin-top:20px; padding-top:18px; border-top:1px solid var(--line); }
   .verdict{ font-family:"Big Shoulders Display"; font-size:26px; font-weight:800; }
+  /* A visual tug-of-war between the two sides' adjusted value -- fixed
+     colors per side (blue vs. the site's own accent gold) so the bar
+     always reads the same way; the text verdict above/below still owns
+     "who's actually winning," this just shows the raw proportion. */
+  .balance-bar-wrap{ margin-top:20px; }
+  .balance-bar{ position:relative; height:16px; border-radius:99px; overflow:hidden; display:flex; background:var(--paper-sunken); box-shadow: inset 0 1px 3px rgba(0,0,0,0.35); }
+  .balance-fill{ height:100%; transition: width 0.5s cubic-bezier(.4,0,.2,1); }
+  .balance-fill-1{ background: linear-gradient(90deg, #3f7fc9, #5a9ae0); }
+  .balance-fill-2{ background: linear-gradient(90deg, var(--accent), var(--accent-ink)); }
+  .balance-center-marker{ position:absolute; left:50%; top:-3px; bottom:-3px; width:2px; background:rgba(255,255,255,0.35); transform:translateX(-50%); pointer-events:none; }
+  .balance-pointer{ position:absolute; top:-7px; width:0; height:0; border-left:6px solid transparent; border-right:6px solid transparent; border-top:8px solid var(--ink); transform:translateX(-50%); transition: left 0.5s cubic-bezier(.4,0,.2,1); filter:drop-shadow(0 1px 1px rgba(0,0,0,0.4)); }
+  .balance-labels{ display:flex; justify-content:space-between; margin-top:8px; font-family:"IBM Plex Mono"; font-size:11.5px; color:var(--ink-muted); }
+  .balance-labels .leading{ color:var(--ink); font-weight:700; }
 
   .link-box{ background:var(--paper-sunken); border-radius:10px; padding:14px 16px; margin-top:12px; }
   .gate-wrap{ position:relative; margin-top:18px; }
@@ -3525,6 +3538,19 @@ TRADE_CALC_HTML = BASE_STYLE + make_header("trade") + """
       </div>
     </div>
 
+    <div class="balance-bar-wrap" id="balanceBarWrap" style="display:none;">
+      <div class="balance-bar">
+        <div class="balance-fill balance-fill-1" id="balanceFill1"></div>
+        <div class="balance-fill balance-fill-2" id="balanceFill2"></div>
+        <div class="balance-center-marker"></div>
+        <div class="balance-pointer" id="balancePointer"></div>
+      </div>
+      <div class="balance-labels">
+        <span id="balanceLabel1"></span>
+        <span id="balanceLabel2"></span>
+      </div>
+    </div>
+
     <div class="trade-result" id="tradeResult" style="display:none;">
       <p class="verdict" id="verdictText"></p>
       <p class="muted" id="verdictCaption" style="margin-top:4px;font-size:12px;display:none;"></p>
@@ -3623,6 +3649,29 @@ function renderSuggestions(suggestions) {
   block.style.display = '';
 }
 
+function updateBalanceBar(result) {
+  const wrap = document.getElementById('balanceBarWrap');
+  const total = result ? result.side1_adjusted + result.side2_adjusted : 0;
+  if (!result || total <= 0) {
+    wrap.style.display = 'none';
+    return;
+  }
+  wrap.style.display = '';
+
+  const pct1 = (result.side1_adjusted / total) * 100;
+  const pct2 = 100 - pct1;
+  document.getElementById('balanceFill1').style.width = pct1 + '%';
+  document.getElementById('balanceFill2').style.width = pct2 + '%';
+  document.getElementById('balancePointer').style.left = pct1 + '%';
+
+  const label1 = document.getElementById('balanceLabel1');
+  const label2 = document.getElementById('balanceLabel2');
+  label1.textContent = 'You send: ' + Math.round(pct1) + '%';
+  label2.textContent = 'You receive: ' + Math.round(pct2) + '%';
+  label1.classList.toggle('leading', pct1 > pct2);
+  label2.classList.toggle('leading', pct2 > pct1);
+}
+
 function applyTradeResult(data) {
   const result = data.result;
 
@@ -3641,6 +3690,8 @@ function applyTradeResult(data) {
   } else {
     adj2.style.display = 'none';
   }
+
+  updateBalanceBar(result);
 
   const tradeResult = document.getElementById('tradeResult');
   if (!result) {
