@@ -581,10 +581,12 @@ def get_all_players(cache={}):
 
 # ---------------- FantasyCalc (real dynasty/redraft trade values, incl. picks) ----------------
 
-def get_fantasycalc_values(num_qbs, is_dynasty=True, cache={}):
+def get_fantasycalc_values(num_qbs, is_dynasty=True, num_teams=12, cache={}):
     """Returns {"players": {sleeper_id: {...}}, "picks": {pick_id: {...}}},
-    cached 1hr per (format, dynasty-vs-redraft)."""
-    key = (num_qbs, is_dynasty)
+    cached 1hr per (format, dynasty-vs-redraft, league size). num_teams
+    lets the trade calculator price picks/players for the user's actual
+    league instead of only a fixed 12-team consensus."""
+    key = (num_qbs, is_dynasty, num_teams)
     now = time.time()
     entry = cache.get(key)
     if entry and now - entry["time"] < 3600:
@@ -592,7 +594,7 @@ def get_fantasycalc_values(num_qbs, is_dynasty=True, cache={}):
 
     r = requests.get(FANTASYCALC_BASE, params={
         "isDynasty": "true" if is_dynasty else "false",
-        "numQbs": num_qbs, "numTeams": 12, "ppr": 1,
+        "numQbs": num_qbs, "numTeams": num_teams, "ppr": 1,
     })
     r.raise_for_status()
     players, picks = {}, {}
@@ -611,15 +613,44 @@ def get_fantasycalc_values(num_qbs, is_dynasty=True, cache={}):
             }
         elif pos not in POSITIONS:
             # No sleeperId and not a real offensive position -> a draft pick
-            # or similar non-Sleeper asset FantasyCalc tracks.
+            # or similar non-Sleeper asset FantasyCalc tracks. Picks are
+            # labeled like "2026 Mid 1st" -- pull the year out so the trade
+            # calculator can group/filter them without re-parsing names
+            # all over the place.
             pid = f"pick_{player.get('id')}"
             name = player.get("name")
             if name:
-                picks[pid] = {"name": name, "value": item.get("value", 0), "overall_rank": item.get("overallRank")}
+                year_match = re.search(r"(20\d{2})", name)
+                picks[pid] = {
+                    "sid": pid, "name": name, "value": item.get("value", 0), "overall_rank": item.get("overallRank"),
+                    "year": int(year_match.group(1)) if year_match else None,
+                }
 
     data = {"players": players, "picks": picks}
     cache[key] = {"data": data, "time": now}
     return data
+
+
+def sorted_upcoming_picks(picks, num_years=3):
+    """Picks grouped/ordered for a browsable UI: nearest `num_years` draft
+    classes present in the data (oldest first), each sorted by round then
+    early/mid/late tier -- so "2026 1st" always comes before "2026 2nd",
+    and "2026 Early 1st" before "2026 Late 1st". Falls back gracefully for
+    any label FantasyCalc formats differently than expected."""
+    tier_order = {"early": 0, "mid": 1, "late": 2}
+
+    def sort_key(pick):
+        name = pick["name"]
+        round_match = re.search(r"(\d+)(?:st|nd|rd|th)", name)
+        tier_match = re.search(r"\b(early|mid|late)\b", name, re.I)
+        rnd = int(round_match.group(1)) if round_match else 9
+        tier = tier_order.get(tier_match.group(1).lower(), 1) if tier_match else 1
+        return (pick["year"] if pick["year"] is not None else 9999, rnd, tier, name)
+
+    years_present = sorted({p["year"] for p in picks.values() if p["year"] is not None})
+    keep_years = set(years_present[:num_years])
+    kept = [p for p in picks.values() if p["year"] in keep_years]
+    return sorted(kept, key=sort_key)
 
 
 def normalize_name(name):
@@ -1451,14 +1482,22 @@ def api_player_search():
     q = request.args.get("q", "").strip()
     fmt = request.args.get("format", "1qb")
     mode = request.args.get("mode", "dynasty")
+    teams = request.args.get("teams", default=12, type=int)
+    if teams not in (8, 10, 12, 14):
+        teams = 12
     if not q:
         return jsonify({"results": []})
 
     num_qbs = 2 if fmt == "superflex" else 1
     is_dynasty = mode != "redraft"
-    fc = get_fantasycalc_values(num_qbs, is_dynasty)
+    fc = get_fantasycalc_values(num_qbs, is_dynasty, teams)
     all_players = get_all_players()
     q_low = q.lower()
+    # Pick labels look like "2026 Mid 1st" -- they never contain the words
+    # people actually type when looking for one, so also treat a generic
+    # "pick"/"draft" query as "show me picks" rather than requiring the
+    # exact year/round text.
+    q_is_generic_pick = q_low in ("pick", "picks", "draft", "draft pick", "draft picks")
 
     results = []
     for sid, p in all_players.items():
@@ -1473,7 +1512,7 @@ def api_player_search():
 
     if is_dynasty:
         for pid, pk in fc["picks"].items():
-            if q_low in pk["name"].lower():
+            if q_is_generic_pick or q_low in pk["name"].lower():
                 results.append({
                     "sid": pid, "name": pk["name"], "position": "PICK", "team": "",
                     "photo": PICK_ICON, "value": pk["value"],
@@ -1581,6 +1620,9 @@ def consolidation_adjusted_value(items):
 def trade_calculator():
     fmt = request.args.get("format", "1qb")
     mode = request.args.get("mode", "dynasty")
+    teams = request.args.get("teams", default=12, type=int)
+    if teams not in (8, 10, 12, 14):
+        teams = 12
     num_qbs = 2 if fmt == "superflex" else 1
     is_dynasty = mode != "redraft"
     side1_ids = [x for x in request.args.get("side1", "").split(",") if x]
@@ -1591,8 +1633,15 @@ def trade_calculator():
     my_roster_id = request.args.get("my_roster_id", type=int)
     other_roster_id = request.args.get("other_roster_id", type=int)
 
-    fc = get_fantasycalc_values(num_qbs, is_dynasty)
+    fc = get_fantasycalc_values(num_qbs, is_dynasty, teams)
     all_players = get_all_players()
+
+    draft_picks_quick = []
+    if is_dynasty:
+        draft_picks_quick = [
+            {"sid": p["sid"], "name": p["name"], "position": "PICK", "team": "", "photo": PICK_ICON, "value": p["value"]}
+            for p in sorted_upcoming_picks(fc["picks"])
+        ]
 
     def build_side(ids):
         items, total = [], 0
@@ -1670,9 +1719,10 @@ def trade_calculator():
         suggestions = pool_sorted[:3]
 
     return render_template_string(
-        TRADE_CALC_HTML, result=result, fmt=fmt, mode=mode,
+        TRADE_CALC_HTML, result=result, fmt=fmt, mode=mode, teams=teams,
         side1_ids=",".join(side1_ids), side2_ids=",".join(side2_ids),
         league_link=league_link, my_quick=my_quick, other_quick=other_quick,
+        draft_picks_quick=draft_picks_quick,
         suggestions=suggestions, u=u, league_id=league_id,
         my_roster_id=my_roster_id, other_roster_id=other_roster_id,
     )
@@ -3093,12 +3143,21 @@ TRADE_CALC_HTML = BASE_STYLE + make_header("trade") + """
           <a class="{{ 'active' if mode=='redraft' else '' }}" href="#" onclick="setParam('mode','redraft');return false;">Redraft</a>
         </div>
       </div>
+      <div class="toggle-group">
+        <span class="glabel">League size</span>
+        <div class="format-toggle">
+          {% for n in [8, 10, 12, 14] %}
+          <a class="{{ 'active' if teams==n else '' }}" href="#" onclick="setParam('teams',{{ n }});return false;">{{ n }}</a>
+          {% endfor %}
+        </div>
+      </div>
     </div>
+    <p class="muted" style="margin-top:8px;font-size:12px;">Values default to a 12-team consensus &mdash; switch this to match your actual league size for more accurate pricing.</p>
 
     <div class="link-box">
       {% if not league_link %}
       <form method="get" class="search-row" style="margin-top:0;">
-        <input type="hidden" name="format" value="{{ fmt }}"><input type="hidden" name="mode" value="{{ mode }}">
+        <input type="hidden" name="format" value="{{ fmt }}"><input type="hidden" name="mode" value="{{ mode }}"><input type="hidden" name="teams" value="{{ teams }}">
         <input type="text" name="u" placeholder="Link your Sleeper username (optional)">
         <button class="btn" type="submit">Load leagues</button>
       </form>
@@ -3108,14 +3167,14 @@ TRADE_CALC_HTML = BASE_STYLE + make_header("trade") + """
       <p class="muted">Pick a league for <strong>{{ league_link.username }}</strong>:</p>
       <div class="league-chip-row">
         {% for lg in league_link.leagues %}
-        <a class="team-chip" href="/trade-calculator?format={{ fmt }}&mode={{ mode }}&u={{ league_link.username }}&league_id={{ lg.league_id }}">{{ lg.league_name }}</a>
+        <a class="team-chip" href="/trade-calculator?format={{ fmt }}&mode={{ mode }}&teams={{ teams }}&u={{ league_link.username }}&league_id={{ lg.league_id }}">{{ lg.league_name }}</a>
         {% endfor %}
       </div>
       {% else %}
       <p class="muted">Playing as <strong style="color:var(--accent-ink);">{{ league_link.my_team.owner_name if league_link.my_team else '?' }}</strong>. Trade with:</p>
       <div class="league-chip-row">
         {% for t in league_link.other_teams %}
-        <a class="team-chip {{ 'active' if league_link.other_team and t.roster_id == league_link.other_team.roster_id else '' }}" href="/trade-calculator?format={{ fmt }}&mode={{ mode }}&u={{ league_link.username }}&league_id={{ league_link.selected_league_id }}&other_roster_id={{ t.roster_id }}&side1={{ side1_ids }}&side2={{ side2_ids }}">{{ t.owner_name }}</a>
+        <a class="team-chip {{ 'active' if league_link.other_team and t.roster_id == league_link.other_team.roster_id else '' }}" href="/trade-calculator?format={{ fmt }}&mode={{ mode }}&teams={{ teams }}&u={{ league_link.username }}&league_id={{ league_link.selected_league_id }}&other_roster_id={{ t.roster_id }}&side1={{ side1_ids }}&side2={{ side2_ids }}">{{ t.owner_name }}</a>
         {% endfor %}
       </div>
       {% endif %}
@@ -3131,6 +3190,16 @@ TRADE_CALC_HTML = BASE_STYLE + make_header("trade") + """
         <div class="chip-list" id="chips1"></div>
         <div class="trade-total" id="total1">Total: 0</div>
         {% if result and result.side1_adjusted != result.side1_total %}<div class="trade-total-adjusted">Adjusted: {{ result.side1_adjusted }}</div>{% endif %}
+        {% if draft_picks_quick %}
+        <p class="muted" style="margin-top:10px;">Draft picks (click to add):</p>
+        <div class="quick-add-grid">
+          {% for pk in draft_picks_quick %}
+          <div class="quick-add-tile" data-sid="{{ pk.sid }}" data-name="{{ pk.name }}" data-position="{{ pk.position }}" data-team="{{ pk.team }}" data-photo="{{ pk.photo }}" data-value="{{ pk.value }}" onclick="quickAddClick(1,this)">
+            <img src="{{ pk.photo }}" onerror="this.style.visibility='hidden'">{{ pk.name }}
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
         {% if my_quick %}
         <p class="muted" style="margin-top:10px;">Your roster (click to add):</p>
         <div class="quick-add-grid">
@@ -3151,6 +3220,16 @@ TRADE_CALC_HTML = BASE_STYLE + make_header("trade") + """
         <div class="chip-list" id="chips2"></div>
         <div class="trade-total" id="total2">Total: 0</div>
         {% if result and result.side2_adjusted != result.side2_total %}<div class="trade-total-adjusted">Adjusted: {{ result.side2_adjusted }}</div>{% endif %}
+        {% if draft_picks_quick %}
+        <p class="muted" style="margin-top:10px;">Draft picks (click to add):</p>
+        <div class="quick-add-grid">
+          {% for pk in draft_picks_quick %}
+          <div class="quick-add-tile" data-sid="{{ pk.sid }}" data-name="{{ pk.name }}" data-position="{{ pk.position }}" data-team="{{ pk.team }}" data-photo="{{ pk.photo }}" data-value="{{ pk.value }}" onclick="quickAddClick(2,this)">
+            <img src="{{ pk.photo }}" onerror="this.style.visibility='hidden'">{{ pk.name }}
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
         {% if other_quick %}
         <p class="muted" style="margin-top:10px;">{{ league_link.other_team.owner_name }}'s roster (click to add):</p>
         <div class="quick-add-grid">
@@ -3186,6 +3265,7 @@ TRADE_CALC_HTML = BASE_STYLE + make_header("trade") + """
 <script>
 const fmt = {{ fmt|tojson }};
 const mode = {{ mode|tojson }};
+const teams = {{ teams|tojson }};
 const initialSide1 = {{ result.side1_items|tojson if result else '[]' }};
 const initialSide2 = {{ result.side2_items|tojson if result else '[]' }};
 
@@ -3272,7 +3352,7 @@ function wireSearch(side) {
     const q = input.value.trim();
     if (!q) { dropdown.classList.remove('open'); return; }
     debounceTimer = setTimeout(async () => {
-      const resp = await fetch(`/api/player-search?q=${encodeURIComponent(q)}&format=${fmt}&mode=${mode}`);
+      const resp = await fetch(`/api/player-search?q=${encodeURIComponent(q)}&format=${fmt}&mode=${mode}&teams=${teams}`);
       const data = await resp.json();
       dropdown.innerHTML = '';
       data.results.forEach(r => {
