@@ -474,15 +474,24 @@ def _depth_slot_sort_key(slot):
 # above). So the depth chart badges below update automatically as soon as
 # Sleeper's data changes, with no separate scrape of NFL.com or anywhere
 # else needed, and nothing manual for us to maintain.
+# label, full status name, severity tier for color-coding (see .injury-*
+# in BASE_STYLE) -- "OUT" spelled out rather than "O" since a single
+# letter O is easy to misread as the digit 0 at small badge size; "Q" for
+# Questionable is kept since that one-letter code is a near-universal
+# fantasy-football convention on its own.
 INJURY_BADGE = {
-    "IR": ("cross", "Injured Reserve"),
-    "OUT": ("O", "Out"),
-    "DOUBTFUL": ("D", "Doubtful"),
-    "QUESTIONABLE": ("Q", "Questionable"),
-    "PUP": ("PUP", "Physically Unable to Perform"),
-    "SUSPENDED": ("SUSP", "Suspended"),
-    "NA": ("NA", "Not Active"),
-    "COV": ("COV", "COVID-19 list"),
+    "IR": ("cross", "Injured Reserve", "out"),
+    "OUT": ("OUT", "Out", "out"),
+    "DOUBTFUL": ("DOUB", "Doubtful", "doubtful"),
+    "QUESTIONABLE": ("Q", "Questionable", "questionable"),
+    "PUP": ("PUP", "Physically Unable to Perform", "admin"),
+    "SUSPENDED": ("SUSP", "Suspended", "admin"),
+    "NA": ("NA", "Not Active", "admin"),
+    "COV": ("COV", "COVID-19 list", "admin"),
+}
+INJURY_TIER_COLOR = {
+    "out": "var(--critical)", "doubtful": "#e27834",
+    "questionable": "var(--warning)", "admin": "var(--ink-muted)",
 }
 
 
@@ -490,8 +499,14 @@ def _injury_badge(pl):
     status = (pl.get("injury_status") or "").strip().upper()
     if not status:
         return None
-    label, title = INJURY_BADGE.get(status, (status[:4], status.title()))
-    return {"label": label, "title": title, "is_ir": status == "IR"}
+    label, title, tier = INJURY_BADGE.get(status, (status[:4], status.title(), "admin"))
+    body_part = (pl.get("injury_body_part") or "").strip()
+    if body_part:
+        title = f"{title} — {body_part}"
+    return {
+        "label": label, "title": title, "tier": tier, "is_ir": status == "IR",
+        "color": INJURY_TIER_COLOR.get(tier, "var(--ink-muted)"),
+    }
 
 
 def get_team_depth_chart(team, all_players):
@@ -1608,7 +1623,7 @@ def player_detail():
         "position": p.get("position", "?"), "team": p.get("team") or "Free agent",
         "age": compute_age_decimal(p.get("birth_date")) or p.get("age"), "years_exp": p.get("years_exp"), "college": p.get("college"),
         "height": format_height(p.get("height")), "weight": p.get("weight"),
-        "status": p.get("status"), "injury_status": p.get("injury_status"),
+        "status": p.get("status"), "injury": _injury_badge(p),
         "value": v.get("value"), "position_rank": v.get("position_rank"), "overall_rank": v.get("overall_rank"),
         "redraft_value": v.get("redraft_value"), "tier": rank_tier(v.get("overall_rank")),
         "adp": adp, "ppg": current_ppg,
@@ -2248,8 +2263,8 @@ BASE_STYLE = """
   .player-row{ display:flex; justify-content:space-between; align-items:center; gap:8px; padding:7px 4px; border-top:1px solid var(--line); font-size:13px; }
   .player-row:first-of-type{ border-top:none; }
   .player-row img{ width:26px; height:26px; border-radius:50%; object-fit:cover; background:var(--paper-sunken); flex:none; }
-  .pname-row{ display:flex; align-items:center; gap:8px; min-width:0; }
-  .pname{ font-weight:600; text-decoration:none; color:var(--ink); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .pname-row{ display:flex; align-items:center; gap:8px; min-width:0; flex:1; }
+  .pname{ font-weight:600; text-decoration:none; color:var(--ink); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; min-width:0; }
   .pname:hover{ color:var(--accent-ink); text-decoration:underline; }
   .rank-pair{ display:flex; gap:5px; font-family:"IBM Plex Mono"; font-size:11px; flex:none; }
   .rank-pair span{ padding:2px 6px; border-radius:5px; }
@@ -2274,12 +2289,18 @@ BASE_STYLE = """
   .news-credit{ font-size:11px; color:var(--ink-muted); margin-top:12px; padding-top:10px; border-top:1px solid var(--line); }
   .news-credit a{ color:var(--accent-ink); text-decoration:none; }
   .news-credit a:hover{ text-decoration:underline; }
-  .depth-you{ color:var(--accent-ink); font-weight:700; }
-  .depth-you-tag{ font-size:10px; color:var(--ink-muted); font-weight:600; text-transform:uppercase; letter-spacing:0.04em; margin-left:6px; }
+  .depth-you{ color:var(--accent-ink); font-weight:700; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; flex:1; min-width:34px; }
+  .depth-you-tag{ font-size:10px; color:var(--ink-muted); font-weight:600; text-transform:uppercase; letter-spacing:0.04em; margin-left:6px; flex:none; white-space:nowrap; }
   .depth-rank{ font-family:"IBM Plex Mono"; font-size:10.5px; font-weight:700; color:var(--ink-muted); min-width:26px; flex:none; }
-  .injury-badge{ margin-left:auto; flex:none; font-family:"IBM Plex Mono"; font-size:10px; font-weight:800; border-radius:5px; padding:1px 6px; line-height:1.5; }
-  .injury-q{ background:rgba(226,151,52,0.18); color:#e29734; }
-  .injury-ir{ background:rgba(226,83,74,0.18); color:#e2534a; font-size:12px; padding:1px 5px; }
+  .injury-badge{ margin-left:auto; flex:none; font-family:"IBM Plex Mono"; font-size:10px; font-weight:800; border-radius:5px; padding:1px 6px; line-height:1.5; letter-spacing:0.02em; }
+  /* Color says the severity even before you read the letters: red = not
+     playing this week (Out/IR), amber = uncertain (Doubtful/Questionable),
+     gray = a roster/administrative status rather than a game-day call. */
+  .injury-out{ background:var(--critical-wash); color:var(--critical); }
+  .injury-doubtful{ background:rgba(226,120,52,0.18); color:#e27834; }
+  .injury-questionable{ background:var(--warning-wash); color:var(--warning); }
+  .injury-admin{ background:var(--paper-sunken); color:var(--ink-muted); }
+  .injury-ir{ background:var(--critical-wash); color:var(--critical); font-size:12px; padding:1px 5px; }
   .fact-tile{ background:var(--paper-sunken); border-radius:10px; padding:12px 14px; }
   .fact-tile b{ display:block; font-family:"Big Shoulders Display"; font-size:22px; font-weight:800; }
   .fact-tile span{ font-size:11.5px; color:var(--ink-secondary); font-weight:600; text-transform:uppercase; letter-spacing:0.04em; }
@@ -2876,7 +2897,7 @@ PLAYER_HTML = BASE_STYLE + make_header("league") + """
       {% if p.college %}<div><b>College:</b> {{ p.college }}</div>{% endif %}
       {% if p.height or p.weight %}<div><b>Size:</b> {{ p.height or '\u2014' }}, {{ p.weight or '\u2014' }} lb</div>{% endif %}
       {% if p.years_exp is not none %}<div><b>Years exp.:</b> {{ p.years_exp }}</div>{% endif %}
-      {% if p.injury_status %}<div><b>Injury status:</b> {{ p.injury_status }}</div>{% endif %}
+      {% if p.injury %}<div><b>Injury status:</b> <span style="color:{{ p.injury.color }};font-weight:700;">{{ p.injury.title }}</span></div>{% endif %}
       {% if p.adp %}<div style="margin-top:6px;">ADP data via <a href="https://fantasyfootballcalculator.com/adp/ppr" target="_blank" style="color:var(--accent-ink);">Fantasy Football Calculator</a></div>{% endif %}
     </div>
     {% endif %}
@@ -2955,15 +2976,15 @@ PLAYER_HTML = BASE_STYLE + make_header("league") + """
             <span class="depth-rank">{{ dp.rank_label }}</span>
             <img src="{{ dp.photo }}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">
             {% if dp.sid == sid %}
-            <span class="depth-you">{{ dp.name }}</span><span class="depth-you-tag">this player</span>
+            <span class="depth-you">{{ dp.name }}</span><span class="depth-you-tag">you</span>
             {% else %}
             <a class="pname" href="/player?sid={{ dp.sid }}&numqbs={{ num_qbs }}&u={{ username }}&tab=general&ref={{ ('/player?sid=' ~ sid ~ '&numqbs=' ~ num_qbs ~ '&u=' ~ username ~ '&tab=' ~ tab ~ '&ref=' ~ ref)|urlencode }}">{{ dp.name }}</a>
             {% endif %}
-            {% if dp.injury %}
+            {% if dp.injury and dp.sid != sid %}
               {% if dp.injury.is_ir %}
               <span class="injury-badge injury-ir" title="{{ dp.injury.title }}">&#10013;</span>
               {% else %}
-              <span class="injury-badge injury-q" title="{{ dp.injury.title }}">{{ dp.injury.label }}</span>
+              <span class="injury-badge injury-{{ dp.injury.tier }}" title="{{ dp.injury.title }}">{{ dp.injury.label }}</span>
               {% endif %}
             {% endif %}
           </div>
