@@ -1127,17 +1127,28 @@ def rank_tier(rank):
     return "critical"
 
 
-def team_power_tier(rank_index, n_teams):
-    """Flock-style label based on where a team's total dynasty value ranks
-    within its own league (0 = strongest)."""
-    frac = rank_index / max(n_teams - 1, 1)
-    if frac <= 0.15:
-        return "Juggernaut", "tier-juggernaut"
-    if frac <= 0.4:
-        return "Strong Contender", "tier-contender"
-    if frac <= 0.65:
+def team_power_tier(total_value, mean_value, stdev_value):
+    """Flock-style label based on how far this team's total dynasty value
+    sits from its own league's average, in standard deviations -- not a
+    fixed rank-percentage cutoff. A rank-based cutoff (e.g. "top 15% of
+    teams") forces the same tier shape onto every league regardless of
+    whether teams are actually bunched together or spread out -- in any
+    10-team league it always hands out exactly 2 Juggernauts and 2
+    Purgatory teams, even when the 2nd-ranked team is nearly tied with the
+    5th. This reflects the real spread instead: a league where everyone's
+    close in value can end up almost entirely "Balanced" with nobody in
+    the extreme tiers, and a league with one dominant roster can have
+    exactly one real Juggernaut and nobody else close."""
+    if stdev_value <= 0:
         return "Balanced", "tier-balanced"
-    if frac <= 0.85:
+    z = (total_value - mean_value) / stdev_value
+    if z >= 1.0:
+        return "Juggernaut", "tier-juggernaut"
+    if z >= 0.35:
+        return "Strong Contender", "tier-contender"
+    if z >= -0.35:
+        return "Balanced", "tier-balanced"
+    if z >= -1.0:
         return "Strong Rebuilder", "tier-rebuilder"
     return "Purgatory", "tier-purgatory"
 
@@ -1214,8 +1225,11 @@ def build_league_teams(league_id, league, all_players, league_users, user_id):
         t["bar"] = bar
 
     team_infos.sort(key=lambda t: (-t["wins"], -sum(t["pos_value"].values())))
-    for i, t in enumerate(team_infos):
-        t["power_tier"], t["power_tier_class"] = team_power_tier(i, len(team_infos))
+    totals = [sum(t["pos_value"].values()) for t in team_infos]
+    mean_value = sum(totals) / len(totals) if totals else 0
+    stdev_value = (sum((v - mean_value) ** 2 for v in totals) / len(totals)) ** 0.5 if totals else 0
+    for t in team_infos:
+        t["power_tier"], t["power_tier_class"] = team_power_tier(sum(t["pos_value"].values()), mean_value, stdev_value)
     return team_infos
 
 
