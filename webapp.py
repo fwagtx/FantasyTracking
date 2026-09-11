@@ -18,6 +18,7 @@ Optional:
 """
 
 import html
+import math
 import os
 import random
 import re
@@ -695,16 +696,21 @@ def pick_tier_value_map(picks):
 def interpolate_pick_slot_value(slot, num_teams, tier_values):
     """Derive a value for one exact slot (1..num_teams) from FantasyCalc's
     published early/mid/late tier values for that round -- they don't
-    publish a value per individual slot, only per tier, so this linearly
-    interpolates between each tier's midpoint slot, holding flat past the
-    outermost tiers. With only one value available (a round FantasyCalc
-    doesn't subdivide by tier), every slot in it gets that same value --
-    there's nothing more granular to derive it from."""
-    real_tiers = {k: v for k, v in tier_values.items() if k != "flat"}
+    publish a value per individual slot, only per tier. Fits a smooth
+    decay curve (linear in log-value space, i.e. geometric decay -- the
+    standard shape for draft-pick value curves) through whichever tier
+    midpoints are known, then evaluates every slot in the round and
+    forces the result non-increasing left-to-right. That clamp matters at
+    the two edges: a curve fit through only 2-3 points can flatten out or
+    even curve the wrong way right past its outermost anchor, which
+    otherwise made pick 1.01 and 1.02 land on the exact same number --
+    the earliest slot should never come out cheaper than a later one.
+    With only one tier value available (a round FantasyCalc doesn't
+    subdivide by tier), every slot in it gets that same value -- there's
+    nothing more granular to derive it from."""
+    real_tiers = {k: v for k, v in tier_values.items() if k != "flat" and v}
     if not real_tiers:
         return tier_values.get("flat")
-    if len(real_tiers) == 1:
-        return next(iter(real_tiers.values()))
 
     third = max(num_teams // 3, 1)
     bounds = {
@@ -717,16 +723,32 @@ def interpolate_pick_slot_value(slot, num_teams, tier_values):
         for tier, value in real_tiers.items()
         if bounds[tier][0] <= bounds[tier][1]
     )
-    if not anchors:
-        return next(iter(real_tiers.values()))
-    if slot <= anchors[0][0]:
-        return anchors[0][1]
-    if slot >= anchors[-1][0]:
-        return anchors[-1][1]
-    for (s1, v1), (s2, v2) in zip(anchors, anchors[1:]):
-        if s1 <= slot <= s2:
-            return v1 if s2 == s1 else v1 + (slot - s1) / (s2 - s1) * (v2 - v1)
-    return anchors[-1][1]
+    if len(anchors) <= 1:
+        return anchors[0][1] if anchors else next(iter(real_tiers.values()))
+
+    xs = [a[0] for a in anchors]
+    ys = [math.log(max(a[1], 1)) for a in anchors]
+
+    if len(anchors) == 2:
+        x1, y1, x2, y2 = xs[0], ys[0], xs[1], ys[1]
+        slope = (y2 - y1) / (x2 - x1) if x2 != x1 else 0
+        curve = lambda x: y1 + slope * (x - x1)  # noqa: E731
+    else:
+        x0, x1, x2 = xs
+        y0, y1, y2 = ys
+
+        def curve(x):
+            l0 = (x - x1) * (x - x2) / ((x0 - x1) * (x0 - x2))
+            l1 = (x - x0) * (x - x2) / ((x1 - x0) * (x1 - x2))
+            l2 = (x - x0) * (x - x1) / ((x2 - x0) * (x2 - x1))
+            return y0 * l0 + y1 * l1 + y2 * l2
+
+    raw_values = [math.exp(curve(s)) for s in range(1, num_teams + 1)]
+    clamped, running_min = [], float("inf")
+    for v in raw_values:
+        running_min = min(running_min, v)
+        clamped.append(running_min)
+    return round(clamped[slot - 1])
 
 
 SLOT_PICK_SID_RE = re.compile(r"^pick_slot_(\d{4})_(\d+)_(\d+)_(\d+)$")
@@ -2008,9 +2030,14 @@ def api_warm():
         try:
             get_all_players()
             get_adp_data()
+            # All (format x mode x league-size) combos the trade calculator
+            # actually offers -- so switching to an 8/10/14-team league
+            # never makes a real visitor eat a cold FantasyCalc fetch
+            # either, same as the 12-team default already got.
             for num_qbs in (1, 2):
                 for is_dynasty in (True, False):
-                    get_fantasycalc_values(num_qbs, is_dynasty)
+                    for num_teams in (8, 10, 12, 14):
+                        get_fantasycalc_values(num_qbs, is_dynasty, num_teams)
         except Exception:
             pass
 
@@ -3377,7 +3404,7 @@ TRADE_CALC_HTML = BASE_STYLE + make_header("trade") + """
       <div class="trade-side-box">
         <div class="trade-side-label">You send</div>
         <div class="search-wrap">
-          <input type="text" id="search1" placeholder="Type a player or pick name&hellip;" autocomplete="off">
+          <input type="text" id="search1" placeholder="{{ 'Search for Players & Draft Picks' if mode=='dynasty' else 'Search a Player' }}" autocomplete="off">
           <div class="search-dropdown" id="dropdown1"></div>
         </div>
         <div class="chip-list" id="chips1"></div>
@@ -3407,7 +3434,7 @@ TRADE_CALC_HTML = BASE_STYLE + make_header("trade") + """
       <div class="trade-side-box">
         <div class="trade-side-label">You receive</div>
         <div class="search-wrap">
-          <input type="text" id="search2" placeholder="Type a player or pick name&hellip;" autocomplete="off">
+          <input type="text" id="search2" placeholder="{{ 'Search for Players & Draft Picks' if mode=='dynasty' else 'Search a Player' }}" autocomplete="off">
           <div class="search-dropdown" id="dropdown2"></div>
         </div>
         <div class="chip-list" id="chips2"></div>
