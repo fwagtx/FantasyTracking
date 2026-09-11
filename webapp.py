@@ -1723,6 +1723,40 @@ def api_sync_stats():
     return jsonify({"ok": True, "season": season, "started": True})
 
 
+@app.route("/healthz")
+def healthz():
+    """Public, does-nothing-but-200 endpoint for uptime/keep-alive pings --
+    deliberately cheap so it can't be abused, but hitting it on a schedule
+    keeps Render's free tier from spinning the worker down between real
+    visitors."""
+    return jsonify({"ok": True})
+
+
+@app.route("/api/warm", methods=["GET", "POST"])
+def api_warm():
+    """Companion to /healthz: actually refreshes the in-memory caches
+    (players, trade values, ADP) in the background so a real visitor is
+    never the one who pays a cold-fetch cost. Each of these already no-ops
+    unless its own TTL has expired, so calling them on a schedule is cheap.
+    Secret-protected like /api/sync-stats since it triggers real outbound
+    API calls."""
+    if request.args.get("secret") != SITE_PASSWORD:
+        return jsonify({"ok": False, "error": "unauthorized"}), 401
+
+    def _run():
+        try:
+            get_all_players()
+            get_adp_data()
+            for num_qbs in (1, 2):
+                for is_dynasty in (True, False):
+                    get_fantasycalc_values(num_qbs, is_dynasty)
+        except Exception:
+            pass
+
+    threading.Thread(target=_run, daemon=True).start()
+    return jsonify({"ok": True, "started": True})
+
+
 @app.route("/api/vote-trio")
 def api_vote_trio():
     return jsonify({"players": pick_similar_trio()})

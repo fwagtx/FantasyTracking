@@ -42,6 +42,13 @@ the deployed site's `/api/sync-stats` endpoint:
 Both call `https://fantasyfootballcalc.com/api/sync-stats` — update that
 hostname in both workflow files if the app is deployed elsewhere.
 
+- **`keep-warm.yml`** — runs every 12 minutes, pinging `/healthz` (keeps
+  Render's free-tier worker from spinning down after ~15 min idle) and
+  `/api/warm` (refreshes the in-memory player/trade-value/ADP caches in the
+  background, so a real visitor is never the one who pays a cold-fetch
+  cost). Both endpoints are safe to call repeatedly — the underlying
+  caches no-op unless their own TTL has actually expired.
+
 ### One-time setup required
 
 These workflows only work once a **`SITE_PASSWORD` repository secret** is
