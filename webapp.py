@@ -72,6 +72,13 @@ PICK_ICON = "data:image/svg+xml;utf8," + urllib.parse.quote(
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("FLASK_SECRET", "change-me-" + SITE_PASSWORD)
+# "Remember me" (login_user(..., remember=True)) issues a persistent cookie
+# that can live for up to a year -- make sure it (and the regular session
+# cookie) is only ever sent over HTTPS, which is all this app is served
+# over in production (Render).
+app.config["SESSION_COOKIE_SECURE"] = True
+app.config["REMEMBER_COOKIE_SECURE"] = True
+app.config["REMEMBER_COOKIE_HTTPONLY"] = True
 
 # ---------------- Accounts: database ----------------
 
@@ -1362,7 +1369,7 @@ def signup():
                     )
                     new_id = cur.fetchone()["id"]
                 conn.commit()
-                login_user(User({"id": new_id, "email": email, "username": username, "is_member": False}))
+                login_user(User({"id": new_id, "email": email, "username": username, "is_member": False}), remember=True)
                 return redirect("/")
             except psycopg2.errors.UniqueViolation:
                 if conn:
@@ -1402,7 +1409,7 @@ def login():
 
         if not error:
             if row and row["password_hash"] and check_password_hash(row["password_hash"], password):
-                login_user(User(row))
+                login_user(User(row), remember=True)
                 return redirect("/")
             error = "Incorrect email/username or password."
     return render_template_string(LOGIN_PAGE_HTML, error=error)
@@ -1464,7 +1471,7 @@ def google_callback():
     finally:
         conn.close()
 
-    login_user(User(row))
+    login_user(User(row), remember=True)
     return redirect("/")
 
 
