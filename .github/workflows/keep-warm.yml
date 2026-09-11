@@ -1,0 +1,17 @@
+name: Keep Site Warm
+
+on:
+  schedule:
+    # Every 12 minutes -- comfortably under Render free tier's ~15 min
+    # spin-down window, so the worker never goes cold between visitors.
+    - cron: "*/12 * * * *"
+  workflow_dispatch: {}
+
+jobs:
+  keep-warm:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping health check (keeps the free-tier worker from spinning down)
+        run: curl -sS "https://fantasyfootballcalc.com/healthz"
+      - name: Refresh in-memory caches (players, trade values, ADP)
+        run: curl -sS -X POST "https://fantasyfootballcalc.com/api/warm?secret=${{ secrets.SITE_PASSWORD }}"
