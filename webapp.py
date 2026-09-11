@@ -428,10 +428,15 @@ def get_player_news(full_name, team, limit=3):
     for it in all_items:
         hay = f"{it['title']} {it['desc']}".lower()
         hit = full_low in hay
-        if not hit and len(last_low) >= 6:
-            # Fall back to last-name-only matching only when it's distinctive
-            # enough, and only alongside the player's team, to avoid pulling
-            # in unrelated players who happen to share a surname.
+        if not hit and len(last_low) >= 4:
+            # Fall back to last-name-only matching once it's at least 4
+            # letters, and only alongside the player's team, to avoid
+            # pulling in unrelated players who happen to share a surname.
+            # This used to require 6+ letters, which silently excluded a
+            # huge share of real NFL surnames (Price, Cook, Hill, Chase,
+            # Kelce, Adams, Allen, Diggs, Evans, Jones, Smith, Davis...)
+            # from ever matching a headline that used last-name-only, which
+            # is how most beat-writer blurbs are actually written.
             hit = last_low in hay and team_low and team_low in hay
         if hit:
             matches.append({
@@ -1963,6 +1968,44 @@ def api_trade_result():
             "diff": result["diff"], "adjusted_diff": result["adjusted_diff"],
         }
     return jsonify({"result": result_json, "suggestions": s["suggestions"]})
+
+
+@app.route("/api/debug-news")
+def api_debug_news():
+    """Temporary diagnostic endpoint -- shows exactly what's in the two
+    news feeds right now and how a given player name/team matches (or
+    doesn't) against them, so a "why is there no news for X" report can
+    be root-caused against live feed content instead of guessed at from
+    a sandbox that can't reach these feeds itself. Remove once news
+    matching is confirmed working end to end."""
+    if request.args.get("secret") != SITE_PASSWORD:
+        return jsonify({"ok": False, "error": "unauthorized"}), 401
+    name = request.args.get("name", "").strip()
+    team = request.args.get("team", "").strip()
+    try:
+        espn_items = get_espn_nfl_news()
+        roto_items = get_rotowire_nfl_news()
+        all_items = espn_items + roto_items
+        result = {
+            "espn_item_count": len(espn_items),
+            "rotowire_item_count": len(roto_items),
+            "espn_sample_titles": [it["title"] for it in espn_items[:8]],
+            "rotowire_sample_titles": [it["title"] for it in roto_items[:8]],
+        }
+        if name:
+            last = name.split()[-1].lower() if name.split() else ""
+            raw_last_name_hits = [
+                {"title": it["title"], "source": it["source"], "desc": it["desc"][:150]}
+                for it in all_items
+                if last and last in f"{it['title']} {it['desc']}".lower()
+            ]
+            result["queried_name"] = name
+            result["queried_team"] = team
+            result["raw_last_name_substring_hits"] = raw_last_name_hits
+            result["get_player_news_result"] = get_player_news(name, team)
+        return jsonify(result)
+    except Exception as e:
+        return jsonify({"ok": False, "error": str(e)})
 
 
 @app.route("/api/debug-fantasycalc")
