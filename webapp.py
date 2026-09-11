@@ -3554,7 +3554,11 @@ function quickAddClick(side, el) {
 }
 
 function recalc() {
-  if (selected1.length === 0 && selected2.length === 0) return;
+  // Always navigate, even when a removal empties both sides -- the
+  // server clears the whole verdict/suggestions block when there's
+  // nothing left to calculate (result=None). Returning early here used
+  // to skip that reload, leaving the last real verdict ("You lose X pts
+  // of value") stuck on screen even after every pick/player was removed.
   const url = new URL(window.location.href);
   url.searchParams.set('format', fmt);
   url.searchParams.set('mode', mode);
