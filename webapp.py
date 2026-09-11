@@ -602,7 +602,14 @@ def get_fantasycalc_values(num_qbs, is_dynasty=True, num_teams=12, cache={}):
         player = item.get("player", {})
         sid = player.get("sleeperId")
         pos = player.get("position")
-        if sid:
+        # Classify by position first, not by whether sleeperId happens to
+        # be truthy: a real skill player always has one of POSITIONS, and
+        # a draft pick never does, regardless of what (if anything) the
+        # API puts in its sleeperId field. Classifying picks off "no
+        # sleeperId" alone silently mis-filed them as players (under a
+        # bogus id nothing else could ever look up) if the API ever sends
+        # a non-empty placeholder id for a pick entry.
+        if pos in POSITIONS and sid:
             players[str(sid)] = {
                 "value": item.get("value", 0),
                 "position_rank": item.get("positionRank"),
@@ -612,11 +619,10 @@ def get_fantasycalc_values(num_qbs, is_dynasty=True, num_teams=12, cache={}):
                 "trend_30day": item.get("trend30Day"),
             }
         elif pos not in POSITIONS:
-            # No sleeperId and not a real offensive position -> a draft pick
-            # or similar non-Sleeper asset FantasyCalc tracks. Picks are
-            # labeled like "2026 Mid 1st" -- pull the year out so the trade
-            # calculator can group/filter them without re-parsing names
-            # all over the place.
+            # Not a real offensive position -> a draft pick or similar
+            # non-Sleeper asset FantasyCalc tracks. Picks are labeled like
+            # "2026 Mid 1st" -- pull the year out so the trade calculator
+            # can group/filter them without re-parsing names everywhere.
             pid = f"pick_{player.get('id')}"
             name = player.get("name")
             if name:
@@ -631,26 +637,52 @@ def get_fantasycalc_values(num_qbs, is_dynasty=True, num_teams=12, cache={}):
     return data
 
 
+PICK_TIER_ORDER = {"early": 0, "mid": 1, "late": 2}
+
+
+def pick_sort_key(pick):
+    """Chronological ordering for a pick label like "2026 Mid 1st" --
+    (year, round, early/mid/late tier, name). Shared by the browsable
+    picks panel and by search, so "typed pick" and "browsed pick" order
+    the same way."""
+    name = pick["name"]
+    round_match = re.search(r"(\d+)(?:st|nd|rd|th)", name)
+    tier_match = re.search(r"\b(early|mid|late)\b", name, re.I)
+    rnd = int(round_match.group(1)) if round_match else 9
+    tier = PICK_TIER_ORDER.get(tier_match.group(1).lower(), 1) if tier_match else 1
+    return (pick["year"] if pick["year"] is not None else 9999, rnd, tier, name)
+
+
 def sorted_upcoming_picks(picks, num_years=3):
     """Picks grouped/ordered for a browsable UI: nearest `num_years` draft
     classes present in the data (oldest first), each sorted by round then
     early/mid/late tier -- so "2026 1st" always comes before "2026 2nd",
     and "2026 Early 1st" before "2026 Late 1st". Falls back gracefully for
     any label FantasyCalc formats differently than expected."""
-    tier_order = {"early": 0, "mid": 1, "late": 2}
-
-    def sort_key(pick):
-        name = pick["name"]
-        round_match = re.search(r"(\d+)(?:st|nd|rd|th)", name)
-        tier_match = re.search(r"\b(early|mid|late)\b", name, re.I)
-        rnd = int(round_match.group(1)) if round_match else 9
-        tier = tier_order.get(tier_match.group(1).lower(), 1) if tier_match else 1
-        return (pick["year"] if pick["year"] is not None else 9999, rnd, tier, name)
-
     years_present = sorted({p["year"] for p in picks.values() if p["year"] is not None})
     keep_years = set(years_present[:num_years])
     kept = [p for p in picks.values() if p["year"] in keep_years]
-    return sorted(kept, key=sort_key)
+    return sorted(kept, key=pick_sort_key)
+
+
+def pick_search_terms(query, num_teams):
+    """Translate round.slot shorthand (e.g. "1.02", the common way
+    dynasty players refer to a specific pick) into the substring(s) that
+    actually appear in a FantasyCalc label. It never appears verbatim --
+    future picks are grouped into early/mid/late tiers within a round
+    since the exact future slot isn't known yet, so "1.02" in a
+    `num_teams`-team league maps to roughly the early part of round 1.
+    Returns candidate terms, best match first (exact tier, then a
+    round-only fallback for rounds FantasyCalc doesn't subdivide by
+    tier), or None if `query` isn't round.slot shorthand at all."""
+    slot_match = re.match(r"^(\d)\.(\d{1,2})$", query)
+    if not slot_match:
+        return None
+    rnd, slot = int(slot_match.group(1)), int(slot_match.group(2))
+    third = max(num_teams // 3, 1)
+    tier = "early" if slot <= third else "mid" if slot <= 2 * third else "late"
+    ordinal = {1: "1st", 2: "2nd", 3: "3rd"}.get(rnd, f"{rnd}th")
+    return [f"{tier} {ordinal}", ordinal]
 
 
 def normalize_name(name):
@@ -1494,10 +1526,13 @@ def api_player_search():
     all_players = get_all_players()
     q_low = q.lower()
     # Pick labels look like "2026 Mid 1st" -- they never contain the words
-    # people actually type when looking for one, so also treat a generic
-    # "pick"/"draft" query as "show me picks" rather than requiring the
-    # exact year/round text.
+    # people actually type when looking for one. Treat a generic
+    # "pick"/"draft" query as "show me picks", and "1.02"-style round.slot
+    # shorthand (the common way dynasty players refer to a pick) as a
+    # translation into that same label format.
     q_is_generic_pick = q_low in ("pick", "picks", "draft", "draft pick", "draft picks")
+    pick_slot_terms = None if q_is_generic_pick else pick_search_terms(q_low, teams)
+    is_pick_query = q_is_generic_pick or pick_slot_terms is not None
 
     results = []
     for sid, p in all_players.items():
@@ -1511,12 +1546,31 @@ def api_player_search():
             })
 
     if is_dynasty:
-        for pid, pk in fc["picks"].items():
-            if q_is_generic_pick or q_low in pk["name"].lower():
-                results.append({
-                    "sid": pid, "name": pk["name"], "position": "PICK", "team": "",
-                    "photo": PICK_ICON, "value": pk["value"],
-                })
+        if q_is_generic_pick:
+            matched_picks = list(fc["picks"].values())
+        elif pick_slot_terms:
+            matched_picks = []
+            for term in pick_slot_terms:
+                matched_picks = [pk for pk in fc["picks"].values() if term in pk["name"].lower()]
+                if matched_picks:
+                    break
+        else:
+            matched_picks = [pk for pk in fc["picks"].values() if q_low in pk["name"].lower()]
+
+        if is_pick_query:
+            matched_picks = sorted(matched_picks, key=pick_sort_key)
+
+        for pk in matched_picks:
+            results.append({
+                "sid": pk["sid"], "name": pk["name"], "position": "PICK", "team": "",
+                "photo": PICK_ICON, "value": pk["value"],
+            })
+
+    if is_pick_query:
+        # Chronological order from above (year -> round -> tier), not
+        # relevance/value -- that's the whole point of "give me picks in
+        # order" instead of highest-value-first.
+        return jsonify({"results": results[:30]})
 
     results.sort(key=lambda r: (not r["name"].lower().startswith(q_low), -(r["value"] or 0), r["name"]))
     return jsonify({"results": results[:10]})
@@ -1726,6 +1780,41 @@ def trade_calculator():
         suggestions=suggestions, u=u, league_id=league_id,
         my_roster_id=my_roster_id, other_roster_id=other_roster_id,
     )
+
+
+@app.route("/api/debug-fantasycalc")
+def api_debug_fantasycalc():
+    """Temporary diagnostic endpoint -- shows exactly what
+    get_fantasycalc_values() parsed (pick count, a sample, and the years
+    present) plus a couple of raw items straight from FantasyCalc's API,
+    so a live "why are there no picks" report can be root-caused instead
+    of guessed at. Remove once picks are confirmed working end to end."""
+    if request.args.get("secret") != SITE_PASSWORD:
+        return jsonify({"ok": False, "error": "unauthorized"}), 401
+    num_qbs = 2 if request.args.get("format", "1qb") == "superflex" else 1
+    teams = request.args.get("teams", default=12, type=int)
+    try:
+        raw = requests.get(FANTASYCALC_BASE, params={
+            "isDynasty": "true", "numQbs": num_qbs, "numTeams": teams, "ppr": 1,
+        }, timeout=15)
+        raw_items = raw.json()
+        raw_non_offense_sample = [
+            item for item in raw_items
+            if (item.get("player") or {}).get("position") not in POSITIONS
+        ][:5]
+        fc = get_fantasycalc_values(num_qbs, True, teams)
+        picks = list(fc["picks"].values())
+        return jsonify({
+            "raw_status_code": raw.status_code,
+            "raw_item_count": len(raw_items),
+            "raw_non_offense_sample": raw_non_offense_sample,
+            "parsed_player_count": len(fc["players"]),
+            "parsed_pick_count": len(picks),
+            "parsed_pick_years_present": sorted({p["year"] for p in picks if p["year"] is not None}),
+            "parsed_pick_sample": sorted(picks, key=pick_sort_key)[:12],
+        })
+    except Exception as e:
+        return jsonify({"ok": False, "error": str(e)})
 
 
 @app.route("/api/debug-sleeper")
