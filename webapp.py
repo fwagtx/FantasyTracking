@@ -1549,22 +1549,45 @@ def _grade_reasoning(c):
     """One short, plain-English sentence explaining a matchup grade's
     components -- shown on the Matchups list and folded into the
     head-to-head comparison's reasons, so the grade never reads as a
-    bare, unexplained letter."""
+    bare, unexplained letter.
+
+    A player whose game for the week is already final gets a distinct,
+    unambiguous callout instead of a pregame-style projection -- grading
+    someone "start" or "sit" for a game that's already been played reads
+    as broken, so this takes priority over everything else. "opponent not
+    set yet" is reserved for an actual bye (no game on the schedule at
+    all); a known opponent with no defense-vs-position data yet (typical
+    in the first weeks of a season, before any team has faced that
+    position enough) instead falls back to last year's number, flagged as
+    such -- see def_source in compute_matchup_grade."""
+    if c["game_status"] == "final":
+        if c["actual_week_pts"] is not None:
+            return f"Already played this week -- scored {c['actual_week_pts']:.1f} pts."
+        return "Already played this week."
+    if c["game_status"] == "in_progress":
+        return "This game is live right now."
+
     if c["injury_tier"] in ("out", "admin"):
         return "Not expected to play this week."
     if c["injury_tier"] == "doubtful":
         return "Doubtful to play -- check the injury report before kickoff."
 
-    if c["def_rank"] is None:
-        matchup_desc = "an unclear matchup (opponent not set yet)"
-    elif c["def_rank"] >= 24:
-        matchup_desc = "a great matchup"
-    elif c["def_rank"] >= 17:
-        matchup_desc = "a favorable matchup"
-    elif c["def_rank"] <= 8:
-        matchup_desc = "a tough matchup"
+    if c["opponent"] is None:
+        return "No game scheduled this week (bye)."
+
+    if c["def_rank_used"] is None:
+        matchup_desc = "not enough defensive data yet to grade the matchup"
     else:
-        matchup_desc = "an average matchup"
+        source_note = "" if c["def_source"] == "current" else " (based on last year)"
+        rank = c["def_rank_used"]
+        if rank >= 24:
+            matchup_desc = f"a great matchup{source_note}"
+        elif rank >= 17:
+            matchup_desc = f"a favorable matchup{source_note}"
+        elif rank <= 8:
+            matchup_desc = f"a tough matchup{source_note}"
+        else:
+            matchup_desc = f"an average matchup{source_note}"
 
     if c["trend_score"] >= 0.65:
         trend_desc = "trending up"
@@ -1606,18 +1629,28 @@ def compute_matchup_grade(sid, season, week, cache={}):
     sched = get_schedule_for_team_week(season, week, team) if team else None
     dvp = get_defense_vs_position(season)
     opp_entry = dvp.get(sched["opponent"], {}).get(position) if sched else None
-    n_teams = len(dvp) or 32
-    def_percentile = (opp_entry["rank"] - 1) / max(n_teams - 1, 1) if opp_entry else 0.5
 
     # Last season's version of the same figure -- early in a season the
-    # current-year sample per defense is thin (a few games), so last
-    # year's full-season number is a useful second data point, shown
-    # alongside rather than blended into the grade itself.
-    last_year_entry = get_defense_vs_position(season - 1).get(sched["opponent"], {}).get(position) if sched else None
+    # current-year sample per defense is thin (zero games in week 1, a
+    # handful for the first month), so if there's nothing usable yet this
+    # year the grade falls back to last year's full-season number instead
+    # of a neutral placeholder. Both are still exposed separately below
+    # so the UI can show which one is actually driving the grade.
+    last_year_dvp = get_defense_vs_position(season - 1)
+    last_year_entry = last_year_dvp.get(sched["opponent"], {}).get(position) if sched else None
+
+    if opp_entry:
+        def_rank_used, def_source, def_pool_size = opp_entry["rank"], "current", len(dvp) or 32
+    elif last_year_entry:
+        def_rank_used, def_source, def_pool_size = last_year_entry["rank"], "last_year", len(last_year_dvp) or 32
+    else:
+        def_rank_used, def_source, def_pool_size = None, None, 32
+    def_percentile = (def_rank_used - 1) / max(def_pool_size - 1, 1) if def_rank_used is not None else 0.5
 
     season_stats = get_season_stats(season)
     stat = season_stats.get(sid, {})
     weeks_sorted = sorted((stat.get("weeks") or {}).items())
+    actual_week_pts = (stat.get("weeks") or {}).get(week)
     recent = [fpts for _, fpts in weeks_sorted[-4:]]
     season_avg = (stat["fpts"] / stat["games"]) if stat.get("games") else 0
     recent_avg = sum(recent) / len(recent) if recent else season_avg
@@ -1665,6 +1698,8 @@ def compute_matchup_grade(sid, season, week, cache={}):
         "opponent": sched["opponent"] if sched else None,
         "def_rank": opp_entry["rank"] if opp_entry else None,
         "def_fpts_allowed_pg": opp_entry["fpts_allowed_per_game"] if opp_entry else None,
+        "def_rank_used": def_rank_used,
+        "def_source": def_source,
         "def_percentile": round(def_percentile, 2),
         "def_rank_last_year": last_year_entry["rank"] if last_year_entry else None,
         "def_fpts_allowed_pg_last_year": last_year_entry["fpts_allowed_per_game"] if last_year_entry else None,
@@ -1673,6 +1708,8 @@ def compute_matchup_grade(sid, season, week, cache={}):
         "consistency_score": round(consistency_score, 2),
         "composite": round(composite, 2),
         "injury_tier": tier,
+        "game_status": sched["status"] if sched else None,
+        "actual_week_pts": actual_week_pts,
     }
     data = {"grade": grade, "stars": stars, "reasoning": _grade_reasoning(components), "components": components}
     cache[key] = {"data": data, "time": now}
@@ -1717,6 +1754,8 @@ def compare_matchups(sid_a, sid_b, season, week):
             "injury": (badge["title"] if badge else "Healthy"),
             "injury_tier": c["injury_tier"],
             "reasoning": grade["reasoning"],
+            "game_status": c["game_status"],
+            "actual_week_pts": c["actual_week_pts"],
         }
 
     a, b = summarize(sid_a, grade_a), summarize(sid_b, grade_b)
@@ -5418,12 +5457,23 @@ MATCHUPS_HTML = BASE_STYLE + make_header("matchups") + """
     const lastYear = p.def_rank_last_year
       ? '<div class="h2h-stat-row"><span class="muted">Defense vs pos, last year</span><span>' + p.def_fpts_allowed_pg_last_year + ' pts/gm (rank ' + p.def_rank_last_year + ')</span></div>'
       : '';
+    // A game that's already final (or live) makes a "start/sit" call moot
+    // -- call that out plainly instead of only leaving it to the prose
+    // reasoning line above, since it's the single most decision-relevant
+    // fact when it applies.
+    let resultRow = '';
+    if (p.game_status === 'final') {
+      resultRow = '<div class="h2h-stat-row" style="color:var(--good);"><span class="muted">Result</span><span>Final' + (p.actual_week_pts != null ? ' -- ' + p.actual_week_pts.toFixed(1) + ' pts' : '') + '</span></div>';
+    } else if (p.game_status === 'in_progress') {
+      resultRow = '<div class="h2h-stat-row" style="color:var(--warning);"><span class="muted">Result</span><span>Live now</span></div>';
+    }
     return '<div class="h2h-card' + (isWinner ? ' winner' : '') + '">' +
       '<div class="h2h-card-head"><img src="' + p.photo + '" onerror="this.style.visibility=\\'hidden\\'">' +
         '<div><div class="h2h-card-name">' + p.name + '</div><span class="muted">' + p.position + ' &middot; ' + p.team + '</span></div>' +
         '<span class="mu-grade ' + p.grade + '" style="margin-left:auto;">' + p.grade + '</span></div>' +
       '<div style="text-align:center; color:#f0b429; margin-top:8px;">' + starString(p.stars) + '</div>' +
       '<p class="muted" style="text-align:center; font-size:12px; margin-top:6px;">' + p.reasoning + '</p>' +
+      resultRow +
       '<div class="h2h-stat-row"><span class="muted">Opponent</span><span>' + (p.opponent ? 'vs ' + p.opponent : 'BYE') + '</span></div>' +
       '<div class="h2h-stat-row"><span class="muted">Defense vs pos, this year</span><span>' + (p.def_fpts_allowed_pg != null ? p.def_fpts_allowed_pg + ' pts/gm (rank ' + p.def_rank + ')' : '—') + '</span></div>' +
       lastYear +
