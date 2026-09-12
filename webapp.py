@@ -1416,6 +1416,152 @@ def get_referee_tendencies(cache={}):
     return data
 
 
+def get_defense_vs_position(season, cache={}):
+    """{team: {position: {fpts_allowed_per_game, games, rank}}} -- how
+    many fantasy points a team gives up per game to each position,
+    ranked 1 (fewest allowed, toughest matchup) to N (most allowed,
+    easiest matchup). Derived entirely from data already flowing through
+    the app: get_season_stats' weekly fpts joined against the new
+    schedule table via each player's *current* team (see the accepted
+    trade-week approximation noted in the implementation plan -- a
+    mid-season trade misattributes a handful of historical weeks).
+    TTL 3600s; cheap to recompute since every input is itself cached."""
+    now = time.time()
+    entry = cache.get(season)
+    if entry and now - entry["time"] < 3600:
+        return entry["data"]
+
+    all_players = get_all_players()
+    season_stats = get_season_stats(season)
+    allowed = {}
+    for sid, stat in season_stats.items():
+        p = all_players.get(sid)
+        if not p or p.get("position") not in POSITIONS:
+            continue
+        team = p.get("team")
+        if not team:
+            continue
+        pos = p["position"]
+        for week, fpts in (stat.get("weeks") or {}).items():
+            sched = get_schedule_for_team_week(season, week, team)
+            if not sched:
+                continue
+            entry_pos = allowed.setdefault(sched["opponent"], {}).setdefault(pos, {"fpts": 0.0, "weeks": set()})
+            entry_pos["fpts"] += fpts
+            entry_pos["weeks"].add(week)
+
+    result = {
+        team: {
+            pos: {"fpts_allowed_per_game": round(v["fpts"] / len(v["weeks"]), 1), "games": len(v["weeks"])}
+            for pos, v in by_pos.items() if v["weeks"]
+        }
+        for team, by_pos in allowed.items()
+    }
+    for pos in POSITIONS:
+        ranked = sorted(
+            ((team, result[team][pos]["fpts_allowed_per_game"]) for team in result if pos in result[team]),
+            key=lambda x: x[1],
+        )
+        for i, (team, _) in enumerate(ranked):
+            result[team][pos]["rank"] = i + 1
+
+    cache[season] = {"data": result, "time": now}
+    return result
+
+
+def compute_matchup_grade(sid, season, week, cache={}):
+    """Composite 'should you start them' grade for one player in one
+    week: opponent defense strength at their position, recent scoring
+    trend, a talent baseline from their dynasty value, and recent
+    week-to-week consistency. An OUT/IR/suspended-type injury caps the
+    grade at F (they're not playing, matchup quality is irrelevant);
+    Doubtful caps at D; Questionable applies a moderate penalty instead
+    of a hard cap, since questionable players often do play. Returns
+    None for a non-skill-position player. TTL 3600s, keyed by
+    (sid, season, week) -- cheap since every input is already cached,
+    safe to compute for every rostered skill player on a page render."""
+    key = (sid, season, week)
+    now = time.time()
+    entry = cache.get(key)
+    if entry and now - entry["time"] < 3600:
+        return entry["data"]
+
+    all_players = get_all_players()
+    p = all_players.get(sid)
+    if not p or p.get("position") not in POSITIONS:
+        return None
+    position = p["position"]
+    team = p.get("team")
+
+    sched = get_schedule_for_team_week(season, week, team) if team else None
+    dvp = get_defense_vs_position(season)
+    opp_entry = dvp.get(sched["opponent"], {}).get(position) if sched else None
+    n_teams = len(dvp) or 32
+    def_percentile = (opp_entry["rank"] - 1) / max(n_teams - 1, 1) if opp_entry else 0.5
+
+    season_stats = get_season_stats(season)
+    stat = season_stats.get(sid, {})
+    weeks_sorted = sorted((stat.get("weeks") or {}).items())
+    recent = [fpts for _, fpts in weeks_sorted[-4:]]
+    season_avg = (stat["fpts"] / stat["games"]) if stat.get("games") else 0
+    recent_avg = sum(recent) / len(recent) if recent else season_avg
+    if season_avg > 0:
+        trend_score = max(0.0, min(1.0, 0.5 + (recent_avg - season_avg) / (season_avg * 2)))
+    else:
+        trend_score = 1.0 if recent_avg > 0 else 0.5
+
+    fc_players = get_fantasycalc_values(1)["players"]
+    position_rank = (fc_players.get(sid) or {}).get("position_rank")
+    # Rough percentile against a ~60-deep starter pool per position -- good
+    # enough as a "is this even a startable-tier player" talent floor.
+    talent_score = max(0.0, min(1.0, 1 - (position_rank - 1) / 60)) if position_rank else 0.3
+
+    if len(recent) >= 2:
+        mean_r = sum(recent) / len(recent)
+        stdev = (sum((x - mean_r) ** 2 for x in recent) / len(recent)) ** 0.5
+        consistency_score = max(0.0, min(1.0, 1 - stdev / mean_r)) if mean_r > 0 else 0.5
+    else:
+        consistency_score = 0.5
+
+    composite = 0.40 * def_percentile + 0.25 * trend_score + 0.20 * talent_score + 0.15 * consistency_score
+
+    badge = _injury_badge(p)
+    tier = badge["tier"] if badge else None
+    if tier == "questionable":
+        composite *= 0.85
+
+    if tier in ("out", "admin"):
+        grade, stars = "F", 1
+    elif tier == "doubtful":
+        grade, stars = "D", 2
+    elif composite >= 0.8:
+        grade, stars = "A", 5
+    elif composite >= 0.65:
+        grade, stars = "B", 4
+    elif composite >= 0.45:
+        grade, stars = "C", 3
+    elif composite >= 0.3:
+        grade, stars = "D", 2
+    else:
+        grade, stars = "F", 1
+
+    data = {
+        "grade": grade, "stars": stars,
+        "components": {
+            "opponent": sched["opponent"] if sched else None,
+            "def_rank": opp_entry["rank"] if opp_entry else None,
+            "def_percentile": round(def_percentile, 2),
+            "trend_score": round(trend_score, 2),
+            "talent_score": round(talent_score, 2),
+            "consistency_score": round(consistency_score, 2),
+            "composite": round(composite, 2),
+            "injury_tier": tier,
+        },
+    }
+    cache[key] = {"data": data, "time": now}
+    return data
+
+
 def league_num_qbs(league):
     positions = league.get("roster_positions", []) or []
     if any(p in ("SUPER_FLEX", "SUPERFLEX") for p in positions):
@@ -2420,6 +2566,47 @@ def api_game_live():
         "home_score": detail["home"]["score"], "away_score": detail["away"]["score"],
         "team_stats": detail["team_stats"],
     })
+
+
+@app.route("/matchups")
+def matchups_page():
+    """Standalone matchup-grade browser -- independent of any synced
+    league, like Rankings. Gated behind login for now (gate-blur, same
+    pattern HOME_HTML uses for guests): this is meant to become a paid
+    subscription perk once Stripe exists, but that billing isn't wired
+    up yet, so login is the only gate today. Swap the `is_authenticated`
+    check below for an `is_member` check once it is."""
+    info = get_current_week_info()
+    season = request.args.get("season", default=info["season"], type=int)
+    week = request.args.get("week", default=info["week"], type=int)
+
+    rows = []
+    if current_user.is_authenticated:
+        all_players = get_all_players()
+        fc_players = get_fantasycalc_values(1)["players"]
+        for sid, v in fc_players.items():
+            p = all_players.get(sid)
+            if not p or v.get("position") not in POSITIONS:
+                continue
+            grade = compute_matchup_grade(sid, season, week)
+            if not grade:
+                continue
+            rows.append({
+                "sid": sid,
+                "name": f"{p.get('first_name','')} {p.get('last_name','')}".strip(),
+                "position": v.get("position"), "team": p.get("team") or "FA",
+                "photo": player_photo_url(sid),
+                "opponent": grade["components"]["opponent"],
+                "grade": grade["grade"], "stars": grade["stars"],
+                "value": v.get("value", 0),
+            })
+        rows.sort(key=lambda r: (-r["stars"], -r["value"]))
+        rows = rows[:300]
+
+    return render_template_string(
+        MATCHUPS_HTML, rows=rows, season=season, week=week,
+        current_season=info["season"], current_week=info["week"],
+    )
 
 
 @app.route("/")
@@ -4371,6 +4558,107 @@ GAME_DETAIL_HTML = BASE_STYLE + make_header("scores") + """
       .catch(function(){ setTimeout(poll, 15000); });
   }
   setTimeout(poll, 15000);
+})();
+</script>
+"""
+
+MATCHUPS_HTML = BASE_STYLE + make_header("matchups") + """
+<style>
+  .mu-toolbar{ display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-top:6px; }
+  .mu-week-nav{ display:flex; align-items:center; gap:8px; margin-left:auto; }
+  .mu-search{ background:var(--paper-sunken); border:1px solid var(--line); color:var(--ink); border-radius:8px; padding:9px 12px; font-size:13.5px; width:180px; font-family:inherit; }
+  .mu-row{ display:flex; align-items:center; gap:12px; padding:10px 4px; border-top:1px solid var(--line); }
+  .mu-row:first-of-type{ border-top:none; }
+  .mu-row img{ width:32px; height:32px; border-radius:50%; object-fit:cover; background:var(--paper-sunken); flex:none; }
+  .mu-name{ font-weight:700; font-size:13.5px; flex:1; min-width:0; }
+  .mu-opp{ color:var(--ink-secondary); font-size:12.5px; width:70px; flex:none; }
+  .mu-grade{ font-family:"IBM Plex Mono"; font-weight:700; font-size:13px; padding:3px 10px; border-radius:6px; flex:none; width:34px; text-align:center; }
+  .mu-grade.A, .mu-grade.B{ background:var(--good-wash); color:var(--good); }
+  .mu-grade.C{ background:var(--warning-wash); color:var(--warning); }
+  .mu-grade.D, .mu-grade.F{ background:var(--critical-wash); color:var(--critical); }
+  .mu-stars{ color:#f0b429; font-size:12px; width:70px; flex:none; text-align:right; }
+</style>
+<main><div class="wrap">
+  <div class="panel">
+    <p class="eyebrow">Matchups</p>
+    <h2>Who's worth starting this week</h2>
+    {% if current_user.is_authenticated %}
+    <div class="mu-toolbar">
+      <input type="text" class="mu-search" id="muSearch" placeholder="Search player...">
+      <div class="format-toggle" id="muPosTabs">
+        <a class="active" data-pos="all" href="#">All</a>
+        <a data-pos="QB" href="#">QB</a>
+        <a data-pos="RB" href="#">RB</a>
+        <a data-pos="WR" href="#">WR</a>
+        <a data-pos="TE" href="#">TE</a>
+      </div>
+      <div class="mu-week-nav">
+        <a class="team-chip" href="/matchups?season={{ season }}&week={{ week-1 if week > 1 else week }}">&larr;</a>
+        <span class="muted">Week {{ week }}</span>
+        <a class="team-chip" href="/matchups?season={{ season }}&week={{ week+1 }}">&rarr;</a>
+      </div>
+    </div>
+    <div id="muList" style="margin-top:14px;">
+      {% for r in rows %}
+      <div class="mu-row" data-name="{{ r.name|lower }}" data-pos="{{ r.position }}">
+        <img src="{{ r.photo }}" alt="" onerror="this.style.visibility='hidden'">
+        <span class="pos-chip" style="background:var(--pos-{{ r.position.lower() }});">{{ r.position }}</span>
+        <span class="mu-name">{{ r.name }} <span class="muted">{{ r.team }}</span></span>
+        <span class="mu-opp">{% if r.opponent %}vs {{ r.opponent }}{% else %}BYE{% endif %}</span>
+        <span class="mu-stars">{{ '★' * r.stars }}{{ '☆' * (5 - r.stars) }}</span>
+        <span class="mu-grade {{ r.grade }}">{{ r.grade }}</span>
+      </div>
+      {% endfor %}
+      {% if not rows %}<p class="muted" style="padding:20px 0;">No graded players for this week yet.</p>{% endif %}
+    </div>
+    {% else %}
+    <div class="gate-wrap">
+      <div class="gate-blur">
+        <div class="mu-row"><img src=""><span class="pos-chip" style="background:var(--pos-qb);">QB</span><span class="mu-name">Sample Player DAL</span><span class="mu-opp">vs SF</span><span class="mu-stars">★★★★★</span><span class="mu-grade A">A</span></div>
+        <div class="mu-row"><img src=""><span class="pos-chip" style="background:var(--pos-rb);">RB</span><span class="mu-name">Sample Player KC</span><span class="mu-opp">vs BUF</span><span class="mu-stars">★★★☆☆</span><span class="mu-grade C">C</span></div>
+        <div class="mu-row"><img src=""><span class="pos-chip" style="background:var(--pos-wr);">WR</span><span class="mu-name">Sample Player MIA</span><span class="mu-opp">vs NYJ</span><span class="mu-stars">★★☆☆☆</span><span class="mu-grade D">D</span></div>
+      </div>
+      <div class="gate-card">
+        <h3>Unlock <span style="color:var(--accent-ink);">Matchup Grades</span></h3>
+        <p>Create a free account to see every player's start/sit grade, based on their opponent's defense, recent trend, and injury status.</p>
+        <div class="gate-benefits">
+          <span>A-F grade for every startable player, every week</span>
+          <span>Opponent defense strength built in automatically</span>
+          <span>Updates as injury reports and matchups change</span>
+        </div>
+        <a href="/signup" class="btn" style="margin-top:22px; width:100%;">Create Account</a>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</div></main>
+<script>
+(function(){
+  const search = document.getElementById('muSearch');
+  const tabs = document.getElementById('muPosTabs');
+  if (!search || !tabs) return;
+  let activePos = 'all';
+  const rows = Array.from(document.querySelectorAll('#muList .mu-row'));
+
+  function render(){
+    const q = search.value.trim().toLowerCase();
+    rows.forEach(function(row){
+      const matchesPos = activePos === 'all' || row.dataset.pos === activePos;
+      const matchesSearch = !q || row.dataset.name.includes(q);
+      row.style.display = (matchesPos && matchesSearch) ? '' : 'none';
+    });
+  }
+
+  search.addEventListener('input', render);
+  tabs.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click', function(e){
+      e.preventDefault();
+      activePos = a.dataset.pos;
+      tabs.querySelectorAll('a').forEach(function(x){ x.classList.remove('active'); });
+      a.classList.add('active');
+      render();
+    });
+  });
 })();
 </script>
 """
