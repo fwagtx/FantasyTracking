@@ -2321,6 +2321,18 @@ def league_detail():
     roster_id = request.args.get("roster_id", type=int)
     try:
         detail = build_league_detail(league_id, username, roster_id)
+        # Matchup grades are an auth-gated perk (eventually a paid one, once
+        # billing exists -- see /matchups) computed here in the route rather
+        # than inside build_league_detail, which stays pure/auth-unaware so
+        # it's reusable wherever a roster needs building regardless of who's
+        # asking. Every grade lookup below hits already-warm caches, so this
+        # adds no new I/O for a signed-in visitor.
+        if detail.get("mode") == "roster" and current_user.is_authenticated:
+            info = get_current_week_info()
+            for col in detail["columns"].values():
+                for p in col["players"]:
+                    grade = compute_matchup_grade(p["sleeper_id"], info["season"], info["week"])
+                    p["grade"] = grade["grade"] if grade else None
         return render_template_string(LEAGUE_DETAIL_HTML, detail=detail, username=username, league_id=league_id)
     except Exception as e:
         return f"Error: {e}", 500
@@ -3392,6 +3404,10 @@ BASE_STYLE = """
   .rank-badge.warning{ background:var(--warning-wash); color:var(--warning); font-weight:700; }
   .rank-badge.critical{ background:var(--critical-wash); color:var(--critical); font-weight:700; }
   .rank-badge.flat{ background:var(--paper-sunken); color:var(--ink-muted); font-weight:700; }
+  .grade-badge{ font-weight:700; }
+  .grade-badge.grade-a, .grade-badge.grade-b{ background:var(--good-wash); color:var(--good); }
+  .grade-badge.grade-c{ background:var(--warning-wash); color:var(--warning); }
+  .grade-badge.grade-d, .grade-badge.grade-f{ background:var(--critical-wash); color:var(--critical); }
   .legend-key{ display:flex; flex-wrap:wrap; gap:10px 20px; align-items:center; }
   .legend-key-item{ display:flex; align-items:center; gap:8px; font-size:12.5px; color:var(--ink-secondary); }
   .col-head-sample{ display:inline-flex; padding:3px 6px; border-radius:5px; background:var(--ink-muted); flex:none; }
@@ -4055,6 +4071,7 @@ LEAGUE_DETAIL_HTML = BASE_STYLE + make_header("league") + """
             <a class="pname" href="/player?sid={{ p.sleeper_id }}&numqbs={{ detail.num_qbs }}&u={{ username }}&ref={{ ('/league?league_id=' ~ league_id ~ '&roster_id=' ~ detail.roster_id ~ '&u=' ~ username)|urlencode }}">{{ p.name }}</a>
           </div>
           <span class="rank-pair">
+            {% if p.grade %}<span class="grade-badge grade-{{ p.grade|lower }}">{{ p.grade }}</span>{% endif %}
             <span class="rank-plain">{{ p.position_rank or '\u2014' }}</span>
             <span class="rank-badge {{ p.tier }}">{{ p.overall_rank or '\u2014' }}</span>
           </span>
