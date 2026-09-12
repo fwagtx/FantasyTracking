@@ -3214,6 +3214,16 @@ def api_warm():
                 for is_dynasty in (True, False):
                     for num_teams in (8, 10, 12, 14):
                         get_fantasycalc_values(num_qbs, is_dynasty, num_teams)
+            # Live-scores/matchup-grade caches -- no separate keep-warm cron
+            # for these (a 15-20s poll from an open /game page already keeps
+            # that one warm on its own), just piggyback the cheap ones onto
+            # this existing 12-minute ping so the first visitor of the day
+            # never eats a cold ESPN fetch or a cold defense/referee
+            # aggregate query either.
+            info = get_current_week_info()
+            espn_week_scoreboard(info["season"], info["week"], info["season_type"])
+            get_defense_vs_position(int(SEASON))
+            get_referee_tendencies()
         except Exception:
             pass
 
