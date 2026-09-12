@@ -1350,47 +1350,42 @@ def build_league_detail(league_id, username, roster_id=None):
         for u in get_league_users(league_id)
     }
     teams = build_league_teams(league_id, league, all_players, league_users, user_id)
-    if not teams:
-        raise ValueError("No teams found in this league.")
     fc_players = get_fantasycalc_values(league_num_qbs(league))["players"]
+
+    target = None
+    if roster_id is not None:
+        target = next((t for t in teams if t["roster_id"] == roster_id), None)
+    if target is None:
+        target = next((t for t in teams if t["is_you"]), None)
+    if target is None:
+        target = teams[0] if teams else None
+    if target is None:
+        raise ValueError("No teams found in this league.")
+
     num_qbs = league_num_qbs(league)
+    columns = {}
+    for pos in POSITIONS:
+        players = []
+        for pid, name in target["positions"].get(pos, []):
+            v = fc_players.get(pid, {})
+            players.append({
+                "sleeper_id": pid, "name": name, "photo": player_photo_url(pid),
+                "position_rank": v.get("position_rank"),
+                "overall_rank": v.get("overall_rank"),
+                "value": v.get("value", 0),
+                "tier": rank_tier(v.get("overall_rank")),
+            })
+        players.sort(key=lambda p: -p["value"])
+        columns[pos] = {"players": players, "team_rank": target["pos_rank"][pos]}
 
-    # Every team's roster is built and shown top to bottom on one page --
-    # teams is already ordered by standings (wins, then value) from
-    # build_league_teams, so that order carries straight through here.
-    # roster_id (if given, e.g. from the League Manager card's own link) just
-    # says which team to jump to on load, not which one to show exclusively.
-    teams_detail = []
-    for t in teams:
-        columns = {}
-        for pos in POSITIONS:
-            players = []
-            for pid, name in t["positions"].get(pos, []):
-                v = fc_players.get(pid, {})
-                players.append({
-                    "sleeper_id": pid, "name": name, "photo": player_photo_url(pid),
-                    "position_rank": v.get("position_rank"),
-                    "overall_rank": v.get("overall_rank"),
-                    "value": v.get("value", 0),
-                    "tier": rank_tier(v.get("overall_rank")),
-                })
-            players.sort(key=lambda p: -p["value"])
-            columns[pos] = {"players": players, "team_rank": t["pos_rank"][pos]}
-        teams_detail.append({
-            "roster_id": t["roster_id"], "owner_name": t["owner_name"], "avatar_url": t["avatar_url"],
-            "is_you": t["is_you"], "wins": t["wins"], "losses": t["losses"],
-            "power_tier": t["power_tier"], "power_tier_class": t["power_tier_class"],
-            "columns": columns,
-        })
-
-    jump_to = roster_id
-    if jump_to is None:
-        my_team = next((t for t in teams_detail if t["is_you"]), None)
-        jump_to = my_team["roster_id"] if my_team else None
+    team_switcher = sorted(
+        [{"roster_id": t["roster_id"], "owner_name": t["owner_name"], "is_you": t["is_you"]} for t in teams],
+        key=lambda t: t["owner_name"].lower(),
+    )
 
     return {
-        "league_name": league.get("name", "League"), "num_qbs": num_qbs,
-        "teams": teams_detail, "jump_to": jump_to,
+        "league_name": league.get("name", "League"), "owner_name": target["owner_name"],
+        "roster_id": target["roster_id"], "columns": columns, "num_qbs": num_qbs, "teams": team_switcher,
     }
 
 
@@ -2446,7 +2441,6 @@ BASE_STYLE = """
   .legend-item{ display:flex; align-items:center; gap:6px; font-size:11.5px; color:var(--ink-secondary); font-weight:600; }
   .legend-item i{ width:9px; height:9px; border-radius:2px; display:inline-block; }
   .view-league-btn{ display:flex; width:100%; margin-top:16px; padding:10px 16px; font-size:13.5px; }
-  .team-detail-section{ scroll-margin-top:76px; }
 
   .league-pick-list{ display:flex; flex-direction:column; gap:8px; margin-top:16px; max-height:420px; overflow-y:auto; }
   .league-pick-row{ display:flex; align-items:center; gap:12px; padding:10px 14px; border:1px solid var(--line); border-radius:10px; cursor:pointer; transition:border-color 0.15s; }
@@ -3093,37 +3087,16 @@ LEAGUE_DETAIL_HTML = BASE_STYLE + make_header("league") + """
   <a href="/league-manager?u={{ username }}" class="muted">&larr; Back to leagues</a>
   <div class="panel">
     <p class="eyebrow">{{ detail.league_name }}</p>
-    <h2>Every team, top to bottom</h2>
+    <h2>{{ detail.owner_name }}'s roster value</h2>
 
     <div class="team-switcher">
       {% for t in detail.teams %}
-      <a class="team-chip" href="#team-{{ t.roster_id }}">{{ t.owner_name }}{% if t.is_you %} &#9733;{% endif %}</a>
+      <a class="team-chip {{ 'active' if t.roster_id == detail.roster_id else '' }}" href="/league?league_id={{ league_id }}&roster_id={{ t.roster_id }}&u={{ username }}">{{ t.owner_name }}{% if t.is_you %} &#9733;{% endif %}</a>
       {% endfor %}
     </div>
 
-    <div class="legend-box" style="margin-top:16px;">
-      <div class="legend-key">
-        <span class="legend-key-item"><span class="col-head-sample"><span class="rank-badge-inline">Rank 3</span></span> Team's rank at that position</span>
-        <span class="legend-key-item"><span class="rank-pair"><span class="rank-plain">12</span></span> Player's rank at their position</span>
-        <span class="legend-key-item"><span class="rank-pair"><span class="rank-badge good">8</span></span> Top 12 player league-wide</span>
-        <span class="legend-key-item"><span class="rank-pair"><span class="rank-badge warning">28</span></span> Top 36 player league-wide</span>
-        <span class="legend-key-item"><span class="rank-pair"><span class="rank-badge critical">54</span></span> Outside the top 36</span>
-      </div>
-      <p class="muted" style="margin-top:10px;">Click a player's photo or name for full detail. Jump to a manager above, or just scroll.</p>
-    </div>
-  </div>
-
-  {% for t in detail.teams %}
-  <div class="panel team-detail-section" id="team-{{ t.roster_id }}">
-    <div class="team-row" style="padding-top:0;">
-      <img class="team-avatar" src="{{ t.avatar_url or 'data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2232%22 height=%2232%22><rect width=%2232%22 height=%2232%22 rx=%2216%22 fill=%22%23444841%22/></svg>' }}" alt="" onerror="this.style.visibility='hidden'">
-      <h2 style="margin:0; font-size:17px; width:auto; flex:none;">{{ t.owner_name }}{% if t.is_you %} &#9733;{% endif %}</h2>
-      <span class="tier-badge {{ t.power_tier_class }}">{{ t.power_tier }}</span>
-      <span class="wl">{{ t.wins }}-{{ t.losses }}</span>
-    </div>
-
     <div class="col-grid">
-      {% for pos, col in t.columns.items() %}
+      {% for pos, col in detail.columns.items() %}
       <div>
         <div class="col-head {{ pos.lower() }}">
           <span>{{ pos }}</span>
@@ -3133,7 +3106,7 @@ LEAGUE_DETAIL_HTML = BASE_STYLE + make_header("league") + """
         <div class="player-row">
           <div class="pname-row">
             <img src="{{ p.photo }}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">
-            <a class="pname" href="/player?sid={{ p.sleeper_id }}&numqbs={{ detail.num_qbs }}&u={{ username }}&ref={{ ('/league?league_id=' ~ league_id ~ '&roster_id=' ~ t.roster_id ~ '&u=' ~ username)|urlencode }}">{{ p.name }}</a>
+            <a class="pname" href="/player?sid={{ p.sleeper_id }}&numqbs={{ detail.num_qbs }}&u={{ username }}&ref={{ ('/league?league_id=' ~ league_id ~ '&roster_id=' ~ detail.roster_id ~ '&u=' ~ username)|urlencode }}">{{ p.name }}</a>
           </div>
           <span class="rank-pair">
             <span class="rank-plain">{{ p.position_rank or '\u2014' }}</span>
@@ -3145,17 +3118,19 @@ LEAGUE_DETAIL_HTML = BASE_STYLE + make_header("league") + """
       </div>
       {% endfor %}
     </div>
+
+    <div class="legend-box">
+      <div class="legend-key">
+        <span class="legend-key-item"><span class="col-head-sample"><span class="rank-badge-inline">Rank 3</span></span> Team's rank at that position</span>
+        <span class="legend-key-item"><span class="rank-pair"><span class="rank-plain">12</span></span> Player's rank at their position</span>
+        <span class="legend-key-item"><span class="rank-pair"><span class="rank-badge good">8</span></span> Top 12 player league-wide</span>
+        <span class="legend-key-item"><span class="rank-pair"><span class="rank-badge warning">28</span></span> Top 36 player league-wide</span>
+        <span class="legend-key-item"><span class="rank-pair"><span class="rank-badge critical">54</span></span> Outside the top 36</span>
+      </div>
+      <p class="muted" style="margin-top:10px;">Click a player's photo or name for full detail.</p>
+    </div>
   </div>
-  {% endfor %}
 </div></main>
-<script>
-(function(){
-  {% if detail.jump_to %}
-  var target = document.getElementById('team-{{ detail.jump_to }}');
-  if (target) target.scrollIntoView({ block: 'start' });
-  {% endif %}
-})();
-</script>
 """
 
 PLAYER_HTML = BASE_STYLE + make_header("league") + """
