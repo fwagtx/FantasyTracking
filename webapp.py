@@ -1171,7 +1171,20 @@ def extract_game_detail(summary_json):
     state = (status.get("type") or {}).get("state")
 
     def linescores(c):
-        return [ls.get("value") for ls in (c.get("linescores") or []) if isinstance(ls, dict)]
+        # ESPN's per-quarter entries have been observed under more than one
+        # key ("value" being the documented one, "displayValue" a string
+        # fallback seen on some real responses) -- if neither resolves for
+        # ANY quarter, treat the whole list as unusable and return [] so
+        # the UI hides the panel instead of rendering a row of "None".
+        vals = []
+        for ls in (c.get("linescores") or []):
+            if not isinstance(ls, dict):
+                continue
+            v = ls.get("value")
+            if v is None:
+                v = ls.get("displayValue")
+            vals.append(v)
+        return vals if vals and any(v is not None for v in vals) else []
 
     def side(c):
         team = c.get("team") or {}
@@ -2166,17 +2179,25 @@ def build_leagues_for_user(username, league_ids=None, cache={}):
 
 
 def get_my_players_by_team(username, league_ids):
-    """{"team_abbr": [{"sid","name","position","league_name"}, ...]} for
-    every player on the account's own roster, across every synced
-    league, grouped by the NFL team they play for -- this is what lets
-    /scores show "N of your players" on a game card. Reuses
-    build_leagues_for_user's existing per-league cache, so this is free
-    if League Manager has already rendered for this account/selection."""
+    """{"team_abbr": [{"sid","name","position","leagues":[...]}, ...]} for
+    every DISTINCT player on the account's own roster, across every
+    synced league, grouped by the NFL team they play for -- this is what
+    lets /scores show "N of your players" on a game card. Deduped by
+    (team, sid): the same real player rostered in more than one synced
+    league (common when several dynasty leagues share a player pool)
+    counts once, with every league it's rostered in recorded on that one
+    entry -- otherwise the count and any rendered name list would repeat
+    the same player once per league, which is exactly the "duplicate
+    names" bug this replaced. Reuses build_leagues_for_user's existing
+    per-league cache, so this is free if League Manager has already
+    rendered for this account/selection."""
     if not league_ids:
         return {}
     data = build_leagues_for_user(username, league_ids=set(league_ids))
     all_players = get_all_players()
     by_team = {}
+    seen = {}  # (team, sid) -> the entry already added to by_team, so a
+               # repeat sighting in another league just appends there
     for lg in data["leagues"]:
         me = next((t for t in lg["teams"] if t["is_you"]), None)
         if not me:
@@ -2186,9 +2207,15 @@ def get_my_players_by_team(username, league_ids):
                 team = (all_players.get(sid) or {}).get("team")
                 if not team:
                     continue
-                by_team.setdefault(team, []).append({
-                    "sid": sid, "name": name, "position": pos, "league_name": lg["league_name"],
-                })
+                key = (team, sid)
+                existing = seen.get(key)
+                if existing:
+                    if lg["league_name"] not in existing["leagues"]:
+                        existing["leagues"].append(lg["league_name"])
+                    continue
+                entry = {"sid": sid, "name": name, "position": pos, "leagues": [lg["league_name"]]}
+                seen[key] = entry
+                by_team.setdefault(team, []).append(entry)
     return by_team
 
 
@@ -4671,12 +4698,10 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + """
   .sc-game-card{ display:flex; flex-direction:column; gap:10px; background:var(--sc-surface); border:1px solid var(--sc-line); border-radius:12px; padding:14px 18px; text-decoration:none; color:var(--sc-text); cursor:pointer; }
   .sc-game-card:hover{ border-color:var(--accent); }
   .sc-game-top{ display:flex; align-items:center; gap:16px; }
-  .sc-my-players{ display:flex; justify-content:space-between; gap:12px; padding-top:8px; border-top:1px solid var(--sc-line); font-size:11.5px; }
-  .sc-my-players-side{ display:flex; align-items:center; gap:6px; color:var(--good); flex:1; min-width:0; }
-  .sc-my-players-side.away{ justify-content:flex-start; }
-  .sc-my-players-side.home{ justify-content:flex-end; text-align:right; }
-  .sc-my-players-count{ background:var(--good-wash); color:var(--good); font-weight:700; border-radius:99px; padding:2px 8px; flex:none; }
-  .sc-my-players-names{ color:var(--ink-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .sc-my-players{ display:flex; justify-content:space-between; gap:10px; padding-top:8px; border-top:1px solid var(--sc-line); flex-wrap:wrap; }
+  .sc-my-players-pill{ display:inline-flex; align-items:center; gap:5px; background:var(--good-wash); color:var(--good); font-weight:700; font-size:11px; border-radius:99px; padding:4px 10px; flex:none; }
+  .sc-my-players-pill.away{ margin-right:auto; }
+  .sc-my-players-pill.home{ margin-left:auto; }
   .sc-sync-banner{ display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; background:var(--sc-surface); border:1px solid var(--sc-line); border-radius:10px; padding:10px 16px; margin-top:14px; font-size:13px; color:var(--sc-muted); }
   .sc-sync-banner a{ color:var(--accent-ink); text-decoration:none; font-weight:700; }
   .sc-game-side{ display:flex; align-items:center; gap:10px; flex:1; min-width:0; }
@@ -4840,13 +4865,19 @@ const scTodayKey = {{ today_key|tojson }};
         '<div class="sc-game-mid"><span class="sc-status-pill ' + g.status + '">' + (g.status === 'in_progress' ? (g.clock||'') + ' Q' + (g.period||'') : (g.status_detail || g.status)) + '</span></div>' +
         '<div class="sc-game-side" style="justify-content:flex-end; text-align:right;"><span class="sc-game-score">' + (g.home.score ?? '') + '</span><span class="nm">' + g.home.name + '</span><img src="' + (g.home.logo||'') + '" onerror="this.style.visibility=\\'hidden\\'"></div>' +
         '</div>';
+      // Compact count-only pills here on purpose -- the full name-by-name
+      // breakdown lives on /game (see the chip grid there). A card in a
+      // list of a dozen games has no room for a wall of comma-separated
+      // names without either truncating illegibly or blowing out the
+      // row height, so the card just answers "how many", and clicking
+      // through answers "who".
       const awayMine = g.my_away_players || [];
       const homeMine = g.my_home_players || [];
       let myRow = '';
       if (awayMine.length || homeMine.length) {
         myRow = '<div class="sc-my-players">' +
-          '<div class="sc-my-players-side away">' + (awayMine.length ? '<span class="sc-my-players-count">' + awayMine.length + '</span><span class="sc-my-players-names">' + awayMine.map(function(p){ return p.name; }).join(', ') + '</span>' : '') + '</div>' +
-          '<div class="sc-my-players-side home">' + (homeMine.length ? '<span class="sc-my-players-names">' + homeMine.map(function(p){ return p.name; }).join(', ') + '</span><span class="sc-my-players-count">' + homeMine.length + '</span>' : '') + '</div>' +
+          (awayMine.length ? '<span class="sc-my-players-pill away">' + awayMine.length + ' of yours</span>' : '<span></span>') +
+          (homeMine.length ? '<span class="sc-my-players-pill home">' + homeMine.length + ' of yours</span>' : '<span></span>') +
           '</div>';
       }
       a.innerHTML = topRow + myRow;
@@ -4958,6 +4989,16 @@ GAME_DETAIL_HTML = BASE_STYLE + make_header("scores") + """
   .gd-pregame{ display:flex; gap:18px; flex-wrap:wrap; margin-top:10px; font-size:13px; color:var(--ink-secondary); }
   .gd-wp-bar{ display:flex; height:22px; border-radius:6px; overflow:hidden; margin-top:8px; }
   .gd-my-players{ margin-top:14px; padding-top:12px; border-top:1px solid var(--line); }
+  .gd-my-players-group{ display:flex; align-items:baseline; gap:10px; margin-top:8px; flex-wrap:wrap; }
+  .gd-my-players-group:first-of-type{ margin-top:2px; }
+  .gd-my-players-team{ font-family:"IBM Plex Mono"; font-weight:700; font-size:11.5px; color:var(--ink-muted); flex:none; width:32px; }
+  .gd-my-players-chips{ display:flex; flex-wrap:wrap; gap:6px; flex:1; min-width:0; }
+  .gd-player-chip{ display:inline-flex; align-items:center; gap:6px; background:var(--paper-sunken); border-radius:99px; padding:4px 10px 4px 5px; font-size:12.5px; white-space:nowrap; }
+  .gd-player-chip-n{ color:var(--ink-muted); font-size:11px; }
+  @media (max-width: 480px) {
+    .gd-my-players-group{ flex-direction:column; gap:4px; }
+    .gd-my-players-team{ width:auto; }
+  }
 </style>
 <main><div class="wrap">
   <a href="/scores" class="muted">&larr; Back to scores</a>
@@ -4998,7 +5039,16 @@ GAME_DETAIL_HTML = BASE_STYLE + make_header("scores") + """
       <p class="eyebrow">Your Players In This Game</p>
       {% for side_label, players in [(detail.away.abbr, detail.my_players.away), (detail.home.abbr, detail.my_players.home)] %}
         {% if players %}
-        <p style="margin-top:6px; font-size:13px;"><b>{{ side_label }}</b> &mdash; {{ players|map(attribute='name')|join(', ') }}</p>
+        <div class="gd-my-players-group">
+          <span class="gd-my-players-team">{{ side_label }}</span>
+          <div class="gd-my-players-chips">
+            {% for p in players %}
+            <span class="gd-player-chip" title="{{ p.leagues|join(', ') if p.leagues else '' }}">
+              <span class="pos-chip" style="background:var(--pos-{{ p.position|lower }}, var(--ink-muted));">{{ p.position }}</span>{{ p.name }}{% if p.leagues and p.leagues|length > 1 %}<span class="gd-player-chip-n">&times;{{ p.leagues|length }}</span>{% endif %}
+            </span>
+            {% endfor %}
+          </div>
+        </div>
         {% endif %}
       {% endfor %}
     </div>
@@ -5024,8 +5074,8 @@ GAME_DETAIL_HTML = BASE_STYLE + make_header("scores") + """
     <p class="eyebrow">Score by Quarter</p>
     <table class="rank-table" style="margin-top:6px;" id="gdLinescoreTable">
       <tr><th></th>{% for i in range(detail.away.linescores|length) %}<th>Q{{ i+1 }}</th>{% endfor %}<th>Final</th></tr>
-      <tr data-side="away"><td>{{ detail.away.abbr }}</td>{% for v in detail.away.linescores %}<td class="mono">{{ v }}</td>{% endfor %}<td class="mono" data-final>{{ detail.away.score }}</td></tr>
-      <tr data-side="home"><td>{{ detail.home.abbr }}</td>{% for v in detail.home.linescores %}<td class="mono">{{ v }}</td>{% endfor %}<td class="mono" data-final>{{ detail.home.score }}</td></tr>
+      <tr data-side="away"><td>{{ detail.away.abbr }}</td>{% for v in detail.away.linescores %}<td class="mono">{{ v if v is not none else '-' }}</td>{% endfor %}<td class="mono" data-final>{{ detail.away.score }}</td></tr>
+      <tr data-side="home"><td>{{ detail.home.abbr }}</td>{% for v in detail.home.linescores %}<td class="mono">{{ v if v is not none else '-' }}</td>{% endfor %}<td class="mono" data-final>{{ detail.home.score }}</td></tr>
     </table>
   </div>
   {% endif %}
@@ -5066,11 +5116,30 @@ GAME_DETAIL_HTML = BASE_STYLE + make_header("scores") + """
 </div></main>
 <script>
 (function(){
-  const status = {{ detail.status|tojson }};
-  if (status !== 'in_progress') return;
+  const initialStatus = {{ detail.status|tojson }};
+  if (initialStatus === 'final') return;  // nothing left to poll for
   const eventId = {{ event_id|tojson }};
+  const POLL_MS = 10000;
   let requestId = 0;
-  function poll(){
+
+  // A page opened before kickoff has none of the live panels (win
+  // probability, quarter-by-quarter, box score, "your players") rendered
+  // yet -- they only exist once the server has real data to show. Rather
+  // than duplicate that markup in JS, just reload once kickoff happens so
+  // the server renders the real live page. This is what makes the page
+  // "fully autonomous": leave it open through kickoff and it updates
+  // itself with no manual refresh, here and for every stat below.
+  function pollPregame(){
+    fetch('/api/game-live?id=' + encodeURIComponent(eventId))
+      .then(function(r){ return r.json(); })
+      .then(function(data){
+        if (data.status && data.status !== 'scheduled') { try { window.location.reload(); } catch (e) {} return; }
+        setTimeout(pollPregame, POLL_MS);
+      })
+      .catch(function(){ setTimeout(pollPregame, POLL_MS); });
+  }
+
+  function pollLive(){
     const thisRequestId = ++requestId;
     fetch('/api/game-live?id=' + encodeURIComponent(eventId))
       .then(function(r){ return r.json(); })
@@ -5112,12 +5181,16 @@ GAME_DETAIL_HTML = BASE_STYLE + make_header("scores") + """
           });
         }
 
-        if (data.status !== 'in_progress') return;  // stop scheduling further polls once final
-        setTimeout(poll, 15000);
+        if (data.status !== 'in_progress') {
+          if (data.status === 'final') { try { window.location.reload(); } catch (e) {} }  // pick up the final box score/leaders
+          return;
+        }
+        setTimeout(pollLive, POLL_MS);
       })
-      .catch(function(){ setTimeout(poll, 15000); });
+      .catch(function(){ setTimeout(pollLive, POLL_MS); });
   }
-  setTimeout(poll, 15000);
+
+  setTimeout(initialStatus === 'scheduled' ? pollPregame : pollLive, POLL_MS);
 })();
 </script>
 """
