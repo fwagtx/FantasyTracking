@@ -1112,7 +1112,13 @@ def espn_event_to_card(ev):
     return {
         "id": ev.get("id"),
         "date": date_raw,
-        "date_key": date_raw[:10] if date_raw else None,  # YYYY-MM-DD for client-side day grouping
+        # NOTE: no server-computed date_key here on purpose. ESPN's `date`
+        # is UTC (a "Z"-suffixed ISO string) -- a Sunday 8:20pm ET kickoff
+        # is already after midnight UTC, so naively slicing the first 10
+        # characters puts it on Monday for anyone west of the UK. The
+        # client computes the visitor's actual local calendar day from
+        # this ISO string instead (see indexGames() in SCORES_HTML), which
+        # is the only place that can know the visitor's real timezone.
         "status": _ESPN_STATE_TO_STATUS.get(state, "scheduled"),
         "period": status.get("period"),
         "clock": status.get("displayClock"),
@@ -1148,13 +1154,14 @@ def extract_game_detail(summary_json):
     """Pure function, no I/O: turns a raw espn_game_summary() payload
     into the shape /game and /api/game-live both need. Field paths here
     are based on ESPN's commonly-documented (by the hobbyist community,
-    since ESPN itself publishes no spec) summary shape -- venue/officials
-    under top-level "gameInfo", team stats under "boxscore.teams",
-    top performers under "leaders". Defensive with .get() at every level
+    since ESPN itself publishes no spec) summary shape. Several fields
+    (venue, officials) are looked up at more than one plausible location
     since this is unverified against a live response from this sandbox
     (see /api/debug-espn?endpoint=summary&event=<id> once deployed) --
     a missing/renamed field degrades to an empty value here, never
-    crashes the page."""
+    crashes the page. Box score/leaders/win-probability are legitimately
+    empty for a game that hasn't kicked off yet -- that's not a bug, the
+    UI shows pregame info (broadcast, odds, kickoff time) instead."""
     header = summary_json.get("header") or {}
     comp = (header.get("competitions") or [{}])[0]
     competitors = comp.get("competitors") or []
@@ -1162,6 +1169,9 @@ def extract_game_detail(summary_json):
     away_c = next((c for c in competitors if c.get("homeAway") == "away"), None) or {}
     status = comp.get("status") or {}
     state = (status.get("type") or {}).get("state")
+
+    def linescores(c):
+        return [ls.get("value") for ls in (c.get("linescores") or []) if isinstance(ls, dict)]
 
     def side(c):
         team = c.get("team") or {}
@@ -1171,21 +1181,48 @@ def extract_game_detail(summary_json):
             "name": team.get("displayName") or abbr,
             "score": c.get("score"),
             "logo": team_logo_url(abbr),
+            "linescores": linescores(c),
+            "record": ((c.get("records") or [{}])[0]).get("summary"),
         }
 
     home, away = side(home_c), side(away_c)
 
+    # Venue/officials are checked at several plausible locations -- ESPN's
+    # summary endpoint has been observed to nest these under a top-level
+    # "gameInfo" object in some sports and directly on the competition in
+    # others, so try both rather than betting on just one.
     game_info = summary_json.get("gameInfo") or {}
-    venue = game_info.get("venue") or comp.get("venue") or {}
+    venue = game_info.get("venue") or comp.get("venue") or header.get("venue") or {}
     address = venue.get("address") or {}
+    officials_raw = game_info.get("officials") or comp.get("officials") or summary_json.get("officials") or []
     officials = [
         {
-            "name": o.get("displayName") or o.get("fullName"),
+            "name": o.get("displayName") or o.get("fullName") or o.get("name"),
             "position": (o.get("position") or {}).get("name") or o.get("position"),
         }
-        for o in (game_info.get("officials") or comp.get("officials") or [])
+        for o in officials_raw
         if isinstance(o, dict)
     ]
+
+    broadcasts = [
+        b.get("name") or b.get("callLetters") or (b.get("names") or [None])[0]
+        for b in (game_info.get("broadcasts") or comp.get("broadcasts") or [])
+        if isinstance(b, dict)
+    ]
+    broadcasts = [b for b in broadcasts if b]
+
+    odds_raw = (comp.get("odds") or summary_json.get("odds") or [{}])
+    odds_entry = odds_raw[0] if isinstance(odds_raw, list) else odds_raw
+    odds = None
+    if isinstance(odds_entry, dict) and (odds_entry.get("details") or odds_entry.get("overUnder")):
+        odds = {"spread": odds_entry.get("details"), "over_under": odds_entry.get("overUnder")}
+
+    win_prob = None
+    predictor = summary_json.get("predictor") or {}
+    home_wp = (predictor.get("homeTeam") or {}).get("gameProjection")
+    away_wp = (predictor.get("awayTeam") or {}).get("gameProjection")
+    if home_wp is not None and away_wp is not None:
+        win_prob = {"home_pct": round(float(home_wp)), "away_pct": round(float(away_wp))}
 
     team_stats = []
     box_teams = (summary_json.get("boxscore") or {}).get("teams") or []
@@ -1221,8 +1258,12 @@ def extract_game_detail(summary_json):
         "period": status.get("period"),
         "clock": status.get("displayClock"),
         "status_detail": (status.get("type") or {}).get("shortDetail"),
+        "kickoff": comp.get("date") or header.get("date"),
         "venue": {"name": venue.get("fullName"), "city": address.get("city"), "state": address.get("state")},
         "officials": officials,
+        "broadcasts": broadcasts,
+        "odds": odds,
+        "win_prob": win_prob,
         "home": home, "away": away,
         "team_stats": team_stats,
         "player_leaders": player_leaders,
@@ -2124,6 +2165,33 @@ def build_leagues_for_user(username, league_ids=None, cache={}):
     return data
 
 
+def get_my_players_by_team(username, league_ids):
+    """{"team_abbr": [{"sid","name","position","league_name"}, ...]} for
+    every player on the account's own roster, across every synced
+    league, grouped by the NFL team they play for -- this is what lets
+    /scores show "N of your players" on a game card. Reuses
+    build_leagues_for_user's existing per-league cache, so this is free
+    if League Manager has already rendered for this account/selection."""
+    if not league_ids:
+        return {}
+    data = build_leagues_for_user(username, league_ids=set(league_ids))
+    all_players = get_all_players()
+    by_team = {}
+    for lg in data["leagues"]:
+        me = next((t for t in lg["teams"] if t["is_you"]), None)
+        if not me:
+            continue
+        for pos in POSITIONS:
+            for sid, name in me["positions"].get(pos, []):
+                team = (all_players.get(sid) or {}).get("team")
+                if not team:
+                    continue
+                by_team.setdefault(team, []).append({
+                    "sid": sid, "name": name, "position": pos, "league_name": lg["league_name"],
+                })
+    return by_team
+
+
 def build_league_detail(league_id, username, roster_id=None):
     all_players = get_all_players()
     user_id, display_name = get_user_id(username)
@@ -2650,6 +2718,57 @@ def api_player_search():
     return jsonify({"results": results[:10]})
 
 
+def _resolve_scores_username():
+    """The username to cross-reference for "your players in this game" --
+    an explicit ?u= wins, otherwise a signed-in account's saved Sleeper
+    username (same auto-load convention League Manager already uses)."""
+    username = request.args.get("u", "").strip()
+    if not username and current_user.is_authenticated and current_user.sleeper_username:
+        username = current_user.sleeper_username
+    return username
+
+
+def _annotate_my_players(games, username):
+    """Mutates each game card in place, adding my_home_players/
+    my_away_players -- only does real work (and only for a signed-in
+    account with leagues already synced on League Manager) so a
+    request with no username attached costs nothing extra."""
+    if not username or not current_user.is_authenticated:
+        return
+    league_ids = get_synced_league_ids(current_user.id)
+    if not league_ids:
+        return
+    try:
+        by_team = get_my_players_by_team(username, league_ids)
+    except Exception:
+        return
+    for g in games:
+        g["my_home_players"] = by_team.get(g["home"]["abbr"], [])
+        g["my_away_players"] = by_team.get(g["away"]["abbr"], [])
+
+
+def _my_players_for_game(detail, username):
+    """Same lookup as _annotate_my_players but shaped for a single game's
+    detail dict ({"home": [...], "away": [...]} or None) -- used by the
+    /game page's "Your Players In This Game" panel."""
+    if not username or not current_user.is_authenticated:
+        return None
+    league_ids = get_synced_league_ids(current_user.id)
+    if not league_ids:
+        return None
+    try:
+        by_team = get_my_players_by_team(username, league_ids)
+    except Exception:
+        return None
+    home_abbr = detail.get("home", {}).get("abbr")
+    away_abbr = detail.get("away", {}).get("abbr")
+    home_players = by_team.get(home_abbr, []) if home_abbr else []
+    away_players = by_team.get(away_abbr, []) if away_abbr else []
+    if not home_players and not away_players:
+        return None
+    return {"home": home_players, "away": away_players}
+
+
 def _week_games(season, week, season_type=2):
     """Shared by /scores and /api/scoreboard so both build cards the same
     way. Returns (games, any_live) where games is a list of card dicts
@@ -2660,18 +2779,37 @@ def _week_games(season, week, season_type=2):
     return games, any_live
 
 
+def _nearby_weeks_games(season, week, season_type=2):
+    """The requested week plus the week before and after, fetched in
+    parallel -- gives the date strip several confirmed game-day tabs to
+    slide through right away instead of just the ~3 days in one ESPN
+    week, without eagerly pulling the whole season. Weeks below 1 are
+    skipped rather than sent to ESPN (which would just 400/empty)."""
+    weeks_to_fetch = [w for w in (week - 1, week, week + 1) if w >= 1]
+    games = []
+    with ThreadPoolExecutor(max_workers=len(weeks_to_fetch)) as executor:
+        futures = [executor.submit(_week_games, season, w, season_type) for w in weeks_to_fetch]
+        for f in futures:
+            games.extend(f.result()[0])
+    return games
+
+
 @app.route("/scores")
 def scores_page():
+    username = _resolve_scores_username()
     try:
         info = get_current_week_info()
         season = request.args.get("season", default=info["season"], type=int)
         week = request.args.get("week", default=info["week"], type=int)
         season_type = request.args.get("seasontype", default=info["season_type"], type=int)
-        games, _ = _week_games(season, week, season_type)
+        games = _nearby_weeks_games(season, week, season_type)
+        _annotate_my_players(games, username)
+        has_synced_leagues = bool(current_user.is_authenticated and get_synced_league_ids(current_user.id))
         return render_template_string(
             SCORES_HTML, games=games, season=season, week=week, season_type=season_type,
             current_season=info["season"], current_week=info["week"],
             today_key=date.today().isoformat(), load_error=None,
+            username=username, has_synced_leagues=has_synced_leagues,
         )
     except Exception as e:
         # ESPN's API is unofficial and unverified against a live response
@@ -2681,7 +2819,7 @@ def scores_page():
         return render_template_string(
             SCORES_HTML, games=[], season=int(SEASON), week=1, season_type=2,
             current_season=int(SEASON), current_week=1, today_key=date.today().isoformat(),
-            load_error=str(e),
+            load_error=str(e), username=username, has_synced_leagues=False,
         )
 
 
@@ -2691,17 +2829,20 @@ def api_scoreboard():
     week (?season=&week=) for Prev/Next Week navigation, or a single day
     (?date=YYYYMMDD) for a month-view cell click -- whichever wasn't
     already baked into the page at load."""
+    username = _resolve_scores_username()
     try:
         date_str = request.args.get("date")
         if date_str:
             data = espn_day_scoreboard(date_str)
             games = [c for c in (espn_event_to_card(ev) for ev in data.get("events", [])) if c]
+            _annotate_my_players(games, username)
             return jsonify({"games": games})
         info = get_current_week_info()
         season = request.args.get("season", default=info["season"], type=int)
         week = request.args.get("week", default=info["week"], type=int)
         season_type = request.args.get("seasontype", default=info["season_type"], type=int)
         games, _ = _week_games(season, week, season_type)
+        _annotate_my_players(games, username)
         return jsonify({"games": games, "season": season, "week": week, "season_type": season_type})
     except Exception as e:
         return jsonify({"games": [], "error": str(e)})
@@ -2713,6 +2854,8 @@ def game_detail_page():
     try:
         summary = espn_game_summary(event_id)
         detail = extract_game_detail(summary)
+        username = _resolve_scores_username()
+        detail["my_players"] = _my_players_for_game(detail, username)
         return render_template_string(GAME_DETAIL_HTML, event_id=event_id, detail=detail, load_error=None)
     except Exception as e:
         empty = {"status": "scheduled", "period": None, "clock": None, "status_detail": None,
@@ -2734,7 +2877,9 @@ def api_game_live():
             "status": detail["status"], "period": detail["period"], "clock": detail["clock"],
             "status_detail": detail["status_detail"],
             "home_score": detail["home"]["score"], "away_score": detail["away"]["score"],
-            "team_stats": detail["team_stats"],
+            "home_linescores": detail["home"]["linescores"], "away_linescores": detail["away"]["linescores"],
+            "team_stats": detail["team_stats"], "player_leaders": detail["player_leaders"],
+            "win_prob": detail["win_prob"],
         })
     except Exception as e:
         return jsonify({"status": "final", "error": str(e)})
@@ -4523,8 +4668,17 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + """
   .sc-month-cell .dot{ width:5px; height:5px; border-radius:50%; background:var(--sc-live); margin-top:3px; }
 
   .sc-games{ display:flex; flex-direction:column; gap:10px; margin-top:18px; }
-  .sc-game-card{ display:flex; align-items:center; gap:16px; background:var(--sc-surface); border:1px solid var(--sc-line); border-radius:12px; padding:14px 18px; text-decoration:none; color:var(--sc-text); cursor:pointer; }
+  .sc-game-card{ display:flex; flex-direction:column; gap:10px; background:var(--sc-surface); border:1px solid var(--sc-line); border-radius:12px; padding:14px 18px; text-decoration:none; color:var(--sc-text); cursor:pointer; }
   .sc-game-card:hover{ border-color:var(--accent); }
+  .sc-game-top{ display:flex; align-items:center; gap:16px; }
+  .sc-my-players{ display:flex; justify-content:space-between; gap:12px; padding-top:8px; border-top:1px solid var(--sc-line); font-size:11.5px; }
+  .sc-my-players-side{ display:flex; align-items:center; gap:6px; color:var(--good); flex:1; min-width:0; }
+  .sc-my-players-side.away{ justify-content:flex-start; }
+  .sc-my-players-side.home{ justify-content:flex-end; text-align:right; }
+  .sc-my-players-count{ background:var(--good-wash); color:var(--good); font-weight:700; border-radius:99px; padding:2px 8px; flex:none; }
+  .sc-my-players-names{ color:var(--ink-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .sc-sync-banner{ display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; background:var(--sc-surface); border:1px solid var(--sc-line); border-radius:10px; padding:10px 16px; margin-top:14px; font-size:13px; color:var(--sc-muted); }
+  .sc-sync-banner a{ color:var(--accent-ink); text-decoration:none; font-weight:700; }
   .sc-game-side{ display:flex; align-items:center; gap:10px; flex:1; min-width:0; }
   .sc-game-side img{ width:32px; height:32px; object-fit:contain; flex:none; }
   .sc-game-side .nm{ font-weight:700; font-size:13.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
@@ -4560,6 +4714,18 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + """
     <button type="button" class="sc-icon-btn" id="scMonthToggle" title="Month view">&#128197;</button>
   </div>
 
+  {% if has_synced_leagues %}
+  <div class="sc-sync-banner">
+    <span>Showing how many of <strong style="color:var(--sc-text);">{{ username }}</strong>'s players are in each game.</span>
+    <a href="/league-manager">Manage synced leagues</a>
+  </div>
+  {% else %}
+  <div class="sc-sync-banner">
+    <span>Sync your leagues to see which of your players are playing in each game.</span>
+    <a href="/league-manager">Sync your leagues &rarr;</a>
+  </div>
+  {% endif %}
+
   <div class="sc-day-tabs" id="scDayTabs"></div>
 
   <div class="sc-month" id="scMonth">
@@ -4585,14 +4751,32 @@ const scSeasonType = {{ season_type }};
 const scTodayKey = {{ today_key|tojson }};
 
 (function(){
-  const daysIndex = {};  // 'YYYY-MM-DD' -> [game, ...]
+  const daysIndex = {};  // 'YYYY-MM-DD' (visitor's LOCAL calendar day) -> [game, ...]
+
+  function dateKey(d){
+    return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+  }
+
+  // ESPN's game "date" is UTC (a "Z"-suffixed ISO string) -- a Sunday
+  // 8:20pm ET kickoff is already past midnight UTC, so grouping games by
+  // date has to convert to the visitor's own local day, not just read the
+  // UTC calendar date off the string. `new Date(iso)` parses the UTC
+  // instant correctly; dateKey()'s getFullYear/getMonth/getDate are local
+  // getters, so this naturally lands the game on the day it's actually
+  // played from the visitor's own clock.
+  function localDateKey(isoString){
+    return dateKey(new Date(isoString));
+  }
+
   function indexGames(games){
     games.forEach(function(g){
-      if(!g.date_key) return;
-      if(!daysIndex[g.date_key]) daysIndex[g.date_key] = [];
-      const existingIdx = daysIndex[g.date_key].findIndex(function(x){ return x.id === g.id; });
-      if(existingIdx >= 0) daysIndex[g.date_key][existingIdx] = g;
-      else daysIndex[g.date_key].push(g);
+      if(!g.date) return;
+      const key = localDateKey(g.date);
+      g.date_key = key;
+      if(!daysIndex[key]) daysIndex[key] = [];
+      const existingIdx = daysIndex[key].findIndex(function(x){ return x.id === g.id; });
+      if(existingIdx >= 0) daysIndex[key][existingIdx] = g;
+      else daysIndex[key].push(g);
     });
   }
   indexGames(SCORES_WEEK);
@@ -4607,39 +4791,32 @@ const scTodayKey = {{ today_key|tojson }};
   const monthGridEl = document.getElementById('scMonthGrid');
   const monthLabelEl = document.getElementById('scMonthLabel');
 
-  function dateKey(d){
-    return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
-  }
-
-  // A continuous, swipeable strip of dates -- like a real live-scores app's
-  // date bar -- centered on whichever day is selected, not limited to just
-  // the handful of days ESPN's own "week" grouping happens to include.
-  // Slides via native horizontal scroll (touch swipe on mobile, trackpad/
-  // shift-wheel on desktop); no custom drag code needed for that.
-  const DAY_STRIP_RADIUS = 10;
-
+  // A swipeable strip showing ONLY days that actually have games -- not
+  // every calendar day. The page bakes in the requested week plus the
+  // week before/after (see _nearby_weeks_games), so there's normally a
+  // handful of real game days to slide through right away; Prev/Next
+  // Week below adds more as confirmed data comes in. Slides via native
+  // horizontal scroll (touch swipe on mobile, trackpad/shift-wheel on
+  // desktop) -- no custom drag code needed for that.
   function renderDayTabs(){
     dayTabsEl.innerHTML = '';
-    const center = new Date(selectedDay + "T00:00:00");
-    for(let offset = -DAY_STRIP_RADIUS; offset <= DAY_STRIP_RADIUS; offset++){
-      const d = new Date(center);
-      d.setDate(d.getDate() + offset);
-      const key = dateKey(d);
+    const keys = Object.keys(daysIndex).filter(function(k){ return daysIndex[k].length > 0; }).sort();
+    keys.forEach(function(key){
+      const d = new Date(key + "T00:00:00");
       const isActive = key === selectedDay;
       const isToday = key === scTodayKey;
       const btn = document.createElement('div');
       btn.className = 'sc-day-tab' + (isActive ? ' active' : '') + (isToday ? ' today' : '');
       btn.dataset.dateKey = key;
       const games = daysIndex[key];
-      const anyLive = games && games.some(function(g){ return g.status === 'in_progress'; });
-      const hasGames = games && games.length > 0;
+      const anyLive = games.some(function(g){ return g.status === 'in_progress'; });
       btn.innerHTML =
         '<span class="dow">' + d.toLocaleDateString(undefined, { weekday: 'short' }) + '</span>' +
         '<span class="dnum">' + d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) + '</span>' +
-        (hasGames ? '<span class="dot" style="background:' + (anyLive ? 'var(--sc-live)' : 'var(--sc-muted)') + '"></span>' : '');
+        '<span class="dot" style="background:' + (anyLive ? 'var(--sc-live)' : 'var(--sc-muted)') + '"></span>';
       btn.addEventListener('click', function(){ selectDay(key); });
       dayTabsEl.appendChild(btn);
-    }
+    });
     const activeEl = dayTabsEl.querySelector('.sc-day-tab.active');
     if (activeEl && typeof activeEl.scrollIntoView === 'function') {
       activeEl.scrollIntoView({ inline: 'center', block: 'nearest' });
@@ -4657,10 +4834,22 @@ const scTodayKey = {{ today_key|tojson }};
       const a = document.createElement('a');
       a.className = 'sc-game-card';
       a.href = '/game?id=' + encodeURIComponent(g.id);
-      a.innerHTML =
+      const topRow =
+        '<div class="sc-game-top">' +
         '<div class="sc-game-side"><img src="' + (g.away.logo||'') + '" onerror="this.style.visibility=\\'hidden\\'"><span class="nm">' + g.away.name + '</span><span class="sc-game-score">' + (g.away.score ?? '') + '</span></div>' +
         '<div class="sc-game-mid"><span class="sc-status-pill ' + g.status + '">' + (g.status === 'in_progress' ? (g.clock||'') + ' Q' + (g.period||'') : (g.status_detail || g.status)) + '</span></div>' +
-        '<div class="sc-game-side" style="justify-content:flex-end; text-align:right;"><span class="sc-game-score">' + (g.home.score ?? '') + '</span><span class="nm">' + g.home.name + '</span><img src="' + (g.home.logo||'') + '" onerror="this.style.visibility=\\'hidden\\'"></div>';
+        '<div class="sc-game-side" style="justify-content:flex-end; text-align:right;"><span class="sc-game-score">' + (g.home.score ?? '') + '</span><span class="nm">' + g.home.name + '</span><img src="' + (g.home.logo||'') + '" onerror="this.style.visibility=\\'hidden\\'"></div>' +
+        '</div>';
+      const awayMine = g.my_away_players || [];
+      const homeMine = g.my_home_players || [];
+      let myRow = '';
+      if (awayMine.length || homeMine.length) {
+        myRow = '<div class="sc-my-players">' +
+          '<div class="sc-my-players-side away">' + (awayMine.length ? '<span class="sc-my-players-count">' + awayMine.length + '</span><span class="sc-my-players-names">' + awayMine.map(function(p){ return p.name; }).join(', ') + '</span>' : '') + '</div>' +
+          '<div class="sc-my-players-side home">' + (homeMine.length ? '<span class="sc-my-players-names">' + homeMine.map(function(p){ return p.name; }).join(', ') + '</span><span class="sc-my-players-count">' + homeMine.length + '</span>' : '') + '</div>' +
+          '</div>';
+      }
+      a.innerHTML = topRow + myRow;
       gamesEl.appendChild(a);
     });
   }
@@ -4766,6 +4955,9 @@ GAME_DETAIL_HTML = BASE_STYLE + make_header("scores") + """
   .gd-stat-val{ font-family:"IBM Plex Mono"; }
   .gd-stat-val.away{ text-align:left; }
   .gd-stat-val.home{ text-align:right; }
+  .gd-pregame{ display:flex; gap:18px; flex-wrap:wrap; margin-top:10px; font-size:13px; color:var(--ink-secondary); }
+  .gd-wp-bar{ display:flex; height:22px; border-radius:6px; overflow:hidden; margin-top:8px; }
+  .gd-my-players{ margin-top:14px; padding-top:12px; border-top:1px solid var(--line); }
 </style>
 <main><div class="wrap">
   <a href="/scores" class="muted">&larr; Back to scores</a>
@@ -4774,7 +4966,7 @@ GAME_DETAIL_HTML = BASE_STYLE + make_header("scores") + """
     <div class="gd-header">
       <div class="gd-side">
         <img src="{{ detail.away.logo or '' }}" alt="" onerror="this.style.visibility='hidden'">
-        <div><div class="nm">{{ detail.away.name }}</div><div class="gd-score" id="gdAwayScore">{{ detail.away.score or 0 }}</div></div>
+        <div><div class="nm">{{ detail.away.name }}</div><div class="gd-score" id="gdAwayScore">{{ detail.away.score or 0 }}</div>{% if detail.away.record %}<span class="muted mono" style="font-size:11px;">{{ detail.away.record }}</span>{% endif %}</div>
       </div>
       <div class="gd-mid">
         <span class="gd-status {{ detail.status }}" id="gdStatus">{{ detail.status_detail or detail.status }}</span>
@@ -4782,7 +4974,7 @@ GAME_DETAIL_HTML = BASE_STYLE + make_header("scores") + """
       </div>
       <div class="gd-side" style="flex-direction:row-reverse; text-align:right;">
         <img src="{{ detail.home.logo or '' }}" alt="" onerror="this.style.visibility='hidden'">
-        <div><div class="nm">{{ detail.home.name }}</div><div class="gd-score" id="gdHomeScore">{{ detail.home.score or 0 }}</div></div>
+        <div><div class="nm">{{ detail.home.name }}</div><div class="gd-score" id="gdHomeScore">{{ detail.home.score or 0 }}</div>{% if detail.home.record %}<span class="muted mono" style="font-size:11px;">{{ detail.home.record }}</span>{% endif %}</div>
       </div>
     </div>
     {% if detail.venue.name %}
@@ -4795,7 +4987,48 @@ GAME_DETAIL_HTML = BASE_STYLE + make_header("scores") + """
       {% endfor %}
     </div>
     {% endif %}
+    {% if detail.status == 'scheduled' and (detail.broadcasts or detail.odds) %}
+    <div class="gd-pregame">
+      {% if detail.broadcasts %}<span>&#128250; {{ detail.broadcasts|join(', ') }}</span>{% endif %}
+      {% if detail.odds and detail.odds.spread %}<span>{{ detail.odds.spread }}{% if detail.odds.over_under %} &middot; O/U {{ detail.odds.over_under }}{% endif %}</span>{% endif %}
+    </div>
+    {% endif %}
+    {% if detail.my_players %}
+    <div class="gd-my-players">
+      <p class="eyebrow">Your Players In This Game</p>
+      {% for side_label, players in [(detail.away.abbr, detail.my_players.away), (detail.home.abbr, detail.my_players.home)] %}
+        {% if players %}
+        <p style="margin-top:6px; font-size:13px;"><b>{{ side_label }}</b> &mdash; {{ players|map(attribute='name')|join(', ') }}</p>
+        {% endif %}
+      {% endfor %}
+    </div>
+    {% endif %}
   </div>
+
+  {% if detail.win_prob %}
+  <div class="panel" id="gdWinProbPanel">
+    <p class="eyebrow">Win Probability</p>
+    <div class="gd-wp-bar">
+      <div id="gdWpAwayBar" style="width:{{ detail.win_prob.away_pct }}%; background:var(--pos-wr);"></div>
+      <div id="gdWpHomeBar" style="width:{{ detail.win_prob.home_pct }}%; background:var(--pos-rb);"></div>
+    </div>
+    <div style="display:flex; justify-content:space-between; margin-top:6px; font-size:12.5px;">
+      <span>{{ detail.away.abbr }} <span id="gdWpAwayPct">{{ detail.win_prob.away_pct }}</span>%</span>
+      <span>{{ detail.home.abbr }} <span id="gdWpHomePct">{{ detail.win_prob.home_pct }}</span>%</span>
+    </div>
+  </div>
+  {% endif %}
+
+  {% if detail.away.linescores and detail.home.linescores %}
+  <div class="panel" id="gdLinescorePanel">
+    <p class="eyebrow">Score by Quarter</p>
+    <table class="rank-table" style="margin-top:6px;" id="gdLinescoreTable">
+      <tr><th></th>{% for i in range(detail.away.linescores|length) %}<th>Q{{ i+1 }}</th>{% endfor %}<th>Final</th></tr>
+      <tr data-side="away"><td>{{ detail.away.abbr }}</td>{% for v in detail.away.linescores %}<td class="mono">{{ v }}</td>{% endfor %}<td class="mono" data-final>{{ detail.away.score }}</td></tr>
+      <tr data-side="home"><td>{{ detail.home.abbr }}</td>{% for v in detail.home.linescores %}<td class="mono">{{ v }}</td>{% endfor %}<td class="mono" data-final>{{ detail.home.score }}</td></tr>
+    </table>
+  </div>
+  {% endif %}
 
   {% if detail.team_stats %}
   <div class="panel" id="gdStatsPanel">
@@ -4826,6 +5059,10 @@ GAME_DETAIL_HTML = BASE_STYLE + make_header("scores") + """
     {% endfor %}
   </div>
   {% endif %}
+
+  {% if detail.status == 'scheduled' and not detail.team_stats and not detail.player_leaders %}
+  <p class="muted" style="margin-top:14px; text-align:center;">Full box score and stats will appear here once the game kicks off.</p>
+  {% endif %}
 </div></main>
 <script>
 (function(){
@@ -4845,6 +5082,36 @@ GAME_DETAIL_HTML = BASE_STYLE + make_header("scores") + """
         statusEl.textContent = data.status_detail || data.status;
         statusEl.className = 'gd-status ' + data.status;
         document.getElementById('gdClock').textContent = data.status === 'in_progress' ? (data.clock + ' · Q' + data.period) : '';
+
+        // Win probability shifts play by play -- patch it if the panel is
+        // already on the page (it only renders when win_prob was present
+        // at initial page load).
+        if (data.win_prob) {
+          const wpAwayBar = document.getElementById('gdWpAwayBar');
+          const wpHomeBar = document.getElementById('gdWpHomeBar');
+          if (wpAwayBar && wpHomeBar) {
+            wpAwayBar.style.width = data.win_prob.away_pct + '%';
+            wpHomeBar.style.width = data.win_prob.home_pct + '%';
+            document.getElementById('gdWpAwayPct').textContent = data.win_prob.away_pct;
+            document.getElementById('gdWpHomePct').textContent = data.win_prob.home_pct;
+          }
+        }
+
+        // Quarter-by-quarter scores fill in as each quarter ends -- patch
+        // the existing cells (same reasoning: the table only exists if
+        // linescores were already present at initial load).
+        const table = document.getElementById('gdLinescoreTable');
+        if (table && data.away_linescores && data.home_linescores) {
+          [['away', data.away_linescores, data.away_score], ['home', data.home_linescores, data.home_score]].forEach(function(entry){
+            const row = table.querySelector('tr[data-side="' + entry[0] + '"]');
+            if (!row) return;
+            const cells = row.querySelectorAll('td.mono:not([data-final])');
+            entry[1].forEach(function(v, i){ if (cells[i]) cells[i].textContent = v; });
+            const finalCell = row.querySelector('td[data-final]');
+            if (finalCell) finalCell.textContent = entry[2] ?? 0;
+          });
+        }
+
         if (data.status !== 'in_progress') return;  // stop scheduling further polls once final
         setTimeout(poll, 15000);
       })
