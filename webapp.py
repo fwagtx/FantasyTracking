@@ -1501,7 +1501,18 @@ def get_defense_vs_position(season, cache={}):
     schedule table via each player's *current* team (see the accepted
     trade-week approximation noted in the implementation plan -- a
     mid-season trade misattributes a handful of historical weeks).
-    TTL 3600s; cheap to recompute since every input is itself cached."""
+    TTL 3600s; cheap to recompute since every input is itself cached.
+
+    Self-heals nfl_schedule for THIS season the same way /scores and
+    /matchups already do -- matchup grading calls this for season-1 too
+    (see compute_matchup_grade's last-year fallback), and the recurring
+    cron only ever syncs the CURRENT season, so without this a prior
+    season's schedule would simply never exist in the DB and every
+    fallback lookup would silently come back empty forever, not just
+    "not synced yet". ensure_schedule_synced no-ops instantly once a
+    season is confirmed present, so this costs nothing after the first
+    call per season per process."""
+    ensure_schedule_synced(season)
     now = time.time()
     entry = cache.get(season)
     if entry and now - entry["time"] < 3600:
@@ -3665,6 +3676,12 @@ def api_warm():
             info = get_current_week_info()
             espn_week_scoreboard(info["season"], info["week"], info["season_type"])
             get_defense_vs_position(int(SEASON))
+            # Matchup grading falls back to last season's defense-vs-position
+            # numbers early in a new season (this year's sample is thin to
+            # nonexistent) -- warming it here means that backfill kicks off
+            # on this 12-minute ping instead of waiting on whichever real
+            # visitor happens to load /matchups first.
+            get_defense_vs_position(int(SEASON) - 1)
             get_referee_tendencies()
         except Exception:
             pass
