@@ -1122,6 +1122,91 @@ def espn_game_summary(event_id, cache={}):
         return entry["data"] if entry else {}
 
 
+def extract_game_detail(summary_json):
+    """Pure function, no I/O: turns a raw espn_game_summary() payload
+    into the shape /game and /api/game-live both need. Field paths here
+    are based on ESPN's commonly-documented (by the hobbyist community,
+    since ESPN itself publishes no spec) summary shape -- venue/officials
+    under top-level "gameInfo", team stats under "boxscore.teams",
+    top performers under "leaders". Defensive with .get() at every level
+    since this is unverified against a live response from this sandbox
+    (see /api/debug-espn?endpoint=summary&event=<id> once deployed) --
+    a missing/renamed field degrades to an empty value here, never
+    crashes the page."""
+    header = summary_json.get("header") or {}
+    comp = (header.get("competitions") or [{}])[0]
+    competitors = comp.get("competitors") or []
+    home_c = next((c for c in competitors if c.get("homeAway") == "home"), None) or {}
+    away_c = next((c for c in competitors if c.get("homeAway") == "away"), None) or {}
+    status = comp.get("status") or {}
+    state = (status.get("type") or {}).get("state")
+
+    def side(c):
+        team = c.get("team") or {}
+        abbr = normalize_team_abbr(team.get("abbreviation"))
+        return {
+            "abbr": abbr,
+            "name": team.get("displayName") or abbr,
+            "score": c.get("score"),
+            "logo": team_logo_url(abbr),
+        }
+
+    home, away = side(home_c), side(away_c)
+
+    game_info = summary_json.get("gameInfo") or {}
+    venue = game_info.get("venue") or comp.get("venue") or {}
+    address = venue.get("address") or {}
+    officials = [
+        {
+            "name": o.get("displayName") or o.get("fullName"),
+            "position": (o.get("position") or {}).get("name") or o.get("position"),
+        }
+        for o in (game_info.get("officials") or comp.get("officials") or [])
+        if isinstance(o, dict)
+    ]
+
+    team_stats = []
+    box_teams = (summary_json.get("boxscore") or {}).get("teams") or []
+    if len(box_teams) == 2:
+        t0_abbr = normalize_team_abbr((box_teams[0].get("team") or {}).get("abbreviation"))
+        home_entry, away_entry = (box_teams[0], box_teams[1]) if t0_abbr == home["abbr"] else (box_teams[1], box_teams[0])
+        home_stats = {s.get("name"): s.get("displayValue") for s in (home_entry.get("statistics") or [])}
+        away_stats = {s.get("name"): s.get("displayValue") for s in (away_entry.get("statistics") or [])}
+        for s in home_entry.get("statistics") or []:
+            name = s.get("name")
+            team_stats.append({
+                "label": s.get("label") or s.get("displayName") or name,
+                "home": home_stats.get(name, "—"),
+                "away": away_stats.get(name, "—"),
+            })
+
+    player_leaders = []
+    for group in summary_json.get("leaders") or []:
+        team_abbr = normalize_team_abbr((group.get("team") or {}).get("abbreviation"))
+        for cat in group.get("leaders") or []:
+            top = (cat.get("leaders") or [None])[0]
+            if not top:
+                continue
+            player_leaders.append({
+                "team": team_abbr,
+                "category": cat.get("displayName") or cat.get("name"),
+                "athlete": (top.get("athlete") or {}).get("displayName"),
+                "stat_line": top.get("displayValue"),
+            })
+
+    return {
+        "status": _ESPN_STATE_TO_STATUS.get(state, "scheduled"),
+        "period": status.get("period"),
+        "clock": status.get("displayClock"),
+        "status_detail": (status.get("type") or {}).get("shortDetail"),
+        "venue": {"name": venue.get("fullName"), "city": address.get("city"), "state": address.get("state")},
+        "officials": officials,
+        "home": home, "away": away,
+        "team_stats": team_stats,
+        "player_leaders": player_leaders,
+    }
+
+
 def _parse_espn_event(ev):
     """Pure function: one ESPN scoreboard 'event' -> the flat row shape
     nfl_schedule stores. Defensive about missing keys since this is an
@@ -2196,6 +2281,30 @@ def api_scoreboard():
     return jsonify({"games": games, "season": season, "week": week, "season_type": season_type})
 
 
+@app.route("/game")
+def game_detail_page():
+    event_id = request.args.get("id", "")
+    summary = espn_game_summary(event_id)
+    detail = extract_game_detail(summary)
+    return render_template_string(GAME_DETAIL_HTML, event_id=event_id, detail=detail)
+
+
+@app.route("/api/game-live")
+def api_game_live():
+    """Trimmed live-poll JSON -- only what can actually change mid-game
+    (score, clock, status, team stats). Venue/officials never change
+    once the game starts, so the polling loop never re-fetches them."""
+    event_id = request.args.get("id", "")
+    summary = espn_game_summary(event_id)
+    detail = extract_game_detail(summary)
+    return jsonify({
+        "status": detail["status"], "period": detail["period"], "clock": detail["clock"],
+        "status_detail": detail["status_detail"],
+        "home_score": detail["home"]["score"], "away_score": detail["away"]["score"],
+        "team_stats": detail["team_stats"],
+    })
+
+
 @app.route("/")
 @app.route("/rankings")
 def rankings():
@@ -2591,14 +2700,18 @@ def api_debug_espn():
             body = r.json()
             comp = (((body.get("header") or {}).get("competitions") or [{}])[0])
             box = body.get("boxscore") or {}
+            game_info = body.get("gameInfo") or {}
             probe = {
                 "top_level_keys": sorted(body.keys()),
                 "header_competition_keys": sorted(comp.keys()),
                 "status_type_state": (comp.get("status") or {}).get("type", {}).get("state"),
-                "venue_raw": comp.get("venue"),
-                "officials_raw": comp.get("officials") or box.get("officials"),
+                "game_info_keys": sorted(game_info.keys()),
+                "venue_raw": game_info.get("venue") or comp.get("venue"),
+                "officials_raw": game_info.get("officials") or comp.get("officials") or box.get("officials"),
                 "boxscore_keys": sorted(box.keys()),
                 "boxscore_teams_sample": (box.get("teams") or [None])[0],
+                "leaders_sample": (body.get("leaders") or [None])[0],
+                "extract_game_detail_result": extract_game_detail(body),
             }
         else:
             season = request.args.get("season", default=int(SEASON), type=int)
@@ -4011,6 +4124,114 @@ const scTodayKey = {{ today_key|tojson }};
   renderDayTabs();
   renderGames();
   renderMonth();
+})();
+</script>
+"""
+
+GAME_DETAIL_HTML = BASE_STYLE + make_header("scores") + """
+<style>
+  .gd-header{ display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; }
+  .gd-side{ display:flex; align-items:center; gap:14px; }
+  .gd-side img{ width:56px; height:56px; object-fit:contain; }
+  .gd-side .nm{ font-family:"Big Shoulders Display"; font-size:20px; font-weight:800; text-transform:uppercase; }
+  .gd-score{ font-family:"IBM Plex Mono"; font-size:40px; font-weight:700; }
+  .gd-mid{ display:flex; flex-direction:column; align-items:center; gap:6px; }
+  .gd-status{ font-size:12px; font-weight:700; text-transform:uppercase; padding:4px 12px; border-radius:99px; background:var(--paper-sunken); color:var(--ink-muted); }
+  .gd-status.in_progress{ background:var(--warning-wash); color:var(--warning); }
+  .gd-venue{ color:var(--ink-secondary); font-size:13px; margin-top:6px; }
+  .gd-officials{ display:flex; flex-wrap:wrap; gap:10px 24px; margin-top:10px; }
+  .gd-official{ font-size:13px; }
+  .gd-official b{ color:var(--ink); }
+  .gd-stat-row{ display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:10px; padding:8px 4px; border-top:1px solid var(--line); font-size:13.5px; }
+  .gd-stat-row:first-child{ border-top:none; }
+  .gd-stat-label{ text-align:center; color:var(--ink-muted); font-size:11.5px; text-transform:uppercase; letter-spacing:0.03em; }
+  .gd-stat-val{ font-family:"IBM Plex Mono"; }
+  .gd-stat-val.away{ text-align:left; }
+  .gd-stat-val.home{ text-align:right; }
+</style>
+<main><div class="wrap">
+  <a href="/scores" class="muted">&larr; Back to scores</a>
+  <div class="panel">
+    <div class="gd-header">
+      <div class="gd-side">
+        <img src="{{ detail.away.logo or '' }}" alt="" onerror="this.style.visibility='hidden'">
+        <div><div class="nm">{{ detail.away.name }}</div><div class="gd-score" id="gdAwayScore">{{ detail.away.score or 0 }}</div></div>
+      </div>
+      <div class="gd-mid">
+        <span class="gd-status {{ detail.status }}" id="gdStatus">{{ detail.status_detail or detail.status }}</span>
+        <span class="muted" id="gdClock">{% if detail.status == 'in_progress' %}{{ detail.clock }} &middot; Q{{ detail.period }}{% endif %}</span>
+      </div>
+      <div class="gd-side" style="flex-direction:row-reverse; text-align:right;">
+        <img src="{{ detail.home.logo or '' }}" alt="" onerror="this.style.visibility='hidden'">
+        <div><div class="nm">{{ detail.home.name }}</div><div class="gd-score" id="gdHomeScore">{{ detail.home.score or 0 }}</div></div>
+      </div>
+    </div>
+    {% if detail.venue.name %}
+    <div class="gd-venue">{{ detail.venue.name }}{% if detail.venue.city %} &middot; {{ detail.venue.city }}{% if detail.venue.state %}, {{ detail.venue.state }}{% endif %}{% endif %}</div>
+    {% endif %}
+    {% if detail.officials %}
+    <div class="gd-officials">
+      {% for o in detail.officials %}
+      <span class="gd-official">{% if o.position %}<span class="muted">{{ o.position }}:</span>{% endif %} <b>{{ o.name }}</b></span>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </div>
+
+  {% if detail.team_stats %}
+  <div class="panel" id="gdStatsPanel">
+    <p class="eyebrow">Team Stats</p>
+    <div class="gd-stat-row" style="font-weight:700;">
+      <span class="gd-stat-val away">{{ detail.away.abbr }}</span>
+      <span></span>
+      <span class="gd-stat-val home">{{ detail.home.abbr }}</span>
+    </div>
+    {% for s in detail.team_stats %}
+    <div class="gd-stat-row">
+      <span class="gd-stat-val away">{{ s.away }}</span>
+      <span class="gd-stat-label">{{ s.label }}</span>
+      <span class="gd-stat-val home">{{ s.home }}</span>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  {% if detail.player_leaders %}
+  <div class="panel">
+    <p class="eyebrow">Top Performers</p>
+    {% for l in detail.player_leaders %}
+    <div class="player-row">
+      <div class="pname-row"><span class="pos-chip" style="background:var(--paper-sunken); color:var(--ink-secondary);">{{ l.team }}</span> <span style="margin-left:8px;">{{ l.athlete }} &middot; <span class="muted">{{ l.category }}</span></span></div>
+      <span class="mono">{{ l.stat_line }}</span>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+</div></main>
+<script>
+(function(){
+  const status = {{ detail.status|tojson }};
+  if (status !== 'in_progress') return;
+  const eventId = {{ event_id|tojson }};
+  let requestId = 0;
+  function poll(){
+    const thisRequestId = ++requestId;
+    fetch('/api/game-live?id=' + encodeURIComponent(eventId))
+      .then(function(r){ return r.json(); })
+      .then(function(data){
+        if (thisRequestId !== requestId) return;
+        document.getElementById('gdAwayScore').textContent = data.away_score ?? 0;
+        document.getElementById('gdHomeScore').textContent = data.home_score ?? 0;
+        const statusEl = document.getElementById('gdStatus');
+        statusEl.textContent = data.status_detail || data.status;
+        statusEl.className = 'gd-status ' + data.status;
+        document.getElementById('gdClock').textContent = data.status === 'in_progress' ? (data.clock + ' · Q' + data.period) : '';
+        if (data.status !== 'in_progress') return;  // stop scheduling further polls once final
+        setTimeout(poll, 15000);
+      })
+      .catch(function(){ setTimeout(poll, 15000); });
+  }
+  setTimeout(poll, 15000);
 })();
 </script>
 """
