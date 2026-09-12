@@ -1266,9 +1266,7 @@ def build_league_teams(league_id, league, all_players, league_users, user_id):
             bar.append((pos, pct, rank, intensity))
         t["bar"] = bar
 
-    # Your own team always leads the list -- everyone else still follows
-    # standings order (wins, then total value) behind it.
-    team_infos.sort(key=lambda t: (0 if t["is_you"] else 1, -t["wins"], -sum(t["pos_value"].values())))
+    team_infos.sort(key=lambda t: (-t["wins"], -sum(t["pos_value"].values())))
     totals = [sum(t["pos_value"].values()) for t in team_infos]
     mean_value = sum(totals) / len(totals) if totals else 0
     stdev_value = (sum((v - mean_value) ** 2 for v in totals) / len(totals)) ** 0.5 if totals else 0
