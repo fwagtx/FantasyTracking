@@ -1562,6 +1562,70 @@ def compute_matchup_grade(sid, season, week, cache={}):
     return data
 
 
+def compare_matchups(sid_a, sid_b, season, week):
+    """Head-to-head start/sit call between two players: reuses
+    compute_matchup_grade for each (same cache, so this is free once
+    the matchups page has already computed either grade) and builds a
+    plain-English case for whichever one grades out ahead. Returns None
+    if either sid isn't a graded skill-position player."""
+    if sid_a == sid_b:
+        return None
+    grade_a = compute_matchup_grade(sid_a, season, week)
+    grade_b = compute_matchup_grade(sid_b, season, week)
+    if not grade_a or not grade_b:
+        return None
+
+    all_players = get_all_players()
+    season_stats = get_season_stats(season)
+
+    def summarize(sid, grade):
+        p = all_players.get(sid, {})
+        stat = season_stats.get(sid, {})
+        weeks_sorted = sorted((stat.get("weeks") or {}).items())
+        recent = [fpts for _, fpts in weeks_sorted[-4:]]
+        badge = _injury_badge(p)
+        c = grade["components"]
+        return {
+            "sid": sid,
+            "name": f"{p.get('first_name','')} {p.get('last_name','')}".strip(),
+            "position": p.get("position"), "team": p.get("team") or "FA",
+            "photo": player_photo_url(sid),
+            "opponent": c["opponent"], "def_rank": c["def_rank"],
+            "grade": grade["grade"], "stars": grade["stars"], "composite": c["composite"],
+            "season_avg": round(stat["fpts"] / stat["games"], 1) if stat.get("games") else 0.0,
+            "recent_avg": round(sum(recent) / len(recent), 1) if recent else 0.0,
+            "injury": (badge["title"] if badge else "Healthy"),
+            "injury_tier": c["injury_tier"],
+        }
+
+    a, b = summarize(sid_a, grade_a), summarize(sid_b, grade_b)
+
+    grade_rank = {"A": 5, "B": 4, "C": 3, "D": 2, "F": 1}
+    if grade_rank[a["grade"]] != grade_rank[b["grade"]]:
+        start, sit = (a, b) if grade_rank[a["grade"]] > grade_rank[b["grade"]] else (b, a)
+    else:
+        start, sit = (a, b) if a["composite"] >= b["composite"] else (b, a)
+
+    # Build the reasons in order of how much they actually drove the
+    # call -- an injury edge first (it's decisive), then the matchup,
+    # then recent form, falling back to "just grades out higher" only
+    # if nothing else distinguishes them.
+    hurt_tiers = ("out", "admin", "doubtful")
+    reasons = []
+    if sit["injury_tier"] in hurt_tiers and start["injury_tier"] not in hurt_tiers:
+        reasons.append(f"{sit['name']} carries an injury designation ({sit['injury']}) that caps their outlook this week.")
+    if start["def_rank"] and sit["def_rank"] and start["def_rank"] != sit["def_rank"]:
+        easier, harder = (start, sit) if start["def_rank"] > sit["def_rank"] else (sit, start)
+        if easier is start:
+            reasons.append(f"{start['name']} draws the easier matchup -- {start['opponent']} ranks {start['def_rank']} against the position, vs. {sit['opponent']} at {sit['def_rank']} for {sit['name']}.")
+    if start["recent_avg"] > sit["recent_avg"] + 1:
+        reasons.append(f"{start['name']} is trending up recently ({start['recent_avg']} pts/gm over their last few weeks vs. {sit['recent_avg']} for {sit['name']}).")
+    if not reasons:
+        reasons.append(f"{start['name']} grades out higher overall this week ({start['grade']} vs. {sit['grade']}).")
+
+    return {"a": a, "b": b, "start_sid": start["sid"], "sit_sid": sit["sid"], "reasons": reasons}
+
+
 def league_num_qbs(league):
     positions = league.get("roster_positions", []) or []
     if any(p in ("SUPER_FLEX", "SUPERFLEX") for p in positions):
@@ -2329,6 +2393,7 @@ def league_detail():
         # adds no new I/O for a signed-in visitor.
         if detail.get("mode") == "roster" and current_user.is_authenticated:
             info = get_current_week_info()
+            ensure_schedule_synced(info["season"])
             for col in detail["columns"].values():
                 for p in col["players"]:
                     grade = compute_matchup_grade(p["sleeper_id"], info["season"], info["week"])
@@ -2525,16 +2590,27 @@ def _week_games(season, week, season_type=2):
 
 @app.route("/scores")
 def scores_page():
-    info = get_current_week_info()
-    season = request.args.get("season", default=info["season"], type=int)
-    week = request.args.get("week", default=info["week"], type=int)
-    season_type = request.args.get("seasontype", default=info["season_type"], type=int)
-    games, _ = _week_games(season, week, season_type)
-    return render_template_string(
-        SCORES_HTML, games=games, season=season, week=week, season_type=season_type,
-        current_season=info["season"], current_week=info["week"],
-        today_key=date.today().isoformat(),
-    )
+    try:
+        info = get_current_week_info()
+        season = request.args.get("season", default=info["season"], type=int)
+        week = request.args.get("week", default=info["week"], type=int)
+        season_type = request.args.get("seasontype", default=info["season_type"], type=int)
+        games, _ = _week_games(season, week, season_type)
+        return render_template_string(
+            SCORES_HTML, games=games, season=season, week=week, season_type=season_type,
+            current_season=info["season"], current_week=info["week"],
+            today_key=date.today().isoformat(), load_error=None,
+        )
+    except Exception as e:
+        # ESPN's API is unofficial and unverified against a live response
+        # from this environment -- surface the real error on the page
+        # instead of a bare 500, so a shape mismatch is diagnosable from
+        # a screenshot alone rather than looking like the page is dead.
+        return render_template_string(
+            SCORES_HTML, games=[], season=int(SEASON), week=1, season_type=2,
+            current_season=int(SEASON), current_week=1, today_key=date.today().isoformat(),
+            load_error=str(e),
+        )
 
 
 @app.route("/api/scoreboard")
@@ -2543,25 +2619,34 @@ def api_scoreboard():
     week (?season=&week=) for Prev/Next Week navigation, or a single day
     (?date=YYYYMMDD) for a month-view cell click -- whichever wasn't
     already baked into the page at load."""
-    date_str = request.args.get("date")
-    if date_str:
-        data = espn_day_scoreboard(date_str)
-        games = [c for c in (espn_event_to_card(ev) for ev in data.get("events", [])) if c]
-        return jsonify({"games": games})
-    info = get_current_week_info()
-    season = request.args.get("season", default=info["season"], type=int)
-    week = request.args.get("week", default=info["week"], type=int)
-    season_type = request.args.get("seasontype", default=info["season_type"], type=int)
-    games, _ = _week_games(season, week, season_type)
-    return jsonify({"games": games, "season": season, "week": week, "season_type": season_type})
+    try:
+        date_str = request.args.get("date")
+        if date_str:
+            data = espn_day_scoreboard(date_str)
+            games = [c for c in (espn_event_to_card(ev) for ev in data.get("events", [])) if c]
+            return jsonify({"games": games})
+        info = get_current_week_info()
+        season = request.args.get("season", default=info["season"], type=int)
+        week = request.args.get("week", default=info["week"], type=int)
+        season_type = request.args.get("seasontype", default=info["season_type"], type=int)
+        games, _ = _week_games(season, week, season_type)
+        return jsonify({"games": games, "season": season, "week": week, "season_type": season_type})
+    except Exception as e:
+        return jsonify({"games": [], "error": str(e)})
 
 
 @app.route("/game")
 def game_detail_page():
     event_id = request.args.get("id", "")
-    summary = espn_game_summary(event_id)
-    detail = extract_game_detail(summary)
-    return render_template_string(GAME_DETAIL_HTML, event_id=event_id, detail=detail)
+    try:
+        summary = espn_game_summary(event_id)
+        detail = extract_game_detail(summary)
+        return render_template_string(GAME_DETAIL_HTML, event_id=event_id, detail=detail, load_error=None)
+    except Exception as e:
+        empty = {"status": "scheduled", "period": None, "clock": None, "status_detail": None,
+                  "venue": {}, "officials": [], "home": {"abbr": None, "name": "?", "score": None, "logo": None},
+                  "away": {"abbr": None, "name": "?", "score": None, "logo": None}, "team_stats": [], "player_leaders": []}
+        return render_template_string(GAME_DETAIL_HTML, event_id=event_id, detail=empty, load_error=str(e))
 
 
 @app.route("/api/game-live")
@@ -2570,14 +2655,17 @@ def api_game_live():
     (score, clock, status, team stats). Venue/officials never change
     once the game starts, so the polling loop never re-fetches them."""
     event_id = request.args.get("id", "")
-    summary = espn_game_summary(event_id)
-    detail = extract_game_detail(summary)
-    return jsonify({
-        "status": detail["status"], "period": detail["period"], "clock": detail["clock"],
-        "status_detail": detail["status_detail"],
-        "home_score": detail["home"]["score"], "away_score": detail["away"]["score"],
-        "team_stats": detail["team_stats"],
-    })
+    try:
+        summary = espn_game_summary(event_id)
+        detail = extract_game_detail(summary)
+        return jsonify({
+            "status": detail["status"], "period": detail["period"], "clock": detail["clock"],
+            "status_detail": detail["status_detail"],
+            "home_score": detail["home"]["score"], "away_score": detail["away"]["score"],
+            "team_stats": detail["team_stats"],
+        })
+    except Exception as e:
+        return jsonify({"status": "final", "error": str(e)})
 
 
 @app.route("/matchups")
@@ -2593,32 +2681,64 @@ def matchups_page():
     week = request.args.get("week", default=info["week"], type=int)
 
     rows = []
+    load_error = None
     if current_user.is_authenticated:
-        all_players = get_all_players()
-        fc_players = get_fantasycalc_values(1)["players"]
-        for sid, v in fc_players.items():
-            p = all_players.get(sid)
-            if not p or v.get("position") not in POSITIONS:
-                continue
-            grade = compute_matchup_grade(sid, season, week)
-            if not grade:
-                continue
-            rows.append({
-                "sid": sid,
-                "name": f"{p.get('first_name','')} {p.get('last_name','')}".strip(),
-                "position": v.get("position"), "team": p.get("team") or "FA",
-                "photo": player_photo_url(sid),
-                "opponent": grade["components"]["opponent"],
-                "grade": grade["grade"], "stars": grade["stars"],
-                "value": v.get("value", 0),
-            })
-        rows.sort(key=lambda r: (-r["stars"], -r["value"]))
-        rows = rows[:300]
+        try:
+            ensure_schedule_synced(season)
+            all_players = get_all_players()
+            fc_players = get_fantasycalc_values(1)["players"]
+            for sid, v in fc_players.items():
+                p = all_players.get(sid)
+                if not p or v.get("position") not in POSITIONS:
+                    continue
+                grade = compute_matchup_grade(sid, season, week)
+                if not grade:
+                    continue
+                rows.append({
+                    "sid": sid,
+                    "name": f"{p.get('first_name','')} {p.get('last_name','')}".strip(),
+                    "position": v.get("position"), "team": p.get("team") or "FA",
+                    "photo": player_photo_url(sid),
+                    "opponent": grade["components"]["opponent"],
+                    "grade": grade["grade"], "stars": grade["stars"],
+                    "value": v.get("value", 0),
+                })
+            rows.sort(key=lambda r: (-r["stars"], -r["value"]))
+            rows = rows[:300]
+        except Exception as e:
+            load_error = str(e)
 
     return render_template_string(
         MATCHUPS_HTML, rows=rows, season=season, week=week,
-        current_season=info["season"], current_week=info["week"],
+        current_season=info["season"], current_week=info["week"], load_error=load_error,
     )
+
+
+@app.route("/api/matchup-compare")
+def api_matchup_compare():
+    """Head-to-head start/sit call for two players -- backs the
+    Matchups page's comparison tool. Auth-gated like the rest of
+    matchup grading (see matchups_page's docstring re: the future
+    is_member swap)."""
+    if not current_user.is_authenticated:
+        return jsonify({"ok": False, "error": "Sign in to compare players."}), 401
+    sid_a = request.args.get("a", "")
+    sid_b = request.args.get("b", "")
+    if not sid_a or not sid_b:
+        return jsonify({"ok": False, "error": "Pick two players to compare."}), 400
+    if sid_a == sid_b:
+        return jsonify({"ok": False, "error": "Pick two different players."}), 400
+    info = get_current_week_info()
+    season = request.args.get("season", default=info["season"], type=int)
+    week = request.args.get("week", default=info["week"], type=int)
+    try:
+        ensure_schedule_synced(season)
+        result = compare_matchups(sid_a, sid_b, season, week)
+        if not result:
+            return jsonify({"ok": False, "error": "Couldn't grade one of those players -- try a different skill-position player."}), 400
+        return jsonify({"ok": True, "result": result})
+    except Exception as e:
+        return jsonify({"ok": False, "error": str(e)}), 500
 
 
 @app.route("/")
@@ -3103,21 +3223,17 @@ _schedule_sync_lock = threading.Lock()
 _schedule_sync_busy = False
 
 
-@app.route("/api/sync-schedule", methods=["GET", "POST"])
-def api_sync_schedule():
-    """Protected endpoint the scheduled sync job calls to refresh
-    nfl_schedule for every week of a season (defaults to the current
-    season) -- same background-thread + single-flight-lock shape as
-    /api/sync-stats, kept as a separate lock so a schedule sync and a
-    stats sync never block each other."""
+def _sync_full_season_schedule_background(season):
+    """Kicks off a background thread syncing every week of `season` into
+    nfl_schedule, guarded by the single-flight lock so overlapping
+    triggers (the cron, the auto-heal check below, a manual dispatch)
+    never run concurrently. Returns immediately either way -- never
+    blocks the caller on a live fetch, the same lesson get_season_stats
+    already learned the hard way (see its docstring)."""
     global _schedule_sync_busy
-    if request.args.get("secret") != SITE_PASSWORD:
-        return jsonify({"ok": False, "error": "unauthorized"}), 401
-    season = request.args.get("season", default=int(SEASON), type=int)
-
     with _schedule_sync_lock:
         if _schedule_sync_busy:
-            return jsonify({"ok": True, "season": season, "skipped": "another schedule sync already running"})
+            return False
         _schedule_sync_busy = True
 
     def _run():
@@ -3132,6 +3248,48 @@ def api_sync_schedule():
                 _schedule_sync_busy = False
 
     threading.Thread(target=_run, daemon=True).start()
+    return True
+
+
+_schedule_seeded_seasons = set()
+
+
+def ensure_schedule_synced(season):
+    """Self-heals the common "just deployed, the 2-hour cron hasn't
+    fired yet" gap: if nfl_schedule has zero rows for this season, kick
+    off a background sync so the page renders honestly (a real bye,
+    just not-yet-synced) now and correctly on the next request or two,
+    without ever blocking this render on a live fetch. Checks an
+    in-memory set first so a season already confirmed non-empty this
+    process never re-queries the DB on every request."""
+    if season in _schedule_seeded_seasons or not DATABASE_URL:
+        return
+    conn = get_db()
+    try:
+        with conn.cursor() as cur:
+            cur.execute("SELECT 1 FROM nfl_schedule WHERE season = %s LIMIT 1", (season,))
+            has_rows = cur.fetchone() is not None
+    finally:
+        conn.close()
+    if has_rows:
+        _schedule_seeded_seasons.add(season)
+    else:
+        _sync_full_season_schedule_background(season)
+
+
+@app.route("/api/sync-schedule", methods=["GET", "POST"])
+def api_sync_schedule():
+    """Protected endpoint the scheduled sync job calls to refresh
+    nfl_schedule for every week of a season (defaults to the current
+    season) -- same background-thread + single-flight-lock shape as
+    /api/sync-stats, kept as a separate lock so a schedule sync and a
+    stats sync never block each other."""
+    if request.args.get("secret") != SITE_PASSWORD:
+        return jsonify({"ok": False, "error": "unauthorized"}), 401
+    season = request.args.get("season", default=int(SEASON), type=int)
+    started = _sync_full_season_schedule_background(season)
+    if not started:
+        return jsonify({"ok": True, "season": season, "skipped": "another schedule sync already running"})
     return jsonify({"ok": True, "season": season, "started": True})
 
 
@@ -4306,6 +4464,7 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + """
 
 <div class="sc-page">
 <div class="wrap">
+  {% if load_error %}<div class="error">Couldn't load live scores right now: {{ load_error }}</div>{% endif %}
   <div class="sc-toolbar">
     <span class="sc-title">Scores</span>
     <div class="sc-week-nav">
@@ -4504,6 +4663,7 @@ GAME_DETAIL_HTML = BASE_STYLE + make_header("scores") + """
 </style>
 <main><div class="wrap">
   <a href="/scores" class="muted">&larr; Back to scores</a>
+  {% if load_error %}<div class="error">Couldn't load this game right now: {{ load_error }}</div>{% endif %}
   <div class="panel">
     <div class="gd-header">
       <div class="gd-side">
@@ -4604,11 +4764,67 @@ MATCHUPS_HTML = BASE_STYLE + make_header("matchups") + """
   .mu-grade.C{ background:var(--warning-wash); color:var(--warning); }
   .mu-grade.D, .mu-grade.F{ background:var(--critical-wash); color:var(--critical); }
   .mu-stars{ color:#f0b429; font-size:12px; width:70px; flex:none; text-align:right; }
+
+  .h2h-pickers{ display:grid; grid-template-columns:1fr auto 1fr; align-items:start; gap:14px; margin-top:14px; }
+  .h2h-vs{ display:flex; align-items:center; justify-content:center; height:44px; font-family:"Big Shoulders Display"; font-weight:800; color:var(--ink-muted); }
+  .h2h-picker{ position:relative; }
+  .h2h-picker input{ width:100%; background:var(--paper-sunken); border:1px solid var(--line); color:var(--ink); border-radius:8px; padding:10px 12px; font-size:13.5px; font-family:inherit; }
+  .h2h-dropdown{ display:none; position:absolute; top:calc(100% + 4px); left:0; right:0; background:var(--paper-raised); border:1px solid var(--line-strong); border-radius:10px; box-shadow:var(--shadow); z-index:20; max-height:260px; overflow-y:auto; }
+  .h2h-dropdown.open{ display:block; }
+  .h2h-dropdown-item{ display:flex; align-items:center; gap:10px; padding:9px 12px; cursor:pointer; }
+  .h2h-dropdown-item:hover{ background:var(--paper-sunken); }
+  .h2h-dropdown-item img{ width:26px; height:26px; border-radius:50%; object-fit:cover; }
+  .h2h-selected{ display:none; align-items:center; gap:10px; margin-top:8px; padding:8px 10px; background:var(--paper-sunken); border-radius:8px; }
+  .h2h-selected.shown{ display:flex; }
+  .h2h-selected img{ width:28px; height:28px; border-radius:50%; object-fit:cover; }
+  .h2h-selected .rm{ margin-left:auto; cursor:pointer; color:var(--ink-muted); font-weight:700; }
+  .h2h-compare-btn{ width:100%; margin-top:16px; }
+  .h2h-result{ margin-top:20px; display:none; }
+  .h2h-result.shown{ display:block; }
+  .h2h-verdict{ text-align:center; padding:14px; border-radius:10px; background:var(--good-wash); color:var(--good); font-weight:700; font-family:"Big Shoulders Display"; text-transform:uppercase; font-size:16px; }
+  .h2h-cards{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:14px; }
+  .h2h-card{ border:1px solid var(--line); border-radius:12px; padding:14px; }
+  .h2h-card.winner{ border-color:var(--good); }
+  .h2h-card-head{ display:flex; align-items:center; gap:10px; }
+  .h2h-card-head img{ width:40px; height:40px; border-radius:50%; object-fit:cover; }
+  .h2h-card-name{ font-weight:700; font-size:14px; }
+  .h2h-stat-row{ display:flex; justify-content:space-between; font-size:12.5px; padding:6px 0; border-top:1px solid var(--line); }
+  .h2h-reasons{ margin-top:14px; padding-left:18px; font-size:13px; color:var(--ink-secondary); }
+  .h2h-reasons li{ margin-top:6px; }
+  @media (max-width: 640px) {
+    .h2h-pickers{ grid-template-columns:1fr; }
+    .h2h-vs{ height:24px; }
+    .h2h-cards{ grid-template-columns:1fr; }
+  }
 </style>
 <main><div class="wrap">
+  {% if current_user.is_authenticated %}
+  <div class="panel">
+    <p class="eyebrow">Head-to-Head</p>
+    <h2>Start/Sit Calculator</h2>
+    <p class="muted" style="margin-top:6px;">Pick two players and see who has the better week ahead, with the stats behind the call.</p>
+    <div class="h2h-pickers">
+      <div class="h2h-picker">
+        <input type="text" id="h2hSearchA" placeholder="Search player A...">
+        <div class="h2h-dropdown" id="h2hDropdownA"></div>
+        <div class="h2h-selected" id="h2hSelectedA"><img src="" alt=""><span class="nm"></span><span class="rm" data-slot="A">&times;</span></div>
+      </div>
+      <div class="h2h-vs">VS</div>
+      <div class="h2h-picker">
+        <input type="text" id="h2hSearchB" placeholder="Search player B...">
+        <div class="h2h-dropdown" id="h2hDropdownB"></div>
+        <div class="h2h-selected" id="h2hSelectedB"><img src="" alt=""><span class="nm"></span><span class="rm" data-slot="B">&times;</span></div>
+      </div>
+    </div>
+    <button type="button" class="btn h2h-compare-btn" id="h2hCompareBtn" disabled>Compare</button>
+    <div class="error" id="h2hError" style="display:none;"></div>
+    <div class="h2h-result" id="h2hResult"></div>
+  </div>
+  {% endif %}
   <div class="panel">
     <p class="eyebrow">Matchups</p>
     <h2>Who's worth starting this week</h2>
+    {% if load_error %}<div class="error">Couldn't load matchup grades right now: {{ load_error }}</div>{% endif %}
     {% if current_user.is_authenticated %}
     <div class="mu-toolbar">
       <input type="text" class="mu-search" id="muSearch" placeholder="Search player...">
@@ -4686,6 +4902,115 @@ MATCHUPS_HTML = BASE_STYLE + make_header("matchups") + """
       render();
     });
   });
+})();
+
+(function(){
+  const picked = {A: null, B: null};
+  const compareBtn = document.getElementById('h2hCompareBtn');
+  const errorEl = document.getElementById('h2hError');
+  const resultEl = document.getElementById('h2hResult');
+  if (!compareBtn) return;  // guest view has no h2h panel at all
+
+  function wirePicker(slot){
+    const input = document.getElementById('h2hSearch' + slot);
+    const dropdown = document.getElementById('h2hDropdown' + slot);
+    const selectedBox = document.getElementById('h2hSelected' + slot);
+    let debounceTimer;
+
+    input.addEventListener('input', function(){
+      clearTimeout(debounceTimer);
+      const q = input.value.trim();
+      if (!q){ dropdown.classList.remove('open'); return; }
+      debounceTimer = setTimeout(function(){
+        fetch('/api/player-search?q=' + encodeURIComponent(q))
+          .then(function(r){ return r.json(); })
+          .then(function(data){
+            dropdown.innerHTML = '';
+            (data.results || []).filter(function(r){ return r.position !== 'PICK'; }).forEach(function(r){
+              const item = document.createElement('div');
+              item.className = 'h2h-dropdown-item';
+              item.innerHTML = '<img src="' + r.photo + '" onerror="this.style.visibility=\\'hidden\\'"><span>' + r.name + ' <span class="muted">' + r.position + (r.team ? ' &middot; ' + r.team : '') + '</span></span>';
+              item.addEventListener('click', function(){
+                picked[slot] = r;
+                selectedBox.querySelector('img').src = r.photo;
+                selectedBox.querySelector('.nm').textContent = r.name + ' (' + r.position + (r.team ? ' ' + r.team : '') + ')';
+                selectedBox.classList.add('shown');
+                input.value = '';
+                dropdown.classList.remove('open');
+                updateCompareState();
+              });
+              dropdown.appendChild(item);
+            });
+            dropdown.classList.toggle('open', dropdown.children.length > 0);
+          });
+      }, 200);
+    });
+
+    selectedBox.querySelector('.rm').addEventListener('click', function(){
+      picked[slot] = null;
+      selectedBox.classList.remove('shown');
+      updateCompareState();
+    });
+
+    document.addEventListener('click', function(e){
+      if (!input.contains(e.target) && !dropdown.contains(e.target)) dropdown.classList.remove('open');
+    });
+  }
+
+  function updateCompareState(){
+    compareBtn.disabled = !(picked.A && picked.B);
+  }
+
+  function starString(n){ return '★'.repeat(n) + '☆'.repeat(5 - n); }
+
+  function renderCard(p, isWinner){
+    return '<div class="h2h-card' + (isWinner ? ' winner' : '') + '">' +
+      '<div class="h2h-card-head"><img src="' + p.photo + '" onerror="this.style.visibility=\\'hidden\\'">' +
+        '<div><div class="h2h-card-name">' + p.name + '</div><span class="muted">' + p.position + ' &middot; ' + p.team + '</span></div>' +
+        '<span class="mu-grade ' + p.grade + '" style="margin-left:auto;">' + p.grade + '</span></div>' +
+      '<div style="text-align:center; color:#f0b429; margin-top:8px;">' + starString(p.stars) + '</div>' +
+      '<div class="h2h-stat-row"><span class="muted">Opponent</span><span>' + (p.opponent ? 'vs ' + p.opponent : 'BYE') + '</span></div>' +
+      '<div class="h2h-stat-row"><span class="muted">Defense rank vs pos</span><span>' + (p.def_rank || '—') + '</span></div>' +
+      '<div class="h2h-stat-row"><span class="muted">Season avg</span><span>' + p.season_avg + ' pts</span></div>' +
+      '<div class="h2h-stat-row"><span class="muted">Last 4 wks avg</span><span>' + p.recent_avg + ' pts</span></div>' +
+      '<div class="h2h-stat-row"><span class="muted">Injury</span><span>' + p.injury + '</span></div>' +
+    '</div>';
+  }
+
+  compareBtn.addEventListener('click', function(){
+    errorEl.style.display = 'none';
+    resultEl.classList.remove('shown');
+    compareBtn.disabled = true;
+    compareBtn.textContent = 'Comparing...';
+    fetch('/api/matchup-compare?a=' + encodeURIComponent(picked.A.sid) + '&b=' + encodeURIComponent(picked.B.sid))
+      .then(function(r){ return r.json(); })
+      .then(function(data){
+        compareBtn.disabled = false;
+        compareBtn.textContent = 'Compare';
+        if (!data.ok){
+          errorEl.textContent = data.error || 'Could not compare these players.';
+          errorEl.style.display = 'block';
+          return;
+        }
+        const res = data.result;
+        const startPlayer = res.a.sid === res.start_sid ? res.a : res.b;
+        const sitPlayer = res.a.sid === res.start_sid ? res.b : res.a;
+        resultEl.innerHTML =
+          '<div class="h2h-verdict">Start ' + startPlayer.name + ' over ' + sitPlayer.name + '</div>' +
+          '<div class="h2h-cards">' + renderCard(startPlayer, true) + renderCard(sitPlayer, false) + '</div>' +
+          '<ul class="h2h-reasons">' + res.reasons.map(function(r){ return '<li>' + r + '</li>'; }).join('') + '</ul>';
+        resultEl.classList.add('shown');
+      })
+      .catch(function(){
+        compareBtn.disabled = false;
+        compareBtn.textContent = 'Compare';
+        errorEl.textContent = 'Something went wrong comparing these players.';
+        errorEl.style.display = 'block';
+      });
+  });
+
+  wirePicker('A');
+  wirePicker('B');
 })();
 </script>
 """
