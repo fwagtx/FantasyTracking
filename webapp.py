@@ -983,6 +983,23 @@ def team_logo_url(team_abbr):
     return f"https://a.espncdn.com/i/teamlogos/nfl/500/{team_abbr.lower()}.png" if team_abbr else None
 
 
+def _safe_int(value, fallback):
+    """Coerces an ESPN field to a plain int, defensively -- some fields
+    that are documented elsewhere as a bare number (like season.type)
+    have turned out in practice to sometimes come back as a nested
+    object instead (e.g. {"id": "2", "type": 2, "name": "Regular
+    Season"}). Using a value like that as part of a cache dict's tuple
+    key crashes with "unhashable type: dict", which is exactly the bug
+    this guards against -- pull a plausible int out of a dict shape, or
+    fall back cleanly rather than ever propagating a dict downstream."""
+    if isinstance(value, dict):
+        value = value.get("type") if isinstance(value.get("type"), (int, str)) else value.get("id")
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return fallback
+
+
 def get_current_week_info(cache={}):
     """Hits the bare scoreboard endpoint (no date/week params) -- ESPN
     resolves that to "the current week" on its own, avoiding us having to
@@ -1000,9 +1017,9 @@ def get_current_week_info(cache={}):
         leagues = body.get("leagues") or [{}]
         season = leagues[0].get("season", {}) or {}
         data = {
-            "season": season.get("year") or fallback["season"],
-            "week": wk.get("number") or fallback["week"],
-            "season_type": season.get("type") or fallback["season_type"],
+            "season": _safe_int(season.get("year"), fallback["season"]),
+            "week": _safe_int(wk.get("number"), fallback["week"]),
+            "season_type": _safe_int(season.get("type"), fallback["season_type"]),
         }
         cache["data"] = data
         cache["time"] = now
@@ -1017,6 +1034,11 @@ def espn_week_scoreboard(season, week, season_type=2, cache={}):
     calendar/scoreboard feels "immediate live" -- and 3600s otherwise,
     since a week with nothing live can't change (final scores are done,
     future kickoff times essentially never move)."""
+    # Defense in depth against a caller (or a future get_current_week_info
+    # response shape surprise) passing something that isn't a plain int --
+    # a dict anywhere in this tuple crashes with "unhashable type: dict"
+    # the moment it's used as a cache key, so coerce before that can happen.
+    season, week, season_type = _safe_int(season, int(SEASON)), _safe_int(week, 1), _safe_int(season_type, 2)
     key = (season, week, season_type)
     now = time.time()
     entry = cache.get(key)
@@ -1469,6 +1491,40 @@ def get_defense_vs_position(season, cache={}):
     return result
 
 
+def _grade_reasoning(c):
+    """One short, plain-English sentence explaining a matchup grade's
+    components -- shown on the Matchups list and folded into the
+    head-to-head comparison's reasons, so the grade never reads as a
+    bare, unexplained letter."""
+    if c["injury_tier"] in ("out", "admin"):
+        return "Not expected to play this week."
+    if c["injury_tier"] == "doubtful":
+        return "Doubtful to play -- check the injury report before kickoff."
+
+    if c["def_rank"] is None:
+        matchup_desc = "an unclear matchup (opponent not set yet)"
+    elif c["def_rank"] >= 24:
+        matchup_desc = "a great matchup"
+    elif c["def_rank"] >= 17:
+        matchup_desc = "a favorable matchup"
+    elif c["def_rank"] <= 8:
+        matchup_desc = "a tough matchup"
+    else:
+        matchup_desc = "an average matchup"
+
+    if c["trend_score"] >= 0.65:
+        trend_desc = "trending up"
+    elif c["trend_score"] <= 0.35:
+        trend_desc = "trending down"
+    else:
+        trend_desc = "steady lately"
+
+    sentence = f"{matchup_desc[0].upper()}{matchup_desc[1:]}, {trend_desc}"
+    if c["injury_tier"] == "questionable":
+        sentence += ", questionable to play"
+    return sentence + "."
+
+
 def compute_matchup_grade(sid, season, week, cache={}):
     """Composite 'should you start them' grade for one player in one
     week: opponent defense strength at their position, recent scoring
@@ -1498,6 +1554,12 @@ def compute_matchup_grade(sid, season, week, cache={}):
     opp_entry = dvp.get(sched["opponent"], {}).get(position) if sched else None
     n_teams = len(dvp) or 32
     def_percentile = (opp_entry["rank"] - 1) / max(n_teams - 1, 1) if opp_entry else 0.5
+
+    # Last season's version of the same figure -- early in a season the
+    # current-year sample per defense is thin (a few games), so last
+    # year's full-season number is a useful second data point, shown
+    # alongside rather than blended into the grade itself.
+    last_year_entry = get_defense_vs_position(season - 1).get(sched["opponent"], {}).get(position) if sched else None
 
     season_stats = get_season_stats(season)
     stat = season_stats.get(sid, {})
@@ -1545,19 +1607,20 @@ def compute_matchup_grade(sid, season, week, cache={}):
     else:
         grade, stars = "F", 1
 
-    data = {
-        "grade": grade, "stars": stars,
-        "components": {
-            "opponent": sched["opponent"] if sched else None,
-            "def_rank": opp_entry["rank"] if opp_entry else None,
-            "def_percentile": round(def_percentile, 2),
-            "trend_score": round(trend_score, 2),
-            "talent_score": round(talent_score, 2),
-            "consistency_score": round(consistency_score, 2),
-            "composite": round(composite, 2),
-            "injury_tier": tier,
-        },
+    components = {
+        "opponent": sched["opponent"] if sched else None,
+        "def_rank": opp_entry["rank"] if opp_entry else None,
+        "def_fpts_allowed_pg": opp_entry["fpts_allowed_per_game"] if opp_entry else None,
+        "def_percentile": round(def_percentile, 2),
+        "def_rank_last_year": last_year_entry["rank"] if last_year_entry else None,
+        "def_fpts_allowed_pg_last_year": last_year_entry["fpts_allowed_per_game"] if last_year_entry else None,
+        "trend_score": round(trend_score, 2),
+        "talent_score": round(talent_score, 2),
+        "consistency_score": round(consistency_score, 2),
+        "composite": round(composite, 2),
+        "injury_tier": tier,
     }
+    data = {"grade": grade, "stars": stars, "reasoning": _grade_reasoning(components), "components": components}
     cache[key] = {"data": data, "time": now}
     return data
 
@@ -1591,11 +1654,15 @@ def compare_matchups(sid_a, sid_b, season, week):
             "position": p.get("position"), "team": p.get("team") or "FA",
             "photo": player_photo_url(sid),
             "opponent": c["opponent"], "def_rank": c["def_rank"],
+            "def_fpts_allowed_pg": c["def_fpts_allowed_pg"],
+            "def_rank_last_year": c["def_rank_last_year"],
+            "def_fpts_allowed_pg_last_year": c["def_fpts_allowed_pg_last_year"],
             "grade": grade["grade"], "stars": grade["stars"], "composite": c["composite"],
             "season_avg": round(stat["fpts"] / stat["games"], 1) if stat.get("games") else 0.0,
             "recent_avg": round(sum(recent) / len(recent), 1) if recent else 0.0,
             "injury": (badge["title"] if badge else "Healthy"),
             "injury_tier": c["injury_tier"],
+            "reasoning": grade["reasoning"],
         }
 
     a, b = summarize(sid_a, grade_a), summarize(sid_b, grade_b)
@@ -1617,7 +1684,12 @@ def compare_matchups(sid_a, sid_b, season, week):
     if start["def_rank"] and sit["def_rank"] and start["def_rank"] != sit["def_rank"]:
         easier, harder = (start, sit) if start["def_rank"] > sit["def_rank"] else (sit, start)
         if easier is start:
-            reasons.append(f"{start['name']} draws the easier matchup -- {start['opponent']} ranks {start['def_rank']} against the position, vs. {sit['opponent']} at {sit['def_rank']} for {sit['name']}.")
+            reasons.append(f"{start['name']} draws the easier matchup -- {start['opponent']} ranks {start['def_rank']} against the position this season, vs. {sit['opponent']} at {sit['def_rank']} for {sit['name']}.")
+    if start["def_rank_last_year"] and sit["def_rank_last_year"] and start["def_rank_last_year"] != sit["def_rank_last_year"]:
+        reasons.append(
+            f"Last season, {start['opponent']} allowed {start['def_fpts_allowed_pg_last_year']} pts/gm to the position "
+            f"(rank {start['def_rank_last_year']}) vs. {sit['opponent']}'s {sit['def_fpts_allowed_pg_last_year']} (rank {sit['def_rank_last_year']})."
+        )
     if start["recent_avg"] > sit["recent_avg"] + 1:
         reasons.append(f"{start['name']} is trending up recently ({start['recent_avg']} pts/gm over their last few weeks vs. {sit['recent_avg']} for {sit['name']}).")
     if not reasons:
@@ -2701,6 +2773,7 @@ def matchups_page():
                     "photo": player_photo_url(sid),
                     "opponent": grade["components"]["opponent"],
                     "grade": grade["grade"], "stars": grade["stars"],
+                    "reasoning": grade["reasoning"],
                     "value": v.get("value", 0),
                 })
             rows.sort(key=lambda r: (-r["stars"], -r["value"]))
@@ -4420,10 +4493,22 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + """
   .sc-icon-btn.active{ color:var(--sc-text); border-color:var(--accent); }
   .sc-week-label{ font-weight:700; font-size:13.5px; min-width:80px; text-align:center; }
 
-  .sc-day-tabs{ display:flex; gap:8px; flex-wrap:wrap; margin-top:16px; }
-  .sc-day-tab{ font-size:12.5px; font-weight:700; padding:8px 14px; border-radius:99px; border:1px solid var(--sc-line); background:var(--sc-surface); color:var(--sc-muted); cursor:pointer; user-select:none; }
+  .sc-day-tabs{
+    display:flex; gap:8px; margin-top:16px; overflow-x:auto; scroll-snap-type:x proximity;
+    -webkit-overflow-scrolling:touch; scrollbar-width:none; padding-bottom:4px;
+  }
+  .sc-day-tabs::-webkit-scrollbar{ display:none; }
+  .sc-day-tab{
+    font-size:12px; font-weight:700; padding:8px 12px; border-radius:12px; border:1px solid var(--sc-line);
+    background:var(--sc-surface); color:var(--sc-muted); cursor:pointer; user-select:none; flex:none;
+    scroll-snap-align:center; display:flex; flex-direction:column; align-items:center; gap:2px; min-width:52px;
+  }
+  .sc-day-tab .dow{ font-size:10px; text-transform:uppercase; opacity:0.8; }
+  .sc-day-tab .dnum{ font-family:"IBM Plex Mono"; font-size:14px; }
   .sc-day-tab.active{ background:var(--accent); color:var(--accent-on); border-color:var(--accent); }
-  .sc-day-tab .dot{ display:inline-block; width:6px; height:6px; border-radius:50%; background:var(--sc-live); margin-left:6px; vertical-align:middle; }
+  .sc-day-tab.today:not(.active){ border-color:var(--accent); color:var(--sc-text); }
+  .sc-day-tab .dot{ display:inline-block; width:5px; height:5px; border-radius:50%; background:var(--sc-live); }
+  .sc-day-tab.active .dot{ background:var(--accent-on); }
 
   .sc-month{ display:none; margin-top:16px; background:var(--sc-surface); border:1px solid var(--sc-line); border-radius:14px; padding:16px; }
   .sc-month.open{ display:block; }
@@ -4522,22 +4607,43 @@ const scTodayKey = {{ today_key|tojson }};
   const monthGridEl = document.getElementById('scMonthGrid');
   const monthLabelEl = document.getElementById('scMonthLabel');
 
-  function fmtDayTab(key){
-    const d = new Date(key + "T00:00:00");
-    return d.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' });
+  function dateKey(d){
+    return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
   }
 
+  // A continuous, swipeable strip of dates -- like a real live-scores app's
+  // date bar -- centered on whichever day is selected, not limited to just
+  // the handful of days ESPN's own "week" grouping happens to include.
+  // Slides via native horizontal scroll (touch swipe on mobile, trackpad/
+  // shift-wheel on desktop); no custom drag code needed for that.
+  const DAY_STRIP_RADIUS = 10;
+
   function renderDayTabs(){
-    const keys = Object.keys(daysIndex).sort();
     dayTabsEl.innerHTML = '';
-    keys.forEach(function(key){
+    const center = new Date(selectedDay + "T00:00:00");
+    for(let offset = -DAY_STRIP_RADIUS; offset <= DAY_STRIP_RADIUS; offset++){
+      const d = new Date(center);
+      d.setDate(d.getDate() + offset);
+      const key = dateKey(d);
+      const isActive = key === selectedDay;
+      const isToday = key === scTodayKey;
       const btn = document.createElement('div');
-      btn.className = 'sc-day-tab' + (key === selectedDay ? ' active' : '');
-      const anyLive = daysIndex[key].some(function(g){ return g.status === 'in_progress'; });
-      btn.innerHTML = fmtDayTab(key) + (anyLive ? '<span class="dot"></span>' : '');
+      btn.className = 'sc-day-tab' + (isActive ? ' active' : '') + (isToday ? ' today' : '');
+      btn.dataset.dateKey = key;
+      const games = daysIndex[key];
+      const anyLive = games && games.some(function(g){ return g.status === 'in_progress'; });
+      const hasGames = games && games.length > 0;
+      btn.innerHTML =
+        '<span class="dow">' + d.toLocaleDateString(undefined, { weekday: 'short' }) + '</span>' +
+        '<span class="dnum">' + d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) + '</span>' +
+        (hasGames ? '<span class="dot" style="background:' + (anyLive ? 'var(--sc-live)' : 'var(--sc-muted)') + '"></span>' : '');
       btn.addEventListener('click', function(){ selectDay(key); });
       dayTabsEl.appendChild(btn);
-    });
+    }
+    const activeEl = dayTabsEl.querySelector('.sc-day-tab.active');
+    if (activeEl && typeof activeEl.scrollIntoView === 'function') {
+      activeEl.scrollIntoView({ inline: 'center', block: 'nearest' });
+    }
   }
 
   function renderGames(){
@@ -4757,7 +4863,9 @@ MATCHUPS_HTML = BASE_STYLE + make_header("matchups") + """
   .mu-row{ display:flex; align-items:center; gap:12px; padding:10px 4px; border-top:1px solid var(--line); }
   .mu-row:first-of-type{ border-top:none; }
   .mu-row img{ width:32px; height:32px; border-radius:50%; object-fit:cover; background:var(--paper-sunken); flex:none; }
-  .mu-name{ font-weight:700; font-size:13.5px; flex:1; min-width:0; }
+  .mu-name-col{ flex:1; min-width:0; display:flex; flex-direction:column; gap:2px; }
+  .mu-name-line{ font-weight:700; font-size:13.5px; }
+  .mu-reason{ font-size:11.5px; color:var(--ink-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   .mu-opp{ color:var(--ink-secondary); font-size:12.5px; width:70px; flex:none; }
   .mu-grade{ font-family:"IBM Plex Mono"; font-weight:700; font-size:13px; padding:3px 10px; border-radius:6px; flex:none; width:34px; text-align:center; }
   .mu-grade.A, .mu-grade.B{ background:var(--good-wash); color:var(--good); }
@@ -4846,7 +4954,10 @@ MATCHUPS_HTML = BASE_STYLE + make_header("matchups") + """
       <div class="mu-row" data-name="{{ r.name|lower }}" data-pos="{{ r.position }}">
         <img src="{{ r.photo }}" alt="" onerror="this.style.visibility='hidden'">
         <span class="pos-chip" style="background:var(--pos-{{ r.position.lower() }});">{{ r.position }}</span>
-        <span class="mu-name">{{ r.name }} <span class="muted">{{ r.team }}</span></span>
+        <div class="mu-name-col">
+          <span class="mu-name-line">{{ r.name }} <span class="muted">{{ r.team }}</span></span>
+          <span class="mu-reason">{{ r.reasoning }}</span>
+        </div>
         <span class="mu-opp">{% if r.opponent %}vs {{ r.opponent }}{% else %}BYE{% endif %}</span>
         <span class="mu-stars">{{ '★' * r.stars }}{{ '☆' * (5 - r.stars) }}</span>
         <span class="mu-grade {{ r.grade }}">{{ r.grade }}</span>
@@ -4964,13 +5075,18 @@ MATCHUPS_HTML = BASE_STYLE + make_header("matchups") + """
   function starString(n){ return '★'.repeat(n) + '☆'.repeat(5 - n); }
 
   function renderCard(p, isWinner){
+    const lastYear = p.def_rank_last_year
+      ? '<div class="h2h-stat-row"><span class="muted">Defense vs pos, last year</span><span>' + p.def_fpts_allowed_pg_last_year + ' pts/gm (rank ' + p.def_rank_last_year + ')</span></div>'
+      : '';
     return '<div class="h2h-card' + (isWinner ? ' winner' : '') + '">' +
       '<div class="h2h-card-head"><img src="' + p.photo + '" onerror="this.style.visibility=\\'hidden\\'">' +
         '<div><div class="h2h-card-name">' + p.name + '</div><span class="muted">' + p.position + ' &middot; ' + p.team + '</span></div>' +
         '<span class="mu-grade ' + p.grade + '" style="margin-left:auto;">' + p.grade + '</span></div>' +
       '<div style="text-align:center; color:#f0b429; margin-top:8px;">' + starString(p.stars) + '</div>' +
+      '<p class="muted" style="text-align:center; font-size:12px; margin-top:6px;">' + p.reasoning + '</p>' +
       '<div class="h2h-stat-row"><span class="muted">Opponent</span><span>' + (p.opponent ? 'vs ' + p.opponent : 'BYE') + '</span></div>' +
-      '<div class="h2h-stat-row"><span class="muted">Defense rank vs pos</span><span>' + (p.def_rank || '—') + '</span></div>' +
+      '<div class="h2h-stat-row"><span class="muted">Defense vs pos, this year</span><span>' + (p.def_fpts_allowed_pg != null ? p.def_fpts_allowed_pg + ' pts/gm (rank ' + p.def_rank + ')' : '—') + '</span></div>' +
+      lastYear +
       '<div class="h2h-stat-row"><span class="muted">Season avg</span><span>' + p.season_avg + ' pts</span></div>' +
       '<div class="h2h-stat-row"><span class="muted">Last 4 wks avg</span><span>' + p.recent_avg + ' pts</span></div>' +
       '<div class="h2h-stat-row"><span class="muted">Injury</span><span>' + p.injury + '</span></div>' +
