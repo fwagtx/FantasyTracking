@@ -1299,6 +1299,123 @@ def get_schedule_for_team_week(season, week, team_abbr, cache={}):
     return data
 
 
+def _parse_penalty_stat(value):
+    """ESPN box scores commonly report penalties as a combined "5-45"
+    (count-yards) string; be defensive since this is unverified against
+    a live response -- also accept a bare number as a count with no
+    yards figure, and anything unparseable as (None, None)."""
+    if not value:
+        return None, None
+    s = str(value).strip()
+    if "-" in s:
+        parts = s.split("-", 1)
+        try:
+            return int(parts[0]), int(parts[1])
+        except ValueError:
+            return None, None
+    try:
+        return int(s), None
+    except ValueError:
+        return None, None
+
+
+def sync_referee_game(event_id, season, week):
+    """One game's officiating crew + penalty stats -> referee_games.
+    Single outbound ESPN call (via extract_game_detail/espn_game_summary,
+    already cached), safe to call synchronously per-game from the
+    backfill workflow's loop -- no background thread needed the way the
+    18-week stats sync uses one. Returns True on success, False if the
+    game had no usable data (so the backfill workflow can log/skip
+    without aborting the whole run)."""
+    if not DATABASE_URL:
+        return False
+    detail = extract_game_detail(espn_game_summary(event_id))
+    if not detail["home"]["abbr"] or not detail["away"]["abbr"]:
+        return False
+    officials = detail["officials"]
+    head_ref = next((o["name"] for o in officials if (o.get("position") or "").lower() == "referee"), None)
+    if not head_ref and officials:
+        head_ref = officials[0]["name"]
+    home_pen_count, home_pen_yards = None, None
+    away_pen_count, away_pen_yards = None, None
+    for s in detail["team_stats"]:
+        if "penalt" in (s.get("label") or "").lower():
+            home_pen_count, home_pen_yards = _parse_penalty_stat(s.get("home"))
+            away_pen_count, away_pen_yards = _parse_penalty_stat(s.get("away"))
+            break
+    conn = get_db()
+    try:
+        with conn.cursor() as cur:
+            cur.execute(
+                """INSERT INTO referee_games
+                       (espn_event_id, season, week, referee_name, officials_json,
+                        home_team, away_team, home_score, away_score,
+                        home_penalties, home_penalty_yards, away_penalties, away_penalty_yards, updated_at)
+                   VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, NOW())
+                   ON CONFLICT (espn_event_id) DO UPDATE SET
+                       referee_name = EXCLUDED.referee_name, officials_json = EXCLUDED.officials_json,
+                       home_score = EXCLUDED.home_score, away_score = EXCLUDED.away_score,
+                       home_penalties = EXCLUDED.home_penalties, home_penalty_yards = EXCLUDED.home_penalty_yards,
+                       away_penalties = EXCLUDED.away_penalties, away_penalty_yards = EXCLUDED.away_penalty_yards,
+                       updated_at = NOW()""",
+                (event_id, int(season), int(week), head_ref, psycopg2.extras.Json(officials),
+                 detail["home"]["abbr"], detail["away"]["abbr"],
+                 detail["home"]["score"], detail["away"]["score"],
+                 home_pen_count, home_pen_yards, away_pen_count, away_pen_yards),
+            )
+        conn.commit()
+    finally:
+        conn.close()
+    return True
+
+
+def get_referee_tendencies(cache={}):
+    """Per-referee tendency summary, GROUP BY referee_name over
+    referee_games -- an on-demand cached aggregate (same pattern as
+    get_season_finish_ranks) rather than a second synced summary table,
+    since referee_games stays small (a 2-3 season backfill is ~800-900
+    rows) so this query is cheap even run fresh. TTL 21600s (6h)."""
+    now = time.time()
+    if "data" in cache and now - cache.get("time", 0) < 21600:
+        return cache["data"]
+    if not DATABASE_URL:
+        return {}
+    conn = get_db()
+    try:
+        with conn.cursor() as cur:
+            cur.execute("""
+                SELECT referee_name,
+                       COUNT(*) AS games,
+                       AVG(COALESCE(home_penalties, 0) + COALESCE(away_penalties, 0)) AS avg_penalties,
+                       AVG(COALESCE(home_penalty_yards, 0) + COALESCE(away_penalty_yards, 0)) AS avg_penalty_yards,
+                       AVG(COALESCE(home_score, 0) + COALESCE(away_score, 0)) AS avg_combined_score,
+                       AVG(CASE WHEN home_score > away_score THEN 1.0 ELSE 0.0 END) AS home_win_rate,
+                       AVG(COALESCE(home_penalties, 0) - COALESCE(away_penalties, 0)) AS home_penalty_diff
+                FROM referee_games
+                WHERE referee_name IS NOT NULL
+                GROUP BY referee_name
+                HAVING COUNT(*) >= 3
+                ORDER BY games DESC
+            """)
+            rows = cur.fetchall()
+    finally:
+        conn.close()
+    data = {
+        r["referee_name"]: {
+            "games": r["games"],
+            "avg_penalties": round(float(r["avg_penalties"]), 1),
+            "avg_penalty_yards": round(float(r["avg_penalty_yards"]), 1),
+            "avg_combined_score": round(float(r["avg_combined_score"]), 1),
+            "home_win_rate": round(float(r["home_win_rate"]), 3),
+            "home_penalty_diff": round(float(r["home_penalty_diff"]), 2),
+        }
+        for r in rows
+    }
+    cache["data"] = data
+    cache["time"] = now
+    return data
+
+
 def league_num_qbs(league):
     positions = league.get("roster_positions", []) or []
     if any(p in ("SUPER_FLEX", "SUPERFLEX") for p in positions):
@@ -2842,6 +2959,28 @@ def api_schedule_week_ids():
     finally:
         conn.close()
     return jsonify({"ok": True, "ids": ids})
+
+
+@app.route("/api/sync-referee-game", methods=["GET", "POST"])
+def api_sync_referee_game():
+    """Protected: syncs one game's officiating/penalty data into
+    referee_games. Called per-game, in a loop, by the one-time backfill
+    workflow -- runs synchronously (a single ESPN call, well under
+    gunicorn's timeout) rather than via a background thread, so the
+    workflow's own per-game logging reflects real success/failure
+    instead of racing a detached thread."""
+    if request.args.get("secret") != SITE_PASSWORD:
+        return jsonify({"ok": False, "error": "unauthorized"}), 401
+    event_id = request.args.get("id", "")
+    season = request.args.get("season", default=int(SEASON), type=int)
+    week = request.args.get("week", default=1, type=int)
+    if not event_id:
+        return jsonify({"ok": False, "error": "missing id"}), 400
+    try:
+        ok = sync_referee_game(event_id, season, week)
+        return jsonify({"ok": ok, "event_id": event_id})
+    except Exception as e:
+        return jsonify({"ok": False, "event_id": event_id, "error": str(e)})
 
 
 @app.route("/healthz")

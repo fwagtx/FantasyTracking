@@ -1,0 +1,38 @@
+name: Backfill Referee Stats (one-time, last 3 seasons)
+
+on:
+  workflow_dispatch: {}   # only runs when you click "Run workflow" -- never automatic
+
+jobs:
+  backfill:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Make sure the schedule is synced for the target seasons first
+        run: |
+          this_year=$(date +%Y)
+          for year in $(seq $((this_year - 2)) $this_year); do
+            echo "Syncing schedule for $year..."
+            curl -sS -X POST "https://fantasyfootballcalc.com/api/sync-schedule?season=$year&secret=${{ secrets.SITE_PASSWORD }}"
+            echo ""
+            sleep 5
+          done
+          # sync-schedule runs in a background thread on the server, so
+          # give it a little time to actually finish writing rows before
+          # the next step starts reading them back out.
+          sleep 30
+
+      - name: Sync every game's officiating/penalty data, one game at a time
+        run: |
+          this_year=$(date +%Y)
+          for year in $(seq $((this_year - 2)) $this_year); do
+            for week in $(seq 1 18); do
+              echo "Fetching game ids for $year week $week..."
+              ids=$(curl -sS "https://fantasyfootballcalc.com/api/schedule-week-ids?season=$year&week=$week&secret=${{ secrets.SITE_PASSWORD }}" | jq -r '.ids[]?')
+              for id in $ids; do
+                echo "  Syncing referee data for $year wk$week game $id"
+                curl -sS -X POST "https://fantasyfootballcalc.com/api/sync-referee-game?id=$id&season=$year&week=$week&secret=${{ secrets.SITE_PASSWORD }}"
+                echo ""
+                sleep 1
+              done
+            done
+          done
