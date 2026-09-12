@@ -139,6 +139,13 @@ def init_db():
             """)
             cur.execute("CREATE INDEX IF NOT EXISTS idx_player_stats_lookup ON player_stats (sleeper_id, season);")
             cur.execute("ALTER TABLE users ADD COLUMN IF NOT EXISTS sleeper_username TEXT;")
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS synced_leagues (
+                    user_id INTEGER REFERENCES users(id),
+                    league_id TEXT NOT NULL,
+                    PRIMARY KEY (user_id, league_id)
+                );
+            """)
         conn.commit()
     finally:
         conn.close()
@@ -185,6 +192,41 @@ def username_available(u):
         with conn.cursor() as cur:
             cur.execute("SELECT 1 FROM users WHERE lower(username) = lower(%s)", (u,))
             return cur.fetchone() is None
+    finally:
+        conn.close()
+
+
+def get_synced_league_ids(user_id):
+    """None means the user has never made a selection yet -- show the
+    picker. A saved selection always has at least one league (the picker
+    requires picking at least one before it submits)."""
+    if not DATABASE_URL:
+        return None
+    conn = get_db()
+    try:
+        with conn.cursor() as cur:
+            cur.execute("SELECT league_id FROM synced_leagues WHERE user_id = %s", (user_id,))
+            rows = cur.fetchall()
+            if not rows:
+                return None
+            return {r["league_id"] for r in rows}
+    finally:
+        conn.close()
+
+
+def set_synced_league_ids(user_id, league_ids):
+    if not DATABASE_URL:
+        return
+    conn = get_db()
+    try:
+        with conn.cursor() as cur:
+            cur.execute("DELETE FROM synced_leagues WHERE user_id = %s", (user_id,))
+            if league_ids:
+                psycopg2.extras.execute_values(
+                    cur, "INSERT INTO synced_leagues (user_id, league_id) VALUES %s",
+                    [(user_id, lid) for lid in league_ids],
+                )
+        conn.commit()
     finally:
         conn.close()
 
@@ -1233,8 +1275,41 @@ def build_league_teams(league_id, league, all_players, league_users, user_id):
     return team_infos
 
 
-def build_leagues_for_user(username, cache={}):
-    key = username.lower()
+def get_leagues_brief(username):
+    """Fast, lightweight league list for the sync picker -- just names and
+    avatars from the single already-cached /leagues call, with none of the
+    per-league roster/value building build_leagues_for_user does."""
+    user_id, display_name = get_user_id(username)
+    leagues = get_leagues(user_id, SEASON)
+    brief = [{
+        "league_id": lg["league_id"],
+        "name": lg.get("name", "Unnamed League"),
+        "avatar_url": sleeper_avatar_url(lg.get("avatar")),
+        "total_rosters": lg.get("total_rosters", 0),
+    } for lg in leagues]
+    return user_id, display_name, brief
+
+
+def _build_one_league(league, all_players, user_id):
+    league_users = {
+        u["user_id"]: {"name": u.get("display_name", "?"), "avatar_url": sleeper_avatar_url(u.get("avatar"))}
+        for u in get_league_users(league["league_id"])
+    }
+    teams = build_league_teams(league["league_id"], league, all_players, league_users, user_id)
+    return {
+        "league_id": league["league_id"],
+        "league_name": league.get("name", "Unnamed League"),
+        "num_qbs": league_num_qbs(league),
+        "teams": teams,
+    }
+
+
+def build_leagues_for_user(username, league_ids=None, cache={}):
+    """league_ids, when given, restricts building to just that subset --
+    the whole point of the sync picker is to skip fetching and scoring
+    leagues the user didn't ask to track, which is also what keeps this
+    fast for anyone in a lot of leagues."""
+    key = (username.lower(), tuple(sorted(league_ids)) if league_ids is not None else None)
     now = time.time()
     entry = cache.get(key)
     if entry and now - entry["time"] < 600:
@@ -1243,20 +1318,18 @@ def build_leagues_for_user(username, cache={}):
     all_players = get_all_players()
     user_id, display_name = get_user_id(username)
     leagues = get_leagues(user_id, SEASON)
+    if league_ids is not None:
+        leagues = [lg for lg in leagues if lg["league_id"] in league_ids]
 
+    # Each league's build is an independent round-trip to Sleeper/FantasyCalc,
+    # so building them in parallel turns the wall-clock cost from "sum of every
+    # league" into "the slowest single league" -- the main lever on reload
+    # speed once the picker has already cut the list down to what's synced.
     result = []
-    for league in leagues:
-        league_users = {
-            u["user_id"]: {"name": u.get("display_name", "?"), "avatar_url": sleeper_avatar_url(u.get("avatar"))}
-            for u in get_league_users(league["league_id"])
-        }
-        teams = build_league_teams(league["league_id"], league, all_players, league_users, user_id)
-        result.append({
-            "league_id": league["league_id"],
-            "league_name": league.get("name", "Unnamed League"),
-            "num_qbs": league_num_qbs(league),
-            "teams": teams,
-        })
+    if leagues:
+        with ThreadPoolExecutor(max_workers=min(8, len(leagues))) as executor:
+            futures = [executor.submit(_build_one_league, league, all_players, user_id) for league in leagues]
+            result = [f.result() for f in futures]
 
     data = {"display_name": display_name, "user_id": user_id, "leagues": result}
     cache[key] = {"data": data, "time": now}
@@ -1520,10 +1593,13 @@ def build_portfolio_summary(data, num_qbs=1):
 def leagues_page():
     username = request.args.get("u", "").strip()
     fmt = request.args.get("fmt", "1qb")
+    manage = request.args.get("manage") == "1"
+    chosen_param = request.args.getlist("leagues")
     error = None
     data = None
     portfolio = None
     used_saved = False
+    picker = None
 
     if not username and current_user.is_authenticated and current_user.sleeper_username:
         username = current_user.sleeper_username
@@ -1531,8 +1607,8 @@ def leagues_page():
 
     if username:
         try:
-            data = build_leagues_for_user(username)
-            portfolio = build_portfolio_summary(data, num_qbs=2 if fmt == "superflex" else 1)
+            user_id, display_name, brief = get_leagues_brief(username)
+
             if current_user.is_authenticated and username != (current_user.sleeper_username or ""):
                 conn = get_db()
                 try:
@@ -1542,11 +1618,40 @@ def leagues_page():
                     current_user.sleeper_username = username
                 finally:
                     conn.close()
+
+            saved_ids = get_synced_league_ids(current_user.id) if current_user.is_authenticated else None
+
+            if manage:
+                # Reopen the picker to add/remove leagues -- preselect whatever
+                # is currently synced (or currently on-screen, for a guest who
+                # has no saved state) rather than starting from scratch.
+                preselected = set(chosen_param) if chosen_param else (saved_ids or set())
+                picker = {"leagues": brief, "display_name": display_name, "preselected": preselected, "default_all": False}
+            elif chosen_param:
+                valid_ids = {lg["league_id"] for lg in brief}
+                chosen_ids = [lid for lid in chosen_param if lid in valid_ids]
+                if current_user.is_authenticated:
+                    set_synced_league_ids(current_user.id, chosen_ids)
+                if not chosen_ids:
+                    error = "Pick at least one league to sync."
+                    picker = {"leagues": brief, "display_name": display_name, "preselected": set(), "default_all": False}
+                else:
+                    data = build_leagues_for_user(username, league_ids=set(chosen_ids))
+                    portfolio = build_portfolio_summary(data, num_qbs=2 if fmt == "superflex" else 1)
+            elif saved_ids is not None:
+                data = build_leagues_for_user(username, league_ids=saved_ids)
+                portfolio = build_portfolio_summary(data, num_qbs=2 if fmt == "superflex" else 1)
+            else:
+                # First time we've seen this username with no saved selection --
+                # ask which leagues to sync instead of building every one of
+                # them up front.
+                picker = {"leagues": brief, "display_name": display_name, "preselected": set(), "default_all": True}
         except Exception as e:
             error = str(e)
 
     return render_template_string(
-        HOME_HTML, username=username, data=data, error=error, portfolio=portfolio, fmt=fmt, used_saved=used_saved,
+        HOME_HTML, username=username, data=data, error=error, portfolio=portfolio, fmt=fmt,
+        used_saved=used_saved, picker=picker,
     )
 
 
@@ -1911,29 +2016,45 @@ def compute_trade_state(args):
         }
 
     # ---- optional league link ----
+    # Only the brief (name-only) league list is needed for the "pick a
+    # league" dropdown; the full roster/value build only ever runs for the
+    # one league actually selected, instead of every league the user is
+    # in -- building all of them here just to show a dropdown and score
+    # one is exactly the wasted work the league-sync picker was added to
+    # avoid on the league-manager page.
     league_link = None
     my_quick, other_quick = [], []
     if u:
         try:
-            udata = build_leagues_for_user(u)
-            selected_league = next((l for l in udata["leagues"] if l["league_id"] == league_id), None) if league_id else None
+            user_id, display_name, brief = get_leagues_brief(u)
             my_team = other_team = None
             other_teams = []
-            if selected_league:
-                my_team = next(
-                    (t for t in selected_league["teams"]
-                     if (my_roster_id and t["roster_id"] == my_roster_id) or (not my_roster_id and t["is_you"])),
-                    None,
-                )
-                other_teams = [t for t in selected_league["teams"] if not my_team or t["roster_id"] != my_team["roster_id"]]
-                if other_roster_id:
-                    other_team = next((t for t in selected_league["teams"] if t["roster_id"] == other_roster_id), None)
-                if my_team:
-                    my_quick = quick_add_list(my_team, fc["players"])
-                if other_team:
-                    other_quick = quick_add_list(other_team, fc["players"])
+            if league_id:
+                leagues_raw = get_leagues(user_id, SEASON)
+                league_raw = next((lg for lg in leagues_raw if lg["league_id"] == league_id), None)
+                if league_raw:
+                    all_players = get_all_players()
+                    league_users = {
+                        lu["user_id"]: {"name": lu.get("display_name", "?"), "avatar_url": sleeper_avatar_url(lu.get("avatar"))}
+                        for lu in get_league_users(league_id)
+                    }
+                    selected_teams = build_league_teams(league_id, league_raw, all_players, league_users, user_id)
+                    my_team = next(
+                        (t for t in selected_teams
+                         if (my_roster_id and t["roster_id"] == my_roster_id) or (not my_roster_id and t["is_you"])),
+                        None,
+                    )
+                    other_teams = [t for t in selected_teams if not my_team or t["roster_id"] != my_team["roster_id"]]
+                    if other_roster_id:
+                        other_team = next((t for t in selected_teams if t["roster_id"] == other_roster_id), None)
+                    if my_team:
+                        my_quick = quick_add_list(my_team, fc["players"])
+                    if other_team:
+                        other_quick = quick_add_list(other_team, fc["players"])
             league_link = {
-                "username": u, "leagues": udata["leagues"], "selected_league_id": league_id,
+                "username": u,
+                "leagues": [{"league_id": b["league_id"], "league_name": b["name"]} for b in brief],
+                "selected_league_id": league_id,
                 "my_team": my_team, "other_team": other_team, "other_teams": other_teams,
             }
         except Exception as e:
@@ -2318,6 +2439,16 @@ BASE_STYLE = """
   .legend-row{ display:flex; gap:14px; flex-wrap:wrap; margin-top:14px; padding-top:12px; border-top:1px solid var(--line); }
   .legend-item{ display:flex; align-items:center; gap:6px; font-size:11.5px; color:var(--ink-secondary); font-weight:600; }
   .legend-item i{ width:9px; height:9px; border-radius:2px; display:inline-block; }
+
+  .league-pick-list{ display:flex; flex-direction:column; gap:8px; margin-top:16px; max-height:420px; overflow-y:auto; }
+  .league-pick-row{ display:flex; align-items:center; gap:12px; padding:10px 14px; border:1px solid var(--line); border-radius:10px; cursor:pointer; transition:border-color 0.15s; }
+  .league-pick-row:hover{ border-color:var(--accent); }
+  .league-pick-row input{ width:17px; height:17px; accent-color:var(--accent); flex:none; cursor:pointer; }
+  .league-pick-avatar{ width:28px; height:28px; border-radius:50%; object-fit:cover; flex:none; background:var(--paper-sunken); }
+  .league-pick-name{ font-weight:600; font-size:14px; }
+  .league-pick-actions{ display:flex; gap:10px; margin-top:16px; align-items:center; flex-wrap:wrap; }
+  .link-btn{ background:none; border:none; padding:0; font:inherit; font-weight:600; font-size:12.5px; color:var(--ink-secondary); text-decoration:underline; cursor:pointer; }
+  .link-btn:hover{ color:var(--accent-ink); }
 
   .team-switcher{ display:flex; gap:8px; flex-wrap:wrap; margin-top:14px; }
   .team-chip{ font-size:12.5px; font-weight:600; padding:6px 12px; border-radius:99px; border:1px solid var(--line-strong); text-decoration:none; color:var(--ink-secondary); }
@@ -2859,6 +2990,46 @@ HOME_HTML = BASE_STYLE + make_header("league") + VOTE_MODAL_HTML + """
 })();
 </script>
 {% endmacro %}
+
+{% macro league_picker(picker, username, fmt) %}
+<div class="panel">
+  <p class="eyebrow">Choose leagues to sync</p>
+  <h2>{{ picker.display_name }}'s leagues on Sleeper</h2>
+  <p class="muted" style="margin-top:6px;">We found {{ picker.leagues|length }} league{{ 's' if picker.leagues|length != 1 else '' }}. Pick the ones you want tracked here &mdash; you can add or remove leagues anytime.</p>
+  <form method="get" action="/league-manager" id="leaguePickForm">
+    <input type="hidden" name="u" value="{{ username }}">
+    <input type="hidden" name="fmt" value="{{ fmt }}">
+    <div class="league-pick-list" id="leaguePickList">
+      {% for lg in picker.leagues %}
+      <label class="league-pick-row">
+        <input type="checkbox" name="leagues" value="{{ lg.league_id }}" {% if lg.league_id in picker.preselected or picker.default_all %}checked{% endif %}>
+        <img class="league-pick-avatar" src="{{ lg.avatar_url or 'data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2228%22 height=%2228%22><rect width=%2228%22 height=%2228%22 rx=%2214%22 fill=%22%23444841%22/></svg>' }}" alt="" onerror="this.style.visibility='hidden'">
+        <span class="league-pick-name">{{ lg.name }}</span>
+        <span class="muted mono" style="margin-left:auto;">{{ lg.total_rosters }} teams</span>
+      </label>
+      {% endfor %}
+    </div>
+    <div class="league-pick-actions">
+      <button type="button" class="link-btn" id="pickAllBtn">Select all</button>
+      <button type="button" class="link-btn" id="pickNoneBtn">Select none</button>
+      <button class="btn" type="submit" style="margin-left:auto;">Sync selected leagues</button>
+    </div>
+  </form>
+</div>
+<script>
+(function(){
+  var list = document.getElementById('leaguePickList');
+  var allBtn = document.getElementById('pickAllBtn');
+  var noneBtn = document.getElementById('pickNoneBtn');
+  if(!list) return;
+  function setAll(checked){
+    list.querySelectorAll('input[type=checkbox]').forEach(function(cb){ cb.checked = checked; });
+  }
+  allBtn.addEventListener('click', function(){ setAll(true); });
+  noneBtn.addEventListener('click', function(){ setAll(false); });
+})();
+</script>
+{% endmacro %}
 <main><div class="wrap">
   <div class="panel">
     <p class="eyebrow">League lookup</p>
@@ -2875,8 +3046,15 @@ HOME_HTML = BASE_STYLE + make_header("league") + VOTE_MODAL_HTML + """
     {% if error %}<div class="error">{{ error }}</div>{% endif %}
   </div>
 
+  {% if picker %}
+  {{ league_picker(picker, username, fmt) }}
+  {% endif %}
+
   {% if data %}
-  <p class="muted" style="margin-top:18px;">Showing leagues for <strong style="color:var(--accent-ink);">{{ data.display_name }}</strong> &middot; ranks based on real dynasty trade values</p>
+  <p class="muted" style="margin-top:18px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+    <span>Showing {{ data.leagues|length }} synced league{{ 's' if data.leagues|length != 1 else '' }} for <strong style="color:var(--accent-ink);">{{ data.display_name }}</strong> &middot; ranks based on real dynasty trade values</span>
+    <a href="/league-manager?u={{ username }}&fmt={{ fmt }}&manage=1{% for lg in data.leagues %}&leagues={{ lg.league_id }}{% endfor %}" class="link-btn">+ Add or remove leagues</a>
+  </p>
 
   {% if current_user.is_authenticated %}
     {% if portfolio %}{{ portfolio_panel(portfolio, fmt, username) }}{% endif %}
