@@ -1301,6 +1301,7 @@ def _build_one_league(league, all_players, user_id):
         "league_name": league.get("name", "Unnamed League"),
         "num_qbs": league_num_qbs(league),
         "teams": teams,
+        "my_team": next((t for t in teams if t["is_you"]), None),
     }
 
 
@@ -2439,6 +2440,7 @@ BASE_STYLE = """
   .legend-row{ display:flex; gap:14px; flex-wrap:wrap; margin-top:14px; padding-top:12px; border-top:1px solid var(--line); }
   .legend-item{ display:flex; align-items:center; gap:6px; font-size:11.5px; color:var(--ink-secondary); font-weight:600; }
   .legend-item i{ width:9px; height:9px; border-radius:2px; display:inline-block; }
+  .view-league-btn{ display:flex; width:100%; margin-top:16px; padding:10px 16px; font-size:13.5px; }
 
   .league-pick-list{ display:flex; flex-direction:column; gap:8px; margin-top:16px; max-height:420px; overflow-y:auto; }
   .league-pick-row{ display:flex; align-items:center; gap:12px; padding:10px 14px; border:1px solid var(--line); border-radius:10px; cursor:pointer; transition:border-color 0.15s; }
@@ -2852,31 +2854,32 @@ document.addEventListener('DOMContentLoaded', () => setTimeout(loadVoteModal, 35
 HOME_HTML = BASE_STYLE + make_header("league") + VOTE_MODAL_HTML + """
 {% macro league_panels(leagues, username) %}
   {% for lg in leagues %}
+  {% set t = lg.my_team %}
   <div class="panel">
     <div style="display:flex; justify-content:space-between; align-items:baseline;">
       <h2>{{ lg.league_name }}</h2>
       <span class="sample-tag">Live data</span>
     </div>
-    {% for t in lg.teams %}
+    {% if t %}
     <div class="team-row">
       <img class="team-avatar" src="{{ t.avatar_url or 'data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2232%22 height=%2232%22><rect width=%2232%22 height=%2232%22 rx=%2216%22 fill=%22%23444841%22/></svg>' }}" alt="" onerror="this.style.visibility='hidden'">
-      <a class="team-name" href="/league?league_id={{ lg.league_id }}&roster_id={{ t.roster_id }}&u={{ username }}">{{ t.owner_name }}{% if t.is_you %} &#9733;{% endif %}</a>
+      <span class="team-name">{{ t.owner_name }}</span>
       <span class="tier-badge {{ t.power_tier_class }}">{{ t.power_tier }}</span>
       <span class="wl">{{ t.wins }}-{{ t.losses }}</span>
       <div class="value-bar">
         {% for pos, pct, rank, intensity in t.bar %}<span class="seg seg-{{ pos.lower() }}" style="width:{{ pct }}%"><span class="rank-bubble" style="background:rgba(0,0,0,{{ (0.15 + intensity*0.45)|round(2) }});">{{ rank }}</span></span>{% endfor %}
       </div>
     </div>
-    {% endfor %}
     <div class="legend-row">
       <span class="legend-item"><i style="background:var(--pos-qb)"></i>QB</span>
       <span class="legend-item"><i style="background:var(--pos-rb)"></i>RB</span>
       <span class="legend-item"><i style="background:var(--pos-wr)"></i>WR</span>
       <span class="legend-item"><i style="background:var(--pos-te)"></i>TE</span>
     </div>
-    <div class="legend-box">
-      <b>How to read this bar:</b> each colored segment is a position group, sized by that team's share of total dynasty value. The number inside each segment is that team's <b>rank at that position</b> vs. everyone else in this league (1 = strongest). Click any manager's name to see their full roster broken down.
-    </div>
+    {% else %}
+    <p class="muted" style="margin-top:14px;">Your roster wasn't found in this league.</p>
+    {% endif %}
+    <a class="btn view-league-btn" href="/league?league_id={{ lg.league_id }}{% if t %}&roster_id={{ t.roster_id }}{% endif %}&u={{ username }}">View League &rarr;</a>
   </div>
   {% endfor %}
 {% endmacro %}
