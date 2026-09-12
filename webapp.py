@@ -146,6 +146,44 @@ def init_db():
                     PRIMARY KEY (user_id, league_id)
                 );
             """)
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS nfl_schedule (
+                    espn_event_id TEXT PRIMARY KEY,
+                    season INTEGER NOT NULL,
+                    week INTEGER NOT NULL,
+                    season_type INTEGER NOT NULL DEFAULT 2,
+                    kickoff TIMESTAMP,
+                    home_team TEXT NOT NULL,
+                    away_team TEXT NOT NULL,
+                    home_score INTEGER,
+                    away_score INTEGER,
+                    status TEXT,
+                    updated_at TIMESTAMP DEFAULT NOW()
+                );
+            """)
+            cur.execute("CREATE INDEX IF NOT EXISTS idx_nfl_schedule_season_week ON nfl_schedule (season, week);")
+            cur.execute("CREATE INDEX IF NOT EXISTS idx_nfl_schedule_home_team ON nfl_schedule (season, home_team);")
+            cur.execute("CREATE INDEX IF NOT EXISTS idx_nfl_schedule_away_team ON nfl_schedule (season, away_team);")
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS referee_games (
+                    espn_event_id TEXT PRIMARY KEY,
+                    season INTEGER NOT NULL,
+                    week INTEGER NOT NULL,
+                    referee_name TEXT,
+                    officials_json JSONB,
+                    home_team TEXT NOT NULL,
+                    away_team TEXT NOT NULL,
+                    home_score INTEGER,
+                    away_score INTEGER,
+                    home_penalties INTEGER,
+                    home_penalty_yards INTEGER,
+                    away_penalties INTEGER,
+                    away_penalty_yards INTEGER,
+                    updated_at TIMESTAMP DEFAULT NOW()
+                );
+            """)
+            cur.execute("CREATE INDEX IF NOT EXISTS idx_referee_games_referee ON referee_games (referee_name);")
+            cur.execute("CREATE INDEX IF NOT EXISTS idx_referee_games_season ON referee_games (season);")
         conn.commit()
     finally:
         conn.close()
@@ -909,6 +947,271 @@ def get_adp_data(cache={}):
         return data
     except Exception:
         return {"by_key": {}, "by_name_only": {}, "by_normalized": {}}
+
+
+# ---------------- ESPN live scores / schedule / officials ----------------
+# Uses ESPN's public "site" API (no key, same domain family as the player
+# news RSS feed above) -- unofficial and undocumented, so it could change
+# without notice, but it's the only free source that covers officiating
+# crews and full box scores. TTLs below are deliberately state-dependent
+# (short while a game is actually live, long once nothing can change) so
+# the scores/game pages feel fast during games without hammering ESPN or
+# re-fetching finished games that will never change again.
+
+ESPN_SITE_BASE = "https://site.api.espn.com/apis/site/v2/sports/football/nfl"
+
+# Known ESPN-vs-Sleeper team abbreviation mismatches. Verify/extend this
+# once /api/debug-espn is deployed and real payloads can be inspected --
+# Washington is the one mismatch known in advance; there may be others.
+TEAM_ABBR_ESPN_TO_SLEEPER = {
+    "WSH": "WAS",
+}
+
+_ESPN_STATE_TO_STATUS = {"pre": "scheduled", "in": "in_progress", "post": "final"}
+
+
+def normalize_team_abbr(espn_abbr):
+    """Maps an ESPN team abbreviation to the Sleeper convention used
+    everywhere else in this app (get_all_players()[sid]['team'])."""
+    if not espn_abbr:
+        return espn_abbr
+    abbr = espn_abbr.upper()
+    return TEAM_ABBR_ESPN_TO_SLEEPER.get(abbr, abbr)
+
+
+def team_logo_url(team_abbr):
+    return f"https://a.espncdn.com/i/teamlogos/nfl/500/{team_abbr.lower()}.png" if team_abbr else None
+
+
+def get_current_week_info(cache={}):
+    """Hits the bare scoreboard endpoint (no date/week params) -- ESPN
+    resolves that to "the current week" on its own, avoiding us having to
+    hand-roll season-opener/bye-week math. TTL 300s (it rarely matters if
+    this is a few minutes stale)."""
+    now = time.time()
+    if "data" in cache and now - cache.get("time", 0) < 300:
+        return cache["data"]
+    fallback = {"season": int(SEASON), "week": 1, "season_type": 2}
+    try:
+        r = requests.get(f"{ESPN_SITE_BASE}/scoreboard", timeout=15)
+        r.raise_for_status()
+        body = r.json()
+        wk = body.get("week", {}) or {}
+        leagues = body.get("leagues") or [{}]
+        season = leagues[0].get("season", {}) or {}
+        data = {
+            "season": season.get("year") or fallback["season"],
+            "week": wk.get("number") or fallback["week"],
+            "season_type": season.get("type") or fallback["season_type"],
+        }
+        cache["data"] = data
+        cache["time"] = now
+        return data
+    except Exception:
+        return cache.get("data", fallback)
+
+
+def espn_week_scoreboard(season, week, season_type=2, cache={}):
+    """One call returns every game (Thu-Mon) in a given week. TTL is 20s
+    whenever any game in the response is actually in progress -- so the
+    calendar/scoreboard feels "immediate live" -- and 3600s otherwise,
+    since a week with nothing live can't change (final scores are done,
+    future kickoff times essentially never move)."""
+    key = (season, week, season_type)
+    now = time.time()
+    entry = cache.get(key)
+    if entry and now - entry["time"] < (20 if entry.get("any_live") else 3600):
+        return entry["data"]
+    try:
+        r = requests.get(
+            f"{ESPN_SITE_BASE}/scoreboard",
+            params={"week": week, "seasontype": season_type, "year": season},
+            timeout=15,
+        )
+        r.raise_for_status()
+        data = r.json()
+        any_live = any(
+            ((ev.get("status") or {}).get("type") or {}).get("state") == "in"
+            for ev in data.get("events", [])
+        )
+        cache[key] = {"data": data, "time": now, "any_live": any_live}
+        return data
+    except Exception:
+        return entry["data"] if entry else {"events": []}
+
+
+def espn_day_scoreboard(date_str, cache={}):
+    """Games for one specific calendar day (YYYYMMDD), used by the
+    calendar/month view to fetch a single clicked-on day on demand
+    instead of eagerly pulling every week that could ever be shown.
+    Same live-aware TTL as espn_week_scoreboard."""
+    now = time.time()
+    entry = cache.get(date_str)
+    if entry and now - entry["time"] < (20 if entry.get("any_live") else 3600):
+        return entry["data"]
+    try:
+        r = requests.get(f"{ESPN_SITE_BASE}/scoreboard", params={"dates": date_str}, timeout=15)
+        r.raise_for_status()
+        data = r.json()
+        any_live = any(
+            ((ev.get("status") or {}).get("type") or {}).get("state") == "in"
+            for ev in data.get("events", [])
+        )
+        cache[date_str] = {"data": data, "time": now, "any_live": any_live}
+        return data
+    except Exception:
+        return entry["data"] if entry else {"events": []}
+
+
+def espn_event_to_card(ev):
+    """Pure function: one ESPN scoreboard event -> the display-ready
+    shape the /scores and /api/scoreboard cards need (richer than
+    _parse_espn_event's flat DB row -- team names/logos, live clock)."""
+    comp = (ev.get("competitions") or [{}])[0]
+    competitors = comp.get("competitors") or []
+    home = next((c for c in competitors if c.get("homeAway") == "home"), None)
+    away = next((c for c in competitors if c.get("homeAway") == "away"), None)
+    if not home or not away:
+        return None
+    status = comp.get("status") or {}
+    state = (status.get("type") or {}).get("state")
+
+    def side(c):
+        team = c.get("team") or {}
+        abbr = normalize_team_abbr(team.get("abbreviation"))
+        return {
+            "abbr": abbr,
+            "name": team.get("shortDisplayName") or team.get("displayName") or abbr,
+            "score": c.get("score"),
+            "logo": team_logo_url(abbr),
+        }
+
+    date_raw = ev.get("date") or ""
+    return {
+        "id": ev.get("id"),
+        "date": date_raw,
+        "date_key": date_raw[:10] if date_raw else None,  # YYYY-MM-DD for client-side day grouping
+        "status": _ESPN_STATE_TO_STATUS.get(state, "scheduled"),
+        "period": status.get("period"),
+        "clock": status.get("displayClock"),
+        "status_detail": (status.get("type") or {}).get("shortDetail"),
+        "home": side(home),
+        "away": side(away),
+    }
+
+
+def espn_game_summary(event_id, cache={}):
+    """Full game detail: venue, officials, box score, leaders. TTL 20s
+    while live, 300s pregame (inactives/injury designations can still
+    change), 86400s once final (a finished game never changes again)."""
+    now = time.time()
+    entry = cache.get(event_id)
+    if entry:
+        state = entry.get("state")
+        ttl = 20 if state == "in" else (86400 if state == "post" else 300)
+        if now - entry["time"] < ttl:
+            return entry["data"]
+    try:
+        r = requests.get(f"{ESPN_SITE_BASE}/summary", params={"event": event_id}, timeout=15)
+        r.raise_for_status()
+        data = r.json()
+        state = (((data.get("header") or {}).get("competitions") or [{}])[0].get("status") or {}).get("type", {}).get("state")
+        cache[event_id] = {"data": data, "time": now, "state": state}
+        return data
+    except Exception:
+        return entry["data"] if entry else {}
+
+
+def _parse_espn_event(ev):
+    """Pure function: one ESPN scoreboard 'event' -> the flat row shape
+    nfl_schedule stores. Defensive about missing keys since this is an
+    undocumented API -- a malformed event should be skipped, not crash
+    the whole sync."""
+    comp = (ev.get("competitions") or [{}])[0]
+    competitors = comp.get("competitors") or []
+    home = next((c for c in competitors if c.get("homeAway") == "home"), None)
+    away = next((c for c in competitors if c.get("homeAway") == "away"), None)
+    if not home or not away:
+        return None
+    state = ((comp.get("status") or {}).get("type") or {}).get("state")
+    return {
+        "espn_event_id": ev.get("id"),
+        "kickoff": ev.get("date"),
+        "home_team": normalize_team_abbr((home.get("team") or {}).get("abbreviation")),
+        "away_team": normalize_team_abbr((away.get("team") or {}).get("abbreviation")),
+        "home_score": int(home["score"]) if home.get("score") not in (None, "") else None,
+        "away_score": int(away["score"]) if away.get("score") not in (None, "") else None,
+        "status": _ESPN_STATE_TO_STATUS.get(state, "scheduled"),
+    }
+
+
+def sync_week_schedule_to_db(season, week, season_type=2):
+    """Fetch one week's games from ESPN and upsert into nfl_schedule.
+    Returns rows upserted. Safe to call repeatedly (ON CONFLICT DO
+    UPDATE) -- this is how in-progress/final scores get refreshed."""
+    if not DATABASE_URL:
+        return 0
+    data = espn_week_scoreboard(season, week, season_type)
+    rows = [r for r in (_parse_espn_event(ev) for ev in data.get("events", [])) if r]
+    if not rows:
+        return 0
+    conn = get_db()
+    try:
+        with conn.cursor() as cur:
+            for row in rows:
+                cur.execute(
+                    """INSERT INTO nfl_schedule
+                           (espn_event_id, season, week, season_type, kickoff,
+                            home_team, away_team, home_score, away_score, status, updated_at)
+                       VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, NOW())
+                       ON CONFLICT (espn_event_id) DO UPDATE SET
+                           home_score = EXCLUDED.home_score, away_score = EXCLUDED.away_score,
+                           status = EXCLUDED.status, kickoff = EXCLUDED.kickoff, updated_at = NOW()""",
+                    (row["espn_event_id"], int(season), int(week), int(season_type), row["kickoff"],
+                     row["home_team"], row["away_team"], row["home_score"], row["away_score"], row["status"]),
+                )
+        conn.commit()
+    finally:
+        conn.close()
+    return len(rows)
+
+
+def get_schedule_for_team_week(season, week, team_abbr, cache={}):
+    """Opponent/home-away/kickoff/status for one team in one week, read
+    from our own DB (survives cold caches/restarts, unlike a pure
+    in-memory cache of ESPN's response). Returns None for a bye week or
+    a week that hasn't been synced yet. TTL 600s."""
+    key = (season, week, team_abbr)
+    now = time.time()
+    entry = cache.get(key)
+    if entry and now - entry["time"] < 600:
+        return entry["data"]
+    if not DATABASE_URL:
+        return None
+    conn = get_db()
+    try:
+        with conn.cursor() as cur:
+            cur.execute(
+                """SELECT * FROM nfl_schedule WHERE season = %s AND week = %s
+                       AND (home_team = %s OR away_team = %s) LIMIT 1""",
+                (season, week, team_abbr, team_abbr),
+            )
+            row = cur.fetchone()
+    finally:
+        conn.close()
+    if not row:
+        cache[key] = {"data": None, "time": now}
+        return None
+    is_home = row["home_team"] == team_abbr
+    data = {
+        "opponent": row["away_team"] if is_home else row["home_team"],
+        "home": is_home,
+        "kickoff": row["kickoff"],
+        "status": row["status"],
+        "espn_event_id": row["espn_event_id"],
+    }
+    cache[key] = {"data": data, "time": now}
+    return data
 
 
 def league_num_qbs(league):
@@ -1850,6 +2153,49 @@ def api_player_search():
     return jsonify({"results": results[:10]})
 
 
+def _week_games(season, week, season_type=2):
+    """Shared by /scores and /api/scoreboard so both build cards the same
+    way. Returns (games, any_live) where games is a list of card dicts
+    from espn_event_to_card, already filtered for malformed events."""
+    data = espn_week_scoreboard(season, week, season_type)
+    games = [c for c in (espn_event_to_card(ev) for ev in data.get("events", [])) if c]
+    any_live = any(g["status"] == "in_progress" for g in games)
+    return games, any_live
+
+
+@app.route("/scores")
+def scores_page():
+    info = get_current_week_info()
+    season = request.args.get("season", default=info["season"], type=int)
+    week = request.args.get("week", default=info["week"], type=int)
+    season_type = request.args.get("seasontype", default=info["season_type"], type=int)
+    games, _ = _week_games(season, week, season_type)
+    return render_template_string(
+        SCORES_HTML, games=games, season=season, week=week, season_type=season_type,
+        current_season=info["season"], current_week=info["week"],
+        today_key=date.today().isoformat(),
+    )
+
+
+@app.route("/api/scoreboard")
+def api_scoreboard():
+    """JSON backing for the calendar's fallback-fetch: either a whole
+    week (?season=&week=) for Prev/Next Week navigation, or a single day
+    (?date=YYYYMMDD) for a month-view cell click -- whichever wasn't
+    already baked into the page at load."""
+    date_str = request.args.get("date")
+    if date_str:
+        data = espn_day_scoreboard(date_str)
+        games = [c for c in (espn_event_to_card(ev) for ev in data.get("events", [])) if c]
+        return jsonify({"games": games})
+    info = get_current_week_info()
+    season = request.args.get("season", default=info["season"], type=int)
+    week = request.args.get("week", default=info["week"], type=int)
+    season_type = request.args.get("seasontype", default=info["season_type"], type=int)
+    games, _ = _week_games(season, week, season_type)
+    return jsonify({"games": games, "season": season, "week": week, "season_type": season_type})
+
+
 @app.route("/")
 @app.route("/rankings")
 def rankings():
@@ -2220,6 +2566,70 @@ def api_debug_sleeper():
         return jsonify({"requested_url": url, "error": str(e)})
 
 
+@app.route("/api/debug-espn")
+def api_debug_espn():
+    """Temporary diagnostic endpoint -- ESPN's live-scores API is
+    undocumented, and this sandbox's outbound network can't reach it at
+    all during development, so this is how the real response shapes get
+    confirmed once deployed (Render has full internet access). Shows the
+    raw body plus a best-effort probe of the specific fields the live
+    scores / officials / box-score features depend on, so a quick look
+    here answers "does this field exist and what's it actually called"
+    without guessing. Remove once Milestones 1-5 are confirmed working
+    against real data.
+
+    ?endpoint=scoreboard (default): pass season/week/seasontype
+    ?endpoint=summary: pass event=<espn_event_id>
+    """
+    if request.args.get("secret") != SITE_PASSWORD:
+        return jsonify({"ok": False, "error": "unauthorized"}), 401
+    endpoint = request.args.get("endpoint", "scoreboard")
+    try:
+        if endpoint == "summary":
+            event_id = request.args.get("event", "")
+            r = requests.get(f"{ESPN_SITE_BASE}/summary", params={"event": event_id}, timeout=15)
+            body = r.json()
+            comp = (((body.get("header") or {}).get("competitions") or [{}])[0])
+            box = body.get("boxscore") or {}
+            probe = {
+                "top_level_keys": sorted(body.keys()),
+                "header_competition_keys": sorted(comp.keys()),
+                "status_type_state": (comp.get("status") or {}).get("type", {}).get("state"),
+                "venue_raw": comp.get("venue"),
+                "officials_raw": comp.get("officials") or box.get("officials"),
+                "boxscore_keys": sorted(box.keys()),
+                "boxscore_teams_sample": (box.get("teams") or [None])[0],
+            }
+        else:
+            season = request.args.get("season", default=int(SEASON), type=int)
+            week = request.args.get("week", default=1, type=int)
+            season_type = request.args.get("seasontype", default=2, type=int)
+            r = requests.get(
+                f"{ESPN_SITE_BASE}/scoreboard",
+                params={"week": week, "seasontype": season_type, "year": season},
+                timeout=15,
+            )
+            body = r.json()
+            events = body.get("events", [])
+            probe = {
+                "top_level_keys": sorted(body.keys()),
+                "event_count": len(events),
+                "first_event_keys": sorted(events[0].keys()) if events else [],
+                "first_event_competitors": (
+                    (events[0].get("competitions") or [{}])[0].get("competitors") if events else None
+                ),
+                "first_event_status": (events[0].get("status") if events else None),
+            }
+        return jsonify({
+            "requested_url": r.url,
+            "status_code": r.status_code,
+            "probe": probe,
+            "body_preview": r.text[:3000],
+        })
+    except Exception as e:
+        return jsonify({"ok": False, "error": str(e)})
+
+
 _sync_lock = threading.Lock()
 _sync_busy = False
 
@@ -2258,6 +2668,67 @@ def api_sync_stats():
 
     threading.Thread(target=_run, daemon=True).start()
     return jsonify({"ok": True, "season": season, "started": True})
+
+
+_schedule_sync_lock = threading.Lock()
+_schedule_sync_busy = False
+
+
+@app.route("/api/sync-schedule", methods=["GET", "POST"])
+def api_sync_schedule():
+    """Protected endpoint the scheduled sync job calls to refresh
+    nfl_schedule for every week of a season (defaults to the current
+    season) -- same background-thread + single-flight-lock shape as
+    /api/sync-stats, kept as a separate lock so a schedule sync and a
+    stats sync never block each other."""
+    global _schedule_sync_busy
+    if request.args.get("secret") != SITE_PASSWORD:
+        return jsonify({"ok": False, "error": "unauthorized"}), 401
+    season = request.args.get("season", default=int(SEASON), type=int)
+
+    with _schedule_sync_lock:
+        if _schedule_sync_busy:
+            return jsonify({"ok": True, "season": season, "skipped": "another schedule sync already running"})
+        _schedule_sync_busy = True
+
+    def _run():
+        global _schedule_sync_busy
+        try:
+            for week in range(1, 19):
+                sync_week_schedule_to_db(season, week)
+        except Exception:
+            pass
+        finally:
+            with _schedule_sync_lock:
+                _schedule_sync_busy = False
+
+    threading.Thread(target=_run, daemon=True).start()
+    return jsonify({"ok": True, "season": season, "started": True})
+
+
+@app.route("/api/schedule-week-ids")
+def api_schedule_week_ids():
+    """Protected, read-only: the espn_event_id list for one season/week,
+    straight from our own DB. Used by the referee backfill workflow to
+    discover which games to sync without embedding ESPN-parsing logic in
+    a shell script."""
+    if request.args.get("secret") != SITE_PASSWORD:
+        return jsonify({"ok": False, "error": "unauthorized"}), 401
+    season = request.args.get("season", default=int(SEASON), type=int)
+    week = request.args.get("week", default=1, type=int)
+    if not DATABASE_URL:
+        return jsonify({"ok": True, "ids": []})
+    conn = get_db()
+    try:
+        with conn.cursor() as cur:
+            cur.execute(
+                "SELECT espn_event_id FROM nfl_schedule WHERE season = %s AND week = %s",
+                (season, week),
+            )
+            ids = [r["espn_event_id"] for r in cur.fetchall()]
+    finally:
+        conn.close()
+    return jsonify({"ok": True, "ids": ids})
 
 
 @app.route("/healthz")
@@ -2647,7 +3118,9 @@ def make_header(active=""):
   <label for="navToggle" class="nav-toggle-btn" aria-label="Menu">&#9776;</label>
   <nav class="links">
     <a class="{cls('league')}" href="/league-manager">League Manager</a>
+    <a class="{cls('scores')}" href="/scores">Scores</a>
     <a class="{cls('rankings')}" href="/rankings">Rankings</a>
+    <a class="{cls('matchups')}" href="/matchups">Matchups</a>
     <a class="{cls('trade')}" href="/trade-calculator">Trade Calculator</a>
     <a class="{cls('sbc')}" href="/start-bench-cut">Start/Bench/Cut</a>
     {{% if current_user.is_authenticated %}}
@@ -3304,6 +3777,242 @@ PLAYER_HTML = BASE_STYLE + make_header("league") + """
   </div>
   {% endif %}
 </div></main>
+"""
+
+SCORES_HTML = BASE_STYLE + make_header("scores") + """
+<style>
+  .sc-page{
+    --sc-bg:#0d0f0d; --sc-surface:#151815; --sc-surface2:#1c201c;
+    --sc-line:rgba(255,255,255,0.08); --sc-text:#e8e6df; --sc-muted:#8b9089;
+    --sc-live:#d1a521; --sc-live-wash:rgba(209,165,33,0.16);
+    background:var(--sc-bg); color:var(--sc-text); padding-bottom:60px;
+    font-family:"Source Sans 3",system-ui,sans-serif;
+  }
+  .sc-toolbar{ position:sticky; top:64px; z-index:40; background:color-mix(in srgb, var(--sc-bg) 92%, transparent); backdrop-filter:blur(8px); border-bottom:1px solid var(--sc-line); padding:16px 0; display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+  .sc-title{ font-family:"Big Shoulders Display"; font-size:22px; font-weight:800; text-transform:uppercase; margin-right:auto; color:var(--sc-text); }
+  .sc-week-nav{ display:flex; align-items:center; gap:8px; }
+  .sc-icon-btn{ width:36px; height:36px; border-radius:8px; background:var(--sc-surface); border:1px solid var(--sc-line); color:var(--sc-muted); display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:15px; }
+  .sc-icon-btn:hover{ color:var(--sc-text); border-color:var(--accent); }
+  .sc-icon-btn.active{ color:var(--sc-text); border-color:var(--accent); }
+  .sc-week-label{ font-weight:700; font-size:13.5px; min-width:80px; text-align:center; }
+
+  .sc-day-tabs{ display:flex; gap:8px; flex-wrap:wrap; margin-top:16px; }
+  .sc-day-tab{ font-size:12.5px; font-weight:700; padding:8px 14px; border-radius:99px; border:1px solid var(--sc-line); background:var(--sc-surface); color:var(--sc-muted); cursor:pointer; user-select:none; }
+  .sc-day-tab.active{ background:var(--accent); color:var(--accent-on); border-color:var(--accent); }
+  .sc-day-tab .dot{ display:inline-block; width:6px; height:6px; border-radius:50%; background:var(--sc-live); margin-left:6px; vertical-align:middle; }
+
+  .sc-month{ display:none; margin-top:16px; background:var(--sc-surface); border:1px solid var(--sc-line); border-radius:14px; padding:16px; }
+  .sc-month.open{ display:block; }
+  .sc-month-head{ display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; font-weight:700; font-family:"Big Shoulders Display"; text-transform:uppercase; }
+  .sc-month-grid{ display:grid; grid-template-columns:repeat(7,1fr); gap:6px; }
+  .sc-month-dow{ font-size:10px; text-transform:uppercase; color:var(--sc-muted); text-align:center; padding-bottom:4px; }
+  .sc-month-cell{ aspect-ratio:1; border-radius:8px; background:var(--sc-surface2); display:flex; flex-direction:column; align-items:center; justify-content:center; font-size:12px; color:var(--sc-muted); cursor:pointer; border:1px solid transparent; }
+  .sc-month-cell:hover{ border-color:var(--accent); }
+  .sc-month-cell.empty{ visibility:hidden; cursor:default; }
+  .sc-month-cell.today{ border-color:var(--accent); color:var(--sc-text); }
+  .sc-month-cell.selected{ background:var(--accent); color:var(--accent-on); }
+  .sc-month-cell .dot{ width:5px; height:5px; border-radius:50%; background:var(--sc-live); margin-top:3px; }
+
+  .sc-games{ display:flex; flex-direction:column; gap:10px; margin-top:18px; }
+  .sc-game-card{ display:flex; align-items:center; gap:16px; background:var(--sc-surface); border:1px solid var(--sc-line); border-radius:12px; padding:14px 18px; text-decoration:none; color:var(--sc-text); cursor:pointer; }
+  .sc-game-card:hover{ border-color:var(--accent); }
+  .sc-game-side{ display:flex; align-items:center; gap:10px; flex:1; min-width:0; }
+  .sc-game-side img{ width:32px; height:32px; object-fit:contain; flex:none; }
+  .sc-game-side .nm{ font-weight:700; font-size:13.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .sc-game-score{ font-family:"IBM Plex Mono"; font-size:20px; font-weight:700; min-width:34px; text-align:center; }
+  .sc-game-mid{ display:flex; flex-direction:column; align-items:center; gap:4px; min-width:90px; }
+  .sc-status-pill{ font-size:10.5px; font-weight:700; text-transform:uppercase; padding:3px 9px; border-radius:99px; }
+  .sc-status-pill.scheduled{ background:var(--sc-surface2); color:var(--sc-muted); }
+  .sc-status-pill.final{ background:var(--sc-surface2); color:var(--sc-muted); }
+  .sc-status-pill.in_progress{ background:var(--sc-live-wash); color:var(--sc-live); }
+  .sc-empty{ color:var(--sc-muted); padding:30px; text-align:center; }
+
+  @media (max-width: 640px) {
+    .sc-toolbar{ flex-wrap:wrap; }
+    .sc-title{ width:100%; }
+    .sc-game-card{ gap:8px; padding:12px; }
+    .sc-game-side{ gap:6px; }
+    .sc-game-side .nm{ max-width:56px; font-size:12px; }
+    .sc-game-mid{ min-width:56px; }
+    .sc-game-score{ font-size:17px; min-width:24px; }
+  }
+</style>
+
+<div class="sc-page">
+<div class="wrap">
+  <div class="sc-toolbar">
+    <span class="sc-title">Scores</span>
+    <div class="sc-week-nav">
+      <button type="button" class="sc-icon-btn" id="scPrevWeek" title="Previous week">&larr;</button>
+      <span class="sc-week-label" id="scWeekLabel">Week {{ week }}</span>
+      <button type="button" class="sc-icon-btn" id="scNextWeek" title="Next week">&rarr;</button>
+    </div>
+    <button type="button" class="sc-icon-btn" id="scMonthToggle" title="Month view">&#128197;</button>
+  </div>
+
+  <div class="sc-day-tabs" id="scDayTabs"></div>
+
+  <div class="sc-month" id="scMonth">
+    <div class="sc-month-head">
+      <button type="button" class="sc-icon-btn" id="scMonthPrev">&larr;</button>
+      <span id="scMonthLabel"></span>
+      <button type="button" class="sc-icon-btn" id="scMonthNext">&rarr;</button>
+    </div>
+    <div class="sc-month-grid" id="scMonthGrid"></div>
+  </div>
+
+  <div class="sc-games" id="scGames"></div>
+</div>
+</div>
+
+<script>
+const SCORES_WEEK = {{ games|tojson }};
+const CURRENT_SEASON = {{ current_season }};
+const CURRENT_WEEK = {{ current_week }};
+let scSeason = {{ season }};
+let scWeek = {{ week }};
+const scSeasonType = {{ season_type }};
+const scTodayKey = {{ today_key|tojson }};
+
+(function(){
+  const daysIndex = {};  // 'YYYY-MM-DD' -> [game, ...]
+  function indexGames(games){
+    games.forEach(function(g){
+      if(!g.date_key) return;
+      if(!daysIndex[g.date_key]) daysIndex[g.date_key] = [];
+      const existingIdx = daysIndex[g.date_key].findIndex(function(x){ return x.id === g.id; });
+      if(existingIdx >= 0) daysIndex[g.date_key][existingIdx] = g;
+      else daysIndex[g.date_key].push(g);
+    });
+  }
+  indexGames(SCORES_WEEK);
+
+  let selectedDay = (daysIndex[scTodayKey] ? scTodayKey : (Object.keys(daysIndex).sort()[0] || scTodayKey));
+  let monthCursor = new Date(selectedDay + "T00:00:00");
+
+  const dayTabsEl = document.getElementById('scDayTabs');
+  const gamesEl = document.getElementById('scGames');
+  const weekLabelEl = document.getElementById('scWeekLabel');
+  const monthEl = document.getElementById('scMonth');
+  const monthGridEl = document.getElementById('scMonthGrid');
+  const monthLabelEl = document.getElementById('scMonthLabel');
+
+  function fmtDayTab(key){
+    const d = new Date(key + "T00:00:00");
+    return d.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' });
+  }
+
+  function renderDayTabs(){
+    const keys = Object.keys(daysIndex).sort();
+    dayTabsEl.innerHTML = '';
+    keys.forEach(function(key){
+      const btn = document.createElement('div');
+      btn.className = 'sc-day-tab' + (key === selectedDay ? ' active' : '');
+      const anyLive = daysIndex[key].some(function(g){ return g.status === 'in_progress'; });
+      btn.innerHTML = fmtDayTab(key) + (anyLive ? '<span class="dot"></span>' : '');
+      btn.addEventListener('click', function(){ selectDay(key); });
+      dayTabsEl.appendChild(btn);
+    });
+  }
+
+  function renderGames(){
+    const games = daysIndex[selectedDay] || [];
+    gamesEl.innerHTML = '';
+    if(!games.length){
+      gamesEl.innerHTML = '<div class="sc-empty">No games this day.</div>';
+      return;
+    }
+    games.forEach(function(g){
+      const a = document.createElement('a');
+      a.className = 'sc-game-card';
+      a.href = '/game?id=' + encodeURIComponent(g.id);
+      a.innerHTML =
+        '<div class="sc-game-side"><img src="' + (g.away.logo||'') + '" onerror="this.style.visibility=\\'hidden\\'"><span class="nm">' + g.away.name + '</span><span class="sc-game-score">' + (g.away.score ?? '') + '</span></div>' +
+        '<div class="sc-game-mid"><span class="sc-status-pill ' + g.status + '">' + (g.status === 'in_progress' ? (g.clock||'') + ' Q' + (g.period||'') : (g.status_detail || g.status)) + '</span></div>' +
+        '<div class="sc-game-side" style="justify-content:flex-end; text-align:right;"><span class="sc-game-score">' + (g.home.score ?? '') + '</span><span class="nm">' + g.home.name + '</span><img src="' + (g.home.logo||'') + '" onerror="this.style.visibility=\\'hidden\\'"></div>';
+      gamesEl.appendChild(a);
+    });
+  }
+
+  function selectDay(key){
+    selectedDay = key;
+    if(!daysIndex[key]){
+      fetch('/api/scoreboard?date=' + key.replace(/-/g, ''))
+        .then(function(r){ return r.json(); })
+        .then(function(data){
+          daysIndex[key] = data.games || [];
+          renderDayTabs();
+          renderGames();
+          renderMonth();
+        })
+        .catch(function(){ daysIndex[key] = []; renderGames(); });
+      return;
+    }
+    renderDayTabs();
+    renderGames();
+    renderMonth();
+  }
+
+  function renderMonth(){
+    const y = monthCursor.getFullYear(), m = monthCursor.getMonth();
+    monthLabelEl.textContent = monthCursor.toLocaleDateString(undefined, { month: 'long', year: 'numeric' });
+    monthGridEl.innerHTML = '';
+    ['S','M','T','W','T','F','S'].forEach(function(d){
+      const el = document.createElement('div');
+      el.className = 'sc-month-dow';
+      el.textContent = d;
+      monthGridEl.appendChild(el);
+    });
+    const firstDow = new Date(y, m, 1).getDay();
+    const daysInMonth = new Date(y, m + 1, 0).getDate();
+    for(let i = 0; i < firstDow; i++){
+      const el = document.createElement('div');
+      el.className = 'sc-month-cell empty';
+      monthGridEl.appendChild(el);
+    }
+    for(let day = 1; day <= daysInMonth; day++){
+      const key = y + '-' + String(m+1).padStart(2,'0') + '-' + String(day).padStart(2,'0');
+      const cell = document.createElement('div');
+      let cls = 'sc-month-cell';
+      if(key === scTodayKey) cls += ' today';
+      if(key === selectedDay) cls += ' selected';
+      cell.className = cls;
+      const anyLive = daysIndex[key] && daysIndex[key].some(function(g){ return g.status === 'in_progress'; });
+      cell.innerHTML = day + (daysIndex[key] && daysIndex[key].length ? '<span class="dot" style="background:' + (anyLive ? 'var(--sc-live)' : 'var(--sc-muted)') + '"></span>' : '');
+      cell.addEventListener('click', function(){ selectDay(key); });
+      monthGridEl.appendChild(cell);
+    }
+  }
+
+  function loadWeek(season, week){
+    fetch('/api/scoreboard?season=' + season + '&week=' + week + '&seasontype=' + scSeasonType)
+      .then(function(r){ return r.json(); })
+      .then(function(data){
+        scSeason = data.season; scWeek = data.week;
+        weekLabelEl.textContent = 'Week ' + scWeek;
+        indexGames(data.games || []);
+        const keys = Object.keys(daysIndex).sort();
+        if(keys.length) selectDay(keys.find(function(k){ return (data.games||[]).some(function(g){ return g.date_key === k; }); }) || keys[0]);
+        renderDayTabs();
+        renderMonth();
+      });
+  }
+
+  document.getElementById('scPrevWeek').addEventListener('click', function(){ loadWeek(scSeason, scWeek - 1); });
+  document.getElementById('scNextWeek').addEventListener('click', function(){ loadWeek(scSeason, scWeek + 1); });
+  document.getElementById('scMonthToggle').addEventListener('click', function(){
+    monthEl.classList.toggle('open');
+    document.getElementById('scMonthToggle').classList.toggle('active');
+    if(monthEl.classList.contains('open')) renderMonth();
+  });
+  document.getElementById('scMonthPrev').addEventListener('click', function(){ monthCursor = new Date(monthCursor.getFullYear(), monthCursor.getMonth()-1, 1); renderMonth(); });
+  document.getElementById('scMonthNext').addEventListener('click', function(){ monthCursor = new Date(monthCursor.getFullYear(), monthCursor.getMonth()+1, 1); renderMonth(); });
+
+  renderDayTabs();
+  renderGames();
+  renderMonth();
+})();
+</script>
 """
 
 RANKINGS_HTML = BASE_STYLE + make_header("rankings") + VOTE_MODAL_HTML + """

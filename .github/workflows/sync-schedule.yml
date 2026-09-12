@@ -1,0 +1,18 @@
+name: Sync NFL Schedule
+
+on:
+  schedule:
+    # Every 2 hours -- same cadence as sync-stats.yml. Keeps kickoff
+    # times, live scores, and final scores in nfl_schedule current for
+    # the calendar/scoreboard pages and for matchup-grade opponent
+    # lookups.
+    - cron: "0 */2 * * *"
+  workflow_dispatch: {}
+
+jobs:
+  sync-schedule:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Sync the current season's schedule
+        run: |
+          curl -sS -X POST "https://fantasyfootballcalc.com/api/sync-schedule?secret=${{ secrets.SITE_PASSWORD }}"
