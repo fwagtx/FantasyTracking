@@ -1350,19 +1350,26 @@ def build_league_detail(league_id, username, roster_id=None):
         for u in get_league_users(league_id)
     }
     teams = build_league_teams(league_id, league, all_players, league_users, user_id)
-    fc_players = get_fantasycalc_values(league_num_qbs(league))["players"]
-
-    target = None
-    if roster_id is not None:
-        target = next((t for t in teams if t["roster_id"] == roster_id), None)
-    if target is None:
-        target = next((t for t in teams if t["is_you"]), None)
-    if target is None:
-        target = teams[0] if teams else None
-    if target is None:
+    if not teams:
         raise ValueError("No teams found in this league.")
 
+    if roster_id is None:
+        # No specific manager picked -- this is the "View League" landing
+        # page, so show the full standings/rankings list (every team's tier
+        # and value bar) rather than defaulting to any one roster.
+        ranked = [{
+            "roster_id": t["roster_id"], "owner_name": t["owner_name"], "avatar_url": t["avatar_url"],
+            "is_you": t["is_you"], "wins": t["wins"], "losses": t["losses"],
+            "power_tier": t["power_tier"], "power_tier_class": t["power_tier_class"], "bar": t["bar"],
+        } for t in teams]
+        return {"mode": "rankings", "league_name": league.get("name", "League"), "teams": ranked}
+
+    target = next((t for t in teams if t["roster_id"] == roster_id), None)
+    if target is None:
+        target = next((t for t in teams if t["is_you"]), None) or teams[0]
+
     num_qbs = league_num_qbs(league)
+    fc_players = get_fantasycalc_values(num_qbs)["players"]
     columns = {}
     for pos in POSITIONS:
         players = []
@@ -1384,7 +1391,7 @@ def build_league_detail(league_id, username, roster_id=None):
     )
 
     return {
-        "league_name": league.get("name", "League"), "owner_name": target["owner_name"],
+        "mode": "roster", "league_name": league.get("name", "League"), "owner_name": target["owner_name"],
         "roster_id": target["roster_id"], "columns": columns, "num_qbs": num_qbs, "teams": team_switcher,
     }
 
@@ -2879,7 +2886,7 @@ HOME_HTML = BASE_STYLE + make_header("league") + VOTE_MODAL_HTML + """
     {% else %}
     <p class="muted" style="margin-top:14px;">Your roster wasn't found in this league.</p>
     {% endif %}
-    <a class="btn view-league-btn" href="/league?league_id={{ lg.league_id }}{% if t %}&roster_id={{ t.roster_id }}{% endif %}&u={{ username }}">View League &rarr;</a>
+    <a class="btn view-league-btn" href="/league?league_id={{ lg.league_id }}&u={{ username }}">View League &rarr;</a>
   </div>
   {% endfor %}
 {% endmacro %}
@@ -3085,11 +3092,38 @@ HOME_HTML = BASE_STYLE + make_header("league") + VOTE_MODAL_HTML + """
 LEAGUE_DETAIL_HTML = BASE_STYLE + make_header("league") + """
 <main><div class="wrap">
   <a href="/league-manager?u={{ username }}" class="muted">&larr; Back to leagues</a>
+
+  {% if detail.mode == 'rankings' %}
+  <div class="panel">
+    <p class="eyebrow">{{ detail.league_name }}</p>
+    <h2>League Rankings</h2>
+    {% for t in detail.teams %}
+    <div class="team-row">
+      <img class="team-avatar" src="{{ t.avatar_url or 'data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2232%22 height=%2232%22><rect width=%2232%22 height=%2232%22 rx=%2216%22 fill=%22%23444841%22/></svg>' }}" alt="" onerror="this.style.visibility='hidden'">
+      <a class="team-name" href="/league?league_id={{ league_id }}&roster_id={{ t.roster_id }}&u={{ username }}">{{ t.owner_name }}{% if t.is_you %} &#9733;{% endif %}</a>
+      <span class="tier-badge {{ t.power_tier_class }}">{{ t.power_tier }}</span>
+      <span class="wl">{{ t.wins }}-{{ t.losses }}</span>
+      <div class="value-bar">
+        {% for pos, pct, rank, intensity in t.bar %}<span class="seg seg-{{ pos.lower() }}" style="width:{{ pct }}%"><span class="rank-bubble" style="background:rgba(0,0,0,{{ (0.15 + intensity*0.45)|round(2) }});">{{ rank }}</span></span>{% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+    <div class="legend-row">
+      <span class="legend-item"><i style="background:var(--pos-qb)"></i>QB</span>
+      <span class="legend-item"><i style="background:var(--pos-rb)"></i>RB</span>
+      <span class="legend-item"><i style="background:var(--pos-wr)"></i>WR</span>
+      <span class="legend-item"><i style="background:var(--pos-te)"></i>TE</span>
+    </div>
+    <p class="muted" style="margin-top:10px;">Click a manager to see their full roster broken down by position.</p>
+  </div>
+
+  {% else %}
   <div class="panel">
     <p class="eyebrow">{{ detail.league_name }}</p>
     <h2>{{ detail.owner_name }}'s roster value</h2>
 
     <div class="team-switcher">
+      <a class="team-chip" href="/league?league_id={{ league_id }}&u={{ username }}">&larr; Rankings</a>
       {% for t in detail.teams %}
       <a class="team-chip {{ 'active' if t.roster_id == detail.roster_id else '' }}" href="/league?league_id={{ league_id }}&roster_id={{ t.roster_id }}&u={{ username }}">{{ t.owner_name }}{% if t.is_you %} &#9733;{% endif %}</a>
       {% endfor %}
@@ -3130,6 +3164,7 @@ LEAGUE_DETAIL_HTML = BASE_STYLE + make_header("league") + """
       <p class="muted" style="margin-top:10px;">Click a player's photo or name for full detail.</p>
     </div>
   </div>
+  {% endif %}
 </div></main>
 """
 
