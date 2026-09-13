@@ -3689,6 +3689,66 @@ def api_sync_schedule():
     return jsonify({"ok": True, "season": season, "started": True})
 
 
+@app.route("/api/sync-schedule-now", methods=["GET", "POST"])
+def api_sync_schedule_now():
+    """Protected, SYNCHRONOUS variant of /api/sync-schedule: blocks the
+    request for however long an 18-week backfill actually takes and
+    returns the real per-week outcome (rows written or the exact
+    exception) in the response, instead of firing a background thread
+    whose success or failure is invisible to whoever triggered it.
+
+    This exists because the background-thread self-heal has repeatedly
+    "should have worked" without producing visible results, with no way
+    to tell from the outside whether it ran at all, died partway through,
+    or never started (e.g. DATABASE_URL missing, a lock never releasing).
+    Hitting this URL directly answers that in one request: either it
+    reports weeks_synced close to 18 and the problem is now fixed, or it
+    reports exactly which week failed and why, which is the fastest way
+    to find the REAL remaining blocker instead of guessing again.
+
+    Deliberately NOT used by the recurring cron or any page's self-heal
+    -- only for a manual, one-off trigger, since blocking a request for
+    this long is the wrong tradeoff for routine traffic."""
+    if request.args.get("secret") != SITE_PASSWORD:
+        return jsonify({"ok": False, "error": "unauthorized"}), 401
+    if not DATABASE_URL:
+        return jsonify({"ok": False, "error": "DATABASE_URL is not configured on this deploy -- there is no database to sync into"})
+    season = request.args.get("season", default=int(SEASON), type=int)
+    season_type = request.args.get("seasontype", default=2, type=int)
+    detail = {}
+    for week in range(1, 19):
+        try:
+            rows = sync_week_schedule_to_db(season, week, season_type)
+            entry = {"ok": True, "rows": rows}
+            if rows == 0:
+                # sync_week_schedule_to_db goes through espn_week_scoreboard,
+                # which swallows every request error and returns an empty
+                # events list -- indistinguishable from a genuine "no games
+                # this week". Probe ESPN directly, uncached, so a REAL
+                # failure (wrong params for a completed past season, a
+                # non-200, a reshaped body) is visible here instead of
+                # just "0 rows, no idea why".
+                try:
+                    probe = requests.get(
+                        f"{ESPN_SITE_BASE}/scoreboard",
+                        params={"week": week, "seasontype": season_type, "year": season},
+                        timeout=15,
+                    )
+                    entry["probe_http_status"] = probe.status_code
+                    try:
+                        entry["probe_raw_event_count"] = len(probe.json().get("events", []))
+                    except Exception:
+                        entry["probe_body_preview"] = probe.text[:300]
+                except Exception as probe_e:
+                    entry["probe_error"] = str(probe_e)
+            detail[week] = entry
+        except Exception as e:
+            detail[week] = {"ok": False, "error": str(e)}
+    weeks_with_rows = sum(1 for r in detail.values() if r.get("ok") and r.get("rows"))
+    _schedule_seeded_seasons.discard(season)  # force a fresh completeness check on the next request
+    return jsonify({"ok": True, "season": season, "weeks_with_rows": weeks_with_rows, "detail": detail})
+
+
 @app.route("/api/schedule-status")
 def api_schedule_status():
     """Protected, read-only: how many distinct weeks of nfl_schedule
