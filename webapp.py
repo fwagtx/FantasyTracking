@@ -34,7 +34,7 @@ import requests
 import psycopg2
 import psycopg2.extras
 import psycopg2.pool
-from flask import Flask, request, session, redirect, render_template_string, jsonify, url_for
+from flask import Flask, request, session, redirect, render_template_string, jsonify, url_for, make_response
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from authlib.integrations.flask_client import OAuth
@@ -163,23 +163,43 @@ class _PooledConnection:
     clears any uncommitted/aborted transaction state first, which is
     exactly what closing a raw connection without a prior commit()
     already did -- so this preserves today's behavior, it doesn't change
-    it, while actually reusing the underlying connection."""
-    __slots__ = ("_conn", "_pool")
+    it, while actually reusing the underlying connection.
+
+    A raw psycopg2 connection tolerates being close()d more than once --
+    it's a harmless no-op. Returning the SAME connection to a pool twice
+    is not: the pool can't find it the second time and raises, and if
+    that ever happened right after a legitimate first return, a second
+    caller could receive it from getconn() while the code that "closed"
+    it the first time still thinks it owns it. close() here is made
+    idempotent (and never lets a pool-level error escape to break a
+    request) specifically so this wrapper is at least as forgiving as
+    the raw connection it replaces."""
+    __slots__ = ("_conn", "_pool", "_returned")
 
     def __init__(self, conn, pool):
         self._conn = conn
         self._pool = pool
+        self._returned = False
 
     def close(self):
+        if self._returned:
+            return
+        self._returned = True
         try:
             self._conn.rollback()
         except Exception:
             # A dead/broken connection (the rollback itself failed) must
             # not go back into circulation for the next borrower to trip
             # over -- tell the pool to actually discard it instead.
-            self._pool.putconn(self._conn, close=True)
+            try:
+                self._pool.putconn(self._conn, close=True)
+            except Exception:
+                pass
             return
-        self._pool.putconn(self._conn)
+        try:
+            self._pool.putconn(self._conn)
+        except Exception:
+            pass
 
     def __getattr__(self, name):
         return getattr(self._conn, name)
@@ -3339,17 +3359,23 @@ def matchups_page():
     subscription perk once Stripe exists, but that billing isn't wired
     up yet, so login is the only gate today. Swap the `is_authenticated`
     check below for an `is_member` check once it is."""
+    t0 = time.monotonic()
     info = get_current_week_info()
     season = request.args.get("season", default=info["season"], type=int)
     week = request.args.get("week", default=info["week"], type=int)
 
     rows = []
     load_error = None
+    timing = []
     if current_user.is_authenticated:
         try:
             ensure_schedule_synced(season)
+            timing.append(("schedule", time.monotonic() - t0))
+            t1 = time.monotonic()
             all_players = get_all_players()
             fc_players = get_fantasycalc_values(1)["players"]
+            timing.append(("players", time.monotonic() - t1))
+            t2 = time.monotonic()
             MAX_ROWS = 300
             # Grade highest-dynasty-value players first and stop once the
             # page is full, instead of computing a grade for every single
@@ -3385,13 +3411,25 @@ def matchups_page():
             # stars/composite only break ties between equally-valued
             # players.
             rows.sort(key=lambda r: (-r["value"], -r["stars"], -r["composite"]))
+            timing.append(("grading", time.monotonic() - t2))
         except Exception as e:
             load_error = str(e)
 
-    return render_template_string(
+    t3 = time.monotonic()
+    html = render_template_string(
         MATCHUPS_HTML, rows=rows, season=season, week=week,
         current_season=info["season"], current_week=info["week"], load_error=load_error,
     )
+    timing.append(("render", time.monotonic() - t3))
+    timing.append(("total", time.monotonic() - t0))
+    resp = make_response(html)
+    # Invisible on the page itself -- only shows up in a browser's
+    # DevTools Network tab (Timing panel) or `curl -D -`, so this can
+    # stay on in production without repeating the earlier mistake of
+    # dumping diagnostic text into the rendered page. Answers "which
+    # part is actually slow" with real numbers instead of another guess.
+    resp.headers["Server-Timing"] = ", ".join(f"{name};dur={dur*1000:.0f}" for name, dur in timing)
+    return resp
 
 
 @app.route("/api/matchup-compare")
@@ -3411,11 +3449,24 @@ def api_matchup_compare():
     info = get_current_week_info()
     season = request.args.get("season", default=info["season"], type=int)
     week = request.args.get("week", default=info["week"], type=int)
+    t0 = time.monotonic()
     try:
         ensure_schedule_synced(season)
+        t1 = time.monotonic()
         result = compare_matchups(sid_a, sid_b, season, week)
+        t2 = time.monotonic()
         if not result:
             return jsonify({"ok": False, "error": "Couldn't grade one of those players -- try a different skill-position player."}), 400
+        # Real per-phase timing, invisible to the UI (the JS never reads
+        # this field) but visible in a browser's DevTools Network tab
+        # under this request's Response, so "comparing players is slow"
+        # can be answered with actual numbers on the very next click
+        # instead of another round of guessing.
+        result["_timing_ms"] = {
+            "schedule_check": round((t1 - t0) * 1000),
+            "compare": round((t2 - t1) * 1000),
+            "total": round((time.monotonic() - t0) * 1000),
+        }
         return jsonify({"ok": True, "result": result})
     except Exception as e:
         return jsonify({"ok": False, "error": str(e)}), 500
