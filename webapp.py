@@ -2293,6 +2293,8 @@ def grade_performance(position, fpts, season=None):
     score = performance_score(fpts, median, p99)
     return {
         "score": score,
+        # "2.1x an average game" lands faster than any percentile does.
+        "vs_median": round(fpts / median, 1) if median else None,
         "score_class": _score_class(score),
         "percentile": round(percentile * 100),
         "better_than": better_than,
@@ -6842,7 +6844,6 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + """
   .sc-perf-stat span{ font-size:10.5px; color:var(--sc-muted); margin-left:2px; }
   .sc-perf-sub{ font-size:11px; color:var(--sc-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   .sc-perf-grade{ font-family:"IBM Plex Mono"; font-size:20px; font-weight:700; flex:none; min-width:44px; text-align:right; font-variant-numeric:tabular-nums; }
-  .sc-perf-grade .of{ font-size:10px; color:var(--sc-muted); font-weight:500; }
   .sc-perf-empty{ color:var(--sc-muted); padding:24px; text-align:center; font-size:13px; }
   /* Banded on what the score's anchors actually mean: 5.0 is an average
      starter day, so "mid" straddles it and anything clearly above reads
@@ -6851,10 +6852,17 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + """
   .sc-perf-grade.good{ color:var(--good); opacity:0.88; }
   .sc-perf-grade.mid{ color:var(--warning); }
   .sc-perf-grade.poor{ color:var(--critical); }
-  .sc-my-players{ display:flex; justify-content:space-between; gap:10px; padding-top:8px; border-top:1px solid var(--sc-line); flex-wrap:wrap; }
-  .sc-my-players-pill{ display:inline-flex; align-items:center; gap:5px; background:var(--good-wash); color:var(--good); font-weight:700; font-size:11px; border-radius:99px; padding:4px 10px; flex:none; }
-  .sc-my-players-pill.away{ margin-right:auto; }
-  .sc-my-players-pill.home{ margin-left:auto; }
+  /* Count of your players, sitting on that team's own row. Reads as
+     part of the team line rather than as a separate fact to be matched
+     back to a side. */
+  .sc-mine{
+    display:inline-flex; align-items:center; justify-content:center; flex:none;
+    min-width:19px; height:19px; padding:0 5px; margin-left:6px;
+    border-radius:99px; background:var(--good-wash); color:var(--good);
+    font-family:"IBM Plex Mono"; font-size:11px; font-weight:700; line-height:1;
+  }
+  .sc-my-players{ padding-top:7px; margin-top:1px; border-top:1px solid var(--sc-line);
+                  font-size:10.5px; color:var(--sc-muted); }
   .sc-sync-banner{ display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; background:var(--sc-surface); border:1px solid var(--sc-line); border-radius:10px; padding:10px 16px; margin-top:14px; font-size:13px; color:var(--sc-muted); }
   .sc-sync-banner a{ color:var(--accent-ink); text-decoration:none; font-weight:700; }
   .sc-game-score{ font-family:"IBM Plex Mono"; font-size:20px; font-weight:700; min-width:34px; text-align:center; }
@@ -7032,10 +7040,19 @@ const scTodayKey = {{ today_key|tojson }};
       const awayLeads = played && isFinite(an) && isFinite(hn) && an > hn;
       const homeLeads = played && isFinite(an) && isFinite(hn) && hn > an;
 
-      function teamRow(t, score, leads){
+      // The count of your players rides on the team's OWN row. It used to
+      // sit in a separate strip under both teams, one pill pushed left
+      // and one right, which meant working out which number belonged to
+      // which team by matching horizontal position -- fine with two
+      // pills, ambiguous the moment one team had none.
+      function teamRow(t, score, leads, mineCount){
+        const pill = mineCount
+          ? '<span class="sc-mine" title="' + mineCount + ' of your players">' + mineCount + '</span>'
+          : '';
         return '<div class="sc-team-row' + (leads ? ' leading' : '') + '">' +
           '<img src="' + (t.logo || '') + '" alt="" onerror="this.style.visibility=\\'hidden\\'">' +
           '<span class="nm">' + (t.name || t.abbr || '') + '</span>' +
+          pill +
           '<span class="sc-game-score">' + score + '</span>' +
         '</div>';
       }
@@ -7062,8 +7079,8 @@ const scTodayKey = {{ today_key|tojson }};
       const topRow =
         '<div class="sc-game-top">' +
           '<div class="sc-game-teams">' +
-            teamRow(away, aScore, awayLeads) +
-            teamRow(home, hScore, homeLeads) +
+            teamRow(away, aScore, awayLeads, (g.my_away_players || []).length) +
+            teamRow(home, hScore, homeLeads, (g.my_home_players || []).length) +
           '</div>' +
           '<div class="sc-game-meta">' + meta + '</div>' +
         '</div>';
@@ -7073,15 +7090,16 @@ const scTodayKey = {{ today_key|tojson }};
       // names without either truncating illegibly or blowing out the
       // row height, so the card just answers "how many", and clicking
       // through answers "who".
+      // The per-team counts are now on the rows themselves, so all that's
+      // left here is the total -- one number that answers "is this game
+      // worth watching for me at all" without re-reading both rows.
       const awayMine = g.my_away_players || [];
       const homeMine = g.my_home_players || [];
-      let myRow = '';
-      if (awayMine.length || homeMine.length) {
-        myRow = '<div class="sc-my-players">' +
-          (awayMine.length ? '<span class="sc-my-players-pill away">' + awayMine.length + ' of yours</span>' : '<span></span>') +
-          (homeMine.length ? '<span class="sc-my-players-pill home">' + homeMine.length + ' of yours</span>' : '<span></span>') +
-          '</div>';
-      }
+      const totalMine = awayMine.length + homeMine.length;
+      const myRow = totalMine
+        ? '<div class="sc-my-players">' + totalMine +
+          (totalMine === 1 ? ' of your players' : ' of your players') + ' in this game</div>'
+        : '';
       a.innerHTML = topRow + myRow;
       gamesEl.appendChild(a);
     });
@@ -7239,8 +7257,7 @@ const scTodayKey = {{ today_key|tojson }};
           '<span class="sc-perf-sub">' + sub + '</span>' +
         '</span>' +
         '<span class="sc-perf-grade ' + (grade.score_class || '') + '">' +
-          (grade.score == null ? '' : grade.score.toFixed(1)) +
-          '<span class="of">/10</span></span>' +
+          (grade.score == null ? '' : grade.score.toFixed(1)) + '</span>' +
       '</a>';
     }).join('');
   }
@@ -7445,16 +7462,21 @@ PERFORMANCE_HTML = BASE_STYLE + make_header("scores") + """
 
   /* How the score was arrived at. The point of showing this is that the
      number stops being something you have to take on faith. */
-  .pf-math{ display:flex; flex-direction:column; gap:8px; font-size:13px; }
-  .pf-math-row{ display:flex; justify-content:space-between; gap:12px; padding:7px 0; border-top:1px solid var(--pf-line); }
-  .pf-math-row:first-child{ border-top:none; }
-  .pf-math-row .k{ color:var(--pf-muted); }
-  .pf-math-row .v{ font-family:"IBM Plex Mono"; }
-  .pf-scale{ position:relative; height:8px; border-radius:99px; background:var(--pf-surface2); margin:14px 0 22px; }
-  .pf-scale-fill{ position:absolute; inset:0 auto 0 0; border-radius:99px; background:var(--accent-ink); }
-  .pf-scale-mark{ position:absolute; top:-5px; width:2px; height:18px; background:var(--pf-muted); opacity:0.7; }
-  .pf-scale-mark span{ position:absolute; top:20px; left:50%; transform:translateX(-50%);
-                       font-size:9.5px; color:var(--pf-muted); white-space:nowrap; }
+  .pf-lede{ font-size:14px; margin:0 0 14px; color:var(--pf-muted); }
+  .pf-lede b{ color:var(--pf-text); font-size:15px; }
+  .pf-bars{ display:flex; flex-direction:column; gap:9px; }
+  .pf-bar-row{ display:flex; align-items:center; gap:10px; font-size:12px; color:var(--pf-muted); }
+  .pf-bar-label{ flex:none; width:106px; text-align:right; }
+  .pf-bar-track{ flex:1; height:14px; border-radius:4px; background:var(--pf-surface2); overflow:hidden; }
+  .pf-bar-fill{ display:block; height:100%; border-radius:4px; background:var(--pf-muted); opacity:0.55; }
+  .pf-bar-val{ flex:none; width:42px; font-family:"IBM Plex Mono"; font-size:12.5px; text-align:right; }
+  /* The performance being viewed is the one that should read first. */
+  .pf-bar-row.is-this{ color:var(--pf-text); font-weight:700; }
+  .pf-bar-row.is-this .pf-bar-fill{ background:var(--accent-ink); opacity:1; }
+  .pf-bar-row.is-this .pf-bar-val{ font-weight:700; }
+  .pf-foot{ font-size:12px; color:var(--pf-muted); margin:14px 0 0; line-height:1.5; }
+  .pf-foot b{ color:var(--pf-text); }
+  @media (max-width:640px){ .pf-bar-label{ width:84px; font-size:11px; } }
 
   /* Season game log -- this performance against the player's own body of
      work, which is the context the league-wide score can't give. */
@@ -7522,7 +7544,7 @@ PERFORMANCE_HTML = BASE_STYLE + make_header("scores") + """
     </div>
     <div class="pf-score {{ detail.score.score_class }}">
       <div class="n">{{ '%.1f'|format(detail.score.score) }}</div>
-      <div class="l">out of 10</div>
+      <div class="l">Game score</div>
     </div>
   </div>
 
@@ -7545,30 +7567,55 @@ PERFORMANCE_HTML = BASE_STYLE + make_header("scores") + """
 
   <div class="pf-panel">
     <h3>How this scored {{ '%.1f'|format(detail.score.score) }}</h3>
-    <!-- The whole point of showing the working: the number is a
-         measurement against a stated reference, not an opinion. -->
-    <div class="pf-scale">
-      <div class="pf-scale-fill" style="width:{{ (detail.score.score * 10)|round|int }}%;"></div>
-      <div class="pf-scale-mark" style="left:50%;"><span>5.0 &middot; average {{ detail.position }} game</span></div>
-      <div class="pf-scale-mark" style="left:90%;"><span>9.0 &middot; top 1%</span></div>
+
+    <!-- Three bars against one shared axis. The previous version put
+         "8.5 pts -> 5.0" in a table, which asked the reader to hold two
+         different units in their head and mentally interpolate between
+         them. Comparing three bars of the same thing needs no
+         explanation at all. -->
+    {% set peak = [detail.fpts, detail.score.median, detail.score.p99]|max %}
+    <p class="pf-lede">
+      <b>{{ detail.fpts }} points</b>
+      {%- if detail.score.vs_median %} &mdash;
+        {{ '%.1f'|format(detail.score.vs_median) }}&times; an average
+        {{ detail.position }} game{% endif %}.
+    </p>
+
+    <div class="pf-bars">
+      <div class="pf-bar-row is-this">
+        <span class="pf-bar-label">This game</span>
+        <span class="pf-bar-track">
+          <span class="pf-bar-fill" style="width:{{ (100 * detail.fpts / peak)|round|int if peak else 0 }}%;"></span>
+        </span>
+        <span class="pf-bar-val">{{ detail.fpts }}</span>
+      </div>
+      <div class="pf-bar-row">
+        <span class="pf-bar-label">Average {{ detail.position }}</span>
+        <span class="pf-bar-track">
+          <span class="pf-bar-fill" style="width:{{ (100 * detail.score.median / peak)|round|int if peak else 0 }}%;"></span>
+        </span>
+        <span class="pf-bar-val">{{ detail.score.median }}</span>
+      </div>
+      <div class="pf-bar-row">
+        <span class="pf-bar-label">Top 1% of {{ detail.position }}s</span>
+        <span class="pf-bar-track">
+          <span class="pf-bar-fill" style="width:{{ (100 * detail.score.p99 / peak)|round|int if peak else 0 }}%;"></span>
+        </span>
+        <span class="pf-bar-val">{{ detail.score.p99 }}</span>
+      </div>
     </div>
-    <div class="pf-math">
-      <div class="pf-math-row"><span class="k">This game</span><span class="v">{{ detail.fpts }} pts</span></div>
-      <div class="pf-math-row"><span class="k">Average {{ detail.position }} starter game</span><span class="v">{{ detail.score.median }} pts &rarr; 5.0</span></div>
-      <div class="pf-math-row"><span class="k">Top 1% of {{ detail.position }} games</span><span class="v">{{ detail.score.p99 }} pts &rarr; 9.0</span></div>
-      <div class="pf-math-row"><span class="k">Better than</span><span class="v">{{ detail.score.percentile }}% of {{ detail.position }} starter games</span></div>
+
+    <p class="pf-foot">
       {% if detail.score.source == 'distribution' %}
-      <div class="pf-math-row">
-        <span class="k">Measured against</span>
-        <span class="v">{{ detail.score.pool_size }} games &middot; {{ detail.score.source_season }} season</span>
-      </div>
+        Better than <b>{{ detail.score.percentile }}%</b> of the
+        {{ '{:,}'.format(detail.score.pool_size) }} {{ detail.position }} starter games
+        played in {{ detail.score.source_season }}.
+        An average one scores 5.0, and the top 1% scores 9.0.
       {% else %}
-      <div class="pf-math-row">
-        <span class="k">Measured against</span>
-        <span class="v">positional baseline (no season data yet)</span>
-      </div>
+        Scored against a typical {{ detail.position }} baseline &mdash; no season
+        of games has been loaded yet to measure against.
       {% endif %}
-    </div>
+    </p>
   </div>
 
   {% if log|length > 1 %}
