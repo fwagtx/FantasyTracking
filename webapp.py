@@ -3162,6 +3162,39 @@ def matchups_page():
                 "last_year_teams_with_any_defense_data": len(last_year_dvp),
                 "stats_sync_in_progress": last_year in _stats_sync_busy_seasons,
             }
+            # Ground truth straight from nfl_schedule itself, for BOTH
+            # last year and the current season side by side -- this is
+            # the only way to tell apart "last year's schedule never
+            # actually got written" (rows_last_year stays 0 no matter how
+            # many times the self-heal fires) from "it's written under
+            # some other season number than expected" (rows_last_year is
+            # 0 while a manual sync somewhere reported success -- meaning
+            # that sync almost certainly wrote to a DIFFERENT season,
+            # e.g. because it was triggered without an explicit
+            # ?season= and silently defaulted to the current one, which
+            # already has its own real rows from the recurring cron).
+            if DATABASE_URL:
+                conn = get_db()
+                try:
+                    with conn.cursor() as cur:
+                        cur.execute(
+                            "SELECT COUNT(DISTINCT week) AS n, COUNT(*) AS rows FROM nfl_schedule WHERE season = %s",
+                            (last_year,),
+                        )
+                        ly_row = cur.fetchone() or {"n": 0, "rows": 0}
+                        cur.execute(
+                            "SELECT COUNT(DISTINCT week) AS n, COUNT(*) AS rows FROM nfl_schedule WHERE season = %s",
+                            (season,),
+                        )
+                        cur_row = cur.fetchone() or {"n": 0, "rows": 0}
+                        data_status["schedule_last_year_weeks"] = ly_row["n"]
+                        data_status["schedule_last_year_rows"] = ly_row["rows"]
+                        data_status["schedule_current_season_weeks"] = cur_row["n"]
+                        data_status["schedule_current_season_rows"] = cur_row["rows"]
+                        data_status["schedule_last_year_sync_in_progress"] = last_year in _schedule_sync_busy_seasons
+                        data_status["schedule_last_year_last_sync_result"] = _schedule_sync_last_result.get(last_year)
+                finally:
+                    conn.close()
             # Stats exist but NOT ONE team matched the schedule -- rather
             # than guess again at why, show real values: three actual
             # players' current team + a week they have stats for, what
@@ -3716,6 +3749,7 @@ def api_sync_stats():
 
 _schedule_sync_lock = threading.Lock()
 _schedule_sync_busy_seasons = set()
+_schedule_sync_last_result = {}
 # Keyed by season, NOT a single shared flag -- syncing the current
 # season (the recurring 2-hour cron) and backfilling a prior season (the
 # matchup-grade fallback's self-heal) are unrelated operations. A single
@@ -3740,6 +3774,9 @@ def _sync_full_season_schedule_background(season):
         _schedule_sync_busy_seasons.add(season)
 
     def _run():
+        weeks_synced = 0
+        last_error = None
+        zero_row_probe = None
         try:
             for week in range(1, 19):
                 # One bad week (a transient ESPN hiccup, a rate limit, a
@@ -3750,12 +3787,50 @@ def _sync_full_season_schedule_background(season):
                 # the same failure forever, leaving last season's defense
                 # data permanently empty.
                 try:
-                    sync_week_schedule_to_db(season, week)
-                except Exception:
-                    pass
+                    rows = sync_week_schedule_to_db(season, week)
+                    if rows:
+                        weeks_synced += 1
+                    elif zero_row_probe is None:
+                        # sync_week_schedule_to_db goes through
+                        # espn_week_scoreboard, which swallows every
+                        # request error and returns an empty events list
+                        # -- indistinguishable here from a genuine "no
+                        # games this week". Probe ESPN directly, uncached,
+                        # once per run, so a real failure (wrong params
+                        # for a completed past season, a non-200, a
+                        # reshaped body) is captured instead of just
+                        # "0 rows, no idea why" -- this background path
+                        # has never had this visibility before, unlike
+                        # the manual /api/sync-schedule-now endpoint.
+                        try:
+                            probe = requests.get(
+                                f"{ESPN_SITE_BASE}/scoreboard",
+                                params={"week": week, "seasontype": 2, "year": season},
+                                timeout=15,
+                            )
+                            zero_row_probe = {
+                                "week": week, "status": probe.status_code,
+                                "event_count": len(probe.json().get("events", [])) if probe.ok else None,
+                            }
+                        except Exception as probe_e:
+                            zero_row_probe = {"week": week, "probe_error": str(probe_e)}
+                except Exception as e:
+                    last_error = f"week {week}: {e}"
         finally:
             with _schedule_sync_lock:
                 _schedule_sync_busy_seasons.discard(season)
+            # Every prior fix here (loop-abort, lock contention, partial-
+            # backfill detection, cache staleness) turned out to be real
+            # but each only got the page a step closer -- and this
+            # background path swallows every per-week exception, so a
+            # SYSTEMATIC failure (every week for this season erroring or
+            # coming back with 0 rows) has never once been visible
+            # anywhere. Recording the outcome here means the next look at
+            # /matchups shows a real reason instead of another guess.
+            _schedule_sync_last_result[season] = {
+                "weeks_synced": weeks_synced, "last_error": last_error,
+                "zero_row_probe": zero_row_probe, "time": time.time(),
+            }
             # A completed backfill writes straight to the DB, but
             # get_defense_vs_position/compute_matchup_grade each cache
             # their own results in memory for up to an hour -- without
@@ -5752,10 +5827,30 @@ MATCHUPS_HTML = BASE_STYLE + make_header("matchups") + """
       {% elif data_status.last_year_teams_with_any_defense_data < 32 %}<strong style="color:var(--warning);">Some teams are missing -- likely a team-abbreviation mismatch.</strong>
       {% endif %}
     </p>
+    {% if data_status.schedule_last_year_rows is defined %}
+    <p class="muted" style="font-size:11.5px; margin-top:2px;">
+      nfl_schedule rows -- {{ data_status.last_year }}: {{ data_status.schedule_last_year_weeks }}/18 weeks, {{ data_status.schedule_last_year_rows }} total rows.
+      {{ current_season }}: {{ data_status.schedule_current_season_weeks }} weeks, {{ data_status.schedule_current_season_rows }} total rows.
+      {% if data_status.schedule_last_year_rows == 0 and data_status.schedule_current_season_rows > 0 %}
+        <strong style="color:var(--critical);">{{ data_status.last_year }} has ZERO schedule rows while {{ current_season }} has real data -- any past "successful" schedule sync almost certainly ran against {{ current_season }} (the default when no season is specified), not {{ data_status.last_year }}.
+        {% if data_status.schedule_last_year_sync_in_progress %} A sync for {{ data_status.last_year }} is running right now -- reload in a minute.{% else %} No sync for {{ data_status.last_year }} is currently running; reloading this page will trigger one automatically.{% endif %}</strong>
+      {% elif data_status.schedule_last_year_rows == 0 %}
+        <strong style="color:var(--warning);">{{ data_status.last_year }} has zero schedule rows.
+        {% if data_status.schedule_last_year_sync_in_progress %}A sync is running right now -- reload in a minute.{% else %}No sync is running; reloading this page should trigger one.{% endif %}</strong>
+      {% endif %}
+    </p>
+    {% if data_status.schedule_last_year_last_sync_result %}
+    <p class="muted" style="font-size:11.5px; margin-top:2px;">
+      Last {{ data_status.last_year }} background sync attempt: {{ data_status.schedule_last_year_last_sync_result.weeks_synced }}/18 weeks wrote rows.
+      {% if data_status.schedule_last_year_last_sync_result.last_error %}<strong style="color:var(--critical);">Error: {{ data_status.schedule_last_year_last_sync_result.last_error }}</strong>{% endif %}
+      {% if data_status.schedule_last_year_last_sync_result.zero_row_probe %}<strong style="color:var(--critical);">ESPN probe for week {{ data_status.schedule_last_year_last_sync_result.zero_row_probe.week }}: {{ data_status.schedule_last_year_last_sync_result.zero_row_probe }}</strong>{% endif %}
+    </p>
+    {% endif %}
+    {% endif %}
     {% endif %}
     {% if sample_trace %}
     <div style="margin-top:8px; padding:10px 12px; background:var(--paper-sunken); border-radius:8px; font-family:'IBM Plex Mono'; font-size:11px; white-space:pre-wrap; overflow-x:auto;">{% for t in sample_trace %}Player {{ t.player_sid }} -- current team "{{ t.player_current_team }}" -- checked week {{ t.week_checked }}
-  get_schedule_for_team_week(2025, {{ t.week_checked }}, "{{ t.player_current_team }}") -&gt; {{ t.get_schedule_for_team_week_result }}
+  get_schedule_for_team_week({{ data_status.last_year }}, {{ t.week_checked }}, "{{ t.player_current_team }}") -&gt; {{ t.get_schedule_for_team_week_result }}
   schedule rows containing "{{ t.player_current_team }}" (any week): {{ t.schedule_rows_for_this_exact_team_string }}
 {% endfor %}</div>
     {% endif %}
