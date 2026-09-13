@@ -1903,6 +1903,20 @@ def compute_matchup_grade(sid, season, week, cache=_matchup_grade_cache):
     else:
         def_rank_used, def_source, def_pool_size, def_games_sampled = None, None, 32, None
     def_percentile = (def_rank_used - 1) / max(def_pool_size - 1, 1) if def_rank_used is not None else 0.5
+    # The single figure actually behind the grade -- whichever entry
+    # (this year's real sample, or last year's fallback) def_rank_used
+    # came from, paired with its own season label. The UI shows this ONE
+    # number ("PIT vs RB in 2025 -- 15.5 pts/gm, #3 of 32") instead of
+    # two separate this-year/last-year rows where one is often just
+    # blank early in the season.
+    if def_source in ("current", "current_thin"):
+        def_fpts_allowed_pg_used = opp_entry["fpts_allowed_per_game"] if opp_entry else None
+        def_season_used = season
+    elif def_source == "last_year":
+        def_fpts_allowed_pg_used = last_year_entry["fpts_allowed_per_game"] if last_year_entry else None
+        def_season_used = season - 1
+    else:
+        def_fpts_allowed_pg_used, def_season_used = None, None
 
     season_stats = get_season_stats(season)
     stat = season_stats.get(sid, {})
@@ -1954,6 +1968,9 @@ def compute_matchup_grade(sid, season, week, cache=_matchup_grade_cache):
         "def_rank": opp_entry["rank"] if opp_entry else None,
         "def_fpts_allowed_pg": opp_entry["fpts_allowed_per_game"] if opp_entry else None,
         "def_rank_used": def_rank_used,
+        "def_fpts_allowed_pg_used": def_fpts_allowed_pg_used,
+        "def_season_used": def_season_used,
+        "def_pool_size": def_pool_size,
         "def_source": def_source,
         "def_games_sampled": def_games_sampled,
         "def_percentile": round(def_percentile, 2),
@@ -2059,6 +2076,8 @@ def compare_matchups(sid_a, sid_b, season, week):
             "def_fpts_allowed_pg": c["def_fpts_allowed_pg"],
             "def_rank_last_year": c["def_rank_last_year"],
             "def_fpts_allowed_pg_last_year": c["def_fpts_allowed_pg_last_year"],
+            "def_rank_used": c["def_rank_used"], "def_fpts_allowed_pg_used": c["def_fpts_allowed_pg_used"],
+            "def_season_used": c["def_season_used"], "def_pool_size": c["def_pool_size"],
             "def_source": c["def_source"], "def_games_sampled": c["def_games_sampled"],
             "grade": grade["grade"], "grade_class": grade["grade_class"], "stars": grade["stars"], "star_pct": grade["star_pct"], "composite": c["composite"],
             "season_avg": round(stat["fpts"] / stat["games"], 1) if stat.get("games") else 0.0,
@@ -2088,19 +2107,33 @@ def compare_matchups(sid_a, sid_b, season, week):
     reasons = []
     if sit["injury_tier"] in hurt_tiers and start["injury_tier"] not in hurt_tiers:
         reasons.append(f"{sit['name']} carries an injury designation ({sit['injury']}) that caps their outlook this week.")
-    if start["def_rank"] and sit["def_rank"] and start["def_rank"] != sit["def_rank"]:
-        easier, harder = (start, sit) if start["def_rank"] > sit["def_rank"] else (sit, start)
-        if easier is start:
-            reasons.append(f"{start['name']} draws the easier matchup -- {start['opponent']} ranks {start['def_rank']} against the position this season, vs. {sit['opponent']} at {sit['def_rank']} for {sit['name']}.")
-    if start["def_rank_last_year"] and sit["def_rank_last_year"] and start["def_rank_last_year"] != sit["def_rank_last_year"]:
-        reasons.append(
-            f"Last season, {start['opponent']} allowed {start['def_fpts_allowed_pg_last_year']} pts/gm to the position "
-            f"(rank {start['def_rank_last_year']}) vs. {sit['opponent']}'s {sit['def_fpts_allowed_pg_last_year']} (rank {sit['def_rank_last_year']})."
-        )
+    # Compare whichever defensive figure actually fed each player's
+    # grade (this year's real sample, or last year's fallback) --
+    # comparing start's current-year rank against sit's current-year
+    # rank doesn't mean much if one of them is grading off last year's
+    # numbers because their current sample is too thin to trust yet.
+    if start["def_rank_used"] is not None and sit["def_rank_used"] is not None and start["def_rank_used"] != sit["def_rank_used"]:
+        if start["def_rank_used"] > sit["def_rank_used"]:
+            reasons.append(
+                f"{start['name']} draws the easier matchup -- {start['opponent']} ranks #{start['def_rank_used']} "
+                f"against {start['position']} in {start['def_season_used']}, vs. {sit['opponent']} at #{sit['def_rank_used']} for {sit['name']}."
+            )
     if start["recent_avg"] > sit["recent_avg"] + 1:
         reasons.append(f"{start['name']} is trending up recently ({start['recent_avg']} pts/gm over their last {start['recent_games']} games vs. {sit['recent_avg']} for {sit['name']}).")
     if not reasons:
-        reasons.append(f"{start['name']} grades out higher overall this week ({start['grade']} vs. {sit['grade']}).")
+        # "Grades out higher (B- vs. B-)" reads as a contradiction when
+        # the two letter grades are actually tied -- that happens
+        # whenever nothing else above distinguished them and the tie
+        # was broken by the underlying composite score alone, so say
+        # that instead of implying a letter-grade difference that isn't
+        # there.
+        if start["grade"] == sit["grade"]:
+            reasons.append(
+                f"{start['name']} and {sit['name']} both grade out as a {start['grade']} this week -- "
+                f"{start['name']} edges it on the underlying matchup score ({start['composite']:.2f} vs {sit['composite']:.2f})."
+            )
+        else:
+            reasons.append(f"{start['name']} grades out higher overall this week ({start['grade']} vs. {sit['grade']}).")
 
     # Beyond the factors that actually decided the call above, always
     # surface the underlying stats themselves -- each player's last-5-
@@ -2114,10 +2147,11 @@ def compare_matchups(sid_a, sid_b, season, week):
             note = " (includes last season)" if side["recent_crossed_season"] else ""
             reasons.append(f"{side['name']} has averaged {side['recent_avg']} pts over their last {side['recent_games']} games{note}.")
     for side in (start, sit):
-        if side["opponent"] and side["def_rank"]:
-            reasons.append(f"{side['opponent']} has allowed {side['def_fpts_allowed_pg']} pts/gm to {side['position']} this season (rank {side['def_rank']} of 32).")
-        elif side["opponent"] and side["def_rank_last_year"]:
-            reasons.append(f"{side['opponent']} allowed {side['def_fpts_allowed_pg_last_year']} pts/gm to {side['position']} last season (rank {side['def_rank_last_year']} of 32).")
+        if side["opponent"] and side["def_rank_used"] is not None:
+            reasons.append(
+                f"{side['opponent']} vs {side['position']} in {side['def_season_used']}: allowed "
+                f"{side['def_fpts_allowed_pg_used']} pts/gm (#{side['def_rank_used']} of {side['def_pool_size']})."
+            )
     for side in (start, sit):
         hist = side["history_vs_opp"]
         if hist:
@@ -6206,9 +6240,14 @@ MATCHUPS_HTML = BASE_STYLE + make_header("matchups") + """
   }
 
   function renderCard(p, isWinner){
-    const lastYear = p.def_rank_last_year
-      ? '<div class="h2h-stat-row"><span class="muted">Defense vs pos, last year</span><span>' + p.def_fpts_allowed_pg_last_year + ' pts/gm (rank ' + p.def_rank_last_year + ')</span></div>'
-      : '';
+    // One row for whichever defensive figure actually fed this player's
+    // grade (this year's real sample, or last year's fallback) -- names
+    // the opponent, the position, and the exact season the number comes
+    // from, instead of two separate this-year/last-year rows where one
+    // was often just a blank "-" early in the season.
+    const defRow = (p.def_rank_used != null && p.def_fpts_allowed_pg_used != null)
+      ? '<div class="h2h-stat-row"><span class="muted">' + p.opponent + ' vs ' + p.position + ' in ' + p.def_season_used + (p.def_source === 'current_thin' ? ' (early sample)' : '') + '</span><span>' + p.def_fpts_allowed_pg_used + ' pts/gm (#' + p.def_rank_used + ' of ' + p.def_pool_size + ')</span></div>'
+      : '<div class="h2h-stat-row"><span class="muted">Defense vs ' + p.position + '</span><span>Not enough data yet</span></div>';
     // A game that's already final (or live) makes a "start/sit" call moot
     // -- call that out plainly instead of only leaving it to the prose
     // reasoning line above, since it's the single most decision-relevant
@@ -6227,8 +6266,7 @@ MATCHUPS_HTML = BASE_STYLE + make_header("matchups") + """
       '<p class="muted" style="text-align:center; font-size:12px; margin-top:6px;">' + p.reasoning + '</p>' +
       resultRow +
       '<div class="h2h-stat-row"><span class="muted">Opponent</span><span>' + (p.opponent ? 'vs ' + p.opponent : 'BYE') + '</span></div>' +
-      '<div class="h2h-stat-row"><span class="muted">Defense vs pos, this year' + (p.def_source === 'current_thin' ? ' (early sample)' : '') + '</span><span>' + (p.def_fpts_allowed_pg != null ? p.def_fpts_allowed_pg + ' pts/gm (rank ' + p.def_rank + ')' : '—') + '</span></div>' +
-      lastYear +
+      defRow +
       '<div class="h2h-stat-row"><span class="muted">Season avg</span><span>' + p.season_avg + ' pts</span></div>' +
       '<div class="h2h-stat-row"><span class="muted">Last ' + (p.recent_games || 5) + ' games avg' + (p.recent_crossed_season ? ' (incl. last season)' : '') + '</span><span>' + p.recent_avg + ' pts</span></div>' +
       '<div class="h2h-stat-row"><span class="muted">Injury</span><span>' + p.injury + '</span></div>' +
