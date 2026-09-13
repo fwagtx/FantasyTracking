@@ -1593,6 +1593,17 @@ def sync_week_schedule_to_db(season, week, season_type=2):
     return len(rows)
 
 
+def _row_get(row, key, default=None):
+    """Read a column from a database row that may be a psycopg2 DictRow
+    (which raises KeyError for an absent column rather than returning
+    None) or a plain dict."""
+    try:
+        value = row[key]
+    except (KeyError, IndexError, TypeError):
+        return default
+    return default if value is None else value
+
+
 def get_schedule_for_team_week(season, week, team_abbr, cache={}):
     """Opponent/home-away/kickoff/status for one team in one week, read
     from our own DB (survives cold caches/restarts, unlike a pure
@@ -1626,6 +1637,14 @@ def get_schedule_for_team_week(season, week, team_abbr, cache={}):
         "kickoff": row["kickoff"],
         "status": row["status"],
         "espn_event_id": row["espn_event_id"],
+        # Oriented to the team that was asked about, not home/away, so a
+        # caller never has to re-derive which score belongs to whom.
+        # Fetched tolerantly: a scoreless row (a game not yet played, or
+        # a query that didn't select these columns) should read as "no
+        # score yet", never take down an opponent lookup that the whole
+        # matchup-grading path depends on.
+        "team_score": _row_get(row, "home_score" if is_home else "away_score"),
+        "opp_score": _row_get(row, "away_score" if is_home else "home_score"),
     }
     cache[key] = {"data": data, "time": now}
     return data
@@ -2119,50 +2138,117 @@ def _performance_pool(position, season, seasons_back=DEF_HISTORY_SEASONS_BACK):
     return None, None
 
 
-def grade_performance(position, fpts, season=None):
-    """Grade one game's fantasy output on the same 13-tier A+ through F
-    scale the matchup grades use, by where it falls in the distribution of
-    starter-caliber performances at that position.
+# The 0-10 performance score's anchor points. Each one is a real,
+# measured feature of the positional distribution rather than a taste
+# call, which is what makes the number defensible:
+#
+#   0.0  ->  zero fantasy points (the player did nothing)
+#   5.0  ->  the MEDIAN starter performance at that position
+#   9.0  ->  the 99th percentile -- about the best anyone manages
+#
+# Above the 99th the same slope continues to a hard ceiling of 10.0, so a
+# genuine monster game still separates from a merely elite one. That top
+# end is the whole reason this isn't just a percentile: a raw percentile
+# puts a 26-point game and a 40-point game within a rounding error of
+# each other, because both are "better than ~99% of games". Anchoring the
+# midpoint on the median is what keeps an average day reading as a 5
+# instead of drifting with the distribution's skew.
+_SCORE_MID = 5.0
+_SCORE_P99 = 9.0
+_SCORE_MAX = 10.0
 
-    Returns {grade, grade_class, stars, star_pct, percentile, better_than,
-    median, source, source_season} -- the supporting numbers alongside
-    the letter, so the UI can show WHY a line graded the way it did
-    instead of asking anyone to trust a bare letter.
+
+def _percentile_in(pool, value):
+    """Where `value` falls in a sorted pool, 0.0-1.0, interpolating
+    between neighbours so two close performances never collapse onto the
+    same number."""
+    if not pool:
+        return 0.0
+    i = bisect.bisect_left(pool, value)
+    if i <= 0:
+        return 0.0
+    if i >= len(pool):
+        return 1.0
+    lo, hi = pool[i - 1], pool[i]
+    frac = 0.0 if hi == lo else (value - lo) / (hi - lo)
+    return (i - 1 + frac) / len(pool)
+
+
+def _pool_quantile(pool, f):
+    return pool[min(len(pool) - 1, int(f * len(pool)))] if pool else 0.0
+
+
+def performance_score(fpts, median, p99):
+    """The 0-10 number itself, as a pure function of the performance and
+    two anchors -- separated out so it can be reasoned about and tested
+    without a database behind it.
+
+    Piecewise linear: 0 -> 0.0, `median` -> 5.0, `p99` -> 9.0, then the
+    same slope onward to a hard 10.0."""
+    fpts = float(fpts or 0)
+    if fpts <= 0 or median <= 0:
+        return 0.0
+    if fpts <= median:
+        score = _SCORE_MID * (fpts / median)
+    else:
+        span = p99 - median
+        slope = (_SCORE_P99 - _SCORE_MID) / span if span > 0 else 0.0
+        score = _SCORE_MID + (fpts - median) * slope
+    return round(max(0.0, min(_SCORE_MAX, score)), 1)
+
+
+def _score_class(score):
+    """Colour band for a score. Deliberately keyed to the same meaning
+    the anchors carry -- 5.0 is an average starter day, so the warning
+    band straddles it and anything clearly above reads as good."""
+    if score >= 8.0:
+        return "elite"
+    if score >= 6.0:
+        return "good"
+    if score >= 4.0:
+        return "mid"
+    return "poor"
+
+
+def grade_performance(position, fpts, season=None):
+    """Rate one game's fantasy output on a 0-10 scale, against the
+    distribution of starter-caliber performances at that position.
+
+    Returns {score, score_class, percentile, better_than, pool_size,
+    median, p99, source, source_season} -- the anchors and the percentile
+    travel with the score so the UI can show exactly what the number was
+    measured against, rather than asking anyone to trust a bare figure.
 
     `source` is "distribution" for a real measured pool and "baseline"
     for the static fallback, which only happens on an unseeded database.
-    Never returns None: a performance always gets a grade."""
+    Never returns None: a performance always gets a score."""
     season = _safe_int(season if season is not None else SEASON, int(SEASON))
     fpts = float(fpts or 0)
     pool, source_season = _performance_pool(position, season)
 
     if pool:
-        # Fraction of the reference pool this performance beat. bisect_left
-        # means an exact tie counts as "not beaten", which is the
-        # conservative reading.
+        median = _pool_quantile(pool, 0.50)
+        p99 = _pool_quantile(pool, 0.99)
         better_than = bisect.bisect_left(pool, fpts)
-        percentile = better_than / len(pool)
-        median = pool[len(pool) // 2]
+        percentile = _percentile_in(pool, fpts)
         source, pool_size = "distribution", len(pool)
     else:
-        # No season anywhere has a usable pool. Rather than refuse to
-        # grade, scale against a documented positional median -- twice the
-        # median is treated as a ceiling-ish game.
+        # No season anywhere has a usable pool. Fall back to documented
+        # positional medians so a score still exists, and say so.
         median = _PERF_BASELINE_MEDIAN.get(position, 10.0)
-        percentile = max(0.0, min(1.0, fpts / (median * 2))) if median else 0.0
+        p99 = median * 2.6   # the median-to-99th ratio real pools show
         better_than, source, pool_size, source_season = None, "baseline", None, None
+        percentile = max(0.0, min(1.0, fpts / (median * 2))) if median else 0.0
 
-    percentile = max(0.0, min(1.0, percentile))
-    grade, stars = _letter_grade(percentile)
+    score = performance_score(fpts, median, p99)
     return {
-        "grade": grade,
-        "grade_class": _grade_css_class(grade),
-        "stars": stars,
-        "star_pct": _star_pct_for_composite(percentile),
+        "score": score,
+        "score_class": _score_class(score),
         "percentile": round(percentile * 100),
         "better_than": better_than,
         "pool_size": pool_size,
         "median": round(median, 1),
+        "p99": round(p99, 1),
         "source": source,
         "source_season": source_season,
     }
@@ -3962,6 +4048,144 @@ def get_week_performers(season, week, cache=_week_performers_cache, allow_fetch=
     return rows
 
 
+# The full stat grid on a performance page, per position group. Every
+# entry is (Sleeper stat key, short label). Only keys actually present in
+# the payload are rendered, so this can list more than any one game will
+# ever fill without producing a grid full of blanks -- and a stat Sleeper
+# renames or stops sending simply disappears instead of erroring.
+_STAT_GRID_FIELDS = {
+    "QB": [
+        ("pass_yd", "PYDS"), ("pass_td", "PTD"), ("pass_int", "INT"),
+        ("pass_cmp", "CMP"), ("pass_att", "ATT"), ("pass_lng", "LNG"),
+        ("pass_sack", "SACK"), ("rush_att", "CAR"), ("rush_yd", "RUYDS"),
+        ("rush_td", "RUTD"), ("fum_lost", "FL"),
+    ],
+    "RB": [
+        ("rush_yd", "RUYDS"), ("rush_td", "RUTD"), ("rush_att", "CAR"),
+        ("rush_ypa", "YPC"), ("rush_lng", "LNG"), ("rec", "REC"),
+        ("rec_yd", "REYDS"), ("rec_td", "RETD"), ("rec_tgt", "TGT"),
+        ("fum_lost", "FL"),
+    ],
+    "WR": [
+        ("rec_yd", "REYDS"), ("rec_td", "RETD"), ("rec", "REC"),
+        ("rec_tgt", "TGT"), ("rec_ypr", "REAVG"), ("rec_lng", "LNG"),
+        ("rec_yar", "YAC"), ("rec_air_yd", "AIRYD"), ("rush_att", "CAR"),
+        ("rush_yd", "RUYDS"), ("rush_td", "RUTD"), ("fum_lost", "FL"),
+    ],
+}
+_STAT_GRID_FIELDS["TE"] = _STAT_GRID_FIELDS["WR"]
+_STAT_GRID_IDP = [
+    ("idp_tkl_solo", "SOLO"), ("idp_tkl_ast", "AST"), ("idp_sack", "SACK"),
+    ("idp_tkl_loss", "TFL"), ("idp_qb_hit", "QBH"), ("idp_int", "INT"),
+    ("idp_pass_def", "PD"), ("idp_ff", "FF"), ("idp_fum_rec", "FR"),
+]
+
+
+def build_stat_grid(position, stats):
+    """The full [(value, label), ...] grid for a performance page.
+
+    Unlike build_stat_line (three headline numbers for a list row) this
+    keeps zeros: on a detail page "0 FL" is information -- it says the
+    player didn't fumble -- whereas on a one-line summary it would just
+    be noise crowding out the stats that did happen."""
+    stats = stats or {}
+    fields = _STAT_GRID_FIELDS.get(position) or _STAT_GRID_IDP
+    grid = []
+    for key, label in fields:
+        val = stats.get(key)
+        if not isinstance(val, (int, float)):
+            continue
+        grid.append((round(val, 1) if isinstance(val, float) and val % 1 else int(val), label))
+    return grid
+
+
+def get_performance_detail(sid, season, week):
+    """Everything the /performance page shows for one player-week, or
+    None if that player has no stat line for the week.
+
+    Reads the same live week stats the performer board does, so a page
+    opened mid-game shows the same numbers the board just showed rather
+    than a staler set from the database."""
+    season, week = _safe_int(season, int(SEASON)), _safe_int(week, 1)
+    live = get_live_week_stats(season, week)
+    rec = (live or {}).get(sid)
+    p = get_all_players().get(sid)
+    if not rec or not p:
+        return None
+
+    position = p.get("position")
+    team = p.get("team")
+    stats = rec.get("stats") or {}
+    fpts = rec.get("pts", 0)
+    sched = get_schedule_for_team_week(season, week, team) if team else None
+
+    # Snap share is real, already synced, and the closest thing this app
+    # has to the tracking data a paid provider would sell -- how much of
+    # the offense the player was actually on the field for.
+    snap_pct = None
+    off_snp, tm_off_snp = stats.get("off_snp"), stats.get("tm_off_snp")
+    if isinstance(off_snp, (int, float)) and isinstance(tm_off_snp, (int, float)) and tm_off_snp:
+        snap_pct = round(100 * off_snp / tm_off_snp)
+
+    # Target share, same idea, for pass catchers.
+    target_share = None
+    tgt, team_tgt = stats.get("rec_tgt"), stats.get("tm_pass_att")
+    if isinstance(tgt, (int, float)) and isinstance(team_tgt, (int, float)) and team_tgt:
+        target_share = round(100 * tgt / team_tgt)
+
+    return {
+        "sid": sid,
+        "name": f"{p.get('first_name','')} {p.get('last_name','')}".strip(),
+        "position": position,
+        "team": team,
+        "photo": player_photo_url(sid),
+        "season": season,
+        "week": week,
+        "fpts": fpts,
+        "opponent": (sched or {}).get("opponent"),
+        "is_home": (sched or {}).get("home"),
+        "vs_label": (None if not sched else
+                     (f"vs {sched['opponent']}" if sched.get("home") else f"@ {sched['opponent']}")),
+        "team_score": (sched or {}).get("team_score"),
+        "opp_score": (sched or {}).get("opp_score"),
+        "game_status": (sched or {}).get("status"),
+        "headline": build_stat_line(position, stats),
+        "grid": build_stat_grid(position, stats),
+        "snap_pct": snap_pct,
+        "target_share": target_share,
+        "score": grade_performance(position, fpts, season),
+    }
+
+
+def get_player_season_log(sid, season, position, through_week=None):
+    """This player's score for every week they've played this season, for
+    the game-log chart -- so one performance can be read against their
+    own body of work, not just against the league.
+
+    Comes from the database rather than the live feed (only the current
+    week is live, and a season-long chart needs all of them), with the
+    live figure patched over the current week so the chart's last bar
+    matches the score shown at the top of the page instead of lagging a
+    sync behind."""
+    season = _safe_int(season, int(SEASON))
+    weeks = dict((get_season_stats(season).get(sid) or {}).get("weeks") or {})
+    if through_week:
+        live = get_live_week_stats(season, through_week, allow_fetch=False) or {}
+        if sid in live:
+            weeks[through_week] = live[sid].get("pts", 0)
+    out = []
+    for wk in sorted(weeks, key=lambda w: _safe_int(w, 0)):
+        pts = weeks[wk]
+        if not isinstance(pts, (int, float)):
+            continue
+        out.append({
+            "week": _safe_int(wk, 0),
+            "fpts": round(float(pts), 1),
+            "score": grade_performance(position, pts, season)["score"],
+        })
+    return out
+
+
 def _week_games(season, week, season_type=2):
     """Shared by /scores and /api/scoreboard so both build cards the same
     way. Returns (games, any_live) where games is a list of card dicts
@@ -4025,6 +4249,31 @@ def scores_page():
             current_season=int(SEASON), current_week=1, today_key=date.today().isoformat(),
             load_error=str(e), username=username, has_synced_leagues=False,
             performers=[],
+        )
+
+
+@app.route("/performance")
+def performance_page():
+    """One player's game: the score, how it was measured, the full stat
+    line, and where it sits in their own season."""
+    sid = (request.args.get("sid") or "").strip()
+    try:
+        info = get_current_week_info()
+        season = request.args.get("season", default=info["season"], type=int)
+        week = request.args.get("week", default=info["week"], type=int)
+        detail = get_performance_detail(sid, season, week) if sid else None
+        log = get_player_season_log(sid, season, detail["position"], through_week=week) if detail else []
+        # The strip across the top is the rest of that week's board, so
+        # you can move between performances without going back first.
+        peers = [p for p in get_week_performers(season, week, allow_fetch=False) if p["sid"] != sid][:24]
+        return render_template_string(
+            PERFORMANCE_HTML, detail=detail, log=log, peers=peers,
+            season=season, week=week, load_error=None,
+        )
+    except Exception as e:
+        return render_template_string(
+            PERFORMANCE_HTML, detail=None, log=[], peers=[],
+            season=int(SEASON), week=1, load_error=str(e),
         )
 
 
@@ -6362,14 +6611,16 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + """
   .sc-perf-stat b{ font-family:"IBM Plex Mono"; font-size:15px; font-weight:700; }
   .sc-perf-stat span{ font-size:10.5px; color:var(--sc-muted); margin-left:2px; }
   .sc-perf-sub{ font-size:11px; color:var(--sc-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  .sc-perf-grade{ font-family:"Big Shoulders Display"; font-size:19px; font-weight:800; flex:none; min-width:34px; text-align:center; }
+  .sc-perf-grade{ font-family:"IBM Plex Mono"; font-size:20px; font-weight:700; flex:none; min-width:44px; text-align:right; font-variant-numeric:tabular-nums; }
+  .sc-perf-grade .of{ font-size:10px; color:var(--sc-muted); font-weight:500; }
   .sc-perf-empty{ color:var(--sc-muted); padding:24px; text-align:center; font-size:13px; }
-  /* Same three-band colouring the matchup grades use, so an A on this
-     page means visually what an A means everywhere else on the site. */
-  .sc-perf-grade.ap, .sc-perf-grade.a, .sc-perf-grade.am,
-  .sc-perf-grade.bp, .sc-perf-grade.b, .sc-perf-grade.bm{ color:var(--good); }
-  .sc-perf-grade.cp, .sc-perf-grade.c, .sc-perf-grade.cm{ color:var(--warning); }
-  .sc-perf-grade.dp, .sc-perf-grade.d, .sc-perf-grade.dm, .sc-perf-grade.f{ color:var(--critical); }
+  /* Banded on what the score's anchors actually mean: 5.0 is an average
+     starter day, so "mid" straddles it and anything clearly above reads
+     as good. */
+  .sc-perf-grade.elite{ color:var(--good); }
+  .sc-perf-grade.good{ color:var(--good); opacity:0.88; }
+  .sc-perf-grade.mid{ color:var(--warning); }
+  .sc-perf-grade.poor{ color:var(--critical); }
   .sc-my-players{ display:flex; justify-content:space-between; gap:10px; padding-top:8px; border-top:1px solid var(--sc-line); flex-wrap:wrap; }
   .sc-my-players-pill{ display:inline-flex; align-items:center; gap:5px; background:var(--good-wash); color:var(--good); font-weight:700; font-size:11px; border-radius:99px; padding:4px 10px; flex:none; }
   .sc-my-players-pill.away{ margin-right:auto; }
@@ -6718,8 +6969,8 @@ const scTodayKey = {{ today_key|tojson }};
     const anyLive = games.some(function(g){ return g.status === 'in_progress'; });
     const anyPlayed = games.some(function(g){ return g.status !== 'scheduled'; });
     perfSubEl.textContent = rows.length
-      ? (anyLive ? 'Live · graded vs. every starter at the position'
-                 : 'Graded vs. every starter at the position')
+      ? (anyLive ? 'Live · 5.0 = an average starter game at the position'
+                 : '5.0 = an average starter game at the position')
       : '';
 
     if(!rows.length){
@@ -6741,7 +6992,9 @@ const scTodayKey = {{ today_key|tojson }};
       const pct = grade.percentile == null ? '' : ordinal(grade.percentile) + ' pct';
       const sub = [p.position + ' · ' + p.team, p.vs_label, pct]
         .filter(Boolean).join(' · ');
-      return '<a class="sc-perf-row" href="/player?sid=' + encodeURIComponent(p.sid) + '">' +
+      const href = '/performance?sid=' + encodeURIComponent(p.sid) +
+                   '&season=' + scSeason + '&week=' + scWeek;
+      return '<a class="sc-perf-row" href="' + href + '">' +
         '<span class="sc-perf-rank">' + (i + 1) + '</span>' +
         '<img src="' + (p.photo || '') + '" alt="" onerror="this.style.visibility=\\'hidden\\'">' +
         '<span class="sc-perf-main">' +
@@ -6750,8 +7003,9 @@ const scTodayKey = {{ today_key|tojson }};
           '<span class="sc-perf-stats">' + stats + '</span>' +
           '<span class="sc-perf-sub">' + sub + '</span>' +
         '</span>' +
-        '<span class="sc-perf-grade ' + (grade.grade_class || '') + '">' +
-          (grade.grade || '') + '</span>' +
+        '<span class="sc-perf-grade ' + (grade.score_class || '') + '">' +
+          (grade.score == null ? '' : grade.score.toFixed(1)) +
+          '<span class="of">/10</span></span>' +
       '</a>';
     }).join('');
   }
@@ -6787,6 +7041,200 @@ const scTodayKey = {{ today_key|tojson }};
 })();
 </script>
 """
+
+PERFORMANCE_HTML = BASE_STYLE + make_header("scores") + """
+<style>
+  .pf-page{
+    --pf-bg:#0d0f0d; --pf-surface:#151815; --pf-surface2:#1c201c;
+    --pf-line:rgba(255,255,255,0.08); --pf-text:#e8e6df; --pf-muted:#8b9089;
+    background:var(--pf-bg); color:var(--pf-text); padding-bottom:60px;
+    font-family:"Source Sans 3",system-ui,sans-serif;
+  }
+  /* Peer strip: the rest of the week's board, so you can move between
+     performances without backing out to /scores first. */
+  .pf-peers{ display:flex; gap:14px; overflow-x:auto; padding:12px 0 6px; scrollbar-width:none;
+             border-bottom:1px solid var(--pf-line); }
+  .pf-peers::-webkit-scrollbar{ display:none; }
+  .pf-peer{ flex:none; width:56px; text-align:center; text-decoration:none; color:var(--pf-muted); }
+  .pf-peer img{ width:46px; height:46px; border-radius:50%; object-fit:cover; background:var(--pf-surface2); }
+  .pf-peer .sc{ display:block; font-family:"IBM Plex Mono"; font-size:12px; font-weight:700; margin-top:3px; }
+  .pf-peer .nm{ display:block; font-size:9.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+
+  .pf-head{ display:flex; align-items:center; gap:16px; padding:18px 0 14px; }
+  .pf-head img{ width:74px; height:74px; border-radius:50%; object-fit:cover; background:var(--pf-surface2); flex:none; }
+  .pf-head-main{ flex:1; min-width:0; }
+  .pf-name{ font-family:"Big Shoulders Display"; font-size:30px; font-weight:800; text-transform:uppercase; line-height:1.05; }
+  .pf-sub{ font-size:12.5px; color:var(--pf-muted); margin-top:2px; }
+  .pf-headline{ display:flex; gap:16px; flex-wrap:wrap; margin-top:8px; }
+  .pf-headline b{ font-family:"IBM Plex Mono"; font-size:26px; font-weight:700; }
+  .pf-headline span{ font-size:11px; color:var(--pf-muted); margin-left:3px; }
+  .pf-score{ flex:none; text-align:center; }
+  .pf-score .n{ font-family:"IBM Plex Mono"; font-size:42px; font-weight:700; line-height:1; font-variant-numeric:tabular-nums; }
+  .pf-score .l{ font-size:10px; color:var(--pf-muted); text-transform:uppercase; letter-spacing:0.06em; }
+  .pf-score.elite .n{ color:var(--good); }
+  .pf-score.good .n{ color:var(--good); opacity:0.88; }
+  .pf-score.mid .n{ color:var(--warning); }
+  .pf-score.poor .n{ color:var(--critical); }
+
+  .pf-panel{ background:var(--pf-surface); border:1px solid var(--pf-line); border-radius:12px; padding:14px 16px; margin-top:16px; }
+  .pf-panel h3{ font-family:"Big Shoulders Display"; font-size:17px; font-weight:800; text-transform:uppercase;
+                margin:0 0 10px; color:var(--pf-text); }
+  .pf-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(64px, 1fr)); gap:12px 8px; }
+  .pf-cell{ text-align:left; }
+  .pf-cell b{ display:block; font-family:"IBM Plex Mono"; font-size:21px; font-weight:700; line-height:1.1; }
+  .pf-cell span{ font-size:10px; color:var(--pf-muted); letter-spacing:0.04em; }
+
+  /* How the score was arrived at. The point of showing this is that the
+     number stops being something you have to take on faith. */
+  .pf-math{ display:flex; flex-direction:column; gap:8px; font-size:13px; }
+  .pf-math-row{ display:flex; justify-content:space-between; gap:12px; padding:7px 0; border-top:1px solid var(--pf-line); }
+  .pf-math-row:first-child{ border-top:none; }
+  .pf-math-row .k{ color:var(--pf-muted); }
+  .pf-math-row .v{ font-family:"IBM Plex Mono"; }
+  .pf-scale{ position:relative; height:8px; border-radius:99px; background:var(--pf-surface2); margin:14px 0 22px; }
+  .pf-scale-fill{ position:absolute; inset:0 auto 0 0; border-radius:99px; background:var(--accent-ink); }
+  .pf-scale-mark{ position:absolute; top:-5px; width:2px; height:18px; background:var(--pf-muted); opacity:0.7; }
+  .pf-scale-mark span{ position:absolute; top:20px; left:50%; transform:translateX(-50%);
+                       font-size:9.5px; color:var(--pf-muted); white-space:nowrap; }
+
+  /* Season game log -- this performance against the player's own body of
+     work, which is the context the league-wide score can't give. */
+  .pf-log{ display:flex; align-items:flex-end; gap:4px; height:130px; margin-top:6px; }
+  .pf-log-bar{ flex:1; min-width:0; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; gap:4px; height:100%; }
+  .pf-log-fill{ width:100%; border-radius:3px 3px 0 0; background:var(--pf-surface2); min-height:2px; }
+  .pf-log-bar.elite .pf-log-fill{ background:var(--good); }
+  .pf-log-bar.good .pf-log-fill{ background:var(--good); opacity:0.7; }
+  .pf-log-bar.mid .pf-log-fill{ background:var(--warning); }
+  .pf-log-bar.poor .pf-log-fill{ background:var(--critical); opacity:0.8; }
+  .pf-log-bar.current .pf-log-fill{ outline:2px solid var(--accent-ink); outline-offset:1px; }
+  .pf-log-val{ font-family:"IBM Plex Mono"; font-size:9.5px; color:var(--pf-muted); }
+  .pf-log-wk{ font-size:9.5px; color:var(--pf-muted); }
+  .pf-empty{ color:var(--pf-muted); padding:26px; text-align:center; font-size:13px; }
+  .pf-back{ display:inline-block; margin-top:16px; color:var(--accent-ink); text-decoration:none; font-weight:700; font-size:13px; }
+  @media (max-width:640px){
+    .pf-name{ font-size:24px; }
+    .pf-head img{ width:58px; height:58px; }
+    .pf-score .n{ font-size:34px; }
+    .pf-headline b{ font-size:21px; }
+    .pf-cell b{ font-size:18px; }
+  }
+</style>
+
+<div class="pf-page">
+<div class="wrap">
+  {% if load_error %}<div class="error">Couldn't load this performance: {{ load_error }}</div>{% endif %}
+
+  {% if peers %}
+  <div class="pf-peers">
+    {% for p in peers %}
+    <a class="pf-peer" href="/performance?sid={{ p.sid }}&amp;season={{ season }}&amp;week={{ week }}">
+      <img src="{{ p.photo }}" alt="" onerror="this.style.visibility='hidden'">
+      <span class="sc">{{ '%.1f'|format(p.grade.score) }}</span>
+      <span class="nm">{{ p.name.split(' ')[-1] }}</span>
+    </a>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  {% if not detail %}
+    <div class="pf-empty">
+      No stat line for this player in week {{ week }} yet.
+      <div><a class="pf-back" href="/scores">&larr; Back to scores</a></div>
+    </div>
+  {% else %}
+  <div class="pf-head">
+    <img src="{{ detail.photo }}" alt="" onerror="this.style.visibility='hidden'">
+    <div class="pf-head-main">
+      <div class="pf-name">{{ detail.name }}</div>
+      <div class="pf-sub">
+        {{ detail.position }} &middot; {{ detail.team }}
+        {% if detail.vs_label %}&middot; {{ detail.vs_label }}{% endif %}
+        {% if detail.team_score is not none and detail.opp_score is not none %}
+          &middot; {{ detail.team_score }}&ndash;{{ detail.opp_score }}
+        {% endif %}
+        &middot; Week {{ detail.week }}
+      </div>
+      <div class="pf-headline">
+        {% for value, label in detail.headline %}
+        <span><b>{{ value }}</b><span>{{ label }}</span></span>
+        {% endfor %}
+        <span><b>{{ detail.fpts }}</b><span>fpts</span></span>
+      </div>
+    </div>
+    <div class="pf-score {{ detail.score.score_class }}">
+      <div class="n">{{ '%.1f'|format(detail.score.score) }}</div>
+      <div class="l">out of 10</div>
+    </div>
+  </div>
+
+  {% if detail.grid %}
+  <div class="pf-panel">
+    <h3>Full line</h3>
+    <div class="pf-grid">
+      {% for value, label in detail.grid %}
+      <div class="pf-cell"><b>{{ value }}</b><span>{{ label }}</span></div>
+      {% endfor %}
+      {% if detail.snap_pct is not none %}
+      <div class="pf-cell"><b>{{ detail.snap_pct }}</b><span>SNAP%</span></div>
+      {% endif %}
+      {% if detail.target_share is not none %}
+      <div class="pf-cell"><b>{{ detail.target_share }}</b><span>TGT%</span></div>
+      {% endif %}
+    </div>
+  </div>
+  {% endif %}
+
+  <div class="pf-panel">
+    <h3>How this scored {{ '%.1f'|format(detail.score.score) }}</h3>
+    <!-- The whole point of showing the working: the number is a
+         measurement against a stated reference, not an opinion. -->
+    <div class="pf-scale">
+      <div class="pf-scale-fill" style="width:{{ (detail.score.score * 10)|round|int }}%;"></div>
+      <div class="pf-scale-mark" style="left:50%;"><span>5.0 &middot; average {{ detail.position }} game</span></div>
+      <div class="pf-scale-mark" style="left:90%;"><span>9.0 &middot; top 1%</span></div>
+    </div>
+    <div class="pf-math">
+      <div class="pf-math-row"><span class="k">This game</span><span class="v">{{ detail.fpts }} pts</span></div>
+      <div class="pf-math-row"><span class="k">Average {{ detail.position }} starter game</span><span class="v">{{ detail.score.median }} pts &rarr; 5.0</span></div>
+      <div class="pf-math-row"><span class="k">Top 1% of {{ detail.position }} games</span><span class="v">{{ detail.score.p99 }} pts &rarr; 9.0</span></div>
+      <div class="pf-math-row"><span class="k">Better than</span><span class="v">{{ detail.score.percentile }}% of {{ detail.position }} starter games</span></div>
+      {% if detail.score.source == 'distribution' %}
+      <div class="pf-math-row">
+        <span class="k">Measured against</span>
+        <span class="v">{{ detail.score.pool_size }} games &middot; {{ detail.score.source_season }} season</span>
+      </div>
+      {% else %}
+      <div class="pf-math-row">
+        <span class="k">Measured against</span>
+        <span class="v">positional baseline (no season data yet)</span>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+  {% if log|length > 1 %}
+  <div class="pf-panel">
+    <h3>{{ detail.season }} game log</h3>
+    <div class="pf-log">
+      {% for g in log %}
+      <div class="pf-log-bar {{ 'current' if g.week == detail.week else '' }}
+                  {{ 'elite' if g.score >= 8 else ('good' if g.score >= 6 else ('mid' if g.score >= 4 else 'poor')) }}"
+           title="Week {{ g.week }}: {{ g.fpts }} pts, scored {{ '%.1f'|format(g.score) }}">
+        <span class="pf-log-val">{{ '%.1f'|format(g.score) }}</span>
+        <div class="pf-log-fill" style="height:{{ (g.score * 10)|round|int }}%;"></div>
+        <span class="pf-log-wk">{{ g.week }}</span>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+  <a class="pf-back" href="/scores">&larr; Back to scores</a>
+  {% endif %}
+</div>
+</div>
+"""
+
 
 GAME_DETAIL_HTML = BASE_STYLE + make_header("scores") + """
 <style>
