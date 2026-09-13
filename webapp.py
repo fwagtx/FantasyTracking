@@ -1753,11 +1753,17 @@ def compute_matchup_grade(sid, season, week, cache={}):
         composite *= 0.85
 
     if tier in ("out", "admin"):
-        grade, stars = "F", 1
+        grade, stars, star_pct = "F", 1, 8
     elif tier == "doubtful":
-        grade, stars = "D-", 2
+        grade, stars, star_pct = "D-", 2, 25
     else:
         grade, stars = _letter_grade(composite)
+        # A continuous fill (0-100%) driven directly by the composite,
+        # not snapped to the coarse 1-5 whole-star count above -- two
+        # matchups in the same letter tier (say a strong B+ and a weak
+        # one) now visibly show different amounts of star fill instead
+        # of looking identical.
+        star_pct = max(5, min(100, round(composite * 100)))
 
     components = {
         "opponent": sched["opponent"] if sched else None,
@@ -1778,7 +1784,7 @@ def compute_matchup_grade(sid, season, week, cache={}):
         "actual_week_pts": actual_week_pts,
     }
     data = {
-        "grade": grade, "grade_class": _grade_css_class(grade), "stars": stars,
+        "grade": grade, "grade_class": _grade_css_class(grade), "stars": stars, "star_pct": star_pct,
         "reasoning": _grade_reasoning(components), "components": components,
     }
     cache[key] = {"data": data, "time": now}
@@ -1818,7 +1824,7 @@ def compare_matchups(sid_a, sid_b, season, week):
             "def_rank_last_year": c["def_rank_last_year"],
             "def_fpts_allowed_pg_last_year": c["def_fpts_allowed_pg_last_year"],
             "def_source": c["def_source"], "def_games_sampled": c["def_games_sampled"],
-            "grade": grade["grade"], "grade_class": grade["grade_class"], "stars": grade["stars"], "composite": c["composite"],
+            "grade": grade["grade"], "grade_class": grade["grade_class"], "stars": grade["stars"], "star_pct": grade["star_pct"], "composite": c["composite"],
             "season_avg": round(stat["fpts"] / stat["games"], 1) if stat.get("games") else 0.0,
             "recent_avg": round(sum(recent) / len(recent), 1) if recent else 0.0,
             "injury": (badge["title"] if badge else "Healthy"),
@@ -3053,7 +3059,7 @@ def matchups_page():
                     "position": v.get("position"), "team": p.get("team") or "FA",
                     "photo": player_photo_url(sid),
                     "opponent": grade["components"]["opponent"],
-                    "grade": grade["grade"], "grade_class": grade["grade_class"], "stars": grade["stars"],
+                    "grade": grade["grade"], "grade_class": grade["grade_class"], "stars": grade["stars"], "star_pct": grade["star_pct"],
                     "composite": grade["components"]["composite"],
                     "reasoning": grade["reasoning"],
                     "value": v.get("value", 0),
@@ -3579,24 +3585,31 @@ def api_sync_stats():
 
 
 _schedule_sync_lock = threading.Lock()
-_schedule_sync_busy = False
+_schedule_sync_busy_seasons = set()
+# Keyed by season, NOT a single shared flag -- syncing the current
+# season (the recurring 2-hour cron) and backfilling a prior season (the
+# matchup-grade fallback's self-heal) are unrelated operations. A single
+# shared busy flag meant whichever one happened to be running blocked the
+# other from ever starting, so a last-year backfill could keep losing the
+# race against the current season's own recurring sync indefinitely and
+# never get a clear window to run -- exactly the kind of silent, hard-to-
+# diagnose gap that left last season's defense data permanently empty.
 
 
 def _sync_full_season_schedule_background(season):
     """Kicks off a background thread syncing every week of `season` into
-    nfl_schedule, guarded by the single-flight lock so overlapping
-    triggers (the cron, the auto-heal check below, a manual dispatch)
-    never run concurrently. Returns immediately either way -- never
-    blocks the caller on a live fetch, the same lesson get_season_stats
-    already learned the hard way (see its docstring)."""
-    global _schedule_sync_busy
+    nfl_schedule, guarded by a per-season single-flight lock so two
+    triggers for the SAME season (the cron, the auto-heal check below, a
+    manual dispatch) never run concurrently, while different seasons are
+    always free to run at the same time. Returns immediately either way
+    -- never blocks the caller on a live fetch, the same lesson
+    get_season_stats already learned the hard way (see its docstring)."""
     with _schedule_sync_lock:
-        if _schedule_sync_busy:
+        if season in _schedule_sync_busy_seasons:
             return False
-        _schedule_sync_busy = True
+        _schedule_sync_busy_seasons.add(season)
 
     def _run():
-        global _schedule_sync_busy
         try:
             for week in range(1, 19):
                 # One bad week (a transient ESPN hiccup, a rate limit, a
@@ -3612,7 +3625,7 @@ def _sync_full_season_schedule_background(season):
                     pass
         finally:
             with _schedule_sync_lock:
-                _schedule_sync_busy = False
+                _schedule_sync_busy_seasons.discard(season)
 
     threading.Thread(target=_run, daemon=True).start()
     return True
@@ -3621,24 +3634,40 @@ def _sync_full_season_schedule_background(season):
 _schedule_seeded_seasons = set()
 
 
+SCHEDULE_WEEKS_PER_SEASON = 18
+
+
 def ensure_schedule_synced(season):
     """Self-heals the common "just deployed, the 2-hour cron hasn't
-    fired yet" gap: if nfl_schedule has zero rows for this season, kick
-    off a background sync so the page renders honestly (a real bye,
-    just not-yet-synced) now and correctly on the next request or two,
-    without ever blocking this render on a live fetch. Checks an
-    in-memory set first so a season already confirmed non-empty this
-    process never re-queries the DB on every request."""
+    fired yet" gap: if nfl_schedule doesn't have (nearly) every week of
+    this season yet, kick off a background sync so the page renders
+    honestly (a real bye, just not-yet-synced) now and correctly on the
+    next request or two, without ever blocking this render on a live
+    fetch. Checks an in-memory set first so a season already confirmed
+    complete this process never re-queries the DB on every request.
+
+    Counts DISTINCT weeks present, not just "any row at all" -- a
+    backfill that only got partway through before the process restarted
+    (a real risk on a free-tier host that can recycle mid-request) would
+    otherwise look "seeded" forever after syncing just one or two weeks,
+    permanently stranding the other 16-17 with no data and no further
+    retries for the rest of this process's life."""
     if season in _schedule_seeded_seasons or not DATABASE_URL:
         return
     conn = get_db()
     try:
         with conn.cursor() as cur:
-            cur.execute("SELECT 1 FROM nfl_schedule WHERE season = %s LIMIT 1", (season,))
-            has_rows = cur.fetchone() is not None
+            cur.execute("SELECT COUNT(DISTINCT week) AS n FROM nfl_schedule WHERE season = %s", (season,))
+            weeks_present = (cur.fetchone() or {}).get("n", 0)
     finally:
         conn.close()
-    if has_rows:
+    # A season in progress won't have all 18 weeks yet (that's correct,
+    # not a gap) -- only require "as many weeks as have actually
+    # happened" for the current season, but the full season for any
+    # prior (fully completed) one.
+    info = get_current_week_info()
+    weeks_expected = SCHEDULE_WEEKS_PER_SEASON if season < info["season"] else min(info["week"], SCHEDULE_WEEKS_PER_SEASON)
+    if weeks_present >= weeks_expected:
         _schedule_seeded_seasons.add(season)
     else:
         _sync_full_season_schedule_background(season)
@@ -3658,6 +3687,43 @@ def api_sync_schedule():
     if not started:
         return jsonify({"ok": True, "season": season, "skipped": "another schedule sync already running"})
     return jsonify({"ok": True, "season": season, "started": True})
+
+
+@app.route("/api/schedule-status")
+def api_schedule_status():
+    """Protected, read-only: how many distinct weeks of nfl_schedule
+    actually exist for each of the last few seasons, straight from the
+    DB -- lets a real check (hitting this URL) confirm whether a
+    season's backfill has genuinely finished instead of guessing from
+    what /matchups shows. Also reports whether a sync is in-flight for
+    that season right now, since the answer might just be "still
+    running, check back in a minute" rather than a bug."""
+    if request.args.get("secret") != SITE_PASSWORD:
+        return jsonify({"ok": False, "error": "unauthorized"}), 401
+    if not DATABASE_URL:
+        return jsonify({"ok": True, "database_configured": False, "seasons": {}})
+    info = get_current_week_info()
+    seasons_to_check = request.args.get("seasons")
+    seasons = [int(s) for s in seasons_to_check.split(",")] if seasons_to_check else [info["season"], info["season"] - 1, info["season"] - 2]
+    conn = get_db()
+    try:
+        with conn.cursor() as cur:
+            result = {}
+            for season in seasons:
+                cur.execute(
+                    "SELECT COUNT(DISTINCT week) AS n, COUNT(*) AS rows FROM nfl_schedule WHERE season = %s",
+                    (season,),
+                )
+                row = cur.fetchone() or {"n": 0, "rows": 0}
+                weeks_expected = SCHEDULE_WEEKS_PER_SEASON if season < info["season"] else min(info["week"], SCHEDULE_WEEKS_PER_SEASON)
+                result[str(season)] = {
+                    "weeks_present": row["n"], "weeks_expected": weeks_expected,
+                    "rows": row["rows"], "complete": row["n"] >= weeks_expected,
+                    "sync_in_progress": season in _schedule_sync_busy_seasons,
+                }
+    finally:
+        conn.close()
+    return jsonify({"ok": True, "database_configured": True, "current_season": info["season"], "seasons": result})
 
 
 @app.route("/api/schedule-week-ids")
@@ -5341,7 +5407,10 @@ MATCHUPS_HTML = BASE_STYLE + make_header("matchups") + """
   .mu-grade.bp, .mu-grade.b, .mu-grade.bm{ background:var(--good-wash); color:var(--good); }
   .mu-grade.cp, .mu-grade.c, .mu-grade.cm{ background:var(--warning-wash); color:var(--warning); }
   .mu-grade.dp, .mu-grade.d, .mu-grade.dm, .mu-grade.f{ background:var(--critical-wash); color:var(--critical); }
-  .mu-stars{ color:#f0b429; font-size:12px; width:70px; flex:none; text-align:right; }
+  .mu-stars{ font-size:12px; width:70px; flex:none; text-align:right; }
+  .star-rating{ position:relative; display:inline-block; line-height:1; }
+  .star-rating .star-bg{ color:var(--ink-muted); opacity:0.4; }
+  .star-rating .star-fg{ position:absolute; top:0; left:0; overflow:hidden; white-space:nowrap; color:#f0b429; }
 
   .h2h-pickers{ display:grid; grid-template-columns:1fr auto 1fr; align-items:start; gap:14px; margin-top:14px; }
   .h2h-vs{ display:flex; align-items:center; justify-content:center; height:44px; font-family:"Big Shoulders Display"; font-weight:800; color:var(--ink-muted); }
@@ -5429,7 +5498,7 @@ MATCHUPS_HTML = BASE_STYLE + make_header("matchups") + """
           <span class="mu-reason">{{ r.reasoning }}</span>
         </div>
         <span class="mu-opp">{% if r.opponent %}vs {{ r.opponent }}{% else %}BYE{% endif %}</span>
-        <span class="mu-stars">{{ '★' * r.stars }}{{ '☆' * (5 - r.stars) }}</span>
+        <span class="mu-stars"><span class="star-rating"><span class="star-bg">★★★★★</span><span class="star-fg" style="width:{{ r.star_pct }}%;">★★★★★</span></span></span>
         <span class="mu-grade {{ r.grade_class }}">{{ r.grade }}</span>
       </div>
       {% endfor %}
@@ -5438,9 +5507,9 @@ MATCHUPS_HTML = BASE_STYLE + make_header("matchups") + """
     {% else %}
     <div class="gate-wrap">
       <div class="gate-blur">
-        <div class="mu-row"><img src=""><span class="pos-chip" style="background:var(--pos-qb);">QB</span><span class="mu-name">Sample Player DAL</span><span class="mu-opp">vs SF</span><span class="mu-stars">★★★★★</span><span class="mu-grade ap">A+</span></div>
-        <div class="mu-row"><img src=""><span class="pos-chip" style="background:var(--pos-rb);">RB</span><span class="mu-name">Sample Player KC</span><span class="mu-opp">vs BUF</span><span class="mu-stars">★★★☆☆</span><span class="mu-grade c">C</span></div>
-        <div class="mu-row"><img src=""><span class="pos-chip" style="background:var(--pos-wr);">WR</span><span class="mu-name">Sample Player MIA</span><span class="mu-opp">vs NYJ</span><span class="mu-stars">★★☆☆☆</span><span class="mu-grade dm">D-</span></div>
+        <div class="mu-row"><img src=""><span class="pos-chip" style="background:var(--pos-qb);">QB</span><span class="mu-name">Sample Player DAL</span><span class="mu-opp">vs SF</span><span class="mu-stars"><span class="star-rating"><span class="star-bg">★★★★★</span><span class="star-fg" style="width:95%;">★★★★★</span></span></span><span class="mu-grade ap">A+</span></div>
+        <div class="mu-row"><img src=""><span class="pos-chip" style="background:var(--pos-rb);">RB</span><span class="mu-name">Sample Player KC</span><span class="mu-opp">vs BUF</span><span class="mu-stars"><span class="star-rating"><span class="star-bg">★★★★★</span><span class="star-fg" style="width:55%;">★★★★★</span></span></span><span class="mu-grade c">C</span></div>
+        <div class="mu-row"><img src=""><span class="pos-chip" style="background:var(--pos-wr);">WR</span><span class="mu-name">Sample Player MIA</span><span class="mu-opp">vs NYJ</span><span class="mu-stars"><span class="star-rating"><span class="star-bg">★★★★★</span><span class="star-fg" style="width:15%;">★★★★★</span></span></span><span class="mu-grade dm">D-</span></div>
       </div>
       <div class="gate-card">
         <h3>Unlock <span style="color:var(--accent-ink);">Matchup Grades</span></h3>
@@ -5542,7 +5611,9 @@ MATCHUPS_HTML = BASE_STYLE + make_header("matchups") + """
     compareBtn.disabled = !(picked.A && picked.B);
   }
 
-  function starString(n){ return '★'.repeat(n) + '☆'.repeat(5 - n); }
+  function starRatingHtml(pct){
+    return '<span class="star-rating"><span class="star-bg">★★★★★</span><span class="star-fg" style="width:' + pct + '%;">★★★★★</span></span>';
+  }
 
   function renderCard(p, isWinner){
     const lastYear = p.def_rank_last_year
@@ -5562,7 +5633,7 @@ MATCHUPS_HTML = BASE_STYLE + make_header("matchups") + """
       '<div class="h2h-card-head"><img src="' + p.photo + '" onerror="this.style.visibility=\\'hidden\\'">' +
         '<div><div class="h2h-card-name">' + p.name + '</div><span class="muted">' + p.position + ' &middot; ' + p.team + '</span></div>' +
         '<span class="mu-grade ' + p.grade_class + '" style="margin-left:auto;">' + p.grade + '</span></div>' +
-      '<div style="text-align:center; color:#f0b429; margin-top:8px;">' + starString(p.stars) + '</div>' +
+      '<div style="text-align:center; margin-top:8px;">' + starRatingHtml(p.star_pct) + '</div>' +
       '<p class="muted" style="text-align:center; font-size:12px; margin-top:6px;">' + p.reasoning + '</p>' +
       resultRow +
       '<div class="h2h-stat-row"><span class="muted">Opponent</span><span>' + (p.opponent ? 'vs ' + p.opponent : 'BYE') + '</span></div>' +
