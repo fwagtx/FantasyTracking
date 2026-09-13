@@ -4783,6 +4783,49 @@ def _week_games(season, week, season_type=2):
     return games, any_live
 
 
+def get_season_game_days(season, season_type=2, cache={}):
+    """Every date the season has games on, as
+    [{date, week, kickoff_utc}, ...] in order.
+
+    Read from nfl_schedule rather than ESPN, because the date strip needs
+    the WHOLE season at once and fetching 18 weeks from ESPN on every
+    page load to build a list of tab labels would be absurd. One indexed
+    query gives the entire grid.
+
+    The dates here are UTC calendar days, used only to enumerate which
+    tabs should exist -- the client still derives each tab's real local
+    day from the kickoff timestamp, since a Sunday night game is already
+    Monday in UTC for anyone west of the UK."""
+    season, season_type = _safe_int(season, int(SEASON)), _safe_int(season_type, 2)
+    key = (season, season_type)
+    now = time.time()
+    entry = cache.get(key)
+    if entry and now - entry["time"] < 3600:
+        return entry["data"]
+    if not DATABASE_URL:
+        return []
+    conn = get_db()
+    try:
+        with conn.cursor() as cur:
+            cur.execute(
+                """SELECT week, MIN(kickoff) AS first_kick
+                   FROM nfl_schedule
+                   WHERE season = %s AND season_type = %s AND kickoff IS NOT NULL
+                   GROUP BY week, DATE(kickoff)
+                   ORDER BY first_kick""",
+                (season, season_type),
+            )
+            rows = cur.fetchall()
+    except Exception:
+        rows = []
+    finally:
+        conn.close()
+    days = [{"week": r["week"], "kickoff": r["first_kick"].isoformat() if r["first_kick"] else None}
+            for r in rows if r.get("first_kick")]
+    cache[key] = {"data": days, "time": now}
+    return days
+
+
 def _nearby_weeks_games(season, week, season_type=2):
     """The requested week plus the week before and after, fetched in
     parallel -- gives the date strip several confirmed game-day tabs to
@@ -4813,8 +4856,13 @@ def scores_page():
         # the teams that played on the selected date -- see
         # get_week_performers for why the date split has to happen there.
         performers = get_week_performers(season, week, allow_fetch=False)
+        # Every game day in the season, so the strip scrolls straight
+        # through to any week instead of dead-ending at the fetched
+        # window. Games for a day outside that window load on demand.
+        season_days = get_season_game_days(season, season_type)
         return render_template_string(
             SCORES_HTML, games=games, season=season, week=week, season_type=season_type,
+            score_mark=SCORE_MARK_SVG, season_days=season_days,
             current_season=info["season"], current_week=info["week"],
             today_key=date.today().isoformat(), load_error=None,
             username=username, has_synced_leagues=has_synced_leagues,
@@ -4827,6 +4875,7 @@ def scores_page():
         # a screenshot alone rather than looking like the page is dead.
         return render_template_string(
             SCORES_HTML, games=[], season=int(SEASON), week=1, season_type=2,
+            score_mark=SCORE_MARK_SVG, season_days=[],
             current_season=int(SEASON), current_week=1, today_key=date.today().isoformat(),
             load_error=str(e), username=username, has_synced_leagues=False,
             performers=[],
@@ -4849,14 +4898,14 @@ def performances_page():
         rows = get_performance_board(scope=scope, position=position, season=season,
                                      week=week, order=order)
         return render_template_string(
-            PERFORMANCES_HTML, rows=rows, season=season, week=week,
+            PERFORMANCES_HTML, rows=rows, season=season, week=week, score_mark=SCORE_MARK_SVG,
             scope=scope if scope in PERF_SCOPES else "week", order=order,
             position=position, positions=SCORED_POSITIONS,
             idp_positions=IDP_POSITIONS, load_error=None,
         )
     except Exception as e:
         return render_template_string(
-            PERFORMANCES_HTML, rows=[], season=int(SEASON), week=1,
+            PERFORMANCES_HTML, rows=[], season=int(SEASON), week=1, score_mark=SCORE_MARK_SVG,
             scope="week", order="top", position=None, positions=SCORED_POSITIONS,
             idp_positions=IDP_POSITIONS, load_error=str(e),
         )
@@ -6438,6 +6487,17 @@ BASE_STYLE = """
 </style>
 """
 
+SCORE_MARK_SVG = ('<svg class="score-mark" viewBox="0 0 12 14" fill="none" aria-hidden="true">'
+                  '<rect x="0.75" y="0.75" width="10.5" height="12.5" rx="2" '
+                  'stroke="currentColor" stroke-width="1.3"/>'
+                  '<rect x="3" y="3" width="6" height="2.2" rx="0.6" fill="currentColor"/>'
+                  '<circle cx="3.9" cy="8" r="0.85" fill="currentColor"/>'
+                  '<circle cx="8.1" cy="8" r="0.85" fill="currentColor"/>'
+                  '<circle cx="3.9" cy="10.9" r="0.85" fill="currentColor"/>'
+                  '<circle cx="8.1" cy="10.9" r="0.85" fill="currentColor"/>'
+                  '</svg>')
+
+
 LOGO_SVG = """<svg viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
   <rect x="1" y="1" width="24" height="24" rx="5" fill="var(--ink)"/>
   <path d="M6 13H20M6 8H14M6 18H14" stroke="var(--paper)" stroke-width="2" stroke-linecap="round"/>
@@ -7244,13 +7304,12 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + """
   .sc-perf-sub{ font-size:11px; color:var(--sc-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   .sc-perf-grade{ font-family:"IBM Plex Mono"; font-size:20px; font-weight:700; flex:none; min-width:44px; text-align:right; font-variant-numeric:tabular-nums; }
   .sc-perf-empty{ color:var(--sc-muted); padding:24px; text-align:center; font-size:13px; }
-  /* Banded on what the score's anchors actually mean: 5.0 is an average
-     starter day, so "mid" straddles it and anything clearly above reads
-     as good. */
-  .sc-perf-grade.elite{ color:var(--good); }
-  .sc-perf-grade.good{ color:var(--good); opacity:0.88; }
-  .sc-perf-grade.mid{ color:var(--warning); }
-  .sc-perf-grade.poor{ color:var(--critical); }
+  /* Deliberately NOT colour-banded. A ranked list is already ordered
+     best-to-worst, so colouring each score repeats information the
+     position already carries, and three colours down a long list reads
+     as noise. The mark before the number does the signalling instead. */
+  .sc-perf-grade{ color:var(--sc-text); display:inline-flex; align-items:center; gap:5px; justify-content:flex-end; }
+  .score-mark{ width:11px; height:13px; flex:none; opacity:0.55; }
   /* Count of your players, sitting on that team's own row. Reads as
      part of the team line rather than as a separate fact to be matched
      back to a side. */
@@ -7332,6 +7391,8 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + """
 <script>
 const SCORES_WEEK = {{ games|tojson }};
 const SCORES_PERFORMERS = {{ performers|tojson }};
+const SCORE_MARK = {{ score_mark|tojson }};
+const SEASON_DAYS = {{ season_days|tojson }};
 const CURRENT_SEASON = {{ current_season }};
 const CURRENT_WEEK = {{ current_week }};
 let scSeason = {{ season }};
@@ -7387,9 +7448,30 @@ const scTodayKey = {{ today_key|tojson }};
   // Week below adds more as confirmed data comes in. Slides via native
   // horizontal scroll (touch swipe on mobile, trackpad/shift-wheel on
   // desktop) -- no custom drag code needed for that.
+  // Every game day in the season, keyed by the visitor's own local
+  // calendar day. Built from the schedule rather than from whichever
+  // weeks happen to be loaded, so the strip runs end to end and the week
+  // arrows become a shortcut rather than the only way to move.
+  const seasonDayWeeks = {};
+  (SEASON_DAYS || []).forEach(function(d){
+    if (!d.kickoff) return;
+    const key = localDateKey(d.kickoff);
+    if (!key || key.indexOf('NaN') !== -1) return;
+    if (seasonDayWeeks[key] === undefined) seasonDayWeeks[key] = d.week;
+  });
+
+  function allDayKeys(){
+    const keys = {};
+    Object.keys(seasonDayWeeks).forEach(function(k){ keys[k] = true; });
+    // A day we've already loaded games for belongs in the strip even if
+    // the schedule table hasn't been synced that far yet.
+    Object.keys(daysIndex).forEach(function(k){ if (daysIndex[k].length) keys[k] = true; });
+    return Object.keys(keys).sort();
+  }
+
   function renderDayTabs(){
     dayTabsEl.innerHTML = '';
-    const keys = Object.keys(daysIndex).filter(function(k){ return daysIndex[k].length > 0; }).sort();
+    const keys = allDayKeys();
     keys.forEach(function(key){
       const d = new Date(key + "T00:00:00");
       const isActive = key === selectedDay;
@@ -7397,12 +7479,15 @@ const scTodayKey = {{ today_key|tojson }};
       const btn = document.createElement('div');
       btn.className = 'sc-day-tab' + (isActive ? ' active' : '') + (isToday ? ' today' : '');
       btn.dataset.dateKey = key;
-      const games = daysIndex[key];
+      const games = daysIndex[key] || [];
       const anyLive = games.some(function(g){ return g.status === 'in_progress'; });
       // "W1 / Sep 13" over "Sun" -- the week matters as much as the date
       // when you're scrolling several weeks ahead, and neither is
       // guessable from the other.
-      const wk = games.length && games[0].week ? 'W' + games[0].week + ' \u00b7 ' : '';
+      // Prefer the loaded game's own week, fall back to the schedule's --
+      // a tab for a day whose games aren't loaded yet still needs a label.
+      const wkNum = (games.length && games[0].week) || seasonDayWeeks[key];
+      const wk = wkNum ? 'W' + wkNum + ' \u00b7 ' : '';
       const anyDone = games.some(function(g){ return g.status === 'final'; });
       btn.innerHTML =
         (anyLive || anyDone ? '<span class="dot' + (anyLive ? '' : ' done') + '"></span>' : '') +
@@ -7670,7 +7755,7 @@ const scTodayKey = {{ today_key|tojson }};
           '<span class="sc-perf-stats">' + stats + '</span>' +
           '<span class="sc-perf-sub">' + sub + '</span>' +
         '</span>' +
-        '<span class="sc-perf-grade ' + (grade.score_class || '') + '">' +
+        '<span class="sc-perf-grade">' + SCORE_MARK +
           (grade.score == null ? '' : grade.score.toFixed(1)) + '</span>' +
       '</a>';
     }).join('');
@@ -7754,11 +7839,10 @@ PERFORMANCES_HTML = BASE_STYLE + make_header("scores") + """
   .pl-meta{ font-size:11px; color:var(--pl-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   .pl-score{ font-family:"IBM Plex Mono"; font-size:20px; font-weight:700; flex:none;
              min-width:46px; text-align:right; font-variant-numeric:tabular-nums; }
-  .pl-score.historic{ color:var(--accent-ink); }
-  .pl-score.elite{ color:var(--good); }
-  .pl-score.good{ color:var(--good); opacity:0.85; }
-  .pl-score.mid{ color:var(--warning); }
-  .pl-score.poor{ color:var(--critical); }
+  /* Same reasoning as the scores board: the ranking already orders
+     these, so the number stays plain and the mark carries the styling. */
+  .pl-score{ color:var(--pl-text); display:inline-flex; align-items:center; gap:5px; justify-content:flex-end; }
+  .score-mark{ width:11px; height:13px; flex:none; opacity:0.55; }
   .pl-empty{ color:var(--pl-muted); padding:36px; text-align:center; font-size:13px; }
   @media (max-width:640px){
     .pl-title{ font-size:21px; }
@@ -7822,7 +7906,7 @@ PERFORMANCES_HTML = BASE_STYLE + make_header("scores") + """
           &middot; {{ r.grade.percentile }}% of {{ r.position }} games
         </span>
       </span>
-      <span class="pl-score {{ r.grade.score_class }}">{{ '%.1f'|format(r.grade.score) }}</span>
+      <span class="pl-score">{{ score_mark|safe }}{{ '%.1f'|format(r.grade.score) }}</span>
     </a>
     {% endfor %}
   </div>
