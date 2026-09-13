@@ -3141,104 +3141,9 @@ def matchups_page():
         except Exception as e:
             load_error = str(e)
 
-    # Visible right on this page, no separate diagnostic URL needed: how
-    # much last-year data actually exists behind the "based on last
-    # year"/"not enough data" reasoning above. If last_year_players_with_
-    # stats is 0, get_season_stats has no rows for that season at all
-    # (a stats-sync gap, unrelated to the schedule); if it's nonzero but
-    # teams_with_any_defense_data is well under 32, that's the signature
-    # of a team-abbreviation mismatch between this app's data and
-    # whichever teams never resolve to a match.
-    data_status = None
-    sample_trace = []
-    if current_user.is_authenticated:
-        try:
-            last_year = season - 1
-            last_year_stats = get_season_stats(last_year)
-            last_year_dvp = get_defense_vs_position(last_year)
-            data_status = {
-                "last_year": last_year,
-                "last_year_players_with_stats": len(last_year_stats),
-                "last_year_teams_with_any_defense_data": len(last_year_dvp),
-                "stats_sync_in_progress": last_year in _stats_sync_busy_seasons,
-            }
-            # Ground truth straight from nfl_schedule itself, for BOTH
-            # last year and the current season side by side -- this is
-            # the only way to tell apart "last year's schedule never
-            # actually got written" (rows_last_year stays 0 no matter how
-            # many times the self-heal fires) from "it's written under
-            # some other season number than expected" (rows_last_year is
-            # 0 while a manual sync somewhere reported success -- meaning
-            # that sync almost certainly wrote to a DIFFERENT season,
-            # e.g. because it was triggered without an explicit
-            # ?season= and silently defaulted to the current one, which
-            # already has its own real rows from the recurring cron).
-            if DATABASE_URL:
-                conn = get_db()
-                try:
-                    with conn.cursor() as cur:
-                        cur.execute(
-                            "SELECT COUNT(DISTINCT week) AS n, COUNT(*) AS rows FROM nfl_schedule WHERE season = %s",
-                            (last_year,),
-                        )
-                        ly_row = cur.fetchone() or {"n": 0, "rows": 0}
-                        cur.execute(
-                            "SELECT COUNT(DISTINCT week) AS n, COUNT(*) AS rows FROM nfl_schedule WHERE season = %s",
-                            (season,),
-                        )
-                        cur_row = cur.fetchone() or {"n": 0, "rows": 0}
-                        data_status["schedule_last_year_weeks"] = ly_row["n"]
-                        data_status["schedule_last_year_rows"] = ly_row["rows"]
-                        data_status["schedule_current_season_weeks"] = cur_row["n"]
-                        data_status["schedule_current_season_rows"] = cur_row["rows"]
-                        data_status["schedule_last_year_sync_in_progress"] = last_year in _schedule_sync_busy_seasons
-                        data_status["schedule_last_year_last_sync_result"] = _schedule_sync_last_result.get(last_year)
-                finally:
-                    conn.close()
-            # Stats exist but NOT ONE team matched the schedule -- rather
-            # than guess again at why, show real values: three actual
-            # players' current team + a week they have stats for, what
-            # get_schedule_for_team_week actually returned for that exact
-            # lookup, and every schedule row that team appears in at all
-            # (any week). Whatever's different between "the team string
-            # this app is looking up" and "what's actually stored" will
-            # be directly visible side by side here.
-            if last_year_stats and not last_year_dvp and DATABASE_URL:
-                all_players = get_all_players()
-                conn = get_db()
-                try:
-                    with conn.cursor() as cur:
-                        for sid, stat in last_year_stats.items():
-                            if len(sample_trace) >= 3:
-                                break
-                            p = all_players.get(sid)
-                            weeks = stat.get("weeks") or {}
-                            if not p or not p.get("team") or not weeks:
-                                continue
-                            team = p["team"]
-                            week = sorted(weeks.keys())[0]
-                            sched_result = get_schedule_for_team_week(last_year, week, team)
-                            cur.execute(
-                                "SELECT week, home_team, away_team FROM nfl_schedule "
-                                "WHERE season = %s AND (home_team = %s OR away_team = %s) "
-                                "ORDER BY week LIMIT 3",
-                                (last_year, team, team),
-                            )
-                            sample_trace.append({
-                                "player_sid": sid, "player_current_team": team, "week_checked": week,
-                                "get_schedule_for_team_week_result": sched_result,
-                                "schedule_rows_for_this_exact_team_string": cur.fetchall(),
-                            })
-                finally:
-                    conn.close()
-        except Exception:
-            data_status = None
-            sample_trace = []
-
     return render_template_string(
         MATCHUPS_HTML, rows=rows, season=season, week=week,
         current_season=info["season"], current_week=info["week"], load_error=load_error,
-        data_status=data_status, sample_trace=sample_trace,
     )
 
 
@@ -5816,44 +5721,6 @@ MATCHUPS_HTML = BASE_STYLE + make_header("matchups") + """
     <p class="eyebrow">Matchups</p>
     <h2>Who's worth starting this week</h2>
     {% if load_error %}<div class="error">Couldn't load matchup grades right now: {{ load_error }}</div>{% endif %}
-    {% if data_status %}
-    <p class="muted" style="font-size:11.5px; margin-top:4px;">
-      Data status ({{ data_status.last_year }}): {{ data_status.last_year_players_with_stats }} players tracked,
-      {{ data_status.last_year_teams_with_any_defense_data }}/32 teams have defense-vs-position data.
-      {% if data_status.last_year_players_with_stats == 0 %}
-        {% if data_status.stats_sync_in_progress %}<strong style="color:var(--warning);">No {{ data_status.last_year }} stats were on file -- a one-time sync just started automatically. Refresh in a minute or two.</strong>
-        {% else %}<strong style="color:var(--critical);">No {{ data_status.last_year }} stats found, and no sync is running -- reload this page to trigger one.</strong>
-        {% endif %}
-      {% elif data_status.last_year_teams_with_any_defense_data < 32 %}<strong style="color:var(--warning);">Some teams are missing -- likely a team-abbreviation mismatch.</strong>
-      {% endif %}
-    </p>
-    {% if data_status.schedule_last_year_rows is defined %}
-    <p class="muted" style="font-size:11.5px; margin-top:2px;">
-      nfl_schedule rows -- {{ data_status.last_year }}: {{ data_status.schedule_last_year_weeks }}/18 weeks, {{ data_status.schedule_last_year_rows }} total rows.
-      {{ current_season }}: {{ data_status.schedule_current_season_weeks }} weeks, {{ data_status.schedule_current_season_rows }} total rows.
-      {% if data_status.schedule_last_year_rows == 0 and data_status.schedule_current_season_rows > 0 %}
-        <strong style="color:var(--critical);">{{ data_status.last_year }} has ZERO schedule rows while {{ current_season }} has real data -- any past "successful" schedule sync almost certainly ran against {{ current_season }} (the default when no season is specified), not {{ data_status.last_year }}.
-        {% if data_status.schedule_last_year_sync_in_progress %} A sync for {{ data_status.last_year }} is running right now -- reload in a minute.{% else %} No sync for {{ data_status.last_year }} is currently running; reloading this page will trigger one automatically.{% endif %}</strong>
-      {% elif data_status.schedule_last_year_rows == 0 %}
-        <strong style="color:var(--warning);">{{ data_status.last_year }} has zero schedule rows.
-        {% if data_status.schedule_last_year_sync_in_progress %}A sync is running right now -- reload in a minute.{% else %}No sync is running; reloading this page should trigger one.{% endif %}</strong>
-      {% endif %}
-    </p>
-    {% if data_status.schedule_last_year_last_sync_result %}
-    <p class="muted" style="font-size:11.5px; margin-top:2px;">
-      Last {{ data_status.last_year }} background sync attempt: {{ data_status.schedule_last_year_last_sync_result.weeks_synced }}/18 weeks wrote rows.
-      {% if data_status.schedule_last_year_last_sync_result.last_error %}<strong style="color:var(--critical);">Error: {{ data_status.schedule_last_year_last_sync_result.last_error }}</strong>{% endif %}
-      {% if data_status.schedule_last_year_last_sync_result.zero_row_probe %}<strong style="color:var(--critical);">ESPN probe for week {{ data_status.schedule_last_year_last_sync_result.zero_row_probe.week }}: {{ data_status.schedule_last_year_last_sync_result.zero_row_probe }}</strong>{% endif %}
-    </p>
-    {% endif %}
-    {% endif %}
-    {% endif %}
-    {% if sample_trace %}
-    <div style="margin-top:8px; padding:10px 12px; background:var(--paper-sunken); border-radius:8px; font-family:'IBM Plex Mono'; font-size:11px; white-space:pre-wrap; overflow-x:auto;">{% for t in sample_trace %}Player {{ t.player_sid }} -- current team "{{ t.player_current_team }}" -- checked week {{ t.week_checked }}
-  get_schedule_for_team_week({{ data_status.last_year }}, {{ t.week_checked }}, "{{ t.player_current_team }}") -&gt; {{ t.get_schedule_for_team_week_result }}
-  schedule rows containing "{{ t.player_current_team }}" (any week): {{ t.schedule_rows_for_this_exact_team_string }}
-{% endfor %}</div>
-    {% endif %}
     {% if current_user.is_authenticated %}
     <div class="mu-toolbar">
       <input type="text" class="mu-search" id="muSearch" placeholder="Search player...">
