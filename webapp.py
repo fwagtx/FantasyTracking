@@ -1767,21 +1767,64 @@ MIN_DEF_GAMES_FOR_CURRENT_YEAR = 4
 # intervention as the season progresses.
 
 
+# Shared with _star_pct_for_composite below, so the star fill's tier
+# slicing always stays perfectly in sync with the letter-grade
+# boundaries -- one source of truth for where each of the 13 tiers
+# starts and ends in composite space.
+_GRADE_BANDS = [
+    (0.92, "A+", 5), (0.85, "A", 5), (0.78, "A-", 5),
+    (0.71, "B+", 4), (0.64, "B", 4), (0.57, "B-", 4),
+    (0.50, "C+", 3), (0.43, "C", 3), (0.36, "C-", 3),
+    (0.29, "D+", 2), (0.22, "D", 2), (0.15, "D-", 2),
+]
+# Ascending lower bound of each tier's composite range, F through A+
+# (F's lower bound is 0.0, everything below D-'s 0.15).
+_TIER_LOWER_BOUNDS = [0.0] + [threshold for threshold, _, _ in reversed(_GRADE_BANDS)]
+
+
 def _letter_grade(composite):
     """13-tier letter grade (A+ down to F) from a 0-1 composite score --
     a bare 5-bucket A/B/C/D/F band crowded together matchups that were
     actually meaningfully different. Stars stay a coarser 1-5 scale
     grouped by the base letter (every A-tier is 5 stars, etc.)."""
-    bands = [
-        (0.92, "A+", 5), (0.85, "A", 5), (0.78, "A-", 5),
-        (0.71, "B+", 4), (0.64, "B", 4), (0.57, "B-", 4),
-        (0.50, "C+", 3), (0.43, "C", 3), (0.36, "C-", 3),
-        (0.29, "D+", 2), (0.22, "D", 2), (0.15, "D-", 2),
-    ]
-    for threshold, grade, stars in bands:
+    for threshold, grade, stars in _GRADE_BANDS:
         if composite >= threshold:
             return grade, stars
     return "F", 1
+
+
+def _star_pct_for_composite(composite):
+    """Continuous star fill (5-100%) that ALWAYS looks visibly different
+    between two different letter grades, while still varying smoothly
+    between two matchups that share the same grade.
+
+    A plain composite*100 mapping (the previous approach) let a
+    borderline B- (composite just above 0.57) and a borderline C+
+    (composite just below 0.57) render with virtually identical fill,
+    since they're separated by only a fraction of a point of raw
+    composite despite carrying different letter grades -- exactly the
+    "why do these look the same" bug this replaces.
+
+    Each of the 13 tiers gets an equal-width slice of the 5-100 range,
+    and only the middle 60% of each slice is actually used for the
+    continuous within-tier fill -- the reserved 40% (20% on each side)
+    guarantees a minimum gap between any two adjacent tiers' ranges, so
+    crossing a letter-grade boundary always moves the fill by at least
+    that gap, no matter how close the two composites are."""
+    n = len(_TIER_LOWER_BOUNDS)
+    tier = 0
+    for i, lower in enumerate(_TIER_LOWER_BOUNDS):
+        if composite >= lower:
+            tier = i
+    lower = _TIER_LOWER_BOUNDS[tier]
+    upper = _TIER_LOWER_BOUNDS[tier + 1] if tier + 1 < n else 1.0
+    frac = (composite - lower) / (upper - lower) if upper > lower else 0.0
+    frac = max(0.0, min(1.0, frac))
+    slice_width = (100 - 5) / n
+    usable = slice_width * 0.6
+    offset = slice_width * 0.2
+    pct = 5 + tier * slice_width + offset + frac * usable
+    return max(5, min(100, round(pct)))
 
 
 def _grade_css_class(grade):
@@ -1899,12 +1942,12 @@ def compute_matchup_grade(sid, season, week, cache=_matchup_grade_cache):
         grade, stars, star_pct = "D-", 2, 25
     else:
         grade, stars = _letter_grade(composite)
-        # A continuous fill (0-100%) driven directly by the composite,
-        # not snapped to the coarse 1-5 whole-star count above -- two
-        # matchups in the same letter tier (say a strong B+ and a weak
-        # one) now visibly show different amounts of star fill instead
-        # of looking identical.
-        star_pct = max(5, min(100, round(composite * 100)))
+        # Tier-normalized fill (see _star_pct_for_composite) -- two
+        # matchups in the same letter tier still show different amounts
+        # of fill, but two DIFFERENT letter grades are now always
+        # visibly distinct too, which a raw composite*100 mapping didn't
+        # guarantee near a tier boundary.
+        star_pct = _star_pct_for_composite(composite)
 
     components = {
         "opponent": sched["opponent"] if sched else None,
