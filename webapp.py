@@ -2023,6 +2023,62 @@ def sync_season_to_db(season):
 # GitHub Actions workflow, which runs on separate infrastructure and
 # can't destabilize the app's own startup.
 
+_stats_sync_lock = threading.Lock()
+_stats_sync_busy_seasons = set()
+_stats_seeded_seasons = set()
+
+
+def ensure_season_stats_synced(season):
+    """Self-heals a season with ZERO rows in player_stats -- the gap
+    matchup grading actually hit: the one-time historical backfill
+    (backfill-stats.yml) only ever runs when someone manually dispatches
+    it in GitHub Actions, and the recurring 2-hour cron only ever syncs
+    "the current season". A season that's already over by the time this
+    app starts treating something newer as current -- last season, right
+    after a new one kicks off -- has no automatic path to ever get synced
+    unless something explicitly asks for it. This is that ask, fired the
+    moment anything (the /matchups page, the defense-vs-position
+    fallback) actually needs a prior season's stats.
+
+    Deliberately a background thread, never a blocking fetch: an earlier
+    version of get_season_stats DID block on a live fetch when a season
+    was empty, and that was the actual, confirmed cause of the whole site
+    timing out (see that function's docstring) -- so this must never
+    repeat that mistake no matter how tempting a synchronous "just fetch
+    it now" would be here."""
+    if season in _stats_seeded_seasons or not DATABASE_URL:
+        return
+    conn = get_db()
+    try:
+        with conn.cursor() as cur:
+            cur.execute("SELECT 1 FROM player_stats WHERE season = %s LIMIT 1", (season,))
+            has_rows = cur.fetchone() is not None
+    finally:
+        conn.close()
+    if has_rows:
+        _stats_seeded_seasons.add(season)
+        return
+    with _stats_sync_lock:
+        if season in _stats_sync_busy_seasons:
+            return
+        _stats_sync_busy_seasons.add(season)
+
+    def _run():
+        try:
+            sync_season_to_db(season)
+        except Exception:
+            pass
+        finally:
+            with _stats_sync_lock:
+                _stats_sync_busy_seasons.discard(season)
+            # Whatever computed (and cached) an answer from the empty
+            # season needs to see the fresh data on the next call, not
+            # its own up-to-an-hour-old cached "nothing here" result.
+            _defense_vs_position_cache.clear()
+            _matchup_grade_cache.clear()
+
+    threading.Thread(target=_run, daemon=True).start()
+
 
 def get_season_stats(season, cache={}):
     """player_id -> {games, fpts, weeks, snap_pct} for a season. Reads
@@ -2060,8 +2116,14 @@ def get_season_stats(season, cache={}):
                 p_entry["tm_off_snp_total"] += row["tm_off_snp"] or 0
         except Exception:
             agg = {}
-        if agg and DATABASE_URL:
+        if agg:
             sync_season_to_db(season)
+        else:
+            # Zero rows means this season has genuinely never been synced
+            # (not "just hasn't updated in a while" -- that's the branch
+            # above) -- self-heal it in the background rather than
+            # leaving it silently, permanently empty forever.
+            ensure_season_stats_synced(season)
 
     for p_entry in agg.values():
         tm_total = p_entry["tm_off_snp_total"]
@@ -3095,6 +3157,7 @@ def matchups_page():
                 "last_year": last_year,
                 "last_year_players_with_stats": len(get_season_stats(last_year)),
                 "last_year_teams_with_any_defense_data": len(get_defense_vs_position(last_year)),
+                "stats_sync_in_progress": last_year in _stats_sync_busy_seasons,
             }
         except Exception:
             data_status = None
@@ -5642,7 +5705,10 @@ MATCHUPS_HTML = BASE_STYLE + make_header("matchups") + """
     <p class="muted" style="font-size:11.5px; margin-top:4px;">
       Data status ({{ data_status.last_year }}): {{ data_status.last_year_players_with_stats }} players tracked,
       {{ data_status.last_year_teams_with_any_defense_data }}/32 teams have defense-vs-position data.
-      {% if data_status.last_year_players_with_stats == 0 %}<strong style="color:var(--critical);">No {{ data_status.last_year }} stats found at all -- that's the actual gap.</strong>
+      {% if data_status.last_year_players_with_stats == 0 %}
+        {% if data_status.stats_sync_in_progress %}<strong style="color:var(--warning);">No {{ data_status.last_year }} stats were on file -- a one-time sync just started automatically. Refresh in a minute or two.</strong>
+        {% else %}<strong style="color:var(--critical);">No {{ data_status.last_year }} stats found, and no sync is running -- reload this page to trigger one.</strong>
+        {% endif %}
       {% elif data_status.last_year_teams_with_any_defense_data < 32 %}<strong style="color:var(--warning);">Some teams are missing -- likely a team-abbreviation mismatch.</strong>
       {% endif %}
     </p>
