@@ -1780,15 +1780,24 @@ MIN_DEF_GAMES_FOR_CURRENT_YEAR = 4
 # automatically, team by team, position by position, with no manual
 # intervention as the season progresses.
 
-DEF_HISTORY_SEASONS_BACK = 4
+DEF_HISTORY_SEASONS_BACK = 1
 # How far back compute_matchup_grade searches for a specific opponent's
 # defense-vs-position figure once the current season's sample is too
-# thin to trust. A single prior season (last year only) left a real gap:
-# any year where that ONE prior season's schedule/stats sync came up
-# incomplete for a specific team (a transient sync failure, a team that
-# changed abbreviation) meant that opponent showed "not enough data"
-# with no other path to a real number. Reaching back further finds real,
-# team-specific history far more often than stopping at just one year.
+# thin to trust. Deliberately kept at 1 (last year only) -- an earlier
+# version of this set it to 4, and every /matchups load then had to
+# compute get_defense_vs_position for up to 5 seasons instead of the 2
+# (current + last year) the rest of the app already touches. Any of
+# those extra 3 seasons that had never been synced before triggered a
+# brand-new full-season schedule+stats background sync on the spot --
+# on Render's free 0.1-CPU tier, several of those firing at once was
+# enough to starve the request thread itself, which is what actually
+# broke /matchups (it stopped loading at all, not just slowly). The
+# league-average fallback below still guarantees a real number even at
+# this shallower depth -- it only ever touches season and season-1,
+# never a season the app wasn't already computing anyway. Safe to raise
+# again once hosting has real CPU headroom (see _defense_entry_multi_
+# season and _league_average_defense, both already take `seasons_back`
+# as a parameter for exactly that).
 
 
 def _defense_entry_multi_season(opponent, position, season, seasons_back=DEF_HISTORY_SEASONS_BACK):
