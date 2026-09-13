@@ -1430,6 +1430,149 @@ def espn_game_summary(event_id, cache={}):
         return entry["data"] if entry else {}
 
 
+# ESPN writes players in play text as "8-K.Cousins" or "K.Cousins" --
+# jersey number optional, always first initial then last name.
+_PLAY_NAME_RE = re.compile(r"(?:\d{1,2}-)?([A-Z][A-Za-z]?\.[A-Z][A-Za-z'\-]+)")
+
+
+def _play_headline(text, yards, scoring):
+    """A short title for a play -- "8-yd catch", "3-yd rush", "Sack" --
+    the way the reference feed leads each row, instead of repeating the
+    full sentence twice.
+
+    Derived from the text rather than from a play-type field because
+    ESPN's own type labels are coarse (everything is "pass" or "rush")
+    and miss the cases that matter most to read at a glance: a sack, a
+    turnover, a kneel."""
+    t = (text or "")
+    low = t.lower()
+    y = yards if isinstance(yards, (int, float)) else None
+    yd = f"{int(y)}-yd " if y not in (None, 0) else ""
+
+    if "intercepted" in low:
+        return "Interception"
+    if "fumbles" in low and "recovered by" in low:
+        return "Fumble"
+    if "sacked" in low:
+        return "Sack"
+    if "kneel" in low:
+        return "Kneel"
+    if "spiked the ball" in low:
+        return "Spike"
+    if "punts" in low:
+        return "Punt"
+    if "field goal" in low:
+        return "Field goal is good" if "is good" in low else "Field goal"
+    if "extra point" in low:
+        return "Extra point"
+    if "kicks" in low and "yards from" in low:
+        return "Kickoff"
+    if "two-minute warning" in low:
+        return "Two-minute warning"
+    if "end quarter" in low or "end game" in low or "end of" in low:
+        return t.strip().title()[:40]
+    if "no play" in low and "penalty" in low:
+        return "Penalty"
+    if "incomplete" in low:
+        return "Incomplete"
+
+    td = scoring or "touchdown" in low
+    if " pass " in low or "pass short" in low or "pass deep" in low:
+        return (f"{yd}TD catch" if td else f"{yd}catch") if yd or td else "Catch"
+    if "scrambles" in low:
+        return f"{yd}scramble" if yd else "Scramble"
+    # Anything left with a ball-carrier reads as a run.
+    if td:
+        return f"{yd}TD run" if yd else "TD run"
+    return f"{yd}rush" if yd else "Rush"
+
+
+def _play_badges(text, yards, down, distance, scoring):
+    """The short factual tags under a play. Only things actually
+    derivable from the payload -- a badge the data can't support is worse
+    than no badge."""
+    low = (text or "").lower()
+    out = []
+    if scoring or "touchdown" in low:
+        out.append({"icon": "\U0001F3C8", "label": "Touchdown"})
+    if isinstance(yards, (int, float)) and isinstance(distance, (int, float)) and distance > 0 \
+            and yards >= distance and "no play" not in low:
+        out.append({"icon": "\u2705", "label": "1st down"})
+    if "intercepted" in low:
+        out.append({"icon": "\U0001F504", "label": "Intercepted"})
+    if "fumbles" in low:
+        out.append({"icon": "\U0001F504", "label": "Fumble"})
+    if "penalty" in low:
+        out.append({"icon": "\U0001F6A9", "label": "Penalty"})
+    if "sacked" in low:
+        out.append({"icon": "\U0001F4C9", "label": "Sack"})
+    return out
+
+
+def _player_name_index(all_players):
+    """{(team, "K.Cousins"): sleeper_id} so a name in ESPN's play text can
+    be resolved to a real player -- for their photo and live points.
+
+    Keyed by team as well as name because initial+surname collides often
+    enough across a whole league to matter, and a play always knows which
+    offense it belongs to."""
+    index = {}
+    for sid, p in (all_players or {}).items():
+        first, last, team = p.get("first_name"), p.get("last_name"), p.get("team")
+        if not first or not last or not team:
+            continue
+        key = f"{first[0]}.{last}"
+        index.setdefault((team, key), sid)
+        # Also unkeyed by team, as a fallback for defenders credited on a
+        # tackle, who belong to the other side of the play.
+        index.setdefault((None, key), sid)
+    return index
+
+
+def enrich_plays(plays, season, week):
+    """Adds the headline, badges, and involved players (with photo and
+    live fantasy points) to each play, so the feed can render the way the
+    reference does rather than as a wall of ESPN's sentences.
+
+    Player points come from the same live feed the performer board uses,
+    so a play row and the leaderboard never disagree about what someone
+    has scored."""
+    if not plays:
+        return []
+    all_players = get_all_players()
+    index = _player_name_index(all_players)
+    live = get_live_week_stats(season, week, allow_fetch=False) or {}
+
+    for play in plays:
+        team = play.get("team")
+        play["headline"] = _play_headline(play.get("text"), play.get("yards"), play.get("scoring"))
+        play["badges"] = _play_badges(play.get("text"), play.get("yards"),
+                                      play.get("down"), play.get("distance"), play.get("scoring"))
+        # Names in the order ESPN wrote them; the ball-carrier or target
+        # leads a play's text, so the first couple are the ones worth
+        # showing. Tacklers appear in parentheses at the end.
+        seen, people = set(), []
+        for name in _PLAY_NAME_RE.findall(play.get("text") or ""):
+            if name in seen:
+                continue
+            seen.add(name)
+            sid = index.get((team, name)) or index.get((None, name))
+            if not sid:
+                continue
+            p = all_players.get(sid) or {}
+            people.append({
+                "sid": sid,
+                "name": name,
+                "position": p.get("position"),
+                "photo": player_photo_url(sid),
+                "fpts": (live.get(sid) or {}).get("pts"),
+            })
+            if len(people) >= 3:
+                break
+        play["people"] = people
+    return plays
+
+
 def extract_drive_plays(summary_json, limit=60):
     """The live play-by-play feed, newest first.
 
@@ -5154,13 +5297,15 @@ def game_detail_page():
         detail = extract_game_detail(summary)
         username = _resolve_scores_username()
         detail["my_players"] = _my_players_for_game(detail, username)
-        detail["plays"] = extract_drive_plays(summary)
+        _wk = get_current_week_info()
+        info_season, info_week = _wk["season"], _wk["week"]
+        detail["plays"] = enrich_plays(extract_drive_plays(summary), info_season, info_week)
         detail["field"] = extract_field_position(summary)
         detail["box"] = extract_box_score(summary)
         detail["totals"] = extract_team_totals(summary)
         # The rest of the day's slate, for the strip across the top --
         # so you can move between live games without going back first.
-        info = get_current_week_info()
+        info = _wk
         others = [g for g in _week_games(info["season"], info["week"], info["season_type"])[0]
                   if g["id"] != event_id]
         others.sort(key=lambda g: (GAME_STATUS_ORDER.get(g["status"], 1), str(g.get("date") or "")))
@@ -5184,13 +5329,15 @@ def api_game_live():
     try:
         summary = espn_game_summary(event_id)
         detail = extract_game_detail(summary)
+        _wk = get_current_week_info()
         return jsonify({
             "status": detail["status"], "period": detail["period"], "clock": detail["clock"],
             "status_detail": detail["status_detail"],
             "home_score": detail["home"]["score"], "away_score": detail["away"]["score"],
             "home_linescores": detail["home"]["linescores"], "away_linescores": detail["away"]["linescores"],
             "team_stats": detail["team_stats"], "player_leaders": detail["player_leaders"],
-            "plays": extract_drive_plays(summary), "field": extract_field_position(summary),
+            "plays": enrich_plays(extract_drive_plays(summary), _wk["season"], _wk["week"]),
+            "field": extract_field_position(summary),
             "box": extract_box_score(summary), "totals": extract_team_totals(summary),
             "win_prob": detail["win_prob"],
         })
@@ -8446,11 +8593,24 @@ GAME_DETAIL_HTML = BASE_STYLE + make_header("scores") + """
                   color:var(--ink-muted); padding:4px 0; }
   .gd-sub button.on{ color:var(--accent-ink); }
 
-  .gd-play{ padding:10px 0; border-top:1px solid var(--line); }
+  .gd-play{ padding:12px 0; border-top:1px solid var(--line); }
   .gd-play:first-child{ border-top:none; }
-  .gd-play-head{ display:flex; justify-content:space-between; gap:10px; font-size:11px; color:var(--ink-muted); }
-  .gd-play-text{ font-size:13px; margin-top:3px; line-height:1.45; }
-  .gd-play.score .gd-play-text{ color:var(--accent-ink); font-weight:700; }
+  .gd-play-head{ display:flex; justify-content:space-between; gap:10px; font-size:11px;
+                 color:var(--ink-muted); margin-bottom:7px; }
+  .gd-play-body{ display:flex; gap:11px; align-items:flex-start; }
+  .gd-play-photo{ width:46px; height:46px; border-radius:50%; object-fit:cover; flex:none;
+                  background:var(--paper-sunken); }
+  .gd-play-main{ flex:1; min-width:0; }
+  .gd-play-title{ font-size:17px; font-weight:800; font-family:"Big Shoulders Display";
+                  text-transform:uppercase; letter-spacing:0.01em; line-height:1.15; }
+  .gd-play.score .gd-play-title{ color:var(--accent-ink); }
+  .gd-play-who{ font-size:12.5px; color:var(--ink-secondary); margin-top:2px; }
+  .gd-play-who b{ color:var(--ink); font-weight:700; }
+  .gd-play-who .fps{ color:var(--ink-muted); }
+  .gd-play-badges{ display:flex; flex-wrap:wrap; gap:5px; margin-top:6px; }
+  .gd-play-badge{ font-size:11px; background:var(--paper-sunken); border-radius:5px;
+                  padding:3px 7px; color:var(--ink-secondary); }
+  .gd-play-text{ font-size:12px; margin-top:6px; line-height:1.45; color:var(--ink-muted); }
 
   .gd-totals{ display:flex; flex-wrap:wrap; gap:12px 18px; padding:10px 0 14px;
               border-bottom:1px solid var(--line); margin-bottom:6px; }
@@ -8614,30 +8774,11 @@ GAME_DETAIL_HTML = BASE_STYLE + make_header("scores") + """
     {% if detail.home.abbr %}<button class="gd-tab" data-panel="home">{{ detail.home.abbr }}</button>{% endif %}
   </div>
 
-  <div class="gd-panel on" data-panel="feed" id="gdFeedPanel">
-    {% if detail.plays %}
-      {% for p in detail.plays %}
-      <div class="gd-play {{ 'score' if p.scoring }}">
-        <div class="gd-play-head">
-          <span>
-            {%- if p.team %}{{ p.team }} &middot; {% endif -%}
-            Q{{ p.period }} {{ p.clock }}
-            {%- if p.down %} &middot; {{ p.down }}{{ 'st' if p.down == 1 else ('nd' if p.down == 2 else ('rd' if p.down == 3 else 'th')) }} &amp; {{ p.distance }}{% endif -%}
-          </span>
-          {% if p.away_score is not none and p.home_score is not none %}
-          <span>{{ p.away_score }}&ndash;{{ p.home_score }}</span>
-          {% endif %}
-        </div>
-        <div class="gd-play-text">{{ p.text }}</div>
-      </div>
-      {% endfor %}
-    {% else %}
-      <div class="gd-empty">
-        {% if detail.status == 'scheduled' %}Plays appear here once the game kicks off.
-        {% else %}No play-by-play available for this game.{% endif %}
-      </div>
-    {% endif %}
-  </div>
+  <!-- Rendered by JS, not Jinja, on purpose: the live poll re-renders
+       this every few seconds, and having the initial paint come from a
+       separate server-side template is how the two silently drift apart.
+       One renderer, used by both. -->
+  <div class="gd-panel on" data-panel="feed" id="gdFeedPanel"></div>
 
   <div class="gd-panel" data-panel="game" id="gdGamePanel">
     {% if detail.team_stats %}
@@ -8753,6 +8894,93 @@ GAME_DETAIL_HTML = BASE_STYLE + make_header("scores") + """
   {% endif %}
 </div></main>
 <script>
+// ---- one feed renderer, shared by the initial paint and every poll ----
+// Exposed on window so the polling IIFE below can call it. Having the
+// first render come from a server-side template and the refresh from JS
+// is precisely how the two drift apart, so there is only this.
+window.GD_STATUS = {{ detail.status|tojson }};
+window.gdRenderFeed = function(plays, status){
+  const el = document.getElementById('gdFeedPanel');
+  if (!el) return;
+  plays = plays || [];
+  if (!plays.length) {
+    el.innerHTML = '<div class="gd-empty">' +
+      (status === 'scheduled' ? 'Plays appear here once the game kicks off.'
+                              : 'No play-by-play available for this game.') + '</div>';
+    return;
+  }
+  function esc(s){
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+    });
+  }
+  function ord(n){ return n === 1 ? '1st' : n === 2 ? '2nd' : n === 3 ? '3rd' : n + 'th'; }
+
+  el.innerHTML = plays.map(function(p){
+    const sit = [
+      p.team ? esc(p.team) : null,
+      p.period ? 'Q' + p.period + (p.clock ? ' ' + esc(p.clock) : '') : null,
+      p.down ? ord(p.down) + ' &amp; ' + esc(p.distance) : null
+    ].filter(Boolean).join(' &middot; ');
+    const score = (p.away_score != null && p.home_score != null)
+      ? esc(p.away_score) + '&ndash;' + esc(p.home_score) : '';
+    const lead = (p.people || [])[0];
+    const who = (p.people || []).map(function(pl){
+      return '<div><b>' + esc(pl.name) + '</b>' +
+             (pl.position ? ' <span class="fps">' + esc(pl.position) + '</span>' : '') +
+             (pl.fpts != null ? ' <span class="fps">&middot; ' + esc(pl.fpts) + ' fps</span>' : '') +
+             '</div>';
+    }).join('');
+    const badges = (p.badges || []).map(function(b){
+      return '<span class="gd-play-badge">' + esc(b.icon) + ' ' + esc(b.label) + '</span>';
+    }).join('');
+    return '<div class="gd-play' + (p.scoring ? ' score' : '') + '">' +
+      '<div class="gd-play-head"><span>' + sit + '</span><span>' + score + '</span></div>' +
+      '<div class="gd-play-body">' +
+        (lead && lead.photo
+          ? '<img class="gd-play-photo" src="' + esc(lead.photo) + '" alt="" ' +
+            'onerror="this.style.visibility=\\'hidden\\'">'
+          : '') +
+        '<div class="gd-play-main">' +
+          '<div class="gd-play-title">' + esc(p.headline || '') + '</div>' +
+          (who ? '<div class="gd-play-who">' + who + '</div>' : '') +
+          (badges ? '<div class="gd-play-badges">' + badges + '</div>' : '') +
+          '<div class="gd-play-text">' + esc(p.text) + '</div>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+};
+
+// Where the ball sits on the field bar. Shared for the same reason.
+window.gdRenderField = function(field, awayAbbr){
+  const wrap = document.querySelector('.gd-field');
+  if (!wrap || !field) return;
+  const ball = wrap.querySelector('.gd-field-ball');
+  const yl = field.yardline;
+  if (ball && yl != null) {
+    // yardLine is yards from the opponent's goal line, so which end of
+    // the bar that maps to depends on who has the ball.
+    const pct = field.possession === awayAbbr ? (100 - yl) : yl;
+    ball.style.left = (9 + pct * 0.82) + '%';
+    ball.style.display = '';
+  } else if (ball) {
+    ball.style.display = 'none';
+  }
+  const meta = wrap.querySelectorAll('.gd-field-meta span');
+  if (meta.length >= 2) {
+    meta[0].innerHTML = (field.possession ? '<b>' + field.possession + '</b> ball' : '') +
+                        (field.possession_text ? ' &middot; ' + field.possession_text : '');
+    meta[1].innerHTML = field.down_distance ? '<b>' + field.down_distance + '</b>' : '';
+  }
+};
+
+(function(){
+  // Paint the feed from the data baked into the page, using the same
+  // renderer the poll uses.
+  window.gdRenderFeed({{ detail.plays|tojson }}, window.GD_STATUS);
+})();
+
 // Tab + sub-tab switching. Deliberately its own IIFE, OUTSIDE the polling
 // one below -- that returns early on a finished game, and a finished game
 // still needs its box score tabs to work.
@@ -8818,6 +9046,17 @@ GAME_DETAIL_HTML = BASE_STYLE + make_header("scores") + """
         statusEl.textContent = data.status_detail || data.status;
         statusEl.className = 'gd-status ' + data.status;
         document.getElementById('gdClock').textContent = data.status === 'in_progress' ? (data.clock + ' · Q' + data.period) : '';
+
+        // THE point of the poll: the feed and the field re-render every
+        // cycle, through the same functions that painted them initially.
+        // Without this the page updated its score while the play list sat
+        // frozen at whatever was happening when the tab was opened.
+        window.gdRenderFeed(data.plays, data.status);
+        window.gdRenderField(data.field, {{ detail.away.abbr|tojson }});
+
+        // A game that just ended still needs one last paint (done above)
+        // before the loop stops, so this check comes after the render.
+        if (data.status === 'final') { return; }
 
         // Win probability shifts play by play -- patch it if the panel is
         // already on the page (it only renders when win_prob was present
