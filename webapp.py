@@ -17,6 +17,7 @@ Optional:
   SLEEPER_USERNAME (prefills your username on the chat page)
 """
 
+import bisect
 import gzip
 import html
 import math
@@ -1229,6 +1230,76 @@ def espn_day_scoreboard(date_str, cache={}):
         return entry["data"] if entry else {"events": []}
 
 
+def _espn_broadcast(comp):
+    """Which network is carrying this game ("FOX", "CBS", "NBC/Peacock").
+
+    ESPN puts this in at least three different places depending on the
+    endpoint and how far out the game is, and none of them is documented
+    -- so try each and take the first that yields a name rather than
+    assuming one shape. Returns None when nothing is listed yet, which is
+    normal for a game more than a week or two out.
+    """
+    for b in (comp.get("broadcasts") or []):
+        names = b.get("names") or ([b.get("shortName")] if b.get("shortName") else [])
+        names = [n for n in names if n]
+        if names:
+            return "/".join(names)
+    for b in (comp.get("geoBroadcasts") or []):
+        media = (b.get("media") or {}).get("shortName")
+        if media:
+            return media
+    return None
+
+
+def _espn_spread(comp):
+    """The point spread as a plain phrase ("LAC by 9.5"), or None.
+
+    ESPN expresses this a few different ways -- sometimes a `details`
+    string already in "LAC -9.5" form, sometimes only a favorite team id
+    plus a numeric `spread`. Both are handled, and anything unrecognized
+    returns None rather than guessing, because a spread shown backwards
+    is far worse than no spread at all.
+
+    A spread of exactly 0 is a pick'em, not a missing value, so it's
+    reported as such instead of being swallowed by a falsy check."""
+    odds_list = comp.get("odds") or []
+    if not odds_list:
+        return None
+    odds = odds_list[0] or {}
+
+    details = (odds.get("details") or "").strip()
+    if details:
+        # "LAC -9.5" -> "LAC by 9.5". "EVEN"/"PK" is a pick'em.
+        if details.upper() in ("EVEN", "PK", "PICK", "PICK'EM"):
+            return "Pick'em"
+        parts = details.split()
+        if len(parts) == 2 and parts[1].lstrip("+-").replace(".", "", 1).isdigit():
+            team, number = parts[0], float(parts[1])
+            if number == 0:
+                return "Pick'em"
+            # A positive number here would mean the named team is the
+            # UNDERDOG, which ESPN doesn't normally emit -- name the
+            # favourite either way rather than printing "X by -3".
+            if number < 0:
+                return f"{team} by {abs(number):g}"
+            return details
+        return details
+
+    spread = odds.get("spread")
+    if isinstance(spread, (int, float)):
+        if spread == 0:
+            return "Pick'em"
+        fav = ((odds.get("homeTeamOdds") or {}).get("favorite") and "home") or \
+              ((odds.get("awayTeamOdds") or {}).get("favorite") and "away")
+        if fav:
+            competitors = comp.get("competitors") or []
+            side = next((c for c in competitors if c.get("homeAway") == fav), None)
+            abbr = normalize_team_abbr(((side or {}).get("team") or {}).get("abbreviation"))
+            if abbr:
+                return f"{abbr} by {abs(spread):g}"
+    return None
+
+
 def espn_event_to_card(ev):
     """Pure function: one ESPN scoreboard event -> the display-ready
     shape the /scores and /api/scoreboard cards need (richer than
@@ -1256,6 +1327,8 @@ def espn_event_to_card(ev):
     return {
         "id": ev.get("id"),
         "date": date_raw,
+        "broadcast": _espn_broadcast(comp),
+        "spread": _espn_spread(comp),
         # NOTE: no server-computed date_key here on purpose. ESPN's `date`
         # is UTC (a "Z"-suffixed ISO string) -- a Sunday 8:20pm ET kickoff
         # is already after midnight UTC, so naively slicing the first 10
@@ -1962,6 +2035,139 @@ def _star_pct_for_composite(composite):
     return max(5, min(100, round(pct)))
 
 
+# How many performances at each position count as "fantasy starter"
+# territory in a typical 12-team league. A performance is graded against
+# this pool rather than against every rostered player's week, because
+# including every deep-bench 0.5-point line would drag the median down
+# far enough that a merely-adequate game grades out as elite. Comparing a
+# starter's day to other starters' days is both the intuitive reading of
+# "how good was this?" and the standard way fantasy replacement level is
+# defined.
+_PERF_POOL_SIZE = {"QB": 12, "RB": 24, "WR": 36, "TE": 12}
+_PERF_POOL_DEFAULT = 24
+
+# Last-resort reference points if no season anywhere has usable data --
+# approximate PPR per-game medians for a starter at each position. Only
+# ever reached on a completely unseeded database, and always reported
+# with source "baseline" so the UI can say so rather than presenting a
+# guess as a measurement.
+_PERF_BASELINE_MEDIAN = {"QB": 17.0, "RB": 12.0, "WR": 11.0, "TE": 8.0}
+
+_perf_distribution_cache = {}
+
+
+def get_performance_distribution(season, cache=_perf_distribution_cache):
+    """{position: sorted list of per-game fantasy points} for the
+    starter-caliber performances of one season -- the reference a single
+    game's output is graded against.
+
+    Built from data already in the database (get_season_stats joined to
+    each player's position), so it needs no new source. Cached for an
+    hour per season; the shape of a full season's distribution barely
+    moves week to week, so this does not need to be fresh to be right."""
+    season = _safe_int(season, int(SEASON))
+    now = time.time()
+    entry = cache.get(season)
+    if entry and now - entry["time"] < 3600:
+        return entry["data"]
+
+    all_players = get_all_players()
+    season_stats = get_season_stats(season)
+    # week -> position -> [fpts], so each week can be truncated to its own
+    # starter pool before everything is pooled together. Truncating only
+    # at the end would let one huge week's depth dilute another's.
+    by_week = {}
+    for sid, stat in season_stats.items():
+        p = all_players.get(sid)
+        pos = (p or {}).get("position")
+        if not pos or pos not in POSITIONS:
+            continue
+        for week, fpts in (stat.get("weeks") or {}).items():
+            if not isinstance(fpts, (int, float)):
+                continue
+            by_week.setdefault(week, {}).setdefault(pos, []).append(float(fpts))
+
+    pools = {}
+    for _week, by_pos in by_week.items():
+        for pos, values in by_pos.items():
+            values.sort(reverse=True)
+            keep = _PERF_POOL_SIZE.get(pos, _PERF_POOL_DEFAULT)
+            pools.setdefault(pos, []).extend(values[:keep])
+    for pos in pools:
+        pools[pos].sort()
+
+    cache[season] = {"data": pools, "time": now}
+    return pools
+
+
+def _performance_pool(position, season, seasons_back=DEF_HISTORY_SEASONS_BACK):
+    """The reference distribution to grade a `position` performance
+    against, as (pool, source_season).
+
+    Prefers the most recently COMPLETED season over the one in progress:
+    a full season is a stable, finished distribution, while the current
+    one is still a handful of weeks deep in September and would have its
+    shape shift underneath the grades every week. Falls back through
+    earlier seasons, then to the current one, then gives up and lets the
+    caller use the static baseline."""
+    for yr in [season - 1] + [season] + [season - o for o in range(2, seasons_back + 1)]:
+        if yr < 1:
+            continue
+        pool = (get_performance_distribution(yr) or {}).get(position)
+        if pool and len(pool) >= 20:
+            return pool, yr
+    return None, None
+
+
+def grade_performance(position, fpts, season=None):
+    """Grade one game's fantasy output on the same 13-tier A+ through F
+    scale the matchup grades use, by where it falls in the distribution of
+    starter-caliber performances at that position.
+
+    Returns {grade, grade_class, stars, star_pct, percentile, better_than,
+    median, source, source_season} -- the supporting numbers alongside
+    the letter, so the UI can show WHY a line graded the way it did
+    instead of asking anyone to trust a bare letter.
+
+    `source` is "distribution" for a real measured pool and "baseline"
+    for the static fallback, which only happens on an unseeded database.
+    Never returns None: a performance always gets a grade."""
+    season = _safe_int(season if season is not None else SEASON, int(SEASON))
+    fpts = float(fpts or 0)
+    pool, source_season = _performance_pool(position, season)
+
+    if pool:
+        # Fraction of the reference pool this performance beat. bisect_left
+        # means an exact tie counts as "not beaten", which is the
+        # conservative reading.
+        better_than = bisect.bisect_left(pool, fpts)
+        percentile = better_than / len(pool)
+        median = pool[len(pool) // 2]
+        source, pool_size = "distribution", len(pool)
+    else:
+        # No season anywhere has a usable pool. Rather than refuse to
+        # grade, scale against a documented positional median -- twice the
+        # median is treated as a ceiling-ish game.
+        median = _PERF_BASELINE_MEDIAN.get(position, 10.0)
+        percentile = max(0.0, min(1.0, fpts / (median * 2))) if median else 0.0
+        better_than, source, pool_size, source_season = None, "baseline", None, None
+
+    percentile = max(0.0, min(1.0, percentile))
+    grade, stars = _letter_grade(percentile)
+    return {
+        "grade": grade,
+        "grade_class": _grade_css_class(grade),
+        "stars": stars,
+        "star_pct": _star_pct_for_composite(percentile),
+        "percentile": round(percentile * 100),
+        "better_than": better_than,
+        "pool_size": pool_size,
+        "median": round(median, 1),
+        "source": source,
+        "source_season": source_season,
+    }
+
+
 def _star_pct_for_grade(grade):
     """Star fill for a grade that was set directly rather than derived
     from a composite -- the injury overrides (OUT/IR -> F, Doubtful ->
@@ -2487,6 +2693,108 @@ def fetch_season_stats_from_sleeper(season):
                     "tm_off_snp": tm_off_snp if isinstance(tm_off_snp, (int, float)) else 0,
                 }
     return weekly
+
+
+# Stat keys worth showing on a performance card, per position group,
+# in the order they should read. Sleeper's own naming; the labels are the
+# short forms the reference app uses ("138 yds  1 td  4 rec").
+_STAT_LINE_FIELDS = {
+    "QB": [("pass_yd", "pyds"), ("pass_td", "ptd"), ("rush_td", "rutd"), ("pass_int", "int")],
+    "RB": [("rush_yd", "yds"), ("rush_td", "td"), ("rec", "rec"), ("rec_yd", "ryds")],
+    "WR": [("rec_yd", "yds"), ("rec_td", "td"), ("rec", "rec")],
+    "TE": [("rec_yd", "yds"), ("rec_td", "td"), ("rec", "rec")],
+}
+# Anything defensive falls back to this, so an IDP performance still
+# shows a real line rather than a blank card.
+_STAT_LINE_IDP = [("idp_fum_rec", "fr"), ("idp_sack", "sack"), ("idp_tkl_solo", "solo"),
+                  ("idp_int", "int"), ("idp_tkl_loss", "tfl")]
+
+
+def build_stat_line(position, stats, max_items=3):
+    """The headline stat line for one performance -- [(value, label), ...]
+    ready to render, e.g. [(138, "yds"), (1, "td"), (4, "rec")].
+
+    Picks the fields that matter for the player's position and keeps only
+    the ones that actually happened, so a receiver with no touchdown shows
+    yards and catches rather than a apologetic '0 td'. A zero IS kept when
+    dropping it would leave the line empty, since a blank card reads as
+    broken data rather than as a quiet game."""
+    stats = stats or {}
+    fields = _STAT_LINE_FIELDS.get(position) or _STAT_LINE_IDP
+    line = []
+    for key, label in fields:
+        val = stats.get(key)
+        if isinstance(val, (int, float)) and val:
+            line.append((round(val, 1) if isinstance(val, float) and val % 1 else int(val), label))
+        if len(line) >= max_items:
+            break
+    if not line:
+        for key, label in fields[:1]:
+            val = stats.get(key)
+            line.append((int(val) if isinstance(val, (int, float)) else 0, label))
+    return line
+
+
+_live_week_stats_cache = {}
+
+
+def get_live_week_stats(season, week, cache=_live_week_stats_cache, allow_fetch=True):
+    """{player_id: {"pts": fantasy points, "stats": raw Sleeper stats}}
+    for ONE week, fetched live rather than read from our database.
+
+    This is deliberately not get_season_stats. That one reads player_stats,
+    which only changes when the sync job runs -- fine for season-long
+    aggregates and history, useless for a leaderboard that is supposed to
+    move while games are being played. Sleeper updates this endpoint
+    during games, and it already carries pts_ppr, so the live board scores
+    identically to every other fantasy figure on the site instead of
+    re-deriving points from a second source with its own rounding.
+
+    TTL 45s: fast enough to feel live next to a scoreboard that polls on
+    its own, slow enough that a busy Sunday is a couple of requests a
+    minute rather than one per visitor. Falls back to the last good
+    response if Sleeper hiccups, so a blip empties nothing.
+
+    allow_fetch=False returns only what is already cached (None if
+    nothing is), for callers on a path that must never block on a live
+    request -- see get_week_performers."""
+    season, week = _safe_int(season, int(SEASON)), _safe_int(week, 1)
+    key = (season, week)
+    now = time.time()
+    entry = cache.get(key)
+    if entry and now - entry["time"] < 45:
+        return entry["data"]
+    if not allow_fetch:
+        # Caller is on a request path that must not block. Serve whatever
+        # is cached (even if stale) and let them refresh out of band.
+        return entry["data"] if entry else None
+    try:
+        r = requests.get(
+            f"https://api.sleeper.com/stats/nfl/{season}/{week}",
+            params={"season_type": "regular"},
+            timeout=15,
+        )
+        r.raise_for_status()
+        data = r.json()
+        if not isinstance(data, list):
+            raise ValueError(f"expected a list of stat entries, got {type(data).__name__}")
+        out = {}
+        for item in data:
+            if not isinstance(item, dict):
+                continue
+            pid, stats = item.get("player_id"), item.get("stats")
+            if not pid or not isinstance(stats, dict):
+                continue
+            pts = stats.get("pts_ppr")
+            if pts is None:
+                pts = compute_idp_points(stats)
+            if pts is None:
+                continue
+            out[pid] = {"pts": round(pts, 1), "stats": stats}
+        cache[key] = {"data": out, "time": now}
+        return out
+    except Exception:
+        return entry["data"] if entry else {}
 
 
 def sync_season_to_db(season):
@@ -3563,12 +3871,109 @@ def _my_players_for_game(detail, username):
     return {"home": home_players, "away": away_players}
 
 
+# How many players per team the week's performer board carries. The
+# client filters this list down to whichever teams played on the selected
+# date, so it has to hold enough per team that any single day still has a
+# real top 10 to draw from -- but not so many that a quiet Thursday ships
+# three hundred rows of bench players nobody will scroll to. Eight covers
+# every plausible day-leader; a team's ninth-best fantasy day has never
+# led a slate.
+PERFORMERS_PER_TEAM = 8
+_week_performers_cache = {}
+
+
+def get_week_performers(season, week, cache=_week_performers_cache, allow_fetch=True):
+    """The best fantasy performances of one week, as display-ready rows.
+
+    Returns a list of dicts sorted best-first, each carrying the player,
+    their team and opponent, the fantasy points, the headline stat line,
+    and a full performance grade (see grade_performance).
+
+    Built from get_live_week_stats rather than the database, so the board
+    moves while games are being played instead of waiting for the next
+    sync. Keyed by team so the /scores page can filter the week down to
+    the teams that played on whichever date the visitor has selected --
+    that filtering happens on the client on purpose, because the visitor's
+    browser is the only place that knows their real local calendar day
+    (ESPN's kickoff times are UTC, so a Sunday night game is already
+    Monday in UTC for anyone west of the UK).
+
+    TTL 45s, matching the live stats fetch underneath it -- no point
+    caching the derived board longer than its own input.
+
+    allow_fetch=False makes this cache-only. /scores renders with it off
+    on purpose: the board is worth baking in when it's already warm (no
+    second request, no flash of empty content), but it is never worth
+    holding up the whole scoreboard behind a live Sleeper call. This app
+    has already shipped that exact bug once, in get_season_stats, and it
+    took the site down -- the page always renders first."""
+    season, week = _safe_int(season, int(SEASON)), _safe_int(week, 1)
+    key = (season, week)
+    now = time.time()
+    entry = cache.get(key)
+    if entry and now - entry["time"] < 45:
+        return entry["data"]
+
+    live = get_live_week_stats(season, week, allow_fetch=allow_fetch)
+    if not live:
+        # Keep serving the last good board rather than blanking the
+        # section on one failed upstream call -- or, when this is a
+        # non-blocking caller and nothing is cached yet, an empty board
+        # the client will fill in for itself a moment later.
+        return entry["data"] if entry else []
+
+    all_players = get_all_players()
+    by_team = {}
+    for sid, rec in live.items():
+        p = all_players.get(sid)
+        if not p:
+            continue
+        pos = p.get("position")
+        team = p.get("team")
+        if not pos or pos not in POSITIONS or not team:
+            continue
+        by_team.setdefault(team, []).append((rec["pts"], sid, p, rec))
+
+    rows = []
+    for team, entries in by_team.items():
+        entries.sort(key=lambda e: -e[0])
+        sched = get_schedule_for_team_week(season, week, team)
+        opponent = (sched or {}).get("opponent")
+        is_home = (sched or {}).get("home")
+        for pts, sid, p, rec in entries[:PERFORMERS_PER_TEAM]:
+            pos = p["position"]
+            rows.append({
+                "sid": sid,
+                "name": f"{p.get('first_name','')} {p.get('last_name','')}".strip(),
+                "position": pos,
+                "team": team,
+                "opponent": opponent,
+                # "@ IND" vs "vs TB", the way the reference board reads.
+                "vs_label": (None if not opponent else
+                             (f"vs {opponent}" if is_home else f"@ {opponent}")),
+                "photo": player_photo_url(sid),
+                "fpts": pts,
+                "stat_line": build_stat_line(pos, rec.get("stats")),
+                "grade": grade_performance(pos, pts, season),
+            })
+
+    rows.sort(key=lambda r: -r["fpts"])
+    cache[key] = {"data": rows, "time": now}
+    return rows
+
+
 def _week_games(season, week, season_type=2):
     """Shared by /scores and /api/scoreboard so both build cards the same
     way. Returns (games, any_live) where games is a list of card dicts
     from espn_event_to_card, already filtered for malformed events."""
     data = espn_week_scoreboard(season, week, season_type)
     games = [c for c in (espn_event_to_card(ev) for ev in data.get("events", [])) if c]
+    # Tag the week we asked for onto each card. The date strip labels every
+    # tab "W1 / Sep 13", and a scoreboard event doesn't reliably carry its
+    # own week number -- but the caller always knows which week it fetched.
+    for g in games:
+        g["week"] = week
+        g["season"] = season
     any_live = any(g["status"] == "in_progress" for g in games)
     return games, any_live
 
@@ -3599,11 +4004,16 @@ def scores_page():
         games = _nearby_weeks_games(season, week, season_type)
         _annotate_my_players(games, username)
         has_synced_leagues = bool(current_user.is_authenticated and get_synced_league_ids(current_user.id))
+        # The whole week's board is baked in, and the client filters it to
+        # the teams that played on the selected date -- see
+        # get_week_performers for why the date split has to happen there.
+        performers = get_week_performers(season, week, allow_fetch=False)
         return render_template_string(
             SCORES_HTML, games=games, season=season, week=week, season_type=season_type,
             current_season=info["season"], current_week=info["week"],
             today_key=date.today().isoformat(), load_error=None,
             username=username, has_synced_leagues=has_synced_leagues,
+            performers=performers,
         )
     except Exception as e:
         # ESPN's API is unofficial and unverified against a live response
@@ -3614,7 +4024,28 @@ def scores_page():
             SCORES_HTML, games=[], season=int(SEASON), week=1, season_type=2,
             current_season=int(SEASON), current_week=1, today_key=date.today().isoformat(),
             load_error=str(e), username=username, has_synced_leagues=False,
+            performers=[],
         )
+
+
+@app.route("/api/performers")
+def api_performers():
+    """The week's performer board as JSON, for the /scores live poll.
+
+    Returns the whole week rather than one day for the same reason the
+    page bakes the whole week: only the client knows the visitor's real
+    local calendar day, so it does the date filtering itself. This just
+    keeps the numbers and grades current while games are in progress."""
+    try:
+        info = get_current_week_info()
+        season = request.args.get("season", default=info["season"], type=int)
+        week = request.args.get("week", default=info["week"], type=int)
+        return jsonify({"performers": get_week_performers(season, week),
+                        "season": season, "week": week})
+    except Exception as e:
+        # Same contract as /api/game-live: a degraded board is fine, a 500
+        # that kills the page's poll loop is not.
+        return jsonify({"performers": [], "error": str(e)})
 
 
 @app.route("/api/scoreboard")
@@ -4758,6 +5189,10 @@ def api_warm():
             # aggregate query either.
             info = get_current_week_info()
             espn_week_scoreboard(info["season"], info["week"], info["season_type"])
+            # /scores bakes the performer board only when it's already
+            # cached (it must never block a render on a live fetch), so
+            # this is what actually keeps it populated.
+            get_week_performers(info["season"], info["week"])
             # Matchup grading searches back up to DEF_HISTORY_SEASONS_BACK
             # prior seasons (plus a league-average fallback built from
             # whichever of those has any data) any time a specific
@@ -5824,22 +6259,33 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + """
   .sc-icon-btn.active{ color:var(--sc-text); border-color:var(--accent); }
   .sc-week-label{ font-weight:700; font-size:13.5px; min-width:80px; text-align:center; }
 
+  /* Date strip: one tab per game day, labelled with its week and date,
+     scrolling horizontally into future weeks. Underline-style rather
+     than pill-style so a long run of tabs reads as one continuous
+     timeline instead of a row of disconnected buttons. */
   .sc-day-tabs{
-    display:flex; gap:8px; margin-top:16px; overflow-x:auto; scroll-snap-type:x proximity;
-    -webkit-overflow-scrolling:touch; scrollbar-width:none; padding-bottom:4px;
+    display:flex; gap:0; margin-top:12px; overflow-x:auto; scroll-snap-type:x proximity;
+    -webkit-overflow-scrolling:touch; scrollbar-width:none;
+    border-bottom:1px solid var(--sc-line);
   }
   .sc-day-tabs::-webkit-scrollbar{ display:none; }
   .sc-day-tab{
-    font-size:12px; font-weight:700; padding:8px 12px; border-radius:12px; border:1px solid var(--sc-line);
-    background:var(--sc-surface); color:var(--sc-muted); cursor:pointer; user-select:none; flex:none;
-    scroll-snap-align:center; display:flex; flex-direction:column; align-items:center; gap:2px; min-width:52px;
+    cursor:pointer; user-select:none; flex:none; scroll-snap-align:center;
+    display:flex; flex-direction:column; align-items:center; gap:1px;
+    padding:8px 16px 10px; min-width:92px; position:relative;
+    border-bottom:2px solid transparent; color:var(--sc-muted);
   }
-  .sc-day-tab .dow{ font-size:10px; text-transform:uppercase; opacity:0.8; }
-  .sc-day-tab .dnum{ font-family:"IBM Plex Mono"; font-size:14px; }
-  .sc-day-tab.active{ background:var(--accent); color:var(--accent-on); border-color:var(--accent); }
-  .sc-day-tab.today:not(.active){ border-color:var(--accent); color:var(--sc-text); }
-  .sc-day-tab .dot{ display:inline-block; width:5px; height:5px; border-radius:50%; background:var(--sc-live); }
-  .sc-day-tab.active .dot{ background:var(--accent-on); }
+  .sc-day-tab .wk{ font-size:11.5px; font-weight:600; letter-spacing:0.01em; white-space:nowrap; }
+  .sc-day-tab .dow{ font-size:16px; font-weight:800; font-family:"Big Shoulders Display"; letter-spacing:0.02em; }
+  .sc-day-tab.active{ color:var(--accent-ink); border-bottom-color:var(--accent-ink); }
+  .sc-day-tab.today:not(.active){ color:var(--sc-text); }
+  /* A live dot sits above the tab, so an in-progress slate is visible
+     without reading any of the labels. */
+  .sc-day-tab .dot{
+    position:absolute; top:2px; left:50%; transform:translateX(-50%);
+    width:6px; height:6px; border-radius:50%; background:var(--sc-live);
+  }
+  .sc-day-tab .dot.done{ background:var(--sc-muted); opacity:0.55; }
 
   .sc-month{ display:none; margin-top:16px; background:var(--sc-surface); border:1px solid var(--sc-line); border-radius:14px; padding:16px; }
   .sc-month.open{ display:block; }
@@ -5853,21 +6299,84 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + """
   .sc-month-cell.selected{ background:var(--accent); color:var(--accent-on); }
   .sc-month-cell .dot{ width:5px; height:5px; border-radius:50%; background:var(--sc-live); margin-top:3px; }
 
-  .sc-games{ display:flex; flex-direction:column; gap:10px; margin-top:18px; }
-  .sc-game-card{ display:flex; flex-direction:column; gap:10px; background:var(--sc-surface); border:1px solid var(--sc-line); border-radius:12px; padding:14px 18px; text-decoration:none; color:var(--sc-text); cursor:pointer; }
-  .sc-game-card:hover{ border-color:var(--accent); }
-  .sc-game-top{ display:flex; align-items:center; gap:16px; }
+  /* Games grid: columns of four, scrolling horizontally into the rest of
+     the slate. Each column snaps, so a swipe lands on a clean set of four
+     rather than halfway between two. On a wide screen several columns are
+     visible at once and the scroll only kicks in for a genuinely long
+     slate. */
+  .sc-games{
+    display:grid; grid-auto-flow:column; grid-template-rows:repeat(4, auto);
+    grid-auto-columns:minmax(280px, 1fr); gap:0; margin-top:16px;
+    overflow-x:auto; scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch;
+    scrollbar-width:none; border:1px solid var(--sc-line); border-radius:12px;
+  }
+  .sc-games::-webkit-scrollbar{ display:none; }
+  @media (min-width:900px){ .sc-games{ grid-auto-columns:minmax(330px, 1fr); } }
+  /* Fill the viewport width on a phone so one column is exactly one
+     screenful and the snap feels like paging. */
+  @media (max-width:640px){ .sc-games{ grid-auto-columns:calc(100vw - 34px); } }
+
+  .sc-game-card{
+    display:flex; flex-direction:column; gap:8px; padding:12px 14px;
+    text-decoration:none; color:var(--sc-text); cursor:pointer;
+    border-right:1px solid var(--sc-line); border-bottom:1px solid var(--sc-line);
+    scroll-snap-align:start; background:var(--sc-surface); min-width:0;
+  }
+  .sc-game-card:hover{ background:var(--sc-surface2); }
+  /* A live game is outlined, the way the reference board marks the games
+     actually worth looking at right now. */
+  .sc-game-card.live{ background:var(--sc-surface2); box-shadow:inset 0 0 0 1px var(--accent-ink); }
+  .sc-game-top{ display:flex; align-items:stretch; gap:10px; }
+  /* Both teams stack on the left, game state on the right -- the
+     reference layout, and it reads better than left/right teams once a
+     card is only ~300px wide. */
+  .sc-game-teams{ display:flex; flex-direction:column; gap:6px; flex:1; min-width:0; }
+  .sc-game-meta{ display:flex; flex-direction:column; align-items:flex-end; justify-content:center; gap:2px; flex:none; text-align:right; }
+  .sc-team-row{ display:flex; align-items:center; gap:8px; min-width:0; }
+  .sc-team-row img{ width:26px; height:26px; object-fit:contain; flex:none; }
+  .sc-team-row .nm{ font-size:13px; color:var(--sc-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .sc-team-row .sc-game-score{ margin-left:auto; }
+  /* The leading side is the one in full-strength text; the trailing side
+     stays muted. Beats a coloured dot nobody has a legend for. */
+  .sc-team-row.leading .nm{ color:var(--sc-text); font-weight:700; }
+  .sc-team-row.leading .sc-game-score{ color:var(--sc-text); }
+  .sc-game-kick{ font-size:13px; font-weight:700; color:var(--sc-text); white-space:nowrap; }
+  .sc-game-net{ font-size:11px; color:var(--sc-muted); white-space:nowrap; }
+  .sc-game-spread{ font-size:11px; color:var(--sc-muted); white-space:nowrap; }
+  .sc-game-live-clock{ font-size:13px; font-weight:800; color:var(--sc-live); white-space:nowrap; }
+
+  /* --- daily performer board --- */
+  .sc-section-head{ display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin:26px 0 10px; }
+  .sc-section-head h2{ font-family:"Big Shoulders Display"; font-size:22px; font-weight:800; text-transform:uppercase; margin:0; color:var(--sc-text); }
+  .sc-section-head .sub{ font-size:11.5px; color:var(--sc-muted); }
+  .sc-perf{ display:flex; flex-direction:column; border:1px solid var(--sc-line); border-radius:12px; overflow:hidden; background:var(--sc-surface); }
+  .sc-perf-row{ display:flex; align-items:center; gap:10px; padding:10px 12px; border-top:1px solid var(--sc-line); text-decoration:none; color:var(--sc-text); }
+  .sc-perf-row:first-child{ border-top:none; }
+  .sc-perf-row:hover{ background:var(--sc-surface2); }
+  .sc-perf-rank{ font-family:"IBM Plex Mono"; font-size:12px; color:var(--sc-muted); width:20px; flex:none; text-align:right; font-variant-numeric:tabular-nums; }
+  .sc-perf-row img{ width:38px; height:38px; border-radius:50%; object-fit:cover; background:var(--sc-surface2); flex:none; }
+  .sc-perf-main{ flex:1; min-width:0; display:flex; flex-direction:column; gap:3px; }
+  .sc-perf-name{ font-weight:700; font-size:13.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .sc-perf-name .pts{ color:var(--sc-muted); font-weight:600; font-size:12px; margin-left:6px; }
+  .sc-perf-stats{ display:flex; align-items:baseline; gap:9px; flex-wrap:wrap; }
+  .sc-perf-stat b{ font-family:"IBM Plex Mono"; font-size:15px; font-weight:700; }
+  .sc-perf-stat span{ font-size:10.5px; color:var(--sc-muted); margin-left:2px; }
+  .sc-perf-sub{ font-size:11px; color:var(--sc-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .sc-perf-grade{ font-family:"Big Shoulders Display"; font-size:19px; font-weight:800; flex:none; min-width:34px; text-align:center; }
+  .sc-perf-empty{ color:var(--sc-muted); padding:24px; text-align:center; font-size:13px; }
+  /* Same three-band colouring the matchup grades use, so an A on this
+     page means visually what an A means everywhere else on the site. */
+  .sc-perf-grade.ap, .sc-perf-grade.a, .sc-perf-grade.am,
+  .sc-perf-grade.bp, .sc-perf-grade.b, .sc-perf-grade.bm{ color:var(--good); }
+  .sc-perf-grade.cp, .sc-perf-grade.c, .sc-perf-grade.cm{ color:var(--warning); }
+  .sc-perf-grade.dp, .sc-perf-grade.d, .sc-perf-grade.dm, .sc-perf-grade.f{ color:var(--critical); }
   .sc-my-players{ display:flex; justify-content:space-between; gap:10px; padding-top:8px; border-top:1px solid var(--sc-line); flex-wrap:wrap; }
   .sc-my-players-pill{ display:inline-flex; align-items:center; gap:5px; background:var(--good-wash); color:var(--good); font-weight:700; font-size:11px; border-radius:99px; padding:4px 10px; flex:none; }
   .sc-my-players-pill.away{ margin-right:auto; }
   .sc-my-players-pill.home{ margin-left:auto; }
   .sc-sync-banner{ display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; background:var(--sc-surface); border:1px solid var(--sc-line); border-radius:10px; padding:10px 16px; margin-top:14px; font-size:13px; color:var(--sc-muted); }
   .sc-sync-banner a{ color:var(--accent-ink); text-decoration:none; font-weight:700; }
-  .sc-game-side{ display:flex; align-items:center; gap:10px; flex:1; min-width:0; }
-  .sc-game-side img{ width:32px; height:32px; object-fit:contain; flex:none; }
-  .sc-game-side .nm{ font-weight:700; font-size:13.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   .sc-game-score{ font-family:"IBM Plex Mono"; font-size:20px; font-weight:700; min-width:34px; text-align:center; }
-  .sc-game-mid{ display:flex; flex-direction:column; align-items:center; gap:4px; min-width:90px; }
   .sc-status-pill{ font-size:10.5px; font-weight:700; text-transform:uppercase; padding:3px 9px; border-radius:99px; }
   .sc-status-pill.scheduled{ background:var(--sc-surface2); color:var(--sc-muted); }
   .sc-status-pill.final{ background:var(--sc-surface2); color:var(--sc-muted); }
@@ -5877,11 +6386,11 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + """
   @media (max-width: 640px) {
     .sc-toolbar{ flex-wrap:wrap; }
     .sc-title{ width:100%; }
-    .sc-game-card{ gap:8px; padding:12px; }
-    .sc-game-side{ gap:6px; }
-    .sc-game-side .nm{ max-width:56px; font-size:12px; }
-    .sc-game-mid{ min-width:56px; }
+    .sc-game-card{ gap:6px; padding:11px 12px; }
+    .sc-team-row img{ width:23px; height:23px; }
+    .sc-team-row .nm{ font-size:12.5px; }
     .sc-game-score{ font-size:17px; min-width:24px; }
+    .sc-day-tab{ min-width:82px; padding:8px 12px 10px; }
   }
 </style>
 
@@ -5922,11 +6431,18 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + """
   </div>
 
   <div class="sc-games" id="scGames"></div>
+
+  <div class="sc-section-head">
+    <h2>Top Performers</h2>
+    <span class="sub" id="scPerfSub"></span>
+  </div>
+  <div class="sc-perf" id="scPerf"></div>
 </div>
 </div>
 
 <script>
 const SCORES_WEEK = {{ games|tojson }};
+const SCORES_PERFORMERS = {{ performers|tojson }};
 const CURRENT_SEASON = {{ current_season }};
 const CURRENT_WEEK = {{ current_week }};
 let scSeason = {{ season }};
@@ -5994,10 +6510,15 @@ const scTodayKey = {{ today_key|tojson }};
       btn.dataset.dateKey = key;
       const games = daysIndex[key];
       const anyLive = games.some(function(g){ return g.status === 'in_progress'; });
+      // "W1 / Sep 13" over "Sun" -- the week matters as much as the date
+      // when you're scrolling several weeks ahead, and neither is
+      // guessable from the other.
+      const wk = games.length && games[0].week ? 'W' + games[0].week + ' \u00b7 ' : '';
+      const anyDone = games.some(function(g){ return g.status === 'final'; });
       btn.innerHTML =
-        '<span class="dow">' + d.toLocaleDateString(undefined, { weekday: 'short' }) + '</span>' +
-        '<span class="dnum">' + d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) + '</span>' +
-        '<span class="dot" style="background:' + (anyLive ? 'var(--sc-live)' : 'var(--sc-muted)') + '"></span>';
+        (anyLive || anyDone ? '<span class="dot' + (anyLive ? '' : ' done') + '"></span>' : '') +
+        '<span class="wk">' + wk + d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) + '</span>' +
+        '<span class="dow">' + d.toLocaleDateString(undefined, { weekday: 'short' }) + '</span>';
       btn.addEventListener('click', function(){ selectDay(key); });
       dayTabsEl.appendChild(btn);
     });
@@ -6016,13 +6537,53 @@ const scTodayKey = {{ today_key|tojson }};
     }
     games.forEach(function(g){
       const a = document.createElement('a');
-      a.className = 'sc-game-card';
+      a.className = 'sc-game-card' + (g.status === 'in_progress' ? ' live' : '');
       a.href = '/game?id=' + encodeURIComponent(g.id);
+
+      const away = g.away || {}, home = g.home || {};
+      const aScore = away.score == null ? '' : away.score;
+      const hScore = home.score == null ? '' : home.score;
+      // Highlight the leader, but only once there's a real score to lead
+      // with -- before kickoff both sides are 0 and neither is "winning".
+      const played = g.status !== 'scheduled';
+      const an = Number(aScore), hn = Number(hScore);
+      const awayLeads = played && isFinite(an) && isFinite(hn) && an > hn;
+      const homeLeads = played && isFinite(an) && isFinite(hn) && hn > an;
+
+      function teamRow(t, score, leads){
+        return '<div class="sc-team-row' + (leads ? ' leading' : '') + '">' +
+          '<img src="' + (t.logo || '') + '" alt="" onerror="this.style.visibility=\\'hidden\\'">' +
+          '<span class="nm">' + (t.name || t.abbr || '') + '</span>' +
+          '<span class="sc-game-score">' + score + '</span>' +
+        '</div>';
+      }
+
+      // Right-hand column: what's happening. A live game leads with the
+      // clock, a finished one says Final, an upcoming one shows kickoff.
+      let meta = '';
+      if (g.status === 'in_progress') {
+        meta = '<span class="sc-game-live-clock">' + (g.clock || '') +
+               (g.period ? ' Q' + g.period : '') + '</span>';
+      } else if (g.status === 'final') {
+        meta = '<span class="sc-game-kick">Final</span>';
+      } else {
+        const kick = g.date ? new Date(g.date).toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' }) : '';
+        meta = '<span class="sc-game-kick">' + kick + '</span>';
+      }
+      if (g.broadcast) meta += '<span class="sc-game-net">' + g.broadcast + '</span>';
+      // The spread only means anything before kickoff -- once a game is
+      // live or final the actual score has superseded it.
+      if (g.spread && g.status === 'scheduled') {
+        meta += '<span class="sc-game-spread">' + g.spread + '</span>';
+      }
+
       const topRow =
         '<div class="sc-game-top">' +
-        '<div class="sc-game-side"><img src="' + (g.away.logo||'') + '" onerror="this.style.visibility=\\'hidden\\'"><span class="nm">' + g.away.name + '</span><span class="sc-game-score">' + (g.away.score ?? '') + '</span></div>' +
-        '<div class="sc-game-mid"><span class="sc-status-pill ' + g.status + '">' + (g.status === 'in_progress' ? (g.clock||'') + ' Q' + (g.period||'') : (g.status_detail || g.status)) + '</span></div>' +
-        '<div class="sc-game-side" style="justify-content:flex-end; text-align:right;"><span class="sc-game-score">' + (g.home.score ?? '') + '</span><span class="nm">' + g.home.name + '</span><img src="' + (g.home.logo||'') + '" onerror="this.style.visibility=\\'hidden\\'"></div>' +
+          '<div class="sc-game-teams">' +
+            teamRow(away, aScore, awayLeads) +
+            teamRow(home, hScore, homeLeads) +
+          '</div>' +
+          '<div class="sc-game-meta">' + meta + '</div>' +
         '</div>';
       // Compact count-only pills here on purpose -- the full name-by-name
       // breakdown lives on /game (see the chip grid there). A card in a
@@ -6053,13 +6614,15 @@ const scTodayKey = {{ today_key|tojson }};
           daysIndex[key] = data.games || [];
           renderDayTabs();
           renderGames();
+          renderPerformers();
           renderMonth();
         })
-        .catch(function(){ daysIndex[key] = []; renderGames(); });
+        .catch(function(){ daysIndex[key] = []; renderGames(); renderPerformers(); });
       return;
     }
     renderDayTabs();
     renderGames();
+    renderPerformers();
     renderMonth();
   }
 
@@ -6105,6 +6668,9 @@ const scTodayKey = {{ today_key|tojson }};
         if(keys.length) selectDay(keys.find(function(k){ return (data.games||[]).some(function(g){ return g.date_key === k; }); }) || keys[0]);
         renderDayTabs();
         renderMonth();
+        // A different week needs a different board -- the baked-in one
+        // only covers the week the page was rendered for.
+        refreshPerformers();
       });
   }
 
@@ -6118,9 +6684,106 @@ const scTodayKey = {{ today_key|tojson }};
   document.getElementById('scMonthPrev').addEventListener('click', function(){ monthCursor = new Date(monthCursor.getFullYear(), monthCursor.getMonth()-1, 1); renderMonth(); });
   document.getElementById('scMonthNext').addEventListener('click', function(){ monthCursor = new Date(monthCursor.getFullYear(), monthCursor.getMonth()+1, 1); renderMonth(); });
 
+  // ---------------- daily performer board ----------------
+  // The week's whole board is baked into the page; this filters it down
+  // to the teams that actually played on the selected date. The split
+  // has to happen here rather than on the server, because the browser is
+  // the only place that knows the visitor's real local calendar day --
+  // the same reason indexGames() derives date_key on the client.
+  // 1st/2nd/3rd/4th -- the teens are the exception that a bare "th"
+  // gets wrong in both directions (11th not 11st, but 21st not 21th).
+  function ordinal(n){
+    const rem100 = n % 100;
+    if (rem100 >= 11 && rem100 <= 13) return n + 'th';
+    return n + ({ 1: 'st', 2: 'nd', 3: 'rd' }[n % 10] || 'th');
+  }
+
+  const perfEl = document.getElementById('scPerf');
+  const perfSubEl = document.getElementById('scPerfSub');
+  const PERF_SHOWN = 10;
+  let performers = SCORES_PERFORMERS || [];
+
+  function renderPerformers(){
+    const games = daysIndex[selectedDay] || [];
+    const teams = new Set();
+    games.forEach(function(g){
+      if (g.away && g.away.abbr) teams.add(g.away.abbr);
+      if (g.home && g.home.abbr) teams.add(g.home.abbr);
+    });
+
+    const rows = performers
+      .filter(function(p){ return teams.has(p.team) && p.fpts > 0; })
+      .slice(0, PERF_SHOWN);
+
+    const anyLive = games.some(function(g){ return g.status === 'in_progress'; });
+    const anyPlayed = games.some(function(g){ return g.status !== 'scheduled'; });
+    perfSubEl.textContent = rows.length
+      ? (anyLive ? 'Live · graded vs. every starter at the position'
+                 : 'Graded vs. every starter at the position')
+      : '';
+
+    if(!rows.length){
+      // Distinguish "hasn't happened yet" from "we have nothing" -- the
+      // first is the normal state of a Thursday morning, the second is
+      // a problem, and they should never look the same.
+      perfEl.innerHTML = '<div class="sc-perf-empty">' +
+        (anyPlayed ? 'No scoring yet in these games.'
+                   : 'Top performers appear here once these games kick off.') +
+        '</div>';
+      return;
+    }
+
+    perfEl.innerHTML = rows.map(function(p, i){
+      const stats = (p.stat_line || []).map(function(s){
+        return '<span class="sc-perf-stat"><b>' + s[0] + '</b><span>' + s[1] + '</span></span>';
+      }).join('');
+      const grade = p.grade || {};
+      const pct = grade.percentile == null ? '' : ordinal(grade.percentile) + ' pct';
+      const sub = [p.position + ' · ' + p.team, p.vs_label, pct]
+        .filter(Boolean).join(' · ');
+      return '<a class="sc-perf-row" href="/player?sid=' + encodeURIComponent(p.sid) + '">' +
+        '<span class="sc-perf-rank">' + (i + 1) + '</span>' +
+        '<img src="' + (p.photo || '') + '" alt="" onerror="this.style.visibility=\\'hidden\\'">' +
+        '<span class="sc-perf-main">' +
+          '<span class="sc-perf-name">' + p.name +
+            '<span class="pts">' + p.fpts + ' pts</span></span>' +
+          '<span class="sc-perf-stats">' + stats + '</span>' +
+          '<span class="sc-perf-sub">' + sub + '</span>' +
+        '</span>' +
+        '<span class="sc-perf-grade ' + (grade.grade_class || '') + '">' +
+          (grade.grade || '') + '</span>' +
+      '</a>';
+    }).join('');
+  }
+
+  function refreshPerformers(){
+    fetch('/api/performers?season=' + scSeason + '&week=' + scWeek)
+      .then(function(r){ return r.json(); })
+      .then(function(data){
+        if (data && data.performers && data.performers.length) {
+          performers = data.performers;
+          renderPerformers();
+        }
+      })
+      .catch(function(){ /* keep the board we already have */ });
+  }
+
+  // Only poll while something is actually being played. A finished or
+  // not-yet-started slate can't change, and polling it would be pure
+  // load for no new information.
+  setInterval(function(){
+    const games = daysIndex[selectedDay] || [];
+    if (games.some(function(g){ return g.status === 'in_progress'; })) refreshPerformers();
+  }, 45000);
+
   renderDayTabs();
   renderGames();
+  renderPerformers();
   renderMonth();
+  // /scores only bakes the board in when it was already cached server-side
+  // (it never blocks the render on a live stats fetch), so on a cold cache
+  // the page arrives with nothing and fills itself in here.
+  if (!performers.length) refreshPerformers();
 })();
 </script>
 """
