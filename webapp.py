@@ -6805,6 +6805,11 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + """
   /* A live game is outlined, the way the reference board marks the games
      actually worth looking at right now. */
   .sc-game-card.live{ background:var(--sc-surface2); box-shadow:inset 0 0 0 1px var(--accent-ink); }
+  /* Finished games are still worth showing, but they've been settled --
+     they recede so the live and upcoming cards in front of them read
+     first. */
+  .sc-game-card.done{ opacity:0.62; }
+  .sc-game-card.done:hover{ opacity:1; }
   .sc-game-top{ display:flex; align-items:stretch; gap:10px; }
   /* Both teams stack on the left, game state on the right -- the
      reference layout, and it reads better than left/right teams once a
@@ -7018,8 +7023,22 @@ const scTodayKey = {{ today_key|tojson }};
     }
   }
 
+  // What's still to come leads the board; finished games fall to the back.
+  // A slate you can still do something about is the reason to open this
+  // page at all, and on a Sunday afternoon the early games would
+  // otherwise sit in front of every window that hasn't kicked off yet.
+  // Live first (happening now), then scheduled (about to), then final.
+  const GAME_ORDER = { in_progress: 0, scheduled: 1, final: 2 };
+
   function renderGames(){
-    const games = daysIndex[selectedDay] || [];
+    const games = (daysIndex[selectedDay] || []).slice().sort(function(a, b){
+      const pa = GAME_ORDER[a.status] === undefined ? 1 : GAME_ORDER[a.status];
+      const pb = GAME_ORDER[b.status] === undefined ? 1 : GAME_ORDER[b.status];
+      if (pa !== pb) return pa - pb;
+      // Within a group, keep the natural kickoff order so the slate still
+      // reads chronologically rather than shuffling on every poll.
+      return String(a.date || '').localeCompare(String(b.date || ''));
+    });
     gamesEl.innerHTML = '';
     if(!games.length){
       gamesEl.innerHTML = '<div class="sc-empty">No games this day.</div>';
@@ -7027,7 +7046,8 @@ const scTodayKey = {{ today_key|tojson }};
     }
     games.forEach(function(g){
       const a = document.createElement('a');
-      a.className = 'sc-game-card' + (g.status === 'in_progress' ? ' live' : '');
+      a.className = 'sc-game-card' + (g.status === 'in_progress' ? ' live' : '') +
+                    (g.status === 'final' ? ' done' : '');
       a.href = '/game?id=' + encodeURIComponent(g.id);
 
       const away = g.away || {}, home = g.home || {};
