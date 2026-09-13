@@ -1,7 +1,12 @@
 name: Backfill Player Stats (one-time, all years)
 
 on:
-  workflow_dispatch: {}   # only runs when you click "Run workflow" -- never automatic
+  workflow_dispatch:   # only runs when you click "Run workflow" -- never automatic
+    inputs:
+      season:
+        description: "Single season to backfill (e.g. 2025). Leave blank to backfill every season from 2015 to the current year."
+        required: false
+        type: string
 
 jobs:
   backfill:
@@ -9,7 +14,12 @@ jobs:
     steps:
       - name: Sync every season, one at a time
         run: |
-          for year in $(seq 2015 $(date +%Y)); do
+          if [ -n "${{ github.event.inputs.season }}" ]; then
+            years="${{ github.event.inputs.season }}"
+          else
+            years=$(seq 2015 $(date +%Y))
+          fi
+          for year in $years; do
             echo "Syncing $year..."
             curl -X POST "https://fantasyfootballcalc.com/api/sync-stats?season=$year&secret=${{ secrets.SITE_PASSWORD }}"
             echo ""
