@@ -1725,21 +1725,35 @@ def _grade_reasoning(c):
         return "No game scheduled this week (bye)."
 
     if c["def_rank_used"] is None:
+        # A genuine data void -- every season _league_average_defense
+        # checked had zero teams with any data at all for this position.
+        # Extremely rare (would require a season with no games played by
+        # anyone at that position), unlike the old, common "no data yet
+        # for this specific opponent" gap that used to land here.
         matchup_desc = "not enough defensive data yet to grade the matchup"
     else:
         if c["def_source"] == "current":
             source_note = ""
         elif c["def_source"] == "last_year":
             source_note = " (based on last year)"
+        elif c["def_source"] == "historical":
+            source_note = f" (based on {c['def_season_used']})"
+        elif c["def_source"] == "league_average":
+            source_note = " (league average -- no specific history for this opponent yet)"
         else:
             games = c["def_games_sampled"]
             source_note = f" (small sample -- {games} game{'s' if games != 1 else ''} this year)"
-        rank = c["def_rank_used"]
-        if rank >= 24:
+        # Percentile-based, not a hardcoded rank cutoff -- def_pool_size
+        # varies (a league-average fallback may be built from fewer
+        # teams than a full 32-team season), so a fixed "rank >= 24"
+        # boundary would misclassify a matchup once the pool isn't a
+        # full 32.
+        pct = c["def_percentile"]
+        if pct >= 0.7:
             matchup_desc = f"a great matchup{source_note}"
-        elif rank >= 17:
+        elif pct >= 0.5:
             matchup_desc = f"a favorable matchup{source_note}"
-        elif rank <= 8:
+        elif pct <= 0.25:
             matchup_desc = f"a tough matchup{source_note}"
         else:
             matchup_desc = f"an average matchup{source_note}"
@@ -1765,6 +1779,57 @@ MIN_DEF_GAMES_FOR_CURRENT_YEAR = 4
 # numbers only" until the sample is real -- then it switches over
 # automatically, team by team, position by position, with no manual
 # intervention as the season progresses.
+
+DEF_HISTORY_SEASONS_BACK = 4
+# How far back compute_matchup_grade searches for a specific opponent's
+# defense-vs-position figure once the current season's sample is too
+# thin to trust. A single prior season (last year only) left a real gap:
+# any year where that ONE prior season's schedule/stats sync came up
+# incomplete for a specific team (a transient sync failure, a team that
+# changed abbreviation) meant that opponent showed "not enough data"
+# with no other path to a real number. Reaching back further finds real,
+# team-specific history far more often than stopping at just one year.
+
+
+def _defense_entry_multi_season(opponent, position, season, seasons_back=DEF_HISTORY_SEASONS_BACK):
+    """Searches season-1, season-2, ... back through `seasons_back` prior
+    years for a real defense-vs-position entry for this exact opponent,
+    returning (year, pool_size, entry) for the first one found, or
+    (None, None, None) if every one of those years is empty for this
+    team (get_defense_vs_position is cached per season, so re-checking
+    several years costs nothing after the first computation each)."""
+    for offset in range(1, seasons_back + 1):
+        yr = season - offset
+        dvp = get_defense_vs_position(yr)
+        entry = dvp.get(opponent, {}).get(position)
+        if entry:
+            return yr, (len(dvp) or 32), entry
+    return None, None, None
+
+
+def _league_average_defense(position, season, seasons_back=DEF_HISTORY_SEASONS_BACK):
+    """League-wide average fpts allowed per game to `position`, used as
+    the absolute last resort when a specific opponent has zero real data
+    across every season checked (a genuine data gap, or a team that
+    doesn't resolve under this abbreviation in any synced season). A
+    paid, data-driven product should never just say "not enough data" --
+    a neutral, league-average estimate (and a middle-of-the-pack rank,
+    so it doesn't quietly bias the grade toward "great" or "tough") beats
+    showing no number at all. Searches the current season first, then
+    the same prior seasons the specific-opponent lookup already checks,
+    stopping at the first season with ANY real per-team data for this
+    position."""
+    for offset in range(0, seasons_back + 1):
+        yr = season - offset
+        dvp = get_defense_vs_position(yr)
+        values = [team_data[position]["fpts_allowed_per_game"] for team_data in dvp.values() if position in team_data]
+        if values:
+            return {
+                "fpts_allowed_per_game": round(sum(values) / len(values), 1),
+                "season": yr,
+                "pool_size": len(values),
+            }
+    return None
 
 
 # Shared with _star_pct_for_composite below, so the star fill's tier
@@ -1879,29 +1944,51 @@ def compute_matchup_grade(sid, season, week, cache=_matchup_grade_cache):
     # current-year sample per defense is thin to nonexistent (zero games
     # in week 1, a handful for the first month), so a defense needs at
     # least MIN_DEF_GAMES_FOR_CURRENT_YEAR games logged against this
-    # position before its current-year number outranks last year's full
-    # 17-game read on the same defense. Below that threshold the grade
-    # relies on last year exclusively; once a defense clears it (which
-    # happens automatically, team by team, as the season plays out), the
-    # switch to this year's real, current data is also automatic.
-    last_year_dvp = get_defense_vs_position(season - 1)
-    last_year_entry = last_year_dvp.get(sched["opponent"], {}).get(position) if sched else None
-
+    # position before its current-year number outranks a real prior-year
+    # read on the same defense. Below that threshold the grade searches
+    # backward through real history (see _defense_entry_multi_season);
+    # once a defense clears the current-year threshold (which happens
+    # automatically, team by team, as the season plays out), the switch
+    # to this year's real, current data is also automatic.
     if opp_entry and opp_entry["games"] >= MIN_DEF_GAMES_FOR_CURRENT_YEAR:
         def_rank_used, def_source, def_pool_size = opp_entry["rank"], "current", len(dvp) or 32
         def_games_sampled = opp_entry["games"]
-    elif last_year_entry:
-        def_rank_used, def_source, def_pool_size = last_year_entry["rank"], "last_year", len(last_year_dvp) or 32
-        def_games_sampled = last_year_entry["games"]
-    elif opp_entry:
-        # Early season, no last-year data available either (e.g. a team
-        # that didn't exist under this abbreviation last year) -- better
-        # than nothing, but flagged distinctly so the UI is honest about
-        # how thin the sample actually is.
-        def_rank_used, def_source, def_pool_size = opp_entry["rank"], "current_thin", len(dvp) or 32
-        def_games_sampled = opp_entry["games"]
+        def_fpts_allowed_pg_used, def_season_used = opp_entry["fpts_allowed_per_game"], season
     else:
-        def_rank_used, def_source, def_pool_size, def_games_sampled = None, None, 32, None
+        hist_year, hist_pool_size, hist_entry = (
+            _defense_entry_multi_season(sched["opponent"], position, season) if sched else (None, None, None)
+        )
+        if hist_entry:
+            def_rank_used, def_pool_size = hist_entry["rank"], hist_pool_size
+            def_source = "last_year" if hist_year == season - 1 else "historical"
+            def_games_sampled = hist_entry["games"]
+            def_fpts_allowed_pg_used, def_season_used = hist_entry["fpts_allowed_per_game"], hist_year
+        elif opp_entry:
+            # Early season, no real prior-year data available either (a
+            # team that doesn't resolve under this abbreviation in any
+            # synced season) -- better than nothing, but flagged
+            # distinctly so the UI is honest about how thin it is.
+            def_rank_used, def_source, def_pool_size = opp_entry["rank"], "current_thin", len(dvp) or 32
+            def_games_sampled = opp_entry["games"]
+            def_fpts_allowed_pg_used, def_season_used = opp_entry["fpts_allowed_per_game"], season
+        else:
+            # Absolute last resort: this specific opponent has zero real
+            # data anywhere in the seasons checked -- a data-driven, paid
+            # product should never just say "not enough data", so fall
+            # back to a neutral, league-wide average for the position
+            # instead of leaving this empty. Only a genuine data void
+            # (no team anywhere has any data for this position, in any
+            # season checked) leaves this None.
+            league_avg = _league_average_defense(position, season) if sched else None
+            if league_avg:
+                def_pool_size = league_avg["pool_size"]
+                def_rank_used = max(1, round(def_pool_size / 2))  # neutral, middle-of-the-pack
+                def_source = "league_average"
+                def_games_sampled = None
+                def_fpts_allowed_pg_used, def_season_used = league_avg["fpts_allowed_per_game"], league_avg["season"]
+            else:
+                def_rank_used, def_source, def_pool_size, def_games_sampled = None, None, 32, None
+                def_fpts_allowed_pg_used, def_season_used = None, None
     def_percentile = (def_rank_used - 1) / max(def_pool_size - 1, 1) if def_rank_used is not None else 0.5
     # def_rank_used counts from 1 = fewest points allowed (toughest
     # matchup) -- correct for the composite math above, but "#3 of 32"
@@ -1912,20 +1999,6 @@ def compute_matchup_grade(sid, season, week, cache=_matchup_grade_cache):
     # -- "#1 most points allowed" reads correctly without needing any
     # convention explained alongside it.
     def_rank_most_pts_used = (def_pool_size - def_rank_used + 1) if def_rank_used is not None else None
-    # The single figure actually behind the grade -- whichever entry
-    # (this year's real sample, or last year's fallback) def_rank_used
-    # came from, paired with its own season label. The UI shows this ONE
-    # number ("PIT vs RB in 2025 -- 15.5 pts/gm, #3 most points allowed")
-    # instead of two separate this-year/last-year rows where one is
-    # often just blank early in the season.
-    if def_source in ("current", "current_thin"):
-        def_fpts_allowed_pg_used = opp_entry["fpts_allowed_per_game"] if opp_entry else None
-        def_season_used = season
-    elif def_source == "last_year":
-        def_fpts_allowed_pg_used = last_year_entry["fpts_allowed_per_game"] if last_year_entry else None
-        def_season_used = season - 1
-    else:
-        def_fpts_allowed_pg_used, def_season_used = None, None
 
     season_stats = get_season_stats(season)
     stat = season_stats.get(sid, {})
@@ -1984,8 +2057,6 @@ def compute_matchup_grade(sid, season, week, cache=_matchup_grade_cache):
         "def_source": def_source,
         "def_games_sampled": def_games_sampled,
         "def_percentile": round(def_percentile, 2),
-        "def_rank_last_year": last_year_entry["rank"] if last_year_entry else None,
-        "def_fpts_allowed_pg_last_year": last_year_entry["fpts_allowed_per_game"] if last_year_entry else None,
         "trend_score": round(trend_score, 2),
         "talent_score": round(talent_score, 2),
         "consistency_score": round(consistency_score, 2),
@@ -2084,8 +2155,6 @@ def compare_matchups(sid_a, sid_b, season, week):
             "photo": player_photo_url(sid),
             "opponent": c["opponent"], "def_rank": c["def_rank"],
             "def_fpts_allowed_pg": c["def_fpts_allowed_pg"],
-            "def_rank_last_year": c["def_rank_last_year"],
-            "def_fpts_allowed_pg_last_year": c["def_fpts_allowed_pg_last_year"],
             "def_rank_used": c["def_rank_used"], "def_rank_most_pts_used": c["def_rank_most_pts_used"],
             "def_fpts_allowed_pg_used": c["def_fpts_allowed_pg_used"],
             "def_season_used": c["def_season_used"], "def_pool_size": c["def_pool_size"],
@@ -2119,11 +2188,20 @@ def compare_matchups(sid_a, sid_b, season, week):
     if sit["injury_tier"] in hurt_tiers and start["injury_tier"] not in hurt_tiers:
         reasons.append(f"{sit['name']} carries an injury designation ({sit['injury']}) that caps their outlook this week.")
     # Compare whichever defensive figure actually fed each player's
-    # grade (this year's real sample, or last year's fallback) --
+    # grade (this year's real sample, or a real prior-year read) --
     # comparing start's current-year rank against sit's current-year
-    # rank doesn't mean much if one of them is grading off last year's
-    # numbers because their current sample is too thin to trust yet.
-    if start["def_rank_used"] is not None and sit["def_rank_used"] is not None and start["def_rank_used"] != sit["def_rank_used"]:
+    # rank doesn't mean much if one of them is grading off a prior
+    # season's numbers because their current sample is too thin to
+    # trust yet. Skipped entirely when either side fell all the way back
+    # to a league-average estimate (see def_source == "league_average"),
+    # since "X's opponent ranks #N" would misattribute a league-wide
+    # number to that specific opponent -- the per-side bullets below
+    # still surface that fallback honestly on its own.
+    if (
+        start["def_rank_used"] is not None and sit["def_rank_used"] is not None
+        and start["def_rank_used"] != sit["def_rank_used"]
+        and start["def_source"] != "league_average" and sit["def_source"] != "league_average"
+    ):
         if start["def_rank_used"] > sit["def_rank_used"]:
             reasons.append(
                 f"{start['name']} draws the easier matchup -- {start['opponent']} ranks #{start['def_rank_most_pts_used']} most points allowed "
@@ -2159,10 +2237,19 @@ def compare_matchups(sid_a, sid_b, season, week):
             reasons.append(f"{side['name']} has averaged {side['recent_avg']} pts over their last {side['recent_games']} games{note}.")
     for side in (start, sit):
         if side["opponent"] and side["def_rank_used"] is not None:
-            reasons.append(
-                f"{side['opponent']} vs {side['position']} in {side['def_season_used']}: allowed "
-                f"{side['def_fpts_allowed_pg_used']} pts/gm (#{side['def_rank_most_pts_used']} most points allowed)."
-            )
+            if side["def_source"] == "league_average":
+                # Never attribute a league-wide average to the specific
+                # opponent as if it were their real number -- label it
+                # for what it is.
+                reasons.append(
+                    f"No specific history for {side['opponent']} vs {side['position']} yet -- using the "
+                    f"{side['def_season_used']} league average of {side['def_fpts_allowed_pg_used']} pts/gm instead."
+                )
+            else:
+                reasons.append(
+                    f"{side['opponent']} vs {side['position']} in {side['def_season_used']}: allowed "
+                    f"{side['def_fpts_allowed_pg_used']} pts/gm (#{side['def_rank_most_pts_used']} most points allowed)."
+                )
     for side in (start, sit):
         hist = side["history_vs_opp"]
         if hist:
@@ -2335,16 +2422,26 @@ _stats_seeded_seasons = set()
 
 
 def ensure_season_stats_synced(season):
-    """Self-heals a season with ZERO rows in player_stats -- the gap
-    matchup grading actually hit: the one-time historical backfill
-    (backfill-stats.yml) only ever runs when someone manually dispatches
-    it in GitHub Actions, and the recurring 2-hour cron only ever syncs
-    "the current season". A season that's already over by the time this
-    app starts treating something newer as current -- last season, right
-    after a new one kicks off -- has no automatic path to ever get synced
-    unless something explicitly asks for it. This is that ask, fired the
-    moment anything (the /matchups page, the defense-vs-position
-    fallback) actually needs a prior season's stats.
+    """Self-heals a season whose player_stats coverage is incomplete --
+    the gap matchup grading actually hit: the one-time historical
+    backfill (backfill-stats.yml) only ever runs when someone manually
+    dispatches it in GitHub Actions, and the recurring 2-hour cron only
+    ever syncs "the current season". A season that's already over by the
+    time this app starts treating something newer as current -- last
+    season, right after a new one kicks off -- has no automatic path to
+    ever get synced unless something explicitly asks for it. This is
+    that ask, fired the moment anything (the /matchups page, the
+    defense-vs-position fallback) actually needs a prior season's stats.
+
+    Counts DISTINCT weeks present, not just "any row at all" -- checking
+    for a single row (the previous version of this check) meant a sync
+    that died partway through (a transient Sleeper hiccup on a handful
+    of weeks, a process recycle on a free-tier host) looked "seeded"
+    forever after saving just a few players' worth of one or two weeks,
+    which is exactly the shape of gap that made defense-vs-position
+    silently empty for most teams despite individual players' own
+    season stats existing. Same fix already applied to
+    ensure_schedule_synced for the identical failure mode.
 
     Deliberately a background thread, never a blocking fetch: an earlier
     version of get_season_stats DID block on a live fetch when a season
@@ -2357,11 +2454,13 @@ def ensure_season_stats_synced(season):
     conn = get_db()
     try:
         with conn.cursor() as cur:
-            cur.execute("SELECT 1 FROM player_stats WHERE season = %s LIMIT 1", (season,))
-            has_rows = cur.fetchone() is not None
+            cur.execute("SELECT COUNT(DISTINCT week) AS n FROM player_stats WHERE season = %s", (season,))
+            weeks_present = (cur.fetchone() or {}).get("n", 0)
     finally:
         conn.close()
-    if has_rows:
+    info = get_current_week_info()
+    weeks_expected = SCHEDULE_WEEKS_PER_SEASON if season < info["season"] else min(info["week"], SCHEDULE_WEEKS_PER_SEASON)
+    if weeks_present >= weeks_expected:
         _stats_seeded_seasons.add(season)
         return
     with _stats_sync_lock:
@@ -4448,13 +4547,15 @@ def api_warm():
             # aggregate query either.
             info = get_current_week_info()
             espn_week_scoreboard(info["season"], info["week"], info["season_type"])
-            get_defense_vs_position(int(SEASON))
-            # Matchup grading falls back to last season's defense-vs-position
-            # numbers early in a new season (this year's sample is thin to
-            # nonexistent) -- warming it here means that backfill kicks off
-            # on this 12-minute ping instead of waiting on whichever real
-            # visitor happens to load /matchups first.
-            get_defense_vs_position(int(SEASON) - 1)
+            # Matchup grading now searches back up to DEF_HISTORY_SEASONS_BACK
+            # prior seasons (plus a league-average fallback built from
+            # whichever of those has any data) any time a specific
+            # opponent's current-year sample is too thin -- warm every
+            # season that chain can reach here, so a real visitor never
+            # pays the first-computation cost for a season this process
+            # hasn't touched yet (each is cheap after this, cached 1h).
+            for offset in range(0, DEF_HISTORY_SEASONS_BACK + 1):
+                get_defense_vs_position(int(SEASON) - offset)
             get_referee_tendencies()
         except Exception:
             pass
@@ -6252,12 +6353,19 @@ MATCHUPS_HTML = BASE_STYLE + make_header("matchups") + """
 
   function renderCard(p, isWinner){
     // One row for whichever defensive figure actually fed this player's
-    // grade (this year's real sample, or last year's fallback) -- names
+    // grade (this year's real sample, a real prior-year read on this
+    // exact opponent, or -- only once no real opponent-specific data
+    // exists in any season checked -- a league-wide average) -- names
     // the opponent, the position, and the exact season the number comes
     // from, instead of two separate this-year/last-year rows where one
-    // was often just a blank "-" early in the season.
+    // was often just a blank "-" early in the season. A league-average
+    // number is labeled as such rather than attributed to the specific
+    // opponent, since it isn't their real number.
+    const defLabel = p.def_source === 'league_average'
+      ? 'League avg vs ' + p.position + ' (' + p.def_season_used + ')'
+      : p.opponent + ' vs ' + p.position + ' in ' + p.def_season_used + (p.def_source === 'current_thin' ? ' (early sample)' : '');
     const defRow = (p.def_rank_most_pts_used != null && p.def_fpts_allowed_pg_used != null)
-      ? '<div class="h2h-stat-row"><span class="muted">' + p.opponent + ' vs ' + p.position + ' in ' + p.def_season_used + (p.def_source === 'current_thin' ? ' (early sample)' : '') + '</span><span>' + p.def_fpts_allowed_pg_used + ' pts/gm (#' + p.def_rank_most_pts_used + ' most points allowed)</span></div>'
+      ? '<div class="h2h-stat-row"><span class="muted">' + defLabel + '</span><span>' + p.def_fpts_allowed_pg_used + ' pts/gm (#' + p.def_rank_most_pts_used + ' most points allowed)</span></div>'
       : '<div class="h2h-stat-row"><span class="muted">Defense vs ' + p.position + '</span><span>Not enough data yet</span></div>';
     // A game that's already final (or live) makes a "start/sit" call moot
     // -- call that out plainly instead of only leaving it to the prose
