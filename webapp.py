@@ -1797,6 +1797,45 @@ def compute_matchup_grade(sid, season, week, cache=_matchup_grade_cache):
     return data
 
 
+def _player_recent_games(sid, season, n=5):
+    """Average fantasy points over a player's last N games played,
+    walking back into last season if the current one doesn't have N
+    games yet -- so early-season "recent form" isn't computed off just
+    1-2 data points. Returns None if the player has no logged games at
+    all in either season."""
+    cur_weeks = sorted((get_season_stats(season).get(sid, {}).get("weeks") or {}).items())
+    tagged = [(season, wk, pts) for wk, pts in cur_weeks]
+    if len(tagged) < n:
+        last_weeks = sorted((get_season_stats(season - 1).get(sid, {}).get("weeks") or {}).items())
+        tagged = [(season - 1, wk, pts) for wk, pts in last_weeks] + tagged
+    last_n = tagged[-n:]
+    if not last_n:
+        return None
+    return {
+        "avg": round(sum(pts for _, _, pts in last_n) / len(last_n), 1),
+        "games": len(last_n),
+        "crossed_season": any(yr != season for yr, _, _ in last_n),
+    }
+
+
+def _player_history_vs_opponent(sid, season, team, opponent):
+    """Every game (current + last season) where this player's current
+    team faced `opponent`, via the same current-team schedule join every
+    other matchup figure in this app relies on (see get_defense_vs_
+    position's docstring re: the accepted trade-week approximation).
+    Returns a list of {season, week, fpts}, oldest first."""
+    if not team or not opponent:
+        return []
+    out = []
+    for yr in (season - 1, season):
+        weeks = sorted((get_season_stats(yr).get(sid, {}).get("weeks") or {}).items())
+        for wk, pts in weeks:
+            sched = get_schedule_for_team_week(yr, wk, team)
+            if sched and sched["opponent"] == opponent:
+                out.append({"season": yr, "week": wk, "fpts": pts})
+    return out
+
+
 def compare_matchups(sid_a, sid_b, season, week):
     """Head-to-head start/sit call between two players: reuses
     compute_matchup_grade for each (same cache, so this is free once
@@ -1816,10 +1855,10 @@ def compare_matchups(sid_a, sid_b, season, week):
     def summarize(sid, grade):
         p = all_players.get(sid, {})
         stat = season_stats.get(sid, {})
-        weeks_sorted = sorted((stat.get("weeks") or {}).items())
-        recent = [fpts for _, fpts in weeks_sorted[-4:]]
         badge = _injury_badge(p)
         c = grade["components"]
+        l5 = _player_recent_games(sid, season, 5)
+        history_vs_opp = _player_history_vs_opponent(sid, season, p.get("team"), c["opponent"])
         return {
             "sid": sid,
             "name": f"{p.get('first_name','')} {p.get('last_name','')}".strip(),
@@ -1832,7 +1871,10 @@ def compare_matchups(sid_a, sid_b, season, week):
             "def_source": c["def_source"], "def_games_sampled": c["def_games_sampled"],
             "grade": grade["grade"], "grade_class": grade["grade_class"], "stars": grade["stars"], "star_pct": grade["star_pct"], "composite": c["composite"],
             "season_avg": round(stat["fpts"] / stat["games"], 1) if stat.get("games") else 0.0,
-            "recent_avg": round(sum(recent) / len(recent), 1) if recent else 0.0,
+            "recent_avg": l5["avg"] if l5 else 0.0,
+            "recent_games": l5["games"] if l5 else 0,
+            "recent_crossed_season": l5["crossed_season"] if l5 else False,
+            "history_vs_opp": history_vs_opp,
             "injury": (badge["title"] if badge else "Healthy"),
             "injury_tier": c["injury_tier"],
             "reasoning": grade["reasoning"],
@@ -1865,9 +1907,35 @@ def compare_matchups(sid_a, sid_b, season, week):
             f"(rank {start['def_rank_last_year']}) vs. {sit['opponent']}'s {sit['def_fpts_allowed_pg_last_year']} (rank {sit['def_rank_last_year']})."
         )
     if start["recent_avg"] > sit["recent_avg"] + 1:
-        reasons.append(f"{start['name']} is trending up recently ({start['recent_avg']} pts/gm over their last few weeks vs. {sit['recent_avg']} for {sit['name']}).")
+        reasons.append(f"{start['name']} is trending up recently ({start['recent_avg']} pts/gm over their last {start['recent_games']} games vs. {sit['recent_avg']} for {sit['name']}).")
     if not reasons:
         reasons.append(f"{start['name']} grades out higher overall this week ({start['grade']} vs. {sit['grade']}).")
+
+    # Beyond the factors that actually decided the call above, always
+    # surface the underlying stats themselves -- each player's last-5-
+    # game form (crossing into last season early on, same as the grade's
+    # own trend factor), each side's opponent-defense split, and any
+    # real history against this exact opponent -- so the comparison
+    # reads as "the stats behind the call" the page promises, not just a
+    # bare verdict.
+    for side in (start, sit):
+        if side["recent_games"]:
+            note = " (includes last season)" if side["recent_crossed_season"] else ""
+            reasons.append(f"{side['name']} has averaged {side['recent_avg']} pts over their last {side['recent_games']} games{note}.")
+    for side in (start, sit):
+        if side["opponent"] and side["def_rank"]:
+            reasons.append(f"{side['opponent']} has allowed {side['def_fpts_allowed_pg']} pts/gm to the position this season (rank {side['def_rank']} of 32).")
+        elif side["opponent"] and side["def_rank_last_year"]:
+            reasons.append(f"{side['opponent']} allowed {side['def_fpts_allowed_pg_last_year']} pts/gm to the position last season (rank {side['def_rank_last_year']} of 32).")
+    for side in (start, sit):
+        hist = side["history_vs_opp"]
+        if hist:
+            avg_hist = round(sum(g["fpts"] for g in hist) / len(hist), 1)
+            most_recent = hist[-1]
+            reasons.append(
+                f"{side['name']} has faced {side['opponent']} {len(hist)} time(s) recently, averaging {avg_hist} pts "
+                f"(most recently {most_recent['fpts']} pts in {most_recent['season']} week {most_recent['week']})."
+            )
 
     return {"a": a, "b": b, "start_sid": start["sid"], "sit_sid": sit["sid"], "reasons": reasons}
 
@@ -5889,7 +5957,7 @@ MATCHUPS_HTML = BASE_STYLE + make_header("matchups") + """
       '<div class="h2h-stat-row"><span class="muted">Defense vs pos, this year' + (p.def_source === 'current_thin' ? ' (early sample)' : '') + '</span><span>' + (p.def_fpts_allowed_pg != null ? p.def_fpts_allowed_pg + ' pts/gm (rank ' + p.def_rank + ')' : '—') + '</span></div>' +
       lastYear +
       '<div class="h2h-stat-row"><span class="muted">Season avg</span><span>' + p.season_avg + ' pts</span></div>' +
-      '<div class="h2h-stat-row"><span class="muted">Last 4 wks avg</span><span>' + p.recent_avg + ' pts</span></div>' +
+      '<div class="h2h-stat-row"><span class="muted">Last ' + (p.recent_games || 5) + ' games avg' + (p.recent_crossed_season ? ' (incl. last season)' : '') + '</span><span>' + p.recent_avg + ' pts</span></div>' +
       '<div class="h2h-stat-row"><span class="muted">Injury</span><span>' + p.injury + '</span></div>' +
     '</div>';
   }
