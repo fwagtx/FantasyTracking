@@ -7,12 +7,27 @@ on:
     # the calendar/scoreboard pages and for matchup-grade opponent
     # lookups.
     - cron: "0 */2 * * *"
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      season:
+        description: "Season to sync (e.g. 2025). Leave blank for the current season."
+        required: false
+        type: string
 
 jobs:
   sync-schedule:
     runs-on: ubuntu-latest
     steps:
-      - name: Sync the current season's schedule
+      - name: Sync the schedule
         run: |
-          curl -sS -X POST "https://fantasyfootballcalc.com/api/sync-schedule?secret=${{ secrets.SITE_PASSWORD }}"
+          # The recurring cron only ever syncs the current season, so a
+          # prior season (which matchup grading needs for its
+          # defense-vs-position history) has no automatic path in here.
+          # This input is how one gets backfilled on demand.
+          season="${{ github.event.inputs.season }}"
+          if [ -n "$season" ]; then
+            url="https://fantasyfootballcalc.com/api/sync-schedule?season=$season&secret=${{ secrets.SITE_PASSWORD }}"
+          else
+            url="https://fantasyfootballcalc.com/api/sync-schedule?secret=${{ secrets.SITE_PASSWORD }}"
+          fi
+          curl -sS -X POST "$url"
