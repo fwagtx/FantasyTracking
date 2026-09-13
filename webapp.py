@@ -1180,9 +1180,18 @@ def espn_week_scoreboard(season, week, season_type=2, cache={}):
     if entry and now - entry["time"] < (20 if entry.get("any_live") else 3600):
         return entry["data"]
     try:
+        # `dates` is what actually selects the season here -- NOT `year`.
+        # ESPN's scoreboard endpoint silently ignores an unrecognized
+        # `year` param and just answers for the CURRENT season, which is
+        # the single bug behind every "last season has no data" symptom
+        # this app has had: a sync for 2025 fetched 2026's games, whose
+        # event IDs then collided with the real 2026 rows already in
+        # nfl_schedule, so the upsert only refreshed those and nothing
+        # ever landed under season=2025. The sync loop reported a
+        # perfectly healthy "18 weeks, N rows each" the whole time.
         r = requests.get(
             f"{ESPN_SITE_BASE}/scoreboard",
-            params={"week": week, "seasontype": season_type, "year": season},
+            params={"week": week, "seasontype": season_type, "dates": season},
             timeout=15,
         )
         r.raise_for_status()
@@ -1441,14 +1450,50 @@ def _parse_espn_event(ev):
     }
 
 
+def _event_belongs_to_season(row, season):
+    """True if a parsed ESPN event's kickoff really falls inside `season`.
+
+    An NFL season spans two calendar years -- September through early
+    January of season+1 (and the Super Bowl in February of season+1) --
+    so both years are legitimate for a given season, and nothing else
+    is. This is the guard that makes a wrong-season response from ESPN
+    (which is what silently poisoned this table before) impossible to
+    write: no kickoff date, no write.
+
+    January/February belong to the season that STARTED the previous
+    fall, so a 2026-01-04 kickoff is season 2025, not 2026 -- the same
+    rule current_nfl_season() already uses for "what season is it".
+    """
+    kickoff = row.get("kickoff")
+    if not kickoff:
+        return False
+    try:
+        year, month = int(str(kickoff)[:4]), int(str(kickoff)[5:7])
+    except (ValueError, TypeError):
+        return False
+    return year - 1 == season if month <= 2 else year == season
+
+
 def sync_week_schedule_to_db(season, week, season_type=2):
     """Fetch one week's games from ESPN and upsert into nfl_schedule.
     Returns rows upserted. Safe to call repeatedly (ON CONFLICT DO
-    UPDATE) -- this is how in-progress/final scores get refreshed."""
+    UPDATE) -- this is how in-progress/final scores get refreshed.
+
+    Every event is checked against the season actually asked for before
+    anything is written (see _event_belongs_to_season). ESPN answering
+    with a different season than requested is not hypothetical -- it is
+    exactly what happened for months here, and because the old upsert
+    left `season`/`week` untouched on conflict, those wrong-season rows
+    quietly refreshed the current season's rows instead of ever landing
+    under the requested one. Now a mismatch is dropped outright, and a
+    row that DOES belong gets its season/week corrected on conflict, so
+    any row previously filed under the wrong season self-heals the first
+    time that week is synced again."""
     if not DATABASE_URL:
         return 0
     data = espn_week_scoreboard(season, week, season_type)
-    rows = [r for r in (_parse_espn_event(ev) for ev in data.get("events", [])) if r]
+    parsed = [r for r in (_parse_espn_event(ev) for ev in data.get("events", [])) if r]
+    rows = [r for r in parsed if _event_belongs_to_season(r, season)]
     if not rows:
         return 0
     conn = get_db()
@@ -1461,6 +1506,9 @@ def sync_week_schedule_to_db(season, week, season_type=2):
                             home_team, away_team, home_score, away_score, status, updated_at)
                        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, NOW())
                        ON CONFLICT (espn_event_id) DO UPDATE SET
+                           season = EXCLUDED.season, week = EXCLUDED.week,
+                           season_type = EXCLUDED.season_type,
+                           home_team = EXCLUDED.home_team, away_team = EXCLUDED.away_team,
                            home_score = EXCLUDED.home_score, away_score = EXCLUDED.away_score,
                            status = EXCLUDED.status, kickoff = EXCLUDED.kickoff, updated_at = NOW()""",
                     (row["espn_event_id"], int(season), int(week), int(season_type), row["kickoff"],
@@ -4082,7 +4130,7 @@ def api_debug_espn():
             season_type = request.args.get("seasontype", default=2, type=int)
             r = requests.get(
                 f"{ESPN_SITE_BASE}/scoreboard",
-                params={"week": week, "seasontype": season_type, "year": season},
+                params={"week": week, "seasontype": season_type, "dates": season},
                 timeout=15,
             )
             body = r.json()
@@ -4204,7 +4252,7 @@ def _sync_full_season_schedule_background(season):
                         try:
                             probe = requests.get(
                                 f"{ESPN_SITE_BASE}/scoreboard",
-                                params={"week": week, "seasontype": 2, "year": season},
+                                params={"week": week, "seasontype": 2, "dates": season},
                                 timeout=15,
                             )
                             zero_row_probe = {
@@ -4344,7 +4392,7 @@ def api_sync_schedule_now():
                 try:
                     probe = requests.get(
                         f"{ESPN_SITE_BASE}/scoreboard",
-                        params={"week": week, "seasontype": season_type, "year": season},
+                        params={"week": week, "seasontype": season_type, "dates": season},
                         timeout=15,
                     )
                     entry["probe_http_status"] = probe.status_code
@@ -6374,7 +6422,10 @@ MATCHUPS_HTML = BASE_STYLE + make_header("matchups") + """
       ? 'League avg vs ' + p.position + ' (' + p.def_season_used + ')'
       : p.opponent + ' vs ' + p.position + ' in ' + p.def_season_used + (p.def_source === 'current_thin' ? ' (early sample)' : '');
     const defRow = (p.def_rank_most_pts_used != null && p.def_fpts_allowed_pg_used != null)
-      ? '<div class="h2h-stat-row"><span class="muted">' + defLabel + '</span><span>' + p.def_fpts_allowed_pg_used + ' pts/gm (#' + p.def_rank_most_pts_used + ' most points allowed)</span></div>'
+      // A rank is meaningless next to a league AVERAGE -- it IS the
+      // middle of the pack by definition, so printing "#N most points
+      // allowed" there states a ranking the number doesn't have.
+      ? '<div class="h2h-stat-row"><span class="muted">' + defLabel + '</span><span>' + p.def_fpts_allowed_pg_used + ' pts/gm' + (p.def_source === 'league_average' ? '' : ' (#' + p.def_rank_most_pts_used + ' most points allowed)') + '</span></div>'
       : '<div class="h2h-stat-row"><span class="muted">Defense vs ' + p.position + '</span><span>Not enough data yet</span></div>';
     // A game that's already final (or live) makes a "start/sit" call moot
     // -- call that out plainly instead of only leaving it to the prose
