@@ -1903,12 +1903,21 @@ def compute_matchup_grade(sid, season, week, cache=_matchup_grade_cache):
     else:
         def_rank_used, def_source, def_pool_size, def_games_sampled = None, None, 32, None
     def_percentile = (def_rank_used - 1) / max(def_pool_size - 1, 1) if def_rank_used is not None else 0.5
+    # def_rank_used counts from 1 = fewest points allowed (toughest
+    # matchup) -- correct for the composite math above, but "#3 of 32"
+    # on its own doesn't say whether #3 is a great or a brutal matchup
+    # unless the reader already knows that convention. Flipped into "how
+    # many points allowed" terms instead -- #1 here means the defense
+    # that allows the MOST (the single easiest matchup at the position)
+    # -- "#1 most points allowed" reads correctly without needing any
+    # convention explained alongside it.
+    def_rank_most_pts_used = (def_pool_size - def_rank_used + 1) if def_rank_used is not None else None
     # The single figure actually behind the grade -- whichever entry
     # (this year's real sample, or last year's fallback) def_rank_used
     # came from, paired with its own season label. The UI shows this ONE
-    # number ("PIT vs RB in 2025 -- 15.5 pts/gm, #3 of 32") instead of
-    # two separate this-year/last-year rows where one is often just
-    # blank early in the season.
+    # number ("PIT vs RB in 2025 -- 15.5 pts/gm, #3 most points allowed")
+    # instead of two separate this-year/last-year rows where one is
+    # often just blank early in the season.
     if def_source in ("current", "current_thin"):
         def_fpts_allowed_pg_used = opp_entry["fpts_allowed_per_game"] if opp_entry else None
         def_season_used = season
@@ -1968,6 +1977,7 @@ def compute_matchup_grade(sid, season, week, cache=_matchup_grade_cache):
         "def_rank": opp_entry["rank"] if opp_entry else None,
         "def_fpts_allowed_pg": opp_entry["fpts_allowed_per_game"] if opp_entry else None,
         "def_rank_used": def_rank_used,
+        "def_rank_most_pts_used": def_rank_most_pts_used,
         "def_fpts_allowed_pg_used": def_fpts_allowed_pg_used,
         "def_season_used": def_season_used,
         "def_pool_size": def_pool_size,
@@ -2076,7 +2086,8 @@ def compare_matchups(sid_a, sid_b, season, week):
             "def_fpts_allowed_pg": c["def_fpts_allowed_pg"],
             "def_rank_last_year": c["def_rank_last_year"],
             "def_fpts_allowed_pg_last_year": c["def_fpts_allowed_pg_last_year"],
-            "def_rank_used": c["def_rank_used"], "def_fpts_allowed_pg_used": c["def_fpts_allowed_pg_used"],
+            "def_rank_used": c["def_rank_used"], "def_rank_most_pts_used": c["def_rank_most_pts_used"],
+            "def_fpts_allowed_pg_used": c["def_fpts_allowed_pg_used"],
             "def_season_used": c["def_season_used"], "def_pool_size": c["def_pool_size"],
             "def_source": c["def_source"], "def_games_sampled": c["def_games_sampled"],
             "grade": grade["grade"], "grade_class": grade["grade_class"], "stars": grade["stars"], "star_pct": grade["star_pct"], "composite": c["composite"],
@@ -2115,8 +2126,8 @@ def compare_matchups(sid_a, sid_b, season, week):
     if start["def_rank_used"] is not None and sit["def_rank_used"] is not None and start["def_rank_used"] != sit["def_rank_used"]:
         if start["def_rank_used"] > sit["def_rank_used"]:
             reasons.append(
-                f"{start['name']} draws the easier matchup -- {start['opponent']} ranks #{start['def_rank_used']} "
-                f"against {start['position']} in {start['def_season_used']}, vs. {sit['opponent']} at #{sit['def_rank_used']} for {sit['name']}."
+                f"{start['name']} draws the easier matchup -- {start['opponent']} ranks #{start['def_rank_most_pts_used']} most points allowed "
+                f"to {start['position']} in {start['def_season_used']}, vs. {sit['opponent']} at #{sit['def_rank_most_pts_used']} for {sit['name']}."
             )
     if start["recent_avg"] > sit["recent_avg"] + 1:
         reasons.append(f"{start['name']} is trending up recently ({start['recent_avg']} pts/gm over their last {start['recent_games']} games vs. {sit['recent_avg']} for {sit['name']}).")
@@ -2150,7 +2161,7 @@ def compare_matchups(sid_a, sid_b, season, week):
         if side["opponent"] and side["def_rank_used"] is not None:
             reasons.append(
                 f"{side['opponent']} vs {side['position']} in {side['def_season_used']}: allowed "
-                f"{side['def_fpts_allowed_pg_used']} pts/gm (#{side['def_rank_used']} of {side['def_pool_size']})."
+                f"{side['def_fpts_allowed_pg_used']} pts/gm (#{side['def_rank_most_pts_used']} most points allowed)."
             )
     for side in (start, sit):
         hist = side["history_vs_opp"]
@@ -6245,8 +6256,8 @@ MATCHUPS_HTML = BASE_STYLE + make_header("matchups") + """
     // the opponent, the position, and the exact season the number comes
     // from, instead of two separate this-year/last-year rows where one
     // was often just a blank "-" early in the season.
-    const defRow = (p.def_rank_used != null && p.def_fpts_allowed_pg_used != null)
-      ? '<div class="h2h-stat-row"><span class="muted">' + p.opponent + ' vs ' + p.position + ' in ' + p.def_season_used + (p.def_source === 'current_thin' ? ' (early sample)' : '') + '</span><span>' + p.def_fpts_allowed_pg_used + ' pts/gm (#' + p.def_rank_used + ' of ' + p.def_pool_size + ')</span></div>'
+    const defRow = (p.def_rank_most_pts_used != null && p.def_fpts_allowed_pg_used != null)
+      ? '<div class="h2h-stat-row"><span class="muted">' + p.opponent + ' vs ' + p.position + ' in ' + p.def_season_used + (p.def_source === 'current_thin' ? ' (early sample)' : '') + '</span><span>' + p.def_fpts_allowed_pg_used + ' pts/gm (#' + p.def_rank_most_pts_used + ' most points allowed)</span></div>'
       : '<div class="h2h-stat-row"><span class="muted">Defense vs ' + p.position + '</span><span>Not enough data yet</span></div>';
     // A game that's already final (or live) makes a "start/sit" call moot
     // -- call that out plainly instead of only leaving it to the prose
