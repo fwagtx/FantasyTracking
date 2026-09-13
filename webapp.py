@@ -1933,17 +1933,24 @@ def _player_recent_games(sid, season, n=5):
     }
 
 
-def _player_history_vs_opponent(sid, season, team, opponent, max_meetings=3, seasons_back=6):
+def _player_history_vs_opponent(sid, season, team, opponent, max_meetings=3, seasons_back=2):
     """The last `max_meetings` games (oldest first) where this player's
     current team faced `opponent`, via the same current-team schedule
     join every other matchup figure in this app relies on (see
     get_defense_vs_position's docstring re: the accepted trade-week
     approximation). Two teams often meet only once a year (or skip a
     year entirely if they're not in the same division/conference), so
-    finding a real 3-game history means searching back several seasons,
-    not just last year -- self-heals each season's schedule the same
-    way get_defense_vs_position does, since only the current and prior
-    season are synced by default."""
+    reaching one season further back than the grade itself already uses
+    gives head-to-head history a real shot at finding more than one
+    meeting. Kept intentionally shallow (not searching back further):
+    this runs for both compared players every time someone uses the
+    Compare tool, and each additional season is another
+    ensure_schedule_synced() check plus a possible new background sync
+    kicked off -- a much deeper search (previously 6 seasons back) made
+    a single Compare click fan out into a dozen-plus of those, which is
+    exactly what made comparing players "take forever". The current and
+    prior season are already self-healed by compute_matchup_grade before
+    this ever runs, so only the one extra season here is new work."""
     if not team or not opponent:
         return []
     out = []
@@ -2271,6 +2278,31 @@ def ensure_season_stats_synced(season):
     threading.Thread(target=_run, daemon=True).start()
 
 
+def _refresh_season_stats_background(season):
+    """Re-fetches a season that already has rows, in the background --
+    same single-flight-per-season lock as ensure_season_stats_synced
+    (the two never need to run at once for the same season: one means
+    "empty, backfill it", this one means "has data, keep it current").
+    See get_season_stats' call site for why this must never be inline."""
+    with _stats_sync_lock:
+        if season in _stats_sync_busy_seasons:
+            return
+        _stats_sync_busy_seasons.add(season)
+
+    def _run():
+        try:
+            sync_season_to_db(season)
+        except Exception:
+            pass
+        finally:
+            with _stats_sync_lock:
+                _stats_sync_busy_seasons.discard(season)
+            _defense_vs_position_cache.clear()
+            _matchup_grade_cache.clear()
+
+    threading.Thread(target=_run, daemon=True).start()
+
+
 def get_season_stats(season, cache={}):
     """player_id -> {games, fpts, weeks, snap_pct} for a season. Reads
     only from our own database -- never calls Sleeper live during a page
@@ -2308,7 +2340,20 @@ def get_season_stats(season, cache={}):
         except Exception:
             agg = {}
         if agg:
-            sync_season_to_db(season)
+            # Keep an already-synced season current (this week's new
+            # stats, updated fpts) -- but NEVER inline/blocking. This
+            # used to call sync_season_to_db() directly here, which is a
+            # full live Sleeper refetch (an 18-week ThreadPoolExecutor
+            # fetch) run synchronously in the middle of a page request,
+            # every single time this season's 600s cache expired --
+            # directly contradicting this function's own "never calls
+            # Sleeper live during a page request" docstring above, and
+            # the actual cause of pages going slow once matchup grading
+            # started querying several seasons (current, last year, and
+            # now up to a few more for head-to-head history) in one
+            # request: every one of those was a potential multi-second
+            # live refetch stacked in sequence.
+            _refresh_season_stats_background(season)
         else:
             # Zero rows means this season has genuinely never been synced
             # (not "just hasn't updated in a while" -- that's the branch
