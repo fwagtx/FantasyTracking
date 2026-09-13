@@ -3079,9 +3079,30 @@ def matchups_page():
         except Exception as e:
             load_error = str(e)
 
+    # Visible right on this page, no separate diagnostic URL needed: how
+    # much last-year data actually exists behind the "based on last
+    # year"/"not enough data" reasoning above. If last_year_players_with_
+    # stats is 0, get_season_stats has no rows for that season at all
+    # (a stats-sync gap, unrelated to the schedule); if it's nonzero but
+    # teams_with_any_defense_data is well under 32, that's the signature
+    # of a team-abbreviation mismatch between this app's data and
+    # whichever teams never resolve to a match.
+    data_status = None
+    if current_user.is_authenticated:
+        try:
+            last_year = season - 1
+            data_status = {
+                "last_year": last_year,
+                "last_year_players_with_stats": len(get_season_stats(last_year)),
+                "last_year_teams_with_any_defense_data": len(get_defense_vs_position(last_year)),
+            }
+        except Exception:
+            data_status = None
+
     return render_template_string(
         MATCHUPS_HTML, rows=rows, season=season, week=week,
         current_season=info["season"], current_week=info["week"], load_error=load_error,
+        data_status=data_status,
     )
 
 
@@ -5617,6 +5638,15 @@ MATCHUPS_HTML = BASE_STYLE + make_header("matchups") + """
     <p class="eyebrow">Matchups</p>
     <h2>Who's worth starting this week</h2>
     {% if load_error %}<div class="error">Couldn't load matchup grades right now: {{ load_error }}</div>{% endif %}
+    {% if data_status %}
+    <p class="muted" style="font-size:11.5px; margin-top:4px;">
+      Data status ({{ data_status.last_year }}): {{ data_status.last_year_players_with_stats }} players tracked,
+      {{ data_status.last_year_teams_with_any_defense_data }}/32 teams have defense-vs-position data.
+      {% if data_status.last_year_players_with_stats == 0 %}<strong style="color:var(--critical);">No {{ data_status.last_year }} stats found at all -- that's the actual gap.</strong>
+      {% elif data_status.last_year_teams_with_any_defense_data < 32 %}<strong style="color:var(--warning);">Some teams are missing -- likely a team-abbreviation mismatch.</strong>
+      {% endif %}
+    </p>
+    {% endif %}
     {% if current_user.is_authenticated %}
     <div class="mu-toolbar">
       <input type="text" class="mu-search" id="muSearch" placeholder="Search player...">
