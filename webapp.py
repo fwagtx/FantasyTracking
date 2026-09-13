@@ -1492,7 +1492,10 @@ def get_referee_tendencies(cache={}):
     return data
 
 
-def get_defense_vs_position(season, cache={}):
+_defense_vs_position_cache = {}
+
+
+def get_defense_vs_position(season, cache=_defense_vs_position_cache):
     """{team: {position: {fpts_allowed_per_game, games, rank}}} -- how
     many fantasy points a team gives up per game to each position,
     ranked 1 (fewest allowed, toughest matchup) to N (most allowed,
@@ -1663,7 +1666,10 @@ _GRADE_ORDER = ["A+", "A", "A-", "B+", "B", "B-", "C+", "C", "C-", "D+", "D", "D
 _GRADE_RANK = {g: len(_GRADE_ORDER) - i for i, g in enumerate(_GRADE_ORDER)}
 
 
-def compute_matchup_grade(sid, season, week, cache={}):
+_matchup_grade_cache = {}
+
+
+def compute_matchup_grade(sid, season, week, cache=_matchup_grade_cache):
     """Composite 'should you start them' grade for one player in one
     week: opponent defense strength at their position, recent scoring
     trend, a talent baseline from their dynasty value, and recent
@@ -3626,6 +3632,15 @@ def _sync_full_season_schedule_background(season):
         finally:
             with _schedule_sync_lock:
                 _schedule_sync_busy_seasons.discard(season)
+            # A completed backfill writes straight to the DB, but
+            # get_defense_vs_position/compute_matchup_grade each cache
+            # their own results in memory for up to an hour -- without
+            # clearing them here, a genuinely successful sync would still
+            # leave every matchup grade serving its old cached answer
+            # (computed before this ran) for up to an hour with no
+            # outward sign the underlying data had actually changed.
+            _defense_vs_position_cache.clear()
+            _matchup_grade_cache.clear()
 
     threading.Thread(target=_run, daemon=True).start()
     return True
@@ -3746,6 +3761,15 @@ def api_sync_schedule_now():
             detail[week] = {"ok": False, "error": str(e)}
     weeks_with_rows = sum(1 for r in detail.values() if r.get("ok") and r.get("rows"))
     _schedule_seeded_seasons.discard(season)  # force a fresh completeness check on the next request
+    # A manual sync writes straight to the DB, but get_defense_vs_position
+    # and compute_matchup_grade each cache their own results in memory for
+    # up to an hour -- without clearing them here, the DB would already
+    # have the fresh schedule while every grade/matchup page kept serving
+    # the exact same stale "not enough data" result it had computed and
+    # cached before this sync ran, for up to an hour with no visible sign
+    # anything had changed.
+    _defense_vs_position_cache.clear()
+    _matchup_grade_cache.clear()
     return jsonify({"ok": True, "season": season, "weeks_with_rows": weeks_with_rows, "detail": detail})
 
 
