@@ -1,25 +1,29 @@
-name: Keep Site Warm
+name: Warm Caches
 
 on:
   schedule:
-    # Every 12 minutes -- comfortably under Render free tier's ~15 min
-    # spin-down window, so the worker never goes cold between visitors.
-    # GitHub's scheduler is best-effort and routinely runs 10-30 minutes
-    # late under load, so this does NOT reliably beat the spin-down; a
-    # paid always-on tier is the real fix, and this file can go away
-    # once the service is on one.
-    - cron: "*/12 * * * *"
+    # Every 30 minutes. This used to run every 12 minutes to stay under
+    # Render's free-tier ~15-minute spin-down, but the service is on a
+    # paid always-on instance now, so there is no container to keep
+    # awake and no cold boot to outrun -- GitHub's scheduler was never
+    # reliable enough for that job anyway (it routinely fires 10-30
+    # minutes late under load).
+    #
+    # What's left is genuinely useful and is why this file still exists:
+    # /api/warm rebuilds the in-memory caches that a deploy or a process
+    # restart empties, and it seeds any season the deepened matchup
+    # history needs but nobody has synced yet -- so that discovery
+    # happens here instead of on a real visitor's page load.
+    - cron: "*/30 * * * *"
   workflow_dispatch: {}
 
 jobs:
-  keep-warm:
+  warm:
     runs-on: ubuntu-latest
     env:
       SITE_PASSWORD: ${{ secrets.SITE_PASSWORD }}
     steps:
-      - name: Ping health check (keeps the free-tier worker from spinning down)
-        run: curl -sS --fail-with-body "https://fantasyfootballcalc.com/healthz"
-      - name: Refresh in-memory caches (players, trade values, ADP)
+      - name: Refresh caches and seed historical seasons
         run: |
           # See sync-stats.yml: this step reported success on every run
           # for months while the server answered "unauthorized", which is

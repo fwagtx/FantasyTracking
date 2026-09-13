@@ -1698,11 +1698,19 @@ def get_defense_vs_position(season, cache=_defense_vs_position_cache):
     "not synced yet". ensure_schedule_synced no-ops instantly once a
     season is confirmed present, so this costs nothing after the first
     call per season per process."""
-    ensure_schedule_synced(season)
     now = time.time()
     entry = cache.get(season)
     if entry and now - entry["time"] < 3600:
+        # Deliberately BEFORE the self-heal call below. This function is
+        # invoked once per graded player per season, so with the history
+        # search reaching several seasons back a single /matchups render
+        # calls it hundreds of times -- and ensure_schedule_synced runs a
+        # COUNT(DISTINCT week) against nfl_schedule for any season it
+        # hasn't yet confirmed complete. Probing ahead of the cache check
+        # meant a season mid-backfill cost one such query on every one of
+        # those calls. A warm cache now short-circuits the whole thing.
         return entry["data"]
+    ensure_schedule_synced(season)
 
     all_players = get_all_players()
     season_stats = get_season_stats(season)
@@ -1828,24 +1836,29 @@ MIN_DEF_GAMES_FOR_CURRENT_YEAR = 4
 # automatically, team by team, position by position, with no manual
 # intervention as the season progresses.
 
-DEF_HISTORY_SEASONS_BACK = 1
+DEF_HISTORY_SEASONS_BACK = 4
 # How far back compute_matchup_grade searches for a specific opponent's
 # defense-vs-position figure once the current season's sample is too
-# thin to trust. Deliberately kept at 1 (last year only) -- an earlier
-# version of this set it to 4, and every /matchups load then had to
-# compute get_defense_vs_position for up to 5 seasons instead of the 2
-# (current + last year) the rest of the app already touches. Any of
-# those extra 3 seasons that had never been synced before triggered a
-# brand-new full-season schedule+stats background sync on the spot --
-# on Render's free 0.1-CPU tier, several of those firing at once was
-# enough to starve the request thread itself, which is what actually
-# broke /matchups (it stopped loading at all, not just slowly). The
-# league-average fallback below still guarantees a real number even at
-# this shallower depth -- it only ever touches season and season-1,
-# never a season the app wasn't already computing anyway. Safe to raise
-# again once hosting has real CPU headroom (see _defense_entry_multi_
-# season and _league_average_defense, both already take `seasons_back`
-# as a parameter for exactly that).
+# thin to trust.
+#
+# This sat at 1 (last year only) for a while because setting it to 4
+# once took /matchups offline completely. Worth being precise about why,
+# since the depth itself was never the real problem: each extra season
+# meant another get_defense_vs_position, and any season not yet synced
+# triggered a full-season schedule AND stats background sync on the
+# spot. Nothing capped those across seasons, so one page load could
+# start ten concurrent 18-week sync threads -- on a 0.1-vCPU instance
+# that starved the request thread that spawned them.
+#
+# Both halves of that are now fixed independently of the hosting tier:
+# _BACKGROUND_SYNC_SLOTS caps concurrent syncs globally, and
+# get_defense_vs_position checks its cache before probing the DB. The
+# extra CPU means a cold computation is merely slower rather than fatal,
+# but the structural fixes are what make this depth safe to keep.
+#
+# The league-average fallback below is unaffected either way -- it still
+# guarantees a real number even when every one of these seasons is empty
+# for a given team.
 
 
 def _defense_entry_multi_season(opponent, position, season, seasons_back=DEF_HISTORY_SEASONS_BACK):
@@ -2170,34 +2183,55 @@ def _player_recent_games(sid, season, n=5):
     }
 
 
-def _player_history_vs_opponent(sid, season, team, opponent, max_meetings=3, seasons_back=2):
+H2H_SEASONS_BACK = 6
+# How far back head-to-head history will look for meetings between a
+# player's team and a specific opponent. Two teams often meet only once
+# a year, and non-divisional opponents can skip years entirely, so
+# showing a real "last 3 meetings" needs a wide window -- six seasons is
+# usually enough to find three meetings even for a rare inter-conference
+# pairing. The search below stops as soon as it has enough, so this is a
+# ceiling on how far it MAY look, not how far it usually does.
+
+
+def _player_history_vs_opponent(sid, season, team, opponent, max_meetings=3,
+                                seasons_back=H2H_SEASONS_BACK):
     """The last `max_meetings` games (oldest first) where this player's
     current team faced `opponent`, via the same current-team schedule
     join every other matchup figure in this app relies on (see
     get_defense_vs_position's docstring re: the accepted trade-week
-    approximation). Two teams often meet only once a year (or skip a
-    year entirely if they're not in the same division/conference), so
-    reaching one season further back than the grade itself already uses
-    gives head-to-head history a real shot at finding more than one
-    meeting. Kept intentionally shallow (not searching back further):
-    this runs for both compared players every time someone uses the
-    Compare tool, and each additional season is another
-    ensure_schedule_synced() check plus a possible new background sync
-    kicked off -- a much deeper search (previously 6 seasons back) made
-    a single Compare click fan out into a dozen-plus of those, which is
-    exactly what made comparing players "take forever". The current and
-    prior season are already self-healed by compute_matchup_grade before
-    this ever runs, so only the one extra season here is new work."""
+    approximation).
+
+    Searches newest season first and stops the moment it has enough
+    meetings, then flips the result back to oldest-first for display.
+    That direction matters more than the depth does: the old version
+    walked every season oldest-first and then threw away all but the
+    last three, so its cost was always the full window. Walking
+    backwards means the common case (a divisional opponent played twice
+    a year) finishes inside one or two seasons and never touches the
+    rest, which is what makes a six-season ceiling cheaper in practice
+    than the old two-season floor.
+
+    Deep history was briefly cut to two seasons because each extra
+    season could kick off its own background sync and a single Compare
+    click fanned out into a dozen of them. That fan-out is now bounded
+    globally by _BACKGROUND_SYNC_SLOTS and the repeat DB probes by
+    _seed_probe_due, so depth is no longer what makes Compare slow."""
     if not team or not opponent:
         return []
     out = []
-    for yr in range(season - seasons_back, season + 1):
+    for yr in range(season, season - seasons_back - 1, -1):
         ensure_schedule_synced(yr)
         weeks = sorted((get_season_stats(yr).get(sid, {}).get("weeks") or {}).items())
+        meetings_this_year = []
         for wk, pts in weeks:
             sched = get_schedule_for_team_week(yr, wk, team)
             if sched and sched["opponent"] == opponent:
-                out.append({"season": yr, "week": wk, "fpts": pts})
+                meetings_this_year.append({"season": yr, "week": wk, "fpts": pts})
+        # Prepend: we're walking seasons backwards, but each season's own
+        # weeks are already in ascending order.
+        out = meetings_this_year + out
+        if len(out) >= max_meetings:
+            break
     return out[-max_meetings:]
 
 
@@ -2494,6 +2528,33 @@ def sync_season_to_db(season):
 
 _stats_sync_lock = threading.Lock()
 _stats_sync_busy_seasons = set()
+# How long to wait before re-running the "is this season complete yet?"
+# COUNT query for a season already known to be incomplete.
+#
+# The seeded-season set short-circuits seasons confirmed COMPLETE, but
+# there was nothing for the other case: a season mid-backfill fails the
+# check every time, so every caller re-ran the count. With the history
+# search now reaching several seasons back, a single page render asks
+# about several incomplete seasons, and the answer cannot meaningfully
+# change between two calls a few milliseconds apart -- an 18-week sync
+# takes far longer than that. Re-probing once a minute per season is
+# plenty to notice one finishing.
+_SEED_PROBE_COOLDOWN_S = 60
+_seed_probe_last = {}
+
+
+def _seed_probe_due(kind, season, now=None):
+    """True if it's worth spending a DB query asking whether `season` is
+    fully synced yet. Records the attempt when it returns True."""
+    now = time.time() if now is None else now
+    key = (kind, season)
+    last = _seed_probe_last.get(key)
+    if last is not None and now - last < _SEED_PROBE_COOLDOWN_S:
+        return False
+    _seed_probe_last[key] = now
+    return True
+
+
 _stats_seeded_seasons = set()
 
 
@@ -2527,6 +2588,8 @@ def ensure_season_stats_synced(season):
     it now" would be here."""
     if season in _stats_seeded_seasons or not DATABASE_URL:
         return
+    if not _seed_probe_due("stats", season):
+        return
     conn = get_db()
     try:
         with conn.cursor() as cur:
@@ -2546,7 +2609,8 @@ def ensure_season_stats_synced(season):
 
     def _run():
         try:
-            sync_season_to_db(season)
+            with _BACKGROUND_SYNC_SLOTS:
+                sync_season_to_db(season)
         except Exception:
             pass
         finally:
@@ -2574,7 +2638,8 @@ def _refresh_season_stats_background(season):
 
     def _run():
         try:
-            sync_season_to_db(season)
+            with _BACKGROUND_SYNC_SLOTS:
+                sync_season_to_db(season)
         except Exception:
             pass
         finally:
@@ -4255,6 +4320,25 @@ def api_sync_stats():
     return jsonify({"ok": True, "season": season, "started": True})
 
 
+# Global ceiling on how many 18-week background syncs may run at once,
+# across ALL seasons and both kinds (schedule and stats).
+#
+# The per-season locks below already stop two triggers for the SAME
+# season from racing, but nothing stopped five DIFFERENT seasons from
+# each starting their own schedule sync and their own stats sync -- up
+# to ten concurrent threads, each walking 18 weeks of outbound HTTP,
+# every one of them kicked off by a single visitor's page load. That is
+# what actually took /matchups offline when DEF_HISTORY_SEASONS_BACK was
+# first raised to 4; the thin CPU allowance made it fatal rather than
+# merely wasteful, so more CPU alone would hide this rather than fix it.
+#
+# Acquired INSIDE the worker thread, never by the caller, so a request
+# still returns instantly -- queued syncs simply wait their turn in the
+# background. The per-season busy flag stays set for the whole wait, so
+# queueing never lets a duplicate of the same season slip past.
+_BACKGROUND_SYNC_SLOTS = threading.BoundedSemaphore(2)
+
+
 _schedule_sync_lock = threading.Lock()
 _schedule_sync_busy_seasons = set()
 _schedule_sync_last_result = {}
@@ -4285,6 +4369,12 @@ def _sync_full_season_schedule_background(season):
         weeks_synced = 0
         last_error = None
         zero_row_probe = None
+        # See _BACKGROUND_SYNC_SLOTS: one page load can now want several
+        # seasons at once, and 18 weeks of outbound fetches per season is
+        # exactly the work that must not all run at once. Acquired here,
+        # inside the thread, rather than in the caller -- the request
+        # that triggered this still returns immediately either way.
+        _BACKGROUND_SYNC_SLOTS.acquire()
         try:
             for week in range(1, 19):
                 # One bad week (a transient ESPN hiccup, a rate limit, a
@@ -4325,6 +4415,7 @@ def _sync_full_season_schedule_background(season):
                 except Exception as e:
                     last_error = f"week {week}: {e}"
         finally:
+            _BACKGROUND_SYNC_SLOTS.release()
             with _schedule_sync_lock:
                 _schedule_sync_busy_seasons.discard(season)
             # Every prior fix here (loop-abort, lock contention, partial-
@@ -4375,6 +4466,8 @@ def ensure_schedule_synced(season):
     permanently stranding the other 16-17 with no data and no further
     retries for the rest of this process's life."""
     if season in _schedule_seeded_seasons or not DATABASE_URL:
+        return
+    if not _seed_probe_due("schedule", season):
         return
     conn = get_db()
     try:
@@ -4665,13 +4758,30 @@ def api_warm():
             # aggregate query either.
             info = get_current_week_info()
             espn_week_scoreboard(info["season"], info["week"], info["season_type"])
-            # Matchup grading now searches back up to DEF_HISTORY_SEASONS_BACK
+            # Matchup grading searches back up to DEF_HISTORY_SEASONS_BACK
             # prior seasons (plus a league-average fallback built from
             # whichever of those has any data) any time a specific
-            # opponent's current-year sample is too thin -- warm every
-            # season that chain can reach here, so a real visitor never
-            # pays the first-computation cost for a season this process
-            # hasn't touched yet (each is cheap after this, cached 1h).
+            # opponent's current-year sample is too thin, and head-to-head
+            # history reaches back further still. Warm every season either
+            # chain can reach.
+            #
+            # This is the part that matters most now that those depths are
+            # back up: a season nobody has touched yet needs its schedule
+            # and stats seeded, and whoever asks first is the one who pays
+            # for discovering that. Doing it here means that "first asker"
+            # is this scheduled job rather than a real visitor's page load,
+            # which is what turns a deep history search from a latency
+            # problem into a background one. _BACKGROUND_SYNC_SLOTS keeps
+            # the seeding itself from running more than two seasons at a
+            # time regardless.
+            warm_depth = max(DEF_HISTORY_SEASONS_BACK, H2H_SEASONS_BACK)
+            for offset in range(0, warm_depth + 1):
+                yr = int(SEASON) - offset
+                ensure_schedule_synced(yr)
+                ensure_season_stats_synced(yr)
+            # Only the defense-history depth needs the (more expensive)
+            # per-team aggregate computed and cached; the deeper H2H
+            # seasons just need their raw rows present, seeded above.
             for offset in range(0, DEF_HISTORY_SEASONS_BACK + 1):
                 get_defense_vs_position(int(SEASON) - offset)
             get_referee_tendencies()
