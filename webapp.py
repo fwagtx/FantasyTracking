@@ -3773,6 +3773,67 @@ def api_sync_schedule_now():
     return jsonify({"ok": True, "season": season, "weeks_with_rows": weeks_with_rows, "detail": detail})
 
 
+@app.route("/api/defense-vs-position-debug")
+def api_defense_vs_position_debug():
+    """Protected, read-only: why get_defense_vs_position(season) might
+    still have gaps even with a fully-synced schedule. A synced schedule
+    is only half the join -- the other half is get_season_stats(season)
+    (a completely separate table, player_stats) and matching each
+    player's CURRENT team abbreviation (Sleeper's convention) against
+    what's stored in nfl_schedule (ESPN's, run through
+    normalize_team_abbr -- which so far only maps WSH -> WAS and was
+    never verified against a real ESPN response for every other team,
+    per the project's own original open-risks list). A mismatch on any
+    other team would silently zero out that team's entries with no
+    error anywhere. This reports, for one season: how many players have
+    any stats at all, which of the 32 real team abbreviations never show
+    up as a schedule row's home/away team, and exactly which
+    teams have zero position entries in the computed defense table --
+    that last list is the direct answer to "why does this specific
+    team's matchup still say no data"."""
+    if request.args.get("secret") != SITE_PASSWORD:
+        return jsonify({"ok": False, "error": "unauthorized"}), 401
+    season = request.args.get("season", default=int(SEASON) - 1, type=int)
+
+    season_stats = get_season_stats(season)
+    all_players = get_all_players()
+    player_teams = {p.get("team") for sid, p in all_players.items() if sid in season_stats and p.get("team")}
+
+    schedule_teams = set()
+    if DATABASE_URL:
+        conn = get_db()
+        try:
+            with conn.cursor() as cur:
+                cur.execute("SELECT DISTINCT home_team FROM nfl_schedule WHERE season = %s", (season,))
+                schedule_teams.update(r["home_team"] for r in cur.fetchall())
+                cur.execute("SELECT DISTINCT away_team FROM nfl_schedule WHERE season = %s", (season,))
+                schedule_teams.update(r["away_team"] for r in cur.fetchall())
+        finally:
+            conn.close()
+
+    # A player's CURRENT team that never once appears in the season's
+    # schedule table is exactly the abbreviation-mismatch signature: the
+    # team objectively played 17 games that season, so its real
+    # abbreviation MUST appear in nfl_schedule somewhere unless
+    # normalize_team_abbr is spelling it differently than Sleeper does.
+    unmatched_player_teams = sorted(player_teams - schedule_teams)
+
+    dvp = get_defense_vs_position(season)
+    coverage = {pos: sorted(team for team in dvp if pos in dvp[team]) for pos in POSITIONS}
+    teams_with_any_position_data = {team for team in dvp if dvp[team]}
+    teams_with_zero_data = sorted(schedule_teams - teams_with_any_position_data)
+
+    return jsonify({
+        "ok": True, "season": season,
+        "players_with_season_stats": len(season_stats),
+        "distinct_current_teams_among_those_players": len(player_teams),
+        "distinct_teams_in_schedule_table": len(schedule_teams),
+        "player_teams_never_seen_in_schedule": unmatched_player_teams,
+        "teams_with_zero_defense_data_despite_being_in_schedule": teams_with_zero_data,
+        "position_coverage_team_counts": {pos: len(teams) for pos, teams in coverage.items()},
+    })
+
+
 @app.route("/api/schedule-status")
 def api_schedule_status():
     """Protected, read-only: how many distinct weeks of nfl_schedule
