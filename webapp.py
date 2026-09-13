@@ -3150,22 +3150,62 @@ def matchups_page():
     # of a team-abbreviation mismatch between this app's data and
     # whichever teams never resolve to a match.
     data_status = None
+    sample_trace = []
     if current_user.is_authenticated:
         try:
             last_year = season - 1
+            last_year_stats = get_season_stats(last_year)
+            last_year_dvp = get_defense_vs_position(last_year)
             data_status = {
                 "last_year": last_year,
-                "last_year_players_with_stats": len(get_season_stats(last_year)),
-                "last_year_teams_with_any_defense_data": len(get_defense_vs_position(last_year)),
+                "last_year_players_with_stats": len(last_year_stats),
+                "last_year_teams_with_any_defense_data": len(last_year_dvp),
                 "stats_sync_in_progress": last_year in _stats_sync_busy_seasons,
             }
+            # Stats exist but NOT ONE team matched the schedule -- rather
+            # than guess again at why, show real values: three actual
+            # players' current team + a week they have stats for, what
+            # get_schedule_for_team_week actually returned for that exact
+            # lookup, and every schedule row that team appears in at all
+            # (any week). Whatever's different between "the team string
+            # this app is looking up" and "what's actually stored" will
+            # be directly visible side by side here.
+            if last_year_stats and not last_year_dvp and DATABASE_URL:
+                all_players = get_all_players()
+                conn = get_db()
+                try:
+                    with conn.cursor() as cur:
+                        for sid, stat in last_year_stats.items():
+                            if len(sample_trace) >= 3:
+                                break
+                            p = all_players.get(sid)
+                            weeks = stat.get("weeks") or {}
+                            if not p or not p.get("team") or not weeks:
+                                continue
+                            team = p["team"]
+                            week = sorted(weeks.keys())[0]
+                            sched_result = get_schedule_for_team_week(last_year, week, team)
+                            cur.execute(
+                                "SELECT week, home_team, away_team FROM nfl_schedule "
+                                "WHERE season = %s AND (home_team = %s OR away_team = %s) "
+                                "ORDER BY week LIMIT 3",
+                                (last_year, team, team),
+                            )
+                            sample_trace.append({
+                                "player_sid": sid, "player_current_team": team, "week_checked": week,
+                                "get_schedule_for_team_week_result": sched_result,
+                                "schedule_rows_for_this_exact_team_string": cur.fetchall(),
+                            })
+                finally:
+                    conn.close()
         except Exception:
             data_status = None
+            sample_trace = []
 
     return render_template_string(
         MATCHUPS_HTML, rows=rows, season=season, week=week,
         current_season=info["season"], current_week=info["week"], load_error=load_error,
-        data_status=data_status,
+        data_status=data_status, sample_trace=sample_trace,
     )
 
 
@@ -5712,6 +5752,12 @@ MATCHUPS_HTML = BASE_STYLE + make_header("matchups") + """
       {% elif data_status.last_year_teams_with_any_defense_data < 32 %}<strong style="color:var(--warning);">Some teams are missing -- likely a team-abbreviation mismatch.</strong>
       {% endif %}
     </p>
+    {% endif %}
+    {% if sample_trace %}
+    <div style="margin-top:8px; padding:10px 12px; background:var(--paper-sunken); border-radius:8px; font-family:'IBM Plex Mono'; font-size:11px; white-space:pre-wrap; overflow-x:auto;">{% for t in sample_trace %}Player {{ t.player_sid }} -- current team "{{ t.player_current_team }}" -- checked week {{ t.week_checked }}
+  get_schedule_for_team_week(2025, {{ t.week_checked }}, "{{ t.player_current_team }}") -&gt; {{ t.get_schedule_for_team_week_result }}
+  schedule rows containing "{{ t.player_current_team }}" (any week): {{ t.schedule_rows_for_this_exact_team_string }}
+{% endfor %}</div>
     {% endif %}
     {% if current_user.is_authenticated %}
     <div class="mu-toolbar">
