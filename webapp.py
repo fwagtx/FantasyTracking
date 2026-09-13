@@ -1818,22 +1818,28 @@ def _player_recent_games(sid, season, n=5):
     }
 
 
-def _player_history_vs_opponent(sid, season, team, opponent):
-    """Every game (current + last season) where this player's current
-    team faced `opponent`, via the same current-team schedule join every
-    other matchup figure in this app relies on (see get_defense_vs_
-    position's docstring re: the accepted trade-week approximation).
-    Returns a list of {season, week, fpts}, oldest first."""
+def _player_history_vs_opponent(sid, season, team, opponent, max_meetings=3, seasons_back=6):
+    """The last `max_meetings` games (oldest first) where this player's
+    current team faced `opponent`, via the same current-team schedule
+    join every other matchup figure in this app relies on (see
+    get_defense_vs_position's docstring re: the accepted trade-week
+    approximation). Two teams often meet only once a year (or skip a
+    year entirely if they're not in the same division/conference), so
+    finding a real 3-game history means searching back several seasons,
+    not just last year -- self-heals each season's schedule the same
+    way get_defense_vs_position does, since only the current and prior
+    season are synced by default."""
     if not team or not opponent:
         return []
     out = []
-    for yr in (season - 1, season):
+    for yr in range(season - seasons_back, season + 1):
+        ensure_schedule_synced(yr)
         weeks = sorted((get_season_stats(yr).get(sid, {}).get("weeks") or {}).items())
         for wk, pts in weeks:
             sched = get_schedule_for_team_week(yr, wk, team)
             if sched and sched["opponent"] == opponent:
                 out.append({"season": yr, "week": wk, "fpts": pts})
-    return out
+    return out[-max_meetings:]
 
 
 def compare_matchups(sid_a, sid_b, season, week):
@@ -1924,17 +1930,19 @@ def compare_matchups(sid_a, sid_b, season, week):
             reasons.append(f"{side['name']} has averaged {side['recent_avg']} pts over their last {side['recent_games']} games{note}.")
     for side in (start, sit):
         if side["opponent"] and side["def_rank"]:
-            reasons.append(f"{side['opponent']} has allowed {side['def_fpts_allowed_pg']} pts/gm to the position this season (rank {side['def_rank']} of 32).")
+            reasons.append(f"{side['opponent']} has allowed {side['def_fpts_allowed_pg']} pts/gm to {side['position']} this season (rank {side['def_rank']} of 32).")
         elif side["opponent"] and side["def_rank_last_year"]:
-            reasons.append(f"{side['opponent']} allowed {side['def_fpts_allowed_pg_last_year']} pts/gm to the position last season (rank {side['def_rank_last_year']} of 32).")
+            reasons.append(f"{side['opponent']} allowed {side['def_fpts_allowed_pg_last_year']} pts/gm to {side['position']} last season (rank {side['def_rank_last_year']} of 32).")
     for side in (start, sit):
         hist = side["history_vs_opp"]
         if hist:
             avg_hist = round(sum(g["fpts"] for g in hist) / len(hist), 1)
-            most_recent = hist[-1]
+            # Oldest-to-newest game log, so the trend reads left-to-right
+            # the way a schedule would -- not just the average and the
+            # single most recent result.
+            games_desc = ", ".join(f"{g['fpts']} pts ({g['season']} wk{g['week']})" for g in hist)
             reasons.append(
-                f"{side['name']} has faced {side['opponent']} {len(hist)} time(s) recently, averaging {avg_hist} pts "
-                f"(most recently {most_recent['fpts']} pts in {most_recent['season']} week {most_recent['week']})."
+                f"{side['name']}'s last {len(hist)} meeting(s) with {side['opponent']}: {games_desc} -- averaging {avg_hist} pts."
             )
 
     return {"a": a, "b": b, "start_sid": start["sid"], "sit_sid": sit["sid"], "reasons": reasons}
