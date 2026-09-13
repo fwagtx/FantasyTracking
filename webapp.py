@@ -328,6 +328,38 @@ def init_db():
             """)
             cur.execute("CREATE INDEX IF NOT EXISTS idx_referee_games_referee ON referee_games (referee_name);")
             cur.execute("CREATE INDEX IF NOT EXISTS idx_referee_games_season ON referee_games (season);")
+            # One row per player per play they were involved in, carrying
+            # that play's EPA. Stored per-player rather than per-play
+            # because every read is "what did this player do", and a pass
+            # attributes to both the passer and the receiver -- which a
+            # single play row can't express without a join table anyway.
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS player_plays (
+                    gsis_id        TEXT NOT NULL,
+                    sleeper_id     TEXT,
+                    season         INTEGER NOT NULL,
+                    week           INTEGER NOT NULL,
+                    game_id        TEXT NOT NULL,
+                    play_id        TEXT NOT NULL,
+                    role           TEXT NOT NULL,
+                    posteam        TEXT,
+                    defteam        TEXT,
+                    qtr            INTEGER,
+                    clock          TEXT,
+                    down           INTEGER,
+                    ydstogo        INTEGER,
+                    play_type      TEXT,
+                    description    TEXT,
+                    yards_gained   REAL,
+                    epa            REAL,
+                    wpa            REAL,
+                    success        BOOLEAN,
+                    touchdown      BOOLEAN,
+                    PRIMARY KEY (game_id, play_id, gsis_id, role)
+                );
+            """)
+            cur.execute("CREATE INDEX IF NOT EXISTS idx_player_plays_lookup ON player_plays (sleeper_id, season, week);")
+            cur.execute("CREATE INDEX IF NOT EXISTS idx_player_plays_season ON player_plays (season, week);")
         conn.commit()
     finally:
         conn.close()
@@ -2935,6 +2967,172 @@ def get_live_week_stats(season, week, cache=_live_week_stats_cache, allow_fetch=
         return entry["data"] if entry else {}
 
 
+# nflverse publishes NFL play-by-play with EPA already computed, free and
+# public, one gzipped CSV per season. This is the same data every public
+# NFL analytics site runs on, which is the point: a rating built on it
+# agrees with the rest of the world instead of being a private model
+# nobody can check.
+#
+# It publishes AFTER games finish, not during, so it can never drive a
+# live in-game number -- the fantasy score covers the live window and
+# this layers real EPA on top once a game is in the books.
+NFLVERSE_PBP_URL = ("https://github.com/nflverse/nflverse-data/releases/"
+                    "download/pbp/play_by_play_{season}.csv.gz")
+
+# Which nflverse column names a player to which role on a play. A
+# completed pass credits the passer AND the receiver, which is why plays
+# are stored per-player rather than one row per play.
+_PLAY_ROLE_COLUMNS = [
+    ("passer_player_id", "passer"),
+    ("rusher_player_id", "rusher"),
+    ("receiver_player_id", "receiver"),
+]
+
+
+def _gsis_to_sleeper_map():
+    """{gsis_id: sleeper_id} built from Sleeper's own player dump, which
+    carries each player's gsis_id alongside its own. Without this the
+    play data and the rest of the site are talking about different
+    people."""
+    out = {}
+    for sid, p in (get_all_players() or {}).items():
+        gsis = (p or {}).get("gsis_id")
+        if gsis:
+            out[gsis] = sid
+    return out
+
+
+def _truthy_csv(value):
+    """nflverse writes booleans as "1"/"0"/"" -- and occasionally as
+    "True". Anything unrecognised is False rather than an exception."""
+    return str(value).strip().lower() in ("1", "true", "t", "yes")
+
+
+def _float_csv(value):
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return None
+
+
+def _int_csv(value):
+    try:
+        return int(float(value))
+    except (TypeError, ValueError):
+        return None
+
+
+def sync_plays_to_db(season, weeks=None):
+    """Download one season of nflverse play-by-play and save every
+    attributed play. Returns the number of player-play rows written.
+
+    Streams and parses the gzip as it downloads rather than holding the
+    whole decompressed season (roughly 50k plays, 372 columns) in memory
+    at once, and keeps only the ~20 columns anything here actually reads.
+    """
+    import csv as _csv
+    import io as _io
+
+    if not DATABASE_URL:
+        return 0
+    gsis_map = _gsis_to_sleeper_map()
+    week_filter = {int(w) for w in weeks} if weeks else None
+
+    r = requests.get(NFLVERSE_PBP_URL.format(season=season), timeout=180, stream=True)
+    r.raise_for_status()
+    stream = _io.TextIOWrapper(gzip.GzipFile(fileobj=r.raw), encoding="utf-8", errors="replace")
+    reader = _csv.DictReader(stream)
+
+    rows = []
+    for play in reader:
+        wk = _int_csv(play.get("week"))
+        if wk is None or (week_filter is not None and wk not in week_filter):
+            continue
+        epa = _float_csv(play.get("epa"))
+        if epa is None:
+            continue
+        # Timeouts, kneels and the synthetic GAME/END rows carry no
+        # player and no useful description.
+        desc = (play.get("desc") or "").strip()
+        if not desc:
+            continue
+        shared = (
+            int(season), wk, play.get("game_id") or "", play.get("play_id") or "",
+            play.get("posteam") or None, play.get("defteam") or None,
+            _int_csv(play.get("qtr")), play.get("time") or None,
+            _int_csv(play.get("down")), _int_csv(play.get("ydstogo")),
+            play.get("play_type") or None, desc[:400],
+            _float_csv(play.get("yards_gained")), epa, _float_csv(play.get("wpa")),
+            _truthy_csv(play.get("success")), _truthy_csv(play.get("touchdown")),
+        )
+        for column, role in _PLAY_ROLE_COLUMNS:
+            gsis = (play.get(column) or "").strip()
+            if not gsis:
+                continue
+            rows.append((gsis, gsis_map.get(gsis), role) + shared)
+
+    if not rows:
+        return 0
+
+    conn = get_db()
+    saved = 0
+    try:
+        with conn.cursor() as cur:
+            for i in range(0, len(rows), 1000):
+                chunk = rows[i:i + 1000]
+                psycopg2.extras.execute_values(
+                    cur,
+                    """INSERT INTO player_plays
+                       (gsis_id, sleeper_id, role, season, week, game_id, play_id,
+                        posteam, defteam, qtr, clock, down, ydstogo, play_type,
+                        description, yards_gained, epa, wpa, success, touchdown)
+                       VALUES %s
+                       ON CONFLICT (game_id, play_id, gsis_id, role) DO UPDATE SET
+                           sleeper_id = EXCLUDED.sleeper_id, epa = EXCLUDED.epa,
+                           wpa = EXCLUDED.wpa, success = EXCLUDED.success,
+                           yards_gained = EXCLUDED.yards_gained,
+                           description = EXCLUDED.description""",
+                    chunk,
+                )
+                saved += len(chunk)
+        conn.commit()
+    finally:
+        conn.close()
+    # A finished sync changes what every performance score can show.
+    _player_plays_cache.clear()
+    _epa_distribution_cache.clear()
+    return saved
+
+
+_player_plays_cache = {}
+_epa_distribution_cache = {}
+_plays_sync_lock = threading.Lock()
+_plays_sync_busy_seasons = set()
+
+
+def sync_plays_background(season, weeks=None):
+    """Same single-flight + global-slot discipline as every other sync
+    here: one season at a time, never more than _BACKGROUND_SYNC_SLOTS
+    running at once, and the caller is never blocked."""
+    with _plays_sync_lock:
+        if season in _plays_sync_busy_seasons:
+            return False
+        _plays_sync_busy_seasons.add(season)
+
+    def _run():
+        try:
+            with _BACKGROUND_SYNC_SLOTS:
+                sync_plays_to_db(season, weeks)
+        except Exception:
+            pass
+        finally:
+            with _plays_sync_lock:
+                _plays_sync_busy_seasons.discard(season)
+
+    threading.Thread(target=_run, daemon=True).start()
+    return True
+
+
 def sync_season_to_db(season):
     """Fetch a season fresh from Sleeper and permanently save every
     player-week row to the database. This is what the scheduled GitHub
@@ -4164,6 +4362,179 @@ def build_stat_grid(position, stats):
     return grid
 
 
+def get_player_plays(sid, season, week, cache=_player_plays_cache):
+    """Every play this player was involved in, for one game, biggest EPA
+    swing first. Empty when nflverse hasn't published the game yet, which
+    is the normal state while it's still being played."""
+    season, week = _safe_int(season, int(SEASON)), _safe_int(week, 1)
+    key = (sid, season, week)
+    now = time.time()
+    entry = cache.get(key)
+    if entry and now - entry["time"] < 3600:
+        return entry["data"]
+    if not DATABASE_URL:
+        return []
+    conn = get_db()
+    try:
+        with conn.cursor() as cur:
+            cur.execute(
+                """SELECT role, qtr, clock, down, ydstogo, play_type, description,
+                          yards_gained, epa, wpa, success, touchdown, posteam, defteam
+                   FROM player_plays
+                   WHERE sleeper_id = %s AND season = %s AND week = %s
+                   ORDER BY epa DESC""",
+                (sid, season, week),
+            )
+            rows = [dict(r) for r in cur.fetchall()]
+    except Exception:
+        rows = []
+    finally:
+        conn.close()
+    for r in rows:
+        r["epa"] = round(r["epa"], 2) if r["epa"] is not None else None
+        r["wpa"] = round(r["wpa"], 3) if r["wpa"] is not None else None
+        r["yards_gained"] = _int_csv(r["yards_gained"])
+    cache[key] = {"data": rows, "time": now}
+    return rows
+
+
+def get_player_game_epa(sid, season, week):
+    """One game's EPA summary for a player: total, per play, success rate.
+
+    Totalled across every role, so a running back who also caught passes
+    is credited for both -- the question is what the player contributed,
+    not what he contributed as a rusher."""
+    plays = get_player_plays(sid, season, week)
+    if not plays:
+        return None
+    epas = [p["epa"] for p in plays if p["epa"] is not None]
+    if not epas:
+        return None
+    successes = [p for p in plays if p.get("success")]
+    return {
+        "total_epa": round(sum(epas), 2),
+        "plays": len(epas),
+        "epa_per_play": round(sum(epas) / len(epas), 3),
+        "success_rate": round(100 * len(successes) / len(plays)),
+        "best_play": max(plays, key=lambda p: p["epa"] if p["epa"] is not None else -99),
+    }
+
+
+def get_epa_distribution(season, cache=_epa_distribution_cache):
+    """{position: sorted list of per-game total EPA} -- the reference the
+    Impact rating is measured against, built the same way the fantasy
+    distribution is: only starter-caliber games, so an average is an
+    average STARTER rather than an average of everyone who took a snap."""
+    season = _safe_int(season, int(SEASON))
+    now = time.time()
+    entry = cache.get(season)
+    if entry and now - entry["time"] < 3600:
+        return entry["data"]
+    if not DATABASE_URL:
+        return {}
+    all_players = get_all_players()
+    conn = get_db()
+    try:
+        with conn.cursor() as cur:
+            cur.execute(
+                """SELECT sleeper_id, week, SUM(epa) AS total_epa
+                   FROM player_plays
+                   WHERE season = %s AND sleeper_id IS NOT NULL
+                   GROUP BY sleeper_id, week""",
+                (season,),
+            )
+            rows = cur.fetchall()
+    except Exception:
+        rows = []
+    finally:
+        conn.close()
+
+    by_week = {}
+    for r in rows:
+        p = all_players.get(r["sleeper_id"])
+        pos = (p or {}).get("position")
+        if not pos or pos not in SCORED_POSITIONS or r["total_epa"] is None:
+            continue
+        by_week.setdefault(r["week"], {}).setdefault(pos, []).append(float(r["total_epa"]))
+
+    pools = {}
+    for _wk, by_pos in by_week.items():
+        for pos, values in by_pos.items():
+            values.sort(reverse=True)
+            pools.setdefault(pos, []).extend(values[:_PERF_POOL_SIZE.get(pos, _PERF_POOL_DEFAULT)])
+    for pos in pools:
+        pools[pos].sort()
+    cache[season] = {"data": pools, "time": now}
+    return pools
+
+
+def grade_impact(position, total_epa, season=None):
+    """The EPA counterpart to grade_performance: how much a player's
+    plays actually moved their team, scored on the same open-ended scale
+    so the two numbers can sit side by side and be read the same way.
+
+    Kept separate from the fantasy score rather than blended into it,
+    because they genuinely measure different things -- a back with two
+    one-yard touchdowns is a fantasy monster and an ordinary real-football
+    performer, and flattening that into one figure would hide the most
+    interesting thing either number has to say.
+
+    Returns None when there's no play data for the game at all, which the
+    UI shows as an absent panel rather than a zero."""
+    if total_epa is None:
+        return None
+    season = _safe_int(season if season is not None else SEASON, int(SEASON))
+    pool = (get_epa_distribution(season) or {}).get(position)
+    if not pool or len(pool) < 20:
+        prior = (get_epa_distribution(season - 1) or {}).get(position)
+        pool = prior if prior and len(prior) >= 20 else pool
+    if not pool:
+        return None
+    median = _pool_quantile(pool, 0.50)
+    p99 = _pool_quantile(pool, 0.99)
+    # EPA is routinely negative, which the fantasy scale never is, so the
+    # zero anchor is the pool's own floor rather than "did nothing".
+    floor = _pool_quantile(pool, 0.01)
+    span_low = median - floor
+    if total_epa <= median:
+        score = _SCORE_MID * ((total_epa - floor) / span_low) if span_low > 0 else 0.0
+    else:
+        span_high = p99 - median
+        slope = (_SCORE_P99 - _SCORE_MID) / span_high if span_high > 0 else 0.0
+        score = _SCORE_MID + (total_epa - median) * slope
+    score = round(max(0.0, score), 1)
+    return {
+        "score": score,
+        "score_class": _score_class(score),
+        "total_epa": round(total_epa, 2),
+        "median": round(median, 2),
+        "p99": round(p99, 2),
+        "percentile": round(100 * _percentile_in(pool, total_epa)),
+        "pool_size": len(pool),
+    }
+
+
+def epa_bar_width(value, impact):
+    """Bar width (percent) for an EPA figure on the Impact panel.
+
+    Unlike fantasy points, EPA is routinely negative, so the bars are
+    scaled from the low end of the range being shown rather than from
+    zero -- otherwise a below-average game would render as no bar at all
+    and read as missing data rather than as a bad day."""
+    if not impact:
+        return 0
+    value = 0.0 if value is None else float(value)
+    lo = min(0.0, float(impact.get("median") or 0), value)
+    hi = max(float(impact.get("p99") or 0), value, lo + 1.0)
+    span = hi - lo
+    if span <= 0:
+        return 0
+    return max(2, min(100, round(100 * (value - lo) / span)))
+
+
+app.jinja_env.globals["epa_width"] = epa_bar_width
+
+
 def get_performance_detail(sid, season, week):
     """Everything the /performance page shows for one player-week, or
     None if that player has no stat line for the week.
@@ -4192,6 +4563,9 @@ def get_performance_detail(sid, season, week):
     if isinstance(off_snp, (int, float)) and isinstance(tm_off_snp, (int, float)) and tm_off_snp:
         snap_pct = round(100 * off_snp / tm_off_snp)
 
+    epa_summary = get_player_game_epa(sid, season, week)
+    plays = get_player_plays(sid, season, week)
+
     # Target share, same idea, for pass catchers.
     target_share = None
     tgt, team_tgt = stats.get("rec_tgt"), stats.get("tm_pass_att")
@@ -4219,6 +4593,12 @@ def get_performance_detail(sid, season, week):
         "snap_pct": snap_pct,
         "target_share": target_share,
         "score": grade_performance(position, fpts, season),
+        # Absent while a game is still being played -- nflverse publishes
+        # after the final whistle, so the page shows the fantasy score
+        # alone until then and gains the Impact panel afterwards.
+        "epa": epa_summary,
+        "impact": grade_impact(position, (epa_summary or {}).get("total_epa"), season),
+        "plays": plays,
     }
 
 
@@ -5396,6 +5776,20 @@ def ensure_schedule_synced(season):
         _schedule_seeded_seasons.add(season)
     else:
         _sync_full_season_schedule_background(season)
+
+
+@app.route("/api/sync-plays", methods=["GET", "POST"])
+def api_sync_plays():
+    """Pull one season of nflverse play-by-play (EPA included) into
+    player_plays. Backgrounded like every other sync -- a season is
+    roughly 50k plays and this must never hold a request open."""
+    if not _secret_ok():
+        return jsonify({"ok": False, "error": "unauthorized"}), 401
+    season = request.args.get("season", default=int(SEASON), type=int)
+    started = sync_plays_background(season)
+    if not started:
+        return jsonify({"ok": True, "season": season, "skipped": "already syncing this season"})
+    return jsonify({"ok": True, "season": season, "started": True})
 
 
 @app.route("/api/sync-schedule", methods=["GET", "POST"])
@@ -7464,6 +7858,7 @@ PERFORMANCE_HTML = BASE_STYLE + make_header("scores") + """
   .pf-headline{ display:flex; gap:16px; flex-wrap:wrap; margin-top:8px; }
   .pf-headline b{ font-family:"IBM Plex Mono"; font-size:26px; font-weight:700; }
   .pf-headline span{ font-size:11px; color:var(--pf-muted); margin-left:3px; }
+  .pf-scores{ display:flex; gap:14px; flex:none; }
   .pf-score{ flex:none; text-align:center; }
   .pf-score .n{ font-family:"IBM Plex Mono"; font-size:42px; font-weight:700; line-height:1; font-variant-numeric:tabular-nums; }
   .pf-score .l{ font-size:10px; color:var(--pf-muted); text-transform:uppercase; letter-spacing:0.06em; }
@@ -7471,6 +7866,18 @@ PERFORMANCE_HTML = BASE_STYLE + make_header("scores") + """
   .pf-score.good .n{ color:var(--good); opacity:0.88; }
   .pf-score.mid .n{ color:var(--warning); }
   .pf-score.poor .n{ color:var(--critical); }
+  .pf-score.historic .n{ color:var(--accent-ink); }
+
+  .pf-plays{ display:flex; flex-direction:column; }
+  .pf-play{ padding:9px 0; border-top:1px solid var(--pf-line); }
+  .pf-play:first-child{ border-top:none; }
+  .pf-play-head{ display:flex; justify-content:space-between; gap:10px; align-items:baseline; }
+  .pf-play-sit{ font-size:11px; color:var(--pf-muted); text-transform:capitalize; }
+  .pf-play-epa{ font-family:"IBM Plex Mono"; font-size:12px; font-weight:700; flex:none; }
+  .pf-play-epa.pos{ color:var(--good); }
+  .pf-play-epa.neg{ color:var(--critical); }
+  .pf-play-desc{ font-size:12.5px; margin-top:3px; line-height:1.4; }
+  .pf-play-desc.td{ color:var(--accent-ink); font-weight:700; }
 
   .pf-panel{ background:var(--pf-surface); border:1px solid var(--pf-line); border-radius:12px; padding:14px 16px; margin-top:16px; }
   .pf-panel h3{ font-family:"Big Shoulders Display"; font-size:17px; font-weight:800; text-transform:uppercase;
@@ -7562,9 +7969,17 @@ PERFORMANCE_HTML = BASE_STYLE + make_header("scores") + """
         <span><b>{{ detail.fpts }}</b><span>fpts</span></span>
       </div>
     </div>
-    <div class="pf-score {{ detail.score.score_class }}">
-      <div class="n">{{ '%.1f'|format(detail.score.score) }}</div>
-      <div class="l">Game score</div>
+    <div class="pf-scores">
+      <div class="pf-score {{ detail.score.score_class }}">
+        <div class="n">{{ '%.1f'|format(detail.score.score) }}</div>
+        <div class="l">Fantasy</div>
+      </div>
+      {% if detail.impact %}
+      <div class="pf-score {{ detail.impact.score_class }}">
+        <div class="n">{{ '%.1f'|format(detail.impact.score) }}</div>
+        <div class="l">Impact</div>
+      </div>
+      {% endif %}
     </div>
   </div>
 
@@ -7637,6 +8052,70 @@ PERFORMANCE_HTML = BASE_STYLE + make_header("scores") + """
       {% endif %}
     </p>
   </div>
+
+  {% if detail.impact %}
+  <div class="pf-panel">
+    <h3>Impact {{ '%.1f'|format(detail.impact.score) }}</h3>
+    <p class="pf-lede">
+      <b>{{ '%+.2f'|format(detail.epa.total_epa) }} expected points added</b>
+      over {{ detail.epa.plays }} plays.
+    </p>
+    <div class="pf-bars">
+      <div class="pf-bar-row is-this">
+        <span class="pf-bar-label">This game</span>
+        <span class="pf-bar-track">
+          <span class="pf-bar-fill" style="width:{{ epa_width(detail.epa.total_epa, detail.impact) }}%;"></span>
+        </span>
+        <span class="pf-bar-val">{{ '%+.1f'|format(detail.epa.total_epa) }}</span>
+      </div>
+      <div class="pf-bar-row">
+        <span class="pf-bar-label">Average {{ detail.position }}</span>
+        <span class="pf-bar-track">
+          <span class="pf-bar-fill" style="width:{{ epa_width(detail.impact.median, detail.impact) }}%;"></span>
+        </span>
+        <span class="pf-bar-val">{{ '%+.1f'|format(detail.impact.median) }}</span>
+      </div>
+      <div class="pf-bar-row">
+        <span class="pf-bar-label">Top 1% of {{ detail.position }}s</span>
+        <span class="pf-bar-track">
+          <span class="pf-bar-fill" style="width:{{ epa_width(detail.impact.p99, detail.impact) }}%;"></span>
+        </span>
+        <span class="pf-bar-val">{{ '%+.1f'|format(detail.impact.p99) }}</span>
+      </div>
+    </div>
+    <p class="pf-foot">
+      Expected points added measures how much each play actually moved the
+      team toward scoring &mdash; so a one-yard touchdown counts for less
+      here than the forty-yard catch that set it up, even though fantasy
+      scoring says the opposite. Success rate
+      <b>{{ detail.epa.success_rate }}%</b>, better than
+      <b>{{ detail.impact.percentile }}%</b> of {{ detail.position }} games.
+    </p>
+  </div>
+  {% endif %}
+
+  {% if detail.plays %}
+  <div class="pf-panel">
+    <h3>Plays &middot; biggest impact first</h3>
+    <div class="pf-plays">
+      {% for p in detail.plays[:14] %}
+      <div class="pf-play">
+        <div class="pf-play-head">
+          <span class="pf-play-sit">
+            Q{{ p.qtr }} {{ p.clock }}
+            {%- if p.down %} &middot; {{ p.down }}{{ 'st' if p.down == 1 else ('nd' if p.down == 2 else ('rd' if p.down == 3 else 'th')) }} &amp; {{ p.ydstogo }}{% endif %}
+            {%- if p.role %} &middot; {{ p.role }}{% endif %}
+          </span>
+          <span class="pf-play-epa {{ 'pos' if p.epa and p.epa > 0 else 'neg' }}">
+            {{ '%+.2f'|format(p.epa) }} EPA
+          </span>
+        </div>
+        <div class="pf-play-desc {{ 'td' if p.touchdown }}">{{ p.description }}</div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
 
   {% if log|length > 1 %}
   <div class="pf-panel">
