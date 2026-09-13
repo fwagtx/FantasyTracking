@@ -60,6 +60,14 @@ FANTASYCALC_BASE = "https://api.fantasycalc.com/values/current"
 ADP_BASE = "https://fantasyfootballcalculator.com/api/v1/adp/ppr"
 POSITIONS = ["QB", "RB", "WR", "TE"]
 IDP_POSITIONS = ["DL", "LB", "DB"]
+# Every position the performance board scores. Deliberately WIDER than
+# POSITIONS, and deliberately not used anywhere that needs a dynasty
+# value: FantasyCalc only publishes QB/RB/WR/TE, so Rankings, the Trade
+# Calculator and Matchup Grades stay on POSITIONS rather than listing
+# defenders they could never price. Performances and depth charts run on
+# real stats, which Sleeper does provide for defenders, so those use
+# this.
+SCORED_POSITIONS = POSITIONS + IDP_POSITIONS
 IDP_POSITION_MAP = {
     "DE": "DL", "DT": "DL", "NT": "DL", "DL": "DL",
     "LB": "LB", "OLB": "LB", "ILB": "LB", "MLB": "LB",
@@ -674,7 +682,21 @@ def get_player_news(full_name, team, limit=3):
 
 # ---------------- Team depth chart (from Sleeper's own player data) ----------------
 
-DEPTH_SLOT_PRIORITY = {"QB": 0, "RB": 1, "WR": 2, "TE": 3}
+DEPTH_SLOT_PRIORITY = {"QB": 0, "RB": 1, "WR": 2, "TE": 3, "DL": 4, "LB": 5, "DB": 6}
+
+# Sleeper labels defensive depth slots by field alignment (LDE, MLB, RCB,
+# SS...) rather than by the DL/LB/DB groups IDP formats actually use --
+# exactly the same mismatch that made LWR/RWR/SWR invisible as receivers.
+# Mapping each alignment onto its group lets a defensive depth chart read
+# the way an IDP roster does, with one ordered column per group.
+DEF_SLOT_GROUPS = {
+    "LDE": "DL", "RDE": "DL", "DE": "DL", "LDT": "DL", "RDT": "DL",
+    "DT": "DL", "NT": "DL", "EDGE": "DL",
+    "LOLB": "LB", "ROLB": "LB", "OLB": "LB", "LILB": "LB", "RILB": "LB",
+    "ILB": "LB", "MLB": "LB", "WLB": "LB", "SLB": "LB", "LB": "LB",
+    "LCB": "DB", "RCB": "DB", "CB": "DB", "NB": "DB", "NCB": "DB",
+    "SS": "DB", "FS": "DB", "S": "DB", "DB": "DB",
+}
 
 # Sleeper labels receiver depth slots by side (Left/Right/Slot WR), not a
 # flat WR1/WR2 pattern like QB/RB/TE use -- this was the actual bug
@@ -685,7 +707,9 @@ WR_VARIANTS = {"LWR", "RWR", "SWR"}
 
 def _depth_slot_base(slot):
     base = re.sub(r"\d+$", "", slot)
-    return "WR" if base in WR_VARIANTS else base
+    if base in WR_VARIANTS:
+        return "WR"
+    return DEF_SLOT_GROUPS.get(base, base)
 
 
 def _depth_slot_sort_key(slot):
@@ -740,14 +764,18 @@ def _injury_badge(pl):
 def get_team_depth_chart(team, all_players):
     """Groups every player on `team` by Sleeper's own depth_chart_position/
     depth_chart_order fields -- no extra API call needed, Sleeper's player
-    dump already carries this. Restricted to skill positions (QB/RB/WR/TE)
-    to match the rest of the site.
+    dump already carries this. Covers the offensive skill positions and
+    the three IDP groups (see SCORED_POSITIONS).
 
     Sleeper labels receiver depth slots by side (LWR/RWR/SWR) instead of a
     flat WR1/WR2/WR3 pattern like QB/RB/TE use. We merge all three into one
     WR column here (ordered by Sleeper's depth_chart_order) so the chart
     shows one real WR pecking order instead of three separate boxes, and
-    number every player within their column (QB1, QB2, WR1, WR2, ...)."""
+    number every player within their column (QB1, QB2, WR1, WR2, ...).
+
+    Defensive alignments are merged the same way, via DEF_SLOT_GROUPS --
+    LDE/RDE/DT all become DL, the linebacker alignments become LB, and
+    the secondary becomes DB."""
     if not team:
         return []
     groups = {}
@@ -758,7 +786,10 @@ def get_team_depth_chart(team, all_players):
         if not slot:
             continue
         base = _depth_slot_base(slot)
-        if base not in POSITIONS:
+        # SCORED_POSITIONS, not POSITIONS: depth charts run on Sleeper's
+        # own roster data, which covers defenders perfectly well. It's the
+        # dynasty-value pages that can't include them.
+        if base not in SCORED_POSITIONS:
             continue
         order = pl.get("depth_chart_order")
         groups.setdefault(base, []).append({
@@ -2062,7 +2093,14 @@ def _star_pct_for_composite(composite):
 # starter's day to other starters' days is both the intuitive reading of
 # "how good was this?" and the standard way fantasy replacement level is
 # defined.
-_PERF_POOL_SIZE = {"QB": 12, "RB": 24, "WR": 36, "TE": 12}
+_PERF_POOL_SIZE = {
+    "QB": 12, "RB": 24, "WR": 36, "TE": 12,
+    # IDP leagues typically start more defenders than any single
+    # position group of offensive skill players, and the scoring is much
+    # flatter, so the pools are wider -- a top-24 linebacker week is
+    # still an ordinary starter week in most formats.
+    "DL": 24, "LB": 24, "DB": 24,
+}
 _PERF_POOL_DEFAULT = 24
 
 # Last-resort reference points if no season anywhere has usable data --
@@ -2070,7 +2108,10 @@ _PERF_POOL_DEFAULT = 24
 # ever reached on a completely unseeded database, and always reported
 # with source "baseline" so the UI can say so rather than presenting a
 # guess as a measurement.
-_PERF_BASELINE_MEDIAN = {"QB": 17.0, "RB": 12.0, "WR": 11.0, "TE": 8.0}
+_PERF_BASELINE_MEDIAN = {
+    "QB": 17.0, "RB": 12.0, "WR": 11.0, "TE": 8.0,
+    "DL": 7.0, "LB": 9.0, "DB": 8.0,
+}
 
 _perf_distribution_cache = {}
 
@@ -2099,7 +2140,7 @@ def get_performance_distribution(season, cache=_perf_distribution_cache):
     for sid, stat in season_stats.items():
         p = all_players.get(sid)
         pos = (p or {}).get("position")
-        if not pos or pos not in POSITIONS:
+        if not pos or pos not in SCORED_POSITIONS:
             continue
         for week, fpts in (stat.get("weeks") or {}).items():
             if not isinstance(fpts, (int, float)):
@@ -2146,16 +2187,16 @@ def _performance_pool(position, season, seasons_back=DEF_HISTORY_SEASONS_BACK):
 #   5.0  ->  the MEDIAN starter performance at that position
 #   9.0  ->  the 99th percentile -- about the best anyone manages
 #
-# Above the 99th the same slope continues to a hard ceiling of 10.0, so a
-# genuine monster game still separates from a merely elite one. That top
-# end is the whole reason this isn't just a percentile: a raw percentile
-# puts a 26-point game and a 40-point game within a rounding error of
-# each other, because both are "better than ~99% of games". Anchoring the
-# midpoint on the median is what keeps an average day reading as a 5
-# instead of drifting with the distribution's skew.
+# Above the 99th the same slope simply CONTINUES. There is deliberately
+# no ceiling: an all-time game should be free to score 12 or 14 and say
+# so, rather than being flattened into a 10 alongside every other big
+# day. That open top end is the whole reason this isn't a percentile --
+# a percentile puts a 26-point game and a 40-point game within a
+# rounding error of each other, because both are "better than ~99% of
+# games". Anchoring the midpoint on the median is what keeps an average
+# day reading as a 5 instead of drifting with the distribution's skew.
 _SCORE_MID = 5.0
 _SCORE_P99 = 9.0
-_SCORE_MAX = 10.0
 
 
 def _percentile_in(pool, value):
@@ -2183,8 +2224,9 @@ def performance_score(fpts, median, p99):
     two anchors -- separated out so it can be reasoned about and tested
     without a database behind it.
 
-    Piecewise linear: 0 -> 0.0, `median` -> 5.0, `p99` -> 9.0, then the
-    same slope onward to a hard 10.0."""
+    Piecewise linear: 0 -> 0.0, `median` -> 5.0, `p99` -> 9.0, and then
+    the same slope onward with NO upper bound -- a once-a-decade game is
+    allowed to score 13 and be recognisable as one."""
     fpts = float(fpts or 0)
     if fpts <= 0 or median <= 0:
         return 0.0
@@ -2194,25 +2236,33 @@ def performance_score(fpts, median, p99):
         span = p99 - median
         slope = (_SCORE_P99 - _SCORE_MID) / span if span > 0 else 0.0
         score = _SCORE_MID + (fpts - median) * slope
-    return round(max(0.0, min(_SCORE_MAX, score)), 1)
+    return round(max(0.0, score), 1)
 
 
 def _score_class(score):
-    """Colour band for a score. Deliberately keyed to the same meaning
-    the anchors carry -- 5.0 is an average starter day, so the warning
-    band straddles it and anything clearly above reads as good."""
-    if score >= 8.0:
+    """Colour band for a score, keyed to what the anchors actually mean:
+    5.0 is an average starter day, 9.0 is roughly the top 1%. Anything
+    past 9 is beyond the 99th percentile and gets its own band, which is
+    only reachable because the scale has no ceiling."""
+    if score >= 9.0:
+        return "historic"
+    if score >= 7.0:
         return "elite"
-    if score >= 6.0:
+    if score >= 5.5:
         return "good"
-    if score >= 4.0:
+    if score >= 3.5:
         return "mid"
     return "poor"
 
 
 def grade_performance(position, fpts, season=None):
-    """Rate one game's fantasy output on a 0-10 scale, against the
-    distribution of starter-caliber performances at that position.
+    """Rate one game's fantasy output against the distribution of
+    starter-caliber performances at that position.
+
+    The scale is open-ended: 5.0 is an average starter game and 9.0 is
+    about the 99th percentile, but nothing caps the top, so a genuinely
+    historic performance scores above 10 rather than being flattened
+    into a tie with every other big day.
 
     Returns {score, score_class, percentile, better_than, pool_size,
     median, p99, source, source_season} -- the anchors and the percentile
@@ -3957,18 +4007,21 @@ def _my_players_for_game(detail, username):
     return {"home": home_players, "away": away_players}
 
 
-# How many players per team the week's performer board carries. The
-# client filters this list down to whichever teams played on the selected
-# date, so it has to hold enough per team that any single day still has a
-# real top 10 to draw from -- but not so many that a quiet Thursday ships
-# three hundred rows of bench players nobody will scroll to. Eight covers
-# every plausible day-leader; a team's ninth-best fantasy day has never
-# led a slate.
-PERFORMERS_PER_TEAM = 8
+# How many players per team the /scores PREVIEW row carries. That row
+# shows a top 10 and links to the full board, so it only needs enough per
+# team that whichever single day the visitor selects still has ten real
+# names to draw from -- not the whole slate, which would mean baking
+# hundreds of rows into a page that displays ten of them.
+#
+# The full /performances board passes per_team=None and scores everyone
+# who played. This cap is a payload budget for one preview, never a limit
+# on who gets rated.
+PERFORMERS_PER_TEAM = 5
 _week_performers_cache = {}
 
 
-def get_week_performers(season, week, cache=_week_performers_cache, allow_fetch=True):
+def get_week_performers(season, week, cache=_week_performers_cache, allow_fetch=True,
+                        per_team=PERFORMERS_PER_TEAM):
     """The best fantasy performances of one week, as display-ready rows.
 
     Returns a list of dicts sorted best-first, each carrying the player,
@@ -3994,7 +4047,7 @@ def get_week_performers(season, week, cache=_week_performers_cache, allow_fetch=
     has already shipped that exact bug once, in get_season_stats, and it
     took the site down -- the page always renders first."""
     season, week = _safe_int(season, int(SEASON)), _safe_int(week, 1)
-    key = (season, week)
+    key = (season, week, per_team)
     now = time.time()
     entry = cache.get(key)
     if entry and now - entry["time"] < 45:
@@ -4016,17 +4069,23 @@ def get_week_performers(season, week, cache=_week_performers_cache, allow_fetch=
             continue
         pos = p.get("position")
         team = p.get("team")
-        if not pos or pos not in POSITIONS or not team:
+        if not pos or pos not in SCORED_POSITIONS or not team:
             continue
         by_team.setdefault(team, []).append((rec["pts"], sid, p, rec))
 
     rows = []
     for team, entries in by_team.items():
+        # Ranked within the team by raw points only to decide WHO makes a
+        # capped preview -- the board itself is then ordered by score
+        # below. Points are the right cut for "this team's most notable
+        # days"; score is the right order for "best performances", and
+        # conflating the two is what put a 20-point quarterback above a
+        # 15-point tight end who had the better game.
         entries.sort(key=lambda e: -e[0])
         sched = get_schedule_for_team_week(season, week, team)
         opponent = (sched or {}).get("opponent")
         is_home = (sched or {}).get("home")
-        for pts, sid, p, rec in entries[:PERFORMERS_PER_TEAM]:
+        for pts, sid, p, rec in (entries if per_team is None else entries[:per_team]):
             pos = p["position"]
             rows.append({
                 "sid": sid,
@@ -4043,7 +4102,11 @@ def get_week_performers(season, week, cache=_week_performers_cache, allow_fetch=
                 "grade": grade_performance(pos, pts, season),
             })
 
-    rows.sort(key=lambda r: -r["fpts"])
+    # Ordered by the SCORE, not by raw points. That's the whole point of
+    # scoring positionally: 15 points is a better game for a tight end
+    # than 20 is for a quarterback, and a board that claims to rank
+    # performances has to say so. Raw points break exact ties.
+    rows.sort(key=lambda r: (-r["grade"]["score"], -r["fpts"]))
     cache[key] = {"data": rows, "time": now}
     return rows
 
@@ -4186,6 +4249,142 @@ def get_player_season_log(sid, season, position, through_week=None):
     return out
 
 
+# The ranges the performance leaderboard offers, and how far back each
+# one reaches. "All time" means every season actually synced into this
+# database, not every season in NFL history -- the label says "all time"
+# because that's what it is for this site, and the page says how many
+# seasons that covers rather than implying more.
+PERF_SCOPES = ("day", "week", "month", "season", "alltime")
+PERF_ALLTIME_SEASONS_BACK = 11   # 2015-onward, matching the backfill range
+_perf_board_cache = {}
+
+
+def _month_weeks(season, month, season_type=2):
+    """Which week numbers of `season` have games falling in `month`.
+
+    Derived from the schedule table rather than assumed, because the NFL
+    week grid doesn't line up with calendar months and drifts year to
+    year."""
+    if not DATABASE_URL:
+        return []
+    conn = get_db()
+    try:
+        with conn.cursor() as cur:
+            cur.execute(
+                """SELECT DISTINCT week FROM nfl_schedule
+                   WHERE season = %s AND season_type = %s
+                     AND EXTRACT(MONTH FROM kickoff) = %s
+                   ORDER BY week""",
+                (season, season_type, month),
+            )
+            return [r["week"] for r in cur.fetchall()]
+    except Exception:
+        return []
+    finally:
+        conn.close()
+
+
+def _historical_performances(season, position=None, weeks=None):
+    """Every scored performance from one season, out of the database.
+
+    This is the path the month/season/all-time ranges use. It can't use
+    the live feed -- that only covers the current week -- so it reads
+    player_stats, which is exactly what that table is for."""
+    all_players = get_all_players()
+    stats = get_season_stats(season)
+    week_filter = set(weeks) if weeks else None
+    out = []
+    for sid, stat in stats.items():
+        p = all_players.get(sid)
+        if not p:
+            continue
+        pos = p.get("position")
+        if not pos or pos not in SCORED_POSITIONS:
+            continue
+        if position and pos != position:
+            continue
+        for week, fpts in (stat.get("weeks") or {}).items():
+            wk = _safe_int(week, 0)
+            if week_filter is not None and wk not in week_filter:
+                continue
+            if not isinstance(fpts, (int, float)):
+                continue
+            out.append({
+                "sid": sid,
+                "name": f"{p.get('first_name','')} {p.get('last_name','')}".strip(),
+                "position": pos,
+                "team": p.get("team") or "FA",
+                "photo": player_photo_url(sid),
+                "season": season,
+                "week": wk,
+                "fpts": round(float(fpts), 1),
+                "grade": grade_performance(pos, fpts, season),
+                # A historical row has no live stat payload to summarise,
+                # so the points stand in for the line. The detail page
+                # still shows the full breakdown when it's opened.
+                "stat_line": [],
+                "vs_label": None,
+            })
+    return out
+
+
+def get_performance_board(scope="week", position=None, season=None, week=None,
+                          order="top", limit=250, cache=_perf_board_cache):
+    """The performance leaderboard, for any range and position.
+
+    `scope` is one of PERF_SCOPES. "day" and "week" come from the live
+    feed so an in-progress slate updates; everything longer comes from
+    the database, because only the current week is ever live.
+
+    `order` is "top" or "lowest". Lowest deliberately excludes anyone who
+    scored nothing at all -- a list of players who didn't play isn't a
+    list of bad performances, it's a list of absences, and it would be
+    the same few hundred names every week."""
+    season = _safe_int(season if season is not None else SEASON, int(SEASON))
+    week = _safe_int(week if week is not None else 1, 1)
+    scope = scope if scope in PERF_SCOPES else "week"
+    order = "lowest" if order == "lowest" else "top"
+    key = (scope, position, season, week, order, limit)
+    now = time.time()
+    entry = cache.get(key)
+    # Live ranges go stale in 45s; historical ones can't change at all
+    # until the next sync, so they're held for an hour.
+    ttl = 45 if scope in ("day", "week") else 3600
+    if entry and now - entry["time"] < ttl:
+        return entry["data"]
+
+    if scope in ("day", "week"):
+        rows = [r for r in get_week_performers(season, week, per_team=None)
+                if not position or r["position"] == position]
+    elif scope == "month":
+        info = get_current_week_info()
+        month = None
+        sched = None
+        # Which calendar month the selected week sits in.
+        for wk in (week,):
+            games, _ = _week_games(season, wk, info.get("season_type", 2))
+            if games and games[0].get("date"):
+                month = _safe_int(str(games[0]["date"])[5:7], 0)
+        weeks = _month_weeks(season, month) if month else [week]
+        rows = _historical_performances(season, position, weeks or [week])
+    elif scope == "season":
+        rows = _historical_performances(season, position)
+    else:
+        rows = []
+        for offset in range(0, PERF_ALLTIME_SEASONS_BACK + 1):
+            rows.extend(_historical_performances(season - offset, position))
+
+    if order == "lowest":
+        rows = [r for r in rows if r["fpts"] > 0]
+        rows.sort(key=lambda r: (r["grade"]["score"], r["fpts"]))
+    else:
+        rows.sort(key=lambda r: (-r["grade"]["score"], -r["fpts"]))
+
+    rows = rows[:limit]
+    cache[key] = {"data": rows, "time": now}
+    return rows
+
+
 def _week_games(season, week, season_type=2):
     """Shared by /scores and /api/scoreboard so both build cards the same
     way. Returns (games, any_live) where games is a list of card dicts
@@ -4249,6 +4448,35 @@ def scores_page():
             current_season=int(SEASON), current_week=1, today_key=date.today().isoformat(),
             load_error=str(e), username=username, has_synced_leagues=False,
             performers=[],
+        )
+
+
+@app.route("/performances")
+def performances_page():
+    """The full performance leaderboard: every scored game, filterable by
+    position and by range."""
+    try:
+        info = get_current_week_info()
+        season = request.args.get("season", default=info["season"], type=int)
+        week = request.args.get("week", default=info["week"], type=int)
+        scope = request.args.get("scope", default="week")
+        order = request.args.get("order", default="top")
+        position = (request.args.get("position") or "").strip().upper() or None
+        if position and position not in SCORED_POSITIONS:
+            position = None
+        rows = get_performance_board(scope=scope, position=position, season=season,
+                                     week=week, order=order)
+        return render_template_string(
+            PERFORMANCES_HTML, rows=rows, season=season, week=week,
+            scope=scope if scope in PERF_SCOPES else "week", order=order,
+            position=position, positions=SCORED_POSITIONS,
+            idp_positions=IDP_POSITIONS, load_error=None,
+        )
+    except Exception as e:
+        return render_template_string(
+            PERFORMANCES_HTML, rows=[], season=int(SEASON), week=1,
+            scope="week", order="top", position=None, positions=SCORED_POSITIONS,
+            idp_positions=IDP_POSITIONS, load_error=str(e),
         )
 
 
@@ -6598,6 +6826,8 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + """
   .sc-section-head{ display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin:26px 0 10px; }
   .sc-section-head h2{ font-family:"Big Shoulders Display"; font-size:22px; font-weight:800; text-transform:uppercase; margin:0; color:var(--sc-text); }
   .sc-section-head .sub{ font-size:11.5px; color:var(--sc-muted); }
+  .sc-viewall{ font-size:12.5px; font-weight:700; color:var(--accent-ink); text-decoration:none; white-space:nowrap; }
+  .sc-perf-note{ font-size:11.5px; color:var(--sc-muted); margin:-4px 0 8px; }
   .sc-perf{ display:flex; flex-direction:column; border:1px solid var(--sc-line); border-radius:12px; overflow:hidden; background:var(--sc-surface); }
   .sc-perf-row{ display:flex; align-items:center; gap:10px; padding:10px 12px; border-top:1px solid var(--sc-line); text-decoration:none; color:var(--sc-text); }
   .sc-perf-row:first-child{ border-top:none; }
@@ -6685,8 +6915,9 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + """
 
   <div class="sc-section-head">
     <h2>Top Performers</h2>
-    <span class="sub" id="scPerfSub"></span>
+    <a class="sc-viewall" id="scPerfMore" href="/performances">View all &rsaquo;</a>
   </div>
+  <div class="sc-perf-note" id="scPerfSub"></div>
   <div class="sc-perf" id="scPerf"></div>
 </div>
 </div>
@@ -6968,6 +7199,10 @@ const scTodayKey = {{ today_key|tojson }};
 
     const anyLive = games.some(function(g){ return g.status === 'in_progress'; });
     const anyPlayed = games.some(function(g){ return g.status !== 'scheduled'; });
+    const moreEl = document.getElementById('scPerfMore');
+    if (moreEl) {
+      moreEl.href = '/performances?season=' + scSeason + '&week=' + scWeek + '&scope=week';
+    }
     perfSubEl.textContent = rows.length
       ? (anyLive ? 'Live · 5.0 = an average starter game at the position'
                  : '5.0 = an average starter game at the position')
@@ -7041,6 +7276,130 @@ const scTodayKey = {{ today_key|tojson }};
 })();
 </script>
 """
+
+PERFORMANCES_HTML = BASE_STYLE + make_header("scores") + """
+<style>
+  .pl-page{
+    --pl-bg:#0d0f0d; --pl-surface:#151815; --pl-surface2:#1c201c;
+    --pl-line:rgba(255,255,255,0.08); --pl-text:#e8e6df; --pl-muted:#8b9089;
+    background:var(--pl-bg); color:var(--pl-text); padding-bottom:60px;
+    font-family:"Source Sans 3",system-ui,sans-serif;
+  }
+  .pl-title{ font-family:"Big Shoulders Display"; font-size:26px; font-weight:800;
+             text-transform:uppercase; margin:18px 0 4px; }
+  .pl-sub{ font-size:12px; color:var(--pl-muted); margin-bottom:14px; }
+
+  /* Filters. Two independent axes -- who, and over what stretch -- kept
+     as separate scrolling rows so neither has to truncate on a phone. */
+  .pl-filters{ display:flex; flex-direction:column; gap:8px; position:sticky; top:64px; z-index:30;
+               background:color-mix(in srgb, var(--pl-bg) 94%, transparent); backdrop-filter:blur(8px);
+               padding:10px 0; border-bottom:1px solid var(--pl-line); }
+  .pl-row{ display:flex; gap:7px; overflow-x:auto; scrollbar-width:none; }
+  .pl-row::-webkit-scrollbar{ display:none; }
+  .pl-chip{ flex:none; font-size:12px; font-weight:700; padding:6px 13px; border-radius:99px;
+            border:1px solid var(--pl-line); background:var(--pl-surface); color:var(--pl-muted);
+            text-decoration:none; white-space:nowrap; }
+  .pl-chip:hover{ color:var(--pl-text); }
+  .pl-chip.on{ background:var(--accent); color:var(--accent-on); border-color:var(--accent); }
+  /* Defenders are scored here but deliberately absent from the
+     value-driven pages, so they're visually set apart rather than
+     silently mixed in. */
+  .pl-chip.idp{ border-style:dashed; }
+  .pl-chip.idp.on{ border-style:solid; }
+
+  .pl-list{ border:1px solid var(--pl-line); border-radius:12px; overflow:hidden;
+            background:var(--pl-surface); margin-top:14px; }
+  .pl-row-item{ display:flex; align-items:center; gap:10px; padding:10px 12px;
+                border-top:1px solid var(--pl-line); text-decoration:none; color:var(--pl-text); }
+  .pl-row-item:first-child{ border-top:none; }
+  .pl-row-item:hover{ background:var(--pl-surface2); }
+  .pl-rank{ font-family:"IBM Plex Mono"; font-size:12px; color:var(--pl-muted);
+            width:30px; flex:none; text-align:right; font-variant-numeric:tabular-nums; }
+  .pl-row-item img{ width:38px; height:38px; border-radius:50%; object-fit:cover;
+                    background:var(--pl-surface2); flex:none; }
+  .pl-main{ flex:1; min-width:0; display:flex; flex-direction:column; gap:2px; }
+  .pl-name{ font-weight:700; font-size:13.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .pl-name .pts{ color:var(--pl-muted); font-weight:600; font-size:12px; margin-left:6px; }
+  .pl-meta{ font-size:11px; color:var(--pl-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .pl-score{ font-family:"IBM Plex Mono"; font-size:20px; font-weight:700; flex:none;
+             min-width:46px; text-align:right; font-variant-numeric:tabular-nums; }
+  .pl-score.historic{ color:var(--accent-ink); }
+  .pl-score.elite{ color:var(--good); }
+  .pl-score.good{ color:var(--good); opacity:0.85; }
+  .pl-score.mid{ color:var(--warning); }
+  .pl-score.poor{ color:var(--critical); }
+  .pl-empty{ color:var(--pl-muted); padding:36px; text-align:center; font-size:13px; }
+  @media (max-width:640px){
+    .pl-title{ font-size:21px; }
+    .pl-score{ font-size:17px; min-width:40px; }
+  }
+</style>
+
+<div class="pl-page">
+<div class="wrap">
+  {% if load_error %}<div class="error">Couldn't load performances: {{ load_error }}</div>{% endif %}
+
+  <div class="pl-title">Performances</div>
+  <div class="pl-sub">
+    5.0 is an average starter game at that position. The scale has no ceiling &mdash;
+    a historic game scores above 10.
+  </div>
+
+  {% set base = '/performances?season=' ~ season ~ '&week=' ~ week %}
+  <div class="pl-filters">
+    <div class="pl-row">
+      <a class="pl-chip {{ 'on' if not position }}"
+         href="{{ base }}&scope={{ scope }}&order={{ order }}">All positions</a>
+      {% for pos in positions %}
+      <a class="pl-chip {{ 'idp' if pos in idp_positions }} {{ 'on' if position == pos }}"
+         href="{{ base }}&scope={{ scope }}&order={{ order }}&position={{ pos }}">{{ pos }}</a>
+      {% endfor %}
+    </div>
+    <div class="pl-row">
+      {% set scopes = [('day','Today'),('week','This week'),('month','This month'),
+                       ('season','This season'),('alltime','All time')] %}
+      {% for key, label in scopes %}
+      <a class="pl-chip {{ 'on' if scope == key }}"
+         href="{{ base }}&scope={{ key }}&order={{ order }}{{ '&position=' ~ position if position else '' }}">{{ label }}</a>
+      {% endfor %}
+      <a class="pl-chip {{ 'on' if order == 'lowest' }}"
+         href="{{ base }}&scope={{ scope }}&order={{ 'top' if order == 'lowest' else 'lowest' }}{{ '&position=' ~ position if position else '' }}">
+        {{ 'Showing lowest' if order == 'lowest' else 'Lowest' }}</a>
+    </div>
+  </div>
+
+  {% if not rows %}
+    <div class="pl-empty">
+      No performances in this range yet.
+      {% if scope in ('month', 'season', 'alltime') %}
+        <div style="margin-top:6px;">Historical ranges need the season backfill to have run.</div>
+      {% endif %}
+    </div>
+  {% else %}
+  <div class="pl-list">
+    {% for r in rows %}
+    <a class="pl-row-item"
+       href="/performance?sid={{ r.sid }}&amp;season={{ r.season or season }}&amp;week={{ r.week or week }}">
+      <span class="pl-rank">{{ loop.index }}</span>
+      <img src="{{ r.photo }}" alt="" onerror="this.style.visibility='hidden'">
+      <span class="pl-main">
+        <span class="pl-name">{{ r.name }}<span class="pts">{{ r.fpts }} pts</span></span>
+        <span class="pl-meta">
+          {{ r.position }} &middot; {{ r.team }}
+          {%- if r.vs_label %} &middot; {{ r.vs_label }}{% endif %}
+          {%- if scope != 'day' and scope != 'week' %} &middot; {{ r.season }} wk {{ r.week }}{% endif %}
+          &middot; {{ r.grade.percentile }}% of {{ r.position }} games
+        </span>
+      </span>
+      <span class="pl-score {{ r.grade.score_class }}">{{ '%.1f'|format(r.grade.score) }}</span>
+    </a>
+    {% endfor %}
+  </div>
+  {% endif %}
+</div>
+</div>
+"""
+
 
 PERFORMANCE_HTML = BASE_STYLE + make_header("scores") + """
 <style>
