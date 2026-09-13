@@ -1430,6 +1430,166 @@ def espn_game_summary(event_id, cache={}):
         return entry["data"] if entry else {}
 
 
+def extract_drive_plays(summary_json, limit=60):
+    """The live play-by-play feed, newest first.
+
+    ESPN's summary carries drives in two places -- `drives.current` for
+    the drive in progress and `drives.previous` for everything finished
+    -- and neither is guaranteed present, so both are read defensively
+    and anything missing simply contributes nothing.
+
+    No EPA here on purpose: nflverse publishes that after the final
+    whistle, so a play is shown live with its situation and result, and
+    gains its EPA once the game is in the books."""
+    drives = (summary_json or {}).get("drives") or {}
+    buckets = []
+    if isinstance(drives.get("previous"), list):
+        buckets.extend(drives["previous"])
+    if isinstance(drives.get("current"), dict):
+        buckets.append(drives["current"])
+
+    out = []
+    for drive in buckets:
+        if not isinstance(drive, dict):
+            continue
+        team = ((drive.get("team") or {}).get("abbreviation")
+                or (drive.get("team") or {}).get("shortDisplayName"))
+        for play in (drive.get("plays") or []):
+            if not isinstance(play, dict):
+                continue
+            text = (play.get("text") or "").strip()
+            if not text:
+                continue
+            period = ((play.get("period") or {}).get("number")
+                      if isinstance(play.get("period"), dict) else play.get("period"))
+            clock = ((play.get("clock") or {}).get("displayValue")
+                     if isinstance(play.get("clock"), dict) else play.get("clock"))
+            start = play.get("start") or {}
+            out.append({
+                "team": normalize_team_abbr(team) if team else None,
+                "period": _safe_int(period, 0) or None,
+                "clock": clock,
+                "down": start.get("down") or None,
+                "distance": start.get("distance"),
+                "yardline": start.get("possessionText") or start.get("downDistanceText"),
+                "text": text[:400],
+                "yards": play.get("statYardage"),
+                "scoring": bool(play.get("scoringPlay")),
+                "away_score": play.get("awayScore"),
+                "home_score": play.get("homeScore"),
+            })
+    # Newest first -- a live feed is read from the top. ESPN lists drives
+    # oldest-first, so this is a straight reverse rather than a sort on a
+    # clock that counts DOWN within a period and would order wrongly.
+    out.reverse()
+    return out[:limit]
+
+
+def extract_field_position(summary_json):
+    """Where the ball is right now: possession, yard line, down and
+    distance. Returns None outside of live play, which is correct -- a
+    finished or unstarted game has no current field position."""
+    comp = (((summary_json or {}).get("header") or {}).get("competitions") or [{}])[0]
+    situation = comp.get("situation") or (summary_json or {}).get("situation") or {}
+    if not situation:
+        return None
+    poss = situation.get("possession")
+    abbr = None
+    # `possession` is a team ID, so resolve it against the competitors.
+    for c in (comp.get("competitors") or []):
+        if str(c.get("id")) == str(poss):
+            abbr = normalize_team_abbr((c.get("team") or {}).get("abbreviation"))
+    down_text = situation.get("downDistanceText") or situation.get("shortDownDistanceText")
+    yardline = situation.get("yardLine")
+    if abbr is None and not down_text and yardline is None:
+        return None
+    return {
+        "possession": abbr,
+        "down_distance": down_text,
+        "yardline": _safe_int(yardline, None) if yardline is not None else None,
+        "possession_text": situation.get("possessionText"),
+        "is_red_zone": bool(situation.get("isRedZone")),
+    }
+
+
+# ESPN groups box-score statistics by category, and each category carries
+# its own ordered `labels` with a matching `stats` array per athlete. The
+# categories worth surfacing, in the order a box score reads.
+_BOX_CATEGORY_ORDER = ["passing", "rushing", "receiving", "defensive",
+                       "interceptions", "fumbles", "kicking", "punting", "returns"]
+_BOX_DEFENSIVE = {"defensive", "interceptions", "fumbles"}
+
+
+def extract_box_score(summary_json):
+    """Per-team, per-player statistics: {team_abbr: {"offense": [...],
+    "defense": [...]}}.
+
+    Each player row carries the stat labels alongside the values, because
+    ESPN's label set differs by category and hardcoding column headers
+    here would silently mislabel numbers the day ESPN changes one."""
+    players = (summary_json or {}).get("boxscore", {}).get("players") or []
+    out = {}
+    for team_block in players:
+        if not isinstance(team_block, dict):
+            continue
+        abbr = normalize_team_abbr((team_block.get("team") or {}).get("abbreviation"))
+        if not abbr:
+            continue
+        side = {"offense": [], "defense": []}
+        # One athlete can appear in several categories (a back who also
+        # caught passes); merge by athlete so the box score has one row
+        # per player rather than one per category.
+        merged = {}
+        for cat in (team_block.get("statistics") or []):
+            if not isinstance(cat, dict):
+                continue
+            name = (cat.get("name") or "").lower()
+            labels = cat.get("labels") or []
+            for athlete_row in (cat.get("athletes") or []):
+                ath = athlete_row.get("athlete") or {}
+                aid = ath.get("id")
+                if not aid:
+                    continue
+                entry = merged.setdefault(aid, {
+                    "id": aid,
+                    "name": ath.get("displayName") or ath.get("shortName") or "",
+                    "position": ((ath.get("position") or {}).get("abbreviation")
+                                 if isinstance(ath.get("position"), dict) else None),
+                    "headshot": (ath.get("headshot") or {}).get("href")
+                                if isinstance(ath.get("headshot"), dict) else None,
+                    "stats": [],
+                    "defensive": False,
+                })
+                values = athlete_row.get("stats") or []
+                for label, value in zip(labels, values):
+                    entry["stats"].append({"label": label, "value": value, "category": name})
+                if name in _BOX_DEFENSIVE:
+                    entry["defensive"] = True
+        for entry in merged.values():
+            side["defense" if entry["defensive"] else "offense"].append(entry)
+        out[abbr] = side
+    return out
+
+
+def extract_team_totals(summary_json):
+    """Team-level totals ({team_abbr: [{label, value}, ...]}) for the
+    header row above each team's player rows."""
+    teams = (summary_json or {}).get("boxscore", {}).get("teams") or []
+    out = {}
+    for block in teams:
+        if not isinstance(block, dict):
+            continue
+        abbr = normalize_team_abbr((block.get("team") or {}).get("abbreviation"))
+        if not abbr:
+            continue
+        out[abbr] = [
+            {"label": s.get("label") or s.get("name"), "value": s.get("displayValue")}
+            for s in (block.get("statistics") or [])
+            if isinstance(s, dict) and (s.get("label") or s.get("name"))
+        ]
+    return out
+
+
 def extract_game_detail(summary_json):
     """Pure function, no I/O: turns a raw espn_game_summary() payload
     into the shape /game and /api/game-live both need. Field paths here
@@ -4767,6 +4927,11 @@ def get_performance_board(scope="week", position=None, season=None, week=None,
     return rows
 
 
+# Still-to-play first, finished last -- the same ordering the scores
+# board uses, kept in one place so the two can't drift apart.
+GAME_STATUS_ORDER = {"in_progress": 0, "scheduled": 1, "final": 2}
+
+
 def _week_games(season, week, season_type=2):
     """Shared by /scores and /api/scoreboard so both build cards the same
     way. Returns (games, any_live) where games is a list of card dicts
@@ -4989,12 +5154,25 @@ def game_detail_page():
         detail = extract_game_detail(summary)
         username = _resolve_scores_username()
         detail["my_players"] = _my_players_for_game(detail, username)
-        return render_template_string(GAME_DETAIL_HTML, event_id=event_id, detail=detail, load_error=None)
+        detail["plays"] = extract_drive_plays(summary)
+        detail["field"] = extract_field_position(summary)
+        detail["box"] = extract_box_score(summary)
+        detail["totals"] = extract_team_totals(summary)
+        # The rest of the day's slate, for the strip across the top --
+        # so you can move between live games without going back first.
+        info = get_current_week_info()
+        others = [g for g in _week_games(info["season"], info["week"], info["season_type"])[0]
+                  if g["id"] != event_id]
+        others.sort(key=lambda g: (GAME_STATUS_ORDER.get(g["status"], 1), str(g.get("date") or "")))
+        return render_template_string(GAME_DETAIL_HTML, event_id=event_id, detail=detail,
+                                      others=others[:12], load_error=None)
     except Exception as e:
         empty = {"status": "scheduled", "period": None, "clock": None, "status_detail": None,
                   "venue": {}, "officials": [], "home": {"abbr": None, "name": "?", "score": None, "logo": None},
-                  "away": {"abbr": None, "name": "?", "score": None, "logo": None}, "team_stats": [], "player_leaders": []}
-        return render_template_string(GAME_DETAIL_HTML, event_id=event_id, detail=empty, load_error=str(e))
+                  "away": {"abbr": None, "name": "?", "score": None, "logo": None}, "team_stats": [], "player_leaders": [],
+                  "plays": [], "field": None, "box": {}, "totals": {}}
+        return render_template_string(GAME_DETAIL_HTML, event_id=event_id, detail=empty,
+                                      others=[], load_error=str(e))
 
 
 @app.route("/api/game-live")
@@ -5012,6 +5190,8 @@ def api_game_live():
             "home_score": detail["home"]["score"], "away_score": detail["away"]["score"],
             "home_linescores": detail["home"]["linescores"], "away_linescores": detail["away"]["linescores"],
             "team_stats": detail["team_stats"], "player_leaders": detail["player_leaders"],
+            "plays": extract_drive_plays(summary), "field": extract_field_position(summary),
+            "box": extract_box_score(summary), "totals": extract_team_totals(summary),
             "win_prob": detail["win_prob"],
         })
     except Exception as e:
@@ -8227,11 +8407,79 @@ PERFORMANCE_HTML = BASE_STYLE + make_header("scores") + """
 
 GAME_DETAIL_HTML = BASE_STYLE + make_header("scores") + """
 <style>
-  .gd-header{ display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; }
-  .gd-side{ display:flex; align-items:center; gap:14px; }
-  .gd-side img{ width:56px; height:56px; object-fit:contain; }
-  .gd-side .nm{ font-family:"Big Shoulders Display"; font-size:20px; font-weight:800; text-transform:uppercase; }
-  .gd-score{ font-family:"IBM Plex Mono"; font-size:40px; font-weight:700; }
+  /* ---- live game layout (strip / field / tabs) ---- */
+  .gd-others{ display:flex; gap:0; overflow-x:auto; scrollbar-width:none;
+              border-bottom:1px solid var(--line); margin-bottom:14px; }
+  .gd-others::-webkit-scrollbar{ display:none; }
+  .gd-other{ flex:none; padding:8px 14px; text-decoration:none; color:var(--ink-muted);
+             border-bottom:2px solid transparent; font-size:11.5px; white-space:nowrap; }
+  .gd-other.live{ color:var(--ink); }
+  .gd-other .sc{ font-family:"IBM Plex Mono"; font-weight:700; font-size:13px; display:block; }
+  .gd-other .st{ font-size:10px; }
+
+  /* Field position. One bar, both directions of travel, with the ball
+     where it actually is -- reading a yard line off text alone is what
+     this replaces. */
+  .gd-field{ margin:14px 0 4px; }
+  .gd-field-bar{ position:relative; height:26px; border-radius:6px; background:var(--paper-sunken);
+                 border:1px solid var(--line); overflow:hidden; }
+  .gd-field-ez{ position:absolute; top:0; bottom:0; width:9%; background:rgba(255,255,255,0.05); }
+  .gd-field-ez.left{ left:0; } .gd-field-ez.right{ right:0; }
+  .gd-field-tick{ position:absolute; top:0; bottom:0; width:1px; background:var(--line); }
+  .gd-field-ball{ position:absolute; top:50%; transform:translate(-50%,-50%);
+                  width:13px; height:9px; border-radius:50%; background:var(--accent-ink); }
+  .gd-field-first{ position:absolute; top:0; bottom:0; width:2px; background:var(--warning); }
+  .gd-field-meta{ display:flex; justify-content:space-between; font-size:11.5px;
+                  color:var(--ink-muted); margin-top:5px; }
+  .gd-field-meta b{ color:var(--ink); }
+
+  .gd-tabs{ display:flex; gap:0; overflow-x:auto; scrollbar-width:none; border-bottom:1px solid var(--line);
+            margin:18px 0 0; }
+  .gd-tabs::-webkit-scrollbar{ display:none; }
+  .gd-tab{ flex:none; padding:9px 16px; font-size:13.5px; font-weight:700; cursor:pointer;
+           color:var(--ink-muted); border-bottom:2px solid transparent; background:none; border-top:none;
+           border-left:none; border-right:none; }
+  .gd-tab.on{ color:var(--accent-ink); border-bottom-color:var(--accent-ink); }
+  .gd-panel{ display:none; padding-top:14px; } .gd-panel.on{ display:block; }
+  .gd-sub{ display:flex; gap:14px; margin-bottom:10px; }
+  .gd-sub button{ background:none; border:none; cursor:pointer; font-size:13px; font-weight:700;
+                  color:var(--ink-muted); padding:4px 0; }
+  .gd-sub button.on{ color:var(--accent-ink); }
+
+  .gd-play{ padding:10px 0; border-top:1px solid var(--line); }
+  .gd-play:first-child{ border-top:none; }
+  .gd-play-head{ display:flex; justify-content:space-between; gap:10px; font-size:11px; color:var(--ink-muted); }
+  .gd-play-text{ font-size:13px; margin-top:3px; line-height:1.45; }
+  .gd-play.score .gd-play-text{ color:var(--accent-ink); font-weight:700; }
+
+  .gd-totals{ display:flex; flex-wrap:wrap; gap:12px 18px; padding:10px 0 14px;
+              border-bottom:1px solid var(--line); margin-bottom:6px; }
+  .gd-total b{ display:block; font-family:"IBM Plex Mono"; font-size:16px; }
+  .gd-total span{ font-size:10px; color:var(--ink-muted); text-transform:uppercase; letter-spacing:0.03em; }
+  .gd-bp{ padding:10px 0; border-top:1px solid var(--line); }
+  .gd-bp:first-child{ border-top:none; }
+  .gd-bp-name{ font-size:13.5px; font-weight:700; }
+  .gd-bp-name span{ color:var(--ink-muted); font-weight:400; font-size:11.5px; margin-left:5px; }
+  .gd-bp-stats{ display:flex; flex-wrap:wrap; gap:10px 16px; margin-top:5px; }
+  .gd-bp-stat b{ font-family:"IBM Plex Mono"; font-size:14px; }
+  .gd-bp-stat span{ font-size:9.5px; color:var(--ink-muted); margin-left:2px; text-transform:uppercase; }
+  .gd-empty{ color:var(--ink-muted); padding:24px; text-align:center; font-size:13px; }
+
+  /* Three columns that hold their shape at phone width. This used to be
+     a wrapping flex row, which stacked both teams vertically on a phone
+     and lost the head-to-head reading a scoreboard exists to give. */
+  .gd-header{ display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:10px; }
+  .gd-side{ display:flex; align-items:center; gap:10px; min-width:0; }
+  .gd-side img{ width:44px; height:44px; object-fit:contain; flex:none; }
+  .gd-side .nm{ font-family:"Big Shoulders Display"; font-size:16px; font-weight:800;
+                text-transform:uppercase; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .gd-score{ font-family:"IBM Plex Mono"; font-size:34px; font-weight:700; line-height:1.05; }
+  @media (max-width:640px){
+    .gd-side img{ width:34px; height:34px; }
+    .gd-side .nm{ font-size:13px; }
+    .gd-score{ font-size:27px; }
+    .gd-header{ gap:6px; }
+  }
   .gd-mid{ display:flex; flex-direction:column; align-items:center; gap:6px; }
   .gd-status{ font-size:12px; font-weight:700; text-transform:uppercase; padding:4px 12px; border-radius:99px; background:var(--paper-sunken); color:var(--ink-muted); }
   .gd-status.in_progress{ background:var(--warning-wash); color:var(--warning); }
@@ -8262,6 +8510,21 @@ GAME_DETAIL_HTML = BASE_STYLE + make_header("scores") + """
 <main><div class="wrap">
   <a href="/scores" class="muted">&larr; Back to scores</a>
   {% if load_error %}<div class="error">Couldn't load this game right now: {{ load_error }}</div>{% endif %}
+
+  {% if others %}
+  <div class="gd-others">
+    {% for g in others %}
+    <a class="gd-other {{ 'live' if g.status == 'in_progress' }}" href="/game?id={{ g.id }}">
+      <span class="sc">{{ g.away.abbr }} {{ g.away.score or 0 }}&ndash;{{ g.home.score or 0 }} {{ g.home.abbr }}</span>
+      <span class="st">
+        {%- if g.status == 'in_progress' %}{{ g.clock }} Q{{ g.period }}
+        {%- elif g.status == 'final' %}Final
+        {%- else %}{{ g.broadcast or 'Scheduled' }}{% endif -%}
+      </span>
+    </a>
+    {% endfor %}
+  </div>
+  {% endif %}
   <div class="panel">
     <div class="gd-header">
       <div class="gd-side">
@@ -8277,6 +8540,33 @@ GAME_DETAIL_HTML = BASE_STYLE + make_header("scores") + """
         <div><div class="nm">{{ detail.home.name }}</div><div class="gd-score" id="gdHomeScore">{{ detail.home.score or 0 }}</div>{% if detail.home.record %}<span class="muted mono" style="font-size:11px;">{{ detail.home.record }}</span>{% endif %}</div>
       </div>
     </div>
+    {% if detail.field %}
+    <!-- Field position. The ball's yardLine is "yards from the opponent's
+         goal line", so 50 is midfield and a small number means close to
+         scoring -- which side of the bar that lands on depends on who has
+         it, hence the flip. -->
+    {% set yl = detail.field.yardline %}
+    {% set pct = (100 - yl) if (yl is not none and detail.field.possession == detail.away.abbr) else yl %}
+    <div class="gd-field">
+      <div class="gd-field-bar">
+        <div class="gd-field-ez left"></div><div class="gd-field-ez right"></div>
+        {% for i in range(1, 10) %}
+        <div class="gd-field-tick" style="left:{{ 9 + i * 8.2 }}%;"></div>
+        {% endfor %}
+        {% if pct is not none %}
+        <div class="gd-field-ball" style="left:{{ 9 + (pct|float) * 0.82 }}%;"></div>
+        {% endif %}
+      </div>
+      <div class="gd-field-meta">
+        <span>
+          {%- if detail.field.possession %}<b>{{ detail.field.possession }}</b> ball{% endif -%}
+          {%- if detail.field.possession_text %} &middot; {{ detail.field.possession_text }}{% endif -%}
+        </span>
+        <span>{% if detail.field.down_distance %}<b>{{ detail.field.down_distance }}</b>{% endif %}</span>
+      </div>
+    </div>
+    {% endif %}
+
     {% if detail.venue.name %}
     <div class="gd-venue">{{ detail.venue.name }}{% if detail.venue.city %} &middot; {{ detail.venue.city }}{% if detail.venue.state %}, {{ detail.venue.state }}{% endif %}{% endif %}</div>
     {% endif %}
@@ -8293,7 +8583,7 @@ GAME_DETAIL_HTML = BASE_STYLE + make_header("scores") + """
       {% if detail.odds and detail.odds.spread %}<span>{{ detail.odds.spread }}{% if detail.odds.over_under %} &middot; O/U {{ detail.odds.over_under }}{% endif %}</span>{% endif %}
     </div>
     {% endif %}
-    {% if detail.my_players %}
+    {% if detail.my_players and (detail.my_players.away or detail.my_players.home) %}
     <div class="gd-my-players">
       <p class="eyebrow">Your Players In This Game</p>
       {% for side_label, players in [(detail.away.abbr, detail.my_players.away), (detail.home.abbr, detail.my_players.home)] %}
@@ -8313,6 +8603,95 @@ GAME_DETAIL_HTML = BASE_STYLE + make_header("scores") + """
     </div>
     {% endif %}
   </div>
+
+  <!-- Feed / per-team tabs. Plain buttons toggling panels rather than
+       separate pages, so switching between the play feed and either
+       team's box score never costs a round trip mid-drive. -->
+  <div class="gd-tabs" id="gdTabs">
+    <button class="gd-tab on" data-panel="feed">Feed</button>
+    <button class="gd-tab" data-panel="game">Game</button>
+    {% if detail.away.abbr %}<button class="gd-tab" data-panel="away">{{ detail.away.abbr }}</button>{% endif %}
+    {% if detail.home.abbr %}<button class="gd-tab" data-panel="home">{{ detail.home.abbr }}</button>{% endif %}
+  </div>
+
+  <div class="gd-panel on" data-panel="feed" id="gdFeedPanel">
+    {% if detail.plays %}
+      {% for p in detail.plays %}
+      <div class="gd-play {{ 'score' if p.scoring }}">
+        <div class="gd-play-head">
+          <span>
+            {%- if p.team %}{{ p.team }} &middot; {% endif -%}
+            Q{{ p.period }} {{ p.clock }}
+            {%- if p.down %} &middot; {{ p.down }}{{ 'st' if p.down == 1 else ('nd' if p.down == 2 else ('rd' if p.down == 3 else 'th')) }} &amp; {{ p.distance }}{% endif -%}
+          </span>
+          {% if p.away_score is not none and p.home_score is not none %}
+          <span>{{ p.away_score }}&ndash;{{ p.home_score }}</span>
+          {% endif %}
+        </div>
+        <div class="gd-play-text">{{ p.text }}</div>
+      </div>
+      {% endfor %}
+    {% else %}
+      <div class="gd-empty">
+        {% if detail.status == 'scheduled' %}Plays appear here once the game kicks off.
+        {% else %}No play-by-play available for this game.{% endif %}
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="gd-panel" data-panel="game" id="gdGamePanel">
+    {% if detail.team_stats %}
+      {% for s in detail.team_stats %}
+      <div class="gd-stat-row">
+        <span class="gd-stat-val away">{{ s.away }}</span>
+        <span class="gd-stat-label">{{ s.label }}</span>
+        <span class="gd-stat-val home">{{ s.home }}</span>
+      </div>
+      {% endfor %}
+    {% else %}
+      <div class="gd-empty">Team stats appear once the game is under way.</div>
+    {% endif %}
+  </div>
+
+  {% for side, abbr in [('away', detail.away.abbr), ('home', detail.home.abbr)] %}
+  {% if abbr %}
+  <div class="gd-panel" data-panel="{{ side }}">
+    {% if detail.totals.get(abbr) %}
+    <div class="gd-totals">
+      {% for t in detail.totals[abbr][:9] %}
+      <span class="gd-total"><b>{{ t.value }}</b><span>{{ t.label }}</span></span>
+      {% endfor %}
+    </div>
+    {% endif %}
+    {% set box = detail.box.get(abbr) or {'offense': [], 'defense': []} %}
+    {% if box.offense or box.defense %}
+    <div class="gd-sub" data-sub-for="{{ side }}">
+      <button class="on" data-sub="offense">Offense</button>
+      <button data-sub="defense">Defense</button>
+    </div>
+    {% for group in ['offense', 'defense'] %}
+    <div class="gd-subpanel" data-sub-panel="{{ side }}-{{ group }}"
+         style="{{ '' if group == 'offense' else 'display:none;' }}">
+      {% for pl in box[group] %}
+      <div class="gd-bp">
+        <div class="gd-bp-name">{{ pl.name }}{% if pl.position %}<span>{{ pl.position }}</span>{% endif %}</div>
+        <div class="gd-bp-stats">
+          {% for s in pl.stats[:8] %}
+          <span class="gd-bp-stat"><b>{{ s.value }}</b><span>{{ s.label }}</span></span>
+          {% endfor %}
+        </div>
+      </div>
+      {% else %}
+      <div class="gd-empty">No {{ group }} stats yet.</div>
+      {% endfor %}
+    </div>
+    {% endfor %}
+    {% else %}
+    <div class="gd-empty">Box score appears once the game is under way.</div>
+    {% endif %}
+  </div>
+  {% endif %}
+  {% endfor %}
 
   {% if detail.win_prob %}
   <div class="panel" id="gdWinProbPanel">
@@ -8374,6 +8753,35 @@ GAME_DETAIL_HTML = BASE_STYLE + make_header("scores") + """
   {% endif %}
 </div></main>
 <script>
+// Tab + sub-tab switching. Deliberately its own IIFE, OUTSIDE the polling
+// one below -- that returns early on a finished game, and a finished game
+// still needs its box score tabs to work.
+(function(){
+  const tabs = document.getElementById('gdTabs');
+  if (!tabs) return;
+  tabs.addEventListener('click', function(e){
+    const btn = e.target.closest('.gd-tab');
+    if (!btn) return;
+    const want = btn.dataset.panel;
+    tabs.querySelectorAll('.gd-tab').forEach(function(b){ b.classList.toggle('on', b === btn); });
+    document.querySelectorAll('.gd-panel').forEach(function(p){
+      p.classList.toggle('on', p.dataset.panel === want);
+    });
+  });
+
+  document.querySelectorAll('.gd-sub').forEach(function(sub){
+    sub.addEventListener('click', function(e){
+      const btn = e.target.closest('button');
+      if (!btn) return;
+      const side = sub.dataset.subFor;
+      sub.querySelectorAll('button').forEach(function(b){ b.classList.toggle('on', b === btn); });
+      document.querySelectorAll('[data-sub-panel^="' + side + '-"]').forEach(function(p){
+        p.style.display = p.dataset.subPanel === side + '-' + btn.dataset.sub ? '' : 'none';
+      });
+    });
+  });
+})();
+
 (function(){
   const initialStatus = {{ detail.status|tojson }};
   if (initialStatus === 'final') return;  // nothing left to poll for
