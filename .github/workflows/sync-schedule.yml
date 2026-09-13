@@ -17,17 +17,30 @@ on:
 jobs:
   sync-schedule:
     runs-on: ubuntu-latest
+    env:
+      SITE_PASSWORD: ${{ secrets.SITE_PASSWORD }}
+      SEASON_INPUT: ${{ github.event.inputs.season }}
     steps:
       - name: Sync the schedule
         run: |
+          # See sync-stats.yml for why the response body is checked: a
+          # missing secret made this job report success while the server
+          # returned "unauthorized" every single run.
+          if [ -z "$SITE_PASSWORD" ]; then
+            echo "::error::SITE_PASSWORD repository secret is not set -- this job cannot authenticate."
+            exit 1
+          fi
           # The recurring cron only ever syncs the current season, so a
           # prior season (which matchup grading needs for its
           # defense-vs-position history) has no automatic path in here.
           # This input is how one gets backfilled on demand.
-          season="${{ github.event.inputs.season }}"
-          if [ -n "$season" ]; then
-            url="https://fantasyfootballcalc.com/api/sync-schedule?season=$season&secret=${{ secrets.SITE_PASSWORD }}"
-          else
-            url="https://fantasyfootballcalc.com/api/sync-schedule?secret=${{ secrets.SITE_PASSWORD }}"
+          url="https://fantasyfootballcalc.com/api/sync-schedule"
+          if [ -n "$SEASON_INPUT" ]; then
+            url="$url?season=$SEASON_INPUT"
           fi
-          curl -sS -X POST "$url"
+          body=$(curl -sS --fail-with-body -X POST \
+            -H "X-Sync-Secret: $SITE_PASSWORD" "$url") || {
+              echo "::error::sync-schedule request failed: $body"; exit 1; }
+          echo "$body"
+          case "$body" in *'"ok": false'*|*'"ok":false'*)
+            echo "::error::server rejected the sync: $body"; exit 1;; esac

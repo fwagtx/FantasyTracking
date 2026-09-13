@@ -11,17 +11,36 @@ on:
 jobs:
   backfill:
     runs-on: ubuntu-latest
+    env:
+      SITE_PASSWORD: ${{ secrets.SITE_PASSWORD }}
+      SEASON_INPUT: ${{ github.event.inputs.season }}
     steps:
       - name: Sync every season, one at a time
         run: |
-          if [ -n "${{ github.event.inputs.season }}" ]; then
-            years="${{ github.event.inputs.season }}"
+          # See sync-stats.yml: without the response check, a missing
+          # secret made this backfill report success in ~30 seconds
+          # having synced absolutely nothing.
+          if [ -z "$SITE_PASSWORD" ]; then
+            echo "::error::SITE_PASSWORD repository secret is not set -- this job cannot authenticate."
+            exit 1
+          fi
+          if [ -n "$SEASON_INPUT" ]; then
+            years="$SEASON_INPUT"
           else
             years=$(seq 2015 $(date +%Y))
           fi
+          failed=""
           for year in $years; do
             echo "Syncing $year..."
-            curl -X POST "https://fantasyfootballcalc.com/api/sync-stats?season=$year&secret=${{ secrets.SITE_PASSWORD }}"
-            echo ""
+            body=$(curl -sS --fail-with-body -X POST \
+              -H "X-Sync-Secret: $SITE_PASSWORD" \
+              "https://fantasyfootballcalc.com/api/sync-stats?season=$year") || body="request failed: $body"
+            echo "  $body"
+            case "$body" in *'"ok": false'*|*'"ok":false'*|"request failed:"*)
+              failed="$failed $year";; esac
             sleep 30
           done
+          if [ -n "$failed" ]; then
+            echo "::error::these seasons did not sync:$failed"
+            exit 1
+          fi

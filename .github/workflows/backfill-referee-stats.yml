@@ -6,14 +6,28 @@ on:
 jobs:
   backfill:
     runs-on: ubuntu-latest
+    env:
+      SITE_PASSWORD: ${{ secrets.SITE_PASSWORD }}
     steps:
       - name: Make sure the schedule is synced for the target seasons first
         run: |
+          # See sync-stats.yml for why the secret and the response body
+          # are both checked rather than assuming a 0 exit code means the
+          # server did the work.
+          if [ -z "$SITE_PASSWORD" ]; then
+            echo "::error::SITE_PASSWORD repository secret is not set -- this job cannot authenticate."
+            exit 1
+          fi
           this_year=$(date +%Y)
           for year in $(seq $((this_year - 2)) $this_year); do
             echo "Syncing schedule for $year..."
-            curl -sS -X POST "https://fantasyfootballcalc.com/api/sync-schedule?season=$year&secret=${{ secrets.SITE_PASSWORD }}"
-            echo ""
+            body=$(curl -sS --fail-with-body -X POST \
+              -H "X-Sync-Secret: $SITE_PASSWORD" \
+              "https://fantasyfootballcalc.com/api/sync-schedule?season=$year") || {
+                echo "::error::schedule sync for $year failed: $body"; exit 1; }
+            echo "  $body"
+            case "$body" in *'"ok": false'*|*'"ok":false'*)
+              echo "::error::server rejected the schedule sync for $year: $body"; exit 1;; esac
             sleep 5
           done
           # sync-schedule runs in a background thread on the server, so
@@ -23,16 +37,47 @@ jobs:
 
       - name: Sync every game's officiating/penalty data, one game at a time
         run: |
+          if [ -z "$SITE_PASSWORD" ]; then
+            echo "::error::SITE_PASSWORD repository secret is not set -- this job cannot authenticate."
+            exit 1
+          fi
           this_year=$(date +%Y)
+          total=0
+          bad=0
           for year in $(seq $((this_year - 2)) $this_year); do
             for week in $(seq 1 18); do
               echo "Fetching game ids for $year week $week..."
-              ids=$(curl -sS "https://fantasyfootballcalc.com/api/schedule-week-ids?season=$year&week=$week&secret=${{ secrets.SITE_PASSWORD }}" | jq -r '.ids[]?')
-              for id in $ids; do
+              week_body=$(curl -sS --fail-with-body \
+                -H "X-Sync-Secret: $SITE_PASSWORD" \
+                "https://fantasyfootballcalc.com/api/schedule-week-ids?season=$year&week=$week") || {
+                  echo "::error::could not list games for $year wk$week: $week_body"; exit 1; }
+              case "$week_body" in *'"ok": false'*|*'"ok":false'*)
+                echo "::error::server rejected the game-id lookup for $year wk$week: $week_body"; exit 1;; esac
+              for id in $(printf '%s' "$week_body" | jq -r '.ids[]?'); do
                 echo "  Syncing referee data for $year wk$week game $id"
-                curl -sS -X POST "https://fantasyfootballcalc.com/api/sync-referee-game?id=$id&season=$year&week=$week&secret=${{ secrets.SITE_PASSWORD }}"
-                echo ""
+                body=$(curl -sS --fail-with-body -X POST \
+                  -H "X-Sync-Secret: $SITE_PASSWORD" \
+                  "https://fantasyfootballcalc.com/api/sync-referee-game?id=$id&season=$year&week=$week") \
+                  || body="request failed: $body"
+                echo "    $body"
+                # One bad game shouldn't abandon a 3-season backfill, but
+                # it must not vanish into a green check either -- count
+                # them and fail at the end with the total.
+                case "$body" in *'"ok": false'*|*'"ok":false'*|"request failed:"*)
+                  bad=$((bad + 1));; esac
+                total=$((total + 1))
                 sleep 1
               done
             done
           done
+          # A backfill that discovered zero games synced nothing -- that's
+          # a failure to surface, not a quiet green check.
+          if [ "$total" -eq 0 ]; then
+            echo "::error::no games found for any of the last 3 seasons -- nothing was backfilled."
+            exit 1
+          fi
+          echo "Backfilled $total games ($bad failed)."
+          if [ "$bad" -gt 0 ]; then
+            echo "::error::$bad of $total games did not sync."
+            exit 1
+          fi

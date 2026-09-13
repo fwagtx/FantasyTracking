@@ -13,7 +13,25 @@ on:
 jobs:
   sync-stats:
     runs-on: ubuntu-latest
+    env:
+      SITE_PASSWORD: ${{ secrets.SITE_PASSWORD }}
     steps:
       - name: Sync the current season
         run: |
-          curl -sS -X POST "https://fantasyfootballcalc.com/api/sync-stats?secret=${{ secrets.SITE_PASSWORD }}"
+          # Every one of these jobs used to report a green check while the
+          # server was answering {"ok":false,"error":"unauthorized"} --
+          # curl exits 0 on an HTTP error as long as the connection
+          # succeeded, so a missing SITE_PASSWORD secret looked exactly
+          # like a healthy sync. Check the secret is present, make curl
+          # fail the step on a non-2xx, and read the response body.
+          if [ -z "$SITE_PASSWORD" ]; then
+            echo "::error::SITE_PASSWORD repository secret is not set -- this job cannot authenticate."
+            exit 1
+          fi
+          body=$(curl -sS --fail-with-body -X POST \
+            -H "X-Sync-Secret: $SITE_PASSWORD" \
+            "https://fantasyfootballcalc.com/api/sync-stats") || {
+              echo "::error::sync-stats request failed: $body"; exit 1; }
+          echo "$body"
+          case "$body" in *'"ok": false'*|*'"ok":false'*)
+            echo "::error::server rejected the sync: $body"; exit 1;; esac

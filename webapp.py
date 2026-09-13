@@ -4033,6 +4033,24 @@ def api_trade_result():
     return jsonify({"result": result_json, "suggestions": s["suggestions"]})
 
 
+def _secret_ok():
+    """Shared auth check for every /api/* job endpoint.
+
+    Also accepts the secret in an X-Sync-Secret header, not just
+    ?secret=, so a scheduled job doesn't have to carry a credential in a
+    URL (query strings end up in access logs and referrers; headers
+    don't). The query param stays supported -- manual curl calls and
+    existing bookmarks use it.
+
+    An unset SITE_PASSWORD authorizes nothing. Without that guard an
+    empty ?secret= would compare equal to an empty password and leave
+    every sync endpoint open to anyone."""
+    if not SITE_PASSWORD:
+        return False
+    provided = request.headers.get("X-Sync-Secret") or request.args.get("secret")
+    return provided == SITE_PASSWORD
+
+
 @app.route("/api/debug-news")
 def api_debug_news():
     """Temporary diagnostic endpoint -- shows exactly what's in the two
@@ -4041,7 +4059,7 @@ def api_debug_news():
     be root-caused against live feed content instead of guessed at from
     a sandbox that can't reach these feeds itself. Remove once news
     matching is confirmed working end to end."""
-    if request.args.get("secret") != SITE_PASSWORD:
+    if not _secret_ok():
         return jsonify({"ok": False, "error": "unauthorized"}), 401
     name = request.args.get("name", "").strip()
     team = request.args.get("team", "").strip()
@@ -4078,7 +4096,7 @@ def api_debug_fantasycalc():
     present) plus a couple of raw items straight from FantasyCalc's API,
     so a live "why are there no picks" report can be root-caused instead
     of guessed at. Remove once picks are confirmed working end to end."""
-    if request.args.get("secret") != SITE_PASSWORD:
+    if not _secret_ok():
         return jsonify({"ok": False, "error": "unauthorized"}), 401
     num_qbs = 2 if request.args.get("format", "1qb") == "superflex" else 1
     teams = request.args.get("teams", default=12, type=int)
@@ -4112,7 +4130,7 @@ def api_debug_sleeper():
     from Sleeper's stats endpoint so we can see exactly what's coming
     back, instead of guessing. Remove once the real sync is confirmed
     working."""
-    if request.args.get("secret") != SITE_PASSWORD:
+    if not _secret_ok():
         return jsonify({"ok": False, "error": "unauthorized"}), 401
     season = request.args.get("season", default=2024, type=int)
     week = request.args.get("week", default=1, type=int)
@@ -4144,7 +4162,7 @@ def api_debug_espn():
     ?endpoint=scoreboard (default): pass season/week/seasontype
     ?endpoint=summary: pass event=<espn_event_id>
     """
-    if request.args.get("secret") != SITE_PASSWORD:
+    if not _secret_ok():
         return jsonify({"ok": False, "error": "unauthorized"}), 401
     endpoint = request.args.get("endpoint", "scoreboard")
     try:
@@ -4214,7 +4232,7 @@ def api_sync_stats():
     the workflow now calls this for every season in quick succession and
     letting them all run at once would fight over the same limited CPU."""
     global _sync_busy
-    if request.args.get("secret") != SITE_PASSWORD:
+    if not _secret_ok():
         return jsonify({"ok": False, "error": "unauthorized"}), 401
     season = request.args.get("season", default=int(SEASON), type=int)
 
@@ -4384,7 +4402,7 @@ def api_sync_schedule():
     season) -- same background-thread + single-flight-lock shape as
     /api/sync-stats, kept as a separate lock so a schedule sync and a
     stats sync never block each other."""
-    if request.args.get("secret") != SITE_PASSWORD:
+    if not _secret_ok():
         return jsonify({"ok": False, "error": "unauthorized"}), 401
     season = request.args.get("season", default=int(SEASON), type=int)
     started = _sync_full_season_schedule_background(season)
@@ -4413,7 +4431,7 @@ def api_sync_schedule_now():
     Deliberately NOT used by the recurring cron or any page's self-heal
     -- only for a manual, one-off trigger, since blocking a request for
     this long is the wrong tradeoff for routine traffic."""
-    if request.args.get("secret") != SITE_PASSWORD:
+    if not _secret_ok():
         return jsonify({"ok": False, "error": "unauthorized"}), 401
     if not DATABASE_URL:
         return jsonify({"ok": False, "error": "DATABASE_URL is not configured on this deploy -- there is no database to sync into"})
@@ -4480,7 +4498,7 @@ def api_defense_vs_position_debug():
     teams have zero position entries in the computed defense table --
     that last list is the direct answer to "why does this specific
     team's matchup still say no data"."""
-    if request.args.get("secret") != SITE_PASSWORD:
+    if not _secret_ok():
         return jsonify({"ok": False, "error": "unauthorized"}), 401
     season = request.args.get("season", default=int(SEASON) - 1, type=int)
 
@@ -4532,7 +4550,7 @@ def api_schedule_status():
     what /matchups shows. Also reports whether a sync is in-flight for
     that season right now, since the answer might just be "still
     running, check back in a minute" rather than a bug."""
-    if request.args.get("secret") != SITE_PASSWORD:
+    if not _secret_ok():
         return jsonify({"ok": False, "error": "unauthorized"}), 401
     if not DATABASE_URL:
         return jsonify({"ok": True, "database_configured": False, "seasons": {}})
@@ -4566,7 +4584,7 @@ def api_schedule_week_ids():
     straight from our own DB. Used by the referee backfill workflow to
     discover which games to sync without embedding ESPN-parsing logic in
     a shell script."""
-    if request.args.get("secret") != SITE_PASSWORD:
+    if not _secret_ok():
         return jsonify({"ok": False, "error": "unauthorized"}), 401
     season = request.args.get("season", default=int(SEASON), type=int)
     week = request.args.get("week", default=1, type=int)
@@ -4593,7 +4611,7 @@ def api_sync_referee_game():
     gunicorn's timeout) rather than via a background thread, so the
     workflow's own per-game logging reflects real success/failure
     instead of racing a detached thread."""
-    if request.args.get("secret") != SITE_PASSWORD:
+    if not _secret_ok():
         return jsonify({"ok": False, "error": "unauthorized"}), 401
     event_id = request.args.get("id", "")
     season = request.args.get("season", default=int(SEASON), type=int)
@@ -4624,7 +4642,7 @@ def api_warm():
     unless its own TTL has expired, so calling them on a schedule is cheap.
     Secret-protected like /api/sync-stats since it triggers real outbound
     API calls."""
-    if request.args.get("secret") != SITE_PASSWORD:
+    if not _secret_ok():
         return jsonify({"ok": False, "error": "unauthorized"}), 401
 
     def _run():

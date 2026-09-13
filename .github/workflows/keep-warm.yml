@@ -4,14 +4,34 @@ on:
   schedule:
     # Every 12 minutes -- comfortably under Render free tier's ~15 min
     # spin-down window, so the worker never goes cold between visitors.
+    # GitHub's scheduler is best-effort and routinely runs 10-30 minutes
+    # late under load, so this does NOT reliably beat the spin-down; a
+    # paid always-on tier is the real fix, and this file can go away
+    # once the service is on one.
     - cron: "*/12 * * * *"
   workflow_dispatch: {}
 
 jobs:
   keep-warm:
     runs-on: ubuntu-latest
+    env:
+      SITE_PASSWORD: ${{ secrets.SITE_PASSWORD }}
     steps:
       - name: Ping health check (keeps the free-tier worker from spinning down)
-        run: curl -sS "https://fantasyfootballcalc.com/healthz"
+        run: curl -sS --fail-with-body "https://fantasyfootballcalc.com/healthz"
       - name: Refresh in-memory caches (players, trade values, ADP)
-        run: curl -sS -X POST "https://fantasyfootballcalc.com/api/warm?secret=${{ secrets.SITE_PASSWORD }}"
+        run: |
+          # See sync-stats.yml: this step reported success on every run
+          # for months while the server answered "unauthorized", which is
+          # why the caches it is supposed to warm were always cold.
+          if [ -z "$SITE_PASSWORD" ]; then
+            echo "::error::SITE_PASSWORD repository secret is not set -- the warm step cannot authenticate."
+            exit 1
+          fi
+          body=$(curl -sS --fail-with-body -X POST \
+            -H "X-Sync-Secret: $SITE_PASSWORD" \
+            "https://fantasyfootballcalc.com/api/warm") || {
+              echo "::error::warm request failed: $body"; exit 1; }
+          echo "$body"
+          case "$body" in *'"ok": false'*|*'"ok":false'*)
+            echo "::error::server rejected the warm call: $body"; exit 1;; esac
