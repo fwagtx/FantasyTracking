@@ -17,6 +17,7 @@ Optional:
   SLEEPER_USERNAME (prefills your username on the chat page)
 """
 
+import gzip
 import html
 import math
 import os
@@ -32,6 +33,7 @@ from email.utils import parsedate_to_datetime
 import requests
 import psycopg2
 import psycopg2.extras
+import psycopg2.pool
 from flask import Flask, request, session, redirect, render_template_string, jsonify, url_for
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -80,15 +82,120 @@ app.config["SESSION_COOKIE_SECURE"] = True
 app.config["REMEMBER_COOKIE_SECURE"] = True
 app.config["REMEMBER_COOKIE_HTTPONLY"] = True
 
+_COMPRESSIBLE_MIMETYPES = (
+    "text/html", "text/css", "text/javascript", "text/plain",
+    "application/javascript", "application/json", "image/svg+xml",
+)
+
+
+@app.after_request
+def _compress_response(response):
+    """Gzips every text/HTML/JSON response for a client that says it can
+    accept it -- this app's pages (Matchups, Rankings, League Manager)
+    render as one large inline HTML/CSS/JS blob with no separate static
+    assets, so nothing else on the page benefits from a browser cache;
+    shrinking the actual bytes sent is the one transfer-time win
+    available for every page load, at essentially zero cost (a few ms of
+    CPU) since Flask already buffers the whole body before this hook
+    runs. Skips anything already encoded, streamed responses (direct_
+    passthrough, e.g. a future file download), non-2xx bodies, tiny
+    bodies where the gzip header overhead isn't worth it, and non-text
+    mimetypes (images/fonts are already compressed formats)."""
+    try:
+        if (
+            response.direct_passthrough
+            or "gzip" not in (request.headers.get("Accept-Encoding", "")).lower()
+            or "Content-Encoding" in response.headers
+            or not (200 <= response.status_code < 300)
+            or not (response.mimetype or "").startswith(_COMPRESSIBLE_MIMETYPES)
+        ):
+            return response
+        body = response.get_data()
+        if len(body) < 500:
+            return response
+        compressed = gzip.compress(body, compresslevel=6)
+        response.set_data(compressed)
+        response.headers["Content-Encoding"] = "gzip"
+        response.headers["Content-Length"] = str(len(compressed))
+        vary = response.headers.get("Vary", "")
+        if "accept-encoding" not in vary.lower():
+            response.headers["Vary"] = (vary + ", Accept-Encoding").lstrip(", ")
+    except Exception:
+        # Never let a compression bug turn into a broken page -- worst
+        # case, this request just goes out uncompressed.
+        pass
+    return response
+
 # ---------------- Accounts: database ----------------
 
 DATABASE_URL = os.environ.get("DATABASE_URL", "")
 
 
+_db_pool = None
+_db_pool_lock = threading.Lock()
+DB_POOL_MAX = int(os.environ.get("DB_POOL_MAX", "10"))
+
+
+def _get_db_pool():
+    """Lazily creates the connection pool on first real use (DATABASE_URL
+    can be empty in local/dev/test runs, and importing this module must
+    never fail just because Postgres isn't configured)."""
+    global _db_pool
+    if _db_pool is None:
+        with _db_pool_lock:
+            if _db_pool is None:
+                _db_pool = psycopg2.pool.ThreadedConnectionPool(
+                    1, DB_POOL_MAX, DATABASE_URL, cursor_factory=psycopg2.extras.RealDictCursor,
+                )
+    return _db_pool
+
+
+class _PooledConnection:
+    """Every one of this file's many get_db() call sites already follows
+    `conn = get_db(); try: ... finally: conn.close()` -- opening a brand
+    new TCP+TLS connection to Postgres for every single query (the old
+    behavior) was a real, avoidable chunk of every page's load time,
+    multiplied by how many self-healing checks (ensure_schedule_synced,
+    get_season_stats, get_schedule_for_team_week, ...) a single request
+    can now trigger. This wraps a pooled connection so `.close()` hands
+    it back to the pool instead of tearing it down -- none of those
+    existing call sites need to change. Rolling back before returning it
+    clears any uncommitted/aborted transaction state first, which is
+    exactly what closing a raw connection without a prior commit()
+    already did -- so this preserves today's behavior, it doesn't change
+    it, while actually reusing the underlying connection."""
+    __slots__ = ("_conn", "_pool")
+
+    def __init__(self, conn, pool):
+        self._conn = conn
+        self._pool = pool
+
+    def close(self):
+        try:
+            self._conn.rollback()
+        except Exception:
+            # A dead/broken connection (the rollback itself failed) must
+            # not go back into circulation for the next borrower to trip
+            # over -- tell the pool to actually discard it instead.
+            self._pool.putconn(self._conn, close=True)
+            return
+        self._pool.putconn(self._conn)
+
+    def __getattr__(self, name):
+        return getattr(self._conn, name)
+
+
 def get_db():
-    """A fresh connection per call -- simplest thing that works for this
-    app's traffic level. Neon (or any real Postgres) handles this fine."""
-    return psycopg2.connect(DATABASE_URL, cursor_factory=psycopg2.extras.RealDictCursor)
+    """A pooled connection -- see _PooledConnection's docstring. Falls
+    back to a plain unpooled connection if the pool can't be created
+    (e.g. a malformed DATABASE_URL), so a pool-specific failure doesn't
+    take down every DB-using route that already worked before pooling
+    existed."""
+    try:
+        pool = _get_db_pool()
+        return _PooledConnection(pool.getconn(), pool)
+    except Exception:
+        return psycopg2.connect(DATABASE_URL, cursor_factory=psycopg2.extras.RealDictCursor)
 
 
 def init_db():
@@ -138,6 +245,14 @@ def init_db():
                 );
             """)
             cur.execute("CREATE INDEX IF NOT EXISTS idx_player_stats_lookup ON player_stats (sleeper_id, season);")
+            # get_season_stats -- the single most-called query in the app
+            # now that matchup grading pulls it for the current season,
+            # last season, and (for head-to-head history) up to 6 seasons
+            # back -- filters on season ALONE. Neither the primary key
+            # nor idx_player_stats_lookup above are usable for that (both
+            # lead with sleeper_id), so every one of those calls was
+            # doing a full sequential scan of a table that only grows.
+            cur.execute("CREATE INDEX IF NOT EXISTS idx_player_stats_season ON player_stats (season);")
             cur.execute("ALTER TABLE users ADD COLUMN IF NOT EXISTS sleeper_username TEXT;")
             cur.execute("""
                 CREATE TABLE IF NOT EXISTS synced_leagues (
@@ -3190,7 +3305,16 @@ def matchups_page():
             ensure_schedule_synced(season)
             all_players = get_all_players()
             fc_players = get_fantasycalc_values(1)["players"]
-            for sid, v in fc_players.items():
+            MAX_ROWS = 300
+            # Grade highest-dynasty-value players first and stop once the
+            # page is full, instead of computing a grade for every single
+            # rostered-and-below player in the pool (often 1000+) before
+            # ever sorting or truncating -- most of that work was thrown
+            # away on every single page load.
+            candidates = sorted(fc_players.items(), key=lambda kv: -(kv[1].get("value") or 0))
+            for sid, v in candidates:
+                if len(rows) >= MAX_ROWS:
+                    break
                 p = all_players.get(sid)
                 if not p or v.get("position") not in POSITIONS:
                     continue
@@ -3208,12 +3332,14 @@ def matchups_page():
                     "reasoning": grade["reasoning"],
                     "value": v.get("value", 0),
                 })
-            # Sort by the actual composite within a star tier too -- 13
-            # letter grades share only 5 star tiers, so sorting on stars
-            # alone would leave e.g. A+ and A- in an arbitrary order
-            # relative to each other.
-            rows.sort(key=lambda r: (-r["stars"], -r["composite"], -r["value"]))
-            rows = rows[:300]
+            # Top-drafted (highest dynasty value) players lead the board.
+            # Sorting by grade quality first used to let an already-final
+            # game's real point total (which feeds the grade's composite)
+            # push a bench/waiver-level player above a still-to-play star
+            # -- value first reads the way an actual draft board does;
+            # stars/composite only break ties between equally-valued
+            # players.
+            rows.sort(key=lambda r: (-r["value"], -r["stars"], -r["composite"]))
         except Exception as e:
             load_error = str(e)
 
