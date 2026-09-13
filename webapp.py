@@ -1589,7 +1589,13 @@ def _grade_reasoning(c):
     if c["def_rank_used"] is None:
         matchup_desc = "not enough defensive data yet to grade the matchup"
     else:
-        source_note = "" if c["def_source"] == "current" else " (based on last year)"
+        if c["def_source"] == "current":
+            source_note = ""
+        elif c["def_source"] == "last_year":
+            source_note = " (based on last year)"
+        else:
+            games = c["def_games_sampled"]
+            source_note = f" (small sample -- {games} game{'s' if games != 1 else ''} this year)"
         rank = c["def_rank_used"]
         if rank >= 24:
             matchup_desc = f"a great matchup{source_note}"
@@ -1611,6 +1617,50 @@ def _grade_reasoning(c):
     if c["injury_tier"] == "questionable":
         sentence += ", questionable to play"
     return sentence + "."
+
+
+MIN_DEF_GAMES_FOR_CURRENT_YEAR = 4
+# A defense needs to have actually faced a position this many times before
+# its current-season sample outranks last year's full 17-game read on that
+# same defense. Early in a season this is almost always false league-wide
+# (nobody has played 4 games yet), so grading is effectively "last year's
+# numbers only" until the sample is real -- then it switches over
+# automatically, team by team, position by position, with no manual
+# intervention as the season progresses.
+
+
+def _letter_grade(composite):
+    """13-tier letter grade (A+ down to F) from a 0-1 composite score --
+    a bare 5-bucket A/B/C/D/F band crowded together matchups that were
+    actually meaningfully different. Stars stay a coarser 1-5 scale
+    grouped by the base letter (every A-tier is 5 stars, etc.)."""
+    bands = [
+        (0.92, "A+", 5), (0.85, "A", 5), (0.78, "A-", 5),
+        (0.71, "B+", 4), (0.64, "B", 4), (0.57, "B-", 4),
+        (0.50, "C+", 3), (0.43, "C", 3), (0.36, "C-", 3),
+        (0.29, "D+", 2), (0.22, "D", 2), (0.15, "D-", 2),
+    ]
+    for threshold, grade, stars in bands:
+        if composite >= threshold:
+            return grade, stars
+    return "F", 1
+
+
+def _grade_css_class(grade):
+    """CSS-safe token for a letter grade -- a bare '+'/'-' isn't valid in
+    a plain class-selector token, so 'A+' -> 'ap', 'B-' -> 'bm', 'C' ->
+    'c'. The badge's visible text still shows the real letter grade;
+    only the class list uses this."""
+    return grade.lower().replace("+", "p").replace("-", "m")
+
+
+# Full best-to-worst order, including the two injury-forced overrides
+# (out/admin -> "F", doubtful -> "D-") compute_matchup_grade can also
+# return -- covers every value compare_matchups needs to rank between,
+# so head-to-head comparisons never KeyError on a grade this scale
+# actually produces.
+_GRADE_ORDER = ["A+", "A", "A-", "B+", "B", "B-", "C+", "C", "C-", "D+", "D", "D-", "F"]
+_GRADE_RANK = {g: len(_GRADE_ORDER) - i for i, g in enumerate(_GRADE_ORDER)}
 
 
 def compute_matchup_grade(sid, season, week, cache={}):
@@ -1642,20 +1692,32 @@ def compute_matchup_grade(sid, season, week, cache={}):
     opp_entry = dvp.get(sched["opponent"], {}).get(position) if sched else None
 
     # Last season's version of the same figure -- early in a season the
-    # current-year sample per defense is thin (zero games in week 1, a
-    # handful for the first month), so if there's nothing usable yet this
-    # year the grade falls back to last year's full-season number instead
-    # of a neutral placeholder. Both are still exposed separately below
-    # so the UI can show which one is actually driving the grade.
+    # current-year sample per defense is thin to nonexistent (zero games
+    # in week 1, a handful for the first month), so a defense needs at
+    # least MIN_DEF_GAMES_FOR_CURRENT_YEAR games logged against this
+    # position before its current-year number outranks last year's full
+    # 17-game read on the same defense. Below that threshold the grade
+    # relies on last year exclusively; once a defense clears it (which
+    # happens automatically, team by team, as the season plays out), the
+    # switch to this year's real, current data is also automatic.
     last_year_dvp = get_defense_vs_position(season - 1)
     last_year_entry = last_year_dvp.get(sched["opponent"], {}).get(position) if sched else None
 
-    if opp_entry:
+    if opp_entry and opp_entry["games"] >= MIN_DEF_GAMES_FOR_CURRENT_YEAR:
         def_rank_used, def_source, def_pool_size = opp_entry["rank"], "current", len(dvp) or 32
+        def_games_sampled = opp_entry["games"]
     elif last_year_entry:
         def_rank_used, def_source, def_pool_size = last_year_entry["rank"], "last_year", len(last_year_dvp) or 32
+        def_games_sampled = last_year_entry["games"]
+    elif opp_entry:
+        # Early season, no last-year data available either (e.g. a team
+        # that didn't exist under this abbreviation last year) -- better
+        # than nothing, but flagged distinctly so the UI is honest about
+        # how thin the sample actually is.
+        def_rank_used, def_source, def_pool_size = opp_entry["rank"], "current_thin", len(dvp) or 32
+        def_games_sampled = opp_entry["games"]
     else:
-        def_rank_used, def_source, def_pool_size = None, None, 32
+        def_rank_used, def_source, def_pool_size, def_games_sampled = None, None, 32, None
     def_percentile = (def_rank_used - 1) / max(def_pool_size - 1, 1) if def_rank_used is not None else 0.5
 
     season_stats = get_season_stats(season)
@@ -1693,17 +1755,9 @@ def compute_matchup_grade(sid, season, week, cache={}):
     if tier in ("out", "admin"):
         grade, stars = "F", 1
     elif tier == "doubtful":
-        grade, stars = "D", 2
-    elif composite >= 0.8:
-        grade, stars = "A", 5
-    elif composite >= 0.65:
-        grade, stars = "B", 4
-    elif composite >= 0.45:
-        grade, stars = "C", 3
-    elif composite >= 0.3:
-        grade, stars = "D", 2
+        grade, stars = "D-", 2
     else:
-        grade, stars = "F", 1
+        grade, stars = _letter_grade(composite)
 
     components = {
         "opponent": sched["opponent"] if sched else None,
@@ -1711,6 +1765,7 @@ def compute_matchup_grade(sid, season, week, cache={}):
         "def_fpts_allowed_pg": opp_entry["fpts_allowed_per_game"] if opp_entry else None,
         "def_rank_used": def_rank_used,
         "def_source": def_source,
+        "def_games_sampled": def_games_sampled,
         "def_percentile": round(def_percentile, 2),
         "def_rank_last_year": last_year_entry["rank"] if last_year_entry else None,
         "def_fpts_allowed_pg_last_year": last_year_entry["fpts_allowed_per_game"] if last_year_entry else None,
@@ -1722,7 +1777,10 @@ def compute_matchup_grade(sid, season, week, cache={}):
         "game_status": sched["status"] if sched else None,
         "actual_week_pts": actual_week_pts,
     }
-    data = {"grade": grade, "stars": stars, "reasoning": _grade_reasoning(components), "components": components}
+    data = {
+        "grade": grade, "grade_class": _grade_css_class(grade), "stars": stars,
+        "reasoning": _grade_reasoning(components), "components": components,
+    }
     cache[key] = {"data": data, "time": now}
     return data
 
@@ -1759,7 +1817,8 @@ def compare_matchups(sid_a, sid_b, season, week):
             "def_fpts_allowed_pg": c["def_fpts_allowed_pg"],
             "def_rank_last_year": c["def_rank_last_year"],
             "def_fpts_allowed_pg_last_year": c["def_fpts_allowed_pg_last_year"],
-            "grade": grade["grade"], "stars": grade["stars"], "composite": c["composite"],
+            "def_source": c["def_source"], "def_games_sampled": c["def_games_sampled"],
+            "grade": grade["grade"], "grade_class": grade["grade_class"], "stars": grade["stars"], "composite": c["composite"],
             "season_avg": round(stat["fpts"] / stat["games"], 1) if stat.get("games") else 0.0,
             "recent_avg": round(sum(recent) / len(recent), 1) if recent else 0.0,
             "injury": (badge["title"] if badge else "Healthy"),
@@ -1771,9 +1830,8 @@ def compare_matchups(sid_a, sid_b, season, week):
 
     a, b = summarize(sid_a, grade_a), summarize(sid_b, grade_b)
 
-    grade_rank = {"A": 5, "B": 4, "C": 3, "D": 2, "F": 1}
-    if grade_rank[a["grade"]] != grade_rank[b["grade"]]:
-        start, sit = (a, b) if grade_rank[a["grade"]] > grade_rank[b["grade"]] else (b, a)
+    if _GRADE_RANK[a["grade"]] != _GRADE_RANK[b["grade"]]:
+        start, sit = (a, b) if _GRADE_RANK[a["grade"]] > _GRADE_RANK[b["grade"]] else (b, a)
     else:
         start, sit = (a, b) if a["composite"] >= b["composite"] else (b, a)
 
@@ -2615,6 +2673,7 @@ def league_detail():
                 for p in col["players"]:
                     grade = compute_matchup_grade(p["sleeper_id"], info["season"], info["week"])
                     p["grade"] = grade["grade"] if grade else None
+                    p["grade_class"] = grade["grade_class"] if grade else None
         return render_template_string(LEAGUE_DETAIL_HTML, detail=detail, username=username, league_id=league_id)
     except Exception as e:
         return f"Error: {e}", 500
@@ -2994,11 +3053,16 @@ def matchups_page():
                     "position": v.get("position"), "team": p.get("team") or "FA",
                     "photo": player_photo_url(sid),
                     "opponent": grade["components"]["opponent"],
-                    "grade": grade["grade"], "stars": grade["stars"],
+                    "grade": grade["grade"], "grade_class": grade["grade_class"], "stars": grade["stars"],
+                    "composite": grade["components"]["composite"],
                     "reasoning": grade["reasoning"],
                     "value": v.get("value", 0),
                 })
-            rows.sort(key=lambda r: (-r["stars"], -r["value"]))
+            # Sort by the actual composite within a star tier too -- 13
+            # letter grades share only 5 star tiers, so sorting on stars
+            # alone would leave e.g. A+ and A- in an arbitrary order
+            # relative to each other.
+            rows.sort(key=lambda r: (-r["stars"], -r["composite"], -r["value"]))
             rows = rows[:300]
         except Exception as e:
             load_error = str(e)
@@ -3535,9 +3599,17 @@ def _sync_full_season_schedule_background(season):
         global _schedule_sync_busy
         try:
             for week in range(1, 19):
-                sync_week_schedule_to_db(season, week)
-        except Exception:
-            pass
+                # One bad week (a transient ESPN hiccup, a rate limit, a
+                # week that legitimately doesn't exist) must not abort the
+                # other 17 -- this used to be one try/except around the
+                # whole loop, so a single failure silently zeroed out the
+                # entire backfill and the next trigger would just repeat
+                # the same failure forever, leaving last season's defense
+                # data permanently empty.
+                try:
+                    sync_week_schedule_to_db(season, week)
+                except Exception:
+                    pass
         finally:
             with _schedule_sync_lock:
                 _schedule_sync_busy = False
@@ -3874,9 +3946,10 @@ BASE_STYLE = """
   .rank-badge.critical{ background:var(--critical-wash); color:var(--critical); font-weight:700; }
   .rank-badge.flat{ background:var(--paper-sunken); color:var(--ink-muted); font-weight:700; }
   .grade-badge{ font-weight:700; }
-  .grade-badge.grade-a, .grade-badge.grade-b{ background:var(--good-wash); color:var(--good); }
-  .grade-badge.grade-c{ background:var(--warning-wash); color:var(--warning); }
-  .grade-badge.grade-d, .grade-badge.grade-f{ background:var(--critical-wash); color:var(--critical); }
+  .grade-badge.grade-ap, .grade-badge.grade-a, .grade-badge.grade-am,
+  .grade-badge.grade-bp, .grade-badge.grade-b, .grade-badge.grade-bm{ background:var(--good-wash); color:var(--good); }
+  .grade-badge.grade-cp, .grade-badge.grade-c, .grade-badge.grade-cm{ background:var(--warning-wash); color:var(--warning); }
+  .grade-badge.grade-dp, .grade-badge.grade-d, .grade-badge.grade-dm, .grade-badge.grade-f{ background:var(--critical-wash); color:var(--critical); }
   .legend-key{ display:flex; flex-wrap:wrap; gap:10px 20px; align-items:center; }
   .legend-key-item{ display:flex; align-items:center; gap:8px; font-size:12.5px; color:var(--ink-secondary); }
   .col-head-sample{ display:inline-flex; padding:3px 6px; border-radius:5px; background:var(--ink-muted); flex:none; }
@@ -4540,7 +4613,7 @@ LEAGUE_DETAIL_HTML = BASE_STYLE + make_header("league") + """
             <a class="pname" href="/player?sid={{ p.sleeper_id }}&numqbs={{ detail.num_qbs }}&u={{ username }}&ref={{ ('/league?league_id=' ~ league_id ~ '&roster_id=' ~ detail.roster_id ~ '&u=' ~ username)|urlencode }}">{{ p.name }}</a>
           </div>
           <span class="rank-pair">
-            {% if p.grade %}<span class="grade-badge grade-{{ p.grade|lower }}">{{ p.grade }}</span>{% endif %}
+            {% if p.grade %}<span class="grade-badge grade-{{ p.grade_class }}">{{ p.grade }}</span>{% endif %}
             <span class="rank-plain">{{ p.position_rank or '\u2014' }}</span>
             <span class="rank-badge {{ p.tier }}">{{ p.overall_rank or '\u2014' }}</span>
           </span>
@@ -5263,10 +5336,11 @@ MATCHUPS_HTML = BASE_STYLE + make_header("matchups") + """
   .mu-name-line{ font-weight:700; font-size:13.5px; }
   .mu-reason{ font-size:11.5px; color:var(--ink-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   .mu-opp{ color:var(--ink-secondary); font-size:12.5px; width:70px; flex:none; }
-  .mu-grade{ font-family:"IBM Plex Mono"; font-weight:700; font-size:13px; padding:3px 10px; border-radius:6px; flex:none; width:34px; text-align:center; }
-  .mu-grade.A, .mu-grade.B{ background:var(--good-wash); color:var(--good); }
-  .mu-grade.C{ background:var(--warning-wash); color:var(--warning); }
-  .mu-grade.D, .mu-grade.F{ background:var(--critical-wash); color:var(--critical); }
+  .mu-grade{ font-family:"IBM Plex Mono"; font-weight:700; font-size:12.5px; padding:3px 8px; border-radius:6px; flex:none; width:38px; text-align:center; }
+  .mu-grade.ap, .mu-grade.a, .mu-grade.am,
+  .mu-grade.bp, .mu-grade.b, .mu-grade.bm{ background:var(--good-wash); color:var(--good); }
+  .mu-grade.cp, .mu-grade.c, .mu-grade.cm{ background:var(--warning-wash); color:var(--warning); }
+  .mu-grade.dp, .mu-grade.d, .mu-grade.dm, .mu-grade.f{ background:var(--critical-wash); color:var(--critical); }
   .mu-stars{ color:#f0b429; font-size:12px; width:70px; flex:none; text-align:right; }
 
   .h2h-pickers{ display:grid; grid-template-columns:1fr auto 1fr; align-items:start; gap:14px; margin-top:14px; }
@@ -5356,7 +5430,7 @@ MATCHUPS_HTML = BASE_STYLE + make_header("matchups") + """
         </div>
         <span class="mu-opp">{% if r.opponent %}vs {{ r.opponent }}{% else %}BYE{% endif %}</span>
         <span class="mu-stars">{{ '★' * r.stars }}{{ '☆' * (5 - r.stars) }}</span>
-        <span class="mu-grade {{ r.grade }}">{{ r.grade }}</span>
+        <span class="mu-grade {{ r.grade_class }}">{{ r.grade }}</span>
       </div>
       {% endfor %}
       {% if not rows %}<p class="muted" style="padding:20px 0;">No graded players for this week yet.</p>{% endif %}
@@ -5364,9 +5438,9 @@ MATCHUPS_HTML = BASE_STYLE + make_header("matchups") + """
     {% else %}
     <div class="gate-wrap">
       <div class="gate-blur">
-        <div class="mu-row"><img src=""><span class="pos-chip" style="background:var(--pos-qb);">QB</span><span class="mu-name">Sample Player DAL</span><span class="mu-opp">vs SF</span><span class="mu-stars">★★★★★</span><span class="mu-grade A">A</span></div>
-        <div class="mu-row"><img src=""><span class="pos-chip" style="background:var(--pos-rb);">RB</span><span class="mu-name">Sample Player KC</span><span class="mu-opp">vs BUF</span><span class="mu-stars">★★★☆☆</span><span class="mu-grade C">C</span></div>
-        <div class="mu-row"><img src=""><span class="pos-chip" style="background:var(--pos-wr);">WR</span><span class="mu-name">Sample Player MIA</span><span class="mu-opp">vs NYJ</span><span class="mu-stars">★★☆☆☆</span><span class="mu-grade D">D</span></div>
+        <div class="mu-row"><img src=""><span class="pos-chip" style="background:var(--pos-qb);">QB</span><span class="mu-name">Sample Player DAL</span><span class="mu-opp">vs SF</span><span class="mu-stars">★★★★★</span><span class="mu-grade ap">A+</span></div>
+        <div class="mu-row"><img src=""><span class="pos-chip" style="background:var(--pos-rb);">RB</span><span class="mu-name">Sample Player KC</span><span class="mu-opp">vs BUF</span><span class="mu-stars">★★★☆☆</span><span class="mu-grade c">C</span></div>
+        <div class="mu-row"><img src=""><span class="pos-chip" style="background:var(--pos-wr);">WR</span><span class="mu-name">Sample Player MIA</span><span class="mu-opp">vs NYJ</span><span class="mu-stars">★★☆☆☆</span><span class="mu-grade dm">D-</span></div>
       </div>
       <div class="gate-card">
         <h3>Unlock <span style="color:var(--accent-ink);">Matchup Grades</span></h3>
@@ -5487,12 +5561,12 @@ MATCHUPS_HTML = BASE_STYLE + make_header("matchups") + """
     return '<div class="h2h-card' + (isWinner ? ' winner' : '') + '">' +
       '<div class="h2h-card-head"><img src="' + p.photo + '" onerror="this.style.visibility=\\'hidden\\'">' +
         '<div><div class="h2h-card-name">' + p.name + '</div><span class="muted">' + p.position + ' &middot; ' + p.team + '</span></div>' +
-        '<span class="mu-grade ' + p.grade + '" style="margin-left:auto;">' + p.grade + '</span></div>' +
+        '<span class="mu-grade ' + p.grade_class + '" style="margin-left:auto;">' + p.grade + '</span></div>' +
       '<div style="text-align:center; color:#f0b429; margin-top:8px;">' + starString(p.stars) + '</div>' +
       '<p class="muted" style="text-align:center; font-size:12px; margin-top:6px;">' + p.reasoning + '</p>' +
       resultRow +
       '<div class="h2h-stat-row"><span class="muted">Opponent</span><span>' + (p.opponent ? 'vs ' + p.opponent : 'BYE') + '</span></div>' +
-      '<div class="h2h-stat-row"><span class="muted">Defense vs pos, this year</span><span>' + (p.def_fpts_allowed_pg != null ? p.def_fpts_allowed_pg + ' pts/gm (rank ' + p.def_rank + ')' : '—') + '</span></div>' +
+      '<div class="h2h-stat-row"><span class="muted">Defense vs pos, this year' + (p.def_source === 'current_thin' ? ' (early sample)' : '') + '</span><span>' + (p.def_fpts_allowed_pg != null ? p.def_fpts_allowed_pg + ' pts/gm (rank ' + p.def_rank + ')' : '—') + '</span></div>' +
       lastYear +
       '<div class="h2h-stat-row"><span class="muted">Season avg</span><span>' + p.season_avg + ' pts</span></div>' +
       '<div class="h2h-stat-row"><span class="muted">Last 4 wks avg</span><span>' + p.recent_avg + ' pts</span></div>' +
