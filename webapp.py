@@ -1949,6 +1949,25 @@ def _star_pct_for_composite(composite):
     return max(5, min(100, round(pct)))
 
 
+def _star_pct_for_grade(grade):
+    """Star fill for a grade that was set directly rather than derived
+    from a composite -- the injury overrides (OUT/IR -> F, Doubtful ->
+    D-), where the composite deliberately no longer describes the
+    outlook.
+
+    Returns the middle of that grade's own slice, so the stars and the
+    letter on the badge can never disagree. These used to be hardcoded
+    (F = 8%, D- = 25%), and 25% actually landed inside the D band, not
+    D- -- a Doubtful player's badge said "D-" while their stars drew a
+    "D". Deriving it from the same tier math that _star_pct_for_composite
+    uses makes that class of mismatch impossible for any grade."""
+    n = len(_TIER_LOWER_BOUNDS)
+    # _GRADE_ORDER runs best-to-worst; tier indexes run worst-to-best.
+    tier = n - 1 - _GRADE_ORDER.index(grade) if grade in _GRADE_ORDER else 0
+    slice_width = (100 - 5) / n
+    return max(5, min(100, round(5 + tier * slice_width + slice_width * 0.5)))
+
+
 def _grade_css_class(grade):
     """CSS-safe token for a letter grade -- a bare '+'/'-' isn't valid in
     a plain class-selector token, so 'A+' -> 'ap', 'B-' -> 'bm', 'C' ->
@@ -2090,9 +2109,9 @@ def compute_matchup_grade(sid, season, week, cache=_matchup_grade_cache):
         composite *= 0.85
 
     if tier in ("out", "admin"):
-        grade, stars, star_pct = "F", 1, 8
+        grade, stars, star_pct = "F", 1, _star_pct_for_grade("F")
     elif tier == "doubtful":
-        grade, stars, star_pct = "D-", 2, 25
+        grade, stars, star_pct = "D-", 2, _star_pct_for_grade("D-")
     else:
         grade, stars = _letter_grade(composite)
         # Tier-normalized fill (see _star_pct_for_composite) -- two
@@ -3641,20 +3660,44 @@ def matchups_page():
                     "name": f"{p.get('first_name','')} {p.get('last_name','')}".strip(),
                     "position": v.get("position"), "team": p.get("team") or "FA",
                     "photo": player_photo_url(sid),
-                    "opponent": grade["components"]["opponent"],
+                    "opponent": grade["components"].get("opponent"),
                     "grade": grade["grade"], "grade_class": grade["grade_class"], "stars": grade["stars"], "star_pct": grade["star_pct"],
-                    "composite": grade["components"]["composite"],
+                    "composite": grade["components"].get("composite", 0),
                     "reasoning": grade["reasoning"],
                     "value": v.get("value", 0),
+                    # A game that's already final (or live, or a bye) isn't
+                    # a start/sit decision at all -- those sort below every
+                    # player who can still actually be started this week.
+                    # Read with .get: one missing optional field must never
+                    # take down the whole board, which a hard lookup here
+                    # would do (the exception is caught page-wide and
+                    # renders an empty list).
+                    "decidable": 0 if (grade["components"].get("game_status") in ("final", "in_progress")
+                                       or grade["components"].get("opponent") is None) else 1,
                 })
-            # Top-drafted (highest dynasty value) players lead the board.
-            # Sorting by grade quality first used to let an already-final
-            # game's real point total (which feeds the grade's composite)
-            # push a bench/waiver-level player above a still-to-play star
-            # -- value first reads the way an actual draft board does;
-            # stars/composite only break ties between equally-valued
-            # players.
-            rows.sort(key=lambda r: (-r["value"], -r["stars"], -r["composite"]))
+            # Most startable first: best grade down to worst.
+            #
+            # Ranked on _GRADE_RANK (the 13-tier order of the grade
+            # actually shown) rather than on composite alone, because an
+            # injury override sets the grade directly -- an OUT player is
+            # an F no matter how strong their underlying composite is, so
+            # a pure composite sort would list them above their own
+            # displayed grade. Composite then orders players who share a
+            # letter (a strong B+ above a weak one), and dynasty value
+            # breaks an exact tie so the order is fully deterministic
+            # rather than dependent on dict iteration order.
+            rows.sort(key=lambda r: (-r["decidable"], -_GRADE_RANK[r["grade"]], -r["composite"], -r["value"]))
+            # Rank runs straight through both groups -- it's one ordered
+            # board -- and the first row of the already-played/bye group
+            # carries a flag so the template can show a divider there.
+            # Without it, an A-graded finished game sitting below an F
+            # would just look like the sort is broken on a board that
+            # says it runs highest grade to lowest.
+            seen_inactive = False
+            for i, r in enumerate(rows, 1):
+                r["rank"] = i
+                r["starts_inactive"] = not r["decidable"] and not seen_inactive
+                seen_inactive = seen_inactive or not r["decidable"]
             timing.append(("grading", time.monotonic() - t2))
         except Exception as e:
             load_error = str(e)
@@ -6191,6 +6234,12 @@ MATCHUPS_HTML = BASE_STYLE + make_header("matchups") + """
   .mu-row{ display:flex; align-items:center; gap:12px; padding:10px 4px; border-top:1px solid var(--line); }
   .mu-row:first-of-type{ border-top:none; }
   .mu-row img{ width:32px; height:32px; border-radius:50%; object-fit:cover; background:var(--paper-sunken); flex:none; }
+  /* Tabular figures + a fixed width keep the rank column from shifting
+     the rest of the row as the numbers grow from 1 to 300. */
+  .mu-rank{ font-family:"IBM Plex Mono"; font-size:11.5px; color:var(--ink-muted); font-variant-numeric:tabular-nums;
+            width:26px; flex:none; text-align:right; }
+  .mu-divider{ margin-top:14px; padding:6px 4px; border-top:1px solid var(--line); font-size:11px;
+               letter-spacing:0.04em; text-transform:uppercase; color:var(--ink-muted); }
   .mu-name-col{ flex:1; min-width:0; display:flex; flex-direction:column; gap:2px; }
   .mu-name-line{ font-weight:700; font-size:13.5px; }
   .mu-reason{ font-size:11.5px; color:var(--ink-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
@@ -6283,7 +6332,11 @@ MATCHUPS_HTML = BASE_STYLE + make_header("matchups") + """
     </div>
     <div id="muList" style="margin-top:14px;">
       {% for r in rows %}
+      {% if r.starts_inactive %}
+      <div class="mu-divider">No longer a start/sit call &mdash; already played, live, or on bye</div>
+      {% endif %}
       <div class="mu-row" data-name="{{ r.name|lower }}" data-pos="{{ r.position }}">
+        <span class="mu-rank">{{ r.rank }}</span>
         <img src="{{ r.photo }}" alt="" onerror="this.style.visibility='hidden'">
         <span class="pos-chip" style="background:var(--pos-{{ r.position.lower() }});">{{ r.position }}</span>
         <div class="mu-name-col">
@@ -6300,9 +6353,9 @@ MATCHUPS_HTML = BASE_STYLE + make_header("matchups") + """
     {% else %}
     <div class="gate-wrap">
       <div class="gate-blur">
-        <div class="mu-row"><img src=""><span class="pos-chip" style="background:var(--pos-qb);">QB</span><span class="mu-name">Sample Player DAL</span><span class="mu-opp">vs SF</span><span class="mu-stars"><span class="star-rating"><span class="star-bg">★★★★★</span><span class="star-fg" style="width:95%;">★★★★★</span></span></span><span class="mu-grade ap">A+</span></div>
-        <div class="mu-row"><img src=""><span class="pos-chip" style="background:var(--pos-rb);">RB</span><span class="mu-name">Sample Player KC</span><span class="mu-opp">vs BUF</span><span class="mu-stars"><span class="star-rating"><span class="star-bg">★★★★★</span><span class="star-fg" style="width:55%;">★★★★★</span></span></span><span class="mu-grade c">C</span></div>
-        <div class="mu-row"><img src=""><span class="pos-chip" style="background:var(--pos-wr);">WR</span><span class="mu-name">Sample Player MIA</span><span class="mu-opp">vs NYJ</span><span class="mu-stars"><span class="star-rating"><span class="star-bg">★★★★★</span><span class="star-fg" style="width:15%;">★★★★★</span></span></span><span class="mu-grade dm">D-</span></div>
+        <div class="mu-row"><span class="mu-rank">1</span><img src=""><span class="pos-chip" style="background:var(--pos-qb);">QB</span><span class="mu-name">Sample Player DAL</span><span class="mu-opp">vs SF</span><span class="mu-stars"><span class="star-rating"><span class="star-bg">★★★★★</span><span class="star-fg" style="width:95%;">★★★★★</span></span></span><span class="mu-grade ap">A+</span></div>
+        <div class="mu-row"><span class="mu-rank">2</span><img src=""><span class="pos-chip" style="background:var(--pos-rb);">RB</span><span class="mu-name">Sample Player KC</span><span class="mu-opp">vs BUF</span><span class="mu-stars"><span class="star-rating"><span class="star-bg">★★★★★</span><span class="star-fg" style="width:55%;">★★★★★</span></span></span><span class="mu-grade c">C</span></div>
+        <div class="mu-row"><span class="mu-rank">3</span><img src=""><span class="pos-chip" style="background:var(--pos-wr);">WR</span><span class="mu-name">Sample Player MIA</span><span class="mu-opp">vs NYJ</span><span class="mu-stars"><span class="star-rating"><span class="star-bg">★★★★★</span><span class="star-fg" style="width:15%;">★★★★★</span></span></span><span class="mu-grade dm">D-</span></div>
       </div>
       <div class="gate-card">
         <h3>Unlock <span style="color:var(--accent-ink);">Matchup Grades</span></h3>
