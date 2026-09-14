@@ -1480,6 +1480,30 @@ def _pass_shape(text):
     return (m.group(1).lower(), m.group(2).lower()) if m else (None, None)
 
 
+def _yard_prefix(y):
+    """"32-yd " for a gain, nothing otherwise.
+
+    Nothing for a loss in particular: a play that went backwards is
+    described as a loss below rather than as a gain of minus three."""
+    if not isinstance(y, (int, float)) or y <= 0:
+        return ""
+    return f"{int(y)}-yd "
+
+
+def _loss_headline(y):
+    """"7-yd loss", when the play went the wrong way."""
+    return f"{abs(int(y))}-yd loss"
+
+
+def _went_backwards(y, td):
+    """A play that lost yardage and did not score.
+
+    The `td` guard matters: a touchdown is never negative yardage, so a
+    feed reporting one is wrong about the number, not about the score.
+    Those print without a distance rather than as "-10-yd TD pass"."""
+    return isinstance(y, (int, float)) and y < 0 and not td
+
+
 def _play_headline(text, yards, scoring):
     """A short title for a play -- "15-yd short-right TD catch", "3-yd
     rush", "Sack" -- the way the reference feed leads each row, instead
@@ -1495,7 +1519,7 @@ def _play_headline(text, yards, scoring):
     main = _primary_clause(t)
     main_low = main.lower()
     y = yards if isinstance(yards, (int, float)) else None
-    yd = f"{int(y)}-yd " if y not in (None, 0) else ""
+    yd = _yard_prefix(y)
     # A play that reached the end zone is a touchdown play. Settled from
     # the WORD, never from ESPN's scoringPlay flag: a field goal is a
     # scoring play too, and trusting the flag is how a kicker's three
@@ -1548,12 +1572,20 @@ def _play_headline(text, yards, scoring):
             shape = f"{depth}-{direction} " if depth == "deep" else f"{direction} "
         if td:
             return f"{yd}{shape}TD catch"
+        if _went_backwards(y, td):
+            return _loss_headline(y)
         return f"{yd}{shape}catch" if (yd or shape) else "Catch"
     if "scrambles" in main_low:
-        return f"{yd}TD scramble" if td else (f"{yd}scramble" if yd else "Scramble")
+        if td:
+            return f"{yd}TD scramble"
+        if _went_backwards(y, td):
+            return _loss_headline(y)
+        return f"{yd}scramble" if yd else "Scramble"
     # Anything left with a ball-carrier reads as a run.
     if td:
         return f"{yd}TD run" if yd else "TD run"
+    if _went_backwards(y, td):
+        return _loss_headline(y)
     return f"{yd}rush" if yd else "Rush"
 
 
@@ -1717,6 +1749,29 @@ def enrich_plays(plays, season, week):
     return plays
 
 
+# ESPN states the yardage in the sentence -- "for 15 yards", "for 1
+# yard", "for no gain" -- and that sentence is the authority. The
+# structured statYardage field beside it does NOT always agree: a
+# quarterback's page showed "-10-yd TD pass" and "-9-yd TD pass" off
+# that field, for goal-line throws that plainly gained one or two. A
+# touchdown is never negative yardage, so when the two disagree the
+# words win.
+_TEXT_YARDS_RE = re.compile(r"\bfor\s+(-?\d{1,3})\s+yards?\b", re.I)
+_NO_GAIN_RE = re.compile(r"\bfor\s+no\s+gain\b", re.I)
+
+
+def play_yards(text, stat_yardage=None):
+    """How far the play went, read from the sentence, falling back to
+    ESPN's own field only when the sentence does not say."""
+    main = _primary_clause(text or "")
+    m = _TEXT_YARDS_RE.search(main)
+    if m:
+        return int(m.group(1))
+    if _NO_GAIN_RE.search(main):
+        return 0
+    return _safe_int(stat_yardage, None) if stat_yardage is not None else None
+
+
 def extract_drive_plays(summary_json, limit=60):
     """The live play-by-play feed, newest first.
 
@@ -1763,7 +1818,7 @@ def extract_drive_plays(summary_json, limit=60):
                 "distance": start.get("distance"),
                 "yardline": start.get("possessionText") or start.get("downDistanceText"),
                 "text": text[:400],
-                "yards": play.get("statYardage"),
+                "yards": play_yards(text, play.get("statYardage")),
                 "scoring": bool(play.get("scoringPlay")),
                 "away_score": play.get("awayScore"),
                 "home_score": play.get("homeScore"),
@@ -5293,8 +5348,12 @@ def play_headline_for(text, yards, scoring, name):
         return "Snap"
 
     if role == "passer":
-        yd = f"{int(y)}-yd " if y not in (None, 0) else ""
-        return f"{yd}TD pass" if td else (f"{yd}pass" if yd else "Completion")
+        yd = _yard_prefix(y)
+        if td:
+            return f"{yd}TD pass"
+        if _went_backwards(y, td):
+            return _loss_headline(y)
+        return f"{yd}pass" if yd else "Completion"
     if role == "sacked":
         return "Sacked"
     if role == "interception_thrown":
@@ -5414,6 +5473,10 @@ def get_player_espn_plays(sid, season, week, cache=_espn_player_plays_cache):
             # flag used to wave these through, which is how a kickoff
             # turned up on a kicker's highlight list.
             continue
+        role = play_role_for(text, name)
+        touchdown = ("touchdown" in text.lower()
+                     and role in ("receiver", "rusher", "passer",
+                                  "interception", "fumble_recovery"))
         qtr = play.get("period")
         clock = (play.get("clock") or "").strip()
         out.append({
@@ -5426,15 +5489,16 @@ def get_player_espn_plays(sid, season, week, cache=_espn_player_plays_cache):
             # whoever the play mainly belonged to.
             "headline": play_headline_for(text, play.get("yards"),
                                           play.get("scoring"), name),
-            "role": play_role_for(text, name),
+            "role": role,
             "yards_gained": play.get("yards"),
             # Only a touchdown THIS player was part of reads as one --
             # the kicker's extra point on somebody else's score is not
             # the kicker's touchdown.
-            "touchdown": ("touchdown" in text.lower()
-                          and play_role_for(text, name) in
-                          ("receiver", "rusher", "passer", "interception",
-                           "fumble_recovery")),
+            "touchdown": touchdown,
+            # Did this player put points on the board? Touchdowns and
+            # made kicks both did; a missed kick never reaches here,
+            # since it is worth nothing and gets filtered out above.
+            "scored": touchdown or role in ("field_goal", "extra_point"),
             "value": round(value, 2),
             "rating": play_rating(value),
             "swing": swing_by_play.get(str(play.get("id"))) if play.get("id") else None,
@@ -10364,6 +10428,11 @@ PERFORMANCE_HTML = BASE_STYLE + make_header("scores") + """
   .pf-page{
     --pf-bg:#0d0f0d; --pf-surface:#151815; --pf-surface2:#1c201c;
     --pf-line:rgba(255,255,255,0.08); --pf-text:#e8e6df; --pf-muted:#8b9089;
+    /* Scoring plays only. Kept off the site's own accent on purpose:
+       orange is the colour of every link and control here, and a play
+       list where every row is orange says nothing about which rows put
+       points on the board. */
+    --pf-scored:#4c9dff;
     background:var(--pf-bg); color:var(--pf-text); padding-bottom:60px;
     font-family:"Source Sans 3",system-ui,sans-serif;
   }
@@ -10442,8 +10511,10 @@ PERFORMANCE_HTML = BASE_STYLE + make_header("scores") + """
                 font-size:11.5px; color:var(--pf-muted); }
   .pf-feed-sit img{ width:15px; height:15px; object-fit:contain; vertical-align:-2px; }
   .pf-feed-sit b{ color:var(--pf-text); font-family:"IBM Plex Mono"; font-weight:700; }
-  .pf-feed-title{ font-size:15.5px; font-weight:700; color:var(--accent-ink); margin-top:3px; }
-  .pf-feed-title.td{ color:var(--good); }
+  /* Plain white for an ordinary play, blue for one that scored -- so
+     the rows that mattered are visible without reading a word. */
+  .pf-feed-title{ font-size:15.5px; font-weight:700; color:var(--pf-text); margin-top:3px; }
+  .pf-feed-title.scored{ color:var(--pf-scored); }
   .pf-feed-rate{ flex:none; display:flex; align-items:center; gap:5px;
                  font-family:"IBM Plex Mono"; font-size:15px; font-weight:700;
                  font-variant-numeric:tabular-nums; }
@@ -10717,7 +10788,7 @@ PERFORMANCE_HTML = BASE_STYLE + make_header("scores") + """
             <span>{% if p.qtr %}Q{{ p.qtr }}{% endif %} {{ p.clock }}</span>
             {%- if p.down %}<span>&middot; {{ p.down|ordinal }} &amp; {{ p.ydstogo }}</span>{% endif %}
           </div>
-          <div class="pf-feed-title {{ 'td' if p.touchdown }}">{{ p.headline }}</div>
+          <div class="pf-feed-title {{ 'scored' if p.scored }}">{{ p.headline }}</div>
         </div>
         <div class="pf-feed-rate">{{ score_mark|safe }}{{ '%.1f'|format(p.rating) }}</div>
       </div>
