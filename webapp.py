@@ -911,14 +911,31 @@ def _refresh_all_players_background(cache):
     threading.Thread(target=_run, daemon=True).start()
 
 
+# Every outbound call in this file carries a timeout. These two were
+# the exceptions, and they were the two the home page cannot render
+# without -- so a slow upstream held a worker until the platform gave up
+# on it and returned a 500, which is what "the site is broken right
+# after a deploy" turned out to be.
+UPSTREAM_TIMEOUT_S = 25
+
+
 def get_all_players(cache={}):
+    """Sleeper's whole player dump, cached.
+
+    Returns {} rather than raising when there is nothing cached and the
+    fetch fails: an empty roster renders an empty page, which is a bad
+    page, while an exception here takes down every route that touches a
+    player -- which is nearly all of them."""
     now = time.time()
     if "players" not in cache:
         # Nothing cached at all -- the very first call has to wait.
-        r = requests.get(f"{SLEEPER_BASE}/players/nfl")
-        r.raise_for_status()
-        cache["players"] = r.json()
-        cache["time"] = now
+        try:
+            r = requests.get(f"{SLEEPER_BASE}/players/nfl", timeout=UPSTREAM_TIMEOUT_S)
+            r.raise_for_status()
+            cache["players"] = r.json()
+            cache["time"] = now
+        except Exception:
+            return {}
         return cache["players"]
     if now - cache.get("time", 0) > PLAYERS_REFRESH_S:
         _refresh_all_players_background(cache)
@@ -937,11 +954,19 @@ def get_fantasycalc_values(num_qbs, is_dynasty=True, num_teams=12, cache={}):
     if entry and now - entry["time"] < 3600:
         return entry["data"]
 
-    r = requests.get(FANTASYCALC_BASE, params={
-        "isDynasty": "true" if is_dynasty else "false",
-        "numQbs": num_qbs, "numTeams": num_teams, "ppr": 1,
-    })
-    r.raise_for_status()
+    try:
+        r = requests.get(FANTASYCALC_BASE, params={
+            "isDynasty": "true" if is_dynasty else "false",
+            "numQbs": num_qbs, "numTeams": num_teams, "ppr": 1,
+        }, timeout=UPSTREAM_TIMEOUT_S)
+        r.raise_for_status()
+    except Exception:
+        # Values barely move hour to hour, so yesterday's are far better
+        # than an error page. With nothing cached at all, an empty board
+        # still beats a 500.
+        if entry:
+            return entry["data"]
+        return {"players": {}, "picks": {}}
     players, picks = {}, {}
     for item in r.json():
         player = item.get("player", {})
@@ -8675,6 +8700,60 @@ def api_sync_referee_game():
         return jsonify({"ok": ok, "event_id": event_id})
     except Exception as e:
         return jsonify({"ok": False, "event_id": event_id, "error": str(e)})
+
+
+# Nothing should ever reach a visitor as Flask's bare "Internal Server
+# Error". The newer pages each catch their own failures and render with
+# a banner, but the older ones (rankings, the trade calculator, a player
+# page) call straight out to Sleeper and FantasyCalc and let anything
+# that goes wrong escape -- which is exactly what a cold process right
+# after a deploy provokes, since every cache is empty and the very first
+# request has to fetch both live.
+#
+# The causes are fixed above (timeouts on those two calls, and a stale
+# copy served rather than an exception raised). This is the backstop, so
+# a route nobody has thought about yet still fails as a page.
+# Built at call time rather than at import: BASE_STYLE and make_header
+# are defined further down the file than this handler needs to live.
+_ERROR_BODY = """
+<div class="wrap" style="padding:60px 0; text-align:center;">
+  <h1 style="font-family:'Big Shoulders Display'; font-size:34px; text-transform:uppercase;">
+    Something went wrong</h1>
+  <p style="color:var(--ink-secondary); max-width:46ch; margin:10px auto 0; line-height:1.6;">
+    This page could not be built just now. It is usually a live data source being
+    slow for a moment &mdash; trying again generally works.
+  </p>
+  <p style="margin-top:22px;">
+    <a href="{{ path }}" style="color:var(--accent-ink); font-weight:700;">Try again</a>
+    <span style="color:var(--ink-muted); padding:0 8px;">&middot;</span>
+    <a href="/scores" style="color:var(--accent-ink); font-weight:700;">Go to Scores</a>
+  </p>
+</div>
+"""
+
+
+@app.errorhandler(Exception)
+def handle_unexpected_error(e):
+    """Render a page rather than Flask's default error text.
+
+    HTTP errors raised deliberately (a 404, a 401 from a secret-protected
+    endpoint) keep their own behaviour; only genuine crashes land here.
+    The traceback goes to the logs, where it can be read, instead of to
+    the visitor, where it cannot be acted on."""
+    from werkzeug.exceptions import HTTPException
+    if isinstance(e, HTTPException):
+        return e
+    app.logger.exception("unhandled error on %s", request.path)
+    # An API caller wants JSON, not a page.
+    if request.path.startswith("/api/"):
+        return jsonify({"ok": False, "error": "internal error"}), 500
+    try:
+        page = BASE_STYLE + make_header("") + _ERROR_BODY
+        return render_template_string(page, path=request.full_path or "/"), 500
+    except Exception:
+        # Even the error page failed. Say so in plain text rather than
+        # recursing into the handler that just broke.
+        return "Something went wrong. Please try again.", 500
 
 
 @app.route("/healthz")
