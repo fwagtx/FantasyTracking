@@ -10105,6 +10105,19 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + """
      an edge rather than hiding exactly off-screen. */
   @media (max-width:640px){ .sc-games{ grid-auto-columns:calc(100vw - 74px); } }
 
+  /* A slate that fits inside one column has nothing to page to. Left in
+     the paging layout it still reserves a column narrower than the
+     board, so a lone Monday-night game sits beside an empty strip and
+     reads as a broken card rather than as "there is more over here".
+     Short slates are a plain full-width list instead. */
+  .sc-games.short{
+    grid-auto-flow:row; grid-template-rows:none; grid-template-columns:1fr;
+    overflow-x:visible;
+  }
+  /* Nothing to the right, and the container already draws the bottom. */
+  .sc-games.short .sc-game-card{ border-right:none; }
+  .sc-games.short .sc-game-card:last-child{ border-bottom:none; }
+
   .sc-game-card{
     display:flex; flex-direction:column; gap:8px; padding:12px 14px;
     text-decoration:none; color:var(--sc-text); cursor:pointer;
@@ -10515,6 +10528,8 @@ const scServerTodayKey = {{ today_key|tojson }};
 
   const dayTabsEl = document.getElementById('scDayTabs');
   const gamesEl = document.getElementById('scGames');
+  // Must match grid-template-rows on .sc-games.
+  const SC_GAME_ROWS = 4;
   const weekLabelEl = document.getElementById('scWeekLabel');
   const monthEl = document.getElementById('scMonth');
   const monthGridEl = document.getElementById('scMonthGrid');
@@ -10639,6 +10654,9 @@ const scServerTodayKey = {{ today_key|tojson }};
       return a.status === 'final' ? -cmp : cmp;
     });
     gamesEl.innerHTML = '';
+    // The board pages in columns of SC_GAME_ROWS. A slate that fits in
+    // one of them has nothing to page to -- see .sc-games.short.
+    gamesEl.classList.toggle('short', games.length <= SC_GAME_ROWS);
     if(!games.length){
       gamesEl.innerHTML = '<div class="sc-empty">No games this day.</div>';
       return;
