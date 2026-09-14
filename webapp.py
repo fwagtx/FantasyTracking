@@ -751,6 +751,10 @@ def _depth_slot_sort_key(slot):
 # fantasy-football convention on its own.
 INJURY_BADGE = {
     "IR": ("cross", "Injured Reserve", "out"),
+    # Expected to play. ESPN publishes this one and Sleeper does not, so
+    # it only turns up on the injury board -- where it is good news and
+    # reads as such.
+    "PROBABLE": ("PROB", "Probable", "probable"),
     "OUT": ("OUT", "Out", "out"),
     "DOUBTFUL": ("DOUB", "Doubtful", "doubtful"),
     "QUESTIONABLE": ("Q", "Questionable", "questionable"),
@@ -760,6 +764,7 @@ INJURY_BADGE = {
     "COV": ("COV", "COVID-19 list", "admin"),
 }
 INJURY_TIER_COLOR = {
+    "probable": "var(--good)",
     "out": "var(--critical)", "doubtful": "#e27834",
     "questionable": "var(--warning)", "admin": "var(--ink-muted)",
 }
@@ -5098,6 +5103,7 @@ def get_week_performers(season, week, cache=_week_performers_cache, allow_fetch=
                 "vs_label": (None if not opponent else
                              (f"vs {opponent}" if is_home else f"@ {opponent}")),
                 "photo": player_photo_url(sid),
+                "logo": team_logo_url(team),
                 "fpts": pts,
                 "stat_line": build_stat_line(pos, rec.get("stats")),
                 "grade": grade_performance(pos, pts, season),
@@ -6630,7 +6636,7 @@ def get_injury_report(limit=None, cache=_injury_feed_cache):
 # the amber the badges already give it, since "probably not playing"
 # genuinely sits between the two and flattening it into either one
 # throws away the distinction.
-_TIER_TONE = {"out": "bad", "doubtful": "doubt",
+_TIER_TONE = {"probable": "good", "out": "bad", "doubtful": "doubt",
               "questionable": "caution", "admin": "admin"}
 _STATUS_TONE = {ACTIVE_STATUS: "good"}
 for _code, (_label, _title, _tier) in INJURY_BADGE.items():
@@ -9910,7 +9916,11 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + """
   .sc-perf-row:first-child{ border-top:none; }
   .sc-perf-row:hover{ background:var(--sc-surface2); }
   .sc-perf-rank{ font-family:"IBM Plex Mono"; font-size:12px; color:var(--sc-muted); width:20px; flex:none; text-align:right; font-variant-numeric:tabular-nums; }
-  .sc-perf-row img{ width:38px; height:38px; border-radius:50%; object-fit:cover; background:var(--sc-surface2); flex:none; }
+  .sc-perf-mug{ position:relative; flex:none; width:38px; height:38px; margin-right:8px; }
+  .sc-perf-mug img.face{ width:38px; height:38px; border-radius:50%; object-fit:cover;
+                         background:var(--sc-surface2); }
+  .sc-perf-mug img.crest{ position:absolute; right:-9px; bottom:-2px; width:21px; height:21px;
+                          object-fit:contain; }
   .sc-perf-main{ flex:1; min-width:0; display:flex; flex-direction:column; gap:3px; }
   .sc-perf-name{ font-weight:700; font-size:13.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   .sc-perf-name .pts{ color:var(--sc-muted); font-weight:600; font-size:12px; margin-left:6px; }
@@ -9934,15 +9944,19 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + """
   .sc-feed-row:hover{ background:var(--sc-surface2); }
   /* The crest sits on the corner of the headshot rather than beside it,
      so a row stays one column of faces however long the names run. */
-  .sc-feed-mug{ position:relative; flex:none; width:40px; height:40px; }
-  .sc-feed-mug img{ width:40px; height:40px; border-radius:50%; object-fit:cover;
-                    background:var(--sc-surface2); }
+  /* Headshot with the team crest hung off its bottom-right, half
+     outside the circle. The extra right margin is the overhang, so the
+     crest never collides with the name beside it. */
+  .sc-feed-mug{ position:relative; flex:none; width:40px; height:40px; margin-right:8px; }
+  .sc-feed-mug img.face{ width:40px; height:40px; border-radius:50%; object-fit:cover;
+                         background:var(--sc-surface2); }
+  .sc-feed-mug img.crest{ position:absolute; right:-9px; bottom:-2px; width:22px; height:22px;
+                          object-fit:contain; }
   .sc-feed-main{ flex:1; min-width:0; display:flex; flex-direction:column; gap:2px; }
   .sc-feed-name{ font-weight:700; font-size:14px; white-space:nowrap;
                  overflow:hidden; text-overflow:ellipsis; }
   .sc-feed-sub{ font-size:12.5px; color:var(--sc-muted); }
   .sc-feed-sub .arrow{ padding:0 2px; }
-  .sc-feed-detail{ color:var(--sc-muted); }
   .sc-feed-sub b.good{ color:var(--good); }
   .sc-feed-sub b.caution{ color:var(--warning); }
   .sc-feed-sub b.doubt{ color:#e27834; }
@@ -9952,8 +9966,7 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + """
                  gap:2px; font-size:11.5px; color:var(--sc-muted);
                  font-family:"IBM Plex Mono"; }
   .sc-feed-meta b{ font-weight:700; color:var(--sc-text); }
-  .sc-feed-club{ display:inline-flex; align-items:center; gap:5px; white-space:nowrap; }
-  .sc-feed-club img{ width:17px; height:17px; object-fit:contain; }
+  .sc-feed-club{ white-space:nowrap; }
 
   /* Power-ranking strip. Deliberately terser than the standings table it
      links to -- rank, crest, record, differential -- so it reads at a
@@ -10120,22 +10133,21 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + """
     {% for r in injuries %}
     <a class="sc-feed-row" href="/player?sid={{ r.sid }}">
       <span class="sc-feed-mug">
-        <img src="{{ r.photo }}" alt="" loading="lazy"
+        <img class="face" src="{{ r.photo }}" alt="" loading="lazy"
              onerror="this.style.visibility='hidden'">
+        <img class="crest" src="{{ r.logo }}" alt="" loading="lazy"
+             onerror="this.style.display='none'">
       </span>
       <span class="sc-feed-main">
         <span class="sc-feed-name">{{ r.name }}</span>
         <span class="sc-feed-sub">
           {%- if r.from %}{{ r.from }} <span class="arrow">&rarr;</span> {% endif -%}
           <b class="{{ r.tone or ('good' if r.good else 'bad') }}">{{ r.to }}</b>
-          {%- if r.detail %} <span class="sc-feed-detail">&middot; {{ r.detail }}</span>{% endif -%}
+          {%- if r.detail %} <b class="{{ r.tone or 'admin' }}">&middot; {{ r.detail }}</b>{% endif -%}
         </span>
       </span>
       <span class="sc-feed-meta">
-        <span class="sc-feed-club">
-          {%- if r.team %}<img src="{{ r.logo }}" alt="" loading="lazy"
-               onerror="this.style.display='none'">{{ r.team }}{% endif -%}
-        </span>
+        <span class="sc-feed-club">{{ r.position }}{% if r.team %} &middot; {{ r.team }}{% endif %}</span>
         {%- if r.ago %}<b>{{ r.ago }}</b>{% endif -%}
       </span>
     </a>
@@ -10152,18 +10164,17 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + """
     {% for b in birthdays %}
     <a class="sc-feed-row" href="/player?sid={{ b.sid }}">
       <span class="sc-feed-mug">
-        <img src="{{ b.photo }}" alt="" loading="lazy"
+        <img class="face" src="{{ b.photo }}" alt="" loading="lazy"
              onerror="this.style.visibility='hidden'">
+        <img class="crest" src="{{ b.logo }}" alt="" loading="lazy"
+             onerror="this.style.display='none'">
       </span>
       <span class="sc-feed-main">
         <span class="sc-feed-name">{{ b.name }}</span>
         <span class="sc-feed-sub">Happy {{ b.age_label }} Birthday &#127881;</span>
       </span>
       <span class="sc-feed-meta">
-        <span class="sc-feed-club">
-          {%- if b.team %}<img src="{{ b.logo }}" alt="" loading="lazy"
-               onerror="this.style.display='none'">{{ b.team }}{% endif -%}
-        </span>
+        <span class="sc-feed-club">{{ b.position }}{% if b.team %} &middot; {{ b.team }}{% endif %}</span>
         {%- if b.ago %}<b>{{ b.ago }}</b>{% endif -%}
       </span>
     </a>
@@ -10584,7 +10595,12 @@ const scServerTodayKey = {{ today_key|tojson }};
                  '&season=' + scSeason + '&week=' + scWeek;
     return '<a class="sc-perf-row" href="' + href + '">' +
       '<span class="sc-perf-rank">' + (i + 1) + '</span>' +
-      '<img src="' + (p.photo || '') + '" alt="" onerror="this.style.visibility=\\'hidden\\'">' +
+      '<span class="sc-perf-mug">' +
+        '<img class="face" src="' + (p.photo || '') + '" alt="" ' +
+          'onerror="this.style.visibility=\\'hidden\\'">' +
+        '<img class="crest" src="' + (p.logo || '') + '" alt="" ' +
+          'onerror="this.style.display=\\'none\\'">' +
+      '</span>' +
       '<span class="sc-perf-main">' +
         '<span class="sc-perf-name">' + p.name +
           '<span class="pts">' + p.fpts + ' pts</span></span>' +
@@ -11125,9 +11141,11 @@ FEED_PAGE_HTML = BASE_STYLE + make_header("scores") + """
            border-top:1px solid var(--fd-line); text-decoration:none; color:var(--fd-text); }
   .fd-row:first-child{ border-top:none; }
   .fd-row:hover{ background:var(--fd-surface2); }
-  .fd-mug{ position:relative; flex:none; width:42px; height:42px; }
-  .fd-mug img{ width:42px; height:42px; border-radius:50%; object-fit:cover;
-               background:var(--fd-surface2); }
+  .fd-mug{ position:relative; flex:none; width:42px; height:42px; margin-right:9px; }
+  .fd-mug img.face{ width:42px; height:42px; border-radius:50%; object-fit:cover;
+                    background:var(--fd-surface2); }
+  .fd-mug img.crest{ position:absolute; right:-10px; bottom:-2px; width:23px; height:23px;
+                     object-fit:contain; }
   .fd-main{ flex:1; min-width:0; display:flex; flex-direction:column; gap:2px; }
   .fd-name{ font-weight:700; font-size:14.5px; }
   .fd-sub{ font-size:12.5px; color:var(--fd-muted); }
@@ -11144,8 +11162,7 @@ FEED_PAGE_HTML = BASE_STYLE + make_header("scores") + """
   /* The crest sits inline with the abbreviation rather than on the
      corner of the headshot: at 19px over a photo it read as a smudge,
      and the team is the thing being looked for. */
-  .fd-club{ display:inline-flex; align-items:center; gap:5px; white-space:nowrap; }
-  .fd-club img{ width:17px; height:17px; object-fit:contain; }
+  .fd-club{ white-space:nowrap; }
   .fd-empty{ color:var(--fd-muted); padding:34px; text-align:center; font-size:13.5px; }
   .fd-back{ display:inline-block; margin-top:20px; color:var(--accent-ink);
             text-decoration:none; font-weight:700; font-size:13px; }
@@ -11162,8 +11179,10 @@ FEED_PAGE_HTML = BASE_STYLE + make_header("scores") + """
     {% for r in rows %}
     <a class="fd-row" href="/player?sid={{ r.sid }}">
       <span class="fd-mug">
-        <img src="{{ r.photo }}" alt="" loading="lazy"
+        <img class="face" src="{{ r.photo }}" alt="" loading="lazy"
              onerror="this.style.visibility='hidden'">
+        <img class="crest" src="{{ r.logo }}" alt="" loading="lazy"
+             onerror="this.style.display='none'">
       </span>
       <span class="fd-main">
         <span class="fd-name">{{ r.name }}</span>
@@ -11171,20 +11190,14 @@ FEED_PAGE_HTML = BASE_STYLE + make_header("scores") + """
           {%- if kind == 'injuries' -%}
             {%- if r.from %}{{ r.from }} <span class="arrow">&rarr;</span> {% endif -%}
             <b class="{{ r.tone or ('good' if r.good else 'bad') }}">{{ r.to }}</b>
-            {%- if r.detail %} &middot; {{ r.detail }}{% endif -%}
+            {%- if r.detail %} <b class="{{ r.tone or 'admin' }}">&middot; {{ r.detail }}</b>{% endif -%}
           {%- else -%}
             Happy {{ r.age_label }} Birthday &#127881;
           {%- endif -%}
         </span>
       </span>
       <span class="fd-meta">
-        <span class="fd-club">
-          {{ r.position }}
-          {%- if r.team %} &middot;
-            <img src="{{ r.logo }}" alt="" loading="lazy"
-                 onerror="this.style.display='none'">{{ r.team }}
-          {%- endif -%}
-        </span>
+        <span class="fd-club">{{ r.position }}{% if r.team %} &middot; {{ r.team }}{% endif %}</span>
         {%- if r.ago %}<b>{{ r.ago }}</b>{% endif -%}
       </span>
     </a>
