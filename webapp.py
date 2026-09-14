@@ -7185,10 +7185,7 @@ def injuries_page():
         rows = _safe_feed(get_injury_report)
         return render_template_string(
             FEED_PAGE_HTML, title="Injuries", kind="injuries", rows=rows,
-            blurb=("Every designation in the league, newest report first. The time "
-                   "beside a row is when that designation was published, so a whole "
-                   "report drop carries one stamp. A row reads as a change once both "
-                   "sides of it have been seen."),
+            blurb=None,
             empty="No injury designations are being reported right now.",
             load_error=None)
     except Exception as e:
@@ -8844,6 +8841,11 @@ BASE_STYLE = """
     --good:#1fae5a; --good-wash:rgba(31,174,90,0.16);
     --warning:#d1a521; --warning-wash:rgba(209,165,33,0.16);
     --critical:#e2534a; --critical-wash:rgba(226,83,74,0.16);
+    /* Plays that put points on the board. Deliberately NOT the accent:
+       orange is the colour of every link and control here, so an accent
+       play list says nothing about which rows scored. Defined once so
+       the game feed and the performance page cannot drift apart. */
+    --scored:#4c9dff;
     --pos-qb:#1baf7a; --pos-rb:#4a90e2; --pos-wr:#e0397a; --pos-te:#9575e8;
     --shadow: 0 1px 2px rgba(0,0,0,0.2), 0 8px 24px -12px rgba(0,0,0,0.5);
   }
@@ -9935,9 +9937,6 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + """
   .sc-feed-mug{ position:relative; flex:none; width:40px; height:40px; }
   .sc-feed-mug img{ width:40px; height:40px; border-radius:50%; object-fit:cover;
                     background:var(--sc-surface2); }
-  .sc-feed-mug img.crest{ position:absolute; right:-3px; bottom:-2px; width:18px;
-                          height:18px; border-radius:0; object-fit:contain;
-                          background:none; }
   .sc-feed-main{ flex:1; min-width:0; display:flex; flex-direction:column; gap:2px; }
   .sc-feed-name{ font-weight:700; font-size:14px; white-space:nowrap;
                  overflow:hidden; text-overflow:ellipsis; }
@@ -9949,8 +9948,12 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + """
   .sc-feed-sub b.doubt{ color:#e27834; }
   .sc-feed-sub b.bad{ color:var(--critical); }
   .sc-feed-sub b.admin{ color:var(--sc-muted); }
-  .sc-feed-ago{ flex:none; font-size:11.5px; color:var(--sc-muted);
-                font-family:"IBM Plex Mono"; }
+  .sc-feed-meta{ flex:none; display:flex; flex-direction:column; align-items:flex-end;
+                 gap:2px; font-size:11.5px; color:var(--sc-muted);
+                 font-family:"IBM Plex Mono"; }
+  .sc-feed-meta b{ font-weight:700; color:var(--sc-text); }
+  .sc-feed-club{ display:inline-flex; align-items:center; gap:5px; white-space:nowrap; }
+  .sc-feed-club img{ width:17px; height:17px; object-fit:contain; }
 
   /* Power-ranking strip. Deliberately terser than the standings table it
      links to -- rank, crest, record, differential -- so it reads at a
@@ -10064,7 +10067,11 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + """
 
   {% if power %}
   <!-- Second: who is actually good right now, on the four-round window
-       rather than the whole season. -->
+       rather than the whole season. Hidden until a game on the selected
+       day has actually kicked off -- before that it is a table of last
+       week's results sitting under a slate that has not happened, which
+       reads as stale rather than as informative. -->
+  <div class="sc-group" id="scGroupTeams">
   <div class="sc-section-head">
     <h2>Team Rankings</h2>
     <a class="sc-viewall" href="/standings">Full standings &rsaquo;</a>
@@ -10082,6 +10089,7 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + """
       </span>
     </a>
     {% endfor %}
+  </div>
   </div>
   {% endif %}
 
@@ -10114,8 +10122,6 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + """
       <span class="sc-feed-mug">
         <img src="{{ r.photo }}" alt="" loading="lazy"
              onerror="this.style.visibility='hidden'">
-        <img class="crest" src="{{ r.logo }}" alt=""
-             onerror="this.style.display='none'">
       </span>
       <span class="sc-feed-main">
         <span class="sc-feed-name">{{ r.name }}</span>
@@ -10125,7 +10131,13 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + """
           {%- if r.detail %} <span class="sc-feed-detail">&middot; {{ r.detail }}</span>{% endif -%}
         </span>
       </span>
-      {% if r.ago %}<span class="sc-feed-ago">{{ r.ago }}</span>{% endif %}
+      <span class="sc-feed-meta">
+        <span class="sc-feed-club">
+          {%- if r.team %}<img src="{{ r.logo }}" alt="" loading="lazy"
+               onerror="this.style.display='none'">{{ r.team }}{% endif -%}
+        </span>
+        {%- if r.ago %}<b>{{ r.ago }}</b>{% endif -%}
+      </span>
     </a>
     {% endfor %}
   </div>
@@ -10142,14 +10154,18 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + """
       <span class="sc-feed-mug">
         <img src="{{ b.photo }}" alt="" loading="lazy"
              onerror="this.style.visibility='hidden'">
-        <img class="crest" src="{{ b.logo }}" alt=""
-             onerror="this.style.display='none'">
       </span>
       <span class="sc-feed-main">
         <span class="sc-feed-name">{{ b.name }}</span>
         <span class="sc-feed-sub">Happy {{ b.age_label }} Birthday &#127881;</span>
       </span>
-      <span class="sc-feed-ago">{{ b.ago or b.position }}</span>
+      <span class="sc-feed-meta">
+        <span class="sc-feed-club">
+          {%- if b.team %}<img src="{{ b.logo }}" alt="" loading="lazy"
+               onerror="this.style.display='none'">{{ b.team }}{% endif -%}
+        </span>
+        {%- if b.ago %}<b>{{ b.ago }}</b>{% endif -%}
+      </span>
     </a>
     {% endfor %}
   </div>
@@ -10546,6 +10562,15 @@ const scServerTodayKey = {{ today_key|tojson }};
       };
     });
   let performers = SCORES_PERFORMERS || [];
+  // Which week the board in hand actually belongs to. Without this, a
+  // board fetched for week 1 kept rendering after the day strip moved to
+  // week 2 -- so a Thursday game that had not kicked off showed last
+  // week's numbers, complete with last week's opponent beside them.
+  let performersWeek = scWeek;
+  // Responses can land out of order when days are clicked quickly; only
+  // the newest request is allowed to replace the board.
+  let performersRequest = 0;
+  const teamsSection = document.getElementById('scGroupTeams');
 
   function perfRow(p, i){
     const stats = (p.stat_line || []).map(function(s){
@@ -10584,32 +10609,34 @@ const scServerTodayKey = {{ today_key|tojson }};
     // slices off the top of this list, so the ranking is worth owning
     // where it is used. By SCORE, not raw points -- that is what lets a
     // kicker's 19 and a receiver's 33 sit in one list at all.
-    const played = performers.filter(function(p){
+    // A board belonging to another week says nothing about this day.
+    const usable = (performersWeek === scWeek) ? performers : [];
+    const played = usable.filter(function(p){
       return teams.has(p.team) && p.fpts > 0;
     }).sort(function(a, b){
       return ((b.grade || {}).score || 0) - ((a.grade || {}).score || 0);
     });
     const anyLive = games.some(function(g){ return g.status === 'in_progress'; });
+    // "Kicked off" is the gate for every ranking section on this page.
+    // Before it, the rankings are either empty or about some other day.
     const anyPlayed = games.some(function(g){ return g.status !== 'scheduled'; });
+    if (teamsSection) teamsSection.classList.toggle('on', anyPlayed);
 
-    perfSubEl.textContent = played.length
-      ? (anyLive ? 'Live · 5.0 = an average starter game at the position'
-                 : '5.0 = an average starter game at the position')
-      : (anyPlayed ? 'No scoring yet in these games.'
-                   : 'Leaders appear here once these games kick off.');
+    perfSubEl.textContent = !anyPlayed ? ''
+      : (played.length
+         ? (anyLive ? 'Live · 5.0 = an average starter game at the position'
+                    : '5.0 = an average starter game at the position')
+         : 'No scoring yet in these games.');
 
     // The combined board. Ranked by SCORE rather than raw points, so a
     // kicker's 19 and a receiver's 33 are compared on what each is worth
     // at its own position instead of on a number they don't share.
     const top = played.slice(0, PERF_SHOWN);
-    if (perfAllSection) perfAllSection.classList.add('on');
+    if (perfAllSection) perfAllSection.classList.toggle('on', anyPlayed);
     if (perfAllEl) {
       perfAllEl.innerHTML = top.length
         ? top.map(perfRow).join('')
-        : '<div class="sc-perf-empty">' +
-          (anyPlayed ? 'No scoring yet in these games.'
-                     : 'Player rankings appear here once these games kick off.') +
-          '</div>';
+        : '<div class="sc-perf-empty">No scoring yet in these games.</div>';
     }
     const allMoreEl = document.getElementById('scPerfMore');
     if (allMoreEl) {
@@ -10623,7 +10650,7 @@ const scServerTodayKey = {{ today_key|tojson }};
       // A section with nobody in it is hidden rather than shown empty:
       // on a short slate there may be no kicker at all, and a headed
       // box saying nothing reads as broken.
-      g.el.classList.toggle('on', rows.length > 0);
+      g.el.classList.toggle('on', anyPlayed && rows.length > 0);
       if (!rows.length) { g.rowsEl.innerHTML = ''; return; }
       if (g.moreEl) {
         // One position per family goes into the link; the page's own
@@ -10636,13 +10663,17 @@ const scServerTodayKey = {{ today_key|tojson }};
   }
 
   function refreshPerformers(){
-    fetch('/api/performers?season=' + scSeason + '&week=' + scWeek)
+    const want = scWeek, id = ++performersRequest;
+    fetch('/api/performers?season=' + scSeason + '&week=' + want)
       .then(function(r){ return r.json(); })
       .then(function(data){
-        if (data && data.performers && data.performers.length) {
-          performers = data.performers;
-          renderPerformers();
-        }
+        if (id !== performersRequest) return;   // a newer click won
+        // An empty board for a week is an ANSWER -- nobody has played
+        // yet -- so it replaces what we had rather than being discarded
+        // as a failed fetch, which is what left the old week on screen.
+        performers = (data && data.performers) || [];
+        performersWeek = want;
+        renderPerformers();
       })
       .catch(function(){ /* keep the board we already have */ });
   }
@@ -11097,8 +11128,6 @@ FEED_PAGE_HTML = BASE_STYLE + make_header("scores") + """
   .fd-mug{ position:relative; flex:none; width:42px; height:42px; }
   .fd-mug img{ width:42px; height:42px; border-radius:50%; object-fit:cover;
                background:var(--fd-surface2); }
-  .fd-mug img.crest{ position:absolute; right:-3px; bottom:-2px; width:19px; height:19px;
-                     border-radius:0; object-fit:contain; background:none; }
   .fd-main{ flex:1; min-width:0; display:flex; flex-direction:column; gap:2px; }
   .fd-name{ font-weight:700; font-size:14.5px; }
   .fd-sub{ font-size:12.5px; color:var(--fd-muted); }
@@ -11108,9 +11137,15 @@ FEED_PAGE_HTML = BASE_STYLE + make_header("scores") + """
   .fd-sub b.doubt{ color:#e27834; }
   .fd-sub b.bad{ color:var(--critical); }
   .fd-sub b.admin{ color:var(--fd-muted); }
-  .fd-meta{ flex:none; text-align:right; font-size:11.5px; color:var(--fd-muted);
+  .fd-meta{ flex:none; display:flex; flex-direction:column; align-items:flex-end; gap:2px;
+            font-size:11.5px; color:var(--fd-muted);
             font-family:"IBM Plex Mono"; line-height:1.5; }
   .fd-meta b{ font-weight:700; color:var(--fd-text); }
+  /* The crest sits inline with the abbreviation rather than on the
+     corner of the headshot: at 19px over a photo it read as a smudge,
+     and the team is the thing being looked for. */
+  .fd-club{ display:inline-flex; align-items:center; gap:5px; white-space:nowrap; }
+  .fd-club img{ width:17px; height:17px; object-fit:contain; }
   .fd-empty{ color:var(--fd-muted); padding:34px; text-align:center; font-size:13.5px; }
   .fd-back{ display:inline-block; margin-top:20px; color:var(--accent-ink);
             text-decoration:none; font-weight:700; font-size:13px; }
@@ -11129,8 +11164,6 @@ FEED_PAGE_HTML = BASE_STYLE + make_header("scores") + """
       <span class="fd-mug">
         <img src="{{ r.photo }}" alt="" loading="lazy"
              onerror="this.style.visibility='hidden'">
-        <img class="crest" src="{{ r.logo }}" alt=""
-             onerror="this.style.display='none'">
       </span>
       <span class="fd-main">
         <span class="fd-name">{{ r.name }}</span>
@@ -11145,8 +11178,14 @@ FEED_PAGE_HTML = BASE_STYLE + make_header("scores") + """
         </span>
       </span>
       <span class="fd-meta">
-        {{ r.position }}{% if r.team %} &middot; {{ r.team }}{% endif %}
-        {%- if r.ago %}<br><b>{{ r.ago }}</b>{% endif -%}
+        <span class="fd-club">
+          {{ r.position }}
+          {%- if r.team %} &middot;
+            <img src="{{ r.logo }}" alt="" loading="lazy"
+                 onerror="this.style.display='none'">{{ r.team }}
+          {%- endif -%}
+        </span>
+        {%- if r.ago %}<b>{{ r.ago }}</b>{% endif -%}
       </span>
     </a>
     {% endfor %}
@@ -11300,11 +11339,8 @@ PERFORMANCE_HTML = BASE_STYLE + make_header("scores") + """
   .pf-page{
     --pf-bg:#0d0f0d; --pf-surface:#151815; --pf-surface2:#1c201c;
     --pf-line:rgba(255,255,255,0.08); --pf-text:#e8e6df; --pf-muted:#8b9089;
-    /* Scoring plays only. Kept off the site's own accent on purpose:
-       orange is the colour of every link and control here, and a play
-       list where every row is orange says nothing about which rows put
-       points on the board. */
-    --pf-scored:#4c9dff;
+    /* Scoring plays, from the one place the colour is defined. */
+    --pf-scored:var(--scored);
     background:var(--pf-bg); color:var(--pf-text); padding-bottom:60px;
     font-family:"Source Sans 3",system-ui,sans-serif;
   }
@@ -11759,7 +11795,7 @@ GAME_DETAIL_HTML = BASE_STYLE + make_header("scores") + """
   .gd-play-main{ flex:1; min-width:0; }
   .gd-play-title{ font-size:17px; font-weight:800; font-family:"Big Shoulders Display";
                   text-transform:uppercase; letter-spacing:0.01em; line-height:1.15; }
-  .gd-play.score .gd-play-title{ color:var(--accent-ink); }
+  .gd-play.score .gd-play-title{ color:var(--scored); }
   .gd-play-who{ font-size:12.5px; color:var(--ink-secondary); margin-top:2px; }
   .gd-play-who b{ color:var(--ink); font-weight:700; }
   .gd-play-who .fps{ color:var(--ink-muted); }
