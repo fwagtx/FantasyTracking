@@ -6322,6 +6322,65 @@ BIRTHDAY_FEED_SIZE = 6
 ESPN_INJURIES_URL = f"{ESPN_SITE_BASE}/injuries"
 
 
+# ESPN fills unknown injury fields with a literal placeholder rather
+# than leaving them out, and the one my first parser reached for --
+# details.detail -- is the field most often set to it. That is how the
+# board came to read "Injured Reserve - Not Specified" down a whole
+# column. None of these is information; every one of them is dropped.
+_INJURY_PLACEHOLDERS = {
+    "", "not specified", "notspecified", "unspecified", "unknown",
+    "n/a", "na", "none", "null", "-", "--", "tbd",
+}
+
+
+def _clean_injury_field(value):
+    """A field's value, or None when it is one of ESPN's placeholders."""
+    text = str(value or "").strip()
+    return None if text.lower() in _INJURY_PLACEHOLDERS else (text or None)
+
+
+def _espn_injury_detail(item):
+    """What is actually wrong, e.g. "Left Knee Sprain" or "Hamstring".
+
+    Assembled from the parts ESPN splits it across -- side, location and
+    the kind of injury -- because any one of them alone is usually the
+    placeholder. `type.description` is deliberately NOT used: on these
+    entries it holds the STATUS ("Out"), not the ailment, so reading it
+    as a detail prints the designation twice."""
+    details = item.get("details") if isinstance(item.get("details"), dict) else {}
+    side = _clean_injury_field(details.get("side"))
+    location = _clean_injury_field(details.get("location"))
+    kind = (_clean_injury_field(details.get("detail"))
+            or _clean_injury_field(details.get("type")))
+    # "Left Knee Sprain", skipping whichever parts are unknown, and never
+    # repeating one ("Knee Knee").
+    parts, seen = [], set()
+    for part in (side, location, kind):
+        key = (part or "").lower()
+        if part and key not in seen:
+            seen.add(key)
+            parts.append(part)
+    return " ".join(parts) or None
+
+
+def _espn_injury_reason(item, limit=160):
+    """The sentence ESPN writes about why, when it writes one.
+
+    The short comment is the one meant to be read at a glance ("Pacheco
+    (knee) is out for Sunday's game"); the long one is the fallback,
+    trimmed at a sentence rather than mid-word."""
+    for key in ("shortComment", "longComment"):
+        text = _clean_injury_field(item.get(key))
+        if not text:
+            continue
+        if len(text) <= limit:
+            return text
+        cut = text[:limit]
+        stop = max(cut.rfind(". "), cut.rfind("! "))
+        return (cut[:stop + 1] if stop > 40 else cut.rstrip() + "\u2026")
+    return None
+
+
 def _parse_espn_datetime(value):
     """ESPN's ISO timestamps, as a naive UTC datetime. None if absent or
     unparseable -- a missing date costs the row its stamp, never the
@@ -6376,18 +6435,13 @@ def espn_injuries(cache=_espn_injuries_cache):
             if not name:
                 continue
             status = (item.get("status") or "").strip()
-            detail = ""
-            for key in ("type", "details"):
-                block = item.get(key)
-                if isinstance(block, dict):
-                    detail = (block.get("description") or block.get("detail")
-                              or block.get("type") or detail)
             out.append({
                 "team": normalize_team_abbr(team) if team else None,
                 "name": name,
                 "espn_id": str(athlete.get("id") or "") or None,
                 "status": status.title() if status else ACTIVE_STATUS,
-                "detail": (detail or "").strip() or None,
+                "detail": _espn_injury_detail(item),
+                "reason": _espn_injury_reason(item),
                 # When the designation was actually published, which is
                 # what orders and timestamps the board -- not when this
                 # app happened to notice.
@@ -8090,6 +8144,18 @@ def api_debug_espn():
                 "group_count": len(groups),
                 "group_keys": sorted(first.keys()),
                 "first_entry": entries[0] if entries else None,
+                # The fields the detail is actually assembled from, so a
+                # board reading "Not Specified" can be diagnosed without
+                # guessing which one ESPN filled in.
+                "detail_fields": [
+                    {"name": ((e.get("athlete") or {}).get("displayName")),
+                     "status": e.get("status"),
+                     "details": e.get("details"),
+                     "shortComment": e.get("shortComment"),
+                     "parsed_detail": _espn_injury_detail(e),
+                     "parsed_reason": _espn_injury_reason(e)}
+                    for e in entries[:3] if isinstance(e, dict)
+                ],
                 "parsed_count": len(espn_injuries()),
                 "parsed_sample": espn_injuries()[:3],
             })
@@ -11229,6 +11295,9 @@ FEED_PAGE_HTML = BASE_STYLE + make_header("scores") + """
   .fd-name{ font-weight:700; font-size:14.5px; }
   .fd-sub{ font-size:12.5px; color:var(--fd-muted); }
   .fd-sub .arrow{ padding:0 2px; }
+  /* Why, in ESPN's own words. Only on the full page -- the board row
+     has one line and the designation has to win it. */
+  .fd-reason{ font-size:11.5px; color:var(--fd-muted); line-height:1.45; margin-top:2px; }
   .fd-sub b.good{ color:var(--good); }
   .fd-sub b.caution{ color:var(--warning); }
   .fd-sub b.doubt{ color:#e27834; }
@@ -11274,6 +11343,9 @@ FEED_PAGE_HTML = BASE_STYLE + make_header("scores") + """
             Happy {{ r.age_label }} Birthday &#127881;
           {%- endif -%}
         </span>
+        {%- if kind == 'injuries' and r.reason %}
+        <span class="fd-reason">{{ r.reason }}</span>
+        {%- endif %}
       </span>
       <span class="fd-meta">
         <span class="fd-club">{{ r.position }}{% if r.team %} &middot; {{ r.team }}{% endif %}</span>
