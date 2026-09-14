@@ -9089,12 +9089,24 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + """
 
   <div class="sc-games" id="scGames"></div>
 
+  <!-- First after the scores: the day's best performances, every
+       position in one ranked list. The per-position sections further
+       down answer "who led at each spot"; this one answers "who had the
+       best day, full stop", which is a different question. -->
+  <div class="sc-group" id="scGroupAll">
+    <div class="sc-section-head">
+      <h2>Player Rankings</h2>
+      <a class="sc-viewall" id="scPerfMore" href="/performances">View all &rsaquo;</a>
+    </div>
+    <div class="sc-perf-note" id="scPerfSub"></div>
+    <div class="sc-perf" id="scPerf"></div>
+  </div>
+
   {% if power %}
-  <!-- Second in the day's order, between the scores and the position
-       leaders: who is actually good right now, on the four-round window
+  <!-- Second: who is actually good right now, on the four-round window
        rather than the whole season. -->
   <div class="sc-section-head">
-    <h2>Power Rankings</h2>
+    <h2>Team Rankings</h2>
     <a class="sc-viewall" href="/standings">Full standings &rsaquo;</a>
   </div>
   <div class="sc-power">
@@ -9117,7 +9129,6 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + """
        the reference board lays them out. Filled client-side from the
        same baked board the day tabs filter, so switching days moves
        these too. -->
-  <div class="sc-perf-note" id="scPerfSub"></div>
   {% for g in perf_groups %}
   <div class="sc-group" id="scGroup-{{ g.key }}" data-positions="{{ g.positions|join(',') }}">
     <div class="sc-section-head">
@@ -9502,10 +9513,14 @@ const scServerTodayKey = {{ today_key|tojson }};
   }
 
   const perfSubEl = document.getElementById('scPerfSub');
-  // Per family rather than per page: three is enough to see who led the
-  // day at each position without the section becoming its own board.
+  const perfAllEl = document.getElementById('scPerf');
+  const perfAllSection = document.getElementById('scGroupAll');
+  // Ten across every position for the combined board, three per family
+  // below it -- enough to see who led each spot without every section
+  // turning into its own full board.
+  const PERF_SHOWN = 10;
   const PERF_PER_GROUP = 3;
-  const perfGroups = Array.prototype.slice.call(document.querySelectorAll('.sc-group'))
+  const perfGroups = Array.prototype.slice.call(document.querySelectorAll('.sc-group[data-positions]'))
     .map(function(el){
       return {
         el: el,
@@ -9549,8 +9564,15 @@ const scServerTodayKey = {{ today_key|tojson }};
       if (g.home && g.home.abbr) teams.add(g.home.abbr);
     });
 
+    // Sorted here rather than trusting the order it arrived in. The
+    // board already comes back best-first, but every section below
+    // slices off the top of this list, so the ranking is worth owning
+    // where it is used. By SCORE, not raw points -- that is what lets a
+    // kicker's 19 and a receiver's 33 sit in one list at all.
     const played = performers.filter(function(p){
       return teams.has(p.team) && p.fpts > 0;
+    }).sort(function(a, b){
+      return ((b.grade || {}).score || 0) - ((a.grade || {}).score || 0);
     });
     const anyLive = games.some(function(g){ return g.status === 'in_progress'; });
     const anyPlayed = games.some(function(g){ return g.status !== 'scheduled'; });
@@ -9560,6 +9582,24 @@ const scServerTodayKey = {{ today_key|tojson }};
                  : '5.0 = an average starter game at the position')
       : (anyPlayed ? 'No scoring yet in these games.'
                    : 'Leaders appear here once these games kick off.');
+
+    // The combined board. Ranked by SCORE rather than raw points, so a
+    // kicker's 19 and a receiver's 33 are compared on what each is worth
+    // at its own position instead of on a number they don't share.
+    const top = played.slice(0, PERF_SHOWN);
+    if (perfAllSection) perfAllSection.classList.add('on');
+    if (perfAllEl) {
+      perfAllEl.innerHTML = top.length
+        ? top.map(perfRow).join('')
+        : '<div class="sc-perf-empty">' +
+          (anyPlayed ? 'No scoring yet in these games.'
+                     : 'Player rankings appear here once these games kick off.') +
+          '</div>';
+    }
+    const allMoreEl = document.getElementById('scPerfMore');
+    if (allMoreEl) {
+      allMoreEl.href = '/performances?season=' + scSeason + '&week=' + scWeek + '&scope=week';
+    }
 
     perfGroups.forEach(function(g){
       const rows = played.filter(function(p){
