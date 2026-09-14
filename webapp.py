@@ -29,7 +29,8 @@ import time
 import urllib.parse
 import xml.etree.ElementTree as ET
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from datetime import date, datetime, timezone
+from datetime import date, datetime, timedelta, timezone
+from zoneinfo import ZoneInfo
 from email.utils import parsedate_to_datetime
 import requests
 import psycopg2
@@ -6288,6 +6289,19 @@ BIRTHDAY_FEED_SIZE = 6
 # this app reads from it -- so it is parsed defensively and an
 # unrecognised response costs the section and nothing else.
 ESPN_INJURIES_URL = f"{ESPN_SITE_BASE}/injuries"
+
+
+def _parse_espn_datetime(value):
+    """ESPN's ISO timestamps, as a naive UTC datetime. None if absent or
+    unparseable -- a missing date costs the row its stamp, never the
+    row."""
+    if not value:
+        return None
+    try:
+        return _as_naive_utc(
+            datetime.fromisoformat(str(value).strip().replace("Z", "+00:00")))
+    except (ValueError, TypeError):
+        return None
 _espn_injuries_cache = {}
 
 
@@ -6343,7 +6357,10 @@ def espn_injuries(cache=_espn_injuries_cache):
                 "espn_id": str(athlete.get("id") or "") or None,
                 "status": status.title() if status else ACTIVE_STATUS,
                 "detail": (detail or "").strip() or None,
-                "since": item.get("date"),
+                # When the designation was actually published, which is
+                # what orders and timestamps the board -- not when this
+                # app happened to notice.
+                "since": _parse_espn_datetime(item.get("date")),
             })
     cache["all"] = {"data": out, "time": now}
     return out
@@ -6540,6 +6557,13 @@ def get_injury_report(limit=None, cache=_injury_feed_cache):
             continue
         p = players.get(sid) or {}
         hit = espn_by_sid.get(sid) or {}
+        # When this designation was PUBLISHED, in order of preference:
+        # ESPN's own date for it, then the moment this app first saw it.
+        # The league report drops as a batch, so everyone in one drop
+        # shares a stamp -- which is why the reference board reads "4h"
+        # down a whole run of rows.
+        reported = (hit.get("since")
+                    or _as_naive_utc((past or {}).get("changed_at")))
         out.append({
             "sid": sid,
             "name": f"{p.get('first_name','')} {p.get('last_name','')}".strip(),
@@ -6551,15 +6575,15 @@ def get_injury_report(limit=None, cache=_injury_feed_cache):
             "to": status,
             "detail": hit.get("detail"),
             "good": status == ACTIVE_STATUS,
-            "changed_at": (past or {}).get("changed_at"),
-            "ago": _time_ago((past or {}).get("changed_at")),
+            "reported_at": reported,
+            "ago": _time_ago(reported),
             "severity": _INJURY_ORDER.get(status, 5),
         })
 
-    # A change we watched happen leads, because it is news; everyone else
-    # follows by how serious the designation is.
-    out.sort(key=lambda r: (r["changed_at"] is None, -(r["changed_at"].timestamp()
-                                                       if r["changed_at"] else 0),
+    # Newest report first. A row with no date at all sinks to the bottom
+    # rather than pretending to be either the freshest or the stalest.
+    out.sort(key=lambda r: (r["reported_at"] is None,
+                            -(r["reported_at"].timestamp() if r["reported_at"] else 0),
                             r["severity"], r["name"]))
     data = out[:limit] if limit else out
     cache[limit] = {"data": data, "time": now}
@@ -6580,12 +6604,40 @@ def get_injury_changes(limit=INJURY_FEED_SIZE):
     return get_injury_report(limit=limit)
 
 
-def _time_ago(when):
-    """"4h", "2d" -- the age of a change, the way a feed writes it."""
+# The NFL keeps its own calendar, and so does a feed that says a
+# birthday started "7h" ago. Eastern is that calendar. Falls back to a
+# fixed -5 if the container ships without a timezone database, which
+# costs an hour during summer time and nothing else.
+try:
+    NFL_TZ = ZoneInfo("America/New_York")
+except Exception:
+    NFL_TZ = timezone(timedelta(hours=-5))
+
+
+def _as_naive_utc(when):
+    """A datetime comparable with utcnow(), whatever it arrived as.
+
+    An aware datetime is converted before its tzinfo is dropped -- just
+    stripping it would read a 00:00 Eastern timestamp as 00:00 UTC and
+    report every birthday as starting four hours later than it did."""
+    if not isinstance(when, datetime):
+        return None
+    if when.tzinfo is not None:
+        return when.astimezone(timezone.utc).replace(tzinfo=None)
+    return when
+
+
+def _time_ago(when, now=None):
+    """"4h", "2d" -- the age of something, the way a feed writes it.
+
+    `now` exists so a caller working from a given day measures against
+    that same day rather than against the wall clock; everything in
+    production leaves it alone."""
+    when = _as_naive_utc(when)
     if not when:
         return None
     try:
-        delta = datetime.utcnow() - when.replace(tzinfo=None)
+        delta = (_as_naive_utc(now) or datetime.utcnow()) - when
     except Exception:
         return None
     secs = max(0, int(delta.total_seconds()))
@@ -6634,7 +6686,7 @@ def _birthday_this_year(y, m, d, year):
         return None
 
 
-def get_birthdays(season=None, limit=None, today=None, since=None):
+def get_birthdays(season=None, limit=None, today=None, since=None, now=None):
     """Every rostered player whose birthday has come round since the
     season opened, most recent first.
 
@@ -6644,6 +6696,10 @@ def get_birthdays(season=None, limit=None, today=None, since=None):
     no list to maintain and nothing to switch over in January -- the
     opener comes from the schedule."""
     today = today or date.today()
+    # A caller that names the day measures ages against that day too,
+    # or every row on it reads as having started moments ago.
+    now = now or (datetime.utcnow() if today == date.today()
+                  else _day_started_at(today))
     season = _safe_int(season if season is not None else SEASON, int(SEASON))
     since = since or season_start_date(season)
     if since > today:
@@ -6683,7 +6739,12 @@ def get_birthdays(season=None, limit=None, today=None, since=None):
             "age_label": _ordinal_age(age),
             "date": when,
             "today": when == today,
-            "ago": None if when == today else _days_ago(when, today),
+            # Stamped from the moment the day itself started, not from
+            # the moment this page was built -- so every birthday on a
+            # given day carries the same age, and today's reads as the
+            # hours since midnight rather than as nothing at all.
+            "started_at": _day_started_at(when),
+            "ago": _time_ago(_day_started_at(when), now),
             "rank": p.get("search_rank") or 999999,
         })
     # Newest first, and within a day the players people have heard of.
@@ -6691,14 +6752,16 @@ def get_birthdays(season=None, limit=None, today=None, since=None):
     return out[:limit] if limit else out
 
 
-def _days_ago(when, today):
-    """"3d", "2w" -- how long ago a birthday was."""
-    days = (today - when).days
-    if days <= 0:
+def _day_started_at(day):
+    """Midnight on `day`, on the league's own clock, as naive UTC.
+
+    Eastern rather than the server's UTC: a birthday that starts at
+    midnight in New York has not started yet at midnight in London, and
+    the NFL's calendar is the one this board is keeping."""
+    try:
+        return _as_naive_utc(datetime(day.year, day.month, day.day, tzinfo=NFL_TZ))
+    except Exception:
         return None
-    if days < 7:
-        return f"{days}d"
-    return f"{days // 7}w"
 
 
 def get_birthdays_today(limit=BIRTHDAY_FEED_SIZE, today=None):
@@ -7072,8 +7135,10 @@ def injuries_page():
         rows = _safe_feed(get_injury_report)
         return render_template_string(
             FEED_PAGE_HTML, title="Injuries", kind="injuries", rows=rows,
-            blurb=("Every designation in the league, most recently changed first. "
-                   "A row reads as a change once both sides of it have been seen."),
+            blurb=("Every designation in the league, newest report first. The time "
+                   "beside a row is when that designation was published, so a whole "
+                   "report drop carries one stamp. A row reads as a change once both "
+                   "sides of it have been seen."),
             empty="No injury designations are being reported right now.",
             load_error=None)
     except Exception as e:
@@ -7093,8 +7158,9 @@ def birthdays_page():
         return render_template_string(
             FEED_PAGE_HTML, title="Birthdays", kind="birthdays", rows=rows,
             blurb=(f"Every birthday since the {season} season opened on "
-                   f"{start.strftime('%-d %B')}. The list grows on its own as the "
-                   "season does."),
+                   f"{start.strftime('%-d %B')}, newest first. The time beside a row "
+                   "is how long ago that day started, on the league's own Eastern "
+                   "clock. The list grows on its own as the season does."),
             empty="No birthdays yet this season.", load_error=None)
     except Exception as e:
         return render_template_string(
@@ -10030,9 +10096,7 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + """
         <span class="sc-feed-name">{{ b.name }}</span>
         <span class="sc-feed-sub">Happy {{ b.age_label }} Birthday &#127881;</span>
       </span>
-      <span class="sc-feed-ago">
-        {%- if b.ago %}{{ b.ago }}{% else %}{{ b.position }}{% endif -%}
-      </span>
+      <span class="sc-feed-ago">{{ b.ago or b.position }}</span>
     </a>
     {% endfor %}
   </div>
@@ -10990,6 +11054,7 @@ FEED_PAGE_HTML = BASE_STYLE + make_header("scores") + """
   .fd-sub b.bad{ color:var(--critical); }
   .fd-meta{ flex:none; text-align:right; font-size:11.5px; color:var(--fd-muted);
             font-family:"IBM Plex Mono"; line-height:1.5; }
+  .fd-meta b{ font-weight:700; color:var(--fd-text); }
   .fd-empty{ color:var(--fd-muted); padding:34px; text-align:center; font-size:13.5px; }
   .fd-back{ display:inline-block; margin-top:20px; color:var(--accent-ink);
             text-decoration:none; font-weight:700; font-size:13px; }
@@ -11024,9 +11089,8 @@ FEED_PAGE_HTML = BASE_STYLE + make_header("scores") + """
         </span>
       </span>
       <span class="fd-meta">
-        {%- if kind == 'birthdays' %}{{ r.date.strftime('%-d %b') }}<br>{% endif -%}
         {{ r.position }}{% if r.team %} &middot; {{ r.team }}{% endif %}
-        {%- if kind == 'injuries' and r.ago %}<br>{{ r.ago }}{% endif -%}
+        {%- if r.ago %}<br><b>{{ r.ago }}</b>{% endif -%}
       </span>
     </a>
     {% endfor %}
