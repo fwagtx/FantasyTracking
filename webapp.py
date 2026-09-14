@@ -1660,7 +1660,41 @@ def extract_field_position(summary_json):
 # categories worth surfacing, in the order a box score reads.
 _BOX_CATEGORY_ORDER = ["passing", "rushing", "receiving", "defensive",
                        "interceptions", "fumbles", "kicking", "punting", "returns"]
-_BOX_DEFENSIVE = {"defensive", "interceptions", "fumbles"}
+
+# Which side of the ball a player is on, by position. This is the ground
+# truth and is checked FIRST, because classifying by stat category gets
+# it wrong: ESPN's "fumbles" category lists the ball carriers who
+# fumbled, not the defenders who recovered, so a quarterback who put the
+# ball on the ground was being filed under Defense.
+_OFFENSE_POSITIONS = {"QB", "RB", "FB", "HB", "WR", "TE",
+                      "OL", "OT", "OG", "C", "G", "T", "LS"}
+_DEFENSE_POSITIONS = {"DL", "DE", "DT", "NT", "EDGE",
+                      "LB", "OLB", "ILB", "MLB",
+                      "DB", "CB", "S", "SS", "FS", "NB"}
+_SPECIAL_POSITIONS = {"K", "P", "PK"}
+
+# Category fallback, only for a player whose position ESPN omits.
+# "fumbles" is deliberately NOT here -- see above.
+_BOX_DEFENSIVE = {"defensive", "interceptions"}
+
+
+def _box_side_for(position, categories):
+    """Which panel a box-score player belongs on.
+
+    Position wins whenever ESPN gives one. The stat categories a player
+    appears in are only a fallback, and a poor one: plenty of categories
+    are mixed, so guessing from them is how offensive players ended up
+    filed under Defense."""
+    pos = (position or "").upper()
+    if pos in _DEFENSE_POSITIONS:
+        return "defense"
+    if pos in _OFFENSE_POSITIONS or pos in _SPECIAL_POSITIONS:
+        return "offense"
+    # No usable position. Fall back to categories, and require a
+    # genuinely defensive one rather than a mixed one.
+    if any(c in _BOX_DEFENSIVE for c in categories):
+        return "defense"
+    return "offense"
 
 
 def extract_box_score(summary_json):
@@ -1701,17 +1735,64 @@ def extract_box_score(summary_json):
                     "headshot": (ath.get("headshot") or {}).get("href")
                                 if isinstance(ath.get("headshot"), dict) else None,
                     "stats": [],
-                    "defensive": False,
+                    "categories": set(),
                 })
                 values = athlete_row.get("stats") or []
                 for label, value in zip(labels, values):
                     entry["stats"].append({"label": label, "value": value, "category": name})
-                if name in _BOX_DEFENSIVE:
-                    entry["defensive"] = True
+                entry["categories"].add(name)
         for entry in merged.values():
-            side["defense" if entry["defensive"] else "offense"].append(entry)
+            entry["categories"] = sorted(entry["categories"])
+            side[_box_side_for(entry["position"], entry["categories"])].append(entry)
+        # Most-involved first, so the players who actually did something
+        # lead each list instead of whatever order ESPN returned.
+        for group in side.values():
+            group.sort(key=lambda e: -len(e["stats"]))
         out[abbr] = side
     return out
+
+
+def _full_name_index(all_players):
+    """{(team, "baker mayfield"): sleeper_id} -- ESPN's box score gives
+    full display names, unlike play text which gives "B.Mayfield", so
+    this is a separate index from _player_name_index."""
+    index = {}
+    for sid, p in (all_players or {}).items():
+        first, last, team = p.get("first_name"), p.get("last_name"), p.get("team")
+        if not first or not last:
+            continue
+        key = f"{first} {last}".lower()
+        if team:
+            index.setdefault((team, key), sid)
+        index.setdefault((None, key), sid)
+    return index
+
+
+def attach_box_photos(box):
+    """Fill in a headshot for every box-score player.
+
+    ESPN supplies one for most players but not all, and a name with no
+    face next to it in a list where everyone else has one reads as a
+    rendering fault. Falls back to Sleeper's photo, matched on full name
+    and team, and leaves the field None only when neither source knows
+    the player -- the template then renders a neutral placeholder rather
+    than a broken image."""
+    if not box:
+        return box
+    try:
+        index = _full_name_index(get_all_players())
+    except Exception:
+        return box
+    for _team, sides in box.items():
+        for group in sides.values():
+            for entry in group:
+                if entry.get("headshot"):
+                    continue
+                key = (entry.get("name") or "").lower()
+                sid = index.get((_team, key)) or index.get((None, key))
+                if sid:
+                    entry["headshot"] = player_photo_url(sid)
+    return box
 
 
 def extract_team_totals(summary_json):
@@ -4940,7 +5021,12 @@ def get_player_season_log(sid, season, position, through_week=None):
 # because that's what it is for this site, and the page says how many
 # seasons that covers rather than implying more.
 PERF_SCOPES = ("day", "week", "month", "season", "alltime")
-PERF_ALLTIME_SEASONS_BACK = 11   # 2015-onward, matching the backfill range
+# The earliest season this site ever backfills (see backfill-stats.yml,
+# which seeds 2015 through the current year). Anchored to a START YEAR
+# rather than "N seasons back" on purpose: a fixed offset silently stops
+# meaning 2015 the moment a new season rolls over, so "all time" would
+# quietly shed its oldest season every September.
+PERF_EARLIEST_SEASON = 2015
 _perf_board_cache = {}
 
 
@@ -5056,8 +5142,8 @@ def get_performance_board(scope="week", position=None, season=None, week=None,
         rows = _historical_performances(season, position)
     else:
         rows = []
-        for offset in range(0, PERF_ALLTIME_SEASONS_BACK + 1):
-            rows.extend(_historical_performances(season - offset, position))
+        for yr in range(season, PERF_EARLIEST_SEASON - 1, -1):
+            rows.extend(_historical_performances(yr, position))
 
     if order == "lowest":
         rows = [r for r in rows if r["fpts"] > 0]
@@ -5301,7 +5387,7 @@ def game_detail_page():
         info_season, info_week = _wk["season"], _wk["week"]
         detail["plays"] = enrich_plays(extract_drive_plays(summary), info_season, info_week)
         detail["field"] = extract_field_position(summary)
-        detail["box"] = extract_box_score(summary)
+        detail["box"] = attach_box_photos(extract_box_score(summary))
         detail["totals"] = extract_team_totals(summary)
         # The rest of the day's slate, for the strip across the top --
         # so you can move between live games without going back first.
@@ -5338,7 +5424,8 @@ def api_game_live():
             "team_stats": detail["team_stats"], "player_leaders": detail["player_leaders"],
             "plays": enrich_plays(extract_drive_plays(summary), _wk["season"], _wk["week"]),
             "field": extract_field_position(summary),
-            "box": extract_box_score(summary), "totals": extract_team_totals(summary),
+            "box": attach_box_photos(extract_box_score(summary)),
+            "totals": extract_team_totals(summary),
             "win_prob": detail["win_prob"],
         })
     except Exception as e:
@@ -5863,7 +5950,7 @@ def api_debug_sleeper():
     working."""
     if not _secret_ok():
         return jsonify({"ok": False, "error": "unauthorized"}), 401
-    season = request.args.get("season", default=2024, type=int)
+    season = request.args.get("season", default=int(SEASON), type=int)
     week = request.args.get("week", default=1, type=int)
     url = f"https://api.sleeper.com/stats/nfl/{season}/{week}"
     try:
@@ -8616,8 +8703,15 @@ GAME_DETAIL_HTML = BASE_STYLE + make_header("scores") + """
               border-bottom:1px solid var(--line); margin-bottom:6px; }
   .gd-total b{ display:block; font-family:"IBM Plex Mono"; font-size:16px; }
   .gd-total span{ font-size:10px; color:var(--ink-muted); text-transform:uppercase; letter-spacing:0.03em; }
-  .gd-bp{ padding:10px 0; border-top:1px solid var(--line); }
+  .gd-bp{ padding:10px 0; border-top:1px solid var(--line); display:flex; gap:11px; align-items:flex-start; }
   .gd-bp:first-child{ border-top:none; }
+  .gd-bp-photo{ width:40px; height:40px; border-radius:50%; object-fit:cover; flex:none;
+                background:var(--paper-sunken); display:block; }
+  /* A headshot neither source has becomes a neutral circle rather than a
+     broken-image icon, so a row without a photo still lines up with the
+     rows that have one. */
+  .gd-bp-photo.missing{ background:var(--paper-sunken); }
+  .gd-bp-main{ flex:1; min-width:0; }
   .gd-bp-name{ font-size:13.5px; font-weight:700; }
   .gd-bp-name span{ color:var(--ink-muted); font-weight:400; font-size:11.5px; margin-left:5px; }
   .gd-bp-stats{ display:flex; flex-wrap:wrap; gap:10px 16px; margin-top:5px; }
@@ -8815,11 +8909,19 @@ GAME_DETAIL_HTML = BASE_STYLE + make_header("scores") + """
          style="{{ '' if group == 'offense' else 'display:none;' }}">
       {% for pl in box[group] %}
       <div class="gd-bp">
-        <div class="gd-bp-name">{{ pl.name }}{% if pl.position %}<span>{{ pl.position }}</span>{% endif %}</div>
-        <div class="gd-bp-stats">
-          {% for s in pl.stats[:8] %}
-          <span class="gd-bp-stat"><b>{{ s.value }}</b><span>{{ s.label }}</span></span>
-          {% endfor %}
+        {% if pl.headshot %}
+        <img class="gd-bp-photo" src="{{ pl.headshot }}" alt=""
+             onerror="this.classList.add('missing');">
+        {% else %}
+        <span class="gd-bp-photo missing"></span>
+        {% endif %}
+        <div class="gd-bp-main">
+          <div class="gd-bp-name">{{ pl.name }}{% if pl.position %}<span>{{ pl.position }}</span>{% endif %}</div>
+          <div class="gd-bp-stats">
+            {% for s in pl.stats[:8] %}
+            <span class="gd-bp-stat"><b>{{ s.value }}</b><span>{{ s.label }}</span></span>
+            {% endfor %}
+          </div>
         </div>
       </div>
       {% else %}
