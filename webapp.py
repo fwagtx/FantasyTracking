@@ -5752,8 +5752,147 @@ def get_team_standings(season, season_type=2, cache=_standings_cache):
         for i, r in enumerate(members, 1):
             r["conf_rank"] = i
 
+    _assign_playoff_seeds(rows)
     cache[key] = {"data": rows, "time": now}
     return rows
+
+
+# The marks the reference standings use, and what each one means. Kept in
+# one place so the rows and the legend below them can never disagree.
+PLAYOFF_MARKERS = {
+    "bye":      {"emoji": "\U0001F410", "label": "Bye to Divisional Round"},
+    "division": {"emoji": "\U0001F451", "label": "Division leader"},
+    "wildcard": {"emoji": "\U0001F0CF", "label": "Wild Card team"},
+}
+TRADED_PICK_EMOJI = "\u27A1\uFE0F"
+
+# Where a traded first-round pick actually lands: {(season, original
+# team): team that now holds it}. Deliberately empty.
+#
+# Nobody publishes traded draft picks in a free feed -- not ESPN's
+# scoreboard, not Sleeper, not nflverse. The marker below renders the
+# moment an entry exists here, so this is the one line to fill in (by
+# hand, or from a paid feed) rather than a feature to rebuild. An empty
+# map means the draft order simply shows no trades, which is honest.
+TRADED_DRAFT_PICKS = {}
+
+
+def _seed_order(r):
+    """Win pct, then point differential, then points scored.
+
+    Not the NFL's full tiebreaker ladder -- head-to-head, common games
+    and strength of victory need more than a schedule table. This is an
+    ordering for display and the page says so."""
+    return (-r["pct"], -r["diff"], -r["pf"])
+
+
+def _assign_playoff_seeds(rows):
+    """Give every team its conference seed and the mark that goes with
+    it: the goat for the first-round bye, the crown for the other three
+    division winners, the joker for the wild cards.
+
+    Division winners take seeds 1-4 however their records compare to the
+    rest of the conference -- that is the whole point of winning a
+    division, and a 9-8 winner really does seed above an 11-6 wild
+    card."""
+    for conf in CONFERENCES:
+        members = [r for r in rows.values() if r["conference"] == conf]
+        leaders = []
+        for d in DIVISIONS:
+            division = sorted((r for r in members if r["division"] == d), key=_seed_order)
+            if division:
+                leaders.append(division[0])
+        leaders.sort(key=_seed_order)
+        leader_teams = {r["team"] for r in leaders}
+        rest = sorted((r for r in members if r["team"] not in leader_teams), key=_seed_order)
+
+        for i, r in enumerate(leaders + rest, 1):
+            kind = ("bye" if i == 1 else
+                    "division" if i <= 4 else
+                    "wildcard" if i <= 7 else None)
+            mark = PLAYOFF_MARKERS.get(kind)
+            r["seed"] = i
+            r["seed_kind"] = kind
+            r["marker"] = mark["emoji"] if mark else None
+            r["marker_label"] = mark["label"] if mark else None
+            r["in_playoffs"] = kind is not None
+
+
+def get_playoff_field(season, conf, season_type=2):
+    """One conference in seed order, playoff teams first -- the same list
+    the reference shows behind its Playoffs tab."""
+    rows = get_team_standings(season, season_type)
+    members = [r for r in rows.values() if r["conference"] == conf]
+    members.sort(key=lambda r: r.get("seed") or 99)
+    return members
+
+
+def _season_opponents(season, season_type=2, cache={}):
+    """{team: [opponent, ...]} across the WHOLE schedule, played or not.
+
+    Strength of schedule counts every opponent a team is down to face,
+    each appearance separately, so a division rival met twice counts
+    twice. That is how the league computes it, and it is why the figure
+    is meaningful in week 1 when almost nothing has been played."""
+    season, season_type = _safe_int(season, int(SEASON)), _safe_int(season_type, 2)
+    key = (season, season_type)
+    now = time.time()
+    entry = cache.get(key)
+    if entry and now - entry["time"] < 3600:
+        return entry["data"]
+    out = {}
+    if DATABASE_URL:
+        conn = get_db()
+        try:
+            with conn.cursor() as cur:
+                cur.execute(
+                    """SELECT home_team, away_team FROM nfl_schedule
+                       WHERE season = %s AND season_type = %s""",
+                    (season, season_type),
+                )
+                for r in cur.fetchall():
+                    out.setdefault(r["home_team"], []).append(r["away_team"])
+                    out.setdefault(r["away_team"], []).append(r["home_team"])
+        except Exception:
+            out = {}
+        finally:
+            conn.close()
+    cache[key] = {"data": out, "time": now}
+    return out
+
+
+def get_draft_order(season, season_type=2):
+    """All 32 teams in draft order: worst record picks first, ties broken
+    by the easier schedule, as the league breaks them.
+
+    This is the regular-season order. Once the postseason is played the
+    last fourteen picks reorder by how far each team went, which needs
+    playoff results this does not have yet -- so during the season it is
+    right, and in January it is the order before the bracket moves it."""
+    rows = get_team_standings(season, season_type)
+    opponents = _season_opponents(season, season_type)
+    out = []
+    for team, r in rows.items():
+        wins = losses = ties = 0
+        for opp in opponents.get(team, []):
+            o = rows.get(opp)
+            if not o:
+                continue
+            wins += o["wins"]
+            losses += o["losses"]
+            ties += o["ties"]
+        decided = wins + losses + ties
+        sos = round((wins + 0.5 * ties) / decided, 3) if decided else 0.0
+        entry = dict(r)
+        entry["sos"] = sos
+        entry["traded_to"] = TRADED_DRAFT_PICKS.get((_safe_int(season, int(SEASON)), team))
+        out.append(entry)
+    # Worst record first; the easier schedule picks ahead of the harder
+    # one; points allowed as a last resort so the order is stable.
+    out.sort(key=lambda r: (r["pct"], r["sos"], -r["pa"]))
+    for i, r in enumerate(out, 1):
+        r["pick"] = i
+    return out
 
 
 _team_rank_cache = {}
@@ -6099,28 +6238,44 @@ def scores_page():
 
 @app.route("/standings")
 def standings_page():
-    """League standings by conference and division, computed from the
-    schedule we already sync."""
+    """Four views on the same season: each conference by division, the
+    playoff field in seed order, and the draft order."""
     try:
         info = get_current_week_info()
         refresh_open_schedule_weeks(info["season"])
         season = request.args.get("season", default=info["season"], type=int)
+        view = (request.args.get("view") or "AFC").lower()
         conf = (request.args.get("conf") or "AFC").upper()
         if conf not in CONFERENCES:
             conf = "AFC"
+        if view in ("afc", "nfc"):
+            conf, view = view.upper(), "conference"
+        elif view not in ("playoffs", "draft"):
+            view = "conference"
+
         standings = get_team_standings(season)
-        by_div = {}
-        for d in DIVISIONS:
-            members = [r for r in standings.values()
-                       if r["conference"] == conf and r["division"] == d]
-            members.sort(key=lambda r: (-r["pct"], -r["diff"], -r["pf"]))
-            by_div[d] = members
+        by_div, field, draft = {}, [], []
+        if view == "conference":
+            for d in DIVISIONS:
+                members = [r for r in standings.values()
+                           if r["conference"] == conf and r["division"] == d]
+                members.sort(key=_seed_order)
+                by_div[d] = members
+        elif view == "playoffs":
+            field = get_playoff_field(season, conf)
+        else:
+            draft = get_draft_order(season)
+        played = any(r["games"] for r in standings.values())
         return render_template_string(
-            STANDINGS_HTML, by_div=by_div, conf=conf, season=season,
+            STANDINGS_HTML, by_div=by_div, field=field, draft=draft, view=view,
+            conf=conf, season=season, played=played, markers=PLAYOFF_MARKERS,
+            traded_emoji=TRADED_PICK_EMOJI,
             conferences=CONFERENCES, divisions=DIVISIONS, load_error=None)
     except Exception as e:
         return render_template_string(
-            STANDINGS_HTML, by_div={}, conf="AFC", season=int(SEASON),
+            STANDINGS_HTML, by_div={}, field=[], draft=[], view="conference",
+            conf="AFC", season=int(SEASON), played=False, markers=PLAYOFF_MARKERS,
+            traded_emoji=TRADED_PICK_EMOJI,
             conferences=CONFERENCES, divisions=DIVISIONS, load_error=str(e))
 
 
@@ -9331,10 +9486,14 @@ STANDINGS_HTML = BASE_STYLE + make_header("scores") + """
   .st-title{ font-family:"Big Shoulders Display"; font-size:26px; font-weight:800;
              text-transform:uppercase; margin:18px 0 2px; }
   .st-sub{ font-size:11.5px; color:var(--st-muted); margin-bottom:12px; }
-  .st-tabs{ display:flex; gap:0; border-bottom:1px solid var(--st-line); margin-bottom:4px; }
-  .st-tab{ padding:9px 18px; font-size:14px; font-weight:800; text-decoration:none;
-           color:var(--st-muted); border-bottom:2px solid transparent; }
+  .st-tabs{ display:flex; gap:0; border-bottom:1px solid var(--st-line); margin-bottom:4px;
+            overflow-x:auto; scrollbar-width:none; }
+  .st-tabs::-webkit-scrollbar{ display:none; }
+  .st-tab{ padding:9px 16px; font-size:14px; font-weight:800; text-decoration:none;
+           color:var(--st-muted); border-bottom:2px solid transparent; white-space:nowrap; }
   .st-tab.on{ color:var(--accent-ink); border-bottom-color:var(--accent-ink); }
+  .st-subtabs{ display:flex; gap:0; border-bottom:1px solid var(--st-line); }
+  .st-subtabs .st-tab{ font-size:13px; padding:8px 14px; }
   .st-div{ margin-top:20px; }
   .st-div h3{ font-family:"Big Shoulders Display"; font-size:16px; font-weight:800;
               text-transform:uppercase; color:var(--st-muted); margin:0 0 6px; letter-spacing:0.04em; }
@@ -9342,15 +9501,27 @@ STANDINGS_HTML = BASE_STYLE + make_header("scores") + """
            border-top:1px solid var(--st-line); text-decoration:none; color:var(--st-text); }
   .st-row:hover{ background:rgba(255,255,255,0.02); }
   .st-seed{ font-family:"IBM Plex Mono"; font-size:15px; color:var(--accent-ink);
-            width:18px; flex:none; text-align:center; font-weight:700; }
+            width:22px; flex:none; text-align:center; font-weight:700; }
   .st-row img{ width:34px; height:34px; object-fit:contain; flex:none; }
   .st-name{ flex:1; min-width:0; }
   .st-name b{ font-size:14px; display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   .st-name span{ font-size:11px; color:var(--st-muted); }
+  /* The mark sits on the team's own line, the way the reference does it:
+     a goat for the bye, a crown for a division, a joker for a wild card. */
+  .st-mark{ font-size:12px; margin-left:5px; }
+  .st-traded{ font-size:11px; color:var(--st-muted); margin-left:5px; white-space:nowrap; }
   .st-stats{ display:flex; gap:12px; flex:none; }
   .st-stat{ text-align:center; min-width:38px; }
   .st-stat b{ display:block; font-family:"IBM Plex Mono"; font-size:14px; }
   .st-stat span{ font-size:9px; color:var(--st-muted); text-transform:uppercase; letter-spacing:0.03em; }
+  /* Teams that missed the field sit below a rule, so the cut line is a
+     thing you can see rather than a seed number you have to count to. */
+  .st-cut{ display:flex; align-items:center; gap:10px; margin-top:14px; padding-top:10px;
+           border-top:1px dashed var(--st-line); font-size:10.5px; text-transform:uppercase;
+           letter-spacing:0.08em; color:var(--st-muted); font-weight:700; }
+  .st-legend{ margin-top:22px; padding-top:14px; border-top:1px solid var(--st-line); }
+  .st-legend div{ display:flex; align-items:center; gap:9px; font-size:12.5px;
+                  color:var(--st-muted); padding:4px 0; }
   .st-empty{ color:var(--st-muted); padding:30px; text-align:center; font-size:13px; }
   @media (max-width:640px){
     .st-stats{ gap:7px; } .st-stat{ min-width:30px; } .st-stat b{ font-size:12.5px; }
@@ -9364,14 +9535,30 @@ STANDINGS_HTML = BASE_STYLE + make_header("scores") + """
     {{ season }} season &middot; computed from completed games. Ordered by win
     percentage then point differential &mdash; not the NFL's full tiebreaker ladder.
   </div>
+
+  {% macro stat(value, label) -%}
+  <span class="st-stat"><b>{{ value }}</b><span>{{ label }}</span></span>
+  {%- endmacro %}
+
+  {% macro mark(r) -%}
+  {%- if r.marker %}<span class="st-mark" title="{{ r.marker_label }}">{{ r.marker }}</span>{% endif -%}
+  {%- endmacro %}
+
   <div class="st-tabs">
     {% for c in conferences %}
-    <a class="st-tab {{ 'on' if c == conf }}" href="/standings?season={{ season }}&conf={{ c }}">{{ c }}</a>
+    <a class="st-tab {{ 'on' if view == 'conference' and c == conf }}"
+       href="/standings?season={{ season }}&amp;view={{ c }}">{{ c }}</a>
     {% endfor %}
+    <a class="st-tab {{ 'on' if view == 'playoffs' }}"
+       href="/standings?season={{ season }}&amp;view=playoffs&amp;conf={{ conf }}">Playoffs</a>
+    <a class="st-tab {{ 'on' if view == 'draft' }}"
+       href="/standings?season={{ season }}&amp;view=draft">Draft Order</a>
   </div>
-  {% if not by_div %}
+
+  {% if not played %}
     <div class="st-empty">No completed games yet this season.</div>
-  {% else %}
+
+  {% elif view == 'conference' %}
   {% for d in divisions %}
   <div class="st-div">
     <h3>{{ conf }} {{ d }}</h3>
@@ -9381,20 +9568,75 @@ STANDINGS_HTML = BASE_STYLE + make_header("scores") + """
       <img src="https://a.espncdn.com/i/teamlogos/nfl/500/{{ r.team|lower }}.png" alt=""
            onerror="this.style.visibility='hidden'">
       <span class="st-name">
-        <b>{{ r.team }}</b>
+        <b>{{ r.team }}{{ mark(r) }}</b>
         <span>{{ r.conf_rank|ordinal }} {{ conf }}</span>
       </span>
       <span class="st-stats">
-        <span class="st-stat"><b>{{ r.record }}</b><span>W-L</span></span>
-        <span class="st-stat"><b>{{ '%.3f'|format(r.pct) }}</b><span>PCT</span></span>
-        <span class="st-stat"><b>{{ r.last5 }}</b><span>L5</span></span>
-        <span class="st-stat"><b>{{ r.ppg }}</b><span>PPG</span></span>
-        <span class="st-stat"><b>{{ r.div_record }}</b><span>DIV</span></span>
+        {{ stat(r.record, 'W-L') }}{{ stat('%.3f'|format(r.pct), 'PCT') }}
+        {{ stat(r.last5, 'L5') }}{{ stat(r.ppg, 'PPG') }}{{ stat(r.div_record, 'DIV') }}
       </span>
     </a>
     {% endfor %}
   </div>
   {% endfor %}
+
+  {% elif view == 'playoffs' %}
+  <div class="st-subtabs">
+    {% for c in conferences %}
+    <a class="st-tab {{ 'on' if c == conf }}"
+       href="/standings?season={{ season }}&amp;view=playoffs&amp;conf={{ c }}">{{ c }}</a>
+    {% endfor %}
+  </div>
+  {% for r in field %}
+  {% if r.seed == 8 %}<div class="st-cut"><span>Out of the field</span></div>{% endif %}
+  <a class="st-row" href="/team?abbr={{ r.team }}&amp;season={{ season }}">
+    <span class="st-seed">{{ r.seed }}</span>
+    <img src="https://a.espncdn.com/i/teamlogos/nfl/500/{{ r.team|lower }}.png" alt=""
+         onerror="this.style.visibility='hidden'">
+    <span class="st-name">
+      <b>{{ r.team }}{{ mark(r) }}</b>
+      <span>{{ r.conf_rank|ordinal }} {{ conf }}</span>
+    </span>
+    <span class="st-stats">
+      {{ stat(r.record, 'W-L') }}{{ stat('%.3f'|format(r.pct), 'PCT') }}
+      {{ stat(r.last5, 'L5') }}{{ stat(r.ppg, 'PPG') }}{{ stat(r.div_record, 'DIV') }}
+    </span>
+  </a>
+  {% endfor %}
+
+  {% else %}
+  {% for r in draft %}
+  <a class="st-row" href="/team?abbr={{ r.team }}&amp;season={{ season }}">
+    <span class="st-seed">{{ r.pick }}</span>
+    <img src="https://a.espncdn.com/i/teamlogos/nfl/500/{{ r.team|lower }}.png" alt=""
+         onerror="this.style.visibility='hidden'">
+    <span class="st-name">
+      <b>{{ r.team }}{% if r.traded_to %}<span class="st-traded">{{ traded_emoji }} {{ r.traded_to }}</span>{% endif %}</b>
+      <span>{{ r.conference }} {{ r.division }}</span>
+    </span>
+    <span class="st-stats">
+      {{ stat('&mdash;'|safe, 'GB') }}{{ stat('%.3f'|format(r.sos), 'SOS') }}
+      {{ stat(r.record, 'W-L') }}{{ stat('%.3f'|format(r.pct), 'PCT') }}
+      {{ stat(r.last5, 'L5') }}{{ stat(r.ppg, 'PPG') }}
+    </span>
+  </a>
+  {% endfor %}
+  <div class="st-sub" style="margin-top:16px;">
+    Worst record picks first, ties broken by the easier schedule. The last
+    fourteen picks reorder once the postseason is played.
+  </div>
+  {% endif %}
+
+  {% if played and view != 'draft' %}
+  <div class="st-legend">
+    {% for key in ['bye', 'division', 'wildcard'] %}
+    <div><span class="st-mark">{{ markers[key].emoji }}</span> {{ markers[key].label }}</div>
+    {% endfor %}
+  </div>
+  {% elif played %}
+  <div class="st-legend">
+    <div><span class="st-mark">{{ traded_emoji }}</span> Pick traded to another team</div>
+  </div>
   {% endif %}
 </div></div>
 """
@@ -11207,11 +11449,6 @@ RANKINGS_HTML = BASE_STYLE + make_header("rankings") + VOTE_MODAL_HTML + """
   .rk-toolbar{ position:sticky; top:64px; z-index:40; background:color-mix(in srgb, var(--rk-bg) 92%, transparent); backdrop-filter:blur(8px); border-bottom:1px solid var(--rk-line); padding:16px 0; display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
   .rk-title{ font-family:"Big Shoulders Display"; font-size:22px; font-weight:800; text-transform:uppercase; margin-right:auto; color:var(--rk-text); }
   .rk-select{ background:var(--rk-surface); border:1px solid var(--rk-line); color:var(--rk-text); border-radius:8px; padding:9px 12px; font-size:13.5px; font-weight:600; font-family:inherit; }
-  .rk-format-toggle{ display:flex; gap:6px; }
-  .rk-format-toggle a{ font-size:12px; font-weight:700; padding:7px 12px; border-radius:99px; border:1px solid var(--rk-line); text-decoration:none; color:var(--rk-muted); }
-  .rk-format-toggle a.active{ background:var(--accent); color:var(--accent-on); border-color:var(--accent); }
-  .rk-toggle-group{ display:flex; align-items:center; gap:8px; }
-  .rk-glabel{ font-size:10.5px; color:var(--rk-muted); font-weight:700; text-transform:uppercase; letter-spacing:0.04em; }
   .rk-icon-btn{ width:36px; height:36px; border-radius:8px; background:var(--rk-surface); border:1px solid var(--rk-line); color:var(--rk-muted); display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:15px; }
   .rk-icon-btn.active{ color:var(--rk-text); border-color:var(--accent); }
   .rk-rookie-toggle{ font-size:12px; font-weight:700; padding:0 13px; height:36px; border-radius:99px; border:1px solid var(--rk-line); background:var(--rk-surface); color:var(--rk-muted); cursor:pointer; display:flex; align-items:center; gap:6px; user-select:none; }
@@ -11281,13 +11518,14 @@ RANKINGS_HTML = BASE_STYLE + make_header("rankings") + VOTE_MODAL_HTML + """
 <div class="wrap">
   <div class="rk-toolbar">
     <span class="rk-title">Rankings <span style="font-size:12px; color:var(--rk-muted); text-transform:none; font-family:'Source Sans 3';">&middot; GP/FPTS from {{ stats_season }}</span></span>
-    <div class="rk-toggle-group">
-      <span class="rk-glabel">Mode</span>
-      <div class="rk-format-toggle">
-        <a class="{{ 'active' if mode=='dynasty' else '' }}" href="/rankings?format={{ fmt }}&mode=dynasty&pos={{ pos_filter }}&view={{ view }}">Dynasty</a>
-        <a class="{{ 'active' if mode=='redraft' else '' }}" href="/rankings?format={{ fmt }}&mode=redraft&pos={{ pos_filter }}&view={{ view }}">Redraft</a>
-      </div>
-    </div>
+    <!-- Mode and format were two pairs of pills sitting beside a
+         dropdown that did the same job, which is four bubbles and a
+         select competing for the same glance. All three are selects
+         now, so the toolbar reads as one row of choices. -->
+    <select class="rk-select" id="modeSelect" aria-label="Mode">
+      <option value="dynasty" {{ 'selected' if mode == 'dynasty' }}>Dynasty</option>
+      <option value="redraft" {{ 'selected' if mode == 'redraft' }}>Redraft</option>
+    </select>
     <select class="rk-select" id="posSelect">
       <option value="overall">Overall</option>
       <option value="QB">QB</option>
@@ -11295,13 +11533,10 @@ RANKINGS_HTML = BASE_STYLE + make_header("rankings") + VOTE_MODAL_HTML + """
       <option value="WR">WR</option>
       <option value="TE">TE</option>
     </select>
-    <div class="rk-toggle-group">
-      <span class="rk-glabel">Format</span>
-      <div class="rk-format-toggle">
-        <a class="{{ 'active' if fmt=='1qb' else '' }}" href="/rankings?format=1qb&mode={{ mode }}&pos={{ pos_filter }}&view={{ view }}">1QB</a>
-        <a class="{{ 'active' if fmt=='superflex' else '' }}" href="/rankings?format=superflex&mode={{ mode }}&pos={{ pos_filter }}&view={{ view }}">Superflex</a>
-      </div>
-    </div>
+    <select class="rk-select" id="fmtSelect" aria-label="Format">
+      <option value="1qb" {{ 'selected' if fmt == '1qb' }}>1QB</option>
+      <option value="superflex" {{ 'selected' if fmt == 'superflex' }}>Superflex</option>
+    </select>
     <div class="rk-rookie-toggle" id="rookieToggle" title="Show only rookies">
       <svg viewBox="0 0 24 24" width="12" height="12"><path d="M12 1.5l2.98 6.63 7.27.7-5.5 4.83 1.63 7.13L12 17.06l-6.38 3.73 1.63-7.13-5.5-4.83 7.27-.7z" fill="currentColor"/></svg>
       Rookies
@@ -11597,6 +11832,21 @@ function render() {
 
 document.getElementById('posSelect').value = state.pos;
 document.getElementById('posSelect').addEventListener('change', e => { state.pos = e.target.value; render(); });
+
+// Mode and format come from the server (they change which value set is
+// loaded), so these navigate rather than re-render, carrying the rest of
+// the toolbar's state across with them.
+['modeSelect', 'fmtSelect'].forEach(function(id){
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.addEventListener('change', function(e){
+    const url = new URL(window.location.href);
+    url.searchParams.set(id === 'modeSelect' ? 'mode' : 'format', e.target.value);
+    url.searchParams.set('pos', state.pos);
+    url.searchParams.set('view', state.view);
+    window.location.href = url.toString();
+  });
+});
 document.getElementById('viewList').addEventListener('click', () => { state.view = 'list'; render(); });
 document.getElementById('viewGrid').addEventListener('click', () => { state.view = 'grid'; render(); });
 document.getElementById('rookieToggle').addEventListener('click', () => {
