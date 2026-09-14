@@ -1434,6 +1434,44 @@ def espn_game_summary(event_id, cache={}):
 # jersey number optional, always first initial then last name.
 _PLAY_NAME_RE = re.compile(r"(?:\d{1,2}-)?([A-Z][A-Za-z]?\.[A-Z][A-Za-z'\-]+)")
 
+# The player a play should lead with. ESPN writes a pass as "K.Cousins
+# pass short right to J.Jefferson", so reading the text in order puts the
+# quarterback's face on every completion -- but the play belongs to the
+# man who caught it. Same for a turnover: the play is the defender's.
+_PLAY_TARGET_RE = re.compile(r"\bto\s+(?:\d{1,2}-)?([A-Z][A-Za-z]?\.[A-Z][A-Za-z'\-]+)")
+_PLAY_INTERCEPT_RE = re.compile(r"intercepted by\s+(?:\d{1,2}-)?([A-Z][A-Za-z]?\.[A-Z][A-Za-z'\-]+)",
+                                re.IGNORECASE)
+_PLAY_RECOVER_RE = re.compile(r"recovered by\s+(?:[A-Z]{2,3}-)?(?:\d{1,2}-)?([A-Z][A-Za-z]?\.[A-Z][A-Za-z'\-]+)",
+                              re.IGNORECASE)
+# "sacked by A.Donald" and "sacked at MIN 20 for -7 yards (A.Donald)"
+# are both written by ESPN, so both spellings are read here.
+_PLAY_SACK_RE = re.compile(r"sacked\b[^()]*(?:by\s+|\()(?:\d{1,2}-)?([A-Z][A-Za-z]?\.[A-Z][A-Za-z'\-]+)",
+                           re.IGNORECASE)
+
+
+def _play_lead_name(text):
+    """Which name in a play's text the play actually belongs to, or None
+    to keep ESPN's own order.
+
+    Only reordered where the writing order and the ownership of the play
+    genuinely disagree -- a completed pass, an interception, a fumble
+    recovery, a sack. A run, a kick, an incompletion all already lead
+    with the right player, and guessing at those would only introduce
+    mistakes."""
+    t = text or ""
+    low = t.lower()
+    for pattern in (_PLAY_INTERCEPT_RE, _PLAY_RECOVER_RE, _PLAY_SACK_RE):
+        m = pattern.search(t)
+        if m:
+            return m.group(1)
+    # A completion: "... pass short right to J.Jefferson for 12 yards".
+    # Not an incompletion -- nobody caught it, so it stays the passer's.
+    if " pass" in low and "incomplete" not in low and "intended for" not in low:
+        m = _PLAY_TARGET_RE.search(t)
+        if m:
+            return m.group(1)
+    return None
+
 
 def _play_headline(text, yards, scoring):
     """A short title for a play -- "8-yd catch", "3-yd rush", "Sack" --
@@ -1509,6 +1547,25 @@ def _play_badges(text, yards, down, distance, scoring):
     return out
 
 
+def summary_season_week(summary_json, fallback=None):
+    """Which season and week a game summary belongs to.
+
+    Read off the game itself rather than assumed to be the current week,
+    so opening a game from an earlier week links its players to the
+    performance they actually had in that game."""
+    fallback = fallback or {}
+    header = (summary_json or {}).get("header") or {}
+    season_block = header.get("season") if isinstance(header.get("season"), dict) else {}
+    season = _safe_int(season_block.get("year"), None)
+    week = _safe_int(header.get("week"), None)
+    season_type = _safe_int(season_block.get("type"), None)
+    return {
+        "season": season or _safe_int(fallback.get("season"), int(SEASON)),
+        "week": week or _safe_int(fallback.get("week"), 1),
+        "season_type": season_type or _safe_int(fallback.get("season_type"), 2),
+    }
+
+
 def _player_name_index(all_players):
     """{(team, "K.Cousins"): sleeper_id} so a name in ESPN's play text can
     be resolved to a real player -- for their photo and live points.
@@ -1548,14 +1605,24 @@ def enrich_plays(plays, season, week):
         play["headline"] = _play_headline(play.get("text"), play.get("yards"), play.get("scoring"))
         play["badges"] = _play_badges(play.get("text"), play.get("yards"),
                                       play.get("down"), play.get("distance"), play.get("scoring"))
-        # Names in the order ESPN wrote them; the ball-carrier or target
-        # leads a play's text, so the first couple are the ones worth
-        # showing. Tacklers appear in parentheses at the end.
-        seen, people = set(), []
-        for name in _PLAY_NAME_RE.findall(play.get("text") or ""):
-            if name in seen:
-                continue
-            seen.add(name)
+        # Names in the order ESPN wrote them, except that the player the
+        # play belongs to is pulled to the front -- the receiver on a
+        # catch, the defender on a turnover -- so the face beside a play
+        # is the one who made it. Tacklers appear in parentheses at the
+        # end and fall out naturally below the cap.
+        text = play.get("text") or ""
+        seen, names = set(), []
+        for name in _PLAY_NAME_RE.findall(text):
+            if name not in seen:
+                seen.add(name)
+                names.append(name)
+        lead_name = _play_lead_name(text)
+        if lead_name and lead_name in seen:
+            names.remove(lead_name)
+            names.insert(0, lead_name)
+
+        people = []
+        for name in names:
             sid = index.get((team, name)) or index.get((None, name))
             if not sid:
                 continue
@@ -1563,6 +1630,8 @@ def enrich_plays(plays, season, week):
             people.append({
                 "sid": sid,
                 "name": name,
+                "full_name": (f"{p.get('first_name') or ''} {p.get('last_name') or ''}".strip()
+                              or name),
                 "position": p.get("position"),
                 "photo": player_photo_url(sid),
                 "fpts": (live.get(sid) or {}).get("pts"),
@@ -1677,6 +1746,73 @@ _SPECIAL_POSITIONS = {"K", "P", "PK"}
 # "fumbles" is deliberately NOT here -- see above.
 _BOX_DEFENSIVE = {"defensive", "interceptions"}
 
+# The order a box score reads down the page: quarterbacks, then backs,
+# then receivers, then the line; the defensive front, then the back
+# seven; kickers last. A position ESPN gives us that isn't listed sorts
+# after everything named, ahead of the unknown-position rows.
+_BOX_POSITION_ORDER = [
+    "QB", "RB", "HB", "FB", "WR", "TE",
+    "OL", "OT", "OG", "C", "G", "T", "LS",
+    "DL", "DE", "DT", "NT", "EDGE",
+    "LB", "OLB", "ILB", "MLB",
+    "DB", "CB", "S", "SS", "FS", "NB",
+    "K", "PK", "P",
+]
+_BOX_POSITION_RANK = {p: i for i, p in enumerate(_BOX_POSITION_ORDER)}
+
+
+def _box_num(value):
+    """The leading number out of a box-score cell. ESPN mixes plain
+    numbers ("84"), fractions ("24/35") and compounds ("2-14"), and only
+    the first figure of each is the one being ranked on."""
+    text = str(value if value is not None else "").strip()
+    m = re.match(r"-?\d+(?:\.\d+)?", text)
+    return float(m.group(0)) if m else 0.0
+
+
+def _box_production(entry):
+    """A single number standing in for how much a player did, used only
+    to order players within their own position group.
+
+    Deliberately crude and category-aware: it is a sort key, not a
+    rating, and the page already prints the real stat line beside every
+    name. Yards, scores and takeaways are what a box score is read for,
+    so those are what it weighs."""
+    total = 0.0
+    for stat in entry.get("stats") or []:
+        label = (stat.get("label") or "").upper()
+        cat = stat.get("category") or ""
+        value = _box_num(stat.get("value"))
+        if label == "YDS":
+            total += value * (0.04 if cat == "passing" else 0.1)
+        elif label == "TD" and cat != "defensive":
+            total += value * 6
+        elif label == "REC":
+            total += value * 2
+        elif label == "CAR":
+            total += value
+        elif label == "TOT" and cat == "defensive":
+            total += value * 3
+        elif label == "SACKS":
+            total += value * 8
+        elif label == "INT" and cat != "passing":
+            total += value * 10
+        elif label == "TB" or label == "LOST":
+            total -= value * 4
+        elif label == "FG" or label == "XP":
+            total += value * 3
+    return total
+
+
+def _box_sort_key(entry):
+    """Position order first, production within the position second, and
+    anyone who took the field without recording anything last -- the
+    bench, in the same position order as everyone above it."""
+    pos = (entry.get("position") or "").upper()
+    rank = _BOX_POSITION_RANK.get(pos, len(_BOX_POSITION_ORDER) + (0 if pos else 1))
+    produced = entry.get("production", 0.0)
+    return (0 if produced > 0 else 1, rank, -produced, entry.get("name") or "")
+
 
 def _box_side_for(position, categories):
     """Which panel a box-score player belongs on.
@@ -1729,6 +1865,7 @@ def extract_box_score(summary_json):
                     continue
                 entry = merged.setdefault(aid, {
                     "id": aid,
+                    "sid": None,
                     "name": ath.get("displayName") or ath.get("shortName") or "",
                     "position": ((ath.get("position") or {}).get("abbreviation")
                                  if isinstance(ath.get("position"), dict) else None),
@@ -1743,11 +1880,14 @@ def extract_box_score(summary_json):
                 entry["categories"].add(name)
         for entry in merged.values():
             entry["categories"] = sorted(entry["categories"])
+            entry["production"] = _box_production(entry)
+            entry["bench"] = entry["production"] <= 0
             side[_box_side_for(entry["position"], entry["categories"])].append(entry)
-        # Most-involved first, so the players who actually did something
-        # lead each list instead of whatever order ESPN returned.
+        # Grouped by position in the order a box score reads, ranked by
+        # production inside each position, with anyone who did not record
+        # anything gathered at the bottom.
         for group in side.values():
-            group.sort(key=lambda e: -len(e["stats"]))
+            group.sort(key=_box_sort_key)
         out[abbr] = side
     return out
 
@@ -1786,13 +1926,30 @@ def attach_box_photos(box):
     for _team, sides in box.items():
         for group in sides.values():
             for entry in group:
-                if entry.get("headshot"):
-                    continue
                 key = (entry.get("name") or "").lower()
                 sid = index.get((_team, key)) or index.get((None, key))
                 if sid:
-                    entry["headshot"] = player_photo_url(sid)
+                    entry["sid"] = sid
+                    entry["headshot"] = entry.get("headshot") or player_photo_url(sid)
     return box
+
+
+def attach_leader_ids(leaders):
+    """Resolve each "Top Performers" leader to a Sleeper id, so the row
+    is a link to that player's game rather than a dead line of text.
+
+    ESPN gives a display name and a team, which is exactly what the
+    box-score name index is built on, so the same index answers both."""
+    if not leaders:
+        return leaders
+    try:
+        index = _full_name_index(get_all_players())
+    except Exception:
+        return leaders
+    for row in leaders:
+        key = (row.get("athlete") or "").lower()
+        row["sid"] = index.get((row.get("team"), key)) or index.get((None, key))
+    return leaders
 
 
 def extract_team_totals(summary_json):
@@ -5231,12 +5388,17 @@ DIVISIONS = ("North", "South", "East", "West")
 _standings_cache = {}
 
 
-def _finished_games(season, season_type=2):
+def _finished_games(season, season_type=2, include_live=False):
     """Every completed game of a season, oldest first, as plain rows.
 
     One query feeds standings, rankings, recent form and the team page's
     results list -- they are all the same underlying facts, and deriving
-    them from a single read keeps them from ever disagreeing."""
+    them from a single read keeps them from ever disagreeing.
+
+    `include_live` additionally counts games still being played, at the
+    score they currently hold. Standings must not use it -- a win is not
+    a win until the whistle -- but a power ranking should move while the
+    games move, which is what it is for."""
     if not DATABASE_URL:
         return []
     conn = get_db()
@@ -5248,9 +5410,10 @@ def _finished_games(season, season_type=2):
                    FROM nfl_schedule
                    WHERE season = %s AND season_type = %s
                      AND home_score IS NOT NULL AND away_score IS NOT NULL
-                     AND status = 'final'
+                     AND status = ANY(%s)
                    ORDER BY kickoff""",
-                (season, season_type),
+                (season, season_type,
+                 ["final", "in_progress"] if include_live else ["final"]),
             )
             return [dict(r) for r in cur.fetchall()]
     except Exception:
@@ -5336,36 +5499,55 @@ def get_team_standings(season, season_type=2, cache=_standings_cache):
 
 
 def get_team_rankings(season, season_type=2, cache={}):
-    """Power ranking over three windows -- last 7 days, last 30 days, and
-    the whole season -- as {team: {"d7": n, "d30": n, "season": n}}.
+    """Power ranking over three windows -- the latest round, the last
+    four rounds, and the whole season -- as {team: {"d7": n, "d30": n,
+    "season": n}}.
 
     Ranked on average point differential, which is the single most
     predictive simple measure of team strength and, importantly, is
-    computable from data the site already has. A team with no games in a
-    window gets no rank for it rather than a fabricated one."""
+    computable from data the site already has.
+
+    Three things make it a live ranking rather than a weekly one:
+
+    * Games in progress count, at the score they currently hold, so the
+      board moves while the games move.
+    * The windows are counted in weeks rather than days. The NFL plays
+      in rounds, and a date window catches the Thursday game but misses
+      the Sunday one from the same round -- so "last 7 days" means the
+      most recent round, and "last 30 days" the most recent four.
+    * A team with nothing in a narrow window (a bye, or a round it has
+      not played yet) inherits its rank from the next window out rather
+      than showing a blank. Every team that has played is ranked in all
+      three columns."""
     season, season_type = _safe_int(season, int(SEASON)), _safe_int(season_type, 2)
     key = (season, season_type)
     now = time.time()
     entry = cache.get(key)
-    if entry and now - entry["time"] < 300:
+    if entry and now - entry["time"] < entry.get("ttl", 300):
         return entry["data"]
 
-    games = _finished_games(season, season_type)
-    latest = max((g["kickoff"] for g in games if g["kickoff"]), default=None)
-    windows = {"d7": 7, "d30": 30, "season": None}
+    games = _finished_games(season, season_type, include_live=True)
+    live = any(g.get("status") == "in_progress" for g in games)
+    latest_week = max((g["week"] for g in games if g["week"]), default=None)
     out = {t: {} for t in NFL_DIVISIONS}
 
-    for label, days in windows.items():
+    # Widest first, so each narrower window has something to fall back on.
+    windows = [("season", None),
+               ("d30", PLAYER_WINDOW_WEEKS["d30"]),
+               ("d7", PLAYER_WINDOW_WEEKS["d7"])]
+    wider = {"d30": "season", "d7": "d30"}
+
+    for label, weeks in windows:
         totals = {}
         for g in games:
-            if days is not None:
-                if not g["kickoff"] or not latest:
+            if weeks is not None:
+                if not g["week"] or latest_week is None:
                     continue
-                if (latest - g["kickoff"]).days > days:
+                if g["week"] <= latest_week - weeks:
                     continue
             for team, own, opp in ((g["home_team"], g["home_score"], g["away_score"]),
                                    (g["away_team"], g["away_score"], g["home_score"])):
-                if team not in out:
+                if team not in out or own is None or opp is None:
                     continue
                 t = totals.setdefault(team, {"diff": 0, "games": 0})
                 t["diff"] += own - opp
@@ -5374,8 +5556,15 @@ def get_team_rankings(season, season_type=2, cache={}):
                         key=lambda kv: -kv[1])
         for i, (team, _avg) in enumerate(ranked, 1):
             out[team][label] = i
+        fallback = wider.get(label)
+        if fallback:
+            for vals in out.values():
+                if label not in vals and fallback in vals:
+                    vals[label] = vals[fallback]
 
-    cache[key] = {"data": out, "time": now}
+    # While games are being played the ranking is worth recomputing often;
+    # between rounds it cannot change, so it is cached the usual way.
+    cache[key] = {"data": out, "time": now, "ttl": 45 if live else 300}
     return out
 
 
@@ -5476,8 +5665,12 @@ def get_team_roster(team, season):
     """The team's players, split offence/defence, each with their window
     ranks -- the roster view on the team page.
 
-    Ordered by season rank so the players who have actually produced lead
-    the list, with unranked players (nobody who hasn't played) after."""
+    Read down the page by position in depth-chart order -- quarterbacks,
+    backs, receivers, tight ends -- and within each position by season
+    rank, so the starter leads their own group rather than every
+    quarterback being buried under the receivers. Players who have not
+    played this season are gathered at the bottom as the bench, in the
+    same position order."""
     if not team:
         return {"offense": [], "defense": []}
     ranks = get_player_window_ranks(season)
@@ -5499,8 +5692,14 @@ def get_team_roster(team, season):
             "photo": player_photo_url(sid),
             "ranks": r,
         })
+    order = {pos: i for i, pos in enumerate(POSITIONS + IDP_POSITIONS)}
     for group in out.values():
-        group.sort(key=lambda x: (x["ranks"].get("season") or 10**9, x["name"]))
+        for p in group:
+            p["bench"] = not p["ranks"].get("season")
+        group.sort(key=lambda x: (1 if x["bench"] else 0,
+                                  order.get(x["position"], len(order)),
+                                  x["ranks"].get("season") or 10**9,
+                                  x["name"]))
     return out
 
 
@@ -5660,7 +5859,8 @@ def team_page():
             "conference": row.get("conference"), "division": row.get("division"),
             "record": row.get("record", "0-0"), "div_rank": div_rank,
             "bye_week": sched["bye_week"], "rank": rank, "standing": row,
-            "games": list(reversed(played))[:10],
+            # Week 1 through the most recent, the way a schedule reads.
+            "games": played,
             "upcoming": [g for g in sched["games"] if not g["result"]][:3],
             "roster": get_team_roster(abbr, season),
         }
@@ -5715,12 +5915,12 @@ def performance_page():
         # you can move between performances without going back first.
         peers = [p for p in get_week_performers(season, week, allow_fetch=False) if p["sid"] != sid][:24]
         return render_template_string(
-            PERFORMANCE_HTML, detail=detail, log=log, peers=peers,
+            PERFORMANCE_HTML, detail=detail, log=log, peers=peers, sid=sid,
             season=season, week=week, load_error=None,
         )
     except Exception as e:
         return render_template_string(
-            PERFORMANCE_HTML, detail=None, log=[], peers=[],
+            PERFORMANCE_HTML, detail=None, log=[], peers=[], sid=sid,
             season=int(SEASON), week=1, load_error=str(e),
         )
 
@@ -5779,11 +5979,15 @@ def game_detail_page():
         username = _resolve_scores_username()
         detail["my_players"] = _my_players_for_game(detail, username)
         _wk = get_current_week_info()
-        info_season, info_week = _wk["season"], _wk["week"]
-        detail["plays"] = enrich_plays(extract_drive_plays(summary), info_season, info_week)
+        # The game's own season and week, not today's -- opening a game
+        # from week 3 should link its players to week 3.
+        gw = summary_season_week(summary, _wk)
+        detail["season"], detail["week"] = gw["season"], gw["week"]
+        detail["plays"] = enrich_plays(extract_drive_plays(summary), gw["season"], gw["week"])
         detail["field"] = extract_field_position(summary)
         detail["box"] = attach_box_photos(extract_box_score(summary))
         detail["totals"] = extract_team_totals(summary)
+        attach_leader_ids(detail.get("player_leaders"))
         # The rest of the day's slate, for the strip across the top --
         # so you can move between live games without going back first.
         info = _wk
@@ -5796,7 +6000,8 @@ def game_detail_page():
         empty = {"status": "scheduled", "period": None, "clock": None, "status_detail": None,
                   "venue": {}, "officials": [], "home": {"abbr": None, "name": "?", "score": None, "logo": None},
                   "away": {"abbr": None, "name": "?", "score": None, "logo": None}, "team_stats": [], "player_leaders": [],
-                  "plays": [], "field": None, "box": {}, "totals": {}}
+                  "plays": [], "field": None, "box": {}, "totals": {},
+                  "season": int(SEASON), "week": 1}
         return render_template_string(GAME_DETAIL_HTML, event_id=event_id, detail=empty,
                                       others=[], load_error=str(e))
 
@@ -5810,14 +6015,16 @@ def api_game_live():
     try:
         summary = espn_game_summary(event_id)
         detail = extract_game_detail(summary)
-        _wk = get_current_week_info()
+        gw = summary_season_week(summary, get_current_week_info())
         return jsonify({
+            "season": gw["season"], "week": gw["week"],
             "status": detail["status"], "period": detail["period"], "clock": detail["clock"],
             "status_detail": detail["status_detail"],
             "home_score": detail["home"]["score"], "away_score": detail["away"]["score"],
             "home_linescores": detail["home"]["linescores"], "away_linescores": detail["away"]["linescores"],
-            "team_stats": detail["team_stats"], "player_leaders": detail["player_leaders"],
-            "plays": enrich_plays(extract_drive_plays(summary), _wk["season"], _wk["week"]),
+            "team_stats": detail["team_stats"],
+            "player_leaders": attach_leader_ids(detail["player_leaders"]),
+            "plays": enrich_plays(extract_drive_plays(summary), gw["season"], gw["week"]),
             "field": extract_field_position(summary),
             "box": attach_box_photos(extract_box_score(summary)),
             "totals": extract_team_totals(summary),
@@ -8746,6 +8953,10 @@ TEAM_HTML = BASE_STYLE + make_header("scores") + """
   .tm-pr b{ display:block; font-family:"IBM Plex Mono"; font-size:13px; }
   .tm-pr span{ font-size:9px; color:var(--tm-muted); text-transform:uppercase; letter-spacing:0.03em; }
   .tm-player-pos{ font-size:12px; color:var(--tm-muted); flex:none; text-align:right; }
+  .tm-player.bench{ opacity:0.72; }
+  .tm-divider{ margin-top:16px; padding:8px 0 4px; border-top:1px solid var(--line-strong);
+               font-size:10.5px; letter-spacing:0.09em; text-transform:uppercase; color:var(--tm-muted); }
+  .tm-divider:first-child{ margin-top:4px; border-top:none; }
   .tm-empty{ color:var(--tm-muted); padding:28px; text-align:center; font-size:13px; }
   @media (max-width:640px){
     .tm-name{ font-size:23px; } .tm-head img{ width:56px; height:56px; }
@@ -8797,7 +9008,9 @@ TEAM_HTML = BASE_STYLE + make_header("scores") + """
     <div class="tm-eyebrow">Recent differentials</div>
     {% set peak = team.games|map(attribute='diff')|map('abs')|max %}
     <div class="tm-diffs">
-      {% for g in team.games[:8]|reverse %}
+      {# The games list now runs week 1 -> latest, so the last eight of it
+         are the most recent eight, already left-to-right in time order. #}
+      {% for g in team.games[-8:] %}
       <div class="tm-diff {{ 'win' if g.result == 'W' else ('loss' if g.result == 'L' else 'tie') }}">
         <span class="tm-diff-val">{{ '%+d'|format(g.diff) }}</span>
         <div class="tm-diff-bar" style="height:{{ ((g.diff|abs) / peak * 70)|round|int if peak else 2 }}%;"></div>
@@ -8849,7 +9062,12 @@ TEAM_HTML = BASE_STYLE + make_header("scores") + """
     {% for group in ['offense', 'defense'] %}
     <div data-sub-panel="{{ group }}" style="{{ '' if group == 'offense' else 'display:none;' }}">
       {% for p in team.roster[group] %}
-      <a class="tm-player" href="/player?sid={{ p.sid }}">
+      {% if p.bench and not loop.first and not team.roster[group][loop.index0 - 1].bench %}
+      <div class="tm-divider">Bench &middot; yet to play this season</div>
+      {% elif not p.bench and (loop.first or team.roster[group][loop.index0 - 1].position != p.position) %}
+      <div class="tm-divider">{{ p.position }}</div>
+      {% endif %}
+      <a class="tm-player{% if p.bench %} bench{% endif %}" href="/player?sid={{ p.sid }}">
         <img src="{{ p.photo }}" alt="" onerror="this.style.visibility='hidden'">
         <span class="tm-player-main">
           <span class="tm-player-name">{{ p.name }}</span>
@@ -9132,7 +9350,12 @@ PERFORMANCE_HTML = BASE_STYLE + make_header("scores") + """
   {% if not detail %}
     <div class="pf-empty">
       No stat line for this player in week {{ week }} yet.
-      <div><a class="pf-back" href="/scores">&larr; Back to scores</a></div>
+      {# Reachable from a box score, where linemen and special-teamers have
+         no fantasy line at all -- so the click still leads somewhere. #}
+      <div>
+        {% if sid %}<a class="pf-back" href="/player?sid={{ sid }}">Full player profile &rarr;</a> &middot; {% endif %}
+        <a class="pf-back" href="/scores">&larr; Back to scores</a>
+      </div>
     </div>
   {% else %}
   <div class="pf-head">
@@ -9372,6 +9595,8 @@ GAME_DETAIL_HTML = BASE_STYLE + make_header("scores") + """
   .gd-play-head{ display:flex; justify-content:space-between; gap:10px; font-size:11px;
                  color:var(--ink-muted); margin-bottom:7px; }
   .gd-play-body{ display:flex; gap:11px; align-items:flex-start; }
+  .gd-play-link{ color:inherit; text-decoration:none; }
+  .gd-play-link:hover b{ text-decoration:underline; }
   .gd-play-photo{ width:46px; height:46px; border-radius:50%; object-fit:cover; flex:none;
                   background:var(--paper-sunken); }
   .gd-play-main{ flex:1; min-width:0; }
@@ -9401,6 +9626,13 @@ GAME_DETAIL_HTML = BASE_STYLE + make_header("scores") + """
   .gd-bp-main{ flex:1; min-width:0; }
   .gd-bp-name{ font-size:13.5px; font-weight:700; }
   .gd-bp-name span{ color:var(--ink-muted); font-weight:400; font-size:11.5px; margin-left:5px; }
+  .gd-bp-link{ color:inherit; text-decoration:none; }
+  .gd-bp-link:hover{ text-decoration:underline; }
+  .gd-bp.bench{ opacity:0.72; }
+  .gd-bp-divider{ margin-top:14px; padding-top:10px; border-top:1px solid var(--line-strong);
+                  font-size:10.5px; letter-spacing:0.09em; text-transform:uppercase;
+                  color:var(--ink-muted); }
+  .gd-bp-divider + .gd-bp{ border-top:none; }
   .gd-bp-stats{ display:flex; flex-wrap:wrap; gap:10px 16px; margin-top:5px; }
   .gd-bp-stat b{ font-family:"IBM Plex Mono"; font-size:14px; }
   .gd-bp-stat span{ font-size:9.5px; color:var(--ink-muted); margin-left:2px; text-transform:uppercase; }
@@ -9441,7 +9673,8 @@ GAME_DETAIL_HTML = BASE_STYLE + make_header("scores") + """
   .gd-my-players-group:first-of-type{ margin-top:2px; }
   .gd-my-players-team{ font-family:"IBM Plex Mono"; font-weight:700; font-size:11.5px; color:var(--ink-muted); flex:none; width:32px; }
   .gd-my-players-chips{ display:flex; flex-wrap:wrap; gap:6px; flex:1; min-width:0; }
-  .gd-player-chip{ display:inline-flex; align-items:center; gap:6px; background:var(--paper-sunken); border-radius:99px; padding:4px 10px 4px 5px; font-size:12.5px; white-space:nowrap; }
+  .gd-player-chip{ display:inline-flex; align-items:center; gap:6px; background:var(--paper-sunken); border-radius:99px; padding:4px 10px 4px 5px; font-size:12.5px; white-space:nowrap; color:inherit; text-decoration:none; }
+  .gd-player-chip:hover{ background:var(--line); }
   .gd-player-chip-n{ color:var(--ink-muted); font-size:11px; }
   @media (max-width: 480px) {
     .gd-my-players-group{ flex-direction:column; gap:4px; }
@@ -9533,9 +9766,10 @@ GAME_DETAIL_HTML = BASE_STYLE + make_header("scores") + """
           <span class="gd-my-players-team">{{ side_label }}</span>
           <div class="gd-my-players-chips">
             {% for p in players %}
-            <span class="gd-player-chip" title="{{ p.leagues|join(', ') if p.leagues else '' }}">
+            <a class="gd-player-chip" title="{{ p.leagues|join(', ') if p.leagues else '' }}"
+               href="/performance?sid={{ p.sid }}&amp;season={{ detail.season }}&amp;week={{ detail.week }}">
               <span class="pos-chip" style="background:var(--pos-{{ p.position|lower }}, var(--ink-muted));">{{ p.position }}</span>{{ p.name }}{% if p.leagues and p.leagues|length > 1 %}<span class="gd-player-chip-n">&times;{{ p.leagues|length }}</span>{% endif %}
-            </span>
+            </a>
             {% endfor %}
           </div>
         </div>
@@ -9595,15 +9829,24 @@ GAME_DETAIL_HTML = BASE_STYLE + make_header("scores") + """
     <div class="gd-subpanel" data-sub-panel="{{ side }}-{{ group }}"
          style="{{ '' if group == 'offense' else 'display:none;' }}">
       {% for pl in box[group] %}
-      <div class="gd-bp">
+      {% if pl.bench and not loop.first and not box[group][loop.index0 - 1].bench %}
+      <div class="gd-bp-divider">Bench</div>
+      {% endif %}
+      <div class="gd-bp{% if pl.bench %} bench{% endif %}">
+        {% set href = '/performance?sid=' ~ pl.sid ~ '&season=' ~ detail.season ~ '&week=' ~ detail.week if pl.sid else None %}
+        {% if href %}<a href="{{ href }}" aria-label="{{ pl.name }}">{% endif %}
         {% if pl.headshot %}
         <img class="gd-bp-photo" src="{{ pl.headshot }}" alt=""
              onerror="this.classList.add('missing');">
         {% else %}
         <span class="gd-bp-photo missing"></span>
         {% endif %}
+        {% if href %}</a>{% endif %}
         <div class="gd-bp-main">
-          <div class="gd-bp-name">{{ pl.name }}{% if pl.position %}<span>{{ pl.position }}</span>{% endif %}</div>
+          <div class="gd-bp-name">
+            {% if href %}<a class="gd-bp-link" href="{{ href }}">{{ pl.name }}</a>{% else %}{{ pl.name }}{% endif %}
+            {% if pl.position %}<span>{{ pl.position }}</span>{% endif %}
+          </div>
           <div class="gd-bp-stats">
             {% for s in pl.stats[:8] %}
             <span class="gd-bp-stat"><b>{{ s.value }}</b><span>{{ s.label }}</span></span>
@@ -9671,7 +9914,7 @@ GAME_DETAIL_HTML = BASE_STYLE + make_header("scores") + """
     <p class="eyebrow">Top Performers</p>
     {% for l in detail.player_leaders %}
     <div class="player-row">
-      <div class="pname-row"><span class="pos-chip" style="background:var(--paper-sunken); color:var(--ink-secondary);">{{ l.team }}</span> <span style="margin-left:8px;">{{ l.athlete }} &middot; <span class="muted">{{ l.category }}</span></span></div>
+      <div class="pname-row"><span class="pos-chip" style="background:var(--paper-sunken); color:var(--ink-secondary);">{{ l.team }}</span> <span style="margin-left:8px;">{% if l.sid %}<a class="gd-bp-link" href="/performance?sid={{ l.sid }}&amp;season={{ detail.season }}&amp;week={{ detail.week }}">{{ l.athlete }}</a>{% else %}{{ l.athlete }}{% endif %} &middot; <span class="muted">{{ l.category }}</span></span></div>
       <span class="mono">{{ l.stat_line }}</span>
     </div>
     {% endfor %}
@@ -9688,6 +9931,8 @@ GAME_DETAIL_HTML = BASE_STYLE + make_header("scores") + """
 // first render come from a server-side template and the refresh from JS
 // is precisely how the two drift apart, so there is only this.
 window.GD_STATUS = {{ detail.status|tojson }};
+window.GD_SEASON = {{ detail.season|tojson }};
+window.GD_WEEK = {{ detail.week|tojson }};
 window.gdRenderFeed = function(plays, status){
   const el = document.getElementById('gdFeedPanel');
   if (!el) return;
@@ -9704,6 +9949,13 @@ window.gdRenderFeed = function(plays, status){
     });
   }
   function ord(n){ return n === 1 ? '1st' : n === 2 ? '2nd' : n === 3 ? '3rd' : n + 'th'; }
+  // Every player in the feed points at their own game -- their plays and
+  // their stat line -- so a name or a face is somewhere to go, not decoration.
+  function plink(sid){
+    return '/performance?sid=' + encodeURIComponent(sid) +
+           '&season=' + encodeURIComponent(window.GD_SEASON) +
+           '&week=' + encodeURIComponent(window.GD_WEEK);
+  }
 
   el.innerHTML = plays.map(function(p){
     const sit = [
@@ -9715,10 +9967,12 @@ window.gdRenderFeed = function(plays, status){
       ? esc(p.away_score) + '&ndash;' + esc(p.home_score) : '';
     const lead = (p.people || [])[0];
     const who = (p.people || []).map(function(pl){
-      return '<div><b>' + esc(pl.name) + '</b>' +
+      const inner = '<b>' + esc(pl.name) + '</b>' +
              (pl.position ? ' <span class="fps">' + esc(pl.position) + '</span>' : '') +
-             (pl.fpts != null ? ' <span class="fps">&middot; ' + esc(pl.fpts) + ' fps</span>' : '') +
-             '</div>';
+             (pl.fpts != null ? ' <span class="fps">&middot; ' + esc(pl.fpts) + ' fps</span>' : '');
+      return '<div>' + (pl.sid
+        ? '<a class="gd-play-link" href="' + plink(pl.sid) + '">' + inner + '</a>'
+        : inner) + '</div>';
     }).join('');
     const badges = (p.badges || []).map(function(b){
       return '<span class="gd-play-badge">' + esc(b.icon) + ' ' + esc(b.label) + '</span>';
@@ -9727,8 +9981,10 @@ window.gdRenderFeed = function(plays, status){
       '<div class="gd-play-head"><span>' + sit + '</span><span>' + score + '</span></div>' +
       '<div class="gd-play-body">' +
         (lead && lead.photo
-          ? '<img class="gd-play-photo" src="' + esc(lead.photo) + '" alt="" ' +
-            'onerror="this.style.visibility=\\'hidden\\'">'
+          ? (lead.sid ? '<a href="' + plink(lead.sid) + '" aria-label="' + esc(lead.name) + '">' : '') +
+            '<img class="gd-play-photo" src="' + esc(lead.photo) + '" alt="" ' +
+            'onerror="this.style.visibility=\\'hidden\\'">' +
+            (lead.sid ? '</a>' : '')
           : '') +
         '<div class="gd-play-main">' +
           '<div class="gd-play-title">' + esc(p.headline || '') + '</div>' +
