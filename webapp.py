@@ -6509,6 +6509,44 @@ def _record_injury_changes_background():
 _injury_feed_cache = {}
 
 
+# How long a return to Active stays on the injury board. A player coming
+# back is the most useful row there is on the day it happens and noise a
+# fortnight later, so it ages off rather than accumulating.
+RETURN_NEWS_DAYS = 7
+
+
+def _is_recent(when, days):
+    """Whether `when` is within `days` of now. False for no timestamp --
+    a change with no date cannot be shown to be recent."""
+    when = _as_naive_utc(when)
+    if not when:
+        return False
+    return (datetime.utcnow() - when) <= timedelta(days=days)
+
+
+def _injury_history():
+    """{sleeper_id: {status, previous_status, changed_at}} for every
+    designation this app has watched change.
+
+    Separate from the report that reads it so the two can be reasoned
+    about -- and tested -- on their own."""
+    if not DATABASE_URL:
+        return {}
+    conn = get_db()
+    try:
+        with conn.cursor() as cur:
+            cur.execute(
+                """SELECT sleeper_id, status, previous_status, changed_at
+                   FROM player_injury_state
+                   WHERE previous_status IS NOT NULL
+                     AND previous_status IS DISTINCT FROM status""")
+            return {r["sleeper_id"]: dict(r) for r in cur.fetchall()}
+    except Exception:
+        return {}
+    finally:
+        conn.close()
+
+
 def get_injury_report(limit=None, cache=_injury_feed_cache):
     """The league's injury report, most recently changed first.
 
@@ -6530,31 +6568,21 @@ def get_injury_report(limit=None, cache=_injury_feed_cache):
         return []
     _record_injury_changes_background()
 
-    history = {}
-    if DATABASE_URL:
-        conn = get_db()
-        try:
-            with conn.cursor() as cur:
-                cur.execute(
-                    """SELECT sleeper_id, status, previous_status, changed_at
-                       FROM player_injury_state
-                       WHERE previous_status IS NOT NULL
-                         AND previous_status IS DISTINCT FROM status""")
-                history = {r["sleeper_id"]: dict(r) for r in cur.fetchall()}
-        except Exception:
-            history = {}
-        finally:
-            conn.close()
+    history = _injury_history()
 
     players = _players_or_empty()
     out = []
     for sid, status in statuses.items():
         past = history.get(sid)
-        returned = bool(past) and status == ACTIVE_STATUS
-        # Active with nothing recorded is just a healthy player, and the
-        # league is mostly healthy players.
-        if status == ACTIVE_STATUS and not returned:
-            continue
+        if status == ACTIVE_STATUS:
+            # A healthy player is only news if we watched them get
+            # healthy, and only for as long as that is still news. The
+            # league is mostly healthy players, and a recovery from
+            # October should not still be sitting on the board in
+            # January -- which is exactly what keeping every recorded
+            # return forever produced.
+            if not past or not _is_recent(past.get("changed_at"), RETURN_NEWS_DAYS):
+                continue
         p = players.get(sid) or {}
         hit = espn_by_sid.get(sid) or {}
         # When this designation was PUBLISHED, in order of preference:
