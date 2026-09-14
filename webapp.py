@@ -1473,10 +1473,47 @@ def _play_lead_name(text):
     return None
 
 
+# ESPN writes the depth and direction of every pass -- "pass short
+# right", "pass deep left" -- which is the only description of HOW a
+# catch was made that its feed actually carries. "Short" is the default
+# and adding it to a headline is noise, so only the direction survives
+# unless the ball went deep.
+_PASS_SHAPE_RE = re.compile(r"pass\s+(short|deep)\s+(left|middle|right)", re.IGNORECASE)
+_RUSH_SHAPE_RE = re.compile(r"\b(left|right)\s+(end|tackle|guard)\b|\b(up the middle)\b",
+                            re.IGNORECASE)
+# "PENALTY on NYG-E.Campbell, Offensive Holding, 10 yards, enforced at..."
+_PENALTY_RE = re.compile(
+    r"PENALTY on (?:[A-Z]{2,3}-)?([A-Z][A-Za-z.'\-]+),\s*([^,]+?),\s*(\d+)\s*yards",
+    re.IGNORECASE)
+
+
+# ESPN appends the kick or conversion to the SAME sentence as the score:
+# "...to I.Likely for 15 yards, TOUCHDOWN. D.Zvada extra point is GOOD".
+# Classifying the play means reading only the part before that, or a
+# touchdown run whose conversion was a pass gets titled a catch.
+_SCORE_TAIL_RE = re.compile(r"\b(touchdown|two-point conversion|extra point)\b",
+                            re.IGNORECASE)
+
+
+def _primary_clause(text):
+    """The play itself, without the point-after ESPN writes into the same
+    sentence."""
+    t = text or ""
+    m = _SCORE_TAIL_RE.search(t)
+    return t[:m.start()] if m else t
+
+
+def _pass_shape(text):
+    """("deep", "left") for a pass whose depth and direction ESPN wrote,
+    otherwise (None, None)."""
+    m = _PASS_SHAPE_RE.search(text or "")
+    return (m.group(1).lower(), m.group(2).lower()) if m else (None, None)
+
+
 def _play_headline(text, yards, scoring):
-    """A short title for a play -- "8-yd catch", "3-yd rush", "Sack" --
-    the way the reference feed leads each row, instead of repeating the
-    full sentence twice.
+    """A short title for a play -- "15-yd short-right TD catch", "3-yd
+    rush", "Sack" -- the way the reference feed leads each row, instead
+    of repeating the full sentence twice.
 
     Derived from the text rather than from a play-type field because
     ESPN's own type labels are coarse (everything is "pass" or "rush")
@@ -1484,66 +1521,128 @@ def _play_headline(text, yards, scoring):
     turnover, a kneel."""
     t = (text or "")
     low = t.lower()
+    # Only the play itself decides what the play was.
+    main = _primary_clause(t)
+    main_low = main.lower()
     y = yards if isinstance(yards, (int, float)) else None
     yd = f"{int(y)}-yd " if y not in (None, 0) else ""
+    # A play that reached the end zone is a touchdown play. This is
+    # settled BEFORE any kicking check, because ESPN writes the extra
+    # point into the same sentence as the score -- which is how a
+    # 15-yard touchdown catch ended up titled "Extra point".
+    td = bool(scoring) or "touchdown" in low
 
-    if "intercepted" in low:
-        return "Interception"
-    if "fumbles" in low and "recovered by" in low:
-        return "Fumble"
-    if "sacked" in low:
+    if "intercepted" in main_low:
+        return "Pick-six" if td else "Interception"
+    if "fumbles" in main_low and "recovered by" in main_low:
+        return "Fumble returned for TD" if td else "Fumble"
+    if "sacked" in main_low:
         return "Sack"
-    if "kneel" in low:
-        return "Kneel"
-    if "spiked the ball" in low:
-        return "Spike"
-    if "punts" in low:
-        return "Punt"
-    if "field goal" in low:
-        return "Field goal is good" if "is good" in low else "Field goal"
-    if "extra point" in low:
-        return "Extra point"
-    if "kicks" in low and "yards from" in low:
-        return "Kickoff"
-    if "two-minute warning" in low:
-        return "Two-minute warning"
-    if "end quarter" in low or "end game" in low or "end of" in low:
-        return t.strip().title()[:40]
-    if "no play" in low and "penalty" in low:
-        return "Penalty"
-    if "incomplete" in low:
-        return "Incomplete"
 
-    td = scoring or "touchdown" in low
-    if " pass " in low or "pass short" in low or "pass deep" in low:
-        return (f"{yd}TD catch" if td else f"{yd}catch") if yd or td else "Catch"
-    if "scrambles" in low:
-        return f"{yd}scramble" if yd else "Scramble"
+    if not td:
+        if "kneel" in low:
+            return "Kneel"
+        if "spiked the ball" in low:
+            return "Spike"
+        if "punts" in low:
+            return "Punt"
+        # These name the play; whether it went through rides the
+        # coloured dot underneath, so the title never says it twice.
+        if "field goal" in low:
+            return "Field goal"
+        if "two-point conversion" in low:
+            return "Two-point conversion"
+        if "extra point" in low:
+            return "Extra point"
+        if "kicks" in low and "yards from" in low:
+            return "Kickoff"
+        if "two-minute warning" in low:
+            return "Two-minute warning"
+        if "end quarter" in low or "end game" in low or "end of" in low:
+            return t.strip().title()[:40]
+        if "no play" in low and "penalty" in low:
+            return "Penalty"
+        if "incomplete" in low:
+            return "Incomplete"
+
+    if " pass " in main_low or "pass short" in main_low or "pass deep" in main_low:
+        depth, direction = _pass_shape(main)
+        # "deep-left", or just "right" on a short throw -- short is the
+        # default and saying so adds length without adding meaning.
+        shape = ""
+        if direction:
+            shape = f"{depth}-{direction} " if depth == "deep" else f"{direction} "
+        if td:
+            return f"{yd}{shape}TD catch"
+        return f"{yd}{shape}catch" if (yd or shape) else "Catch"
+    if "scrambles" in main_low:
+        return f"{yd}TD scramble" if td else (f"{yd}scramble" if yd else "Scramble")
     # Anything left with a ball-carrier reads as a run.
     if td:
         return f"{yd}TD run" if yd else "TD run"
     return f"{yd}rush" if yd else "Rush"
 
 
-def _play_badges(text, yards, down, distance, scoring):
-    """The short factual tags under a play. Only things actually
-    derivable from the payload -- a badge the data can't support is worse
-    than no badge."""
-    low = (text or "").lower()
+def _play_notes(text, yards, down, distance, scoring):
+    """The lines under a play: what else happened, one fact per line,
+    each with a coloured dot saying whether it went well.
+
+    This replaced dumping ESPN's raw sentence under every row. That
+    sentence carries real information -- whether the extra point was
+    good, who was flagged, who made the tackle -- but buried in
+    officialese ("Center-B.Mann, Holder-J.Stout") that nobody reads. So
+    the facts worth having are pulled out and the sentence is dropped.
+
+    `tone` is good / bad / warn / info, and only ever reflects something
+    the text actually says."""
+    t = (text or "")
+    low = t.lower()
     out = []
-    if scoring or "touchdown" in low:
-        out.append({"icon": "\U0001F3C8", "label": "Touchdown"})
-    if isinstance(yards, (int, float)) and isinstance(distance, (int, float)) and distance > 0 \
-            and yards >= distance and "no play" not in low:
-        out.append({"icon": "\u2705", "label": "1st down"})
+    td = bool(scoring) or "touchdown" in low
+
+    # The kick after a score, which is the whole reason the sentence was
+    # worth parsing: a green dot for a good one, red for a miss.
+    if "extra point" in low:
+        good = "extra point is good" in low
+        out.append({"tone": "good" if good else "bad",
+                    "label": "Extra point is good" if good else "Extra point is no good"})
+    if "two-point conversion" in low:
+        good = "conversion succeeds" in low or "attempt succeeds" in low
+        out.append({"tone": "good" if good else "bad",
+                    "label": "Two-point conversion" + (" is good" if good else " failed")})
+    if "field goal" in low and "extra point" not in low:
+        good = "is good" in low
+        out.append({"tone": "good" if good else "bad",
+                    "label": "Field goal is good" if good else "Field goal is no good"})
+
+    # A touchdown is already the headline; repeating it as a note is the
+    # kind of duplication this rewrite is removing.
+    if not td and isinstance(yards, (int, float)) and isinstance(distance, (int, float)) \
+            and distance > 0 and yards >= distance and "no play" not in low:
+        out.append({"tone": "good", "label": "First down"})
+
     if "intercepted" in low:
-        out.append({"icon": "\U0001F504", "label": "Intercepted"})
+        out.append({"tone": "bad", "label": "Intercepted"})
     if "fumbles" in low:
-        out.append({"icon": "\U0001F504", "label": "Fumble"})
-    if "penalty" in low:
-        out.append({"icon": "\U0001F6A9", "label": "Penalty"})
+        out.append({"tone": "bad",
+                    "label": "Fumble lost" if "recovered by" in low else "Fumble"})
     if "sacked" in low:
-        out.append({"icon": "\U0001F4C9", "label": "Sack"})
+        out.append({"tone": "bad", "label": "Sacked"})
+
+    # The flag, written the way a broadcast says it rather than the way
+    # the league records it.
+    m = _PENALTY_RE.search(t)
+    if m:
+        who, foul, pen_yards = m.group(1), m.group(2).strip(), m.group(3)
+        declined = "declined" in low
+        out.append({"tone": "warn",
+                    "label": f"{who} \u00b7 {pen_yards}-yd {foul.lower()}"
+                             + (", declined" if declined else "")})
+    elif "penalty" in low:
+        out.append({"tone": "warn", "label": "Penalty on the play"})
+
+    if "no play" in low:
+        out.append({"tone": "warn", "label": "No play"})
     return out
 
 
@@ -1587,7 +1686,7 @@ def _player_name_index(all_players):
 
 
 def enrich_plays(plays, season, week):
-    """Adds the headline, badges, and involved players (with photo and
+    """Adds the headline, notes, and involved players (with photo and
     live fantasy points) to each play, so the feed can render the way the
     reference does rather than as a wall of ESPN's sentences.
 
@@ -1603,8 +1702,8 @@ def enrich_plays(plays, season, week):
     for play in plays:
         team = play.get("team")
         play["headline"] = _play_headline(play.get("text"), play.get("yards"), play.get("scoring"))
-        play["badges"] = _play_badges(play.get("text"), play.get("yards"),
-                                      play.get("down"), play.get("distance"), play.get("scoring"))
+        play["notes"] = _play_notes(play.get("text"), play.get("yards"),
+                                    play.get("down"), play.get("distance"), play.get("scoring"))
         # Names in the order ESPN wrote them, except that the player the
         # play belongs to is pulled to the front -- the receiver on a
         # catch, the defender on a turnover -- so the face beside a play
@@ -9844,10 +9943,14 @@ GAME_DETAIL_HTML = BASE_STYLE + make_header("scores") + """
   .gd-play-who{ font-size:12.5px; color:var(--ink-secondary); margin-top:2px; }
   .gd-play-who b{ color:var(--ink); font-weight:700; }
   .gd-play-who .fps{ color:var(--ink-muted); }
-  .gd-play-badges{ display:flex; flex-wrap:wrap; gap:5px; margin-top:6px; }
-  .gd-play-badge{ font-size:11px; background:var(--paper-sunken); border-radius:5px;
-                  padding:3px 7px; color:var(--ink-secondary); }
-  .gd-play-text{ font-size:12px; margin-top:6px; line-height:1.45; color:var(--ink-muted); }
+  .gd-play-notes{ margin-top:7px; display:flex; flex-direction:column; gap:4px; }
+  .gd-play-note{ display:flex; align-items:center; gap:7px; font-size:13px;
+                 color:var(--ink-secondary); }
+  .gd-play-dot{ width:9px; height:9px; border-radius:50%; flex:none;
+                background:var(--ink-muted); }
+  .gd-play-note.good .gd-play-dot{ background:var(--good); }
+  .gd-play-note.bad .gd-play-dot{ background:var(--critical); }
+  .gd-play-note.warn .gd-play-dot{ background:var(--warning); }
 
   .gd-totals{ display:flex; flex-wrap:wrap; gap:12px 18px; padding:10px 0 14px;
               border-bottom:1px solid var(--line); margin-bottom:6px; }
@@ -10356,8 +10459,11 @@ window.gdRenderFeed = function(plays, status){
         ? '<a class="gd-play-link" href="' + plink(pl.sid) + '">' + inner + '</a>'
         : inner) + '</div>';
     }).join('');
-    const badges = (p.badges || []).map(function(b){
-      return '<span class="gd-play-badge">' + esc(b.icon) + ' ' + esc(b.label) + '</span>';
+    // One fact per line with a coloured dot, in place of ESPN's raw
+    // sentence -- which said the same things buried in officialese.
+    const notes = (p.notes || []).map(function(n){
+      return '<div class="gd-play-note ' + esc(n.tone || 'info') + '">' +
+             '<span class="gd-play-dot"></span>' + esc(n.label) + '</div>';
     }).join('');
     return '<div class="gd-play' + (p.scoring ? ' score' : '') + '">' +
       '<div class="gd-play-head"><span>' + sit + '</span><span>' + score + '</span></div>' +
@@ -10366,8 +10472,7 @@ window.gdRenderFeed = function(plays, status){
         '<div class="gd-play-main">' +
           '<div class="gd-play-title">' + esc(p.headline || '') + '</div>' +
           (who ? '<div class="gd-play-who">' + who + '</div>' : '') +
-          (badges ? '<div class="gd-play-badges">' + badges + '</div>' : '') +
-          '<div class="gd-play-text">' + esc(p.text) + '</div>' +
+          (notes ? '<div class="gd-play-notes">' + notes + '</div>' : '') +
         '</div>' +
       '</div>' +
     '</div>';
