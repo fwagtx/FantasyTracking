@@ -1910,6 +1910,12 @@ def extract_drive_plays(summary_json, limit=60):
                 "down": start.get("down") or None,
                 "distance": start.get("distance"),
                 "yardline": start.get("possessionText") or start.get("downDistanceText"),
+                # How far there was left to go, which is the one field
+                # that places a play on the field without having to know
+                # whose half it is in.
+                "to_endzone": _safe_int(start.get("yardsToEndzone"), None),
+                "end_to_endzone": _safe_int((play.get("end") or {}).get("yardsToEndzone"), None),
+                "down_distance": start.get("downDistanceText"),
                 "text": text[:400],
                 "yards": play_yards(text, play.get("statYardage")),
                 "scoring": bool(play.get("scoringPlay")),
@@ -1921,6 +1927,70 @@ def extract_drive_plays(summary_json, limit=60):
     # clock that counts DOWN within a period and would order wrongly.
     out.reverse()
     return out[:limit]
+
+
+def get_game_play(event_id, play_id):
+    """One play from one game, with everything a page about it needs:
+    the situation, who was involved, where on the field it started and
+    finished, and how much it moved the result.
+
+    Returns None when the game or the play is not found, which the route
+    turns into a 404 rather than a blank page."""
+    summary = espn_game_summary(event_id) or {}
+    detail = extract_game_detail(summary)
+    info = summary_season_week(summary, get_current_week_info())
+    plays = enrich_plays(extract_drive_plays(summary, limit=400),
+                         info["season"], info["week"])
+    play = next((p for p in plays if str(p.get("id")) == str(play_id)), None)
+    if not play:
+        return None
+
+    home, away = detail.get("home") or {}, detail.get("away") or {}
+    # Which side had the ball, so the score and the field can both be
+    # oriented to them rather than to home and away.
+    poss_is_home = play.get("team") == home.get("abbr")
+    swings = _win_probability_deltas(summary, poss_is_home)
+    return {
+        "event_id": event_id,
+        "season": info["season"],
+        "week": info["week"],
+        "play": play,
+        "home": home,
+        "away": away,
+        "offense": home if poss_is_home else away,
+        "defense": away if poss_is_home else home,
+        "swing": swings.get(str(play.get("id"))),
+        "field": play_field_position(play),
+        "status": detail.get("status"),
+    }
+
+
+def play_field_position(play):
+    """Where the play started and finished, as percentages across a
+    hundred-yard field measured from the offense's own goal line.
+
+    ESPN gives yards-to-the-end-zone, which is the one figure that
+    places a play without having to know whose half it is in. Returns
+    None when the feed does not say -- the bar is then simply not drawn,
+    rather than drawn somewhere invented."""
+    start = play.get("to_endzone")
+    if not isinstance(start, int) or not 0 <= start <= 100:
+        return None
+    end = play.get("end_to_endzone")
+    if not isinstance(end, int) or not 0 <= end <= 100:
+        gained = play.get("yards") if isinstance(play.get("yards"), (int, float)) else 0
+        end = max(0, min(100, start - int(gained)))
+    to_go = play.get("distance") if isinstance(play.get("distance"), int) else None
+    return {
+        # 0 = the offense's own goal line, 100 = the end zone they are
+        # attacking, so the bar always reads left to right.
+        "start_pct": round(100 - start, 1),
+        "end_pct": round(100 - end, 1),
+        "to_endzone": start,
+        # Where a first down would be, when there is one to get.
+        "marker_pct": (round(100 - max(0, start - to_go), 1)
+                       if to_go is not None and to_go > 0 else None),
+    }
 
 
 MOMENTUM_POINTS = 160
@@ -7577,6 +7647,25 @@ def api_game_live():
         return jsonify({"status": "final", "error": str(e)})
 
 
+@app.route("/play")
+def play_detail_page():
+    """One play, on its own page. The game feed lists plays; this is
+    where a play is actually read."""
+    event_id = request.args.get("game", "")
+    play_id = request.args.get("id", "")
+    try:
+        data = get_game_play(event_id, play_id)
+        if not data:
+            return render_template_string(
+                PLAY_DETAIL_HTML, data=None, event_id=event_id,
+                score_mark=SCORE_MARK_SVG, load_error=None), 404
+        return render_template_string(PLAY_DETAIL_HTML, data=data, event_id=event_id,
+                                      score_mark=SCORE_MARK_SVG, load_error=None)
+    except Exception as e:
+        return render_template_string(PLAY_DETAIL_HTML, data=None, event_id=event_id,
+                                      score_mark=SCORE_MARK_SVG, load_error=str(e))
+
+
 @app.route("/matchups")
 def matchups_page():
     """Standalone matchup-grade browser -- independent of any synced
@@ -11364,6 +11453,202 @@ FEED_PAGE_HTML = BASE_STYLE + make_header("scores") + """
 """
 
 
+PLAY_DETAIL_HTML = BASE_STYLE + make_header("scores") + """
+<style>
+  .pd-page{
+    --pd-bg:#0d0f0d; --pd-surface:#151815; --pd-surface2:#1c201c;
+    --pd-line:rgba(255,255,255,0.08); --pd-text:#e8e6df; --pd-muted:#8b9089;
+    background:var(--pd-bg); color:var(--pd-text); padding-bottom:60px; min-height:100vh;
+    font-family:"Source Sans 3",system-ui,sans-serif;
+  }
+  .pd-sit{ display:flex; align-items:center; gap:7px; flex-wrap:wrap; font-size:13px;
+           color:var(--pd-muted); padding-top:20px; }
+  .pd-sit img{ width:19px; height:19px; object-fit:contain; vertical-align:-3px; }
+  .pd-sit b{ color:var(--pd-text); font-family:"IBM Plex Mono"; font-weight:700; }
+  .pd-rate{ margin-left:auto; display:inline-flex; align-items:center; gap:6px;
+            font-family:"IBM Plex Mono"; font-size:20px; font-weight:700; color:var(--pd-text); }
+  .pd-rate .score-mark{ width:13px; height:16px; opacity:0.5; }
+
+  .pd-head{ display:flex; gap:14px; align-items:flex-start; margin-top:10px; }
+  .pd-mug{ position:relative; flex:none; width:56px; height:56px; margin-right:10px; }
+  .pd-mug img.face{ width:56px; height:56px; border-radius:50%; object-fit:cover;
+                    background:var(--pd-surface2); }
+  .pd-mug img.crest{ position:absolute; right:-11px; bottom:-2px; width:26px; height:26px;
+                     object-fit:contain; }
+  .pd-title{ font-size:26px; font-weight:800; line-height:1.15; color:var(--scored); }
+  .pd-title.plain{ color:var(--pd-text); }
+  .pd-who{ margin-top:7px; display:flex; flex-direction:column; gap:3px; }
+  .pd-who a{ font-size:14px; color:var(--pd-text); text-decoration:none; }
+  .pd-who a:hover{ color:var(--accent-ink); }
+  .pd-who .fps{ color:var(--pd-muted); }
+
+  .pd-cta{ display:block; text-align:center; margin-top:18px; padding:13px 16px;
+           border-radius:99px; background:var(--scored); color:#04121f; font-weight:800;
+           font-size:15px; text-decoration:none; }
+
+  .pd-panel{ margin-top:22px; }
+  .pd-panel h3{ font-family:"Big Shoulders Display"; font-size:15px; font-weight:800;
+                text-transform:uppercase; letter-spacing:0.04em; color:var(--pd-muted);
+                margin:0 0 10px; }
+
+  /* The field. A hundred yards left to right from the offence's own
+     goal, with the line of scrimmage, the line to gain, and where the
+     play actually finished. */
+  .pd-field{ display:flex; align-items:center; gap:12px; }
+  .pd-field-down{ flex:none; }
+  .pd-field-down b{ display:block; font-size:16px; font-weight:800; }
+  .pd-field-down span{ font-size:11.5px; color:var(--pd-muted); font-family:"IBM Plex Mono"; }
+  .pd-strip{ flex:1; min-width:0; }
+  .pd-bar{ position:relative; height:12px; border-radius:99px; background:var(--pd-surface2); }
+  .pd-gain{ position:absolute; top:0; bottom:0; border-radius:99px; background:var(--scored); }
+  .pd-gain.loss{ background:var(--critical); }
+  .pd-los{ position:absolute; top:-4px; bottom:-4px; width:2px; background:var(--pd-text); }
+  .pd-togo{ position:absolute; top:-4px; bottom:-4px; width:2px; background:var(--warning); }
+  .pd-ticks{ display:flex; justify-content:space-between; margin-top:6px; font-size:10.5px;
+             color:var(--pd-muted); font-family:"IBM Plex Mono"; }
+  .pd-legend{ font-size:11.5px; color:var(--pd-muted); margin-top:9px; line-height:1.5; }
+
+  .pd-notes{ display:flex; flex-direction:column; gap:6px; }
+  .pd-note{ display:flex; align-items:center; gap:8px; font-size:13px; }
+  .pd-dot{ width:8px; height:8px; border-radius:50%; flex:none; background:var(--pd-muted); }
+  .pd-note.good .pd-dot{ background:var(--good); }
+  .pd-note.bad .pd-dot{ background:var(--critical); }
+  .pd-note.warn .pd-dot{ background:var(--warning); }
+
+  .pd-swing{ font-family:"IBM Plex Mono"; font-size:15px; font-weight:700; }
+  .pd-swing.pos{ color:var(--good); } .pd-swing.neg{ color:var(--critical); }
+  .pd-raw{ font-size:12.5px; color:var(--pd-muted); line-height:1.55; }
+  .pd-back{ display:inline-block; margin-top:24px; color:var(--accent-ink);
+            text-decoration:none; font-weight:700; font-size:13px; }
+</style>
+
+<div class="pd-page">
+<div class="wrap">
+  {% if load_error %}<div class="error">Couldn't load this play: {{ load_error }}</div>{% endif %}
+
+  {% if not data %}
+    {% if not load_error %}
+    <div style="padding:60px 0; text-align:center; color:var(--pd-muted);">
+      That play isn't in this game's feed.
+    </div>
+    {% endif %}
+    <a class="pd-back" href="/game?id={{ event_id }}">&larr; Back to the game</a>
+  {% else %}
+  {% set p = data.play %}
+  {% set lead = p.people[0] if p.people else None %}
+
+  <div class="pd-sit">
+    {% if data.away.logo %}<img src="{{ data.away.logo }}" alt="">{% endif %}
+    <b>{{ p.away_score if p.away_score is not none else '-' }}</b>
+    <span>&ndash;</span>
+    <b>{{ p.home_score if p.home_score is not none else '-' }}</b>
+    {% if data.home.logo %}<img src="{{ data.home.logo }}" alt="">{% endif %}
+    <span>{% if p.period %}Q{{ p.period }}{% endif %} {{ p.clock }}</span>
+    {%- if p.down %}<span>&middot; {{ p.down|ordinal }} &amp; {{ p.distance }}</span>{% endif %}
+    {% if lead and lead.fpts is not none %}
+    <span class="pd-rate">{{ score_mark|safe }}{{ '%.1f'|format(lead.fpts) }}</span>
+    {% endif %}
+  </div>
+
+  <div class="pd-head">
+    {% if lead %}
+    <span class="pd-mug">
+      <img class="face" src="{{ lead.photo }}" alt="" loading="lazy"
+           onerror="this.style.visibility='hidden'">
+      {% if data.offense.logo %}<img class="crest" src="{{ data.offense.logo }}" alt=""
+           onerror="this.style.display='none'">{% endif %}
+    </span>
+    {% endif %}
+    <div style="flex:1; min-width:0;">
+      <div class="pd-title {{ '' if p.scoring else 'plain' }}">{{ p.headline }}</div>
+      {% if p.people %}
+      <div class="pd-who">
+        {% for who in p.people %}
+        <a href="/performance?sid={{ who.sid }}&amp;season={{ data.season }}&amp;week={{ data.week }}">
+          {{ who.full_name or who.name }}
+          {%- if who.position %} <span class="fps">{{ who.position }}</span>{% endif -%}
+          {%- if who.fpts is not none %} <span class="fps">&middot; {{ who.fpts }} fps</span>{% endif -%}
+        </a>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+  {% if lead %}
+  <a class="pd-cta"
+     href="/performance?sid={{ lead.sid }}&amp;season={{ data.season }}&amp;week={{ data.week }}">
+    Performance</a>
+  {% endif %}
+
+  {% if data.field %}
+  <div class="pd-panel">
+    <h3>Field position</h3>
+    <div class="pd-field">
+      <div class="pd-field-down">
+        {% if p.down %}<b>{{ p.down|ordinal }} &amp; {{ p.distance }}</b>{% endif %}
+        {% if p.yardline %}<span>{{ p.yardline }}</span>{% endif %}
+      </div>
+      <div class="pd-strip">
+        <div class="pd-bar">
+          {% set a = data.field.start_pct %}{% set b = data.field.end_pct %}
+          <span class="pd-gain {{ 'loss' if b < a }}"
+                style="left:{{ [a, b]|min }}%; width:{{ (a - b)|abs }}%;"></span>
+          <span class="pd-los" style="left:{{ a }}%;"></span>
+          {% if data.field.marker_pct %}
+          <span class="pd-togo" style="left:{{ data.field.marker_pct }}%;"></span>
+          {% endif %}
+        </div>
+        <div class="pd-ticks">
+          <span>G</span><span>20</span><span>50</span><span>20</span><span>G</span>
+        </div>
+      </div>
+    </div>
+    <p class="pd-legend">
+      Left to right is {{ data.offense.abbr or 'the offence' }} attacking.
+      The white line is where the play started, the amber one the line to gain,
+      and the bar is the ground it covered &mdash;
+      {{ data.field.to_endzone }} yards from the end zone at the snap.
+    </p>
+  </div>
+  {% endif %}
+
+  {% if p.notes %}
+  <div class="pd-panel">
+    <h3>What else happened</h3>
+    <div class="pd-notes">
+      {% for n in p.notes %}
+      <div class="pd-note {{ n.tone }}"><span class="pd-dot"></span>{{ n.label }}</div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+  {% if data.swing is not none %}
+  <div class="pd-panel">
+    <h3>Impact</h3>
+    <div class="pd-swing {{ 'pos' if data.swing > 0 else ('neg' if data.swing < 0 else '') }}">
+      {{ '%+.1f'|format(data.swing) }} points of win probability
+    </div>
+    <p class="pd-legend">
+      How much this play moved {{ data.offense.abbr or 'the offence' }}'s chance of winning,
+      read straight off the win probability ESPN publishes after every snap.
+    </p>
+  </div>
+  {% endif %}
+
+  <div class="pd-panel">
+    <h3>The call</h3>
+    <p class="pd-raw">{{ p.text }}</p>
+  </div>
+
+  <a class="pd-back" href="/game?id={{ data.event_id }}">&larr; Back to the game</a>
+  {% endif %}
+</div>
+</div>
+"""
+
+
 PERFORMANCES_HTML = BASE_STYLE + make_header("scores") + """
 <style>
   .pl-page{
@@ -11960,6 +12245,9 @@ GAME_DETAIL_HTML = BASE_STYLE + make_header("scores") + """
   .gd-play-title{ font-size:17px; font-weight:800; font-family:"Big Shoulders Display";
                   text-transform:uppercase; letter-spacing:0.01em; line-height:1.15; }
   .gd-play.score .gd-play-title{ color:var(--scored); }
+  /* The row is a link now; it should still read as a row. */
+  a.gd-play{ display:block; text-decoration:none; color:inherit; }
+  a.gd-play:hover{ background:var(--paper-sunken); }
   .gd-play-who{ font-size:12.5px; color:var(--ink-secondary); margin-top:2px; }
   .gd-play-who b{ color:var(--ink); font-weight:700; }
   .gd-play-who .fps{ color:var(--ink-muted); }
@@ -12489,7 +12777,19 @@ window.gdRenderFeed = function(plays, status){
       return '<div class="gd-play-note ' + esc(n.tone || 'info') + '">' +
              '<span class="gd-play-dot"></span>' + esc(n.label) + '</div>';
     }).join('');
-    return '<div class="gd-play' + (p.scoring ? ' score' : '') + '">' +
+    // Every play opens its own page. Without an id there is nothing to
+    // open, so that row stays a plain block rather than a dead link.
+    // The event id comes straight from the template rather than from a
+    // const declared further down this script -- which would be in its
+    // temporal dead zone if anything ever renders plays during the
+    // initial run.
+    const href = p.id
+      ? '/play?game=' + encodeURIComponent({{ event_id|tojson }}) +
+        '&id=' + encodeURIComponent(p.id)
+      : null;
+    const tag = href ? 'a' : 'div';
+    const attr = href ? ' href="' + href + '"' : '';
+    return '<' + tag + ' class="gd-play' + (p.scoring ? ' score' : '') + '"' + attr + '>' +
       '<div class="gd-play-head"><span>' + sit + '</span><span>' + score + '</span></div>' +
       '<div class="gd-play-body">' +
         faces +
@@ -12499,7 +12799,7 @@ window.gdRenderFeed = function(plays, status){
           (notes ? '<div class="gd-play-notes">' + notes + '</div>' : '') +
         '</div>' +
       '</div>' +
-    '</div>';
+    '</' + tag + '>';
   }).join('');
 };
 
