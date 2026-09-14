@@ -10872,10 +10872,10 @@ const scServerTodayKey = {{ today_key|tojson }};
     const anyPlayed = games.some(function(g){ return g.status !== 'scheduled'; });
     if (teamsSection) teamsSection.classList.toggle('on', anyPlayed);
 
+    // No scale explainer here -- the board is read as a ranking, and the
+    // full scale is spelled out on /performances for anyone who wants it.
     perfSubEl.textContent = !anyPlayed ? ''
-      : (played.length
-         ? (anyLive ? 'Live · 5.0 = an average starter game at the position'
-                    : '5.0 = an average starter game at the position')
+      : (played.length ? (anyLive ? 'Live' : '')
          : 'No scoring yet in these games.');
 
     // The combined board. Ranked by SCORE rather than raw points, so a
