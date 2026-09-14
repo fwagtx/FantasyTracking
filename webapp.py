@@ -2352,14 +2352,31 @@ def _parse_espn_event(ev):
     if not home or not away:
         return None
     state = ((comp.get("status") or {}).get("type") or {}).get("state")
+    status = _ESPN_STATE_TO_STATUS.get(state, "scheduled")
+
+    # ESPN reports "0" for both sides of a game that has not kicked off.
+    # Storing that is how every unplayed game on a team's schedule became
+    # a 0-0 TIE, and how "has a score" stopped meaning "has been played".
+    # A game that has not started has no score: NULL.
+    def score(side):
+        if status == "scheduled":
+            return None
+        raw = side.get("score")
+        if raw in (None, ""):
+            return None
+        try:
+            return int(raw)
+        except (TypeError, ValueError):
+            return None
+
     return {
         "espn_event_id": ev.get("id"),
         "kickoff": ev.get("date"),
         "home_team": normalize_team_abbr((home.get("team") or {}).get("abbreviation")),
         "away_team": normalize_team_abbr((away.get("team") or {}).get("abbreviation")),
-        "home_score": int(home["score"]) if home.get("score") not in (None, "") else None,
-        "away_score": int(away["score"]) if away.get("score") not in (None, "") else None,
-        "status": _ESPN_STATE_TO_STATUS.get(state, "scheduled"),
+        "home_score": score(home),
+        "away_score": score(away),
+        "status": status,
     }
 
 
@@ -2769,6 +2786,11 @@ MIN_DEF_GAMES_FOR_CURRENT_YEAR = 4
 # intervention as the season progresses.
 
 DEF_HISTORY_SEASONS_BACK = 4
+
+# How far back a power ranking may reach when the current season has not
+# been played yet. Two, so a page opened in August still ranks on the
+# season just finished rather than showing a row of dashes.
+RANK_FALLBACK_SEASONS_BACK = 2
 # How far back compute_matchup_grade searches for a specific opponent's
 # defense-vs-position figure once the current season's sample is too
 # thin to trust.
@@ -5734,7 +5756,10 @@ def get_team_standings(season, season_type=2, cache=_standings_cache):
     return rows
 
 
-def get_team_rankings(season, season_type=2, cache={}):
+_team_rank_cache = {}
+
+
+def get_team_rankings(season, season_type=2, cache=_team_rank_cache):
     """Power ranking over three windows -- the latest round, the last
     four rounds, and the whole season -- as {team: {"d7": n, "d30": n,
     "season": n}}.
@@ -5832,13 +5857,21 @@ def get_team_schedule(team, season, season_type=2):
         is_home = r["home_team"] == team
         own = r["home_score"] if is_home else r["away_score"]
         opp_score = r["away_score"] if is_home else r["home_score"]
+        # Whether a game has a result is decided by its status, not by
+        # whether a score column happens to hold a number -- rows written
+        # before kickoff (and older rows that stored ESPN's placeholder
+        # 0-0) otherwise render as a schedule full of ties.
+        played = r["status"] in ("final", "in_progress") and own is not None and opp_score is not None
         games.append({
             "id": r["espn_event_id"], "week": r["week"], "kickoff": r["kickoff"],
             "opponent": r["away_team"] if is_home else r["home_team"],
-            "home": is_home, "score": own, "opp_score": opp_score, "status": r["status"],
-            "result": (None if own is None or opp_score is None else
-                       ("W" if own > opp_score else ("L" if own < opp_score else "T"))),
-            "diff": (None if own is None or opp_score is None else own - opp_score),
+            "home": is_home,
+            "score": own if played else None,
+            "opp_score": opp_score if played else None,
+            "status": r["status"],
+            "result": (("W" if own > opp_score else ("L" if own < opp_score else "T"))
+                       if played else None),
+            "diff": (own - opp_score) if played else None,
         })
     played_weeks = {g["week"] for g in games}
     bye = next((w for w in range(1, SCHEDULE_WEEKS_PER_SEASON + 1) if w not in played_weeks), None)
@@ -6097,7 +6130,18 @@ def team_page():
                 TEAM_HTML, team=None, season=season, load_error=None,
                 all_teams=sorted(NFL_DIVISIONS))
         standings = get_team_standings(season)
+        # Before a team's first game there is nothing this season to rank
+        # on. Rather than three dashes, fall back to the most recent
+        # season that WAS played and say so underneath -- which is how a
+        # preseason ranking works anywhere else.
         rank = (get_team_rankings(season) or {}).get(abbr, {})
+        rank_season = season
+        if not rank:
+            for back in range(1, RANK_FALLBACK_SEASONS_BACK + 1):
+                prior = (get_team_rankings(season - back) or {}).get(abbr, {})
+                if prior:
+                    rank, rank_season = prior, season - back
+                    break
         sched = get_team_schedule(abbr, season)
         row = standings.get(abbr, {})
         # Where they sit in their own division, which is what a team page
@@ -6115,8 +6159,13 @@ def team_page():
             "conference": row.get("conference"), "division": row.get("division"),
             "record": row.get("record", "0-0"), "div_rank": div_rank,
             "bye_week": sched["bye_week"], "rank": rank, "standing": row,
-            # Week 1 through the most recent, the way a schedule reads.
+            "rank_season": rank_season,
+            # Played games only -- the form strip measures point
+            # differentials, which an unplayed game does not have.
             "games": played,
+            # The whole season, week 1 through the last, for the Games
+            # tab: results where there are results, fixtures elsewhere.
+            "schedule": sched["games"],
             "upcoming": [g for g in sched["games"] if not g["result"]][:3],
             "roster": get_team_roster(abbr, season),
         }
@@ -7063,6 +7112,122 @@ def _sync_full_season_schedule_background(season):
     return True
 
 
+# How often a live week is worth re-pulling from ESPN. Games change on
+# the order of a play, but a page's standings and rankings do not need to
+# be second-accurate, and this is a shared upstream nobody is paying for.
+_SCHEDULE_REFRESH_COOLDOWN_S = 120
+# How many weeks one refresh pass may pull. A site that was down for a
+# month has a month of weeks sitting at their pre-kickoff state; this
+# lets it catch up a few weeks per pass rather than firing eighteen
+# outbound calls at once, and the cooldown means it converges in minutes.
+_SCHEDULE_REFRESH_MAX_WEEKS = 3
+_schedule_refresh_last = {}
+_schedule_refresh_busy = set()
+_schedule_refresh_lock = threading.Lock()
+
+
+def _open_weeks(season, weeks, season_type=2):
+    """Of `weeks`, the ones still worth re-pulling: a week with no rows
+    yet, or one still holding a game that has not finished.
+
+    One grouped query over an indexed column, so asking is far cheaper
+    than fetching."""
+    if not DATABASE_URL or not weeks:
+        return []
+    weeks = [w for w in weeks if 1 <= w <= SCHEDULE_WEEKS_PER_SEASON]
+    if not weeks:
+        return []
+    conn = get_db()
+    try:
+        with conn.cursor() as cur:
+            cur.execute(
+                """SELECT week, COUNT(*) FILTER (WHERE status <> 'final') AS unfinished
+                   FROM nfl_schedule
+                   WHERE season = %s AND season_type = %s AND week = ANY(%s)
+                   GROUP BY week""",
+                (season, season_type, weeks),
+            )
+            seen = {r["week"]: r["unfinished"] for r in cur.fetchall()}
+    except Exception:
+        return []
+    finally:
+        conn.close()
+    # A week with no rows at all is missing, not finished.
+    return [w for w in weeks if seen.get(w) is None or seen[w]]
+
+
+def refresh_open_schedule_weeks(season, season_type=2):
+    """Re-pull the weeks whose games are still moving, in the background.
+
+    This is what makes scores, standings and rankings fill themselves in
+    without anything scheduled having to fire. ensure_schedule_synced
+    below only ever asked "does every week have ROWS yet" -- and rows for
+    a week exist from the moment its schedule is published, days before
+    kickoff. So once a week was seeded the season was marked done and its
+    scores were never fetched again: every game sat at its pre-kickoff
+    state forever, standings stayed empty, and the power ranking had
+    nothing to rank. The only thing that would have refreshed it was the
+    cron, which fails silently whenever its secret is unset.
+
+    Every week up to the current one is a candidate, newest first, a few
+    per pass. That covers both the week being played right now and any
+    earlier week the site never got a second look at -- and the week
+    before the current one specifically, since a Monday night game is
+    still being played after ESPN has rolled the week number over."""
+    season, season_type = _safe_int(season, int(SEASON)), _safe_int(season_type, 2)
+    if not DATABASE_URL:
+        return False
+    key = (season, season_type)
+    now = time.time()
+    last = _schedule_refresh_last.get(key)
+    if last is not None and now - last < _SCHEDULE_REFRESH_COOLDOWN_S:
+        return False
+    _schedule_refresh_last[key] = now
+
+    info = get_current_week_info()
+    if season != info["season"]:
+        return False   # a finished season has nothing left to move
+    # Every week up to now, not just this one: a week seeded before its
+    # kickoff and never looked at again sits at 0-0 forever, and that is
+    # exactly the state this is here to clear. Newest first, so the week
+    # being played is always the one that gets fixed first.
+    weeks = _open_weeks(season, list(range(1, info["week"] + 1)), season_type)
+    if not weeks:
+        return False
+    weeks = sorted(weeks, reverse=True)[:_SCHEDULE_REFRESH_MAX_WEEKS]
+
+    with _schedule_refresh_lock:
+        if key in _schedule_refresh_busy:
+            return False
+        _schedule_refresh_busy.add(key)
+
+    def _run():
+        _BACKGROUND_SYNC_SLOTS.acquire()
+        changed = False
+        try:
+            for week in weeks:
+                try:
+                    if sync_week_schedule_to_db(season, week, season_type):
+                        changed = True
+                except Exception:
+                    continue   # one bad week must not cost the others
+        finally:
+            _BACKGROUND_SYNC_SLOTS.release()
+            with _schedule_refresh_lock:
+                _schedule_refresh_busy.discard(key)
+        if changed:
+            # Everything derived from the schedule caches its own answer
+            # for minutes at a time; without clearing them a successful
+            # refresh would still serve the pre-kickoff numbers.
+            _standings_cache.clear()
+            _team_rank_cache.clear()
+            _defense_vs_position_cache.clear()
+            _matchup_grade_cache.clear()
+
+    threading.Thread(target=_run, daemon=True).start()
+    return True
+
+
 _schedule_seeded_seasons = set()
 
 
@@ -7084,7 +7249,13 @@ def ensure_schedule_synced(season):
     otherwise look "seeded" forever after syncing just one or two weeks,
     permanently stranding the other 16-17 with no data and no further
     retries for the rest of this process's life."""
-    if season in _schedule_seeded_seasons or not DATABASE_URL:
+    if not DATABASE_URL:
+        return
+    # Runs even for a season already seeded -- seeded means "every week
+    # has rows", which says nothing about whether their scores are
+    # current. This is the half that keeps the site up to date on its own.
+    refresh_open_schedule_weeks(season)
+    if season in _schedule_seeded_seasons:
         return
     if not _seed_probe_due("schedule", season):
         return
@@ -9236,6 +9407,7 @@ TEAM_HTML = BASE_STYLE + make_header("scores") + """
   .tm-rank b sup{ font-size:12px; }
   .tm-rank span{ font-size:10px; color:var(--accent-ink); text-transform:uppercase;
                  letter-spacing:0.05em; font-weight:700; }
+  .tm-rank-note{ font-size:11.5px; color:var(--tm-muted); margin-top:7px; }
   .tm-tabs{ display:flex; border-bottom:1px solid var(--tm-line); margin-top:18px; }
   .tm-tab{ flex:1; padding:11px 8px; text-align:center; font-size:14px; font-weight:800;
            cursor:pointer; color:var(--tm-muted); background:none; border:none;
@@ -9267,6 +9439,7 @@ TEAM_HTML = BASE_STYLE + make_header("scores") + """
   .tm-game-res{ font-family:"Big Shoulders Display"; font-size:20px; font-weight:800;
                 width:22px; flex:none; text-align:center; }
   .tm-game-res.W{ color:var(--good); } .tm-game-res.L{ color:var(--critical); }
+  .tm-game.upcoming{ opacity:0.7; }
   .tm-game img{ width:28px; height:28px; object-fit:contain; flex:none; }
   .tm-game-main{ flex:1; min-width:0; font-size:13.5px; }
   .tm-game-main span{ display:block; font-size:11px; color:var(--tm-muted); }
@@ -9315,7 +9488,9 @@ TEAM_HTML = BASE_STYLE + make_header("scores") + """
   </div>
 
   <!-- Power rank over three windows. A window a team hasn't played in
-       shows a dash rather than a fabricated position. -->
+       inherits from the next window out; a season not yet played falls
+       back to the last one that was, which the note below says plainly
+       rather than passing off as current form. -->
   <div class="tm-ranks">
     {% for key, label in [('d7', '7-day'), ('d30', '30-day'), ('season', 'Season')] %}
     <div class="tm-rank">
@@ -9325,6 +9500,11 @@ TEAM_HTML = BASE_STYLE + make_header("scores") + """
     </div>
     {% endfor %}
   </div>
+  {% if team.rank and team.rank_season != season %}
+  <div class="tm-rank-note">Ranked on {{ team.rank_season }} results until this season&rsquo;s games are final.</div>
+  {% elif not team.rank %}
+  <div class="tm-rank-note">Power ranking appears once games have been played.</div>
+  {% endif %}
 
   <div class="tm-tabs" id="tmTabs">
     <button class="tm-tab on" data-panel="feed">Feed</button>
@@ -9359,27 +9539,23 @@ TEAM_HTML = BASE_STYLE + make_header("scores") + """
     {% endif %}
   </div>
 
+  <!-- The whole season in one list, week 1 to the last. A game that has
+       been played carries its result and score; one that has not says so
+       rather than rendering as a 0-0 tie. -->
   <div class="tm-panel" data-panel="games">
-    {% for g in team.upcoming %}
-    <a class="tm-game" href="/game?id={{ g.id }}">
-      <span class="tm-game-res">&middot;</span>
+    {% for g in team.schedule %}
+    <a class="tm-game{% if not g.result %} upcoming{% endif %}" href="/game?id={{ g.id }}">
+      <span class="tm-game-res {{ g.result or '' }}">{{ g.result or '&middot;'|safe }}</span>
       <img src="https://a.espncdn.com/i/teamlogos/nfl/500/{{ g.opponent|lower }}.png" alt=""
            onerror="this.style.visibility='hidden'">
       <span class="tm-game-main">{{ 'vs' if g.home else '@' }} {{ g.opponent }}
-        <span>Week {{ g.week }} &middot; upcoming</span></span>
-    </a>
-    {% endfor %}
-    {% for g in team.games %}
-    <a class="tm-game" href="/game?id={{ g.id }}">
-      <span class="tm-game-res {{ g.result }}">{{ g.result }}</span>
-      <img src="https://a.espncdn.com/i/teamlogos/nfl/500/{{ g.opponent|lower }}.png" alt=""
-           onerror="this.style.visibility='hidden'">
-      <span class="tm-game-main">{{ 'vs' if g.home else '@' }} {{ g.opponent }}
-        <span>Week {{ g.week }}</span></span>
-      <span class="tm-game-score">{{ g.score }}&ndash;{{ g.opp_score }}</span>
+        <span>Week {{ g.week }}{% if not g.result %} &middot; {{ 'live' if g.status == 'in_progress' else 'upcoming' }}{% endif %}</span></span>
+      <span class="tm-game-score">
+        {%- if g.result %}{{ g.score }}&ndash;{{ g.opp_score }}{% endif -%}
+      </span>
     </a>
     {% else %}
-    {% if not team.upcoming %}<div class="tm-empty">No games on the schedule yet.</div>{% endif %}
+    <div class="tm-empty">No games on the schedule yet.</div>
     {% endfor %}
   </div>
 
