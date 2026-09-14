@@ -331,6 +331,21 @@ def init_db():
             """)
             cur.execute("CREATE INDEX IF NOT EXISTS idx_referee_games_referee ON referee_games (referee_name);")
             cur.execute("CREATE INDEX IF NOT EXISTS idx_referee_games_season ON referee_games (season);")
+            # One row per player, holding the injury designation we last
+            # saw and the one before it. Sleeper publishes only the
+            # CURRENT designation -- "Out -> Active" is not a thing you
+            # can fetch, it is a thing you have to have been watching
+            # for. This table is the watching.
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS player_injury_state (
+                    sleeper_id      TEXT PRIMARY KEY,
+                    status          TEXT,
+                    previous_status TEXT,
+                    changed_at      TIMESTAMP DEFAULT NOW()
+                );
+            """)
+            cur.execute("CREATE INDEX IF NOT EXISTS idx_injury_state_changed "
+                        "ON player_injury_state (changed_at DESC);")
         conn.commit()
     finally:
         conn.close()
@@ -847,13 +862,65 @@ def get_league_users(league_id, cache={}):
     return _cached_get(f"{SLEEPER_BASE}/league/{league_id}/users", cache)
 
 
+# How stale the player dump may get before it is refetched. It used to
+# be a flat 24 hours, which was right when the only thing riding on it
+# was a depth-chart badge. The injury feed reads the same dump, and an
+# injury report that is up to a day late is not an injury report.
+#
+# Three hours rather than minutes because this is a ~5MB document and
+# nothing in it moves faster than that: Sleeper updates injury
+# designations over the course of a week, not a drive.
+PLAYERS_REFRESH_S = 3 * 3600
+_players_refresh_lock = threading.Lock()
+_players_refreshing = set()
+
+
+def _refresh_all_players_background(cache):
+    """Refetch the player dump off the request path.
+
+    The previous version let the TTL expire and then made whoever
+    happened to arrive next wait for a multi-megabyte download and parse.
+    Serving the slightly stale copy and refreshing behind it is strictly
+    better: nobody waits, and the data is never more than one refresh
+    interval behind."""
+    with _players_refresh_lock:
+        if "players" in _players_refreshing:
+            return
+        _players_refreshing.add("players")
+
+    def _run():
+        try:
+            with _BACKGROUND_SYNC_SLOTS:
+                r = requests.get(f"{SLEEPER_BASE}/players/nfl", timeout=60)
+                r.raise_for_status()
+                fresh = r.json()
+            previous = cache.get("players")
+            cache["players"] = fresh
+            cache["time"] = time.time()
+            # Sleeper publishes only the CURRENT designation, so a change
+            # exists only if something noticed it. This is that.
+            if previous:
+                record_injury_changes(fresh)
+        except Exception:
+            pass
+        finally:
+            with _players_refresh_lock:
+                _players_refreshing.discard("players")
+
+    threading.Thread(target=_run, daemon=True).start()
+
+
 def get_all_players(cache={}):
     now = time.time()
-    if "players" not in cache or now - cache.get("time", 0) > 86400:
+    if "players" not in cache:
+        # Nothing cached at all -- the very first call has to wait.
         r = requests.get(f"{SLEEPER_BASE}/players/nfl")
         r.raise_for_status()
         cache["players"] = r.json()
         cache["time"] = now
+        return cache["players"]
+    if now - cache.get("time", 0) > PLAYERS_REFRESH_S:
+        _refresh_all_players_background(cache)
     return cache["players"]
 
 # ---------------- FantasyCalc (real dynasty/redraft trade values, incl. picks) ----------------
@@ -6196,6 +6263,236 @@ def get_power_board(season, season_type=2, limit=POWER_BOARD_SIZE):
     return out[:limit]
 
 
+# --- Injuries and birthdays ---------------------------------------------
+#
+# Both read the player dump the site already pulls, so neither costs a
+# new source. Injuries need one thing the dump cannot give on its own:
+# Sleeper publishes the CURRENT designation, never the change, so
+# "Out -> Active" only exists if something was watching for it. That is
+# what player_injury_state is for -- it is written every time the dump
+# refreshes and remembers what each designation used to be.
+
+# Sleeper leaves injury_status null for a healthy player. "Active" is
+# what that means and what the reference calls it.
+ACTIVE_STATUS = "Active"
+
+# Designations that read as a setback, so a change INTO one is bad news
+# and a change out of one is good news.
+_INJURY_BAD = {"IR", "OUT", "DOUBTFUL", "PUP", "SUSPENDED", "NA", "COV"}
+
+INJURY_FEED_SIZE = 6
+BIRTHDAY_FEED_SIZE = 6
+
+
+def _players_or_empty():
+    """The player dump, or {} when it is unavailable or not the shape we
+    expect.
+
+    Injuries and birthdays are decoration on a page whose job is live
+    scores. An upstream hiccup, or a response that arrives in an
+    unexpected shape, must cost those two sections and nothing else --
+    it must never be able to blank the scoreboard above them, which is
+    what an exception escaping into the route would do."""
+    try:
+        players = get_all_players()
+    except Exception:
+        return {}
+    return players if isinstance(players, dict) else {}
+
+
+def _injury_status_of(player):
+    """The designation as it should be displayed: a real status, or
+    Active when Sleeper leaves it blank."""
+    raw = ((player or {}).get("injury_status") or "").strip()
+    if not raw:
+        return ACTIVE_STATUS
+    return INJURY_BADGE.get(raw.upper(), (None, raw.title(), None))[1]
+
+
+def record_injury_changes(all_players):
+    """Write every designation that moved since the last time we looked.
+
+    Called after the player dump refreshes, from the background thread
+    that refreshed it -- never on a request path. Returns the number of
+    changes recorded (0 when there is no database, which is a valid
+    configuration here and simply means no injury feed)."""
+    if not DATABASE_URL or not isinstance(all_players, dict) or not all_players:
+        return 0
+    current = {}
+    for sid, p in all_players.items():
+        # Only players on a roster. A dump of every player Sleeper has
+        # ever heard of would otherwise fill the feed with the retired.
+        if (p or {}).get("team"):
+            current[sid] = _injury_status_of(p)
+    if not current:
+        return 0
+
+    conn = get_db()
+    changed = 0
+    try:
+        with conn.cursor() as cur:
+            cur.execute("SELECT sleeper_id, status FROM player_injury_state")
+            known = {r["sleeper_id"]: r["status"] for r in cur.fetchall()}
+            rows = [(sid, status, known.get(sid))
+                    for sid, status in current.items()
+                    if known.get(sid) != status]
+            if not rows:
+                return 0
+            # A player we have never seen before is not a change -- there
+            # is nothing to have changed FROM. Seed them silently by
+            # recording the status with no previous one, so the feed
+            # starts reporting the moment anything actually moves.
+            psycopg2.extras.execute_values(
+                cur,
+                """INSERT INTO player_injury_state
+                       (sleeper_id, status, previous_status, changed_at)
+                   VALUES %s
+                   ON CONFLICT (sleeper_id) DO UPDATE SET
+                       previous_status = player_injury_state.status,
+                       status = EXCLUDED.status,
+                       changed_at = NOW()""",
+                [(sid, status, prev) for sid, status, prev in rows],
+            )
+            changed = len(rows)
+        conn.commit()
+    except Exception:
+        changed = 0
+    finally:
+        conn.close()
+    _injury_feed_cache.clear()
+    return changed
+
+
+_injury_feed_cache = {}
+
+
+def get_injury_changes(limit=INJURY_FEED_SIZE, cache=_injury_feed_cache):
+    """The most recent designation changes, newest first.
+
+    Each row is ready to render: who, from what to what, whether that is
+    good news, and how long ago. Returns [] rather than raising when
+    there is no database or nothing has moved yet -- the section simply
+    does not render."""
+    now = time.time()
+    entry = cache.get(limit)
+    if entry and now - entry["time"] < 300:
+        return entry["data"]
+    if not DATABASE_URL:
+        return []
+    conn = get_db()
+    try:
+        with conn.cursor() as cur:
+            cur.execute(
+                """SELECT sleeper_id, status, previous_status, changed_at
+                   FROM player_injury_state
+                   WHERE previous_status IS NOT NULL
+                     AND previous_status IS DISTINCT FROM status
+                   ORDER BY changed_at DESC LIMIT %s""",
+                (limit * 3,),
+            )
+            rows = [dict(r) for r in cur.fetchall()]
+    except Exception:
+        rows = []
+    finally:
+        conn.close()
+
+    all_players = _players_or_empty()
+    out = []
+    for r in rows:
+        p = all_players.get(r["sleeper_id"])
+        if not p or not p.get("team"):
+            continue
+        status = r["status"] or ACTIVE_STATUS
+        out.append({
+            "sid": r["sleeper_id"],
+            "name": f"{p.get('first_name','')} {p.get('last_name','')}".strip(),
+            "position": p.get("position"),
+            "team": p.get("team"),
+            "logo": team_logo_url(p.get("team")),
+            "photo": player_photo_url(r["sleeper_id"]),
+            "from": r["previous_status"] or ACTIVE_STATUS,
+            "to": status,
+            # Green for a return, red for a setback -- the same reading
+            # the reference gives them.
+            "good": status == ACTIVE_STATUS,
+            "ago": _time_ago(r["changed_at"]),
+        })
+        if len(out) >= limit:
+            break
+    cache[limit] = {"data": out, "time": now}
+    return out
+
+
+def _time_ago(when):
+    """"4h", "2d" -- the age of a change, the way a feed writes it."""
+    if not when:
+        return None
+    try:
+        delta = datetime.utcnow() - when.replace(tzinfo=None)
+    except Exception:
+        return None
+    secs = max(0, int(delta.total_seconds()))
+    if secs < 3600:
+        return f"{max(1, secs // 60)}m"
+    if secs < 86400:
+        return f"{secs // 3600}h"
+    return f"{secs // 86400}d"
+
+
+def _ordinal_age(n):
+    """22nd, 31st, 23rd -- reusing the same rule the rest of the site
+    uses so an age and a draft slot are never written differently."""
+    return ordinal(n)
+
+
+def get_birthdays_today(limit=BIRTHDAY_FEED_SIZE, today=None):
+    """Everyone on a roster whose birthday is today, most notable first.
+
+    Notability is Sleeper's own search_rank, which is how prominent a
+    player is in their app -- the closest thing the dump has to "who
+    would you actually care about", and it costs nothing extra.
+
+    Leap-day birthdays are celebrated on the 28th in non-leap years,
+    which is the common convention and better than skipping the player
+    entirely three years in four."""
+    today = today or date.today()
+    out = []
+    for sid, p in _players_or_empty().items():
+        if not isinstance(p, dict) or not p.get("team"):
+            continue
+        raw = (p.get("birth_date") or "").strip()
+        if not raw:
+            continue
+        try:
+            y, m, d = [int(x) for x in raw.split("-")]
+        except (ValueError, TypeError):
+            continue
+        match = (m == today.month and d == today.day)
+        if not match and m == 2 and d == 29 and today.month == 2 and today.day == 28:
+            try:
+                date(today.year, 2, 29)
+            except ValueError:
+                match = True    # no 29th this year, so today is the day
+        if not match:
+            continue
+        age = today.year - y
+        if age <= 0 or age > 70:
+            continue
+        out.append({
+            "sid": sid,
+            "name": f"{p.get('first_name','')} {p.get('last_name','')}".strip(),
+            "position": p.get("position"),
+            "team": p.get("team"),
+            "logo": team_logo_url(p.get("team")),
+            "photo": player_photo_url(sid),
+            "age": age,
+            "age_label": _ordinal_age(age),
+            "rank": p.get("search_rank") or 999999,
+        })
+    out.sort(key=lambda b: b["rank"])
+    return out[:limit]
+
+
 _team_rank_cache = {}
 
 
@@ -6490,6 +6787,18 @@ def _nearby_weeks_games(season, week, season_type=2):
     return games
 
 
+def _safe_feed(fn):
+    """Run a decoration feed, or give up on it quietly.
+
+    Belt as well as braces: the feeds guard their own inputs, and this
+    guards the route against anything they did not anticipate. The
+    scoreboard is the page; Injuries and Birthdays are not worth it."""
+    try:
+        return fn() or []
+    except Exception:
+        return []
+
+
 @app.route("/scores")
 def scores_page():
     username = _resolve_scores_username()
@@ -6523,6 +6832,8 @@ def scores_page():
             username=username, has_synced_leagues=has_synced_leagues,
             performers=performers, power=get_power_board(season, season_type),
             perf_groups=PERFORMER_GROUPS,
+            injuries=_safe_feed(get_injury_changes),
+            birthdays=_safe_feed(get_birthdays_today),
         )
     except Exception as e:
         # ESPN's API is unofficial and unverified against a live response
@@ -6535,6 +6846,7 @@ def scores_page():
             current_season=int(SEASON), current_week=1, today_key=date.today().isoformat(),
             load_error=str(e), username=username, has_synced_leagues=False,
             performers=[], power=[], perf_groups=PERFORMER_GROUPS,
+            injuries=[], birthdays=[],
         )
 
 
@@ -9223,6 +9535,33 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + """
   .sc-group{ display:none; }
   .sc-group.on{ display:block; }
 
+  /* Injuries and birthdays: the same row, since they say the same shape
+     of thing -- a face, a name, one line about what changed, and when. */
+  .sc-feed{ display:flex; flex-direction:column; border:1px solid var(--sc-line);
+            border-radius:12px; overflow:hidden; background:var(--sc-surface); }
+  .sc-feed-row{ display:flex; align-items:center; gap:11px; padding:10px 13px;
+                border-top:1px solid var(--sc-line); text-decoration:none;
+                color:var(--sc-text); }
+  .sc-feed-row:first-child{ border-top:none; }
+  .sc-feed-row:hover{ background:var(--sc-surface2); }
+  /* The crest sits on the corner of the headshot rather than beside it,
+     so a row stays one column of faces however long the names run. */
+  .sc-feed-mug{ position:relative; flex:none; width:40px; height:40px; }
+  .sc-feed-mug img{ width:40px; height:40px; border-radius:50%; object-fit:cover;
+                    background:var(--sc-surface2); }
+  .sc-feed-mug img.crest{ position:absolute; right:-3px; bottom:-2px; width:18px;
+                          height:18px; border-radius:0; object-fit:contain;
+                          background:none; }
+  .sc-feed-main{ flex:1; min-width:0; display:flex; flex-direction:column; gap:2px; }
+  .sc-feed-name{ font-weight:700; font-size:14px; white-space:nowrap;
+                 overflow:hidden; text-overflow:ellipsis; }
+  .sc-feed-sub{ font-size:12.5px; color:var(--sc-muted); }
+  .sc-feed-sub .arrow{ padding:0 2px; }
+  .sc-feed-sub b.good{ color:var(--good); }
+  .sc-feed-sub b.bad{ color:var(--critical); }
+  .sc-feed-ago{ flex:none; font-size:11.5px; color:var(--sc-muted);
+                font-family:"IBM Plex Mono"; }
+
   /* Power-ranking strip. Deliberately terser than the standings table it
      links to -- rank, crest, record, differential -- so it reads at a
      glance and the full table stays one tap away. */
@@ -9370,6 +9709,61 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + """
     <div class="sc-perf" data-group-rows="{{ g.key }}"></div>
   </div>
   {% endfor %}
+
+  {% if injuries %}
+  <!-- Designation changes, newest first. Sleeper publishes only the
+       current status, so these exist because the app has been watching
+       the dump refresh and writing down what moved. -->
+  {# No "View more" here on purpose: there is no fuller injuries page to
+     send anyone to, and a link that goes somewhere almost-right is worse
+     than no link. Each row opens that player instead. #}
+  <div class="sc-section-head">
+    <h2>Injuries</h2>
+  </div>
+  <div class="sc-feed">
+    {% for r in injuries %}
+    <a class="sc-feed-row" href="/player?sid={{ r.sid }}">
+      <span class="sc-feed-mug">
+        <img src="{{ r.photo }}" alt="" loading="lazy"
+             onerror="this.style.visibility='hidden'">
+        <img class="crest" src="{{ r.logo }}" alt=""
+             onerror="this.style.display='none'">
+      </span>
+      <span class="sc-feed-main">
+        <span class="sc-feed-name">{{ r.name }}</span>
+        <span class="sc-feed-sub">
+          {{ r.from }} <span class="arrow">&rarr;</span>
+          <b class="{{ 'good' if r.good else 'bad' }}">{{ r.to }}</b>
+        </span>
+      </span>
+      {% if r.ago %}<span class="sc-feed-ago">{{ r.ago }}</span>{% endif %}
+    </a>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  {% if birthdays %}
+  <div class="sc-section-head">
+    <h2>Birthdays</h2>
+  </div>
+  <div class="sc-feed">
+    {% for b in birthdays %}
+    <a class="sc-feed-row" href="/player?sid={{ b.sid }}">
+      <span class="sc-feed-mug">
+        <img src="{{ b.photo }}" alt="" loading="lazy"
+             onerror="this.style.visibility='hidden'">
+        <img class="crest" src="{{ b.logo }}" alt=""
+             onerror="this.style.display='none'">
+      </span>
+      <span class="sc-feed-main">
+        <span class="sc-feed-name">{{ b.name }}</span>
+        <span class="sc-feed-sub">Happy {{ b.age_label }} Birthday &#127881;</span>
+      </span>
+      <span class="sc-feed-ago">{{ b.position }}{% if b.team %} &middot; {{ b.team }}{% endif %}</span>
+    </a>
+    {% endfor %}
+  </div>
+  {% endif %}
 </div>
 </div>
 
