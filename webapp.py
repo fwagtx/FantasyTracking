@@ -1496,11 +1496,14 @@ def _play_headline(text, yards, scoring):
     main_low = main.lower()
     y = yards if isinstance(yards, (int, float)) else None
     yd = f"{int(y)}-yd " if y not in (None, 0) else ""
-    # A play that reached the end zone is a touchdown play. This is
-    # settled BEFORE any kicking check, because ESPN writes the extra
-    # point into the same sentence as the score -- which is how a
-    # 15-yard touchdown catch ended up titled "Extra point".
-    td = bool(scoring) or "touchdown" in low
+    # A play that reached the end zone is a touchdown play. Settled from
+    # the WORD, never from ESPN's scoringPlay flag: a field goal is a
+    # scoring play too, and trusting the flag is how a kicker's three
+    # field goals came to be titled as touchdown runs. It is also settled
+    # BEFORE any kicking check, because ESPN writes the extra point into
+    # the same sentence as the score -- which is how a 15-yard touchdown
+    # catch once ended up titled "Extra point".
+    td = "touchdown" in low
 
     if "intercepted" in main_low:
         return "Pick-six" if td else "Interception"
@@ -1516,10 +1519,11 @@ def _play_headline(text, yards, scoring):
             return "Spike"
         if "punts" in low:
             return "Punt"
-        # These name the play; whether it went through rides the
-        # coloured dot underneath, so the title never says it twice.
         if "field goal" in low:
-            return "Field goal"
+            m = re.search(r"(\d{1,3})\s+yard field goal", t, re.I)
+            made = "field goal is good" in low
+            return ((f"{m.group(1)}-yd field goal" if m else "Field goal")
+                    + ("" if made else " missed"))
         if "two-point conversion" in low:
             return "Two-point conversion"
         if "extra point" in low:
@@ -1568,7 +1572,9 @@ def _play_notes(text, yards, down, distance, scoring):
     t = (text or "")
     low = t.lower()
     out = []
-    td = bool(scoring) or "touchdown" in low
+    # The word, not the scoringPlay flag -- a field goal is a scoring
+    # play and is not a touchdown.
+    td = "touchdown" in low
 
     # The kick after a score, which is the whole reason the sentence was
     # worth parsing: a green dot for a good one, red for a miss.
@@ -3712,6 +3718,10 @@ _STAT_LINE_FIELDS = {
     "RB": [("rush_yd", "yds"), ("rush_td", "td"), ("rec", "rec"), ("rec_yd", "ryds")],
     "WR": [("rec_yd", "yds"), ("rec_td", "td"), ("rec", "rec")],
     "TE": [("rec_yd", "yds"), ("rec_td", "td"), ("rec", "rec")],
+    # A kicker kicks. Without this the line fell through to the
+    # defensive fallback below and every kicker on the board read
+    # "0 fr" -- nought fumble recoveries -- which is true and useless.
+    "K": [("fgm", "fg"), ("xpm", "xp"), ("fgm_lng", "lng"), ("fga", "fga")],
 }
 # Anything defensive falls back to this, so an IDP performance still
 # shows a real line rather than a blank card.
@@ -5010,6 +5020,11 @@ _STAT_GRID_FIELDS = {
     ],
 }
 _STAT_GRID_FIELDS["TE"] = _STAT_GRID_FIELDS["WR"]
+_STAT_GRID_FIELDS["K"] = [
+    ("fgm", "FG"), ("fga", "FGA"), ("fgm_lng", "LNG"), ("fgm_50p", "50+"),
+    ("fgmiss", "MISS"), ("xpm", "XP"), ("xpa", "XPA"), ("xpmiss", "XPMISS"),
+    ("fgm_pct", "FG%"),
+]
 _STAT_GRID_IDP = [
     ("idp_tkl_solo", "SOLO"), ("idp_tkl_ast", "AST"), ("idp_sack", "SACK"),
     ("idp_tkl_loss", "TFL"), ("idp_qb_hit", "QBH"), ("idp_int", "INT"),
@@ -5083,6 +5098,13 @@ _PLAY_W_PASS_YARD = 0.04
 _PLAY_W_TD = 6.0
 _PLAY_W_PASS_TD = 4.0
 _PLAY_W_RECEPTION = 1.0
+# Kicking, on the tiering every fantasy league uses -- a 50-yarder is
+# worth more than a chip shot, and a miss is worth nothing rather than a
+# negative (see _play_value_for on why nothing here goes below zero).
+_PLAY_W_FG = 3.0
+_PLAY_W_FG_40 = 4.0
+_PLAY_W_FG_50 = 5.0
+_PLAY_W_XP = 1.0
 _PLAY_W_SACK = 4.0
 _PLAY_W_INT = 6.0
 _PLAY_W_FUMBLE = 4.0
@@ -5096,10 +5118,11 @@ _PLAY_W_TACKLE = 1.0
 PLAY_RATING_K = 4.3
 
 _PLAY_PASSER_RE = re.compile(
-    r"(?:\d{1,2}-)?([A-Z][A-Za-z]?\.[A-Z][A-Za-z'\-]+)\s+(?:pass|sacked|scrambles)\b")
+    r"(?:\d{1,2}-)?([A-Z][A-Za-z]?\.[A-Z][A-Za-z'\-]+)\s+(?:pass|sacked)\b")
 _PLAY_RECEIVER_RE = re.compile(
     r"\bto\s+(?:\d{1,2}-)?([A-Z][A-Za-z]?\.[A-Z][A-Za-z'\-]+)")
 _PLAY_PAREN_RE = re.compile(r"\(([^)]*)\)")
+_FG_DISTANCE_RE = r"\s+(\d{1,3})\s+yard field goal"
 
 
 def play_rating(value):
@@ -5112,54 +5135,185 @@ def play_rating(value):
     return min(9.9, round(10 * v / (v + PLAY_RATING_K), 1))
 
 
+def play_role_for(text, name):
+    """What THIS player did on this play, as a role name.
+
+    One play is several different events depending on whose page you are
+    reading it on. "22-D.Henry right tackle for 32 yards, TOUCHDOWN.
+    8-E.McPherson extra point is GOOD, Center-C.Adomitis,
+    Holder-R.Robbins" is a touchdown run for Henry, an extra point for
+    McPherson, and nothing at all for the two men who got the ball to the
+    tee -- and every one of those four names is in the same sentence.
+
+    Resolving the role ONCE, here, is what keeps the number beside a play
+    and the words describing it from disagreeing: both read this. It is
+    also the fix for a kicker's page listing three touchdown runs, which
+    is what "whoever is named, assume they carried it" produced.
+
+    Returns None when the player is only incidentally named."""
+    t = text or ""
+    if not name or name not in t:
+        return None
+    esc = re.escape(name)
+    low = t.lower()
+    main = _primary_clause(t)
+    main_low = main.lower()
+
+    # --- kicking, read off the whole sentence ------------------------
+    # The extra point is written AFTER the word "touchdown", which is
+    # exactly where _primary_clause cuts, so the kicker is invisible to
+    # anything that only looks at the primary clause.
+    if re.search(r"(?:center|holder|snapper)-(?:\d{1,2}-)?" + esc, t, re.I):
+        return "snap_hold"
+    if re.search(esc + r"\s+kicks\b", t, re.I):
+        return "kickoff"
+    if re.search(esc + r"\s+punts\b", t, re.I):
+        return "punt"
+    if re.search(esc + _FG_DISTANCE_RE, t, re.I):
+        return "field_goal"
+    if re.search(esc + r"\s+extra point", t, re.I):
+        return "extra_point"
+
+    # --- passing and receiving ---------------------------------------
+    m_pass = _PLAY_PASSER_RE.search(main)
+    if m_pass and m_pass.group(1) == name:
+        if "sacked" in main_low:
+            return "sacked"
+        if "intercepted" in main_low:
+            return "interception_thrown"
+        return "passer"
+    m_rec = _PLAY_RECEIVER_RE.search(main)
+    if m_rec and m_rec.group(1) == name:
+        if "incomplete" in main_low or "intercepted" in main_low:
+            return "target"
+        return "receiver"
+
+    # --- defence, read off the clauses ESPN writes it in --------------
+    # Case-insensitively: ESPN writes these in capitals in a gamebook
+    # sentence and in title case elsewhere, and both turn up.
+    # ESPN writes the credited player as "K.Hamilton", "37-K.Hamilton"
+    # or "BAL-37-K.Hamilton" depending on the feed, so team prefix and
+    # jersey number are each optional AND stackable -- matching only one
+    # of them read a fumble recovery as a carry.
+    _CREDIT = r"\s+(?:[A-Z]{2,3}-)?(?:\d{1,2}-)?"
+    if re.search(r"intercepted by" + _CREDIT + esc, main, re.I):
+        return "interception"
+    if re.search(r"recovered by" + _CREDIT + esc, main, re.I):
+        return "fumble_recovery"
+    if any(name in group for group in _PLAY_PAREN_RE.findall(main)):
+        return "sack" if "sacked" in main_low else "tackle"
+
+    # Anything left with the player's name in the play itself is a carry.
+    return "rusher" if name in main else None
+
+
+def _field_goal_distance(text, name):
+    """The length of the kick, when the sentence says it."""
+    m = re.search(re.escape(name) + _FG_DISTANCE_RE, text or "", re.I)
+    return int(m.group(1)) if m else None
+
+
 def _play_value_for(text, yards, scoring, name):
     """What `name` did on this play, as a non-negative weight.
 
     Returns 0 for a play the player was only incidentally named in, and
-    never goes negative: a lost fumble or an interception is a real
-    part of the game, but a negative weight would subtract from a
-    quarter's share of a rating the player genuinely earned, which reads
-    as nonsense on a bar chart."""
-    main = _primary_clause(text or "")
-    low = main.lower()
+    never goes negative: a lost fumble or an interception is a real part
+    of the game, but a negative weight would subtract from a quarter's
+    share of a rating the player genuinely earned, which reads as
+    nonsense on a bar chart."""
+    role = play_role_for(text, name)
+    if role is None:
+        return 0.0
+    t = text or ""
+    low = t.lower()
     y = yards if isinstance(yards, (int, float)) else 0
     gain = max(0, int(y))
     # Read off the WHOLE sentence, not the primary clause -- the clause
     # splitter cuts at the word "touchdown" itself, so asking the clause
     # whether a touchdown happened always says no.
-    td = "touchdown" in (text or "").lower()
+    td = "touchdown" in low
 
-    m_pass = _PLAY_PASSER_RE.search(main)
-    passer = m_pass.group(1) if m_pass else None
-    m_rec = _PLAY_RECEIVER_RE.search(main)
-    receiver = m_rec.group(1) if m_rec else None
-
-    if name == passer:
-        if "sacked" in low or "intercepted" in low:
+    if role == "field_goal":
+        if "field goal is good" not in low:
             return 0.0
+        d = _field_goal_distance(t, name) or 0
+        return (_PLAY_W_FG_50 if d >= 50 else
+                _PLAY_W_FG_40 if d >= 40 else _PLAY_W_FG)
+    if role == "extra_point":
+        return _PLAY_W_XP if "extra point is good" in low else 0.0
+    # A kickoff, a punt, a snap and a hold are all real jobs and none of
+    # them is scored in any fantasy league.
+    if role in ("kickoff", "punt", "snap_hold"):
+        return 0.0
+
+    if role == "passer":
         return gain * _PLAY_W_PASS_YARD + (_PLAY_W_PASS_TD if td else 0.0)
-    if name == receiver:
-        if "incomplete" in low or "intercepted" in low:
-            return 0.0
+    if role in ("sacked", "interception_thrown", "target"):
+        return 0.0
+    if role == "receiver":
         return gain * _PLAY_W_YARD + _PLAY_W_RECEPTION + (_PLAY_W_TD if td else 0.0)
 
-    # Defensive credit, read off the clauses ESPN writes it in.
-    # Case-insensitively: ESPN writes these in capitals in a gamebook
-    # sentence and in title case elsewhere, and both turn up.
-    if re.search(r"intercepted by\s+(?:\d{1,2}-|[A-Z]{2,3}-)?" + re.escape(name),
-                 main, re.I):
+    if role == "interception":
         return _PLAY_W_INT + (_PLAY_W_TD if td else 0.0)
-    if re.search(r"recovered by\s+(?:\d{1,2}-|[A-Z]{2,3}-)?" + re.escape(name),
-                 main, re.I):
+    if role == "fumble_recovery":
         return _PLAY_W_FUMBLE + (_PLAY_W_TD if td else 0.0)
-    in_paren = any(name in group for group in _PLAY_PAREN_RE.findall(main))
-    if in_paren:
-        return _PLAY_W_SACK if "sacked" in low else _PLAY_W_TACKLE
+    if role == "sack":
+        return _PLAY_W_SACK
+    if role == "tackle":
+        return _PLAY_W_TACKLE
 
-    # Anything left with the player's name on it is a carry.
-    if name and name in main:
-        return gain * _PLAY_W_YARD + (_PLAY_W_TD if td else 0.0)
-    return 0.0
+    return gain * _PLAY_W_YARD + (_PLAY_W_TD if td else 0.0)
+
+
+def play_headline_for(text, yards, scoring, name):
+    """The play, described as THIS player's play.
+
+    _play_headline titles a play by whoever it mainly belonged to, which
+    is right on a game feed where every play appears once. On a player's
+    own page every row is his row, so the same sentence has to be read
+    from where he was standing -- otherwise a kicker's page reports the
+    touchdown runs he kicked the extra points after."""
+    role = play_role_for(text, name)
+    t = text or ""
+    low = t.lower()
+    y = yards if isinstance(yards, (int, float)) else None
+    td = "touchdown" in low
+
+    if role == "field_goal":
+        d = _field_goal_distance(t, name)
+        made = "field goal is good" in low
+        return (f"{d}-yd field goal" if d else "Field goal") + ("" if made else " missed")
+    if role == "extra_point":
+        return "Extra point" if "extra point is good" in low else "Extra point missed"
+    if role == "kickoff":
+        return "Kickoff"
+    if role == "punt":
+        return "Punt"
+    if role == "snap_hold":
+        return "Snap"
+
+    if role == "passer":
+        yd = f"{int(y)}-yd " if y not in (None, 0) else ""
+        return f"{yd}TD pass" if td else (f"{yd}pass" if yd else "Completion")
+    if role == "sacked":
+        return "Sacked"
+    if role == "interception_thrown":
+        return "Interception thrown"
+    if role == "target":
+        return "Incomplete"
+
+    if role == "interception":
+        return "Pick-six" if td else "Interception"
+    if role == "fumble_recovery":
+        return "Fumble returned for TD" if td else "Fumble recovery"
+    if role == "sack":
+        return "Sack"
+    if role == "tackle":
+        return "Tackle for loss" if (y is not None and y < 0) else "Tackle"
+
+    # Receiver and rusher read the same either way, so the play's own
+    # title is already the right one.
+    return _play_headline(text, yards, scoring)
 
 
 def _player_play_name(player):
@@ -5253,9 +5407,12 @@ def get_player_espn_plays(sid, season, week, cache=_espn_player_plays_cache):
         if not name or name not in text:
             continue
         value = _play_value_for(text, play.get("yards"), play.get("scoring"), name)
-        if value <= 0 and not play.get("scoring"):
-            # Named only as a bystander (a blocker ESPN credited, a
-            # penalty declined against him) -- not this player's play.
+        if value <= 0:
+            # Nothing this player did on this play counts: a bystander
+            # ESPN happened to name, an incompletion, a kickoff, or the
+            # long snapper on somebody else's field goal. The scoringPlay
+            # flag used to wave these through, which is how a kickoff
+            # turned up on a kicker's highlight list.
             continue
         qtr = play.get("period")
         clock = (play.get("clock") or "").strip()
@@ -5265,9 +5422,19 @@ def get_player_espn_plays(sid, season, week, cache=_espn_player_plays_cache):
             "down": play.get("down"),
             "ydstogo": play.get("distance"),
             "description": text,
-            "headline": _play_headline(text, play.get("yards"), play.get("scoring")),
+            # Described from where THIS player was standing, not from
+            # whoever the play mainly belonged to.
+            "headline": play_headline_for(text, play.get("yards"),
+                                          play.get("scoring"), name),
+            "role": play_role_for(text, name),
             "yards_gained": play.get("yards"),
-            "touchdown": bool(play.get("scoring")) and "touchdown" in text.lower(),
+            # Only a touchdown THIS player was part of reads as one --
+            # the kicker's extra point on somebody else's score is not
+            # the kicker's touchdown.
+            "touchdown": ("touchdown" in text.lower()
+                          and play_role_for(text, name) in
+                          ("receiver", "rusher", "passer", "interception",
+                           "fumble_recovery")),
             "value": round(value, 2),
             "rating": play_rating(value),
             "swing": swing_by_play.get(str(play.get("id"))) if play.get("id") else None,
