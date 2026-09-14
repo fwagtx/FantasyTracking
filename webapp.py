@@ -10144,7 +10144,10 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + """
   .sc-section-head h2{ font-family:"Big Shoulders Display"; font-size:22px; font-weight:800; text-transform:uppercase; margin:0; color:var(--sc-text); }
   .sc-section-head .sub{ font-size:11.5px; color:var(--sc-muted); }
   .sc-viewall{ font-size:12.5px; font-weight:700; color:var(--accent-ink); text-decoration:none; white-space:nowrap; }
-  .sc-perf-note{ font-size:11.5px; color:var(--sc-muted); margin:20px 0 -10px; }
+  .sc-perf-note{ font-size:11.5px; color:var(--sc-muted); margin:18px 0 0; }
+  /* Usually there is nothing to say -- an empty note must not push
+     the board down, nor sit on top of the first rank number. */
+  .sc-perf-note:empty{ display:none; }
   .sc-perf{ display:flex; flex-direction:column; border:1px solid var(--sc-line); border-radius:12px; overflow:hidden; background:var(--sc-surface); }
   .sc-perf-row{ display:flex; align-items:center; gap:10px; padding:10px 12px; border-top:1px solid var(--sc-line); text-decoration:none; color:var(--sc-text); }
   .sc-perf-row:first-child{ border-top:none; }
@@ -10164,6 +10167,37 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + """
   .sc-perf-sub{ font-size:11px; color:var(--sc-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   .sc-perf-grade{ font-family:"IBM Plex Mono"; font-size:20px; font-weight:700; flex:none; min-width:44px; text-align:right; font-variant-numeric:tabular-nums; }
   .sc-perf-empty{ color:var(--sc-muted); padding:24px; text-align:center; font-size:13px; }
+
+  /* The combined board, as a row of faces rather than a stack of stat
+     lines. Ten players read as a ranking at a glance this way; the
+     stats are one tap away on the player's own page, which is where
+     someone who wants them is going anyway. Five across on a phone,
+     all ten on one line once there is room. */
+  .sc-bubbles{ display:grid; grid-template-columns:repeat(5, 1fr); gap:16px 9px; margin-top:16px; }
+  @media (min-width:760px){ .sc-bubbles{ grid-template-columns:repeat(10, 1fr); gap:18px 10px; } }
+  .sc-bubbles .sc-perf-empty{ grid-column:1 / -1; }
+  .sc-bub{ display:block; min-width:0; text-decoration:none; color:var(--sc-text); }
+  /* block, not the span default -- aspect-ratio and a percentage
+     width do nothing to an inline box. */
+  .sc-bub-mug{ display:block; position:relative; width:100%; aspect-ratio:1 / 1; }
+  .sc-bub-disc{ position:absolute; inset:0; border-radius:50%; overflow:hidden;
+                background:var(--sc-surface2); border:1px solid var(--sc-line); }
+  .sc-bub-disc img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+  /* Sits behind the headshot, so a player ESPN has no photo for is still
+     identifiable instead of being a blank circle. */
+  .sc-bub-ini{ position:absolute; inset:0; display:flex; align-items:center;
+               justify-content:center; font-family:"Big Shoulders Display";
+               font-weight:800; font-size:17px; color:var(--sc-muted); }
+  .sc-bub-rank{ position:absolute; left:0; top:-1px; z-index:2;
+                font-family:"IBM Plex Mono"; font-size:13px; font-weight:700;
+                color:var(--accent-ink); font-variant-numeric:tabular-nums; }
+  .sc-bub-crest{ position:absolute; right:-2%; top:-2%; width:32%; height:32%;
+                 object-fit:contain; z-index:2; }
+  .sc-bub-score{ display:flex; align-items:center; justify-content:center; gap:4px;
+                 margin-top:7px; font-family:"IBM Plex Mono"; font-size:15px;
+                 font-weight:700; font-variant-numeric:tabular-nums; }
+  .sc-bub-score .score-mark{ width:9px; height:11px; flex:none; opacity:0.55; }
+  .sc-bub:hover .sc-bub-disc{ outline:2px solid var(--accent-ink); outline-offset:1px; }
   .sc-group{ display:none; }
   .sc-group.on{ display:block; }
 
@@ -10309,7 +10343,7 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + """
       <a class="sc-viewall" id="scPerfMore" href="/performances">View all &rsaquo;</a>
     </div>
     <div class="sc-perf-note" id="scPerfSub"></div>
-    <div class="sc-perf" id="scPerf"></div>
+    <div class="sc-bubbles" id="scPerf"></div>
   </div>
 
   {% if power %}
@@ -10817,6 +10851,36 @@ const scServerTodayKey = {{ today_key|tojson }};
   let performersRequest = 0;
   const teamsSection = document.getElementById('scGroupTeams');
 
+  // The combined board's cell: rank, face, crest, score. Deliberately
+  // no name and no stat line -- see .sc-bubbles above. The position
+  // sections below still use the full row, because "who led at WR" is
+  // a question you answer by reading, not by glancing.
+  function perfBubble(p, i){
+    const grade = p.grade || {};
+    const href = '/performance?sid=' + encodeURIComponent(p.sid) +
+                 '&season=' + scSeason + '&week=' + scWeek;
+    const initials = (p.name || '').split(/[\s.]+/).filter(Boolean)
+      .map(function(w){ return w.charAt(0); }).join('').slice(0, 2).toUpperCase();
+    const score = grade.score == null ? '' : grade.score.toFixed(1);
+    // A face with no name needs one somewhere: hover on a desktop,
+    // and the accessible name of the link everywhere else.
+    const label = [p.name, p.position + ' ' + p.team, score].filter(Boolean).join(' · ');
+    return '<a class="sc-bub" href="' + href + '" title="' + label + '" ' +
+             'aria-label="' + label + '">' +
+      '<span class="sc-bub-mug">' +
+        '<span class="sc-bub-rank">' + (i + 1) + '</span>' +
+        '<span class="sc-bub-disc">' +
+          '<span class="sc-bub-ini">' + initials + '</span>' +
+          '<img src="' + (p.photo || '') + '" alt="" loading="lazy" ' +
+            'onerror="this.style.visibility=\\'hidden\\'">' +
+        '</span>' +
+        '<img class="sc-bub-crest" src="' + (p.logo || '') + '" alt="" ' +
+          'onerror="this.style.display=\\'none\\'">' +
+      '</span>' +
+      '<span class="sc-bub-score">' + SCORE_MARK + score + '</span>' +
+    '</a>';
+  }
+
   function perfRow(p, i){
     const stats = (p.stat_line || []).map(function(s){
       return '<span class="sc-perf-stat"><b>' + s[0] + '</b><span>' + s[1] + '</span></span>';
@@ -10885,7 +10949,7 @@ const scServerTodayKey = {{ today_key|tojson }};
     if (perfAllSection) perfAllSection.classList.toggle('on', anyPlayed);
     if (perfAllEl) {
       perfAllEl.innerHTML = top.length
-        ? top.map(perfRow).join('')
+        ? top.map(perfBubble).join('')
         : '<div class="sc-perf-empty">No scoring yet in these games.</div>';
     }
     const allMoreEl = document.getElementById('scPerfMore');
