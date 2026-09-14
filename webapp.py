@@ -1678,6 +1678,7 @@ def extract_drive_plays(summary_json, limit=60):
                      if isinstance(play.get("clock"), dict) else play.get("clock"))
             start = play.get("start") or {}
             out.append({
+                "id": play.get("id"),
                 "team": normalize_team_abbr(team) if team else None,
                 "period": _safe_int(period, 0) or None,
                 "clock": clock,
@@ -1695,6 +1696,142 @@ def extract_drive_plays(summary_json, limit=60):
     # clock that counts DOWN within a period and would order wrongly.
     out.reverse()
     return out[:limit]
+
+
+MOMENTUM_POINTS = 160
+
+
+def extract_momentum(summary_json, max_points=MOMENTUM_POINTS):
+    """The game's swing, as a win-probability curve.
+
+    ESPN records the home team's win probability after every single play,
+    which is the honest version of "momentum" -- not a vibe, but how much
+    each play actually moved the result. Returned oldest-first as
+    percentages, with the play that moved it most called out.
+
+    Long-downed to `max_points` because a full game is 150-400 entries
+    and the chart is a couple of hundred pixels wide: past that, points
+    land on the same pixel and only cost payload. The first and last are
+    always kept so the curve starts at the opening kickoff and ends where
+    the game actually stands."""
+    raw = (summary_json or {}).get("winprobability") or []
+    points = []
+    for entry in raw:
+        if not isinstance(entry, dict):
+            continue
+        pct = entry.get("homeWinPercentage")
+        if pct is None:
+            continue
+        try:
+            pct = float(pct)
+        except (TypeError, ValueError):
+            continue
+        # ESPN gives a 0-1 fraction; a stray 0-100 payload is taken as-is.
+        points.append({"home": round((pct * 100 if pct <= 1 else pct), 1),
+                       "play_id": entry.get("playId")})
+    if not points:
+        return {"points": [], "swing": None}
+
+    if len(points) > max_points:
+        step = (len(points) - 1) / float(max_points - 1)
+        kept = [points[int(round(i * step))] for i in range(max_points)]
+        kept[-1] = points[-1]
+        points = kept
+
+    # The single biggest move, which is the play worth naming.
+    swing = None
+    for prev, cur in zip(points, points[1:]):
+        delta = cur["home"] - prev["home"]
+        if swing is None or abs(delta) > abs(swing["delta"]):
+            swing = {"delta": round(delta, 1), "play_id": cur.get("play_id"),
+                     "to": cur["home"]}
+    if swing and abs(swing["delta"]) < 1:
+        swing = None
+    return {"points": points, "swing": swing}
+
+
+def _odds_price(value):
+    """American odds as they are written on a board: +150, -110."""
+    if value in (None, ""):
+        return None
+    text = str(value).strip()
+    if text.startswith(("+", "-")):
+        return text
+    try:
+        n = int(float(text))
+    except (TypeError, ValueError):
+        return text
+    return f"+{n}" if n > 0 else str(n)
+
+
+def extract_betting(summary_json, away_abbr, home_abbr):
+    """The betting board: every sportsbook line ESPN carries for this
+    game, plus each side's record against the spread.
+
+    Reported, never offered -- this shows what the market says about the
+    game, the same way the score shows what the scoreboard says. No bet
+    is placed, priced or linked from here."""
+    picks = (summary_json or {}).get("pickcenter") or []
+    lines = []
+    for p in picks:
+        if not isinstance(p, dict):
+            continue
+        away_o = p.get("awayTeamOdds") or {}
+        home_o = p.get("homeTeamOdds") or {}
+        spread = p.get("details") or p.get("spread")
+        over_under = p.get("overUnder")
+        if spread is None and over_under is None:
+            continue
+        lines.append({
+            "provider": (p.get("provider") or {}).get("name") or "Consensus",
+            "spread": spread if isinstance(spread, str) else (
+                f"{spread:+g}" if isinstance(spread, (int, float)) else None),
+            "over_under": over_under,
+            "over_odds": _odds_price(p.get("overOdds")),
+            "under_odds": _odds_price(p.get("underOdds")),
+            "away_ml": _odds_price(away_o.get("moneyLine")),
+            "home_ml": _odds_price(home_o.get("moneyLine")),
+            "favorite": (away_abbr if away_o.get("favorite")
+                         else (home_abbr if home_o.get("favorite") else None)),
+        })
+
+    ats = []
+    for block in (summary_json or {}).get("againstTheSpread") or []:
+        if not isinstance(block, dict):
+            continue
+        abbr = normalize_team_abbr((block.get("team") or {}).get("abbreviation"))
+        records = block.get("records") or []
+        summary = None
+        for r in records:
+            if isinstance(r, dict) and r.get("summary"):
+                summary = r.get("summary")
+                break
+        if abbr and summary:
+            ats.append({"team": abbr, "record": summary})
+    return {"lines": lines, "ats": ats}
+
+
+def extract_game_info(summary_json):
+    """Everything about the occasion rather than the play: where it is
+    being held, who is officiating, how many are watching, what the
+    weather is doing."""
+    info = (summary_json or {}).get("gameInfo") or {}
+    venue = info.get("venue") or {}
+    address = venue.get("address") or {}
+    weather = info.get("weather") or {}
+    temp = weather.get("temperature")
+    if temp is None:
+        temp = weather.get("highTemperature")
+    return {
+        "attendance": info.get("attendance"),
+        "capacity": venue.get("capacity"),
+        "indoor": venue.get("indoor"),
+        "surface": "Grass" if venue.get("grass") else ("Turf" if venue.get("grass") is False else None),
+        "city": address.get("city"),
+        "state": address.get("state"),
+        "weather": (weather.get("displayValue") or weather.get("conditionId")) or None,
+        "temperature": temp,
+    }
 
 
 def extract_field_position(summary_json):
@@ -6007,6 +6144,9 @@ def game_detail_page():
         detail["field"] = extract_field_position(summary)
         detail["box"] = attach_box_photos(extract_box_score(summary))
         detail["totals"] = extract_team_totals(summary)
+        detail["momentum"] = extract_momentum(summary)
+        detail["betting"] = extract_betting(summary, detail["away"]["abbr"], detail["home"]["abbr"])
+        detail["info"] = extract_game_info(summary)
         attach_leader_ids(detail.get("player_leaders"))
         # The rest of the day's slate, for the strip across the top --
         # so you can move between live games without going back first.
@@ -6021,6 +6161,8 @@ def game_detail_page():
                   "venue": {}, "officials": [], "home": {"abbr": None, "name": "?", "score": None, "logo": None},
                   "away": {"abbr": None, "name": "?", "score": None, "logo": None}, "team_stats": [], "player_leaders": [],
                   "plays": [], "field": None, "box": {}, "totals": {},
+                  "momentum": {"points": [], "swing": None},
+                  "betting": {"lines": [], "ats": []}, "info": {},
                   "season": int(SEASON), "week": 1}
         return render_template_string(GAME_DETAIL_HTML, event_id=event_id, detail=empty,
                                       others=[], load_error=str(e))
@@ -6046,6 +6188,9 @@ def api_game_live():
             "player_leaders": attach_leader_ids(detail["player_leaders"]),
             "plays": enrich_plays(extract_drive_plays(summary), gw["season"], gw["week"]),
             "field": extract_field_position(summary),
+            # The momentum curve moves on every play, so it rides the
+            # poll. Betting lines and the venue do not, so they don't.
+            "momentum": extract_momentum(summary),
             "box": attach_box_photos(extract_box_score(summary)),
             "totals": extract_team_totals(summary),
             "win_prob": detail["win_prob"],
@@ -9680,6 +9825,14 @@ GAME_DETAIL_HTML = BASE_STYLE + make_header("scores") + """
   .gd-play-head{ display:flex; justify-content:space-between; gap:10px; font-size:11px;
                  color:var(--ink-muted); margin-bottom:7px; }
   .gd-play-body{ display:flex; gap:11px; align-items:flex-start; }
+  /* Two overlapping faces for a play with two players in it. Sized so
+     the pair occupies the same column width as a single face does, and
+     the row never shifts depending on how many people a play involved. */
+  .gd-play-faces{ position:relative; flex:none; width:46px; height:46px; }
+  .gd-play-faces.pair{ width:56px; height:52px; }
+  .gd-play-faces.pair .gd-play-photo{ position:absolute; width:34px; height:34px; }
+  .gd-play-faces.pair .back{ left:0; top:0; }
+  .gd-play-faces.pair .front{ right:0; bottom:0; border:2px solid var(--paper-raised); }
   .gd-play-link{ color:inherit; text-decoration:none; }
   .gd-play-link:hover b{ text-decoration:underline; }
   .gd-play-photo{ width:46px; height:46px; border-radius:50%; object-fit:cover; flex:none;
@@ -9743,6 +9896,64 @@ GAME_DETAIL_HTML = BASE_STYLE + make_header("scores") + """
   .gd-status.in_progress{ background:var(--warning-wash); color:var(--warning); }
   .gd-venue{ color:var(--ink-secondary); font-size:13px; margin-top:6px; }
   .gd-officials{ display:flex; flex-wrap:wrap; gap:10px 24px; margin-top:10px; }
+
+  /* ---- section headings inside a tab panel ---- */
+  .gd-sect{ font-size:11px; letter-spacing:0.09em; text-transform:uppercase; font-weight:800;
+            color:var(--accent-ink); margin:22px 0 8px; }
+  .gd-sect.first{ margin-top:4px; }
+
+  /* ---- momentum ---- */
+  .gd-momentum{ margin-top:4px; }
+  .gd-mom-head{ display:flex; justify-content:space-between; font-size:12.5px; font-weight:700; }
+  .gd-mom-home{ color:var(--pos-rb); } .gd-mom-away{ color:var(--pos-wr); }
+  .gd-mom-svg{ display:block; width:100%; height:84px; margin:6px 0 2px;
+               background:var(--paper-sunken); border-radius:8px; }
+  .gd-mom-axis{ display:flex; justify-content:space-between; font-size:10px;
+                text-transform:uppercase; letter-spacing:0.06em; color:var(--ink-muted); }
+  .gd-mom-swing{ margin-top:8px; font-size:12.5px; color:var(--ink-secondary); }
+  .gd-mom-swing b{ color:var(--ink); font-family:"IBM Plex Mono"; }
+
+  /* ---- bets ---- */
+  .gd-bet-head{ display:flex; gap:8px; margin-top:4px; }
+  .gd-bet-cell{ flex:1; background:var(--paper-sunken); border-radius:10px; padding:12px 10px; text-align:center; }
+  .gd-bet-label{ display:block; font-size:9.5px; text-transform:uppercase; letter-spacing:0.07em;
+                 color:var(--ink-muted); font-weight:700; }
+  .gd-bet-cell b{ display:block; font-family:"IBM Plex Mono"; font-size:15px; margin-top:4px; }
+  .gd-bet-sub{ display:block; font-size:11px; color:var(--ink-muted); margin-top:2px; }
+  .gd-bet-src{ font-size:11px; color:var(--ink-muted); margin-top:8px; }
+  .gd-bet-table{ margin-top:6px; }
+  .gd-bet-row{ display:grid; grid-template-columns:1.4fr 1fr 0.8fr 0.9fr 0.9fr; gap:6px;
+               padding:9px 0; border-top:1px solid var(--line); font-size:12.5px; align-items:center; }
+  .gd-bet-row.head{ border-top:none; font-size:9.5px; text-transform:uppercase;
+                    letter-spacing:0.06em; color:var(--ink-muted); font-weight:700; }
+  .gd-bet-row span:not(:first-child){ text-align:right; }
+  .gd-bet-note{ margin-top:16px; font-size:11px; color:var(--ink-muted); line-height:1.5; }
+
+  /* ---- game information / officials ---- */
+  .gd-info-grid{ display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:8px; }
+  .gd-info-item{ background:var(--paper-sunken); border-radius:10px; padding:10px 12px; min-width:0; }
+  .gd-info-item.wide{ grid-column:1 / -1; }
+  .gd-info-item span{ display:block; font-size:9.5px; text-transform:uppercase;
+                      letter-spacing:0.07em; color:var(--ink-muted); font-weight:700; }
+  .gd-info-item b{ display:block; font-size:13px; margin-top:3px; word-break:break-word; }
+
+  /* ---- top performers, inside the Game tab ---- */
+  .gd-leader{ display:flex; align-items:center; gap:10px; padding:10px 0; border-top:1px solid var(--line); }
+  .gd-leader-team{ font-size:10.5px; font-weight:800; color:var(--ink-muted); flex:none; width:34px; }
+  .gd-leader-main{ flex:1; min-width:0; font-size:13.5px; font-weight:700; }
+  .gd-leader-main span{ display:block; font-size:11px; font-weight:400; color:var(--ink-muted); }
+
+  /* ---- the rest of a team's own stat line ---- */
+  .gd-more{ margin-top:12px; }
+  .gd-more summary{ cursor:pointer; font-size:12px; font-weight:700; color:var(--accent-ink);
+                    list-style:none; padding:8px 0; }
+  .gd-more summary::-webkit-details-marker{ display:none; }
+  .gd-more summary::after{ content:" \\25BE"; }
+  .gd-more[open] summary::after{ content:" \\25B4"; }
+  .gd-team-stats{ display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:2px 14px; }
+  .gd-team-stat{ display:flex; justify-content:space-between; gap:8px; padding:6px 0;
+                 border-top:1px solid var(--line); font-size:12.5px; }
+  .gd-team-stat span{ color:var(--ink-secondary); min-width:0; }
   .gd-official{ font-size:13px; }
   .gd-official b{ color:var(--ink); }
   .gd-stat-row{ display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:10px; padding:8px 4px; border-top:1px solid var(--line); font-size:13.5px; }
@@ -9826,16 +10037,9 @@ GAME_DETAIL_HTML = BASE_STYLE + make_header("scores") + """
     </div>
     {% endif %}
 
-    {% if detail.venue.name %}
-    <div class="gd-venue">{{ detail.venue.name }}{% if detail.venue.city %} &middot; {{ detail.venue.city }}{% if detail.venue.state %}, {{ detail.venue.state }}{% endif %}{% endif %}</div>
-    {% endif %}
-    {% if detail.officials %}
-    <div class="gd-officials">
-      {% for o in detail.officials %}
-      <span class="gd-official">{% if o.position %}<span class="muted">{{ o.position }}:</span>{% endif %} <b>{{ o.name }}</b></span>
-      {% endfor %}
-    </div>
-    {% endif %}
+    {# Venue, officials, broadcast and the betting line all live behind
+       the Game and Bets tabs now. The header stays what a scoreboard is:
+       who, what the score is, and where the ball sits. #}
     {% if detail.status == 'scheduled' and (detail.broadcasts or detail.odds) %}
     <div class="gd-pregame">
       {% if detail.broadcasts %}<span>&#128250; {{ detail.broadcasts|join(', ') }}</span>{% endif %}
@@ -9869,6 +10073,7 @@ GAME_DETAIL_HTML = BASE_STYLE + make_header("scores") + """
        team's box score never costs a round trip mid-drive. -->
   <div class="gd-tabs" id="gdTabs">
     <button class="gd-tab on" data-panel="feed">Feed</button>
+    <button class="gd-tab" data-panel="bets">Bets</button>
     <button class="gd-tab" data-panel="game">Game</button>
     {% if detail.away.abbr %}<button class="gd-tab" data-panel="away">{{ detail.away.abbr }}</button>{% endif %}
     {% if detail.home.abbr %}<button class="gd-tab" data-panel="home">{{ detail.home.abbr }}</button>{% endif %}
@@ -9880,8 +10085,88 @@ GAME_DETAIL_HTML = BASE_STYLE + make_header("scores") + """
        One renderer, used by both. -->
   <div class="gd-panel on" data-panel="feed" id="gdFeedPanel"></div>
 
+  <!-- Bets: what the market says about this game. Reported, never
+       offered -- there is nothing to click, no book linked, no wager
+       placed. The same posture as showing the score. -->
+  <div class="gd-panel" data-panel="bets">
+    {% if detail.betting.lines %}
+    {% set head = detail.betting.lines[0] %}
+    <div class="gd-bet-head">
+      <div class="gd-bet-cell">
+        <span class="gd-bet-label">Spread</span>
+        <b>{{ head.spread or '&ndash;' }}</b>
+      </div>
+      <div class="gd-bet-cell">
+        <span class="gd-bet-label">Total</span>
+        <b>{% if head.over_under %}{{ head.over_under }}{% else %}&ndash;{% endif %}</b>
+        {% if head.over_odds or head.under_odds %}
+        <span class="gd-bet-sub">O {{ head.over_odds or '&ndash;' }} &middot; U {{ head.under_odds or '&ndash;' }}</span>
+        {% endif %}
+      </div>
+      <div class="gd-bet-cell">
+        <span class="gd-bet-label">Moneyline</span>
+        <b>{{ detail.away.abbr }} {{ head.away_ml or '&ndash;' }}</b>
+        <span class="gd-bet-sub">{{ detail.home.abbr }} {{ head.home_ml or '&ndash;' }}</span>
+      </div>
+    </div>
+    {% if head.provider %}<div class="gd-bet-src">Line from {{ head.provider }}</div>{% endif %}
+
+    {% if detail.betting.lines|length > 1 %}
+    <p class="gd-sect">Every book</p>
+    <div class="gd-bet-table">
+      <div class="gd-bet-row head">
+        <span>Book</span><span>Spread</span><span>Total</span><span>{{ detail.away.abbr }}</span><span>{{ detail.home.abbr }}</span>
+      </div>
+      {% for l in detail.betting.lines %}
+      <div class="gd-bet-row">
+        <span>{{ l.provider }}</span>
+        <span class="mono">{{ l.spread or '&ndash;' }}</span>
+        <span class="mono">{{ l.over_under if l.over_under else '&ndash;' }}</span>
+        <span class="mono">{{ l.away_ml or '&ndash;' }}</span>
+        <span class="mono">{{ l.home_ml or '&ndash;' }}</span>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+    {% else %}
+    <div class="gd-empty">No betting lines published for this game.</div>
+    {% endif %}
+
+    {% if detail.betting.ats %}
+    <p class="gd-sect">Against the spread this season</p>
+    <div class="gd-info-grid">
+      {% for a in detail.betting.ats %}
+      <div class="gd-info-item"><span>{{ a.team }}</span><b>{{ a.record }}</b></div>
+      {% endfor %}
+    </div>
+    {% endif %}
+    <p class="gd-bet-note">Lines are shown for information only. Nothing here is a wager or an offer to place one.</p>
+  </div>
+
   <div class="gd-panel" data-panel="game" id="gdGamePanel">
+    <!-- Momentum: the home side's win probability after every play. The
+         honest version of momentum -- not a feeling, but how far each
+         play actually moved the result. JS-rendered so the poll can
+         repaint it mid-drive through the same function. -->
+    <p class="gd-sect first">Momentum</p>
+    <div id="gdMomentum" class="gd-momentum"></div>
+
+    {% if detail.away.linescores and detail.home.linescores %}
+    <p class="gd-sect">Score by quarter</p>
+    <table class="rank-table" style="margin-top:6px;" id="gdLinescoreTable">
+      <tr><th></th>{% for i in range(detail.away.linescores|length) %}<th>Q{{ i+1 }}</th>{% endfor %}<th>T</th></tr>
+      <tr data-side="away"><td>{{ detail.away.abbr }}</td>{% for v in detail.away.linescores %}<td class="mono">{{ v if v is not none else '-' }}</td>{% endfor %}<td class="mono" data-final>{{ detail.away.score }}</td></tr>
+      <tr data-side="home"><td>{{ detail.home.abbr }}</td>{% for v in detail.home.linescores %}<td class="mono">{{ v if v is not none else '-' }}</td>{% endfor %}<td class="mono" data-final>{{ detail.home.score }}</td></tr>
+    </table>
+    {% endif %}
+
+    <p class="gd-sect">Team stats</p>
     {% if detail.team_stats %}
+      <div class="gd-stat-row" style="font-weight:800;">
+        <span class="gd-stat-val away">{{ detail.away.abbr }}</span>
+        <span class="gd-stat-label"></span>
+        <span class="gd-stat-val home">{{ detail.home.abbr }}</span>
+      </div>
       {% for s in detail.team_stats %}
       <div class="gd-stat-row">
         <span class="gd-stat-val away">{{ s.away }}</span>
@@ -9891,6 +10176,45 @@ GAME_DETAIL_HTML = BASE_STYLE + make_header("scores") + """
       {% endfor %}
     {% else %}
       <div class="gd-empty">Team stats appear once the game is under way.</div>
+    {% endif %}
+
+    {% if detail.player_leaders %}
+    <p class="gd-sect">Top performers</p>
+    {% for l in detail.player_leaders %}
+    <div class="gd-leader">
+      <span class="gd-leader-team">{{ l.team }}</span>
+      <span class="gd-leader-main">
+        {% if l.sid %}<a class="gd-bp-link" href="/performance?sid={{ l.sid }}&amp;season={{ detail.season }}&amp;week={{ detail.week }}">{{ l.athlete }}</a>{% else %}{{ l.athlete }}{% endif %}
+        <span>{{ l.category }}</span>
+      </span>
+      <span class="mono">{{ l.stat_line }}</span>
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    <p class="gd-sect">Game information</p>
+    <div class="gd-info-grid">
+      {% if detail.venue.name %}
+      <div class="gd-info-item wide"><span>Venue</span><b>{{ detail.venue.name }}{% if detail.venue.city %} &middot; {{ detail.venue.city }}{% if detail.venue.state %}, {{ detail.venue.state }}{% endif %}{% endif %}</b></div>
+      {% endif %}
+      {% if detail.broadcasts %}<div class="gd-info-item"><span>Coverage</span><b>{{ detail.broadcasts|join(', ') }}</b></div>{% endif %}
+      {% if detail.info.attendance %}<div class="gd-info-item"><span>Attendance</span><b>{{ '{:,}'.format(detail.info.attendance) }}{% if detail.info.capacity %} / {{ '{:,}'.format(detail.info.capacity) }}{% endif %}</b></div>{% endif %}
+      {% if detail.info.surface %}<div class="gd-info-item"><span>Surface</span><b>{{ detail.info.surface }}{% if detail.info.indoor %} &middot; Indoor{% endif %}</b></div>{% endif %}
+      {% if detail.info.weather or detail.info.temperature is not none %}
+      <div class="gd-info-item"><span>Weather</span><b>{% if detail.info.weather %}{{ detail.info.weather }}{% endif %}{% if detail.info.temperature is not none %} {{ detail.info.temperature }}&deg;{% endif %}</b></div>
+      {% endif %}
+      {% if detail.odds and detail.odds.spread %}
+      <div class="gd-info-item"><span>Line</span><b>{{ detail.odds.spread }}{% if detail.odds.over_under %} &middot; O/U {{ detail.odds.over_under }}{% endif %}</b></div>
+      {% endif %}
+    </div>
+
+    {% if detail.officials %}
+    <p class="gd-sect">Officials</p>
+    <div class="gd-info-grid">
+      {% for o in detail.officials %}
+      <div class="gd-info-item"><span>{{ o.position or 'Official' }}</span><b>{{ o.name }}</b></div>
+      {% endfor %}
+    </div>
     {% endif %}
   </div>
 
@@ -9903,6 +10227,19 @@ GAME_DETAIL_HTML = BASE_STYLE + make_header("scores") + """
       <span class="gd-total"><b>{{ t.value }}</b><span>{{ t.label }}</span></span>
       {% endfor %}
     </div>
+    {# The headline chips above are the first nine; this is the rest of
+       the team's line, so a team tab holds ALL of its stats rather than
+       sending you to the Game tab to compare for a single number. #}
+    {% if detail.totals[abbr]|length > 9 %}
+    <details class="gd-more">
+      <summary>All {{ abbr }} team stats</summary>
+      <div class="gd-team-stats">
+        {% for t in detail.totals[abbr] %}
+        <div class="gd-team-stat"><span>{{ t.label }}</span><b class="mono">{{ t.value }}</b></div>
+        {% endfor %}
+      </div>
+    </details>
+    {% endif %}
     {% endif %}
     {% set box = detail.box.get(abbr) or {'offense': [], 'defense': []} %}
     {% if box.offense or box.defense %}
@@ -9951,61 +10288,6 @@ GAME_DETAIL_HTML = BASE_STYLE + make_header("scores") + """
   {% endif %}
   {% endfor %}
 
-  {% if detail.win_prob %}
-  <div class="panel" id="gdWinProbPanel">
-    <p class="eyebrow">Win Probability</p>
-    <div class="gd-wp-bar">
-      <div id="gdWpAwayBar" style="width:{{ detail.win_prob.away_pct }}%; background:var(--pos-wr);"></div>
-      <div id="gdWpHomeBar" style="width:{{ detail.win_prob.home_pct }}%; background:var(--pos-rb);"></div>
-    </div>
-    <div style="display:flex; justify-content:space-between; margin-top:6px; font-size:12.5px;">
-      <span>{{ detail.away.abbr }} <span id="gdWpAwayPct">{{ detail.win_prob.away_pct }}</span>%</span>
-      <span>{{ detail.home.abbr }} <span id="gdWpHomePct">{{ detail.win_prob.home_pct }}</span>%</span>
-    </div>
-  </div>
-  {% endif %}
-
-  {% if detail.away.linescores and detail.home.linescores %}
-  <div class="panel" id="gdLinescorePanel">
-    <p class="eyebrow">Score by Quarter</p>
-    <table class="rank-table" style="margin-top:6px;" id="gdLinescoreTable">
-      <tr><th></th>{% for i in range(detail.away.linescores|length) %}<th>Q{{ i+1 }}</th>{% endfor %}<th>Final</th></tr>
-      <tr data-side="away"><td>{{ detail.away.abbr }}</td>{% for v in detail.away.linescores %}<td class="mono">{{ v if v is not none else '-' }}</td>{% endfor %}<td class="mono" data-final>{{ detail.away.score }}</td></tr>
-      <tr data-side="home"><td>{{ detail.home.abbr }}</td>{% for v in detail.home.linescores %}<td class="mono">{{ v if v is not none else '-' }}</td>{% endfor %}<td class="mono" data-final>{{ detail.home.score }}</td></tr>
-    </table>
-  </div>
-  {% endif %}
-
-  {% if detail.team_stats %}
-  <div class="panel" id="gdStatsPanel">
-    <p class="eyebrow">Team Stats</p>
-    <div class="gd-stat-row" style="font-weight:700;">
-      <span class="gd-stat-val away">{{ detail.away.abbr }}</span>
-      <span></span>
-      <span class="gd-stat-val home">{{ detail.home.abbr }}</span>
-    </div>
-    {% for s in detail.team_stats %}
-    <div class="gd-stat-row">
-      <span class="gd-stat-val away">{{ s.away }}</span>
-      <span class="gd-stat-label">{{ s.label }}</span>
-      <span class="gd-stat-val home">{{ s.home }}</span>
-    </div>
-    {% endfor %}
-  </div>
-  {% endif %}
-
-  {% if detail.player_leaders %}
-  <div class="panel">
-    <p class="eyebrow">Top Performers</p>
-    {% for l in detail.player_leaders %}
-    <div class="player-row">
-      <div class="pname-row"><span class="pos-chip" style="background:var(--paper-sunken); color:var(--ink-secondary);">{{ l.team }}</span> <span style="margin-left:8px;">{% if l.sid %}<a class="gd-bp-link" href="/performance?sid={{ l.sid }}&amp;season={{ detail.season }}&amp;week={{ detail.week }}">{{ l.athlete }}</a>{% else %}{{ l.athlete }}{% endif %} &middot; <span class="muted">{{ l.category }}</span></span></div>
-      <span class="mono">{{ l.stat_line }}</span>
-    </div>
-    {% endfor %}
-  </div>
-  {% endif %}
-
   {% if detail.status == 'scheduled' and not detail.team_stats and not detail.player_leaders %}
   <p class="muted" style="margin-top:14px; text-align:center;">Full box score and stats will appear here once the game kicks off.</p>
   {% endif %}
@@ -10050,7 +10332,22 @@ window.gdRenderFeed = function(plays, status){
     ].filter(Boolean).join(' &middot; ');
     const score = (p.away_score != null && p.home_score != null)
       ? esc(p.away_score) + '&ndash;' + esc(p.home_score) : '';
-    const lead = (p.people || [])[0];
+    // Two faces, stacked, the way the reference feed does it: the
+    // player the play belongs to in front, whoever else it ran through
+    // behind them. One face when that is all there is.
+    const cast = (p.people || []).filter(function(pl){ return pl.photo; });
+    const lead = cast[0], second = cast[1];
+    function face(pl, cls){
+      const img = '<img class="gd-play-photo ' + cls + '" src="' + esc(pl.photo) + '" alt="" ' +
+                  'onerror="this.style.visibility=\\'hidden\\'">';
+      return pl.sid
+        ? '<a href="' + plink(pl.sid) + '" aria-label="' + esc(pl.name) + '">' + img + '</a>'
+        : img;
+    }
+    const faces = !lead ? ''
+      : '<span class="gd-play-faces' + (second ? ' pair' : '') + '">' +
+          (second ? face(second, 'back') : '') + face(lead, 'front') +
+        '</span>';
     const who = (p.people || []).map(function(pl){
       const inner = '<b>' + esc(pl.name) + '</b>' +
              (pl.position ? ' <span class="fps">' + esc(pl.position) + '</span>' : '') +
@@ -10065,12 +10362,7 @@ window.gdRenderFeed = function(plays, status){
     return '<div class="gd-play' + (p.scoring ? ' score' : '') + '">' +
       '<div class="gd-play-head"><span>' + sit + '</span><span>' + score + '</span></div>' +
       '<div class="gd-play-body">' +
-        (lead && lead.photo
-          ? (lead.sid ? '<a href="' + plink(lead.sid) + '" aria-label="' + esc(lead.name) + '">' : '') +
-            '<img class="gd-play-photo" src="' + esc(lead.photo) + '" alt="" ' +
-            'onerror="this.style.visibility=\\'hidden\\'">' +
-            (lead.sid ? '</a>' : '')
-          : '') +
+        faces +
         '<div class="gd-play-main">' +
           '<div class="gd-play-title">' + esc(p.headline || '') + '</div>' +
           (who ? '<div class="gd-play-who">' + who + '</div>' : '') +
@@ -10080,6 +10372,56 @@ window.gdRenderFeed = function(plays, status){
       '</div>' +
     '</div>';
   }).join('');
+};
+
+// The momentum curve: the home side's win probability after every play.
+// Rendered here rather than in Jinja for the same reason as the feed --
+// the poll repaints it mid-drive and one renderer cannot drift from
+// itself. Above the centre line is the home team, below is the away
+// team, and the distance from the line is how sure the game looks.
+window.gdRenderMomentum = function(momentum, awayAbbr, homeAbbr){
+  const el = document.getElementById('gdMomentum');
+  if (!el) return;
+  const pts = (momentum && momentum.points) || [];
+  if (pts.length < 2) {
+    el.innerHTML = '<div class="gd-empty">Momentum appears once the game kicks off.</div>';
+    return;
+  }
+  const W = 300, H = 84, MID = H / 2;
+  const step = W / (pts.length - 1);
+  const xy = pts.map(function(p, i){
+    const home = Math.max(0, Math.min(100, p.home));
+    return [ +(i * step).toFixed(2), +(H - (home / 100) * H).toFixed(2) ];
+  });
+  const line = xy.map(function(p, i){ return (i ? 'L' : 'M') + p[0] + ' ' + p[1]; }).join(' ');
+  const area = 'M0 ' + MID + ' ' + line.replace(/^M/, 'L') + ' L' + W + ' ' + MID + ' Z';
+  const last = pts[pts.length - 1].home;
+  const homePct = Math.round(last), awayPct = 100 - Math.round(last);
+  const swing = momentum.swing;
+
+  el.innerHTML =
+    '<div class="gd-mom-head">' +
+      '<span class="gd-mom-home">' + homeAbbr + ' ' + homePct + '%</span>' +
+      '<span class="gd-mom-away">' + awayAbbr + ' ' + awayPct + '%</span>' +
+    '</div>' +
+    '<svg class="gd-mom-svg" viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="none" role="img" ' +
+         'aria-label="Win probability through the game">' +
+      '<defs>' +
+        '<clipPath id="gdMomUp"><rect x="0" y="0" width="' + W + '" height="' + MID + '"/></clipPath>' +
+        '<clipPath id="gdMomDown"><rect x="0" y="' + MID + '" width="' + W + '" height="' + MID + '"/></clipPath>' +
+      '</defs>' +
+      '<path d="' + area + '" fill="var(--pos-rb)" opacity="0.55" clip-path="url(#gdMomUp)"/>' +
+      '<path d="' + area + '" fill="var(--pos-wr)" opacity="0.55" clip-path="url(#gdMomDown)"/>' +
+      '<line x1="0" y1="' + MID + '" x2="' + W + '" y2="' + MID + '" stroke="var(--line-strong)" stroke-width="1" vector-effect="non-scaling-stroke"/>' +
+      '<path d="' + line + '" fill="none" stroke="var(--ink)" stroke-width="1.6" ' +
+            'stroke-linejoin="round" vector-effect="non-scaling-stroke"/>' +
+    '</svg>' +
+    '<div class="gd-mom-axis"><span>Kickoff</span><span>' +
+      (window.GD_STATUS === 'final' ? 'Final' : 'Now') + '</span></div>' +
+    (swing
+      ? '<div class="gd-mom-swing">Biggest swing <b>' + Math.abs(swing.delta).toFixed(1) +
+        ' pts</b> to ' + (swing.delta > 0 ? homeAbbr : awayAbbr) + '</div>'
+      : '');
 };
 
 // Where the ball sits on the field bar. Shared for the same reason.
@@ -10109,6 +10451,8 @@ window.gdRenderField = function(field, awayAbbr){
   // Paint the feed from the data baked into the page, using the same
   // renderer the poll uses.
   window.gdRenderFeed({{ detail.plays|tojson }}, window.GD_STATUS);
+  window.gdRenderMomentum({{ detail.momentum|tojson }},
+                          {{ detail.away.abbr|tojson }}, {{ detail.home.abbr|tojson }});
 })();
 
 // Tab + sub-tab switching. Deliberately its own IIFE, OUTSIDE the polling
@@ -10183,23 +10527,21 @@ window.gdRenderField = function(field, awayAbbr){
         // frozen at whatever was happening when the tab was opened.
         window.gdRenderFeed(data.plays, data.status);
         window.gdRenderField(data.field, {{ detail.away.abbr|tojson }});
+        window.GD_STATUS = data.status;
+        if (data.momentum) {
+          window.gdRenderMomentum(data.momentum,
+                                  {{ detail.away.abbr|tojson }}, {{ detail.home.abbr|tojson }});
+        }
 
         // A game that just ended still needs one last paint (done above)
         // before the loop stops, so this check comes after the render.
         if (data.status === 'final') { return; }
 
-        // Win probability shifts play by play -- patch it if the panel is
-        // already on the page (it only renders when win_prob was present
-        // at initial page load).
-        if (data.win_prob) {
-          const wpAwayBar = document.getElementById('gdWpAwayBar');
-          const wpHomeBar = document.getElementById('gdWpHomeBar');
-          if (wpAwayBar && wpHomeBar) {
-            wpAwayBar.style.width = data.win_prob.away_pct + '%';
-            wpHomeBar.style.width = data.win_prob.home_pct + '%';
-            document.getElementById('gdWpAwayPct').textContent = data.win_prob.away_pct;
-            document.getElementById('gdWpHomePct').textContent = data.win_prob.home_pct;
-          }
+        // Momentum grows by a point every play, so it is redrawn rather
+        // than patched -- same renderer as the first paint.
+        if (data.momentum) {
+          window.gdRenderMomentum(data.momentum,
+                                  {{ detail.away.abbr|tojson }}, {{ detail.home.abbr|tojson }});
         }
 
         // Quarter-by-quarter scores fill in as each quarter ends -- patch
