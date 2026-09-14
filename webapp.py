@@ -6603,6 +6603,7 @@ def get_injury_report(limit=None, cache=_injury_feed_cache):
             "to": status,
             "detail": hit.get("detail"),
             "good": status == ACTIVE_STATUS,
+            "tone": injury_tone(status),
             "reported_at": reported,
             "ago": _time_ago(reported),
             "severity": _INJURY_ORDER.get(status, 5),
@@ -6621,6 +6622,27 @@ def get_injury_report(limit=None, cache=_injury_feed_cache):
 # How serious a designation is, for ordering a report nobody has seen
 # change yet. Active first among those, since a return is the row worth
 # reading.
+# What colour a designation reads in. Derived from INJURY_BADGE's own
+# tiers rather than restated, so the injury board and the depth-chart
+# badges can never disagree about how serious something is.
+#
+# Green healthy, red out, yellow questionable -- with doubtful keeping
+# the amber the badges already give it, since "probably not playing"
+# genuinely sits between the two and flattening it into either one
+# throws away the distinction.
+_TIER_TONE = {"out": "bad", "doubtful": "doubt",
+              "questionable": "caution", "admin": "admin"}
+_STATUS_TONE = {ACTIVE_STATUS: "good"}
+for _code, (_label, _title, _tier) in INJURY_BADGE.items():
+    _STATUS_TONE[_title] = _TIER_TONE.get(_tier, "admin")
+
+
+def injury_tone(status):
+    """The colour class for a designation. Anything unrecognised reads
+    as a plain designation rather than as an alarm."""
+    return _STATUS_TONE.get(status, "admin")
+
+
 _INJURY_ORDER = {
     ACTIVE_STATUS: 0, "Injured Reserve": 1, "Out": 2, "Doubtful": 3,
     "Questionable": 4,
@@ -9923,7 +9945,10 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + """
   .sc-feed-sub .arrow{ padding:0 2px; }
   .sc-feed-detail{ color:var(--sc-muted); }
   .sc-feed-sub b.good{ color:var(--good); }
+  .sc-feed-sub b.caution{ color:var(--warning); }
+  .sc-feed-sub b.doubt{ color:#e27834; }
   .sc-feed-sub b.bad{ color:var(--critical); }
+  .sc-feed-sub b.admin{ color:var(--sc-muted); }
   .sc-feed-ago{ flex:none; font-size:11.5px; color:var(--sc-muted);
                 font-family:"IBM Plex Mono"; }
 
@@ -10096,7 +10121,7 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + """
         <span class="sc-feed-name">{{ r.name }}</span>
         <span class="sc-feed-sub">
           {%- if r.from %}{{ r.from }} <span class="arrow">&rarr;</span> {% endif -%}
-          <b class="{{ 'good' if r.good else 'bad' }}">{{ r.to }}</b>
+          <b class="{{ r.tone or ('good' if r.good else 'bad') }}">{{ r.to }}</b>
           {%- if r.detail %} <span class="sc-feed-detail">&middot; {{ r.detail }}</span>{% endif -%}
         </span>
       </span>
@@ -11079,7 +11104,10 @@ FEED_PAGE_HTML = BASE_STYLE + make_header("scores") + """
   .fd-sub{ font-size:12.5px; color:var(--fd-muted); }
   .fd-sub .arrow{ padding:0 2px; }
   .fd-sub b.good{ color:var(--good); }
+  .fd-sub b.caution{ color:var(--warning); }
+  .fd-sub b.doubt{ color:#e27834; }
   .fd-sub b.bad{ color:var(--critical); }
+  .fd-sub b.admin{ color:var(--fd-muted); }
   .fd-meta{ flex:none; text-align:right; font-size:11.5px; color:var(--fd-muted);
             font-family:"IBM Plex Mono"; line-height:1.5; }
   .fd-meta b{ font-weight:700; color:var(--fd-text); }
@@ -11109,7 +11137,7 @@ FEED_PAGE_HTML = BASE_STYLE + make_header("scores") + """
         <span class="fd-sub">
           {%- if kind == 'injuries' -%}
             {%- if r.from %}{{ r.from }} <span class="arrow">&rarr;</span> {% endif -%}
-            <b class="{{ 'good' if r.good else 'bad' }}">{{ r.to }}</b>
+            <b class="{{ r.tone or ('good' if r.good else 'bad') }}">{{ r.to }}</b>
             {%- if r.detail %} &middot; {{ r.detail }}{% endif -%}
           {%- else -%}
             Happy {{ r.age_label }} Birthday &#127881;
