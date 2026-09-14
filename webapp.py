@@ -67,7 +67,10 @@ IDP_POSITIONS = ["DL", "LB", "DB"]
 # defenders they could never price. Performances and depth charts run on
 # real stats, which Sleeper does provide for defenders, so those use
 # this.
-SCORED_POSITIONS = POSITIONS + IDP_POSITIONS
+# Kickers score through Sleeper's own pts_ppr like everyone else, so
+# they need nothing but a place in this list to appear on the board.
+KICKER_POSITIONS = ["K"]
+SCORED_POSITIONS = POSITIONS + IDP_POSITIONS + KICKER_POSITIONS
 IDP_POSITION_MAP = {
     "DE": "DL", "DT": "DL", "NT": "DL", "DL": "DL",
     "LB": "LB", "OLB": "LB", "ILB": "LB", "MLB": "LB",
@@ -1910,25 +1913,93 @@ def extract_betting(summary_json, away_abbr, home_abbr):
     return {"lines": lines, "ats": ats}
 
 
+# Conditions to a single glyph, matched on ESPN's own words. Order
+# matters: "partly cloudy" has to be tested before "cloudy", or every
+# broken-cloud afternoon reads as overcast.
+_WEATHER_EMOJI = [
+    ("blizzard", "\u2744\uFE0F"), ("flurr", "\u2744\uFE0F"), ("snow", "\u2744\uFE0F"),
+    ("sleet", "\U0001F328\uFE0F"), ("hail", "\U0001F328\uFE0F"), ("freezing", "\U0001F328\uFE0F"),
+    ("thunder", "\u26C8\uFE0F"), ("lightning", "\u26C8\uFE0F"), ("storm", "\u26C8\uFE0F"),
+    ("drizzle", "\U0001F327\uFE0F"), ("shower", "\U0001F327\uFE0F"), ("rain", "\U0001F327\uFE0F"),
+    ("fog", "\U0001F32B\uFE0F"), ("haze", "\U0001F32B\uFE0F"), ("hazy", "\U0001F32B\uFE0F"),
+    ("mist", "\U0001F32B\uFE0F"), ("smoke", "\U0001F32B\uFE0F"),
+    ("wind", "\U0001F4A8"), ("breez", "\U0001F4A8"), ("blustery", "\U0001F4A8"),
+    ("partly cloudy", "\u26C5"), ("partly sunny", "\u26C5"),
+    ("mostly sunny", "\u26C5"), ("intermittent clouds", "\u26C5"),
+    ("mostly cloudy", "\u2601\uFE0F"), ("overcast", "\u2601\uFE0F"), ("cloud", "\u2601\uFE0F"),
+    ("sunny", "\u2600\uFE0F"), ("clear", "\u2600\uFE0F"), ("fair", "\u2600\uFE0F"),
+]
+INDOOR_EMOJI = "\U0001F3DF\uFE0F"
+
+
+def weather_emoji(text):
+    """The glyph for a condition, or None when the words do not say.
+
+    Matched on ESPN's English, never on a code -- a word we can read is a
+    word we can be right about."""
+    low = (text or "").lower()
+    if not low:
+        return None
+    for needle, emoji in _WEATHER_EMOJI:
+        if needle in low:
+            return emoji
+    return None
+
+
+def _fahrenheit(value):
+    """A temperature only when it is plainly a temperature.
+
+    ESPN has been seen returning strings here, and a stray value is worse
+    than a blank -- so anything outside the range a football game has
+    ever been played in is dropped rather than printed."""
+    if value in (None, ""):
+        return None
+    try:
+        temp = int(round(float(value)))
+    except (TypeError, ValueError):
+        return None
+    return temp if -60 <= temp <= 140 else None
+
+
 def extract_game_info(summary_json):
     """Everything about the occasion rather than the play: where it is
     being held, who is officiating, how many are watching, what the
-    weather is doing."""
+    weather is doing.
+
+    The condition is taken ONLY from ESPN's displayValue. Its weather
+    block also carries a numeric conditionId, and that used to be the
+    fallback -- which is how a Kansas City game in September came to
+    report its weather as "1". ESPN does not publish what those numbers
+    mean, and the obvious guess (the legacy Yahoo codes, where 1 is a
+    tropical storm) is plainly wrong for the games it was tested on. So
+    the id is never shown: no words from ESPN means no condition claimed,
+    and the temperature stands on its own."""
     info = (summary_json or {}).get("gameInfo") or {}
     venue = info.get("venue") or {}
     address = venue.get("address") or {}
     weather = info.get("weather") or {}
-    temp = weather.get("temperature")
+    indoor = venue.get("indoor")
+
+    condition = (weather.get("displayValue") or "").strip() or None
+    temp = _fahrenheit(weather.get("temperature"))
     if temp is None:
-        temp = weather.get("highTemperature")
+        temp = _fahrenheit(weather.get("highTemperature"))
+
+    # Under a roof the forecast is beside the point, and saying so is
+    # both shorter and truer than reporting the weather outside.
+    if indoor and not condition:
+        condition = "Indoors"
+    emoji = INDOOR_EMOJI if (indoor and condition == "Indoors") else weather_emoji(condition)
+
     return {
         "attendance": info.get("attendance"),
         "capacity": venue.get("capacity"),
-        "indoor": venue.get("indoor"),
+        "indoor": indoor,
         "surface": "Grass" if venue.get("grass") else ("Turf" if venue.get("grass") is False else None),
         "city": address.get("city"),
         "state": address.get("state"),
-        "weather": (weather.get("displayValue") or weather.get("conditionId")) or None,
+        "weather": condition,
+        "weather_emoji": emoji,
         "temperature": temp,
     }
 
@@ -5219,6 +5290,59 @@ def get_player_game_epa(sid, season, week):
     }
 
 
+def get_player_quarter_breakdown(sid, season, week):
+    """The same game split four ways: what the player did in each
+    quarter, and how much of the game's swing came from it.
+
+    Built from the plays already loaded for the feed, so it costs nothing
+    extra -- and it answers the question a single game rating cannot: was
+    this a steady afternoon or one explosive drive?
+
+    Quarters with no snaps are left out rather than shown as zero. A
+    player who never took the field in the first quarter did not have a
+    bad first quarter."""
+    plays = get_player_plays(sid, season, week)
+    if not plays:
+        return []
+
+    by_qtr = {}
+    for p in plays:
+        q = p.get("qtr")
+        if not q:
+            continue
+        by_qtr.setdefault(int(q), []).append(p)
+    if not by_qtr:
+        return []
+
+    # Share is measured against the total SWING, not the net total: a
+    # game that went +6 then -6 has plenty of story in it, and dividing
+    # by a net of zero would either explode or report nothing happened.
+    swing = sum(abs(p["epa"]) for p in plays if p["epa"] is not None) or 0.0
+
+    out = []
+    for q in sorted(by_qtr):
+        rows = by_qtr[q]
+        epas = [p["epa"] for p in rows if p["epa"] is not None]
+        tds = sum(1 for p in rows if p.get("touchdown"))
+        successes = sum(1 for p in rows if p.get("success"))
+        total = round(sum(epas), 2) if epas else 0.0
+        out.append({
+            "qtr": q,
+            "label": f"Q{q}" if q <= 4 else "OT",
+            "plays": len(rows),
+            "yards": sum(p["yards_gained"] for p in rows
+                         if isinstance(p.get("yards_gained"), (int, float))),
+            "touchdowns": tds,
+            "epa": total,
+            "epa_per_play": round(sum(epas) / len(epas), 2) if epas else 0.0,
+            "success_rate": round(100 * successes / len(rows)) if rows else 0,
+            # How much of the afternoon happened here, 0-100.
+            "share": round(100 * sum(abs(e) for e in epas) / swing) if swing else 0,
+            "best": max(rows, key=lambda p: p["epa"] if p["epa"] is not None else -99),
+        })
+    return out
+
+
 def get_epa_distribution(season, cache=_epa_distribution_cache):
     """{position: sorted list of per-game total EPA} -- the reference the
     Impact rating is measured against, built the same way the fantasy
@@ -6358,13 +6482,13 @@ def performances_page():
             PERFORMANCES_HTML, rows=rows, season=season, week=week, score_mark=SCORE_MARK_SVG,
             scope=scope if scope in PERF_SCOPES else "week", order=order,
             position=position, positions=SCORED_POSITIONS,
-            idp_positions=IDP_POSITIONS, load_error=None,
+            load_error=None,
         )
     except Exception as e:
         return render_template_string(
             PERFORMANCES_HTML, rows=[], season=int(SEASON), week=1, score_mark=SCORE_MARK_SVG,
             scope="week", order="top", position=None, positions=SCORED_POSITIONS,
-            idp_positions=IDP_POSITIONS, load_error=str(e),
+            load_error=str(e),
         )
 
 
@@ -6379,16 +6503,18 @@ def performance_page():
         week = request.args.get("week", default=info["week"], type=int)
         detail = get_performance_detail(sid, season, week) if sid else None
         log = get_player_season_log(sid, season, detail["position"], through_week=week) if detail else []
+        quarters = get_player_quarter_breakdown(sid, season, week) if detail else []
         # The strip across the top is the rest of that week's board, so
         # you can move between performances without going back first.
         peers = [p for p in get_week_performers(season, week, allow_fetch=False) if p["sid"] != sid][:24]
         return render_template_string(
             PERFORMANCE_HTML, detail=detail, log=log, peers=peers, sid=sid,
+            quarters=quarters,
             season=season, week=week, load_error=None, score_mark=SCORE_MARK_SVG,
         )
     except Exception as e:
         return render_template_string(
-            PERFORMANCE_HTML, detail=None, log=[], peers=[], sid=sid,
+            PERFORMANCE_HTML, detail=None, log=[], peers=[], sid=sid, quarters=[],
             season=int(SEASON), week=1, load_error=str(e), score_mark=SCORE_MARK_SVG,
         )
 
@@ -9887,23 +10013,18 @@ PERFORMANCES_HTML = BASE_STYLE + make_header("scores") + """
              text-transform:uppercase; margin:18px 0 4px; }
   .pl-sub{ font-size:12px; color:var(--pl-muted); margin-bottom:14px; }
 
-  /* Filters. Two independent axes -- who, and over what stretch -- kept
-     as separate scrolling rows so neither has to truncate on a phone. */
-  .pl-filters{ display:flex; flex-direction:column; gap:8px; position:sticky; top:64px; z-index:30;
+  /* Filters. Three independent axes -- who, over what stretch, and which
+     end of the board -- as dropdowns, so none has to truncate on a phone. */
+  .pl-filters{ display:flex; flex-wrap:wrap; gap:8px; position:sticky; top:64px; z-index:30;
                background:color-mix(in srgb, var(--pl-bg) 94%, transparent); backdrop-filter:blur(8px);
                padding:10px 0; border-bottom:1px solid var(--pl-line); }
-  .pl-row{ display:flex; gap:7px; overflow-x:auto; scrollbar-width:none; }
-  .pl-row::-webkit-scrollbar{ display:none; }
-  .pl-chip{ flex:none; font-size:12px; font-weight:700; padding:6px 13px; border-radius:99px;
-            border:1px solid var(--pl-line); background:var(--pl-surface); color:var(--pl-muted);
-            text-decoration:none; white-space:nowrap; }
-  .pl-chip:hover{ color:var(--pl-text); }
-  .pl-chip.on{ background:var(--accent); color:var(--accent-on); border-color:var(--accent); }
-  /* Defenders are scored here but deliberately absent from the
-     value-driven pages, so they're visually set apart rather than
-     silently mixed in. */
-  .pl-chip.idp{ border-style:dashed; }
-  .pl-chip.idp.on{ border-style:solid; }
+  .pl-select{ background-color:var(--pl-surface); border:1px solid var(--pl-line);
+              color:var(--pl-text); border-radius:8px; padding:9px 12px; font-size:13px;
+              font-weight:700; font-family:inherit;
+              appearance:none; -webkit-appearance:none;
+             background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5 6 6.5 11 1.5' stroke='%238b9089' stroke-width='1.8' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+             background-repeat:no-repeat; background-position:right 11px center;
+             background-size:11px 7px; padding-right:30px; cursor:pointer; }
 
   .pl-list{ border:1px solid var(--pl-line); border-radius:12px; overflow:hidden;
             background:var(--pl-surface); margin-top:14px; }
@@ -9942,28 +10063,44 @@ PERFORMANCES_HTML = BASE_STYLE + make_header("scores") + """
     a historic game scores above 10.
   </div>
 
-  {% set base = '/performances?season=' ~ season ~ '&week=' ~ week %}
+  <!-- Three dropdowns rather than fourteen pills across two rows. A
+       list this long is what a select is for: it shows the choice you
+       made, not every choice you did not. -->
   <div class="pl-filters">
-    <div class="pl-row">
-      <a class="pl-chip {{ 'on' if not position }}"
-         href="{{ base }}&scope={{ scope }}&order={{ order }}">All positions</a>
+    <select class="pl-select" id="plPosition" aria-label="Position">
+      <option value="">All positions</option>
       {% for pos in positions %}
-      <a class="pl-chip {{ 'idp' if pos in idp_positions }} {{ 'on' if position == pos }}"
-         href="{{ base }}&scope={{ scope }}&order={{ order }}&position={{ pos }}">{{ pos }}</a>
+      <option value="{{ pos }}" {{ 'selected' if position == pos }}>{{ pos }}</option>
       {% endfor %}
-    </div>
-    <div class="pl-row">
-      {% set scopes = [('day','Today'),('week','This week'),('month','This month'),
-                       ('season','This season'),('alltime','All time')] %}
-      {% for key, label in scopes %}
-      <a class="pl-chip {{ 'on' if scope == key }}"
-         href="{{ base }}&scope={{ key }}&order={{ order }}{{ '&position=' ~ position if position else '' }}">{{ label }}</a>
+    </select>
+    <select class="pl-select" id="plScope" aria-label="Range">
+      {% for key, label in [('day','Today'),('week','This week'),('month','This month'),
+                            ('season','This season'),('alltime','All time')] %}
+      <option value="{{ key }}" {{ 'selected' if scope == key }}>{{ label }}</option>
       {% endfor %}
-      <a class="pl-chip {{ 'on' if order == 'lowest' }}"
-         href="{{ base }}&scope={{ scope }}&order={{ 'top' if order == 'lowest' else 'lowest' }}{{ '&position=' ~ position if position else '' }}">
-        {{ 'Showing lowest' if order == 'lowest' else 'Lowest' }}</a>
-    </div>
+    </select>
+    <select class="pl-select" id="plOrder" aria-label="Order">
+      <option value="top" {{ 'selected' if order != 'lowest' }}>Highest first</option>
+      <option value="lowest" {{ 'selected' if order == 'lowest' }}>Lowest first</option>
+    </select>
   </div>
+  <script>
+  (function(){
+    const base = {{ ('/performances?season=' ~ season ~ '&week=' ~ week)|tojson }};
+    function go(){
+      const pos = document.getElementById('plPosition').value;
+      const url = base +
+        '&scope=' + encodeURIComponent(document.getElementById('plScope').value) +
+        '&order=' + encodeURIComponent(document.getElementById('plOrder').value) +
+        (pos ? '&position=' + encodeURIComponent(pos) : '');
+      window.location.href = url;
+    }
+    ['plPosition', 'plScope', 'plOrder'].forEach(function(id){
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('change', go);
+    });
+  })();
+  </script>
 
   {% if not rows %}
     <div class="pl-empty">
@@ -10039,6 +10176,18 @@ PERFORMANCE_HTML = BASE_STYLE + make_header("scores") + """
   .pf-score.poor .n{ color:var(--critical); }
   .pf-score.historic .n{ color:var(--accent-ink); }
 
+  .pf-qtrs{ display:flex; flex-direction:column; gap:12px; }
+  .pf-qtr-head{ display:flex; justify-content:space-between; align-items:baseline; }
+  .pf-qtr-head b{ font-family:"Big Shoulders Display"; font-size:17px; letter-spacing:0.02em; }
+  .pf-qtr-epa{ font-family:"IBM Plex Mono"; font-size:12.5px; font-weight:700;
+               color:var(--pf-muted); }
+  .pf-qtr-epa.pos{ color:var(--good); } .pf-qtr-epa.neg{ color:var(--critical); }
+  .pf-qtr-bar{ height:7px; border-radius:99px; background:var(--pf-surface);
+               overflow:hidden; margin:5px 0 4px; }
+  .pf-qtr-bar span{ display:block; height:100%; border-radius:99px; background:var(--accent);
+                    min-width:2px; }
+  .pf-qtr-line{ font-size:11.5px; color:var(--pf-muted); }
+  .pf-note{ font-size:11.5px; color:var(--pf-muted); margin-top:14px; line-height:1.5; }
   .pf-plays{ display:flex; flex-direction:column; }
   .pf-play{ padding:9px 0; border-top:1px solid var(--pf-line); }
   .pf-play:first-child{ border-top:none; }
@@ -10267,6 +10416,39 @@ PERFORMANCE_HTML = BASE_STYLE + make_header("scores") + """
       scoring says the opposite. Success rate
       <b>{{ detail.epa.success_rate }}%</b>, better than
       <b>{{ detail.impact.percentile }}%</b> of {{ detail.position }} games.
+    </p>
+  </div>
+  {% endif %}
+
+  {% if quarters %}
+  <!-- The same game split four ways. A single rating cannot tell a
+       steady afternoon from one explosive drive; this can. -->
+  <div class="pf-panel">
+    <h3>By quarter</h3>
+    <div class="pf-qtrs">
+      {% for q in quarters %}
+      <div class="pf-qtr">
+        <div class="pf-qtr-head">
+          <b>{{ q.label }}</b>
+          <span class="pf-qtr-epa {{ 'pos' if q.epa > 0 else ('neg' if q.epa < 0 else '') }}">
+            {{ '%+.2f'|format(q.epa) }} EPA
+          </span>
+        </div>
+        <!-- Width is the share of the game's total swing that happened
+             here, so the bars read against each other at a glance. -->
+        <div class="pf-qtr-bar"><span style="width:{{ q.share }}%;"></span></div>
+        <div class="pf-qtr-line">
+          {{ q.plays }} play{{ '' if q.plays == 1 else 's' }}
+          {%- if q.yards %} &middot; {{ q.yards }} yds{% endif -%}
+          {%- if q.touchdowns %} &middot; {{ q.touchdowns }} TD{% endif %}
+          &middot; {{ q.success_rate }}% success
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <p class="pf-note">
+      Bars show each quarter's share of the game's total swing. A quarter
+      with no snaps is left out rather than shown as a zero.
     </p>
   </div>
   {% endif %}
@@ -10744,7 +10926,11 @@ GAME_DETAIL_HTML = BASE_STYLE + make_header("scores") + """
       {% if detail.info.attendance %}<div class="gd-info-item"><span>Attendance</span><b>{{ '{:,}'.format(detail.info.attendance) }}{% if detail.info.capacity %} / {{ '{:,}'.format(detail.info.capacity) }}{% endif %}</b></div>{% endif %}
       {% if detail.info.surface %}<div class="gd-info-item"><span>Surface</span><b>{{ detail.info.surface }}{% if detail.info.indoor %} &middot; Indoor{% endif %}</b></div>{% endif %}
       {% if detail.info.weather or detail.info.temperature is not none %}
-      <div class="gd-info-item"><span>Weather</span><b>{% if detail.info.weather %}{{ detail.info.weather }}{% endif %}{% if detail.info.temperature is not none %} {{ detail.info.temperature }}&deg;{% endif %}</b></div>
+      <div class="gd-info-item"><span>Weather</span><b>
+        {%- if detail.info.weather_emoji %}{{ detail.info.weather_emoji }} {% endif -%}
+        {%- if detail.info.weather %}{{ detail.info.weather }}{% endif -%}
+        {%- if detail.info.temperature is not none %} {{ detail.info.temperature }}&deg;F{% endif -%}
+      </b></div>
       {% endif %}
       {% if detail.odds and detail.odds.spread %}
       <div class="gd-info-item"><span>Line</span><b>{{ detail.odds.spread }}{% if detail.odds.over_under %} &middot; O/U {{ detail.odds.over_under }}{% endif %}</b></div>
@@ -11448,7 +11634,15 @@ RANKINGS_HTML = BASE_STYLE + make_header("rankings") + VOTE_MODAL_HTML + """
   }
   .rk-toolbar{ position:sticky; top:64px; z-index:40; background:color-mix(in srgb, var(--rk-bg) 92%, transparent); backdrop-filter:blur(8px); border-bottom:1px solid var(--rk-line); padding:16px 0; display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
   .rk-title{ font-family:"Big Shoulders Display"; font-size:22px; font-weight:800; text-transform:uppercase; margin-right:auto; color:var(--rk-text); }
-  .rk-select{ background:var(--rk-surface); border:1px solid var(--rk-line); color:var(--rk-text); border-radius:8px; padding:9px 12px; font-size:13.5px; font-weight:600; font-family:inherit; }
+  /* A styled select loses the platform's own arrow, and a control with
+     no arrow does not read as a control. Drawn back on explicitly. */
+  .rk-select{ background-color:var(--rk-surface); border:1px solid var(--rk-line);
+              color:var(--rk-text); border-radius:8px; padding:9px 12px; font-size:13.5px;
+              font-weight:600; font-family:inherit;
+              appearance:none; -webkit-appearance:none;
+             background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5 6 6.5 11 1.5' stroke='%238b9089' stroke-width='1.8' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+             background-repeat:no-repeat; background-position:right 11px center;
+             background-size:11px 7px; padding-right:30px; cursor:pointer; }
   .rk-icon-btn{ width:36px; height:36px; border-radius:8px; background:var(--rk-surface); border:1px solid var(--rk-line); color:var(--rk-muted); display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:15px; }
   .rk-icon-btn.active{ color:var(--rk-text); border-color:var(--accent); }
   .rk-rookie-toggle{ font-size:12px; font-weight:700; padding:0 13px; height:36px; border-radius:99px; border:1px solid var(--rk-line); background:var(--rk-surface); color:var(--rk-muted); cursor:pointer; display:flex; align-items:center; gap:6px; user-select:none; }
