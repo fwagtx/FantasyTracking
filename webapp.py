@@ -5290,56 +5290,255 @@ def get_player_game_epa(sid, season, week):
     }
 
 
-def get_player_quarter_breakdown(sid, season, week):
-    """The same game split four ways: what the player did in each
-    quarter, and how much of the game's swing came from it.
+# --- Per-play ratings and the quarter breakdown -------------------------
+#
+# The quarter panel used to read nflverse's `player_plays`, which is why
+# almost nobody had one: nflverse publishes a game only after the final
+# whistle AND only once the nightly sync has run. ESPN's own drive feed
+# is live, covers every game, and already carries everything a play row
+# needs -- the score at the time, the quarter and clock, the down and
+# distance -- so that is the source now, with nflverse's EPA layered on
+# top wherever it happens to exist.
 
-    Built from the plays already loaded for the feed, so it costs nothing
-    extra -- and it answers the question a single game rating cannot: was
-    this a steady afternoon or one explosive drive?
+# How much one play was worth to the player it belonged to, in
+# fantasy-point-shaped units. These weights only ever decide the
+# RELATIVE size of one play against another (the quarter ratings are a
+# split of the score the player actually earned, and the per-play rating
+# is a curve over this value), so they are a weighting, not a scoring
+# system, and they do not have to match any particular league's rules.
+_PLAY_W_YARD = 0.1
+_PLAY_W_PASS_YARD = 0.04
+_PLAY_W_TD = 6.0
+_PLAY_W_PASS_TD = 4.0
+_PLAY_W_RECEPTION = 1.0
+_PLAY_W_SACK = 4.0
+_PLAY_W_INT = 6.0
+_PLAY_W_FUMBLE = 4.0
+_PLAY_W_TACKLE = 1.0
 
-    Quarters with no snaps are left out rather than shown as zero. A
-    player who never took the field in the first quarter did not have a
-    bad first quarter."""
-    plays = get_player_plays(sid, season, week)
-    if not plays:
+# The compressive curve that turns that value into the 0-10 rating shown
+# beside a play: 10 * v / (v + K). A touchdown run lands in the high
+# sixes, a chunk gain in the fours, a routine carry near one, and nothing
+# ever reaches ten. K is fitted so the curve reproduces the per-play
+# ratings the reference app publishes for a known game.
+PLAY_RATING_K = 4.3
+
+_PLAY_PASSER_RE = re.compile(
+    r"(?:\d{1,2}-)?([A-Z][A-Za-z]?\.[A-Z][A-Za-z'\-]+)\s+(?:pass|sacked|scrambles)\b")
+_PLAY_RECEIVER_RE = re.compile(
+    r"\bto\s+(?:\d{1,2}-)?([A-Z][A-Za-z]?\.[A-Z][A-Za-z'\-]+)")
+_PLAY_PAREN_RE = re.compile(r"\(([^)]*)\)")
+
+
+def play_rating(value):
+    """A play's 0-10 rating from its weighted value.
+
+    The curve only approaches ten, and the rounding is held just below it
+    as well, so a ten on this page always means the season-long rating it
+    is reserved for rather than one very good snap."""
+    v = max(0.0, float(value or 0))
+    return min(9.9, round(10 * v / (v + PLAY_RATING_K), 1))
+
+
+def _play_value_for(text, yards, scoring, name):
+    """What `name` did on this play, as a non-negative weight.
+
+    Returns 0 for a play the player was only incidentally named in, and
+    never goes negative: a lost fumble or an interception is a real
+    part of the game, but a negative weight would subtract from a
+    quarter's share of a rating the player genuinely earned, which reads
+    as nonsense on a bar chart."""
+    main = _primary_clause(text or "")
+    low = main.lower()
+    y = yards if isinstance(yards, (int, float)) else 0
+    gain = max(0, int(y))
+    # Read off the WHOLE sentence, not the primary clause -- the clause
+    # splitter cuts at the word "touchdown" itself, so asking the clause
+    # whether a touchdown happened always says no.
+    td = "touchdown" in (text or "").lower()
+
+    m_pass = _PLAY_PASSER_RE.search(main)
+    passer = m_pass.group(1) if m_pass else None
+    m_rec = _PLAY_RECEIVER_RE.search(main)
+    receiver = m_rec.group(1) if m_rec else None
+
+    if name == passer:
+        if "sacked" in low or "intercepted" in low:
+            return 0.0
+        return gain * _PLAY_W_PASS_YARD + (_PLAY_W_PASS_TD if td else 0.0)
+    if name == receiver:
+        if "incomplete" in low or "intercepted" in low:
+            return 0.0
+        return gain * _PLAY_W_YARD + _PLAY_W_RECEPTION + (_PLAY_W_TD if td else 0.0)
+
+    # Defensive credit, read off the clauses ESPN writes it in.
+    # Case-insensitively: ESPN writes these in capitals in a gamebook
+    # sentence and in title case elsewhere, and both turn up.
+    if re.search(r"intercepted by\s+(?:\d{1,2}-|[A-Z]{2,3}-)?" + re.escape(name),
+                 main, re.I):
+        return _PLAY_W_INT + (_PLAY_W_TD if td else 0.0)
+    if re.search(r"recovered by\s+(?:\d{1,2}-|[A-Z]{2,3}-)?" + re.escape(name),
+                 main, re.I):
+        return _PLAY_W_FUMBLE + (_PLAY_W_TD if td else 0.0)
+    in_paren = any(name in group for group in _PLAY_PAREN_RE.findall(main))
+    if in_paren:
+        return _PLAY_W_SACK if "sacked" in low else _PLAY_W_TACKLE
+
+    # Anything left with the player's name on it is a carry.
+    if name and name in main:
+        return gain * _PLAY_W_YARD + (_PLAY_W_TD if td else 0.0)
+    return 0.0
+
+
+def _player_play_name(player):
+    """The "D.Henry" form ESPN writes in play text."""
+    first, last = (player or {}).get("first_name"), (player or {}).get("last_name")
+    return f"{first[0]}.{last}" if first and last else None
+
+
+_espn_player_plays_cache = {}
+
+
+def get_player_espn_plays(sid, season, week, cache=_espn_player_plays_cache):
+    """Every play this player appeared in for one game, best first, from
+    ESPN's live play-by-play.
+
+    Each row carries what a play line needs to be read without the
+    surrounding sentence: the quarter and clock, the down and distance,
+    the score at that moment, a short headline, and a 0-10 rating.
+
+    Returns [] rather than raising for a player with no team, a week
+    that has not been synced, or an ESPN response that arrived empty --
+    the panels above it simply do not render."""
+    season, week = _safe_int(season, int(SEASON)), _safe_int(week, 1)
+    key = (sid, season, week)
+    now = time.time()
+    entry = cache.get(key)
+    if entry and now - entry["time"] < 45:
+        return entry["data"]
+
+    player = get_all_players().get(sid) or {}
+    name, team = _player_play_name(player), player.get("team")
+    sched = get_schedule_for_team_week(season, week, team) if (name and team) else None
+    event_id = (sched or {}).get("espn_event_id")
+    if not event_id:
+        cache[key] = {"data": [], "time": now}
         return []
 
-    by_qtr = {}
-    for p in plays:
-        q = p.get("qtr")
-        if not q:
-            continue
-        by_qtr.setdefault(int(q), []).append(p)
-    if not by_qtr:
-        return []
+    summary = espn_game_summary(event_id) or {}
+    # A whole game is 150-190 plays; the default feed cap of 60 would
+    # silently drop the first half.
+    raw = extract_drive_plays(summary, limit=400)
+    is_home = bool((sched or {}).get("home"))
+    opponent = (sched or {}).get("opponent")
 
-    # Share is measured against the total SWING, not the net total: a
-    # game that went +6 then -6 has plenty of story in it, and dividing
-    # by a net of zero would either explode or report nothing happened.
-    swing = sum(abs(p["epa"]) for p in plays if p["epa"] is not None) or 0.0
+    # nflverse EPA, when it exists, keyed by (quarter, clock) so a play
+    # can show the real number instead of an estimate.
+    epa_by_slot = {}
+    for p in (get_player_plays(sid, season, week) or []):
+        if p.get("qtr") and p.get("clock"):
+            epa_by_slot[(int(p["qtr"]), str(p["clock"]).strip())] = p.get("epa")
 
     out = []
-    for q in sorted(by_qtr):
-        rows = by_qtr[q]
-        epas = [p["epa"] for p in rows if p["epa"] is not None]
-        tds = sum(1 for p in rows if p.get("touchdown"))
-        successes = sum(1 for p in rows if p.get("success"))
-        total = round(sum(epas), 2) if epas else 0.0
+    for play in raw:
+        text = play.get("text") or ""
+        if not name or name not in text:
+            continue
+        value = _play_value_for(text, play.get("yards"), play.get("scoring"), name)
+        if value <= 0 and not play.get("scoring"):
+            # Named only as a bystander (a blocker ESPN credited, a
+            # penalty declined against him) -- not this player's play.
+            continue
+        qtr = play.get("period")
+        clock = (play.get("clock") or "").strip()
+        out.append({
+            "qtr": qtr,
+            "clock": clock,
+            "down": play.get("down"),
+            "ydstogo": play.get("distance"),
+            "description": text,
+            "headline": _play_headline(text, play.get("yards"), play.get("scoring")),
+            "yards_gained": play.get("yards"),
+            "touchdown": bool(play.get("scoring")) and "touchdown" in text.lower(),
+            "value": round(value, 2),
+            "rating": play_rating(value),
+            "epa": epa_by_slot.get((qtr, clock)) if qtr else None,
+            "team": team,
+            "opponent": opponent,
+            "team_score": play.get("home_score") if is_home else play.get("away_score"),
+            "opp_score": play.get("away_score") if is_home else play.get("home_score"),
+        })
+
+    out.sort(key=lambda p: (p["value"], p.get("qtr") or 0), reverse=True)
+    cache[key] = {"data": out, "time": now}
+    return out
+
+
+def get_player_quarter_breakdown(sid, season, week, score=None):
+    """The player's game rating, split across the quarters they earned it
+    in -- so the four bars add up to the one number at the top of the
+    page rather than sitting on some unrelated scale.
+
+    Weighting comes from ESPN's play-by-play, which is live and covers
+    every game. nflverse EPA is used instead when it is available, since
+    a real expected-points swing is a truer measure of when a game was
+    won than yardage is; the split it produces is on the same scale
+    either way.
+
+    Quarters run from the first one the player appeared in to the last,
+    so a quarter they were on the field for but did nothing in shows as a
+    zero -- which is information -- while quarters before they entered or
+    after they left are simply absent, which is also information."""
+    season, week = _safe_int(season, int(SEASON)), _safe_int(week, 1)
+    if score is None:
+        player = get_all_players().get(sid) or {}
+        live = (get_live_week_stats(season, week, allow_fetch=False) or {}).get(sid) or {}
+        score = (grade_performance(player.get("position"), live.get("pts"), season) or {}).get("score")
+    if score is None:
+        return []
+
+    # nflverse first (real EPA), ESPN second (always there).
+    weights, source = {}, None
+    nfl_plays = get_player_plays(sid, season, week) or []
+    if any(p.get("epa") is not None and p.get("qtr") for p in nfl_plays):
+        source = "epa"
+        for p in nfl_plays:
+            if p.get("qtr") and p.get("epa") is not None:
+                weights[int(p["qtr"])] = weights.get(int(p["qtr"]), 0.0) + abs(p["epa"])
+    else:
+        espn_plays = get_player_espn_plays(sid, season, week)
+        if not espn_plays:
+            return []
+        source = "espn"
+        for p in espn_plays:
+            if p.get("qtr"):
+                weights[int(p["qtr"])] = weights.get(int(p["qtr"]), 0.0) + p["value"]
+
+    if not weights:
+        return []
+    total = sum(weights.values())
+    if total <= 0:
+        return []
+
+    lo, hi = min(weights), max(weights)
+    out = []
+    for q in range(lo, hi + 1):
+        w = weights.get(q, 0.0)
         out.append({
             "qtr": q,
-            "label": f"Q{q}" if q <= 4 else "OT",
-            "plays": len(rows),
-            "yards": sum(p["yards_gained"] for p in rows
-                         if isinstance(p.get("yards_gained"), (int, float))),
-            "touchdowns": tds,
-            "epa": total,
-            "epa_per_play": round(sum(epas) / len(epas), 2) if epas else 0.0,
-            "success_rate": round(100 * successes / len(rows)) if rows else 0,
-            # How much of the afternoon happened here, 0-100.
-            "share": round(100 * sum(abs(e) for e in epas) / swing) if swing else 0,
-            "best": max(rows, key=lambda p: p["epa"] if p["epa"] is not None else -99),
+            "label": f"Q{q}" if q <= 4 else ("OT" if q == 5 else f"OT{q - 4}"),
+            "rating": round(score * w / total, 2),
+            "share": round(100 * w / total),
+            "source": source,
         })
+
+    # Rounding must not cost the player part of their score: the
+    # leftover thousandths go to the biggest quarter, so the bars always
+    # add back up to the number printed at the top of the page.
+    drift = round(score - sum(q["rating"] for q in out), 2)
+    if drift and out:
+        top = max(out, key=lambda q: q["rating"])
+        top["rating"] = round(top["rating"] + drift, 2)
     return out
 
 
@@ -5506,6 +5705,10 @@ def get_performance_detail(sid, season, week):
 
     epa_summary = get_player_game_epa(sid, season, week)
     plays = get_player_plays(sid, season, week)
+    # The play list the page actually renders. ESPN's feed is live and
+    # covers every game, so it is the one that shows up for everybody;
+    # nflverse's rows, when they exist, carry the EPA panel instead.
+    feed_plays = get_player_espn_plays(sid, season, week)
 
     # Target share, same idea, for pass catchers.
     target_share = None
@@ -5540,6 +5743,9 @@ def get_performance_detail(sid, season, week):
         "epa": epa_summary,
         "impact": grade_impact(position, (epa_summary or {}).get("total_epa"), season),
         "plays": plays,
+        "feed_plays": feed_plays,
+        "opp_logo": team_logo_url((sched or {}).get("opponent")) if sched else None,
+        "team_logo": team_logo_url(team) if team else None,
     }
 
 
@@ -6019,6 +6225,55 @@ def get_draft_order(season, season_type=2):
     return out
 
 
+# The position families the scores board leads with, in the order the
+# reference shows them. Kickers get their own line rather than being
+# folded in with the skill positions, where a 14-point day would never
+# out-rank a receiver's 30.
+PERFORMER_GROUPS = [
+    {"key": "qb",  "title": "Top QB",         "positions": ["QB"]},
+    {"key": "flex", "title": "Top WR/RB/TE",  "positions": ["WR", "RB", "TE"]},
+    {"key": "idp", "title": "Top DB/LB/DL",   "positions": ["DB", "LB", "DL"]},
+    {"key": "k",   "title": "Top K",          "positions": ["K"]},
+]
+
+# How many teams the scores board's power-ranking strip shows before
+# handing off to the full standings page.
+POWER_BOARD_SIZE = 10
+
+
+def get_power_board(season, season_type=2, limit=POWER_BOARD_SIZE):
+    """The top of the power ranking, ready to render: rank, logo, record
+    and point differential.
+
+    Ranked on the four-round window rather than the whole season, which
+    is the one people mean by "power ranking" -- who is good NOW, not who
+    banked wins in September. Teams with nothing in that window fall back
+    to their season rank inside get_team_rankings, so nobody is missing.
+
+    Returns [] rather than raising when the season has no finished games
+    yet; the strip simply does not render."""
+    try:
+        ranks = get_team_rankings(season, season_type)
+        standings = get_team_standings(season, season_type)
+    except Exception:
+        return []
+    out = []
+    for team, r in (ranks or {}).items():
+        place = r.get("d30") or r.get("season")
+        if not place:
+            continue
+        st = standings.get(team) or {}
+        record = f"{st.get('wins', 0)}-{st.get('losses', 0)}"
+        if st.get("ties"):
+            record += f"-{st['ties']}"
+        out.append({
+            "team": team, "rank": place, "logo": team_logo_url(team),
+            "record": record, "diff": st.get("diff"),
+        })
+    out.sort(key=lambda t: t["rank"])
+    return out[:limit]
+
+
 _team_rank_cache = {}
 
 
@@ -6344,7 +6599,8 @@ def scores_page():
             current_season=info["season"], current_week=info["week"],
             today_key=date.today().isoformat(), load_error=None,
             username=username, has_synced_leagues=has_synced_leagues,
-            performers=performers,
+            performers=performers, power=get_power_board(season, season_type),
+            perf_groups=PERFORMER_GROUPS,
         )
     except Exception as e:
         # ESPN's API is unofficial and unverified against a live response
@@ -6356,7 +6612,7 @@ def scores_page():
             score_mark=SCORE_MARK_SVG, season_days=[],
             current_season=int(SEASON), current_week=1, today_key=date.today().isoformat(),
             load_error=str(e), username=username, has_synced_leagues=False,
-            performers=[],
+            performers=[], power=[], perf_groups=PERFORMER_GROUPS,
         )
 
 
@@ -6503,7 +6759,8 @@ def performance_page():
         week = request.args.get("week", default=info["week"], type=int)
         detail = get_performance_detail(sid, season, week) if sid else None
         log = get_player_season_log(sid, season, detail["position"], through_week=week) if detail else []
-        quarters = get_player_quarter_breakdown(sid, season, week) if detail else []
+        quarters = (get_player_quarter_breakdown(
+            sid, season, week, score=(detail["score"] or {}).get("score")) if detail else [])
         # The strip across the top is the rest of that week's board, so
         # you can move between performances without going back first.
         peers = [p for p in get_week_performers(season, week, allow_fetch=False) if p["sid"] != sid][:24]
@@ -8935,21 +9192,29 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + """
   /* Date strip: one tab per game day, labelled with its week and date,
      scrolling horizontally into future weeks. Underline-style rather
      than pill-style so a long run of tabs reads as one continuous
-     timeline instead of a row of disconnected buttons. */
+     timeline instead of a row of disconnected buttons.
+     Deliberately NOT scroll-snapped. Snapping locked each tab to the
+     middle of the strip, which hid the fact that there was anything
+     either side of it; free scrolling lets the next tab sit half-cut at
+     the edge, which is what tells you the strip scrolls at all. */
   .sc-day-tabs{
-    display:flex; gap:0; margin-top:12px; overflow-x:auto; scroll-snap-type:x proximity;
+    display:flex; gap:0; margin-top:12px; overflow-x:auto;
     -webkit-overflow-scrolling:touch; scrollbar-width:none;
     border-bottom:1px solid var(--sc-line);
+    /* The same job from the other side: the right edge fades out, so a
+       strip that runs past the screen never looks like it ends there. */
+    -webkit-mask-image:linear-gradient(to right, #000 calc(100% - 34px), transparent);
+    mask-image:linear-gradient(to right, #000 calc(100% - 34px), transparent);
   }
   .sc-day-tabs::-webkit-scrollbar{ display:none; }
   .sc-day-tab{
-    cursor:pointer; user-select:none; flex:none; scroll-snap-align:center;
+    cursor:pointer; user-select:none; flex:none;
     display:flex; flex-direction:column; align-items:center; gap:1px;
     padding:8px 16px 10px; min-width:92px; position:relative;
     border-bottom:2px solid transparent; color:var(--sc-muted);
   }
-  .sc-day-tab .wk{ font-size:11.5px; font-weight:600; letter-spacing:0.01em; white-space:nowrap; }
-  .sc-day-tab .dow{ font-size:16px; font-weight:800; font-family:"Big Shoulders Display"; letter-spacing:0.02em; }
+  .sc-day-tab .wk{ font-size:12px; font-weight:700; letter-spacing:0.01em; white-space:nowrap; }
+  .sc-day-tab .dow{ font-size:18px; font-weight:800; font-family:"Big Shoulders Display"; letter-spacing:0.02em; }
   .sc-day-tab.active{ color:var(--accent-ink); border-bottom-color:var(--accent-ink); }
   .sc-day-tab.today:not(.active){ color:var(--sc-text); }
   /* A live dot sits above the tab, so an in-progress slate is visible
@@ -8973,27 +9238,30 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + """
   .sc-month-cell .dot{ width:5px; height:5px; border-radius:50%; background:var(--sc-live); margin-top:3px; }
 
   /* Games grid: columns of four, scrolling horizontally into the rest of
-     the slate. Each column snaps, so a swipe lands on a clean set of four
-     rather than halfway between two. On a wide screen several columns are
-     visible at once and the scroll only kicks in for a genuinely long
-     slate. */
+     the slate. On a wide screen several columns are visible at once and
+     the scroll only kicks in for a genuinely long slate.
+     The columns used to snap MANDATORY, which paged the board one clean
+     screenful at a time -- and a board that only ever shows whole
+     columns looks like a board with nothing beside it. Free scrolling,
+     a column narrower than the screen, and a faded right edge all say
+     the same thing instead: there is more over here. */
   .sc-games{
     display:grid; grid-auto-flow:column; grid-template-rows:repeat(4, auto);
     grid-auto-columns:minmax(280px, 1fr); gap:0; margin-top:16px;
-    overflow-x:auto; scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch;
+    overflow-x:auto; -webkit-overflow-scrolling:touch;
     scrollbar-width:none; border:1px solid var(--sc-line); border-radius:12px;
   }
   .sc-games::-webkit-scrollbar{ display:none; }
   @media (min-width:900px){ .sc-games{ grid-auto-columns:minmax(330px, 1fr); } }
-  /* Fill the viewport width on a phone so one column is exactly one
-     screenful and the snap feels like paging. */
-  @media (max-width:640px){ .sc-games{ grid-auto-columns:calc(100vw - 34px); } }
+  /* Just under a screenful on a phone, so the next column always shows
+     an edge rather than hiding exactly off-screen. */
+  @media (max-width:640px){ .sc-games{ grid-auto-columns:calc(100vw - 74px); } }
 
   .sc-game-card{
     display:flex; flex-direction:column; gap:8px; padding:12px 14px;
     text-decoration:none; color:var(--sc-text); cursor:pointer;
     border-right:1px solid var(--sc-line); border-bottom:1px solid var(--sc-line);
-    scroll-snap-align:start; background:var(--sc-surface); min-width:0;
+    background:var(--sc-surface); min-width:0;
   }
   .sc-game-card:hover{ background:var(--sc-surface2); }
   /* A live game is outlined, the way the reference board marks the games
@@ -9028,7 +9296,7 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + """
   .sc-section-head h2{ font-family:"Big Shoulders Display"; font-size:22px; font-weight:800; text-transform:uppercase; margin:0; color:var(--sc-text); }
   .sc-section-head .sub{ font-size:11.5px; color:var(--sc-muted); }
   .sc-viewall{ font-size:12.5px; font-weight:700; color:var(--accent-ink); text-decoration:none; white-space:nowrap; }
-  .sc-perf-note{ font-size:11.5px; color:var(--sc-muted); margin:-4px 0 8px; }
+  .sc-perf-note{ font-size:11.5px; color:var(--sc-muted); margin:20px 0 -10px; }
   .sc-perf{ display:flex; flex-direction:column; border:1px solid var(--sc-line); border-radius:12px; overflow:hidden; background:var(--sc-surface); }
   .sc-perf-row{ display:flex; align-items:center; gap:10px; padding:10px 12px; border-top:1px solid var(--sc-line); text-decoration:none; color:var(--sc-text); }
   .sc-perf-row:first-child{ border-top:none; }
@@ -9044,6 +9312,30 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + """
   .sc-perf-sub{ font-size:11px; color:var(--sc-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   .sc-perf-grade{ font-family:"IBM Plex Mono"; font-size:20px; font-weight:700; flex:none; min-width:44px; text-align:right; font-variant-numeric:tabular-nums; }
   .sc-perf-empty{ color:var(--sc-muted); padding:24px; text-align:center; font-size:13px; }
+  .sc-group{ display:none; }
+  .sc-group.on{ display:block; }
+
+  /* Power-ranking strip. Deliberately terser than the standings table it
+     links to -- rank, crest, record, differential -- so it reads at a
+     glance and the full table stays one tap away. */
+  .sc-power{ display:flex; flex-direction:column; border:1px solid var(--sc-line);
+             border-radius:12px; overflow:hidden; background:var(--sc-surface); }
+  .sc-power-row{ display:flex; align-items:center; gap:11px; padding:9px 13px;
+                 border-top:1px solid var(--sc-line); text-decoration:none;
+                 color:var(--sc-text); }
+  .sc-power-row:first-child{ border-top:none; }
+  .sc-power-row:hover{ background:var(--sc-surface2); }
+  .sc-power-rank{ font-family:"IBM Plex Mono"; font-size:12.5px; color:var(--sc-muted);
+                  width:20px; flex:none; text-align:right; font-variant-numeric:tabular-nums; }
+  .sc-power-row img{ width:26px; height:26px; object-fit:contain; flex:none; }
+  .sc-power-name{ font-weight:700; font-size:14px; flex:1; min-width:0;
+                  font-family:"Big Shoulders Display"; letter-spacing:0.02em; }
+  .sc-power-rec{ font-family:"IBM Plex Mono"; font-size:12.5px; color:var(--sc-muted); flex:none; }
+  .sc-power-diff{ font-family:"IBM Plex Mono"; font-size:12.5px; font-weight:700;
+                  flex:none; min-width:38px; text-align:right;
+                  font-variant-numeric:tabular-nums; color:var(--sc-muted); }
+  .sc-power-diff.pos{ color:var(--good); }
+  .sc-power-diff.neg{ color:var(--critical); }
   /* Deliberately NOT colour-banded. A ranked list is already ordered
      best-to-worst, so colouring each score repeats information the
      position already carries, and three colours down a long list reads
@@ -9120,12 +9412,45 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + """
 
   <div class="sc-games" id="scGames"></div>
 
+  {% if power %}
+  <!-- Second in the day's order, between the scores and the position
+       leaders: who is actually good right now, on the four-round window
+       rather than the whole season. -->
   <div class="sc-section-head">
-    <h2>Top Performers</h2>
-    <a class="sc-viewall" id="scPerfMore" href="/performances">View all &rsaquo;</a>
+    <h2>Power Rankings</h2>
+    <a class="sc-viewall" href="/standings">Full standings &rsaquo;</a>
   </div>
+  <div class="sc-power">
+    {% for t in power %}
+    <a class="sc-power-row" href="/team?abbr={{ t.team }}&amp;season={{ season }}">
+      <span class="sc-power-rank">{{ t.rank }}</span>
+      <img src="{{ t.logo }}" alt="" loading="lazy"
+           onerror="this.style.visibility='hidden'">
+      <span class="sc-power-name">{{ t.team }}</span>
+      <span class="sc-power-rec">{{ t.record }}</span>
+      <span class="sc-power-diff {{ 'pos' if t.diff and t.diff > 0 else ('neg' if t.diff and t.diff < 0 else '') }}">
+        {%- if t.diff is not none %}{{ '%+d'|format(t.diff) }}{% endif -%}
+      </span>
+    </a>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <!-- Third: the day's leaders, one section per position family, the way
+       the reference board lays them out. Filled client-side from the
+       same baked board the day tabs filter, so switching days moves
+       these too. -->
   <div class="sc-perf-note" id="scPerfSub"></div>
-  <div class="sc-perf" id="scPerf"></div>
+  {% for g in perf_groups %}
+  <div class="sc-group" id="scGroup-{{ g.key }}" data-positions="{{ g.positions|join(',') }}">
+    <div class="sc-section-head">
+      <h2>{{ g.title }}</h2>
+      <a class="sc-viewall" data-group-more="{{ g.key }}"
+         href="/performances">View more &rsaquo;</a>
+    </div>
+    <div class="sc-perf" data-group-rows="{{ g.key }}"></div>
+  </div>
+  {% endfor %}
 </div>
 </div>
 
@@ -9499,10 +9824,45 @@ const scServerTodayKey = {{ today_key|tojson }};
     return n + ({ 1: 'st', 2: 'nd', 3: 'rd' }[n % 10] || 'th');
   }
 
-  const perfEl = document.getElementById('scPerf');
   const perfSubEl = document.getElementById('scPerfSub');
-  const PERF_SHOWN = 10;
+  // Per family rather than per page: three is enough to see who led the
+  // day at each position without the section becoming its own board.
+  const PERF_PER_GROUP = 3;
+  const perfGroups = Array.prototype.slice.call(document.querySelectorAll('.sc-group'))
+    .map(function(el){
+      return {
+        el: el,
+        key: el.id.replace('scGroup-', ''),
+        positions: (el.getAttribute('data-positions') || '').split(',').filter(Boolean),
+        rowsEl: el.querySelector('[data-group-rows]'),
+        moreEl: el.querySelector('[data-group-more]')
+      };
+    });
   let performers = SCORES_PERFORMERS || [];
+
+  function perfRow(p, i){
+    const stats = (p.stat_line || []).map(function(s){
+      return '<span class="sc-perf-stat"><b>' + s[0] + '</b><span>' + s[1] + '</span></span>';
+    }).join('');
+    const grade = p.grade || {};
+    const pct = grade.percentile == null ? '' : ordinal(grade.percentile) + ' pct';
+    const sub = [p.position + ' · ' + p.team, p.vs_label, pct]
+      .filter(Boolean).join(' · ');
+    const href = '/performance?sid=' + encodeURIComponent(p.sid) +
+                 '&season=' + scSeason + '&week=' + scWeek;
+    return '<a class="sc-perf-row" href="' + href + '">' +
+      '<span class="sc-perf-rank">' + (i + 1) + '</span>' +
+      '<img src="' + (p.photo || '') + '" alt="" onerror="this.style.visibility=\\'hidden\\'">' +
+      '<span class="sc-perf-main">' +
+        '<span class="sc-perf-name">' + p.name +
+          '<span class="pts">' + p.fpts + ' pts</span></span>' +
+        '<span class="sc-perf-stats">' + stats + '</span>' +
+        '<span class="sc-perf-sub">' + sub + '</span>' +
+      '</span>' +
+      '<span class="sc-perf-grade">' + SCORE_MARK +
+        (grade.score == null ? '' : grade.score.toFixed(1)) + '</span>' +
+    '</a>';
+  }
 
   function renderPerformers(){
     const games = daysIndex[selectedDay] || [];
@@ -9512,55 +9872,35 @@ const scServerTodayKey = {{ today_key|tojson }};
       if (g.home && g.home.abbr) teams.add(g.home.abbr);
     });
 
-    const rows = performers
-      .filter(function(p){ return teams.has(p.team) && p.fpts > 0; })
-      .slice(0, PERF_SHOWN);
-
+    const played = performers.filter(function(p){
+      return teams.has(p.team) && p.fpts > 0;
+    });
     const anyLive = games.some(function(g){ return g.status === 'in_progress'; });
     const anyPlayed = games.some(function(g){ return g.status !== 'scheduled'; });
-    const moreEl = document.getElementById('scPerfMore');
-    if (moreEl) {
-      moreEl.href = '/performances?season=' + scSeason + '&week=' + scWeek + '&scope=week';
-    }
-    perfSubEl.textContent = rows.length
+
+    perfSubEl.textContent = played.length
       ? (anyLive ? 'Live · 5.0 = an average starter game at the position'
                  : '5.0 = an average starter game at the position')
-      : '';
+      : (anyPlayed ? 'No scoring yet in these games.'
+                   : 'Leaders appear here once these games kick off.');
 
-    if(!rows.length){
-      // Distinguish "hasn't happened yet" from "we have nothing" -- the
-      // first is the normal state of a Thursday morning, the second is
-      // a problem, and they should never look the same.
-      perfEl.innerHTML = '<div class="sc-perf-empty">' +
-        (anyPlayed ? 'No scoring yet in these games.'
-                   : 'Top performers appear here once these games kick off.') +
-        '</div>';
-      return;
-    }
-
-    perfEl.innerHTML = rows.map(function(p, i){
-      const stats = (p.stat_line || []).map(function(s){
-        return '<span class="sc-perf-stat"><b>' + s[0] + '</b><span>' + s[1] + '</span></span>';
-      }).join('');
-      const grade = p.grade || {};
-      const pct = grade.percentile == null ? '' : ordinal(grade.percentile) + ' pct';
-      const sub = [p.position + ' · ' + p.team, p.vs_label, pct]
-        .filter(Boolean).join(' · ');
-      const href = '/performance?sid=' + encodeURIComponent(p.sid) +
-                   '&season=' + scSeason + '&week=' + scWeek;
-      return '<a class="sc-perf-row" href="' + href + '">' +
-        '<span class="sc-perf-rank">' + (i + 1) + '</span>' +
-        '<img src="' + (p.photo || '') + '" alt="" onerror="this.style.visibility=\\'hidden\\'">' +
-        '<span class="sc-perf-main">' +
-          '<span class="sc-perf-name">' + p.name +
-            '<span class="pts">' + p.fpts + ' pts</span></span>' +
-          '<span class="sc-perf-stats">' + stats + '</span>' +
-          '<span class="sc-perf-sub">' + sub + '</span>' +
-        '</span>' +
-        '<span class="sc-perf-grade">' + SCORE_MARK +
-          (grade.score == null ? '' : grade.score.toFixed(1)) + '</span>' +
-      '</a>';
-    }).join('');
+    perfGroups.forEach(function(g){
+      const rows = played.filter(function(p){
+        return g.positions.indexOf(p.position) !== -1;
+      }).slice(0, PERF_PER_GROUP);
+      // A section with nobody in it is hidden rather than shown empty:
+      // on a short slate there may be no kicker at all, and a headed
+      // box saying nothing reads as broken.
+      g.el.classList.toggle('on', rows.length > 0);
+      if (!rows.length) { g.rowsEl.innerHTML = ''; return; }
+      if (g.moreEl) {
+        // One position per family goes into the link; the page's own
+        // dropdown covers the rest.
+        g.moreEl.href = '/performances?season=' + scSeason + '&week=' + scWeek +
+                        '&scope=week&position=' + encodeURIComponent(g.positions[0]);
+      }
+      g.rowsEl.innerHTML = rows.map(perfRow).join('');
+    });
   }
 
   function refreshPerformers(){
@@ -10176,28 +10516,46 @@ PERFORMANCE_HTML = BASE_STYLE + make_header("scores") + """
   .pf-score.poor .n{ color:var(--critical); }
   .pf-score.historic .n{ color:var(--accent-ink); }
 
-  .pf-qtrs{ display:flex; flex-direction:column; gap:12px; }
-  .pf-qtr-head{ display:flex; justify-content:space-between; align-items:baseline; }
-  .pf-qtr-head b{ font-family:"Big Shoulders Display"; font-size:17px; letter-spacing:0.02em; }
-  .pf-qtr-epa{ font-family:"IBM Plex Mono"; font-size:12.5px; font-weight:700;
-               color:var(--pf-muted); }
-  .pf-qtr-epa.pos{ color:var(--good); } .pf-qtr-epa.neg{ color:var(--critical); }
-  .pf-qtr-bar{ height:7px; border-radius:99px; background:var(--pf-surface);
-               overflow:hidden; margin:5px 0 4px; }
-  .pf-qtr-bar span{ display:block; height:100%; border-radius:99px; background:var(--accent);
-                    min-width:2px; }
-  .pf-qtr-line{ font-size:11.5px; color:var(--pf-muted); }
+  /* Rating breakdown: one column per quarter, the rating printed above
+     its bar. Columns rather than rows because the question being asked
+     is "when did this game happen", and a timeline reads left to right. */
+  .pf-qtrs{ display:flex; align-items:flex-end; gap:12px; height:170px; margin-top:6px; }
+  .pf-qtr{ flex:1; display:flex; flex-direction:column; align-items:center;
+           justify-content:flex-end; height:100%; min-width:0; }
+  .pf-qtr-val{ font-size:15px; font-weight:700; font-family:"IBM Plex Mono";
+               font-variant-numeric:tabular-nums; margin-bottom:6px; white-space:nowrap; }
+  .pf-qtr-col{ width:100%; border-radius:6px 6px 0 0; background:var(--accent);
+               min-height:3px; transition:height 0.2s ease; }
+  .pf-qtr-col.zero{ background:var(--pf-surface2); }
+  .pf-qtr-lab{ font-size:12.5px; color:var(--pf-muted); margin-top:7px; }
   .pf-note{ font-size:11.5px; color:var(--pf-muted); margin-top:14px; line-height:1.5; }
-  .pf-plays{ display:flex; flex-direction:column; }
-  .pf-play{ padding:9px 0; border-top:1px solid var(--pf-line); }
-  .pf-play:first-child{ border-top:none; }
-  .pf-play-head{ display:flex; justify-content:space-between; gap:10px; align-items:baseline; }
-  .pf-play-sit{ font-size:11px; color:var(--pf-muted); text-transform:capitalize; }
-  .pf-play-epa{ font-family:"IBM Plex Mono"; font-size:12px; font-weight:700; flex:none; }
-  .pf-play-epa.pos{ color:var(--good); }
-  .pf-play-epa.neg{ color:var(--critical); }
-  .pf-play-desc{ font-size:12.5px; margin-top:3px; line-height:1.4; }
-  .pf-play-desc.td{ color:var(--accent-ink); font-weight:700; }
+
+  /* Play rows, the way the reference writes them: who, when, at what
+     score, what happened, and what it was worth. */
+  .pf-feed{ display:flex; flex-direction:column; }
+  .pf-feed-row{ display:flex; gap:11px; align-items:flex-start; padding:12px 0;
+                border-top:1px solid var(--pf-line); text-decoration:none; color:inherit; }
+  .pf-feed-row:first-child{ border-top:none; }
+  .pf-feed-row img.mug{ width:44px; height:44px; border-radius:50%; object-fit:cover;
+                        background:var(--pf-surface2); flex:none; }
+  .pf-feed-main{ flex:1; min-width:0; }
+  .pf-feed-sit{ display:flex; align-items:center; gap:5px; flex-wrap:wrap;
+                font-size:11.5px; color:var(--pf-muted); }
+  .pf-feed-sit img{ width:15px; height:15px; object-fit:contain; vertical-align:-2px; }
+  .pf-feed-sit b{ color:var(--pf-text); font-family:"IBM Plex Mono"; font-weight:700; }
+  .pf-feed-title{ font-size:15.5px; font-weight:700; color:var(--accent-ink); margin-top:3px; }
+  .pf-feed-title.td{ color:var(--good); }
+  .pf-feed-rate{ flex:none; display:flex; align-items:center; gap:5px;
+                 font-family:"IBM Plex Mono"; font-size:15px; font-weight:700;
+                 font-variant-numeric:tabular-nums; }
+  .pf-feed-rate .score-mark{ width:11px; height:13px; opacity:0.5; }
+  .pf-feed-more{ display:block; text-align:center; padding:11px 0 2px; font-size:12.5px;
+                 font-weight:700; color:var(--accent-ink); cursor:pointer;
+                 border-top:1px solid var(--pf-line); }
+  .pf-feed-row.extra{ display:none; }
+  .pf-feed.all .pf-feed-row.extra{ display:flex; }
+  .pf-feed.all .pf-feed-more{ display:none; }
+  .pf-panel-head{ display:flex; align-items:baseline; justify-content:space-between; gap:10px; }
 
   .pf-panel{ background:var(--pf-surface); border:1px solid var(--pf-line); border-radius:12px; padding:14px 16px; margin-top:16px; }
   .pf-panel h3{ font-family:"Big Shoulders Display"; font-size:17px; font-weight:800; text-transform:uppercase;
@@ -10421,57 +10779,65 @@ PERFORMANCE_HTML = BASE_STYLE + make_header("scores") + """
   {% endif %}
 
   {% if quarters %}
-  <!-- The same game split four ways. A single rating cannot tell a
-       steady afternoon from one explosive drive; this can. -->
+  <!-- The rating at the top of the page, split across the quarters it
+       was earned in -- so the bars add up to it rather than sitting on
+       some unrelated scale. One column per quarter, read left to right. -->
+  {% set maxr = (quarters|map(attribute='rating')|max) or 0 %}
   <div class="pf-panel">
-    <h3>By quarter</h3>
+    <h3>Rating breakdown</h3>
     <div class="pf-qtrs">
       {% for q in quarters %}
       <div class="pf-qtr">
-        <div class="pf-qtr-head">
-          <b>{{ q.label }}</b>
-          <span class="pf-qtr-epa {{ 'pos' if q.epa > 0 else ('neg' if q.epa < 0 else '') }}">
-            {{ '%+.2f'|format(q.epa) }} EPA
-          </span>
-        </div>
-        <!-- Width is the share of the game's total swing that happened
-             here, so the bars read against each other at a glance. -->
-        <div class="pf-qtr-bar"><span style="width:{{ q.share }}%;"></span></div>
-        <div class="pf-qtr-line">
-          {{ q.plays }} play{{ '' if q.plays == 1 else 's' }}
-          {%- if q.yards %} &middot; {{ q.yards }} yds{% endif -%}
-          {%- if q.touchdowns %} &middot; {{ q.touchdowns }} TD{% endif %}
-          &middot; {{ q.success_rate }}% success
-        </div>
+        <div class="pf-qtr-val">{{ '%.2f'|format(q.rating) }}</div>
+        <div class="pf-qtr-col {{ 'zero' if q.rating <= 0 }}"
+             style="height:{{ ((118 * q.rating / maxr)|round|int) if maxr > 0 else 3 }}px;"></div>
+        <div class="pf-qtr-lab">{{ q.label }}</div>
       </div>
       {% endfor %}
     </div>
     <p class="pf-note">
-      Bars show each quarter's share of the game's total swing. A quarter
-      with no snaps is left out rather than shown as a zero.
+      Each quarter's share of {{ '%.1f'|format(detail.score.score) }}, weighted by what
+      {{ detail.name.split(' ')[-1] }} actually did in it
+      {%- if quarters[0].source == 'epa' %} and by how much each play moved the game
+      {%- endif %}. The four add back up to the rating above.
     </p>
   </div>
   {% endif %}
 
-  {% if detail.plays %}
+  {% if detail.feed_plays %}
   <div class="pf-panel">
-    <h3>Plays &middot; biggest impact first</h3>
-    <div class="pf-plays">
-      {% for p in detail.plays[:14] %}
-      <div class="pf-play">
-        <div class="pf-play-head">
-          <span class="pf-play-sit">
-            Q{{ p.qtr }} {{ p.clock }}
-            {%- if p.down %} &middot; {{ p.down|ordinal }} &amp; {{ p.ydstogo }}{% endif %}
-            {%- if p.role %} &middot; {{ p.role }}{% endif %}
-          </span>
-          <span class="pf-play-epa {{ 'pos' if p.epa and p.epa > 0 else 'neg' }}">
-            {{ '%+.2f'|format(p.epa) }} EPA
-          </span>
+    <h3>Plays</h3>
+    <!-- The six that mattered, with the rest one tap away -- the same
+         shape the reference uses, so a big day reads as a highlight reel
+         rather than a transcript. -->
+    {% set shown = detail.feed_plays[:24] %}
+    <div class="pf-feed" id="pfFeed">
+      {% for p in shown %}
+      <div class="pf-feed-row {{ 'extra' if loop.index > 6 }}">
+        <img class="mug" src="{{ detail.photo }}" alt="" loading="lazy"
+             onerror="this.style.visibility='hidden'">
+        <div class="pf-feed-main">
+          <div class="pf-feed-sit">
+            {% if detail.team_logo %}<img src="{{ detail.team_logo }}" alt=""
+                 onerror="this.style.display='none'">{% endif %}
+            <b>{{ p.team_score if p.team_score is not none else '-' }}</b>
+            <span>&ndash;</span>
+            <b>{{ p.opp_score if p.opp_score is not none else '-' }}</b>
+            {% if detail.opp_logo %}<img src="{{ detail.opp_logo }}" alt=""
+                 onerror="this.style.display='none'">{% endif %}
+            <span>{% if p.qtr %}Q{{ p.qtr }}{% endif %} {{ p.clock }}</span>
+            {%- if p.down %}<span>&middot; {{ p.down|ordinal }} &amp; {{ p.ydstogo }}</span>{% endif %}
+          </div>
+          <div class="pf-feed-title {{ 'td' if p.touchdown }}">{{ p.headline }}</div>
         </div>
-        <div class="pf-play-desc {{ 'td' if p.touchdown }}">{{ p.description }}</div>
+        <div class="pf-feed-rate">{{ score_mark|safe }}{{ '%.1f'|format(p.rating) }}</div>
       </div>
       {% endfor %}
+      {% if shown|length > 6 %}
+      <span class="pf-feed-more" onclick="document.getElementById('pfFeed').classList.add('all');">
+        View all {{ shown|length }} plays &rsaquo;
+      </span>
+      {% endif %}
     </div>
   </div>
   {% endif %}
