@@ -4898,6 +4898,24 @@ def grade_impact(position, total_epa, season=None):
     }
 
 
+def ordinal(n):
+    """1st, 2nd, 3rd, 4th -- with the teens exception, which a bare
+    last-digit rule gets wrong in both directions (11th not 11st, but
+    21st not 21th). Registered as a Jinja filter because this was being
+    written inline in templates, where the short version produced "22th".
+    """
+    try:
+        n = int(n)
+    except (TypeError, ValueError):
+        return ""
+    if 11 <= (n % 100) <= 13:
+        return f"{n}th"
+    return f"{n}{ {1: 'st', 2: 'nd', 3: 'rd'}.get(n % 10, 'th') }"
+
+
+app.jinja_env.filters["ordinal"] = ordinal
+
+
 def epa_bar_width(value, impact):
     """Bar width (percent) for an EPA figure on the Impact panel.
 
@@ -5177,6 +5195,315 @@ def _week_games(season, week, season_type=2):
     return games, any_live
 
 
+# Conference and division for all 32 teams. Static on purpose: the NFL's
+# alignment has not changed since 2002 and a realignment would be league
+# news, not a silent data drift -- so hardcoding it is more reliable than
+# scraping it, and it means standings work from the schedule table alone.
+NFL_DIVISIONS = {
+    "BAL": ("AFC", "North"), "CIN": ("AFC", "North"), "CLE": ("AFC", "North"), "PIT": ("AFC", "North"),
+    "HOU": ("AFC", "South"), "IND": ("AFC", "South"), "JAX": ("AFC", "South"), "TEN": ("AFC", "South"),
+    "BUF": ("AFC", "East"), "MIA": ("AFC", "East"), "NE": ("AFC", "East"), "NYJ": ("AFC", "East"),
+    "DEN": ("AFC", "West"), "KC": ("AFC", "West"), "LV": ("AFC", "West"), "LAC": ("AFC", "West"),
+    "CHI": ("NFC", "North"), "DET": ("NFC", "North"), "GB": ("NFC", "North"), "MIN": ("NFC", "North"),
+    "ATL": ("NFC", "South"), "CAR": ("NFC", "South"), "NO": ("NFC", "South"), "TB": ("NFC", "South"),
+    "DAL": ("NFC", "East"), "NYG": ("NFC", "East"), "PHI": ("NFC", "East"), "WAS": ("NFC", "East"),
+    "ARI": ("NFC", "West"), "LAR": ("NFC", "West"), "SF": ("NFC", "West"), "SEA": ("NFC", "West"),
+}
+# Full names for the 32 teams. Same reasoning as the division map: stable
+# league facts, and hardcoding them means a team page renders correctly
+# even before any schedule has synced.
+TEAM_NAMES = {
+    "ARI": "Arizona Cardinals", "ATL": "Atlanta Falcons", "BAL": "Baltimore Ravens",
+    "BUF": "Buffalo Bills", "CAR": "Carolina Panthers", "CHI": "Chicago Bears",
+    "CIN": "Cincinnati Bengals", "CLE": "Cleveland Browns", "DAL": "Dallas Cowboys",
+    "DEN": "Denver Broncos", "DET": "Detroit Lions", "GB": "Green Bay Packers",
+    "HOU": "Houston Texans", "IND": "Indianapolis Colts", "JAX": "Jacksonville Jaguars",
+    "KC": "Kansas City Chiefs", "LAC": "Los Angeles Chargers", "LAR": "Los Angeles Rams",
+    "LV": "Las Vegas Raiders", "MIA": "Miami Dolphins", "MIN": "Minnesota Vikings",
+    "NE": "New England Patriots", "NO": "New Orleans Saints", "NYG": "New York Giants",
+    "NYJ": "New York Jets", "PHI": "Philadelphia Eagles", "PIT": "Pittsburgh Steelers",
+    "SEA": "Seattle Seahawks", "SF": "San Francisco 49ers", "TB": "Tampa Bay Buccaneers",
+    "TEN": "Tennessee Titans", "WAS": "Washington Commanders",
+}
+CONFERENCES = ("AFC", "NFC")
+DIVISIONS = ("North", "South", "East", "West")
+
+_standings_cache = {}
+
+
+def _finished_games(season, season_type=2):
+    """Every completed game of a season, oldest first, as plain rows.
+
+    One query feeds standings, rankings, recent form and the team page's
+    results list -- they are all the same underlying facts, and deriving
+    them from a single read keeps them from ever disagreeing."""
+    if not DATABASE_URL:
+        return []
+    conn = get_db()
+    try:
+        with conn.cursor() as cur:
+            cur.execute(
+                """SELECT espn_event_id, week, kickoff, home_team, away_team,
+                          home_score, away_score, status
+                   FROM nfl_schedule
+                   WHERE season = %s AND season_type = %s
+                     AND home_score IS NOT NULL AND away_score IS NOT NULL
+                     AND status = 'final'
+                   ORDER BY kickoff""",
+                (season, season_type),
+            )
+            return [dict(r) for r in cur.fetchall()]
+    except Exception:
+        return []
+    finally:
+        conn.close()
+
+
+def get_team_standings(season, season_type=2, cache=_standings_cache):
+    """{team: {...}} -- record, win pct, points for/against, division
+    record, last five, streak and conference rank.
+
+    Computed from our own schedule rather than fetched, so it is correct
+    for whatever the table holds and needs no second source to stay in
+    step with the scores already on the site."""
+    season, season_type = _safe_int(season, int(SEASON)), _safe_int(season_type, 2)
+    key = (season, season_type)
+    now = time.time()
+    entry = cache.get(key)
+    if entry and now - entry["time"] < 300:
+        return entry["data"]
+
+    rows = {t: {"team": t, "conference": c, "division": d,
+                "wins": 0, "losses": 0, "ties": 0,
+                "pf": 0, "pa": 0, "games": 0,
+                "div_wins": 0, "div_losses": 0, "div_ties": 0,
+                "results": []}
+            for t, (c, d) in NFL_DIVISIONS.items()}
+
+    for g in _finished_games(season, season_type):
+        home, away = g["home_team"], g["away_team"]
+        hs, as_ = g["home_score"], g["away_score"]
+        if home not in rows or away not in rows:
+            continue
+        same_div = (NFL_DIVISIONS[home] == NFL_DIVISIONS[away])
+        for team, own, opp in ((home, hs, as_), (away, as_, hs)):
+            r = rows[team]
+            r["games"] += 1
+            r["pf"] += own
+            r["pa"] += opp
+            outcome = "W" if own > opp else ("L" if own < opp else "T")
+            r["results"].append(outcome)
+            r["wins" if outcome == "W" else ("losses" if outcome == "L" else "ties")] += 1
+            if same_div:
+                r["div_wins" if outcome == "W" else
+                  ("div_losses" if outcome == "L" else "div_ties")] += 1
+
+    for r in rows.values():
+        played = r["games"] or 0
+        decided = r["wins"] + r["losses"] + r["ties"]
+        # Ties count as half a win, which is how the NFL computes win pct.
+        r["pct"] = round((r["wins"] + 0.5 * r["ties"]) / decided, 3) if decided else 0.0
+        r["ppg"] = round(r["pf"] / played, 1) if played else 0.0
+        r["papg"] = round(r["pa"] / played, 1) if played else 0.0
+        r["diff"] = r["pf"] - r["pa"]
+        r["record"] = f"{r['wins']}-{r['losses']}" + (f"-{r['ties']}" if r["ties"] else "")
+        r["div_record"] = (f"{r['div_wins']}-{r['div_losses']}"
+                           + (f"-{r['div_ties']}" if r["div_ties"] else ""))
+        last5 = r["results"][-5:]
+        r["last5"] = f"{last5.count('W')}-{last5.count('L')}" + (
+            f"-{last5.count('T')}" if last5.count("T") else "")
+        # Current streak, counted back from the most recent result.
+        streak = 0
+        for outcome in reversed(r["results"]):
+            if streak and outcome != r["results"][-1]:
+                break
+            streak += 1
+        r["streak"] = f"{r['results'][-1]}{streak}" if r["results"] else "-"
+
+    # Conference rank, the "6th AFC" figure on each row. Ordered by win
+    # pct, then point differential as the tie-break -- not the NFL's full
+    # tiebreaker ladder (head-to-head, common games, strength of victory),
+    # which needs more than a schedule table; this is an ordering for
+    # display, and the page says as much.
+    for conf in CONFERENCES:
+        members = sorted((r for r in rows.values() if r["conference"] == conf),
+                         key=lambda r: (-r["pct"], -r["diff"], -r["pf"]))
+        for i, r in enumerate(members, 1):
+            r["conf_rank"] = i
+
+    cache[key] = {"data": rows, "time": now}
+    return rows
+
+
+def get_team_rankings(season, season_type=2, cache={}):
+    """Power ranking over three windows -- last 7 days, last 30 days, and
+    the whole season -- as {team: {"d7": n, "d30": n, "season": n}}.
+
+    Ranked on average point differential, which is the single most
+    predictive simple measure of team strength and, importantly, is
+    computable from data the site already has. A team with no games in a
+    window gets no rank for it rather than a fabricated one."""
+    season, season_type = _safe_int(season, int(SEASON)), _safe_int(season_type, 2)
+    key = (season, season_type)
+    now = time.time()
+    entry = cache.get(key)
+    if entry and now - entry["time"] < 300:
+        return entry["data"]
+
+    games = _finished_games(season, season_type)
+    latest = max((g["kickoff"] for g in games if g["kickoff"]), default=None)
+    windows = {"d7": 7, "d30": 30, "season": None}
+    out = {t: {} for t in NFL_DIVISIONS}
+
+    for label, days in windows.items():
+        totals = {}
+        for g in games:
+            if days is not None:
+                if not g["kickoff"] or not latest:
+                    continue
+                if (latest - g["kickoff"]).days > days:
+                    continue
+            for team, own, opp in ((g["home_team"], g["home_score"], g["away_score"]),
+                                   (g["away_team"], g["away_score"], g["home_score"])):
+                if team not in out:
+                    continue
+                t = totals.setdefault(team, {"diff": 0, "games": 0})
+                t["diff"] += own - opp
+                t["games"] += 1
+        ranked = sorted(((team, v["diff"] / v["games"]) for team, v in totals.items() if v["games"]),
+                        key=lambda kv: -kv[1])
+        for i, (team, _avg) in enumerate(ranked, 1):
+            out[team][label] = i
+
+    cache[key] = {"data": out, "time": now}
+    return out
+
+
+def get_team_schedule(team, season, season_type=2):
+    """Every game on a team's schedule, played or not, oldest first --
+    with the bye week identified by its absence rather than assumed."""
+    season = _safe_int(season, int(SEASON))
+    if not DATABASE_URL or not team:
+        return {"games": [], "bye_week": None}
+    conn = get_db()
+    try:
+        with conn.cursor() as cur:
+            cur.execute(
+                """SELECT espn_event_id, week, kickoff, home_team, away_team,
+                          home_score, away_score, status
+                   FROM nfl_schedule
+                   WHERE season = %s AND season_type = %s AND (home_team = %s OR away_team = %s)
+                   ORDER BY week""",
+                (season, season_type, team, team),
+            )
+            rows = [dict(r) for r in cur.fetchall()]
+    except Exception:
+        return {"games": [], "bye_week": None}
+    finally:
+        conn.close()
+
+    games = []
+    for r in rows:
+        is_home = r["home_team"] == team
+        own = r["home_score"] if is_home else r["away_score"]
+        opp_score = r["away_score"] if is_home else r["home_score"]
+        games.append({
+            "id": r["espn_event_id"], "week": r["week"], "kickoff": r["kickoff"],
+            "opponent": r["away_team"] if is_home else r["home_team"],
+            "home": is_home, "score": own, "opp_score": opp_score, "status": r["status"],
+            "result": (None if own is None or opp_score is None else
+                       ("W" if own > opp_score else ("L" if own < opp_score else "T"))),
+            "diff": (None if own is None or opp_score is None else own - opp_score),
+        })
+    played_weeks = {g["week"] for g in games}
+    bye = next((w for w in range(1, SCHEDULE_WEEKS_PER_SEASON + 1) if w not in played_weeks), None)
+    return {"games": games, "bye_week": bye}
+
+
+# NFL teams play once a week, so a "last 7 days" window is the most
+# recent week and "last 30 days" is roughly the last four. Deriving the
+# windows from weeks rather than from timestamps keeps them aligned to
+# games actually played -- a date-based window would sometimes catch a
+# Thursday game and miss the Sunday one from the same round.
+PLAYER_WINDOW_WEEKS = {"d7": 1, "d30": 4}
+_player_rank_cache = {}
+
+
+def get_player_window_ranks(season, cache=_player_rank_cache):
+    """{sleeper_id: {d7, d30, season, alltime}} -- where each player
+    ranks by fantasy points over each window.
+
+    All-time spans every season this database holds, back to
+    PERF_EARLIEST_SEASON, so it grows as the backfill does rather than
+    being pinned to a fixed set."""
+    season = _safe_int(season, int(SEASON))
+    now = time.time()
+    entry = cache.get(season)
+    if entry and now - entry["time"] < 900:
+        return entry["data"]
+
+    stats = get_season_stats(season) or {}
+    weeks_seen = [_safe_int(w, 0) for s in stats.values() for w in (s.get("weeks") or {})]
+    latest_week = max(weeks_seen) if weeks_seen else 0
+
+    totals = {"d7": {}, "d30": {}, "season": {}, "alltime": {}}
+    for sid, stat in stats.items():
+        for w, pts in (stat.get("weeks") or {}).items():
+            if not isinstance(pts, (int, float)):
+                continue
+            wk = _safe_int(w, 0)
+            totals["season"][sid] = totals["season"].get(sid, 0) + pts
+            for label, span in PLAYER_WINDOW_WEEKS.items():
+                if latest_week and wk > latest_week - span:
+                    totals[label][sid] = totals[label].get(sid, 0) + pts
+
+    for yr in range(season, PERF_EARLIEST_SEASON - 1, -1):
+        for sid, stat in (get_season_stats(yr) or {}).items():
+            for _w, pts in (stat.get("weeks") or {}).items():
+                if isinstance(pts, (int, float)):
+                    totals["alltime"][sid] = totals["alltime"].get(sid, 0) + pts
+
+    out = {}
+    for label, bucket in totals.items():
+        for i, (sid, _pts) in enumerate(
+                sorted(bucket.items(), key=lambda kv: -kv[1]), 1):
+            out.setdefault(sid, {})[label] = i
+    cache[season] = {"data": out, "time": now}
+    return out
+
+
+def get_team_roster(team, season):
+    """The team's players, split offence/defence, each with their window
+    ranks -- the roster view on the team page.
+
+    Ordered by season rank so the players who have actually produced lead
+    the list, with unranked players (nobody who hasn't played) after."""
+    if not team:
+        return {"offense": [], "defense": []}
+    ranks = get_player_window_ranks(season)
+    out = {"offense": [], "defense": []}
+    for sid, p in (get_all_players() or {}).items():
+        if p.get("team") != team:
+            continue
+        pos = p.get("position")
+        if not pos or pos not in SCORED_POSITIONS:
+            continue
+        r = ranks.get(sid) or {}
+        out["defense" if pos in IDP_POSITIONS else "offense"].append({
+            "sid": sid,
+            "name": f"{p.get('first_name','')} {p.get('last_name','')}".strip(),
+            "position": pos,
+            "number": p.get("number"),
+            "status": (p.get("status") or "").title() or None,
+            "injury": _injury_badge(p),
+            "photo": player_photo_url(sid),
+            "ranks": r,
+        })
+    for group in out.values():
+        group.sort(key=lambda x: (x["ranks"].get("season") or 10**9, x["name"]))
+    return out
+
+
 def get_season_game_days(season, season_type=2, cache={}):
     """Every date the season has games on, as
     [{date, week, kickoff_utc}, ...] in order.
@@ -5274,6 +5601,74 @@ def scores_page():
             load_error=str(e), username=username, has_synced_leagues=False,
             performers=[],
         )
+
+
+@app.route("/standings")
+def standings_page():
+    """League standings by conference and division, computed from the
+    schedule we already sync."""
+    try:
+        info = get_current_week_info()
+        season = request.args.get("season", default=info["season"], type=int)
+        conf = (request.args.get("conf") or "AFC").upper()
+        if conf not in CONFERENCES:
+            conf = "AFC"
+        standings = get_team_standings(season)
+        by_div = {}
+        for d in DIVISIONS:
+            members = [r for r in standings.values()
+                       if r["conference"] == conf and r["division"] == d]
+            members.sort(key=lambda r: (-r["pct"], -r["diff"], -r["pf"]))
+            by_div[d] = members
+        return render_template_string(
+            STANDINGS_HTML, by_div=by_div, conf=conf, season=season,
+            conferences=CONFERENCES, divisions=DIVISIONS, load_error=None)
+    except Exception as e:
+        return render_template_string(
+            STANDINGS_HTML, by_div={}, conf="AFC", season=int(SEASON),
+            conferences=CONFERENCES, divisions=DIVISIONS, load_error=str(e))
+
+
+@app.route("/team")
+def team_page():
+    """One team: record and standing, power rank over three windows,
+    recent results, and the roster with each player's ranks."""
+    abbr = normalize_team_abbr((request.args.get("abbr") or "").upper())
+    try:
+        info = get_current_week_info()
+        season = request.args.get("season", default=info["season"], type=int)
+        if abbr not in NFL_DIVISIONS:
+            return render_template_string(
+                TEAM_HTML, team=None, season=season, load_error=None,
+                all_teams=sorted(NFL_DIVISIONS))
+        standings = get_team_standings(season)
+        rank = (get_team_rankings(season) or {}).get(abbr, {})
+        sched = get_team_schedule(abbr, season)
+        row = standings.get(abbr, {})
+        # Where they sit in their own division, which is what a team page
+        # leads with rather than the conference seed.
+        division_members = sorted(
+            (r for r in standings.values()
+             if r["conference"] == row.get("conference") and r["division"] == row.get("division")),
+            key=lambda r: (-r["pct"], -r["diff"], -r["pf"]))
+        div_rank = next((i for i, r in enumerate(division_members, 1)
+                         if r["team"] == abbr), None)
+        played = [g for g in sched["games"] if g["result"]]
+        team = {
+            "abbr": abbr, "logo": team_logo_url(abbr),
+            "name": TEAM_NAMES.get(abbr, abbr),
+            "conference": row.get("conference"), "division": row.get("division"),
+            "record": row.get("record", "0-0"), "div_rank": div_rank,
+            "bye_week": sched["bye_week"], "rank": rank, "standing": row,
+            "games": list(reversed(played))[:10],
+            "upcoming": [g for g in sched["games"] if not g["result"]][:3],
+            "roster": get_team_roster(abbr, season),
+        }
+        return render_template_string(TEAM_HTML, team=team, season=season,
+                                      load_error=None, all_teams=sorted(NFL_DIVISIONS))
+    except Exception as e:
+        return render_template_string(TEAM_HTML, team=None, season=int(SEASON),
+                                      load_error=str(e), all_teams=sorted(NFL_DIVISIONS))
 
 
 @app.route("/performances")
@@ -7766,6 +8161,7 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + """
       <button type="button" class="sc-icon-btn" id="scNextWeek" title="Next week">&rarr;</button>
     </div>
     <button type="button" class="sc-icon-btn" id="scMonthToggle" title="Month view">&#128197;</button>
+    <a class="sc-viewall" href="/standings" style="margin-left:10px;">Standings &rsaquo;</a>
   </div>
 
   {% if has_synced_leagues %}
@@ -8207,6 +8603,297 @@ const scTodayKey = {{ today_key|tojson }};
 </script>
 """
 
+STANDINGS_HTML = BASE_STYLE + make_header("scores") + """
+<style>
+  .st-page{ --st-bg:#0d0f0d; --st-surface:#151815; --st-line:rgba(255,255,255,0.08);
+            --st-text:#e8e6df; --st-muted:#8b9089;
+            background:var(--st-bg); color:var(--st-text); padding-bottom:60px;
+            font-family:"Source Sans 3",system-ui,sans-serif; }
+  .st-title{ font-family:"Big Shoulders Display"; font-size:26px; font-weight:800;
+             text-transform:uppercase; margin:18px 0 2px; }
+  .st-sub{ font-size:11.5px; color:var(--st-muted); margin-bottom:12px; }
+  .st-tabs{ display:flex; gap:0; border-bottom:1px solid var(--st-line); margin-bottom:4px; }
+  .st-tab{ padding:9px 18px; font-size:14px; font-weight:800; text-decoration:none;
+           color:var(--st-muted); border-bottom:2px solid transparent; }
+  .st-tab.on{ color:var(--accent-ink); border-bottom-color:var(--accent-ink); }
+  .st-div{ margin-top:20px; }
+  .st-div h3{ font-family:"Big Shoulders Display"; font-size:16px; font-weight:800;
+              text-transform:uppercase; color:var(--st-muted); margin:0 0 6px; letter-spacing:0.04em; }
+  .st-row{ display:flex; align-items:center; gap:10px; padding:10px 0;
+           border-top:1px solid var(--st-line); text-decoration:none; color:var(--st-text); }
+  .st-row:hover{ background:rgba(255,255,255,0.02); }
+  .st-seed{ font-family:"IBM Plex Mono"; font-size:15px; color:var(--accent-ink);
+            width:18px; flex:none; text-align:center; font-weight:700; }
+  .st-row img{ width:34px; height:34px; object-fit:contain; flex:none; }
+  .st-name{ flex:1; min-width:0; }
+  .st-name b{ font-size:14px; display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .st-name span{ font-size:11px; color:var(--st-muted); }
+  .st-stats{ display:flex; gap:12px; flex:none; }
+  .st-stat{ text-align:center; min-width:38px; }
+  .st-stat b{ display:block; font-family:"IBM Plex Mono"; font-size:14px; }
+  .st-stat span{ font-size:9px; color:var(--st-muted); text-transform:uppercase; letter-spacing:0.03em; }
+  .st-empty{ color:var(--st-muted); padding:30px; text-align:center; font-size:13px; }
+  @media (max-width:640px){
+    .st-stats{ gap:7px; } .st-stat{ min-width:30px; } .st-stat b{ font-size:12.5px; }
+    .st-row img{ width:27px; height:27px; }
+  }
+</style>
+<div class="st-page"><div class="wrap">
+  {% if load_error %}<div class="error">Couldn't load standings: {{ load_error }}</div>{% endif %}
+  <div class="st-title">Standings</div>
+  <div class="st-sub">
+    {{ season }} season &middot; computed from completed games. Ordered by win
+    percentage then point differential &mdash; not the NFL's full tiebreaker ladder.
+  </div>
+  <div class="st-tabs">
+    {% for c in conferences %}
+    <a class="st-tab {{ 'on' if c == conf }}" href="/standings?season={{ season }}&conf={{ c }}">{{ c }}</a>
+    {% endfor %}
+  </div>
+  {% if not by_div %}
+    <div class="st-empty">No completed games yet this season.</div>
+  {% else %}
+  {% for d in divisions %}
+  <div class="st-div">
+    <h3>{{ conf }} {{ d }}</h3>
+    {% for r in by_div[d] %}
+    <a class="st-row" href="/team?abbr={{ r.team }}&amp;season={{ season }}">
+      <span class="st-seed">{{ loop.index }}</span>
+      <img src="https://a.espncdn.com/i/teamlogos/nfl/500/{{ r.team|lower }}.png" alt=""
+           onerror="this.style.visibility='hidden'">
+      <span class="st-name">
+        <b>{{ r.team }}</b>
+        <span>{{ r.conf_rank|ordinal }} {{ conf }}</span>
+      </span>
+      <span class="st-stats">
+        <span class="st-stat"><b>{{ r.record }}</b><span>W-L</span></span>
+        <span class="st-stat"><b>{{ '%.3f'|format(r.pct) }}</b><span>PCT</span></span>
+        <span class="st-stat"><b>{{ r.last5 }}</b><span>L5</span></span>
+        <span class="st-stat"><b>{{ r.ppg }}</b><span>PPG</span></span>
+        <span class="st-stat"><b>{{ r.div_record }}</b><span>DIV</span></span>
+      </span>
+    </a>
+    {% endfor %}
+  </div>
+  {% endfor %}
+  {% endif %}
+</div></div>
+"""
+
+
+TEAM_HTML = BASE_STYLE + make_header("scores") + """
+<style>
+  .tm-page{ --tm-bg:#0d0f0d; --tm-surface:#151815; --tm-surface2:#1c201c;
+            --tm-line:rgba(255,255,255,0.08); --tm-text:#e8e6df; --tm-muted:#8b9089;
+            background:var(--tm-bg); color:var(--tm-text); padding-bottom:60px;
+            font-family:"Source Sans 3",system-ui,sans-serif; }
+  .tm-head{ display:flex; align-items:center; gap:16px; padding:20px 0 14px; }
+  .tm-head img{ width:72px; height:72px; object-fit:contain; flex:none; }
+  .tm-name{ font-family:"Big Shoulders Display"; font-size:30px; font-weight:800;
+            text-transform:uppercase; line-height:1.05; }
+  .tm-meta{ font-size:13px; color:var(--tm-muted); margin-top:3px; }
+  .tm-ranks{ display:flex; background:var(--tm-surface); border:1px solid var(--tm-line);
+             border-radius:12px; overflow:hidden; }
+  .tm-rank{ flex:1; text-align:center; padding:12px 6px; border-left:1px solid var(--tm-line); }
+  .tm-rank:first-child{ border-left:none; }
+  .tm-rank b{ display:block; font-family:"IBM Plex Mono"; font-size:24px; font-weight:700; }
+  .tm-rank b sup{ font-size:12px; }
+  .tm-rank span{ font-size:10px; color:var(--accent-ink); text-transform:uppercase;
+                 letter-spacing:0.05em; font-weight:700; }
+  .tm-tabs{ display:flex; border-bottom:1px solid var(--tm-line); margin-top:18px; }
+  .tm-tab{ flex:1; padding:11px 8px; text-align:center; font-size:14px; font-weight:800;
+           cursor:pointer; color:var(--tm-muted); background:none; border:none;
+           border-bottom:2px solid transparent; }
+  .tm-tab.on{ color:var(--accent-ink); border-bottom-color:var(--accent-ink); }
+  .tm-panel{ display:none; padding-top:14px; } .tm-panel.on{ display:block; }
+  .tm-sub{ display:flex; gap:16px; justify-content:center; margin-bottom:10px; }
+  .tm-sub button{ background:none; border:none; cursor:pointer; font-size:14px;
+                  font-weight:800; color:var(--tm-muted); }
+  .tm-sub button.on{ color:var(--accent-ink); }
+
+  .tm-eyebrow{ font-size:11px; text-transform:uppercase; letter-spacing:0.06em;
+               color:var(--tm-muted); margin:6px 0 8px; font-weight:700; }
+  /* Recent point differentials. Bars grow up for a win and down for a
+     loss from a shared centre line, so form reads at a glance. */
+  .tm-diffs{ display:flex; align-items:center; gap:5px; height:120px;
+             border-bottom:1px solid var(--tm-line); padding-bottom:4px; }
+  .tm-diff{ flex:1; display:flex; flex-direction:column; align-items:center;
+            justify-content:center; height:100%; min-width:0; }
+  .tm-diff-val{ font-family:"IBM Plex Mono"; font-size:10.5px; color:var(--tm-muted); }
+  .tm-diff-bar{ width:100%; border-radius:3px; }
+  .tm-diff.win .tm-diff-bar{ background:var(--good); }
+  .tm-diff.loss .tm-diff-bar{ background:var(--critical); }
+  .tm-diff.tie .tm-diff-bar{ background:var(--tm-muted); }
+  .tm-diff-opp{ font-size:9.5px; color:var(--tm-muted); margin-top:3px; white-space:nowrap; }
+
+  .tm-game{ display:flex; align-items:center; gap:10px; padding:11px 0;
+            border-top:1px solid var(--tm-line); text-decoration:none; color:var(--tm-text); }
+  .tm-game-res{ font-family:"Big Shoulders Display"; font-size:20px; font-weight:800;
+                width:22px; flex:none; text-align:center; }
+  .tm-game-res.W{ color:var(--good); } .tm-game-res.L{ color:var(--critical); }
+  .tm-game img{ width:28px; height:28px; object-fit:contain; flex:none; }
+  .tm-game-main{ flex:1; min-width:0; font-size:13.5px; }
+  .tm-game-main span{ display:block; font-size:11px; color:var(--tm-muted); }
+  .tm-game-score{ font-family:"IBM Plex Mono"; font-size:16px; font-weight:700; flex:none; }
+
+  .tm-player{ display:flex; align-items:center; gap:11px; padding:11px 0;
+              border-top:1px solid var(--tm-line); text-decoration:none; color:var(--tm-text); }
+  .tm-player img{ width:46px; height:46px; border-radius:50%; object-fit:cover;
+                  background:var(--tm-surface2); flex:none; }
+  .tm-player-main{ flex:1; min-width:0; }
+  .tm-player-name{ font-size:15px; font-weight:700; }
+  .tm-player-ranks{ display:flex; gap:14px; margin-top:4px; }
+  .tm-pr b{ display:block; font-family:"IBM Plex Mono"; font-size:13px; }
+  .tm-pr span{ font-size:9px; color:var(--tm-muted); text-transform:uppercase; letter-spacing:0.03em; }
+  .tm-player-pos{ font-size:12px; color:var(--tm-muted); flex:none; text-align:right; }
+  .tm-empty{ color:var(--tm-muted); padding:28px; text-align:center; font-size:13px; }
+  @media (max-width:640px){
+    .tm-name{ font-size:23px; } .tm-head img{ width:56px; height:56px; }
+    .tm-rank b{ font-size:20px; } .tm-player-ranks{ gap:10px; }
+  }
+</style>
+<div class="tm-page"><div class="wrap">
+  {% if load_error %}<div class="error">Couldn't load this team: {{ load_error }}</div>{% endif %}
+  {% if not team %}
+    <div class="tm-empty">
+      Pick a team:
+      <div style="margin-top:10px; display:flex; flex-wrap:wrap; gap:6px; justify-content:center;">
+        {% for t in all_teams %}<a href="/team?abbr={{ t }}" style="color:var(--accent-ink); font-weight:700;">{{ t }}</a>{% endfor %}
+      </div>
+    </div>
+  {% else %}
+  <div class="tm-head">
+    <img src="{{ team.logo }}" alt="" onerror="this.style.visibility='hidden'">
+    <div>
+      <div class="tm-name">{{ team.name }}</div>
+      <div class="tm-meta">
+        {{ team.record }}
+        {%- if team.div_rank %} &middot; {{ team.div_rank|ordinal }} {{ team.conference }} {{ team.division }}{% endif -%}
+        {%- if team.bye_week %} &middot; Bye {{ team.bye_week }}{% endif -%}
+      </div>
+    </div>
+  </div>
+
+  <!-- Power rank over three windows. A window a team hasn't played in
+       shows a dash rather than a fabricated position. -->
+  <div class="tm-ranks">
+    {% for key, label in [('d7', '7-day'), ('d30', '30-day'), ('season', 'Season')] %}
+    <div class="tm-rank">
+      {% set v = team.rank.get(key) %}
+      <b>{% if v %}{{ v }}<sup>{{ (v|ordinal)[-2:] }}</sup>{% else %}&ndash;{% endif %}</b>
+      <span>{{ label }}</span>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="tm-tabs" id="tmTabs">
+    <button class="tm-tab on" data-panel="feed">Feed</button>
+    <button class="tm-tab" data-panel="games">Games</button>
+    <button class="tm-tab" data-panel="players">Players</button>
+  </div>
+
+  <div class="tm-panel on" data-panel="feed">
+    {% if team.games %}
+    <div class="tm-eyebrow">Recent differentials</div>
+    {% set peak = team.games|map(attribute='diff')|map('abs')|max %}
+    <div class="tm-diffs">
+      {% for g in team.games[:8]|reverse %}
+      <div class="tm-diff {{ 'win' if g.result == 'W' else ('loss' if g.result == 'L' else 'tie') }}">
+        <span class="tm-diff-val">{{ '%+d'|format(g.diff) }}</span>
+        <div class="tm-diff-bar" style="height:{{ ((g.diff|abs) / peak * 70)|round|int if peak else 2 }}%;"></div>
+        <span class="tm-diff-opp">{{ '' if g.home else '@' }}{{ g.opponent }}</span>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+    {% if team.standing %}
+    <div class="tm-eyebrow" style="margin-top:18px;">Season</div>
+    <div class="tm-ranks">
+      <div class="tm-rank"><b>{{ team.standing.ppg }}</b><span>PPG</span></div>
+      <div class="tm-rank"><b>{{ team.standing.papg }}</b><span>Allowed</span></div>
+      <div class="tm-rank"><b>{{ '%+d'|format(team.standing.diff) }}</b><span>Diff</span></div>
+      <div class="tm-rank"><b>{{ team.standing.streak }}</b><span>Streak</span></div>
+    </div>
+    {% endif %}
+  </div>
+
+  <div class="tm-panel" data-panel="games">
+    {% for g in team.upcoming %}
+    <a class="tm-game" href="/game?id={{ g.id }}">
+      <span class="tm-game-res">&middot;</span>
+      <img src="https://a.espncdn.com/i/teamlogos/nfl/500/{{ g.opponent|lower }}.png" alt=""
+           onerror="this.style.visibility='hidden'">
+      <span class="tm-game-main">{{ 'vs' if g.home else '@' }} {{ g.opponent }}
+        <span>Week {{ g.week }} &middot; upcoming</span></span>
+    </a>
+    {% endfor %}
+    {% for g in team.games %}
+    <a class="tm-game" href="/game?id={{ g.id }}">
+      <span class="tm-game-res {{ g.result }}">{{ g.result }}</span>
+      <img src="https://a.espncdn.com/i/teamlogos/nfl/500/{{ g.opponent|lower }}.png" alt=""
+           onerror="this.style.visibility='hidden'">
+      <span class="tm-game-main">{{ 'vs' if g.home else '@' }} {{ g.opponent }}
+        <span>Week {{ g.week }}</span></span>
+      <span class="tm-game-score">{{ g.score }}&ndash;{{ g.opp_score }}</span>
+    </a>
+    {% else %}
+    {% if not team.upcoming %}<div class="tm-empty">No games on the schedule yet.</div>{% endif %}
+    {% endfor %}
+  </div>
+
+  <div class="tm-panel" data-panel="players">
+    <div class="tm-sub" id="tmSub">
+      <button class="on" data-sub="offense">Offense</button>
+      <button data-sub="defense">Defense</button>
+    </div>
+    {% for group in ['offense', 'defense'] %}
+    <div data-sub-panel="{{ group }}" style="{{ '' if group == 'offense' else 'display:none;' }}">
+      {% for p in team.roster[group] %}
+      <a class="tm-player" href="/player?sid={{ p.sid }}">
+        <img src="{{ p.photo }}" alt="" onerror="this.style.visibility='hidden'">
+        <span class="tm-player-main">
+          <span class="tm-player-name">{{ p.name }}</span>
+          <span class="tm-player-ranks">
+            {% for key, label in [('d7','7-day'), ('d30','30-day'), ('season','Season'), ('alltime','All-time')] %}
+            <span class="tm-pr"><b>{% if p.ranks.get(key) %}{{ '{:,}'.format(p.ranks[key]) }}{% else %}&ndash;{% endif %}</b><span>{{ label }}</span></span>
+            {% endfor %}
+          </span>
+        </span>
+        <span class="tm-player-pos">{{ p.position }}{% if p.number %}<br>#{{ p.number }}{% endif %}</span>
+      </a>
+      {% else %}
+      <div class="tm-empty">No {{ group }} players found for this team.</div>
+      {% endfor %}
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+</div></div>
+<script>
+(function(){
+  const tabs = document.getElementById('tmTabs');
+  if (tabs) tabs.addEventListener('click', function(e){
+    const btn = e.target.closest('.tm-tab');
+    if (!btn) return;
+    tabs.querySelectorAll('.tm-tab').forEach(function(b){ b.classList.toggle('on', b === btn); });
+    document.querySelectorAll('.tm-panel').forEach(function(p){
+      p.classList.toggle('on', p.dataset.panel === btn.dataset.panel);
+    });
+  });
+  const sub = document.getElementById('tmSub');
+  if (sub) sub.addEventListener('click', function(e){
+    const btn = e.target.closest('button');
+    if (!btn) return;
+    sub.querySelectorAll('button').forEach(function(b){ b.classList.toggle('on', b === btn); });
+    document.querySelectorAll('[data-sub-panel]').forEach(function(p){
+      p.style.display = p.dataset.subPanel === btn.dataset.sub ? '' : 'none';
+    });
+  });
+})();
+</script>
+"""
+
+
 PERFORMANCES_HTML = BASE_STYLE + make_header("scores") + """
 <style>
   .pl-page{
@@ -8601,7 +9288,7 @@ PERFORMANCE_HTML = BASE_STYLE + make_header("scores") + """
         <div class="pf-play-head">
           <span class="pf-play-sit">
             Q{{ p.qtr }} {{ p.clock }}
-            {%- if p.down %} &middot; {{ p.down }}{{ 'st' if p.down == 1 else ('nd' if p.down == 2 else ('rd' if p.down == 3 else 'th')) }} &amp; {{ p.ydstogo }}{% endif %}
+            {%- if p.down %} &middot; {{ p.down|ordinal }} &amp; {{ p.ydstogo }}{% endif %}
             {%- if p.role %} &middot; {{ p.role }}{% endif %}
           </span>
           <span class="pf-play-epa {{ 'pos' if p.epa and p.epa > 0 else 'neg' }}">
@@ -8782,16 +9469,16 @@ GAME_DETAIL_HTML = BASE_STYLE + make_header("scores") + """
   <div class="panel">
     <div class="gd-header">
       <div class="gd-side">
-        <img src="{{ detail.away.logo or '' }}" alt="" onerror="this.style.visibility='hidden'">
-        <div><div class="nm">{{ detail.away.name }}</div><div class="gd-score" id="gdAwayScore">{{ detail.away.score or 0 }}</div>{% if detail.away.record %}<span class="muted mono" style="font-size:11px;">{{ detail.away.record }}</span>{% endif %}</div>
+        <a href="/team?abbr={{ detail.away.abbr }}"><img src="{{ detail.away.logo or '' }}" alt="" onerror="this.style.visibility='hidden'"></a>
+        <div><div class="nm"><a href="/team?abbr={{ detail.away.abbr }}" style="color:inherit; text-decoration:none;">{{ detail.away.name }}</a></div><div class="gd-score" id="gdAwayScore">{{ detail.away.score or 0 }}</div>{% if detail.away.record %}<span class="muted mono" style="font-size:11px;">{{ detail.away.record }}</span>{% endif %}</div>
       </div>
       <div class="gd-mid">
         <span class="gd-status {{ detail.status }}" id="gdStatus">{{ detail.status_detail or detail.status }}</span>
         <span class="muted" id="gdClock">{% if detail.status == 'in_progress' %}{{ detail.clock }} &middot; Q{{ detail.period }}{% endif %}</span>
       </div>
       <div class="gd-side" style="flex-direction:row-reverse; text-align:right;">
-        <img src="{{ detail.home.logo or '' }}" alt="" onerror="this.style.visibility='hidden'">
-        <div><div class="nm">{{ detail.home.name }}</div><div class="gd-score" id="gdHomeScore">{{ detail.home.score or 0 }}</div>{% if detail.home.record %}<span class="muted mono" style="font-size:11px;">{{ detail.home.record }}</span>{% endif %}</div>
+        <a href="/team?abbr={{ detail.home.abbr }}"><img src="{{ detail.home.logo or '' }}" alt="" onerror="this.style.visibility='hidden'"></a>
+        <div><div class="nm"><a href="/team?abbr={{ detail.home.abbr }}" style="color:inherit; text-decoration:none;">{{ detail.home.name }}</a></div><div class="gd-score" id="gdHomeScore">{{ detail.home.score or 0 }}</div>{% if detail.home.record %}<span class="muted mono" style="font-size:11px;">{{ detail.home.record }}</span>{% endif %}</div>
       </div>
     </div>
     {% if detail.field %}
