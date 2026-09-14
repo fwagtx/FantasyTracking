@@ -6055,6 +6055,12 @@ def scores_page():
     username = _resolve_scores_username()
     try:
         info = get_current_week_info()
+        # The three pages built on nfl_schedule are the ones that have to
+        # keep it current. This used to hang off the matchup-grade paths
+        # only, so a visitor who went straight to Scores, Standings or a
+        # team page never triggered a refresh and sat looking at games
+        # frozen at their pre-kickoff state.
+        refresh_open_schedule_weeks(info["season"])
         season = request.args.get("season", default=info["season"], type=int)
         week = request.args.get("week", default=info["week"], type=int)
         season_type = request.args.get("seasontype", default=info["season_type"], type=int)
@@ -6097,6 +6103,7 @@ def standings_page():
     schedule we already sync."""
     try:
         info = get_current_week_info()
+        refresh_open_schedule_weeks(info["season"])
         season = request.args.get("season", default=info["season"], type=int)
         conf = (request.args.get("conf") or "AFC").upper()
         if conf not in CONFERENCES:
@@ -6124,6 +6131,7 @@ def team_page():
     abbr = normalize_team_abbr((request.args.get("abbr") or "").upper())
     try:
         info = get_current_week_info()
+        refresh_open_schedule_weeks(info["season"])
         season = request.args.get("season", default=info["season"], type=int)
         if abbr not in NFL_DIVISIONS:
             return render_template_string(
@@ -6221,12 +6229,12 @@ def performance_page():
         peers = [p for p in get_week_performers(season, week, allow_fetch=False) if p["sid"] != sid][:24]
         return render_template_string(
             PERFORMANCE_HTML, detail=detail, log=log, peers=peers, sid=sid,
-            season=season, week=week, load_error=None,
+            season=season, week=week, load_error=None, score_mark=SCORE_MARK_SVG,
         )
     except Exception as e:
         return render_template_string(
             PERFORMANCE_HTML, detail=None, log=[], peers=[], sid=sid,
-            season=int(SEASON), week=1, load_error=str(e),
+            season=int(SEASON), week=1, load_error=str(e), score_mark=SCORE_MARK_SVG,
         )
 
 
@@ -9018,9 +9026,13 @@ const scServerTodayKey = {{ today_key|tojson }};
       const pa = GAME_ORDER[a.status] === undefined ? 1 : GAME_ORDER[a.status];
       const pb = GAME_ORDER[b.status] === undefined ? 1 : GAME_ORDER[b.status];
       if (pa !== pb) return pa - pb;
-      // Within a group, keep the natural kickoff order so the slate still
-      // reads chronologically rather than shuffling on every poll.
-      return String(a.date || '').localeCompare(String(b.date || ''));
+      // Within a group, the order that answers the question you are
+      // asking of it. A game still to come: soonest first, because the
+      // next kickoff is the one you care about. A game already finished:
+      // most recent first, because the late window is the news and the
+      // early games have been sitting there all afternoon.
+      const cmp = String(a.date || '').localeCompare(String(b.date || ''));
+      return a.status === 'final' ? -cmp : cmp;
     });
     gamesEl.innerHTML = '';
     if(!games.length){
@@ -9401,7 +9413,10 @@ TEAM_HTML = BASE_STYLE + make_header("scores") + """
   .tm-meta{ font-size:13px; color:var(--tm-muted); margin-top:3px; }
   .tm-ranks{ display:flex; background:var(--tm-surface); border:1px solid var(--tm-line);
              border-radius:12px; overflow:hidden; }
-  .tm-rank{ flex:1; text-align:center; padding:12px 6px; border-left:1px solid var(--tm-line); }
+  .tm-rank{ flex:1; text-align:center; padding:12px 6px; border-left:1px solid var(--tm-line);
+            color:inherit; text-decoration:none; display:block; }
+  a.tm-rank{ cursor:pointer; }
+  a.tm-rank:hover{ background:var(--tm-surface2); }
   .tm-rank:first-child{ border-left:none; }
   .tm-rank b{ display:block; font-family:"IBM Plex Mono"; font-size:24px; font-weight:700; }
   .tm-rank b sup{ font-size:12px; }
@@ -9491,13 +9506,14 @@ TEAM_HTML = BASE_STYLE + make_header("scores") + """
        inherits from the next window out; a season not yet played falls
        back to the last one that was, which the note below says plainly
        rather than passing off as current form. -->
+  {% set standings_href = '/standings?season=' ~ season ~ ('&conf=' ~ team.conference if team.conference else '') %}
   <div class="tm-ranks">
     {% for key, label in [('d7', '7-day'), ('d30', '30-day'), ('season', 'Season')] %}
-    <div class="tm-rank">
+    <a class="tm-rank" href="{{ standings_href }}" title="See where every team ranks">
       {% set v = team.rank.get(key) %}
       <b>{% if v %}{{ v }}<sup>{{ (v|ordinal)[-2:] }}</sup>{% else %}&ndash;{% endif %}</b>
       <span>{{ label }}</span>
-    </div>
+    </a>
     {% endfor %}
   </div>
   {% if team.rank and team.rank_season != season %}
@@ -9531,10 +9547,10 @@ TEAM_HTML = BASE_STYLE + make_header("scores") + """
     {% if team.standing %}
     <div class="tm-eyebrow" style="margin-top:18px;">Season</div>
     <div class="tm-ranks">
-      <div class="tm-rank"><b>{{ team.standing.ppg }}</b><span>PPG</span></div>
-      <div class="tm-rank"><b>{{ team.standing.papg }}</b><span>Allowed</span></div>
-      <div class="tm-rank"><b>{{ '%+d'|format(team.standing.diff) }}</b><span>Diff</span></div>
-      <div class="tm-rank"><b>{{ team.standing.streak }}</b><span>Streak</span></div>
+      <a class="tm-rank" href="{{ standings_href }}"><b>{{ team.standing.ppg }}</b><span>PPG</span></a>
+      <a class="tm-rank" href="{{ standings_href }}"><b>{{ team.standing.papg }}</b><span>Allowed</span></a>
+      <a class="tm-rank" href="{{ standings_href }}"><b>{{ '%+d'|format(team.standing.diff) }}</b><span>Diff</span></a>
+      <a class="tm-rank" href="{{ standings_href }}"><b>{{ team.standing.streak }}</b><span>Streak</span></a>
     </div>
     {% endif %}
   </div>
@@ -9768,7 +9784,12 @@ PERFORMANCE_HTML = BASE_STYLE + make_header("scores") + """
   .pf-headline span{ font-size:11px; color:var(--pf-muted); margin-left:3px; }
   .pf-scores{ display:flex; gap:14px; flex:none; }
   .pf-score{ flex:none; text-align:center; }
-  .pf-score .n{ font-family:"IBM Plex Mono"; font-size:42px; font-weight:700; line-height:1; font-variant-numeric:tabular-nums; }
+  .pf-score .n{ font-family:"IBM Plex Mono"; font-size:42px; font-weight:700; line-height:1;
+                font-variant-numeric:tabular-nums; display:flex; align-items:center;
+                justify-content:center; gap:7px; }
+  /* Sized against the 42px numeral it sits beside, not the 13px one on a
+     board row, so the mark reads as part of the score rather than a speck. */
+  .pf-score .n .score-mark{ width:22px; height:26px; opacity:0.5; }
   .pf-score .l{ font-size:10px; color:var(--pf-muted); text-transform:uppercase; letter-spacing:0.06em; }
   .pf-score.elite .n{ color:var(--good); }
   .pf-score.good .n{ color:var(--good); opacity:0.88; }
@@ -9883,9 +9904,10 @@ PERFORMANCE_HTML = BASE_STYLE + make_header("scores") + """
       </div>
     </div>
     <div class="pf-scores">
+      {# The calculator mark instead of the word, the same way the score
+         is written on the performer board and the power rankings. #}
       <div class="pf-score {{ detail.score.score_class }}">
-        <div class="n">{{ '%.1f'|format(detail.score.score) }}</div>
-        <div class="l">Fantasy</div>
+        <div class="n">{{ score_mark|safe }}{{ '%.1f'|format(detail.score.score) }}</div>
       </div>
       {% if detail.impact %}
       <div class="pf-score {{ detail.impact.score_class }}">
