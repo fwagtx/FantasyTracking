@@ -102,6 +102,30 @@ _COMPRESSIBLE_MIMETYPES = (
 
 
 @app.after_request
+def _no_stale_pages(response):
+    """Every page here is generated fresh -- live scores, injury feeds,
+    a board that changes by the minute -- and none of it is served from
+    a static file with a hashed name. Without a Cache-Control header a
+    browser is free to invent its own expiry, and mobile Safari does:
+    a page kept from before a deploy comes back looking unchanged, so a
+    fix that shipped an hour ago appears not to have shipped at all.
+
+    no-cache is not no-store: the browser may still keep the copy, it
+    just has to ask first. Anything genuinely static (a redirect, a
+    downloadable file set direct_passthrough) is left alone, as is
+    anything a route has already given an explicit policy."""
+    try:
+        if (response.direct_passthrough
+                or "Cache-Control" in response.headers
+                or not (response.mimetype or "").startswith("text/html")):
+            return response
+        response.headers["Cache-Control"] = "no-cache, must-revalidate"
+    except Exception:
+        pass
+    return response
+
+
+@app.after_request
 def _compress_response(response):
     """Gzips every text/HTML/JSON response for a client that says it can
     accept it -- this app's pages (Matchups, Rankings, League Manager)
@@ -10109,14 +10133,27 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + """
      the paging layout it still reserves a column narrower than the
      board, so a lone Monday-night game sits beside an empty strip and
      reads as a broken card rather than as "there is more over here".
-     Short slates are a plain full-width list instead. */
-  .sc-games.short{
+     Short slates are a plain full-width list instead.
+
+     Two selectors on purpose. The class is set when the board renders;
+     the :has() counts the cards that are actually there, so the list
+     layout holds even if the class never lands -- a stale script, a
+     render path added later. "No fifth card" is the same test as
+     "fits in one column of four". */
+  .sc-games.short,
+  .sc-games:not(:has(> .sc-game-card:nth-child(5))){
     grid-auto-flow:row; grid-template-rows:none; grid-template-columns:1fr;
-    overflow-x:visible;
+    grid-auto-columns:auto; overflow-x:visible;
   }
   /* Nothing to the right, and the container already draws the bottom. */
-  .sc-games.short .sc-game-card{ border-right:none; }
-  .sc-games.short .sc-game-card:last-child{ border-bottom:none; }
+  .sc-games.short > .sc-game-card,
+  .sc-games:not(:has(> .sc-game-card:nth-child(5))) > .sc-game-card{
+    border-right:none;
+  }
+  .sc-games.short > .sc-game-card:last-child,
+  .sc-games:not(:has(> .sc-game-card:nth-child(5))) > .sc-game-card:last-child{
+    border-bottom:none;
+  }
 
   .sc-game-card{
     display:flex; flex-direction:column; gap:8px; padding:12px 14px;
