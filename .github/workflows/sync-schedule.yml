@@ -19,6 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       SITE_PASSWORD: ${{ secrets.SITE_PASSWORD }}
+      EVENT_NAME: ${{ github.event_name }}
       SEASON_INPUT: ${{ github.event.inputs.season }}
     steps:
       - name: Sync the schedule
@@ -26,7 +27,26 @@ jobs:
           # See sync-stats.yml for why the response body is checked: a
           # missing secret made this job report success while the server
           # returned "unauthorized" every single run.
+          # A scheduled run with no secret has nothing to authenticate
+          # with and nothing useful to do. It exits GREEN rather than red:
+          # this fired every half hour for days, mailing a failure notice
+          # each time, for a condition no re-run can fix and that only the
+          # repository owner can change. The notice below still says so on
+          # the run itself, so it is skipped visibly rather than silently.
+          #
+          # Nothing breaks while it skips. Every season this job seeds is
+          # also seeded on demand by the app itself (see
+          # ensure_season_stats_synced / ensure_schedule_synced), so the
+          # secret makes the work happen on a schedule instead of on a
+          # visitor's first page load -- it is an optimisation, not a
+          # dependency.
           if [ -z "$SITE_PASSWORD" ]; then
+            if [ "$EVENT_NAME" = "schedule" ]; then
+              echo "::notice::SITE_PASSWORD is not set, so this scheduled run has nothing to authenticate with -- skipping. Set the repository secret to turn this job back on."
+              exit 0
+            fi
+            # Somebody pressed Run workflow. They want it to run, so say
+            # plainly why it cannot.
             echo "::error::SITE_PASSWORD repository secret is not set -- this job cannot authenticate."
             exit 1
           fi
