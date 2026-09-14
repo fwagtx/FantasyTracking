@@ -5703,6 +5703,20 @@ def get_team_roster(team, season):
     return out
 
 
+def _utc_isoformat(dt):
+    """An ISO timestamp a browser will read as UTC.
+
+    `nfl_schedule.kickoff` is a naive TIMESTAMP holding UTC wall time.
+    `new Date("2026-09-14T00:15:00")` -- no offset -- is LOCAL time by
+    the ECMAScript spec, so handing the client a bare isoformat() means
+    it never converts and every late kickoff lands a day late."""
+    if not dt:
+        return None
+    if getattr(dt, "tzinfo", None) is None:
+        return dt.replace(tzinfo=timezone.utc).isoformat()
+    return dt.astimezone(timezone.utc).isoformat()
+
+
 def get_season_game_days(season, season_type=2, cache={}):
     """Every date the season has games on, as
     [{date, week, kickoff_utc}, ...] in order.
@@ -5715,7 +5729,13 @@ def get_season_game_days(season, season_type=2, cache={}):
     The dates here are UTC calendar days, used only to enumerate which
     tabs should exist -- the client still derives each tab's real local
     day from the kickoff timestamp, since a Sunday night game is already
-    Monday in UTC for anyone west of the UK."""
+    Monday in UTC for anyone west of the UK.
+
+    Which is why every kickoff goes out explicitly marked as UTC. The
+    column is a naive TIMESTAMP holding UTC wall time, and an ISO string
+    with no offset is parsed by browsers as LOCAL time -- so without the
+    marker the conversion never happens and Thursday Night Football shows
+    up as a Friday tab, Monday night as a Tuesday one."""
     season, season_type = _safe_int(season, int(SEASON)), _safe_int(season_type, 2)
     key = (season, season_type)
     now = time.time()
@@ -5740,7 +5760,7 @@ def get_season_game_days(season, season_type=2, cache={}):
         rows = []
     finally:
         conn.close()
-    days = [{"week": r["week"], "kickoff": r["first_kick"].isoformat() if r["first_kick"] else None}
+    days = [{"week": r["week"], "kickoff": _utc_isoformat(r["first_kick"])}
             for r in rows if r.get("first_kick")]
     cache[key] = {"data": days, "time": now}
     return days
@@ -8415,7 +8435,12 @@ const CURRENT_WEEK = {{ current_week }};
 let scSeason = {{ season }};
 let scWeek = {{ week }};
 const scSeasonType = {{ season_type }};
-const scTodayKey = {{ today_key|tojson }};
+// The server's own calendar day, kept only as a last resort. It is NOT
+// what "today" means on this page: Render's clock runs on UTC, so a
+// Sunday 8pm Eastern visit lands on Monday there, and the board opened
+// on Monday Night Football while the visitor was still watching Sunday.
+// The real today is computed from the visitor's own clock below.
+const scServerTodayKey = {{ today_key|tojson }};
 
 (function(){
   const daysIndex = {};  // 'YYYY-MM-DD' (visitor's LOCAL calendar day) -> [game, ...]
@@ -8435,6 +8460,14 @@ const scTodayKey = {{ today_key|tojson }};
     return dateKey(new Date(isoString));
   }
 
+  // Every other date on this page is the visitor's local day, and this
+  // has to agree with them or the strip highlights one day and opens
+  // another.
+  function todayKey(){
+    try { return dateKey(new Date()); } catch (e) { return scServerTodayKey; }
+  }
+  const scTodayKey = todayKey();
+
   function indexGames(games){
     games.forEach(function(g){
       if(!g.date) return;
@@ -8448,7 +8481,9 @@ const scTodayKey = {{ today_key|tojson }};
   }
   indexGames(SCORES_WEEK);
 
-  let selectedDay = (daysIndex[scTodayKey] ? scTodayKey : (Object.keys(daysIndex).sort()[0] || scTodayKey));
+  // Set for real in the init block at the bottom, once the season's game
+  // days are known -- see pickOpeningDay().
+  let selectedDay = scTodayKey;
   let monthCursor = new Date(selectedDay + "T00:00:00");
 
   const dayTabsEl = document.getElementById('scDayTabs');
@@ -8484,6 +8519,43 @@ const scTodayKey = {{ today_key|tojson }};
     // the schedule table hasn't been synced that far yet.
     Object.keys(daysIndex).forEach(function(k){ if (daysIndex[k].length) keys[k] = true; });
     return Object.keys(keys).sort();
+  }
+
+  // Which day the board should open on: today if there is football
+  // today, otherwise the nearest day there is. Looking both ways matters
+  // -- on a Tuesday the game worth seeing is last night's, on a
+  // Wednesday it is Thursday's -- and a tie goes forward, to the game
+  // that hasn't been played yet. Never a fixed day and never the
+  // server's idea of today.
+  function pickOpeningDay(){
+    const today = scTodayKey;
+    const keys = allDayKeys();
+    if (!keys.length || keys.indexOf(today) >= 0) return today;
+    const ahead = keys.filter(function(k){ return k > today; });
+    const behind = keys.filter(function(k){ return k < today; });
+    const next = ahead[0] || null;
+    const prev = behind.length ? behind[behind.length - 1] : null;
+    if (!next) return prev || today;
+    if (!prev) return next;
+    const day = 86400000;
+    const t = new Date(today + "T00:00:00").getTime();
+    const forward = (new Date(next + "T00:00:00").getTime() - t) / day;
+    const back = (t - new Date(prev + "T00:00:00").getTime()) / day;
+    return back < forward ? prev : next;
+  }
+
+  // The header says "Week N", the performer board is a week's board, and
+  // the day strip runs across week boundaries -- so whenever the
+  // selected day belongs to another week, those follow it rather than
+  // staying on whatever week the page was rendered for.
+  function syncWeekToDay(key){
+    const games = daysIndex[key] || [];
+    const wk = (games.length && games[0].week) || seasonDayWeeks[key];
+    if (wk && wk !== scWeek) {
+      scWeek = wk;
+      weekLabelEl.textContent = 'Week ' + scWeek;
+      refreshPerformers();
+    }
   }
 
   function renderDayTabs(){
@@ -8623,11 +8695,15 @@ const scTodayKey = {{ today_key|tojson }};
 
   function selectDay(key){
     selectedDay = key;
+    // Sync the label off the schedule first, so a day whose games are
+    // still loading (or fail to load) doesn't sit under the wrong week.
+    syncWeekToDay(key);
     if(!daysIndex[key]){
       fetch('/api/scoreboard?date=' + key.replace(/-/g, ''))
         .then(function(r){ return r.json(); })
         .then(function(data){
           daysIndex[key] = data.games || [];
+          syncWeekToDay(key);
           renderDayTabs();
           renderGames();
           renderPerformers();
@@ -8636,6 +8712,7 @@ const scTodayKey = {{ today_key|tojson }};
         .catch(function(){ daysIndex[key] = []; renderGames(); renderPerformers(); });
       return;
     }
+    syncWeekToDay(key);
     renderDayTabs();
     renderGames();
     renderPerformers();
@@ -8798,10 +8875,18 @@ const scTodayKey = {{ today_key|tojson }};
     if (games.some(function(g){ return g.status === 'in_progress'; })) refreshPerformers();
   }, 45000);
 
+  // Open on a day with football, decided here rather than at page build
+  // so it uses the visitor's clock and the whole season's schedule.
+  selectedDay = pickOpeningDay();
+  monthCursor = new Date(selectedDay + "T00:00:00");
+  syncWeekToDay(selectedDay);
   renderDayTabs();
   renderGames();
   renderPerformers();
   renderMonth();
+  // A day outside the week baked into the page has no games loaded yet;
+  // selectDay fetches that day and repaints when it lands.
+  if (!daysIndex[selectedDay]) selectDay(selectedDay);
   // /scores only bakes the board in when it was already cached server-side
   // (it never blocks the render on a live stats fetch), so on a cold cache
   // the page arrives with nothing and fills itself in here.
