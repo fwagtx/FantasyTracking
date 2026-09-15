@@ -317,12 +317,33 @@ def init_db():
             # lead with sleeper_id), so every one of those calls was
             # doing a full sequential scan of a table that only grows.
             cur.execute("CREATE INDEX IF NOT EXISTS idx_player_stats_season ON player_stats (season);")
+            # Receptions. Every scoring format on this site differs from
+            # PPR only in what a catch is worth, so the stored PPR figure
+            # plus this one number rescores a whole season exactly --
+            # no second source, no re-deriving points from raw stats.
+            cur.execute("ALTER TABLE player_stats ADD COLUMN IF NOT EXISTS rec REAL DEFAULT 0;")
             cur.execute("ALTER TABLE users ADD COLUMN IF NOT EXISTS sleeper_username TEXT;")
             # Rankings defaults. Format and mode were URL parameters only,
             # so every visit started on 1QB dynasty regardless of the
             # league anyone actually plays in.
             cur.execute("ALTER TABLE users ADD COLUMN IF NOT EXISTS pref_format TEXT;")
             cur.execute("ALTER TABLE users ADD COLUMN IF NOT EXISTS pref_mode TEXT;")
+            cur.execute("ALTER TABLE users ADD COLUMN IF NOT EXISTS pref_scoring TEXT;")
+            # Avatars live apart from users because load_user does a
+            # SELECT * on that row for every single request -- putting
+            # image bytes there would drag a picture through every page
+            # load on the site.
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS user_avatars (
+                    user_id INTEGER PRIMARY KEY REFERENCES users(id),
+                    image BYTEA NOT NULL,
+                    mimetype TEXT NOT NULL,
+                    updated_at TIMESTAMP DEFAULT NOW()
+                );
+            """)
+            # A counter on the users row, so a page can build a
+            # cache-busting avatar URL without reading the image.
+            cur.execute("ALTER TABLE users ADD COLUMN IF NOT EXISTS avatar_version INTEGER DEFAULT 0;")
             cur.execute("""
                 CREATE TABLE IF NOT EXISTS synced_leagues (
                     user_id INTEGER REFERENCES users(id),
@@ -407,6 +428,8 @@ class User(UserMixin):
         self.sleeper_username = row.get("sleeper_username")
         self.pref_format = row.get("pref_format") or "1qb"
         self.pref_mode = row.get("pref_mode") or "dynasty"
+        self.pref_scoring = row.get("pref_scoring") or DEFAULT_SCORING
+        self.avatar_version = row.get("avatar_version") or 0
         self.newsletter_opt_in = bool(row.get("newsletter_opt_in"))
 
 
@@ -3007,8 +3030,12 @@ def get_defense_vs_position(season, cache=_defense_vs_position_cache):
     "not synced yet". ensure_schedule_synced no-ops instantly once a
     season is confirmed present, so this costs nothing after the first
     call per season per process."""
+    # Derived from fantasy points, so the format it was built in is part
+    # of its identity -- otherwise whoever loads a season first decides
+    # the numbers everyone after them gets.
+    _sc = current_scoring()
     now = time.time()
-    entry = cache.get(season)
+    entry = cache.get((season, _sc))
     if entry and now - entry["time"] < 3600:
         # Deliberately BEFORE the self-heal call below. This function is
         # invoked once per graded player per season, so with the history
@@ -3055,7 +3082,7 @@ def get_defense_vs_position(season, cache=_defense_vs_position_cache):
         for i, (team, _) in enumerate(ranked):
             result[team][pos]["rank"] = i + 1
 
-    cache[season] = {"data": result, "time": now}
+    cache[(season, _sc)] = {"data": result, "time": now}
     return result
 
 
@@ -3307,7 +3334,7 @@ _PERF_BASELINE_MEDIAN = {
 _perf_distribution_cache = {}
 
 
-def get_performance_distribution(season, cache=_perf_distribution_cache):
+def get_performance_distribution(season, scoring=None, cache=_perf_distribution_cache):
     """{position: sorted list of per-game fantasy points} for the
     starter-caliber performances of one season -- the reference a single
     game's output is graded against.
@@ -3317,13 +3344,18 @@ def get_performance_distribution(season, cache=_perf_distribution_cache):
     hour per season; the shape of a full season's distribution barely
     moves week to week, so this does not need to be fresh to be right."""
     season = _safe_int(season, int(SEASON))
+    # Graded against a pool built in the same format as the points being
+    # graded. Pooling half-PPR games against a PPR reference would mark
+    # every receiver down for a rule change nobody made.
+    scoring = normalize_scoring(scoring or current_scoring())
     now = time.time()
-    entry = cache.get(season)
+    key = (season, scoring)
+    entry = cache.get(key)
     if entry and now - entry["time"] < 3600:
         return entry["data"]
 
     all_players = get_all_players()
-    season_stats = get_season_stats(season)
+    season_stats = get_season_stats(season, scoring)
     # week -> position -> [fpts], so each week can be truncated to its own
     # starter pool before everything is pooled together. Truncating only
     # at the end would let one huge week's depth dilute another's.
@@ -3347,7 +3379,7 @@ def get_performance_distribution(season, cache=_perf_distribution_cache):
     for pos in pools:
         pools[pos].sort()
 
-    cache[season] = {"data": pools, "time": now}
+    cache[key] = {"data": pools, "time": now}
     return pools
 
 
@@ -3547,7 +3579,7 @@ def compute_matchup_grade(sid, season, week, cache=_matchup_grade_cache):
     None for a non-skill-position player. TTL 3600s, keyed by
     (sid, season, week) -- cheap since every input is already cached,
     safe to compute for every rostered skill player on a page render."""
-    key = (sid, season, week)
+    key = (sid, season, week, current_scoring())
     now = time.time()
     entry = cache.get(key)
     if entry and now - entry["time"] < 3600:
@@ -3942,6 +3974,70 @@ def compute_age_decimal(birth_date_str):
         return None
 
 
+# --- scoring formats -----------------------------------------------------
+#
+# Sleeper hands us PPR. Every format here differs from it by exactly one
+# thing -- what a reception is worth -- so each is the PPR figure plus a
+# per-catch delta. That keeps a rescored season EXACT rather than a
+# re-derivation with its own rounding, and it is why player_stats stores
+# receptions beside the points.
+#
+# TE premium is the one that needs to know who caught it: it is PPR with
+# tight ends paid more, everyone else unchanged.
+SCORING_FORMATS = [
+    ("ppr", "PPR", "1.0 per catch"),
+    ("half_ppr", "Half PPR", "0.5 per catch"),
+    ("standard", "Standard", "no points per catch"),
+    ("te_prem", "TE Premium", "1.5 per catch for TEs, 1.0 for everyone else"),
+]
+SCORING_KEYS = {k for k, _, _ in SCORING_FORMATS}
+DEFAULT_SCORING = "ppr"
+# Points added per reception, relative to the PPR figure Sleeper gives.
+_PER_CATCH_DELTA = {"ppr": 0.0, "half_ppr": -0.5, "standard": -1.0, "te_prem": 0.0}
+_TE_PREM_BONUS = 0.5
+
+
+def scoring_label(key):
+    for k, label, _ in SCORING_FORMATS:
+        if k == key:
+            return label
+    return "PPR"
+
+
+def normalize_scoring(key):
+    key = (key or "").strip().lower()
+    return key if key in SCORING_KEYS else DEFAULT_SCORING
+
+
+def current_scoring():
+    """The scoring the person reading this page has chosen.
+
+    Read once here rather than threaded through every call site: the
+    stats readers below default to it, so every board, grade and point on
+    the site follows the setting without each of them having to ask.
+
+    Anything outside a request -- the sync job, cache warming -- gets the
+    site default, which is what those should be computing in anyway."""
+    try:
+        if current_user.is_authenticated:
+            return normalize_scoring(getattr(current_user, "pref_scoring", None))
+    except Exception:
+        pass
+    return DEFAULT_SCORING
+
+
+def rescore(fpts, rec, scoring, position=None):
+    """A PPR figure, in another format. `rec` is receptions."""
+    if scoring == DEFAULT_SCORING or not isinstance(fpts, (int, float)):
+        return fpts
+    catches = rec if isinstance(rec, (int, float)) else 0
+    if not catches:
+        return fpts
+    if scoring == "te_prem":
+        return round(fpts + (_TE_PREM_BONUS * catches if position == "TE" else 0.0), 2)
+    return round(fpts + _PER_CATCH_DELTA.get(scoring, 0.0) * catches, 2)
+
+
 def compute_idp_points(stats):
     """Best-effort IDP fantasy points from raw Sleeper defensive stats,
     using commonly-used standard weights (solo tackle=1, assist=0.5,
@@ -4016,8 +4112,10 @@ def fetch_season_stats_from_sleeper(season):
                         continue
                 off_snp = stats.get("off_snp")
                 tm_off_snp = stats.get("tm_off_snp")
+                rec = stats.get("rec")
                 weekly.setdefault(pid, {})[week] = {
                     "pts": round(pts, 1),
+                    "rec": rec if isinstance(rec, (int, float)) else 0,
                     "off_snp": off_snp if isinstance(off_snp, (int, float)) else 0,
                     "tm_off_snp": tm_off_snp if isinstance(tm_off_snp, (int, float)) else 0,
                 }
@@ -4071,7 +4169,33 @@ def build_stat_line(position, stats, max_items=3):
 _live_week_stats_cache = {}
 
 
-def get_live_week_stats(season, week, cache=_live_week_stats_cache, allow_fetch=True):
+def _live_in_scoring(data, scoring):
+    """One week of live stats, in the reader's format.
+
+    The raw Sleeper response is cached once and rescored on the way out,
+    so a second format costs arithmetic rather than a second call during
+    a game. Receptions come from the same payload, so a live figure is
+    exact rather than an estimate.
+
+    PPR is returned untouched -- the common case does no work and no
+    copying at all."""
+    if not data or scoring == DEFAULT_SCORING:
+        return data
+    positions = {}
+    if scoring == "te_prem":
+        positions = {sid: (p or {}).get("position")
+                     for sid, p in (get_all_players() or {}).items()}
+    out = {}
+    for pid, entry in data.items():
+        stats = entry.get("stats") or {}
+        out[pid] = dict(entry, pts=round(
+            rescore(entry.get("pts") or 0, stats.get("rec"), scoring,
+                    positions.get(pid)) or 0, 1))
+    return out
+
+
+def get_live_week_stats(season, week, cache=_live_week_stats_cache, allow_fetch=True,
+                        scoring=None):
     """{player_id: {"pts": fantasy points, "stats": raw Sleeper stats}}
     for ONE week, fetched live rather than read from our database.
 
@@ -4092,15 +4216,16 @@ def get_live_week_stats(season, week, cache=_live_week_stats_cache, allow_fetch=
     nothing is), for callers on a path that must never block on a live
     request -- see get_week_performers."""
     season, week = _safe_int(season, int(SEASON)), _safe_int(week, 1)
+    scoring = normalize_scoring(scoring or current_scoring())
     key = (season, week)
     now = time.time()
     entry = cache.get(key)
     if entry and now - entry["time"] < 45:
-        return entry["data"]
+        return _live_in_scoring(entry["data"], scoring)
     if not allow_fetch:
         # Caller is on a request path that must not block. Serve whatever
         # is cached (even if stale) and let them refresh out of band.
-        return entry["data"] if entry else None
+        return _live_in_scoring(entry["data"], scoring) if entry else None
     try:
         r = requests.get(
             f"https://api.sleeper.com/stats/nfl/{season}/{week}",
@@ -4125,9 +4250,9 @@ def get_live_week_stats(season, week, cache=_live_week_stats_cache, allow_fetch=
                 continue
             out[pid] = {"pts": round(pts, 1), "stats": stats}
         cache[key] = {"data": out, "time": now}
-        return out
+        return _live_in_scoring(out, scoring)
     except Exception:
-        return entry["data"] if entry else {}
+        return _live_in_scoring(entry["data"], scoring) if entry else {}
 
 
 def sync_season_to_db(season):
@@ -4145,12 +4270,15 @@ def sync_season_to_db(season):
             for pid, weeks in weekly.items():
                 for week, w in weeks.items():
                     cur.execute(
-                        """INSERT INTO player_stats (sleeper_id, season, week, fpts, off_snp, tm_off_snp, updated_at)
-                           VALUES (%s, %s, %s, %s, %s, %s, NOW())
+                        """INSERT INTO player_stats (sleeper_id, season, week, fpts, rec,
+                                                     off_snp, tm_off_snp, updated_at)
+                           VALUES (%s, %s, %s, %s, %s, %s, %s, NOW())
                            ON CONFLICT (sleeper_id, season, week)
-                           DO UPDATE SET fpts = EXCLUDED.fpts, off_snp = EXCLUDED.off_snp,
+                           DO UPDATE SET fpts = EXCLUDED.fpts, rec = EXCLUDED.rec,
+                                         off_snp = EXCLUDED.off_snp,
                                          tm_off_snp = EXCLUDED.tm_off_snp, updated_at = NOW()""",
-                        (pid, int(season), week, w["pts"], w["off_snp"], w["tm_off_snp"]),
+                        (pid, int(season), week, w["pts"], w.get("rec") or 0,
+                         w["off_snp"], w["tm_off_snp"]),
                     )
                     rows_saved += 1
         conn.commit()
@@ -4299,15 +4427,23 @@ def _refresh_season_stats_background(season):
 RANKINGS_STATS_SEASONS = [str(int(SEASON) - n) for n in range(0, 4)]
 
 
-def get_season_stats(season, cache={}):
+def get_season_stats(season, scoring=None, cache={}):
     """player_id -> {games, fpts, weeks, snap_pct} for a season. Reads
     only from our own database -- never calls Sleeper live during a page
     request, no matter what. If a season hasn't been synced yet, this
     just returns empty rather than blocking the page load on a live
     fetch (that blocking fallback was the actual cause of the site
-    timing out entirely -- fixed by removing it here)."""
+    timing out entirely -- fixed by removing it here).
+
+    Points come out in the reader's own scoring format. Doing it HERE
+    rather than at each place a number is printed is the whole reason the
+    setting reaches the site at once: the grade distribution, the
+    rankings, the performer boards and the matchup grades all read this,
+    so all of them follow the setting without knowing it exists."""
+    scoring = normalize_scoring(scoring or current_scoring())
     now = time.time()
-    entry = cache.get(season)
+    key = (season, scoring)
+    entry = cache.get(key)
     if entry and now - entry["time"] < 600:
         return entry["data"]
 
@@ -4318,19 +4454,28 @@ def get_season_stats(season, cache={}):
             try:
                 with conn.cursor() as cur:
                     cur.execute(
-                        "SELECT sleeper_id, week, fpts, off_snp, tm_off_snp FROM player_stats WHERE season = %s",
+                        "SELECT sleeper_id, week, fpts, rec, off_snp, tm_off_snp "
+                        "FROM player_stats WHERE season = %s",
                         (int(season),),
                     )
                     rows = cur.fetchall()
             finally:
                 conn.close()
+            # Only TE premium needs to know who caught the ball, so the
+            # player dump is touched only when that format is asked for.
+            positions = {}
+            if scoring == "te_prem":
+                positions = {sid: (p or {}).get("position")
+                             for sid, p in (get_all_players() or {}).items()}
             for row in rows:
                 p_entry = agg.setdefault(row["sleeper_id"], {
                     "games": 0, "fpts": 0.0, "weeks": {}, "off_snp_total": 0, "tm_off_snp_total": 0,
                 })
+                pts = rescore(row["fpts"] or 0, row.get("rec"), scoring,
+                              positions.get(row["sleeper_id"]))
                 p_entry["games"] += 1
-                p_entry["fpts"] += row["fpts"] or 0
-                p_entry["weeks"][row["week"]] = round(row["fpts"] or 0, 1)
+                p_entry["fpts"] += pts
+                p_entry["weeks"][row["week"]] = round(pts, 1)
                 p_entry["off_snp_total"] += row["off_snp"] or 0
                 p_entry["tm_off_snp_total"] += row["tm_off_snp"] or 0
         except Exception:
@@ -4361,7 +4506,7 @@ def get_season_stats(season, cache={}):
         tm_total = p_entry["tm_off_snp_total"]
         p_entry["snap_pct"] = round(100 * p_entry["off_snp_total"] / tm_total, 1) if tm_total else None
 
-    cache[season] = {"data": agg, "time": now}
+    cache[key] = {"data": agg, "time": now}
     return agg
 
 
@@ -4372,8 +4517,12 @@ def get_season_finish_ranks(season, cache={}):
     position. This is a real 'how they performed that year' ranking,
     different from dynasty value (which is forward-looking). Cached 1hr
     since it's a full-league computation, not a single-player lookup."""
+    # Derived from fantasy points, so the format it was built in is part
+    # of its identity -- otherwise whoever loads a season first decides
+    # the numbers everyone after them gets.
+    _sc = current_scoring()
     now = time.time()
-    entry = cache.get(season)
+    entry = cache.get((season, _sc))
     if entry and now - entry["time"] < 3600:
         return entry["data"]
 
@@ -4410,7 +4559,7 @@ def get_season_finish_ranks(season, cache={}):
         except Exception:
             ranks = {}
 
-    cache[season] = {"data": ranks, "time": now}
+    cache[(season, _sc)] = {"data": ranks, "time": now}
     return ranks
 
 
@@ -4806,6 +4955,109 @@ def login():
     return render_template_string(LOGIN_PAGE_HTML, error=error)
 
 
+# --- profile pictures ----------------------------------------------------
+#
+# Stored in the database rather than on disk: this runs on an instance
+# whose filesystem does not survive a deploy, so a file written there is
+# a picture that vanishes the next time the app ships.
+#
+# Nothing resizes it, because there is no image library here and adding
+# one to crop a handful of avatars is not a trade worth making. Instead
+# the cap is small enough that an unresized file is still a reasonable
+# thing to send, and the browser does the fitting.
+AVATAR_MAX_BYTES = 600 * 1024
+# Read from the bytes, never from the filename or the browser's claim --
+# both are just strings the uploader chose.
+_AVATAR_SIGNATURES = (
+    (b"\x89PNG\r\n\x1a\n", "image/png"),
+    (b"\xff\xd8\xff", "image/jpeg"),
+    (b"GIF87a", "image/gif"),
+    (b"GIF89a", "image/gif"),
+)
+
+
+def sniff_image(data):
+    """The real type of an uploaded image, or None if it is not one."""
+    if not data:
+        return None
+    for sig, mime in _AVATAR_SIGNATURES:
+        if data.startswith(sig):
+            return mime
+    # WebP is RIFF....WEBP -- the marker sits past a length field.
+    if data[:4] == b"RIFF" and data[8:12] == b"WEBP":
+        return "image/webp"
+    return None
+
+
+def save_avatar(user_id, data, mimetype):
+    conn = get_db()
+    try:
+        with conn.cursor() as cur:
+            cur.execute(
+                """INSERT INTO user_avatars (user_id, image, mimetype, updated_at)
+                   VALUES (%s, %s, %s, NOW())
+                   ON CONFLICT (user_id) DO UPDATE
+                   SET image = EXCLUDED.image, mimetype = EXCLUDED.mimetype,
+                       updated_at = NOW()""",
+                (int(user_id), psycopg2.Binary(data), mimetype))
+            cur.execute(
+                "UPDATE users SET avatar_version = COALESCE(avatar_version, 0) + 1 "
+                "WHERE id = %s RETURNING avatar_version", (int(user_id),))
+            row = cur.fetchone()
+        conn.commit()
+        return (row or {}).get("avatar_version") or 1
+    finally:
+        conn.close()
+
+
+def delete_avatar(user_id):
+    conn = get_db()
+    try:
+        with conn.cursor() as cur:
+            cur.execute("DELETE FROM user_avatars WHERE user_id = %s", (int(user_id),))
+            # Bumped on removal too, so a browser holding the old picture
+            # under a long cache is asked for a URL it has never seen.
+            cur.execute(
+                "UPDATE users SET avatar_version = COALESCE(avatar_version, 0) + 1 "
+                "WHERE id = %s RETURNING avatar_version", (int(user_id),))
+            row = cur.fetchone()
+        conn.commit()
+        return (row or {}).get("avatar_version") or 1
+    finally:
+        conn.close()
+
+
+def get_avatar(user_id):
+    if not DATABASE_URL:
+        return None
+    conn = get_db()
+    try:
+        with conn.cursor() as cur:
+            cur.execute("SELECT image, mimetype FROM user_avatars WHERE user_id = %s",
+                        (int(user_id),))
+            row = cur.fetchone()
+            return (bytes(row["image"]), row["mimetype"]) if row else None
+    except Exception:
+        return None
+    finally:
+        conn.close()
+
+
+@app.route("/avatar/<int:user_id>")
+def avatar_image(user_id):
+    """Served under a ?v= that changes on every upload, which is what
+    lets the response be cached for a year and still update the instant
+    someone changes their picture."""
+    found = get_avatar(user_id)
+    if not found:
+        return redirect("/favicon.svg")
+    data, mimetype = found
+    resp = make_response(data)
+    resp.headers["Content-Type"] = mimetype
+    resp.headers["Cache-Control"] = "public, max-age=31536000, immutable"
+    return resp
+
+
 @app.route("/settings", methods=["GET", "POST"])
 @login_required
 def settings_page():
@@ -4819,9 +5071,38 @@ def settings_page():
     saved = request.args.get("saved") == "1"
     error = None
     if request.method == "POST":
+        # Removing a picture is its own button, and nothing else on the
+        # form should be touched by it.
+        if request.form.get("action") == "remove_avatar":
+            try:
+                current_user.avatar_version = delete_avatar(current_user.id)
+                return redirect("/settings?saved=1")
+            except Exception as e:
+                error = str(e)
+
+        upload = request.files.get("avatar")
+        if not error and upload and upload.filename:
+            data = upload.read(AVATAR_MAX_BYTES + 1)
+            if len(data) > AVATAR_MAX_BYTES:
+                error = "That picture is over %d KB. Pick a smaller one." % (
+                    AVATAR_MAX_BYTES // 1024)
+            else:
+                # The bytes decide what it is. A .png that is really
+                # something else is not a picture, whatever it is called.
+                mimetype = sniff_image(data)
+                if not mimetype:
+                    error = "That file isn't a PNG, JPEG, GIF or WebP image."
+                else:
+                    try:
+                        current_user.avatar_version = save_avatar(
+                            current_user.id, data, mimetype)
+                    except Exception as e:
+                        error = str(e)
+
         sleeper = (request.form.get("sleeper_username") or "").strip()
         fmt = request.form.get("pref_format")
         mode = request.form.get("pref_mode")
+        scoring = normalize_scoring(request.form.get("pref_scoring"))
         if fmt not in ("1qb", "superflex"):
             fmt = "1qb"
         if mode not in ("dynasty", "redraft"):
@@ -4829,16 +5110,16 @@ def settings_page():
         news = bool(request.form.get("newsletter_opt_in"))
         if len(sleeper) > 64:
             error = "That Sleeper username is too long."
-        else:
+        elif not error:
             try:
                 conn = get_db()
                 try:
                     with conn.cursor() as cur:
                         cur.execute(
                             """UPDATE users SET sleeper_username = %s, pref_format = %s,
-                                      pref_mode = %s, newsletter_opt_in = %s
+                                      pref_mode = %s, pref_scoring = %s, newsletter_opt_in = %s
                                WHERE id = %s""",
-                            (sleeper or None, fmt, mode, news, current_user.id))
+                            (sleeper or None, fmt, mode, scoring, news, current_user.id))
                     conn.commit()
                 finally:
                     conn.close()
@@ -4847,6 +5128,7 @@ def settings_page():
                 # what it was loaded with.
                 current_user.sleeper_username = sleeper or None
                 current_user.pref_format, current_user.pref_mode = fmt, mode
+                current_user.pref_scoring = scoring
                 current_user.newsletter_opt_in = news
                 return redirect("/settings?saved=1")
             except Exception as e:
@@ -4854,7 +5136,8 @@ def settings_page():
 
     leagues = get_synced_league_ids(current_user.id)
     return render_template_string(
-        SETTINGS_HTML, saved=saved, error=error,
+        SETTINGS_HTML, saved=saved, error=error, scoring_formats=SCORING_FORMATS,
+        avatar_max_kb=AVATAR_MAX_BYTES // 1024,
         league_count=len(leagues) if leagues else 0)
 
 
@@ -5303,7 +5586,7 @@ def get_week_performers(season, week, cache=_week_performers_cache, allow_fetch=
     has already shipped that exact bug once, in get_season_stats, and it
     took the site down -- the page always renders first."""
     season, week = _safe_int(season, int(SEASON)), _safe_int(week, 1)
-    key = (season, week, per_team)
+    key = (season, week, per_team, current_scoring())
     now = time.time()
     entry = cache.get(key)
     if entry and now - entry["time"] < 45:
@@ -7323,8 +7606,12 @@ def get_player_window_ranks(season, cache=_player_rank_cache):
     PERF_EARLIEST_SEASON, so it grows as the backfill does rather than
     being pinned to a fixed set."""
     season = _safe_int(season, int(SEASON))
+    # Derived from fantasy points, so the format it was built in is part
+    # of its identity -- otherwise whoever loads a season first decides
+    # the numbers everyone after them gets.
+    _sc = current_scoring()
     now = time.time()
-    entry = cache.get(season)
+    entry = cache.get((season, _sc))
     if entry and now - entry["time"] < 900:
         return entry["data"]
 
@@ -7354,7 +7641,7 @@ def get_player_window_ranks(season, cache=_player_rank_cache):
         for i, (sid, _pts) in enumerate(
                 sorted(bucket.items(), key=lambda kv: -kv[1]), 1):
             out.setdefault(sid, {})[label] = i
-    cache[season] = {"data": out, "time": now}
+    cache[(season, _sc)] = {"data": out, "time": now}
     return out
 
 
@@ -7718,12 +8005,14 @@ def performances_page():
             PERFORMANCES_HTML, rows=rows, season=season, week=week, score_mark=SCORE_MARK_SVG,
             scope=scope if scope in PERF_SCOPES else "week", order=order,
             position=position, positions=SCORED_POSITIONS,
+            scoring_name=scoring_label(current_scoring()),
             load_error=None,
         )
     except Exception as e:
         return render_template_string(
             PERFORMANCES_HTML, rows=[], season=int(SEASON), week=1, score_mark=SCORE_MARK_SVG,
             scope="week", order="top", position=None, positions=SCORED_POSITIONS,
+            scoring_name=scoring_label(current_scoring()),
             load_error=str(e),
         )
 
@@ -8133,7 +8422,8 @@ def rankings():
     # which ranks lower overall than WR/RB) still has a real list to show.
     return render_template_string(RANKINGS_HTML, rows=rows[:300], fmt=fmt, mode=mode,
                                   pos_filter=pos_filter, view=view,
-                                  stats_season=stats_season, stats_seasons=stats_seasons)
+                                  stats_season=stats_season, stats_seasons=stats_seasons,
+                                  scoring_name=scoring_label(current_scoring()))
 
 
 def consolidation_adjusted_value(items):
@@ -9384,6 +9674,7 @@ BASE_STYLE = """
     border:1px solid transparent;
   }
   .acct[open] .acct-disc, .acct > summary:hover .acct-disc{ border-color:var(--accent-ink); }
+  .acct-photo{ object-fit:cover; background:var(--paper-sunken); padding:0; }
   .acct-caret{ font-size:9px; color:var(--ink-muted); }
   .acct-menu{
     position:absolute; right:0; top:calc(100% + 8px); min-width:210px;
@@ -10103,7 +10394,12 @@ def make_header(active=""):
     {{% if current_user.is_authenticated %}}
       <details class="acct">
         <summary aria-label="Account menu">
+          {{% if current_user.avatar_version %}}
+          <img class="acct-disc acct-photo"
+               src="/avatar/{{{{ current_user.id }}}}?v={{{{ current_user.avatar_version }}}}" alt="">
+          {{% else %}}
           <span class="acct-disc">{{{{ (current_user.username or '?')[:2] }}}}</span>
+          {{% endif %}}
           <span class="acct-caret">&#9660;</span>
         </summary>
         <div class="acct-menu">
@@ -12600,6 +12896,7 @@ PERFORMANCES_HTML = BASE_STYLE + make_header("scores") + """
 
   <div class="pl-title">Performances</div>
   <div class="pl-sub">
+    {{ scoring_name }} &middot;
     5.0 is an average starter game at that position. The scale has no ceiling &mdash;
     a historic game scores above 10.
   </div>
@@ -14435,7 +14732,7 @@ RANKINGS_HTML = BASE_STYLE + make_header("rankings") + VOTE_MODAL_HTML + """
 <div class="rk-page">
 <div class="wrap">
   <div class="rk-toolbar">
-    <span class="rk-title">Rankings <span style="font-size:12px; color:var(--rk-muted); text-transform:none; font-family:'Source Sans 3';">&middot; GP/FPTS from {{ stats_season }}</span></span>
+    <span class="rk-title">Rankings <span style="font-size:12px; color:var(--rk-muted); text-transform:none; font-family:'Source Sans 3';">&middot; GP/FPTS from {{ stats_season }} &middot; {{ scoring_name }}</span></span>
     <!-- Mode and format were two pairs of pills sitting beside a
          dropdown that did the same job, which is four bubbles and a
          select competing for the same glance. All three are selects
@@ -15417,6 +15714,36 @@ SETTINGS_HTML = BASE_STYLE + make_header("") + """
                  font-weight:700; color:var(--ink-muted); cursor:pointer; white-space:nowrap; }
   .set-seg input:checked + span{ background:var(--accent); color:var(--accent-on); }
   .set-seg input:focus-visible + span{ outline:2px solid var(--accent-ink); outline-offset:2px; }
+  /* Four choices with a line of explanation each -- too much to sit in a
+     pill row, and the note is the part that tells them apart. */
+  .set-avatar{ display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
+  .set-avatar-img{ width:72px; height:72px; border-radius:50%; object-fit:cover; flex:none;
+                   background:var(--paper-sunken); border:1px solid var(--line); }
+  .set-avatar-img.placeholder{ display:flex; align-items:center; justify-content:center;
+                               background:var(--accent); color:var(--accent-on);
+                               font-family:"IBM Plex Mono",monospace; font-size:22px;
+                               font-weight:700; text-transform:uppercase; border-color:transparent; }
+  .set-avatar-side{ flex:1; min-width:180px; }
+  /* A file input styled as a button, since the native one cannot be. */
+  .set-file input{ position:absolute; opacity:0; pointer-events:none; }
+  .set-file span{ display:inline-block; padding:8px 16px; border-radius:99px;
+                  border:1px solid var(--line-strong); font-size:13px; font-weight:700;
+                  cursor:pointer; }
+  .set-file span:hover{ border-color:var(--accent-ink); color:var(--accent-ink); }
+  .set-link-btn{ background:none; border:none; padding:0; margin-top:8px; cursor:pointer;
+                 font-family:inherit; font-size:12.5px; font-weight:700; color:var(--ink-muted); }
+  .set-link-btn:hover{ color:var(--critical); }
+  .set-scoring{ display:grid; gap:8px; }
+  .set-score-opt{ margin:0; cursor:pointer; }
+  .set-score-opt input{ position:absolute; opacity:0; pointer-events:none; }
+  .set-score-opt span{ display:block; padding:11px 14px; border-radius:10px;
+                       border:1px solid var(--line); background:var(--paper-sunken); }
+  .set-score-opt b{ display:block; font-size:13.5px; }
+  .set-score-opt i{ display:block; font-style:normal; font-size:11.5px;
+                    color:var(--ink-muted); margin-top:2px; }
+  .set-score-opt input:checked + span{ border-color:var(--accent-ink);
+                                       background:color-mix(in srgb, var(--accent) 16%, transparent); }
+  .set-score-opt input:focus-visible + span{ outline:2px solid var(--accent-ink); outline-offset:2px; }
   .set-check{ display:flex; align-items:flex-start; gap:10px; cursor:pointer; }
   .set-check input{ margin-top:3px; accent-color:var(--accent); flex:none; }
   .set-read{ display:flex; justify-content:space-between; gap:12px; padding:10px 0;
@@ -15432,14 +15759,55 @@ SETTINGS_HTML = BASE_STYLE + make_header("") + """
   .set-danger a{ font-size:13px; font-weight:700; color:var(--ink-muted); text-decoration:none; }
   .set-danger a:hover{ color:var(--critical); }
 </style>
+<script>
+// Show the chosen file straight away. Picking a picture and seeing the
+// old one still sitting there reads as the upload having failed.
+document.addEventListener('change', function(e){
+  if (!e.target.matches('.set-file input[type=file]')) return;
+  const file = e.target.files && e.target.files[0];
+  if (!file) return;
+  const shown = document.querySelector('.set-avatar-img');
+  const url = URL.createObjectURL(file);
+  if (shown && shown.tagName === 'IMG') { shown.src = url; return; }
+  if (shown) {
+    const img = document.createElement('img');
+    img.className = 'set-avatar-img';
+    img.src = url;
+    shown.replaceWith(img);
+  }
+});
+</script>
 <main><div class="wrap set-wrap">
   <div class="set-title">Settings</div>
   <div class="set-sub">Signed in as {{ current_user.username }}.</div>
   {% if error %}<div class="error">Couldn&rsquo;t save: {{ error }}</div>{% endif %}
 
-  <form method="post">
+  <form method="post" enctype="multipart/form-data">
     <div class="panel">
       <div class="set-group" style="margin-top:0;">
+        <h3>Profile picture</h3>
+        <div class="set-avatar">
+          {% if current_user.avatar_version %}
+          <img class="set-avatar-img"
+               src="/avatar/{{ current_user.id }}?v={{ current_user.avatar_version }}" alt="">
+          {% else %}
+          <span class="set-avatar-img placeholder">{{ (current_user.username or '?')[:2] }}</span>
+          {% endif %}
+          <div class="set-avatar-side">
+            <label class="set-file">
+              <input type="file" name="avatar" accept="image/png,image/jpeg,image/gif,image/webp">
+              <span>Choose a picture</span>
+            </label>
+            <div class="hint">PNG, JPEG, GIF or WebP, up to {{ avatar_max_kb }} KB.
+              It shows on the menu in the corner of every page.</div>
+            {% if current_user.avatar_version %}
+            <button class="set-link-btn" type="submit" name="action" value="remove_avatar">Remove</button>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <div class="set-group">
         <h3>Rankings</h3>
         <div class="set-field">
           <label>Default format</label>
@@ -15460,6 +15828,27 @@ SETTINGS_HTML = BASE_STYLE + make_header("") + """
           </div>
           <div class="hint">What Rankings opens on. You can still switch on the page itself &mdash;
             this only decides where it starts.</div>
+        </div>
+      </div>
+
+      <div class="set-group">
+        <h3>Scoring</h3>
+        <div class="set-field" style="margin-top:0;">
+          <div class="set-scoring">
+            {% for key, label, note in scoring_formats %}
+            <label class="set-score-opt">
+              <input type="radio" name="pref_scoring" value="{{ key }}"
+                     {{ 'checked' if current_user.pref_scoring == key }}>
+              <span><b>{{ label }}</b><i>{{ note }}</i></span>
+            </label>
+            {% endfor %}
+          </div>
+          <div class="hint">
+            Every fantasy point on the site is counted this way &mdash; the rankings,
+            the live scoreboard, each player&rsquo;s game grade and the matchup grades.
+            The formats differ only in what a catch is worth, so a season rescores
+            exactly rather than being estimated.
+          </div>
         </div>
       </div>
 
