@@ -4932,13 +4932,20 @@ def send_email(to_address, subject, text_body, html_body=None):
     """True if it went out. False is never fatal to the caller -- a page
     that depends on mail having been delivered is a page that breaks
     every time a mail provider has a bad minute."""
+    return send_email_reason(to_address, subject, text_body, html_body)[0]
+
+
+def send_email_reason(to_address, subject, text_body, html_body=None):
+    """(sent, reason). The reason is what a diagnostic needs: "it didn't
+    work" is not something anyone can act on, and the mail server almost
+    always says exactly what is wrong."""
     if not to_address:
-        return False
+        return False, "no recipient address"
     if not mail_configured():
         app.logger.warning(
             "email not configured (set SMTP_HOST/SMTP_USER/SMTP_PASSWORD/MAIL_FROM); "
             "would have sent %r to %s", subject, to_address)
-        return False
+        return False, "SMTP_HOST or MAIL_FROM is not set on this server"
     try:
         msg = EmailMessage()
         msg["Subject"] = subject
@@ -4960,10 +4967,10 @@ def send_email(to_address, subject, text_body, html_body=None):
             server.send_message(msg)
         finally:
             server.quit()
-        return True
-    except Exception:
+        return True, None
+    except Exception as e:
         app.logger.exception("could not send %r to %s", subject, to_address)
-        return False
+        return False, "%s: %s" % (type(e).__name__, e)
 
 
 # --- password resets -----------------------------------------------------
@@ -8962,6 +8969,59 @@ def _secret_ok():
         return False
     provided = request.headers.get("X-Sync-Secret") or request.args.get("secret")
     return provided == SITE_PASSWORD
+
+
+@app.route("/api/mail-status")
+def api_mail_status():
+    """Why did no email arrive?
+
+    The answer is almost always one of five environment variables, and
+    finding that out by triggering a password reset and reading a log is
+    a slow way to learn it. Never returns the password itself -- only
+    whether each name is set.
+
+    Add &to=you@example.com to send a real test message and get back
+    whatever the mail server actually said."""
+    if not _secret_ok():
+        return jsonify({"ok": False, "error": "unauthorized"}), 403
+
+    checks = []
+    if not SMTP_HOST:
+        checks.append("SMTP_HOST is not set -- nothing can send.")
+    if not SMTP_USER:
+        checks.append("SMTP_USER is not set (Resend wants the literal word 'resend').")
+    if not SMTP_PASSWORD:
+        checks.append("SMTP_PASSWORD is not set -- that is your API key.")
+    if not MAIL_FROM:
+        checks.append("MAIL_FROM is not set.")
+    elif "@" in MAIL_FROM:
+        # The most common first-try failure: a verified domain, and a
+        # From address that is not on it.
+        domain = MAIL_FROM.rsplit("@", 1)[1].lower()
+        if domain.endswith(("gmail.com", "yahoo.com", "outlook.com", "hotmail.com")):
+            checks.append(
+                "MAIL_FROM is %s -- a provider will refuse to send as a free mailbox "
+                "domain. Use an address at the domain you verified." % MAIL_FROM)
+
+    status = {
+        "configured": mail_configured(),
+        "SMTP_HOST": SMTP_HOST or None,
+        "SMTP_PORT": SMTP_PORT,
+        "SMTP_USER": SMTP_USER or None,
+        "SMTP_PASSWORD_set": bool(SMTP_PASSWORD),
+        "MAIL_FROM": MAIL_FROM,
+        "SITE_URL": SITE_URL,
+        "problems": checks or None,
+    }
+
+    to = request.args.get("to")
+    if to:
+        sent, reason = send_email_reason(
+            to, "Fantasy Football Calc test email",
+            "This is a test. If it arrived, password reset emails will too.",
+            "<p>This is a test. If it arrived, password reset emails will too.</p>")
+        status["test_send"] = {"to": to, "sent": sent, "reason": reason}
+    return jsonify(status)
 
 
 @app.route("/api/debug-news")
