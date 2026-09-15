@@ -6002,7 +6002,10 @@ def api_news_status():
 
     Secret-protected: it makes an outbound call per hit."""
     if not _secret_ok():
-        return jsonify({"error": "nope"}), 403
+        # Same shape every other secret-protected endpoint refuses with.
+        # test_job_endpoint_auth asserts they all match, so that a route
+        # cannot quietly grow its own weaker guard.
+        return jsonify({"ok": False, "error": "unauthorized"}), 401
     name = (request.args.get("name") or "").strip().lower()
     players = get_all_players()
     hit = None
