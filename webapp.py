@@ -8239,7 +8239,7 @@ def birthdays_page():
         rows = _safe_feed(lambda: get_birthdays(season=season))
         start = season_start_date(season)
         return render_template_string(
-            BIRTHDAYS_PAGE_HTML, title="Birthdays", kind="birthdays", rows=rows,
+            FEED_PAGE_HTML, title="Birthdays", kind="birthdays", rows=rows,
             blurb=(f"Every birthday since the {season} season opened on "
                    f"{start.strftime('%-d %B')}, newest first. The time beside a row "
                    "is how long ago that day started, on the league's own Eastern "
@@ -8247,7 +8247,7 @@ def birthdays_page():
             empty="No birthdays yet this season.", load_error=None)
     except Exception as e:
         return render_template_string(
-            BIRTHDAYS_PAGE_HTML, title="Birthdays", kind="birthdays", rows=[],
+            FEED_PAGE_HTML, title="Birthdays", kind="birthdays", rows=[],
             blurb=None, empty=None, load_error=str(e))
 
 
@@ -10866,13 +10866,21 @@ LOGO_SVG = """<svg viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000
 # which. Grouping them names the split.
 #
 # Each entry is (active-key, href, label, one-line description).
+# Live is one tap, not a menu. Everything that used to be listed under
+# it -- Standings, Performances, Injuries -- is already a heading with
+# its own "View all" on the scores board itself, so the dropdown was a
+# second way to reach pages the destination page already links to, at
+# the cost of making the live side of the site harder to get to than the
+# fantasy side. Its `active` keys still exist and still light the link
+# (see NAV_LIVE_KEYS), so a standings or performance page reads as
+# current without being listed.
+NAV_LIVE = ("live", "/scores", "Live")
+NAV_LIVE_KEYS = ("live", "scores", "standings", "performances",
+                 "injuries", "birthdays")
+
+# myCalc stays a menu: its five destinations have no shared landing page
+# that lists them the way /scores lists the live ones.
 NAV_GROUPS = [
-    ("live", "Live", [
-        ("scores", "/scores", "Scores", "Live games, drives and play-by-play"),
-        ("standings", "/standings", "Standings", "Division races and power rankings"),
-        ("performances", "/performances", "Performances", "Who is producing, rated 0-10"),
-        ("injuries", "/injuries", "Injuries", "The league report as it lands"),
-    ]),
     ("mycalc", "myCalc", [
         ("league", "/league-manager", "League Manager", "Your synced leagues and rosters"),
         ("rankings", "/rankings", "Rankings", "Dynasty and redraft player values"),
@@ -10909,12 +10917,18 @@ def make_header(active=""):
     </details>''')
     nav_groups = "".join(groups)
 
+    # Live is a plain link, and reads as current on any of the live-side
+    # pages -- including the ones it no longer lists.
+    _lk, _lhref, _llabel = NAV_LIVE
+    live_link = (f'<a class="navtop {"active" if active in NAV_LIVE_KEYS else ""}" '
+                 f'href="{_lhref}">{_llabel}</a>')
+
     return f"""
 <header class="site"><div class="wrap nav-row">
   <a class="wordmark" href="/">{LOGO_SVG}<span>Fantasy Football Calc</span></a>
   <input type="checkbox" id="navToggle" class="nav-toggle-checkbox">
   <label for="navToggle" class="nav-toggle-btn" aria-label="Menu">&#9776;</label>
-  <nav class="links">{nav_groups}
+  <nav class="links">{live_link}{nav_groups}
     {{% if current_user.is_authenticated %}}
       <details class="acct">
         <summary aria-label="Account menu">
@@ -11832,6 +11846,8 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + """
                  gap:2px; font-size:11.5px; color:var(--sc-muted);
                  font-family:"IBM Plex Mono"; }
   .sc-feed-meta b{ font-weight:700; color:var(--sc-text); }
+  /* Position only. The team already rides on the mugshot as a crest, so
+     the abbreviation beside it was the same fact twice in one row. */
   .sc-feed-club{ white-space:nowrap; }
 
   /* Power-ranking strip. Deliberately terser than the standings table it
@@ -12014,7 +12030,7 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + """
         </span>
       </span>
       <span class="sc-feed-meta">
-        <span class="sc-feed-club">{{ r.position }}{% if r.team %} &middot; {{ r.team }}{% endif %}</span>
+        <span class="sc-feed-club">{{ r.position }}</span>
         {%- if r.ago %}<b>{{ r.ago }}</b>{% endif -%}
       </span>
     </a>
@@ -12041,7 +12057,7 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + """
         <span class="sc-feed-sub">Happy {{ b.age_label }} Birthday &#127881;</span>
       </span>
       <span class="sc-feed-meta">
-        <span class="sc-feed-club">{{ b.position }}{% if b.team %} &middot; {{ b.team }}{% endif %}</span>
+        <span class="sc-feed-club">{{ b.position }}</span>
         {%- if b.ago %}<b>{{ b.ago }}</b>{% endif -%}
       </span>
     </a>
@@ -13070,7 +13086,7 @@ TEAM_HTML = BASE_STYLE + make_header("live") + """
 # One page for both feeds. They are the same row -- a face, a name, one
 # line about what changed and when -- so they are one template, and the
 # two differ only in what that line says.
-_FEED_PAGE_BODY = """
+FEED_PAGE_HTML = BASE_STYLE + make_header("live") + """
 <style>
   .fd-page{
     --fd-bg:#0d0f0d; --fd-surface:#151815; --fd-surface2:#1c201c;
@@ -13150,7 +13166,7 @@ _FEED_PAGE_BODY = """
         {%- endif %}
       </span>
       <span class="fd-meta">
-        <span class="fd-club">{{ r.position }}{% if r.team %} &middot; {{ r.team }}{% endif %}</span>
+        <span class="fd-club">{{ r.position }}</span>
         {%- if r.ago %}<b>{{ r.ago }}</b>{% endif -%}
       </span>
     </a>
@@ -13165,12 +13181,6 @@ _FEED_PAGE_BODY = """
 </div>
 """
 
-# Same body, two headers. /injuries is an entry in the Live menu and
-# should read as current there; /birthdays is reachable only from the
-# scores board, so it lights the group without claiming to be one of
-# its listed pages.
-FEED_PAGE_HTML = BASE_STYLE + make_header("injuries") + _FEED_PAGE_BODY
-BIRTHDAYS_PAGE_HTML = BASE_STYLE + make_header("live") + _FEED_PAGE_BODY
 
 
 PLAY_DETAIL_HTML = BASE_STYLE + make_header("live") + """
