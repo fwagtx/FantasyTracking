@@ -8288,7 +8288,24 @@ def build_team_assignments():
     # rostered player in the league would read as a fresh signing.
     return {sid: (p.get("team") or NOT_ROSTERED)
             for sid, p in players.items()
-            if isinstance(p, dict) and p.get("position") in SCORED_POSITIONS}
+            if isinstance(p, dict) and _moves_watches(p.get("position"))}
+
+
+def _moves_watches(position):
+    """Is this a player the moves feed follows?
+
+    Not `position in SCORED_POSITIONS`, which is the mistake this
+    replaces. That list holds the GROUPED defensive names -- DL, LB, DB
+    -- while Sleeper's dump labels defenders the way a depth chart does:
+    DE, DT, NT, OLB, ILB, MLB, CB, S, FS, SS. Testing raw membership
+    quietly dropped nearly every defender in the league, so a traded
+    edge rusher would never have appeared. IDP_POSITION_MAP is the same
+    translation the rest of the site already runs defenders through."""
+    if not position:
+        return False
+    return (position in POSITIONS
+            or position in KICKER_POSITIONS
+            or position in IDP_POSITION_MAP)
 
 
 def record_team_changes(assignments):
@@ -10939,11 +10956,69 @@ def api_warm():
             for offset in range(0, DEF_HISTORY_SEASONS_BACK + 1):
                 get_defense_vs_position(int(SEASON) - offset)
             get_referee_tendencies()
+            # Moves needs TWO snapshots of Sleeper's team field before it
+            # can report anything -- the first one has nothing to compare
+            # against. Leaving that to the request path meant the clock
+            # only advanced when somebody happened to load /scores, so a
+            # quiet night could pass without a single snapshot being
+            # taken and a move made overnight would never be seen at all.
+            # This job already runs every twelve minutes, so taking the
+            # snapshot here is what actually makes the feed automatic.
+            record_team_changes(build_team_assignments())
         except Exception:
             pass
 
     threading.Thread(target=_run, daemon=True).start()
     return jsonify({"ok": True, "started": True})
+
+
+@app.route("/api/moves-status")
+def api_moves_status():
+    """Is the moves feed actually watching, and what has it seen?
+
+    Moves is the one feed that can be working perfectly and still show
+    nothing, because it reports changes rather than state. This says
+    which of the two is happening: `watching` is how many players have
+    been snapshotted at all, `compared` how many have a previous club to
+    be measured against, and `reportable` how many have actually moved.
+    watching > 0 with reportable 0 is a healthy feed on a quiet day."""
+    if not _secret_ok():
+        return jsonify({"ok": False, "error": "unauthorized"}), 401
+    out = {"ok": True, "database": bool(DATABASE_URL),
+           "refresh_seconds": TEAM_STATE_REFRESH_S,
+           "window_days": MOVE_NEWS_DAYS,
+           "tracked_positions": len(SCORED_POSITIONS)}
+    try:
+        out["dump_players"] = len(build_team_assignments())
+    except Exception as e:
+        out["dump_error"] = str(e)
+    try:
+        out["feed_rows"] = len(get_moves_report())
+    except Exception as e:
+        out["feed_error"] = str(e)
+    if not DATABASE_URL:
+        return jsonify(out)
+    try:
+        conn = get_db()
+        try:
+            with conn.cursor() as cur:
+                cur.execute(
+                    """SELECT COUNT(*) AS watching,
+                              COUNT(previous_team) AS compared,
+                              COUNT(*) FILTER (
+                                  WHERE previous_team IS NOT NULL
+                                    AND previous_team IS DISTINCT FROM team
+                              ) AS reportable,
+                              MAX(changed_at) AS newest
+                       FROM player_team_state""")
+                row = cur.fetchone() or {}
+        finally:
+            conn.close()
+        out.update({k: row.get(k) for k in ("watching", "compared", "reportable")})
+        out["newest_change"] = str(row.get("newest")) if row.get("newest") else None
+    except Exception as e:
+        out["db_error"] = str(e)
+    return jsonify(out)
 
 
 @app.route("/api/vote-trio")
@@ -13305,6 +13380,8 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + """
   .sc-move-kind.signed{ color:var(--good); }
   .sc-move-kind.released{ color:var(--critical); }
   .sc-move-kind.traded{ color:var(--warning); }
+  .sc-feed-quiet{ color:var(--sc-muted); font-size:12.5px; padding:16px 14px;
+                  line-height:1.55; }
 
   .sc-section-head{ display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin:26px 0 10px; }
   .sc-section-head h2{ font-family:"Big Shoulders Display"; font-size:22px; font-weight:800; text-transform:uppercase; margin:0; color:var(--sc-text); }
@@ -13592,11 +13669,18 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + """
   </div>
   {% endif %}
 
-  {% if moves %}
+  <!-- Unlike Injuries and Birthdays this section renders even when it
+       is empty. Those two always have something to say; this one has
+       nothing at all until the app has watched a club change hands,
+       which on a fresh deploy means waiting for the next real NFL
+       transaction. A section that simply vanishes until then is
+       indistinguishable from one that is broken, so it says which it
+       is. -->
   <div class="sc-section-head">
     <h2>Moves</h2>
     <a class="sc-viewall" href="/moves">View all &rsaquo;</a>
   </div>
+  {% if moves %}
   <div class="sc-feed">
     {% for r in moves %}
     <a class="sc-feed-row" href="/player?sid={{ r.sid }}">
@@ -13628,6 +13712,12 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + """
     </a>
     {% endfor %}
   </div>
+  {% else %}
+  <div class="sc-feed"><div class="sc-feed-quiet">
+    Watching every roster in the league. Nothing has changed hands in the
+    last two weeks &mdash; the next signing, trade or release shows up here
+    on its own.
+  </div></div>
   {% endif %}
 
   {% if birthdays %}
