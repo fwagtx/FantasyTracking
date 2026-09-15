@@ -12385,6 +12385,14 @@ GAME_DETAIL_HTML = BASE_STYLE + make_header("scores") + """
   .gd-play:first-child{ border-top:none; }
   .gd-play-head{ display:flex; justify-content:space-between; gap:10px; font-size:11px;
                  color:var(--ink-muted); margin-bottom:7px; }
+  /* Both halves carry crests now, so each is its own little row rather
+     than a run of text. */
+  .gd-play-head > span{ display:inline-flex; align-items:center; gap:4px; min-width:0; }
+  .gd-play-crest{ width:15px; height:15px; object-fit:contain; flex:none; }
+  /* The score is the one thing in this line worth reading at speed. */
+  .gd-play-head b{ color:var(--ink); font-family:"IBM Plex Mono"; font-weight:700;
+                   font-size:12px; font-variant-numeric:tabular-nums; }
+  .gd-play-dash{ opacity:0.6; }
   .gd-play-body{ display:flex; gap:11px; align-items:flex-start; }
   /* Two overlapping faces for a play with two players in it. Sized so
      the pair occupies the same column width as a single face does, and
@@ -12876,6 +12884,13 @@ GAME_DETAIL_HTML = BASE_STYLE + make_header("scores") + """
 window.GD_STATUS = {{ detail.status|tojson }};
 window.GD_SEASON = {{ detail.season|tojson }};
 window.GD_WEEK = {{ detail.week|tojson }};
+// Both sides, so every play row can say WHOSE seven the seven is. The
+// abbreviation on its own was ambiguous at a glance, and "7-7" said
+// nothing at all about which way round it ran.
+window.GD_TEAMS = {
+  away: {abbr: {{ (detail.away.abbr or '')|tojson }}, logo: {{ (detail.away.logo or '')|tojson }}},
+  home: {abbr: {{ (detail.home.abbr or '')|tojson }}, logo: {{ (detail.home.logo or '')|tojson }}}
+};
 window.gdRenderFeed = function(plays, status){
   const el = document.getElementById('gdFeedPanel');
   if (!el) return;
@@ -12892,6 +12907,20 @@ window.gdRenderFeed = function(plays, status){
     });
   }
   function ord(n){ return n === 1 ? '1st' : n === 2 ? '2nd' : n === 3 ? '3rd' : n + 'th'; }
+  const GDT = window.GD_TEAMS || {};
+  function crest(t){
+    return (t && t.logo)
+      ? '<img class="gd-play-crest" src="' + esc(t.logo) + '" alt="" loading="lazy" ' +
+        'onerror="this.style.display=\\'none\\'">'
+      : '';
+  }
+  // Which of the two sides an abbreviation belongs to, so the crest
+  // beside it is that team's rather than whichever came first.
+  function teamOf(abbr){
+    if (GDT.home && GDT.home.abbr === abbr) return GDT.home;
+    if (GDT.away && GDT.away.abbr === abbr) return GDT.away;
+    return null;
+  }
   // Every player in the feed points at their own game -- their plays and
   // their stat line -- so a name or a face is somewhere to go, not decoration.
   function plink(sid){
@@ -12902,12 +12931,18 @@ window.gdRenderFeed = function(plays, status){
 
   el.innerHTML = plays.map(function(p){
     const sit = [
-      p.team ? esc(p.team) : null,
+      p.team ? crest(teamOf(p.team)) + esc(p.team) : null,
       p.period ? 'Q' + p.period + (p.clock ? ' ' + esc(p.clock) : '') : null,
       p.down ? ord(p.down) + ' &amp; ' + esc(p.distance) : null
     ].filter(Boolean).join(' &middot; ');
+    // Away crest, away score, home score, home crest -- the same order
+    // the scoreboard at the top of the page uses, so a glance at either
+    // reads the same way round.
     const score = (p.away_score != null && p.home_score != null)
-      ? esc(p.away_score) + '&ndash;' + esc(p.home_score) : '';
+      ? crest(GDT.away) + '<b>' + esc(p.away_score) + '</b>' +
+        '<span class="gd-play-dash">&ndash;</span>' +
+        '<b>' + esc(p.home_score) + '</b>' + crest(GDT.home)
+      : '';
     // Two faces, stacked, the way the reference feed does it: the
     // player the play belongs to in front, whoever else it ran through
     // behind them. One face when that is all there is.
