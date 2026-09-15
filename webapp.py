@@ -829,7 +829,20 @@ ESPN_ATHLETE_NEWS_URLS = (
     "https://site.web.api.espn.com/apis/common/v3/sports/football/nfl"
     "/athletes/{id}/news?limit=12",
 )
+ESPN_TEAM_NEWS_URLS = (
+    "https://site.api.espn.com/apis/site/v2/sports/football/nfl"
+    "/news?team={id}&limit=12",
+    "https://site.api.espn.com/apis/site/v2/sports/football/nfl"
+    "/teams/{id}/news?limit=12",
+)
+ESPN_GAME_NEWS_URLS = (
+    "https://site.api.espn.com/apis/site/v2/sports/football/nfl"
+    "/news?event={id}&limit=12",
+)
+
 _espn_athlete_news_cache = {}
+_espn_team_news_cache = {}
+_espn_game_news_cache = {}
 
 
 def _news_time(value):
@@ -857,67 +870,94 @@ def _news_time(value):
         return _relative_time(stamp)
 
 
-def espn_athlete_news(espn_id, cache=_espn_athlete_news_cache):
-    """Headlines ESPN files against this specific player.
+def _parse_espn_articles(payload):
+    """ESPN's news payload -> our item shape.
 
-    Two URLs because the exact one could not be verified from the
-    sandbox that wrote this (no outbound access to ESPN); whichever
-    answers with articles wins, and /api/news-status on the deployed app
-    reports which one did. Parsed defensively for the same reason: an
-    unfamiliar shape yields no items rather than an exception, because a
-    news panel is never worth a 500 on a player page.
+    Defensive throughout: an unfamiliar shape, or one bad article inside
+    a good response, costs that item rather than raising. A news panel
+    is never worth a 500 on the page it sits on."""
+    out = []
+    articles = payload.get("articles") if isinstance(payload, dict) else None
+    if not isinstance(articles, list):
+        return out
+    for art in articles:
+        if not isinstance(art, dict):
+            continue
+        title = (art.get("headline") or art.get("title") or "").strip()
+        link = ""
+        links = art.get("links")
+        if isinstance(links, dict):
+            web = links.get("web")
+            if isinstance(web, dict):
+                link = (web.get("href") or "").strip()
+            elif isinstance(web, str):
+                link = web.strip()
+        link = link or (art.get("link") or "").strip()
+        desc = _strip_html(art.get("description") or art.get("story") or "")
+        if not (title and link):
+            continue
+        out.append({
+            "title": title, "link": link,
+            "desc": (desc[:220] + "...") if len(desc) > 220 else desc,
+            "ago": _news_time(art.get("published") or art.get("lastModified")),
+            "source": "ESPN",
+        })
+    return out
 
-    Cached per player for 15 minutes, and a miss is cached too --
-    otherwise every view of a player ESPN has nothing on would go back
-    out and ask again."""
-    if not espn_id:
+
+def _espn_news(url_templates, key, cache, ttl=900):
+    """Shared fetch for every kind of ESPN news -- player, team, game.
+
+    Several candidate URLs per kind, because none of them could be
+    verified from the sandbox this was written in (no outbound access to
+    ESPN). Whichever returns articles wins, and /api/news-status reports
+    which one did from the deployed app.
+
+    A miss is cached alongside a hit: otherwise every view of a quiet
+    player or a quiet team would go back out and ask again."""
+    if not key:
         return []
-    key = str(espn_id)
+    key = str(key)
     entry = cache.get(key)
     now = time.time()
-    if entry and now - entry["time"] < 900:
+    if entry and now - entry["time"] < ttl:
         return entry["items"]
-
     items, used = [], None
-    for template in ESPN_ATHLETE_NEWS_URLS:
+    for template in url_templates:
         try:
             r = requests.get(template.format(id=key), timeout=8,
                              headers={"User-Agent": "Mozilla/5.0"})
             r.raise_for_status()
-            payload = r.json()
+            found = _parse_espn_articles(r.json())
         except Exception:
             continue
-        articles = payload.get("articles") if isinstance(payload, dict) else None
-        if not isinstance(articles, list):
-            continue
-        for art in articles:
-            if not isinstance(art, dict):
-                continue
-            title = (art.get("headline") or art.get("title") or "").strip()
-            link = ""
-            links = art.get("links")
-            if isinstance(links, dict):
-                web = links.get("web")
-                if isinstance(web, dict):
-                    link = (web.get("href") or "").strip()
-                elif isinstance(web, str):
-                    link = web.strip()
-            link = link or (art.get("link") or "").strip()
-            desc = _strip_html(art.get("description") or art.get("story") or "")
-            if not (title and link):
-                continue
-            items.append({
-                "title": title, "link": link,
-                "desc": (desc[:220] + "...") if len(desc) > 220 else desc,
-                "ago": _news_time(art.get("published") or art.get("lastModified")),
-                "source": "ESPN",
-            })
-        if items:
-            used = template
+        if found:
+            items, used = found, template
             break
-
     cache[key] = {"items": items, "time": now, "url": used}
     return items
+
+
+def espn_athlete_news(espn_id, cache=_espn_athlete_news_cache):
+    """Headlines ESPN files against this specific player."""
+    return _espn_news(ESPN_ATHLETE_NEWS_URLS, espn_id, cache)
+
+
+def espn_team_news(team_abbr, cache=_espn_team_news_cache):
+    """Headlines about a team. ESPN keys these by abbreviation, which is
+    ESPN's own spelling -- normalize_team_abbr goes the other way, from
+    ESPN to Sleeper, so this reverses it for the handful that differ."""
+    if not team_abbr:
+        return []
+    espn_abbr = SLEEPER_TO_ESPN_ABBR.get(team_abbr.upper(), team_abbr.upper())
+    return _espn_news(ESPN_TEAM_NEWS_URLS, espn_abbr, cache)
+
+
+def espn_game_news(event_id, cache=_espn_game_news_cache):
+    """Headlines tied to one game -- a preview before kickoff, a recap
+    after. Thinner than player or team news by nature: ESPN files far
+    less against an individual game than against the people in it."""
+    return _espn_news(ESPN_GAME_NEWS_URLS, event_id, cache)
 
 
 def _league_feed_matches(full_name, team, limit):
@@ -1539,6 +1579,12 @@ ESPN_SITE_BASE = "https://site.api.espn.com/apis/site/v2/sports/football/nfl"
 TEAM_ABBR_ESPN_TO_SLEEPER = {
     "WSH": "WAS",
 }
+
+# The same map read backwards, for the few places that need to hand ESPN
+# its own spelling (team news). Derived rather than written out, so the
+# two cannot drift apart. espn_team_news is defined above this line but
+# only reads it when called, which is long after import.
+SLEEPER_TO_ESPN_ABBR = {v: k for k, v in TEAM_ABBR_ESPN_TO_SLEEPER.items()}
 
 _ESPN_STATE_TO_STATUS = {"pre": "scheduled", "in": "in_progress", "post": "final"}
 
@@ -6006,6 +6052,28 @@ def api_news_status():
         # test_job_endpoint_auth asserts they all match, so that a route
         # cannot quietly grow its own weaker guard.
         return jsonify({"ok": False, "error": "unauthorized"}), 401
+    # Team and game news answer here too, so one endpoint covers all
+    # three places news now appears.
+    team = (request.args.get("team") or "").strip().upper()
+    if team:
+        _espn_team_news_cache.pop(SLEEPER_TO_ESPN_ABBR.get(team, team), None)
+        items = espn_team_news(team)
+        cached = _espn_team_news_cache.get(SLEEPER_TO_ESPN_ABBR.get(team, team)) or {}
+        return jsonify({"kind": "team", "team": team,
+                        "espn_abbr": SLEEPER_TO_ESPN_ABBR.get(team, team),
+                        "items": len(items), "url_that_worked": cached.get("url"),
+                        "candidate_urls": list(ESPN_TEAM_NEWS_URLS),
+                        "sample": items[:2]})
+    event = (request.args.get("event") or "").strip()
+    if event:
+        _espn_game_news_cache.pop(event, None)
+        items = espn_game_news(event)
+        cached = _espn_game_news_cache.get(event) or {}
+        return jsonify({"kind": "game", "event": event, "items": len(items),
+                        "url_that_worked": cached.get("url"),
+                        "candidate_urls": list(ESPN_GAME_NEWS_URLS),
+                        "sample": items[:2]})
+
     name = (request.args.get("name") or "").strip().lower()
     players = get_all_players()
     hit = None
@@ -9001,10 +9069,14 @@ def team_page():
             "upcoming": [g for g in sched["games"] if not g["result"]][:3],
             "roster": get_team_roster(abbr, season),
         }
+        team_news = espn_team_news(abbr)
         return render_template_string(TEAM_HTML, team=team, season=season,
+                                      news=team_news,
+                                      news_sources=news_sources_used(team_news),
                                       load_error=None, all_teams=sorted(NFL_DIVISIONS))
     except Exception as e:
         return render_template_string(TEAM_HTML, team=None, season=int(SEASON),
+                                      news=[], news_sources=[],
                                       load_error=str(e), all_teams=sorted(NFL_DIVISIONS))
 
 
@@ -9139,7 +9211,19 @@ def game_detail_page():
         others = [g for g in _week_games(info["season"], info["week"], info["season_type"])[0]
                   if g["id"] != event_id]
         others.sort(key=lambda g: (GAME_STATUS_ORDER.get(g["status"], 1), str(g.get("date") or "")))
+        # Game news, plus each side's team news behind it -- ESPN files
+        # far less against an individual game than against the teams in
+        # it, so a game-only panel would be empty most of the week.
+        gnews = list(espn_game_news(event_id))
+        seen = {n["link"] for n in gnews}
+        for side in ("away", "home"):
+            for n in espn_team_news((detail.get(side) or {}).get("abbr")):
+                if n["link"] not in seen:
+                    seen.add(n["link"])
+                    gnews.append(n)
+        gnews = gnews[:6]
         return render_template_string(GAME_DETAIL_HTML, event_id=event_id, detail=detail,
+                                      news=gnews, news_sources=news_sources_used(gnews),
                                       others=others[:12], load_error=None)
     except Exception as e:
         empty = {"status": "scheduled", "period": None, "clock": None, "status_detail": None,
@@ -9150,6 +9234,7 @@ def game_detail_page():
                   "betting": {"lines": [], "ats": []}, "info": {},
                   "season": int(SEASON), "week": 1}
         return render_template_string(GAME_DETAIL_HTML, event_id=event_id, detail=empty,
+                                      news=[], news_sources=[],
                                       others=[], load_error=str(e))
 
 
@@ -14147,6 +14232,29 @@ TEAM_HTML = BASE_STYLE + make_header("live") + """
   </div>
 
   <div class="tm-panel on" data-panel="feed">
+    {# News first: on a team page it is the thing that changed since you
+       last looked, where the differentials below are the season so far. #}
+    {% if news %}
+    <div class="tm-eyebrow">Latest news</div>
+    <div style="margin-bottom:18px;">
+      {% for n in news[:5] %}
+      <div class="news-item">
+        <a class="news-title" href="{{ n.link }}" target="_blank" rel="noopener">{{ n.title }}</a>
+        <div class="news-meta">{{ n.ago }}{% if n.ago %} &middot; {% endif %}via {{ n.source }}</div>
+        {% if n.desc %}<div class="news-desc">{{ n.desc }}</div>{% endif %}
+      </div>
+      {% endfor %}
+      {% if news_sources %}
+      <div class="news-credit">
+        {%- for name, url in news_sources -%}
+          {%- if not loop.first %}{{ ' and ' if loop.last else ', ' }}{% endif -%}
+          {%- if url %}<a href="{{ url }}" target="_blank" rel="noopener">{{ name }}</a>
+          {%- else %}{{ name }}{% endif -%}
+        {%- endfor %} &middot; headline &amp; summary only, links back to the original article.
+      </div>
+      {% endif %}
+    </div>
+    {% endif %}
     {% if team.games %}
     <div class="tm-eyebrow">Recent differentials</div>
     {% set peak = team.games|map(attribute='diff')|map('abs')|max %}
@@ -15606,11 +15714,35 @@ GAME_DETAIL_HTML = BASE_STYLE + make_header("live") + """
   </div>
 
   <div class="gd-panel" data-panel="game" id="gdGamePanel">
+    {# News lives on this tab, not the Feed one: the Feed panel is
+       repainted wholesale by the live poll, so anything rendered into it
+       server-side is wiped on the first refresh. #}
+    {% if news %}
+    <p class="gd-sect first">Latest news</p>
+    <div style="margin-bottom:6px;">
+      {% for n in news %}
+      <div class="news-item">
+        <a class="news-title" href="{{ n.link }}" target="_blank" rel="noopener">{{ n.title }}</a>
+        <div class="news-meta">{{ n.ago }}{% if n.ago %} &middot; {% endif %}via {{ n.source }}</div>
+        {% if n.desc %}<div class="news-desc">{{ n.desc }}</div>{% endif %}
+      </div>
+      {% endfor %}
+      {% if news_sources %}
+      <div class="news-credit">
+        {%- for name, url in news_sources -%}
+          {%- if not loop.first %}{{ ' and ' if loop.last else ', ' }}{% endif -%}
+          {%- if url %}<a href="{{ url }}" target="_blank" rel="noopener">{{ name }}</a>
+          {%- else %}{{ name }}{% endif -%}
+        {%- endfor %} &middot; headline &amp; summary only, links back to the original article.
+      </div>
+      {% endif %}
+    </div>
+    {% endif %}
     <!-- Momentum: the home side's win probability after every play. The
          honest version of momentum -- not a feeling, but how far each
          play actually moved the result. JS-rendered so the poll can
          repaint it mid-drive through the same function. -->
-    <p class="gd-sect first">Momentum</p>
+    <p class="gd-sect{{ '' if news else ' first' }}">Momentum</p>
     <div id="gdMomentum" class="gd-momentum"></div>
 
     {% if detail.away.linescores and detail.home.linescores %}
