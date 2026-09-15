@@ -94,6 +94,9 @@ app.secret_key = os.environ.get("FLASK_SECRET", "change-me-" + SITE_PASSWORD)
 # cookie) is only ever sent over HTTPS, which is all this app is served
 # over in production (Render).
 app.config["SESSION_COOKIE_SECURE"] = True
+# Refused at the door rather than buffered and then measured. The only
+# upload on the site is an avatar, and the browser shrinks that first.
+app.config["MAX_CONTENT_LENGTH"] = 12 * 1024 * 1024
 app.config["REMEMBER_COOKIE_SECURE"] = True
 app.config["REMEMBER_COOKIE_HTTPONLY"] = True
 
@@ -4965,7 +4968,12 @@ def login():
 # one to crop a handful of avatars is not a trade worth making. Instead
 # the cap is small enough that an unresized file is still a reasonable
 # thing to send, and the browser does the fitting.
-AVATAR_MAX_BYTES = 600 * 1024
+# Not a limit anyone should meet. The browser shrinks a picture to a
+# square JPEG before uploading it, so a real avatar arrives at a few tens
+# of kilobytes whatever came off the camera roll; this is the backstop
+# for the case where that did not run, sized to take a full-resolution
+# phone photo rather than to turn one away.
+AVATAR_MAX_BYTES = 12 * 1024 * 1024
 # Read from the bytes, never from the filename or the browser's claim --
 # both are just strings the uploader chose.
 _AVATAR_SIGNATURES = (
@@ -5084,14 +5092,14 @@ def settings_page():
         if not error and upload and upload.filename:
             data = upload.read(AVATAR_MAX_BYTES + 1)
             if len(data) > AVATAR_MAX_BYTES:
-                error = "That picture is over %d KB. Pick a smaller one." % (
-                    AVATAR_MAX_BYTES // 1024)
+                error = "That picture is over %d MB, which is larger than any phone takes." % (
+                    AVATAR_MAX_BYTES // (1024 * 1024))
             else:
                 # The bytes decide what it is. A .png that is really
                 # something else is not a picture, whatever it is called.
                 mimetype = sniff_image(data)
                 if not mimetype:
-                    error = "That file isn't a PNG, JPEG, GIF or WebP image."
+                    error = "That file doesn't look like an image."
                 else:
                     try:
                         current_user.avatar_version = save_avatar(
@@ -5137,7 +5145,6 @@ def settings_page():
     leagues = get_synced_league_ids(current_user.id)
     return render_template_string(
         SETTINGS_HTML, saved=saved, error=error, scoring_formats=SCORING_FORMATS,
-        avatar_max_kb=AVATAR_MAX_BYTES // 1024,
         league_count=len(leagues) if leagues else 0)
 
 
@@ -15760,21 +15767,68 @@ SETTINGS_HTML = BASE_STYLE + make_header("") + """
   .set-danger a:hover{ color:var(--critical); }
 </style>
 <script>
-// Show the chosen file straight away. Picking a picture and seeing the
-// old one still sitting there reads as the upload having failed.
+// A picture off a phone is eight to twelve megabytes, and what it ends up
+// as here is a circle 72 pixels across. So the browser shrinks it before
+// it is ever uploaded: pick whatever you like out of the camera roll and
+// what leaves the device is a square JPEG of a few tens of kilobytes.
+//
+// It also settles the format question. Safari can decode the HEIC an
+// iPhone shoots but Chrome cannot display one, so storing the original
+// would mean a picture that shows for some people and not others.
+// Everything comes out of the canvas as JPEG, whatever went in.
+const AVATAR_PX = 512;      // plenty for a 72px circle at 3x, and small
+const AVATAR_QUALITY = 0.85;
+
+function avatarSquare(img){
+  // Cover-crop from the middle: the frame is a circle, so scaling a
+  // portrait photo to fit would leave it in a band with empty sides.
+  const side = Math.min(img.width, img.height);
+  const canvas = document.createElement('canvas');
+  canvas.width = canvas.height = Math.min(AVATAR_PX, side);
+  const ctx = canvas.getContext('2d');
+  ctx.drawImage(img, (img.width - side) / 2, (img.height - side) / 2, side, side,
+                0, 0, canvas.width, canvas.height);
+  return canvas;
+}
+
+function showAvatar(url){
+  const shown = document.querySelector('.set-avatar-img');
+  if (!shown) return;
+  if (shown.tagName === 'IMG') { shown.src = url; return; }
+  const img = document.createElement('img');
+  img.className = 'set-avatar-img';
+  img.src = url;
+  shown.replaceWith(img);
+}
+
 document.addEventListener('change', function(e){
   if (!e.target.matches('.set-file input[type=file]')) return;
-  const file = e.target.files && e.target.files[0];
+  const input = e.target;
+  const file = input.files && input.files[0];
   if (!file) return;
-  const shown = document.querySelector('.set-avatar-img');
-  const url = URL.createObjectURL(file);
-  if (shown && shown.tagName === 'IMG') { shown.src = url; return; }
-  if (shown) {
-    const img = document.createElement('img');
-    img.className = 'set-avatar-img';
-    img.src = url;
-    shown.replaceWith(img);
-  }
+
+  // Shown straight away, from the original. Picking a picture and seeing
+  // the old one still sitting there reads as the upload having failed.
+  const preview = URL.createObjectURL(file);
+  showAvatar(preview);
+
+  const img = new Image();
+  img.onload = function(){
+    try {
+      avatarSquare(img).toBlob(function(blob){
+        // Anything that fails here leaves the original file on the input,
+        // which the server still accepts -- worse compression, same
+        // outcome. Never a failed upload.
+        if (!blob || typeof DataTransfer === 'undefined') return;
+        const dt = new DataTransfer();
+        dt.items.add(new File([blob], 'avatar.jpg', {type: 'image/jpeg'}));
+        input.files = dt.files;
+      }, 'image/jpeg', AVATAR_QUALITY);
+    } catch (err) { /* keep the original */ }
+    URL.revokeObjectURL(preview);
+  };
+  img.onerror = function(){ URL.revokeObjectURL(preview); };
+  img.src = preview;
 });
 </script>
 <main><div class="wrap set-wrap">
@@ -15795,11 +15849,13 @@ document.addEventListener('change', function(e){
           {% endif %}
           <div class="set-avatar-side">
             <label class="set-file">
-              <input type="file" name="avatar" accept="image/png,image/jpeg,image/gif,image/webp">
-              <span>Choose a picture</span>
+              <!-- image/*, not a list of types: a narrower accept is what
+                   makes an iPhone offer Browse rather than the photo
+                   library, and it is also what stops iOS converting a
+                   HEIC shot to JPEG on the way out. -->
+              <input type="file" name="avatar" accept="image/*">
+              <span>Change Profile Pic</span>
             </label>
-            <div class="hint">PNG, JPEG, GIF or WebP, up to {{ avatar_max_kb }} KB.
-              It shows on the menu in the corner of every page.</div>
             {% if current_user.avatar_version %}
             <button class="set-link-btn" type="submit" name="action" value="remove_avatar">Remove</button>
             {% endif %}
