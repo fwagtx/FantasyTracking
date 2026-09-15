@@ -4445,11 +4445,50 @@ def _refresh_season_stats_background(season):
     threading.Thread(target=_run, daemon=True).start()
 
 
-# Seasons the Rankings page will show games and points for: this one
-# and the three behind it. Four is what the rest of the site already
-# keeps synced (DEF_HISTORY_SEASONS_BACK), so every option here has data
-# behind it rather than offering a year of empty columns.
-RANKINGS_STATS_SEASONS = [str(int(SEASON) - n) for n in range(0, 4)]
+# Seasons the Rankings page will show games and points for: this one and
+# the one behind it, and no further back.
+#
+# The board's ORDER, its tiers and both rank columns come from
+# FantasyCalc's dynasty values, which are current by definition -- there
+# is no historical value series to ask for. Only the GP/FPTS/SNAP%
+# columns follow this selector. Offering 2023 therefore did not show the
+# 2023 rankings; it showed TODAY's rankings with three-year-old box
+# scores pasted into them, which reads as a claim nobody made -- a rookie
+# at #1 with the ten games they played as a nineteen-year-old.
+#
+# One season back stays honest because a dynasty value is a forward-
+# looking number and last year is the recent evidence behind it. Going
+# deeper would need value snapshots taken at the time, which nothing has
+# been recording; if those are ever stored, this can widen again and
+# mean something.
+RANKINGS_STATS_SEASONS = [str(int(SEASON) - n) for n in range(0, 2)]
+
+# How much of a season has to exist before the board opens on it.
+STATS_SEASON_READY_GAMES = 4
+STATS_SEASON_READY_PLAYERS = 50
+
+
+def default_stats_season(by_season):
+    """Which season's games and points the board opens on, decided from
+    the data rather than from the calendar.
+
+    In September the current season has one or two games for everybody,
+    and a rate computed off that is noise wearing a number's clothes --
+    a receiver's entire body of work reading "3.2 FPTS/G" because one
+    Sunday was quiet. So the board opens on last season until this one
+    has enough games behind it to be worth reading, and then switches on
+    its own. Nobody has to touch the dropdown for it to be right in
+    September and right again in December.
+
+    Counting players rather than weeks is deliberate: it is true whether
+    or not a given week finished syncing, and it can't be fooled by one
+    team having played a Thursday game."""
+    current, prior = str(int(SEASON)), str(int(SEASON) - 1)
+    ready = sum(1 for v in (by_season.get(current) or {}).values()
+                if (v.get("games") or 0) >= STATS_SEASON_READY_GAMES)
+    if ready >= STATS_SEASON_READY_PLAYERS:
+        return current
+    return prior if by_season.get(prior) else current
 
 
 def get_season_stats(season, scoring=None, cache={}):
@@ -6419,6 +6458,11 @@ def get_player_espn_plays(sid, season, week, cache=_espn_player_plays_cache):
         qtr = play.get("period")
         clock = (play.get("clock") or "").strip()
         out.append({
+            # What /play needs to find this exact snap again. A play
+            # ESPN gave no id to simply isn't clickable, rather than
+            # linking to a page that can't resolve it.
+            "play_id": str(play.get("id")) if play.get("id") else None,
+            "event_id": event_id,
             "qtr": qtr,
             "clock": clock,
             "down": play.get("down"),
@@ -8195,7 +8239,7 @@ def birthdays_page():
         rows = _safe_feed(lambda: get_birthdays(season=season))
         start = season_start_date(season)
         return render_template_string(
-            FEED_PAGE_HTML, title="Birthdays", kind="birthdays", rows=rows,
+            BIRTHDAYS_PAGE_HTML, title="Birthdays", kind="birthdays", rows=rows,
             blurb=(f"Every birthday since the {season} season opened on "
                    f"{start.strftime('%-d %B')}, newest first. The time beside a row "
                    "is how long ago that day started, on the league's own Eastern "
@@ -8203,7 +8247,7 @@ def birthdays_page():
             empty="No birthdays yet this season.", load_error=None)
     except Exception as e:
         return render_template_string(
-            FEED_PAGE_HTML, title="Birthdays", kind="birthdays", rows=[],
+            BIRTHDAYS_PAGE_HTML, title="Birthdays", kind="birthdays", rows=[],
             blurb=None, empty=None, load_error=str(e))
 
 
@@ -8692,17 +8736,21 @@ def rankings():
     # 0 games for everyone, which says nothing. The dropdown lets anyone
     # switch to this season once it has games worth reading, and back.
     stats_seasons = RANKINGS_STATS_SEASONS
-    stats_season = request.args.get("stats") or str(int(SEASON) - 1)
-    if stats_season not in stats_seasons:
-        stats_season = str(int(SEASON) - 1)
-
-    with ThreadPoolExecutor(max_workers=3) as executor:
+    with ThreadPoolExecutor(max_workers=4) as executor:
         fc_future = executor.submit(get_fantasycalc_values, num_qbs, is_dynasty)
         players_future = executor.submit(get_all_players)
-        stats_future = executor.submit(get_season_stats, stats_season)
+        # Both offered seasons at once. They are cached DB reads, and
+        # having both in hand is what lets the default be decided from
+        # what the season actually contains instead of from the date.
+        stats_futures = {yr: executor.submit(get_season_stats, yr) for yr in stats_seasons}
         fc_players = fc_future.result()["players"]
         all_players = players_future.result()
-        season_stats = stats_future.result()
+        by_season = {yr: f.result() for yr, f in stats_futures.items()}
+
+    stats_season = request.args.get("stats")
+    if stats_season not in stats_seasons:
+        stats_season = default_stats_season(by_season)
+    season_stats = by_season.get(stats_season) or {}
 
     prelim = []
     for sid, v in fc_players.items():
@@ -10047,6 +10095,36 @@ BASE_STYLE = """
   nav.links a{ text-decoration:none; font-size:13.5px; font-weight:600; color:var(--ink-secondary); }
   nav.links a:hover, nav.links a.active{ color:var(--accent-ink); }
 
+  /* --- the Live / myCalc group menus ---------------------------------
+     Same <details> machinery as the account menu below: opens, closes
+     and takes keyboard focus with no script, so the header still works
+     if the script never runs. */
+  .navgrp{ position:relative; }
+  .navgrp > summary{ list-style:none; cursor:pointer; display:flex; align-items:center;
+                     gap:6px; font-size:13.5px; font-weight:600; color:var(--ink-secondary);
+                     -webkit-tap-highlight-color:transparent; }
+  .navgrp > summary::-webkit-details-marker{ display:none; }
+  .navgrp > summary:hover, .navgrp > summary.on{ color:var(--accent-ink); }
+  .navgrp[open] > summary{ color:var(--accent-ink); }
+  .navgrp-caret{ font-size:8px; opacity:0.7; transition:transform 0.15s ease; }
+  .navgrp[open] .navgrp-caret{ transform:rotate(180deg); }
+  .navgrp-menu{
+    position:absolute; left:0; top:calc(100% + 8px); min-width:264px;
+    background:var(--paper-raised); border:1px solid var(--line-strong);
+    border-radius:12px; box-shadow:var(--shadow); padding:6px; z-index:70;
+  }
+  /* Beats nav.links a, which these sit inside. */
+  nav.links .navgrp-menu a{
+    display:block; padding:9px 11px; border-radius:8px; border-top:none; margin:0;
+    color:var(--ink-secondary);
+  }
+  nav.links .navgrp-menu a:hover{ background:var(--paper-sunken); }
+  .navgrp-lab{ display:block; font-size:13.5px; font-weight:700; color:var(--ink); }
+  nav.links .navgrp-menu a:hover .navgrp-lab,
+  nav.links .navgrp-menu a.active .navgrp-lab{ color:var(--accent-ink); }
+  .navgrp-desc{ display:block; font-size:11.5px; font-weight:500; color:var(--ink-muted);
+                margin-top:2px; line-height:1.35; }
+
   /* --- the account menu ---------------------------------------------
      Username and Log Out used to sit in the link row at the same weight
      as Scores, which put a destructive action inline with navigation and
@@ -10298,8 +10376,18 @@ BASE_STYLE = """
     }
     .nav-toggle-checkbox:checked ~ nav.links{ display:flex; }
     nav.links a{ padding:13px 4px; border-top:1px solid var(--line); margin:0; }
-    /* The nav is a stacked panel here, so the account menu opens inline
-       within it instead of floating over the page. */
+    /* The nav is a stacked panel here, so the group menus and the
+       account menu open inline within it instead of floating over the
+       page. */
+    .navgrp{ border-top:1px solid var(--line); }
+    .navgrp > summary{ padding:13px 4px; }
+    .navgrp-menu{ position:static; border:none; box-shadow:none; background:none;
+                  padding:0 0 6px; min-width:0; }
+    nav.links .navgrp-menu a{ padding:10px 4px 10px 14px; border-radius:0; }
+    /* One line each once they are stacked -- the descriptions are a
+       desktop hover affordance, not something to scroll past on a
+       phone. */
+    .navgrp-desc{ display:none; }
     .acct{ border-top:1px solid var(--line); }
     .acct > summary{ padding:11px 4px; }
     .acct-menu{ position:static; border:none; box-shadow:none; background:none;
@@ -10330,13 +10418,13 @@ BASE_STYLE = """
 // header exists, and because it is on every page -- one listener pair,
 // no per-page wiring, nothing to keep in step.
 document.addEventListener('click', function(e){
-  document.querySelectorAll('details.acct[open]').forEach(function(d){
+  document.querySelectorAll('details.acct[open], details.navgrp[open]').forEach(function(d){
     if (!d.contains(e.target)) d.open = false;
   });
 });
 document.addEventListener('keydown', function(e){
   if (e.key !== 'Escape') return;
-  document.querySelectorAll('details.acct[open]').forEach(function(d){
+  document.querySelectorAll('details.acct[open], details.navgrp[open]').forEach(function(d){
     d.open = false;
     const s = d.querySelector('summary');
     if (s) s.focus();
@@ -10770,21 +10858,63 @@ LOGO_SVG = """<svg viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000
   <path d="M6 13H20M6 8H14M6 18H14" stroke="var(--paper)" stroke-width="2" stroke-linecap="round"/>
 </svg>"""
 
+# The two halves of the site, and what lives in each.
+#
+# Six links in one flat row said nothing about how the site is actually
+# organised: Scores is the live NFL, everything else is the reader's own
+# fantasy team, and the row gave a stranger no way to tell which was
+# which. Grouping them names the split.
+#
+# Each entry is (active-key, href, label, one-line description).
+NAV_GROUPS = [
+    ("live", "Live", [
+        ("scores", "/scores", "Scores", "Live games, drives and play-by-play"),
+        ("standings", "/standings", "Standings", "Division races and power rankings"),
+        ("performances", "/performances", "Performances", "Who is producing, rated 0-10"),
+        ("injuries", "/injuries", "Injuries", "The league report as it lands"),
+    ]),
+    ("mycalc", "myCalc", [
+        ("league", "/league-manager", "League Manager", "Your synced leagues and rosters"),
+        ("rankings", "/rankings", "Rankings", "Dynasty and redraft player values"),
+        ("matchups", "/matchups", "Matchups", "Start-sit grades for the week"),
+        ("trade", "/trade-calculator", "Trade Calculator", "Weigh any trade both ways"),
+        ("sbc", "/start-bench-cut", "Start/Bench/Cut", "Help keep the rankings sharp"),
+    ]),
+]
+
+
 def make_header(active=""):
     def cls(name):
         return "active" if name == active else ""
+
+    # A group reads as current when the page you are on is one of its
+    # own, so the header still answers "where am I" at a glance now that
+    # the links themselves are a tap away.
+    groups = []
+    for key, label, items in NAV_GROUPS:
+        here = active == key or any(item[0] == active for item in items)
+        links = "".join(
+            f'''<a class="{cls(k)}" href="{href}">
+               <span class="navgrp-lab">{text}</span>
+               <span class="navgrp-desc">{desc}</span>
+             </a>'''
+            for k, href, text, desc in items
+        )
+        groups.append(f'''
+    <details class="navgrp" data-nav="{key}">
+      <summary class="{"on" if here else ""}">
+        <span>{label}</span><span class="navgrp-caret">&#9660;</span>
+      </summary>
+      <div class="navgrp-menu">{links}</div>
+    </details>''')
+    nav_groups = "".join(groups)
+
     return f"""
 <header class="site"><div class="wrap nav-row">
   <a class="wordmark" href="/">{LOGO_SVG}<span>Fantasy Football Calc</span></a>
   <input type="checkbox" id="navToggle" class="nav-toggle-checkbox">
   <label for="navToggle" class="nav-toggle-btn" aria-label="Menu">&#9776;</label>
-  <nav class="links">
-    <a class="{cls('league')}" href="/league-manager">League Manager</a>
-    <a class="{cls('scores')}" href="/scores">Scores</a>
-    <a class="{cls('rankings')}" href="/rankings">Rankings</a>
-    <a class="{cls('matchups')}" href="/matchups">Matchups</a>
-    <a class="{cls('trade')}" href="/trade-calculator">Trade Calculator</a>
-    <a class="{cls('sbc')}" href="/start-bench-cut">Start/Bench/Cut</a>
+  <nav class="links">{nav_groups}
     {{% if current_user.is_authenticated %}}
       <details class="acct">
         <summary aria-label="Account menu">
@@ -12494,7 +12624,7 @@ const scServerTodayKey = {{ today_key|tojson }};
 </script>
 """
 
-STANDINGS_HTML = BASE_STYLE + make_header("scores") + """
+STANDINGS_HTML = BASE_STYLE + make_header("standings") + """
 <style>
   .st-page{ --st-bg:#0d0f0d; --st-surface:#151815; --st-line:rgba(255,255,255,0.08);
             --st-text:#e8e6df; --st-muted:#8b9089;
@@ -12703,7 +12833,7 @@ STANDINGS_HTML = BASE_STYLE + make_header("scores") + """
 """
 
 
-TEAM_HTML = BASE_STYLE + make_header("scores") + """
+TEAM_HTML = BASE_STYLE + make_header("live") + """
 <style>
   .tm-page{ --tm-bg:#0d0f0d; --tm-surface:#151815; --tm-surface2:#1c201c;
             --tm-line:rgba(255,255,255,0.08); --tm-text:#e8e6df; --tm-muted:#8b9089;
@@ -12940,7 +13070,7 @@ TEAM_HTML = BASE_STYLE + make_header("scores") + """
 # One page for both feeds. They are the same row -- a face, a name, one
 # line about what changed and when -- so they are one template, and the
 # two differ only in what that line says.
-FEED_PAGE_HTML = BASE_STYLE + make_header("scores") + """
+_FEED_PAGE_BODY = """
 <style>
   .fd-page{
     --fd-bg:#0d0f0d; --fd-surface:#151815; --fd-surface2:#1c201c;
@@ -13035,8 +13165,15 @@ FEED_PAGE_HTML = BASE_STYLE + make_header("scores") + """
 </div>
 """
 
+# Same body, two headers. /injuries is an entry in the Live menu and
+# should read as current there; /birthdays is reachable only from the
+# scores board, so it lights the group without claiming to be one of
+# its listed pages.
+FEED_PAGE_HTML = BASE_STYLE + make_header("injuries") + _FEED_PAGE_BODY
+BIRTHDAYS_PAGE_HTML = BASE_STYLE + make_header("live") + _FEED_PAGE_BODY
 
-PLAY_DETAIL_HTML = BASE_STYLE + make_header("scores") + """
+
+PLAY_DETAIL_HTML = BASE_STYLE + make_header("live") + """
 <style>
   .pd-page{
     --pd-bg:#0d0f0d; --pd-surface:#151815; --pd-surface2:#1c201c;
@@ -13232,7 +13369,7 @@ PLAY_DETAIL_HTML = BASE_STYLE + make_header("scores") + """
 """
 
 
-PERFORMANCES_HTML = BASE_STYLE + make_header("scores") + """
+PERFORMANCES_HTML = BASE_STYLE + make_header("performances") + """
 <style>
   .pl-page{
     --pl-bg:#0d0f0d; --pl-surface:#151815; --pl-surface2:#1c201c;
@@ -13367,7 +13504,7 @@ PERFORMANCES_HTML = BASE_STYLE + make_header("scores") + """
 """
 
 
-PERFORMANCE_HTML = BASE_STYLE + make_header("scores") + """
+PERFORMANCE_HTML = BASE_STYLE + make_header("live") + """
 <style>
   .pf-page{
     --pf-bg:#0d0f0d; --pf-surface:#151815; --pf-surface2:#1c201c;
@@ -13438,6 +13575,22 @@ PERFORMANCE_HTML = BASE_STYLE + make_header("scores") + """
   .pf-qtr-col.zero{ background:var(--pf-surface2); }
   .pf-qtr-lab{ font-size:12.5px; color:var(--pf-muted); margin-top:7px; }
   .pf-note{ font-size:11.5px; color:var(--pf-muted); margin-top:14px; line-height:1.5; }
+  .pf-hint{ color:var(--accent-ink); font-weight:700; }
+
+  /* A quarter is a control: it filters the Plays panel below to the
+     snaps that produced its bar. Hover and the selected state both
+     act on the column, since the column IS the hit target visually. */
+  .pf-qtr{ cursor:pointer; border-radius:7px; padding-top:4px;
+           -webkit-tap-highlight-color:transparent; }
+  .pf-qtr:hover .pf-qtr-col{ filter:brightness(1.15); }
+  .pf-qtr:focus-visible{ outline:2px solid var(--accent-ink); outline-offset:2px; }
+  .pf-qtr[aria-pressed="true"] .pf-qtr-col{ background:var(--accent-ink);
+                                            box-shadow:0 0 0 2px var(--accent-ink) inset; }
+  .pf-qtr[aria-pressed="true"] .pf-qtr-lab,
+  .pf-qtr[aria-pressed="true"] .pf-qtr-val{ color:var(--accent-ink); }
+  /* While one quarter is selected the others recede rather than vanish,
+     so the shape of the game is still readable. */
+  .pf-qtrs.filtering .pf-qtr:not([aria-pressed="true"]){ opacity:0.4; }
 
   /* Play rows, the way the reference writes them: who, when, at what
      score, what happened, and what it was worth. */
@@ -13466,6 +13619,24 @@ PERFORMANCE_HTML = BASE_STYLE + make_header("scores") + """
   .pf-feed-row.extra{ display:none; }
   .pf-feed.all .pf-feed-row.extra{ display:flex; }
   .pf-feed.all .pf-feed-more{ display:none; }
+  /* A row that links somewhere says so. A row ESPN gave no play id is
+     left inert and deliberately keeps the default cursor. */
+  .pf-feed-row[data-href]{ cursor:pointer; }
+  .pf-feed-row[data-href]:hover{ background:var(--pf-surface2); }
+  .pf-feed-row[data-href]:focus-visible{ outline:2px solid var(--accent-ink);
+                                         outline-offset:-2px; border-radius:7px; }
+  /* Quarter filtering. Wins over .extra in both directions: a hidden
+     overflow row in the chosen quarter comes back, and a visible row
+     outside it goes away. */
+  /* :not() rather than a bare .pf-feed-row, so this outranks the
+     equally-specific ".pf-feed.all .pf-feed-row.extra" above -- with
+     both classes on, an overflow row from another quarter would
+     otherwise stay visible through the filter. */
+  .pf-feed.qfilter .pf-feed-row:not(.qmatch){ display:none; }
+  .pf-feed.qfilter .pf-feed-row.qmatch{ display:flex; }
+  .pf-feed.qfilter .pf-feed-more{ display:none; }
+  .pf-feed-empty{ padding:16px 0 4px; font-size:13px; color:var(--pf-muted);
+                  text-align:center; }
   .pf-panel-head{ display:flex; align-items:baseline; justify-content:space-between; gap:10px; }
 
   .pf-panel{ background:var(--pf-surface); border:1px solid var(--pf-line); border-radius:12px; padding:14px 16px; margin-top:16px; }
@@ -13686,9 +13857,11 @@ PERFORMANCE_HTML = BASE_STYLE + make_header("scores") + """
   {% set maxr = (quarters|map(attribute='rating')|max) or 0 %}
   <div class="pf-panel">
     <h3>Rating breakdown</h3>
-    <div class="pf-qtrs">
+    <div class="pf-qtrs" id="pfQtrs">
       {% for q in quarters %}
-      <div class="pf-qtr">
+      <div class="pf-qtr" data-qtr="{{ q.qtr }}" role="button" tabindex="0"
+           aria-pressed="false"
+           title="Show only the plays {{ detail.name.split(' ')[-1] }} made in {{ q.label }}">
         <div class="pf-qtr-val">{{ '%.2f'|format(q.rating) }}</div>
         <div class="pf-qtr-col {{ 'zero' if q.rating <= 0 }}"
              style="height:{{ ((118 * q.rating / maxr)|round|int) if maxr > 0 else 3 }}px;"></div>
@@ -13701,6 +13874,7 @@ PERFORMANCE_HTML = BASE_STYLE + make_header("scores") + """
       {{ detail.name.split(' ')[-1] }} actually did in it
       {%- if quarters[0].source == 'epa' %} and by how much each play moved the game
       {%- endif %}. The four add back up to the rating above.
+      {% if detail.feed_plays %}<b class="pf-hint">Tap a quarter to see the plays behind it.</b>{% endif %}
     </p>
   </div>
   {% endif %}
@@ -13714,7 +13888,18 @@ PERFORMANCE_HTML = BASE_STYLE + make_header("scores") + """
     {% set shown = detail.feed_plays[:24] %}
     <div class="pf-feed" id="pfFeed">
       {% for p in shown %}
-      <div class="pf-feed-row {{ 'extra' if loop.index > 6 }}">
+      {# A row is a link only when ESPN gave the play an id -- otherwise
+         /play has nothing to look the snap up by, and a dead link is
+         worse than a plain row. Set as data-href rather than wrapping
+         the row in an <a>: the row already contains links, and an <a>
+         inside an <a> makes the parser close the outer one early and
+         split one play across two elements. #}
+      <div class="pf-feed-row {{ 'extra' if loop.index > 6 }}"
+           data-qtr="{{ p.qtr or 0 }}"
+           {% if p.play_id and p.event_id %}
+           data-href="/play?game={{ p.event_id|urlencode }}&amp;id={{ p.play_id|urlencode }}"
+           role="link" tabindex="0"
+           {% endif %}>
         <img class="mug" src="{{ detail.photo }}" alt="" loading="lazy"
              onerror="this.style.visibility='hidden'">
         <div class="pf-feed-main">
@@ -13734,8 +13919,14 @@ PERFORMANCE_HTML = BASE_STYLE + make_header("scores") + """
         <div class="pf-feed-rate">{{ score_mark|safe }}{{ '%.1f'|format(p.rating) }}</div>
       </div>
       {% endfor %}
+      {# Only reachable by filtering to a quarter whose rating came from
+         a play that carries no quarter of its own. Better than a panel
+         that silently empties. #}
+      <div class="pf-feed-empty" id="pfFeedEmpty" hidden>
+        No plays recorded in that quarter.
+      </div>
       {% if shown|length > 6 %}
-      <span class="pf-feed-more" onclick="document.getElementById('pfFeed').classList.add('all');">
+      <span class="pf-feed-more" id="pfFeedMore">
         View all {{ shown|length }} plays &rsaquo;
       </span>
       {% endif %}
@@ -13764,10 +13955,96 @@ PERFORMANCE_HTML = BASE_STYLE + make_header("scores") + """
   {% endif %}
 </div>
 </div>
+<script>
+(function(){
+  var feed  = document.getElementById('pfFeed');
+  var qtrs  = document.getElementById('pfQtrs');
+  var more  = document.getElementById('pfFeedMore');
+  var empty = document.getElementById('pfFeedEmpty');
+
+  // ---- a play row opens that play -----------------------------------
+  // Delegated, because the rows carry inner links of their own and
+  // wrapping each row in an <a> would split it in two at parse time.
+  if (feed) {
+    var go = function(row, newTab){
+      var href = row && row.getAttribute('data-href');
+      if (!href) return;
+      if (newTab) { window.open(href, '_blank', 'noopener'); }
+      else { window.location.href = href; }
+    };
+    feed.addEventListener('click', function(e){
+      // A real link inside the row wins -- clicking a player's name
+      // should still go to that player, not to the play.
+      if (e.target.closest('a')) return;
+      go(e.target.closest('.pf-feed-row[data-href]'), e.metaKey || e.ctrlKey);
+    });
+    feed.addEventListener('keydown', function(e){
+      if (e.key !== 'Enter' && e.key !== ' ') return;
+      var row = e.target.closest('.pf-feed-row[data-href]');
+      if (!row) return;
+      e.preventDefault();
+      go(row, false);
+    });
+  }
+
+  if (more && feed) {
+    more.addEventListener('click', function(){ feed.classList.add('all'); });
+  }
+
+  // ---- a quarter filters the plays behind it ------------------------
+  if (!qtrs || !feed) return;
+  var rows = Array.prototype.slice.call(feed.querySelectorAll('.pf-feed-row'));
+  var bars = Array.prototype.slice.call(qtrs.querySelectorAll('.pf-qtr'));
+
+  function clear(){
+    qtrs.classList.remove('filtering');
+    feed.classList.remove('qfilter');
+    bars.forEach(function(b){ b.setAttribute('aria-pressed', 'false'); });
+    rows.forEach(function(r){ r.classList.remove('qmatch'); });
+    if (empty) empty.hidden = true;
+  }
+
+  function select(bar){
+    var q = bar.getAttribute('data-qtr');
+    var hits = 0;
+    rows.forEach(function(r){
+      var on = r.getAttribute('data-qtr') === q;
+      r.classList.toggle('qmatch', on);
+      if (on) hits++;
+    });
+    qtrs.classList.add('filtering');
+    feed.classList.add('qfilter');
+    bars.forEach(function(b){
+      b.setAttribute('aria-pressed', b === bar ? 'true' : 'false');
+    });
+    if (empty) empty.hidden = hits > 0;
+  }
+
+  function toggle(bar){
+    if (bar.getAttribute('aria-pressed') === 'true') { clear(); return; }
+    select(bar);
+    // Filtering is only useful if you can see the result: on a phone
+    // the Plays panel sits well below the chart.
+    var panel = feed.closest('.pf-panel');
+    if (panel && panel.getBoundingClientRect().top > window.innerHeight * 0.75) {
+      panel.scrollIntoView({behavior: 'smooth', block: 'start'});
+    }
+  }
+
+  bars.forEach(function(bar){
+    bar.addEventListener('click', function(){ toggle(bar); });
+    bar.addEventListener('keydown', function(e){
+      if (e.key !== 'Enter' && e.key !== ' ') return;
+      e.preventDefault();
+      toggle(bar);
+    });
+  });
+})();
+</script>
 """
 
 
-GAME_DETAIL_HTML = BASE_STYLE + make_header("scores") + """
+GAME_DETAIL_HTML = BASE_STYLE + make_header("live") + """
 <style>
   /* ---- live game layout (strip / field / tabs) ---- */
   .gd-others{ display:flex; gap:0; overflow-x:auto; scrollbar-width:none;
