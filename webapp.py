@@ -316,6 +316,11 @@ def init_db():
             # doing a full sequential scan of a table that only grows.
             cur.execute("CREATE INDEX IF NOT EXISTS idx_player_stats_season ON player_stats (season);")
             cur.execute("ALTER TABLE users ADD COLUMN IF NOT EXISTS sleeper_username TEXT;")
+            # Rankings defaults. Format and mode were URL parameters only,
+            # so every visit started on 1QB dynasty regardless of the
+            # league anyone actually plays in.
+            cur.execute("ALTER TABLE users ADD COLUMN IF NOT EXISTS pref_format TEXT;")
+            cur.execute("ALTER TABLE users ADD COLUMN IF NOT EXISTS pref_mode TEXT;")
             cur.execute("""
                 CREATE TABLE IF NOT EXISTS synced_leagues (
                     user_id INTEGER REFERENCES users(id),
@@ -398,6 +403,9 @@ class User(UserMixin):
         self.username = row["username"]
         self.is_member = row["is_member"]
         self.sleeper_username = row.get("sleeper_username")
+        self.pref_format = row.get("pref_format") or "1qb"
+        self.pref_mode = row.get("pref_mode") or "dynasty"
+        self.newsletter_opt_in = bool(row.get("newsletter_opt_in"))
 
 
 @login_manager.user_loader
@@ -4796,6 +4804,58 @@ def login():
     return render_template_string(LOGIN_PAGE_HTML, error=error)
 
 
+@app.route("/settings", methods=["GET", "POST"])
+@login_required
+def settings_page():
+    """Everything about an account that was previously either fixed at
+    signup or hidden inside another page.
+
+    The Sleeper username lived only in League Manager, the newsletter
+    choice was set once at signup and never again, and the rankings
+    format and mode existed only as URL parameters -- so every visit
+    began on 1QB dynasty no matter what league you actually play in."""
+    saved = request.args.get("saved") == "1"
+    error = None
+    if request.method == "POST":
+        sleeper = (request.form.get("sleeper_username") or "").strip()
+        fmt = request.form.get("pref_format")
+        mode = request.form.get("pref_mode")
+        if fmt not in ("1qb", "superflex"):
+            fmt = "1qb"
+        if mode not in ("dynasty", "redraft"):
+            mode = "dynasty"
+        news = bool(request.form.get("newsletter_opt_in"))
+        if len(sleeper) > 64:
+            error = "That Sleeper username is too long."
+        else:
+            try:
+                conn = get_db()
+                try:
+                    with conn.cursor() as cur:
+                        cur.execute(
+                            """UPDATE users SET sleeper_username = %s, pref_format = %s,
+                                      pref_mode = %s, newsletter_opt_in = %s
+                               WHERE id = %s""",
+                            (sleeper or None, fmt, mode, news, current_user.id))
+                    conn.commit()
+                finally:
+                    conn.close()
+                # Keep the object backing this request in step, so the page
+                # that renders next shows what was just saved rather than
+                # what it was loaded with.
+                current_user.sleeper_username = sleeper or None
+                current_user.pref_format, current_user.pref_mode = fmt, mode
+                current_user.newsletter_opt_in = news
+                return redirect("/settings?saved=1")
+            except Exception as e:
+                error = str(e)
+
+    leagues = get_synced_league_ids(current_user.id)
+    return render_template_string(
+        SETTINGS_HTML, saved=saved, error=error,
+        league_count=len(leagues) if leagues else 0)
+
+
 @app.route("/logout")
 def logout():
     logout_user()
@@ -7978,8 +8038,17 @@ def api_matchup_compare():
 @app.route("/")
 @app.route("/rankings")
 def rankings():
-    fmt = request.args.get("format", "1qb")
-    mode = request.args.get("mode", "dynasty")
+    # No parameter means "whatever this person plays" -- their saved
+    # default from Settings, or the site's if they have not set one or
+    # are not signed in.
+    pref_fmt, pref_mode = "1qb", "dynasty"
+    if current_user.is_authenticated:
+        pref_fmt = getattr(current_user, "pref_format", None) or pref_fmt
+        pref_mode = getattr(current_user, "pref_mode", None) or pref_mode
+    fmt = request.args.get("format") or pref_fmt
+    mode = request.args.get("mode") or pref_mode
+    if fmt not in ("1qb", "superflex"):
+        fmt = "1qb"
     if mode not in ("dynasty", "redraft"):
         mode = "dynasty"
     is_dynasty = mode == "dynasty"
@@ -9276,6 +9345,50 @@ BASE_STYLE = """
   nav.links{ display:flex; align-items:center; gap:20px; flex-wrap:wrap; }
   nav.links a{ text-decoration:none; font-size:13.5px; font-weight:600; color:var(--ink-secondary); }
   nav.links a:hover, nav.links a.active{ color:var(--accent-ink); }
+
+  /* --- the account menu ---------------------------------------------
+     Username and Log Out used to sit in the link row at the same weight
+     as Scores, which put a destructive action inline with navigation and
+     spent two of the row's slots. Both live behind the disc now, and
+     Settings joins them.
+
+     Built on <details>, so it opens, closes and takes keyboard focus
+     with no script at all; the script below only adds closing it by
+     clicking elsewhere or pressing Escape. */
+  .acct{ position:relative; }
+  .acct > summary{ list-style:none; cursor:pointer; display:flex; align-items:center; gap:6px; }
+  .acct > summary::-webkit-details-marker{ display:none; }
+  .acct-disc{
+    width:30px; height:30px; border-radius:50%; flex:none;
+    display:flex; align-items:center; justify-content:center;
+    background:var(--accent); color:var(--accent-on);
+    font-family:"IBM Plex Mono",monospace; font-size:12px; font-weight:700;
+    text-transform:uppercase; letter-spacing:0.02em;
+    border:1px solid transparent;
+  }
+  .acct[open] .acct-disc, .acct > summary:hover .acct-disc{ border-color:var(--accent-ink); }
+  .acct-caret{ font-size:9px; color:var(--ink-muted); }
+  .acct-menu{
+    position:absolute; right:0; top:calc(100% + 8px); min-width:210px;
+    background:var(--paper-raised); border:1px solid var(--line-strong);
+    border-radius:12px; box-shadow:var(--shadow); padding:6px; z-index:70;
+  }
+  .acct-who{ padding:9px 10px 10px; border-bottom:1px solid var(--line); margin-bottom:5px; }
+  .acct-who b{ display:block; font-size:13.5px; }
+  .acct-who span{ display:block; font-size:11.5px; color:var(--ink-muted);
+                  white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:190px; }
+  /* Beats nav.links a, which these sit inside. */
+  nav.links .acct-menu a{
+    display:flex; align-items:center; gap:9px; padding:9px 10px; border-radius:8px;
+    font-size:13px; font-weight:600; color:var(--ink-secondary); border-top:none; margin:0;
+  }
+  nav.links .acct-menu a:hover{ background:var(--paper-sunken); color:var(--ink); }
+  .acct-menu .sep{ height:1px; background:var(--line); margin:5px 2px; }
+  /* Log out is the one thing in here you cannot undo by tapping again. */
+  nav.links .acct-menu a.out{ color:var(--ink-muted); }
+  nav.links .acct-menu a.out:hover{ color:var(--critical); background:var(--critical-wash); }
+  .acct-menu .ico{ width:15px; text-align:center; flex:none; opacity:0.8; }
+
   main{ padding: 32px 0 80px; }
   .panel{ background:var(--paper-raised); border:1px solid var(--line); border-radius:16px; box-shadow:var(--shadow); padding:22px 24px; margin-top:18px; }
   .panel h2{ font-size:20px; margin-top:6px; margin-bottom:2px; }
@@ -9483,6 +9596,14 @@ BASE_STYLE = """
     }
     .nav-toggle-checkbox:checked ~ nav.links{ display:flex; }
     nav.links a{ padding:13px 4px; border-top:1px solid var(--line); margin:0; }
+    /* The nav is a stacked panel here, so the account menu opens inline
+       within it instead of floating over the page. */
+    .acct{ border-top:1px solid var(--line); }
+    .acct > summary{ padding:11px 4px; }
+    .acct-menu{ position:static; border:none; box-shadow:none; background:none;
+                padding:0 0 4px; min-width:0; }
+    .acct-who{ display:none; }
+    nav.links .acct-menu a{ padding:11px 4px 11px 14px; border-radius:0; }
     .panel{ padding:18px 16px; }
     .trade-cols{ grid-template-columns:1fr; }
     .vote-cards{ flex-direction:column; }
@@ -9500,6 +9621,26 @@ BASE_STYLE = """
     .toggle-row{ gap:12px; }
   }
 </style>
+<script>
+// Closing the account menu. <details> handles opening, closing on a
+// second tap, and keyboard focus by itself; these are the two things it
+// does not do. Delegated off document because this runs before the
+// header exists, and because it is on every page -- one listener pair,
+// no per-page wiring, nothing to keep in step.
+document.addEventListener('click', function(e){
+  document.querySelectorAll('details.acct[open]').forEach(function(d){
+    if (!d.contains(e.target)) d.open = false;
+  });
+});
+document.addEventListener('keydown', function(e){
+  if (e.key !== 'Escape') return;
+  document.querySelectorAll('details.acct[open]').forEach(function(d){
+    d.open = false;
+    const s = d.querySelector('summary');
+    if (s) s.focus();
+  });
+});
+</script>
 """
 
 SCORE_MARK_SVG = ('<svg class="score-mark" viewBox="0 0 12 14" fill="none" aria-hidden="true">'
@@ -9534,7 +9675,22 @@ def make_header(active=""):
     <a class="{cls('trade')}" href="/trade-calculator">Trade Calculator</a>
     <a class="{cls('sbc')}" href="/start-bench-cut">Start/Bench/Cut</a>
     {{% if current_user.is_authenticated %}}
-      <a href="/">{{{{ current_user.username }}}}</a><a href="/logout">Log Out</a>
+      <details class="acct">
+        <summary aria-label="Account menu">
+          <span class="acct-disc">{{{{ (current_user.username or '?')[:2] }}}}</span>
+          <span class="acct-caret">&#9660;</span>
+        </summary>
+        <div class="acct-menu">
+          <div class="acct-who">
+            <b>{{{{ current_user.username }}}}</b>
+            <span>{{{{ current_user.email or 'Signed in' }}}}</span>
+          </div>
+          <a href="/settings"><span class="ico">&#9881;</span>Settings</a>
+          <a href="/league-manager"><span class="ico">&#9776;</span>My Leagues</a>
+          <div class="sep"></div>
+          <a class="out" href="/logout"><span class="ico">&#8677;</span>Log Out</a>
+        </div>
+      </details>
     {{% else %}}
       <a href="/login">Sign In</a><a href="/signup">Create Account</a>
     {{% endif %}}
@@ -14806,6 +14962,123 @@ document.getElementById('usernameInput').addEventListener('input', () => {
 document.getElementById('tosBox').addEventListener('change', (e) => { tosOk = e.target.checked; updateJoinBtn(); });
 </script>
 """
+
+SETTINGS_HTML = BASE_STYLE + make_header("") + """
+<style>
+  .set-wrap{ max-width:620px; }
+  .set-title{ font-family:"Big Shoulders Display"; font-size:26px; font-weight:800;
+              text-transform:uppercase; margin:18px 0 2px; }
+  .set-sub{ font-size:12px; color:var(--ink-muted); margin-bottom:14px; }
+  .set-group{ margin-top:22px; }
+  .set-group h3{ font-family:"Big Shoulders Display"; font-size:15px; font-weight:800;
+                 text-transform:uppercase; letter-spacing:0.04em; color:var(--ink-muted);
+                 margin:0 0 10px; }
+  .set-field{ margin-top:14px; }
+  .set-field label{ display:block; font-size:13px; font-weight:700; margin-bottom:5px; }
+  .set-field .hint{ font-size:11.5px; color:var(--ink-muted); margin-top:5px; line-height:1.5; }
+  .set-field input[type=text]{
+    width:100%; background:var(--paper-sunken); border:1px solid var(--line);
+    color:var(--ink); border-radius:8px; padding:10px 12px; font-size:14px;
+    font-family:inherit; }
+  /* Two choices each, so they are buttons rather than a select you have
+     to open to find out what is in it. */
+  .set-seg{ display:inline-flex; background:var(--paper-sunken); border:1px solid var(--line);
+            border-radius:99px; padding:3px; gap:3px; }
+  .set-seg label{ margin:0; }
+  .set-seg input{ position:absolute; opacity:0; pointer-events:none; }
+  .set-seg span{ display:block; padding:7px 16px; border-radius:99px; font-size:13px;
+                 font-weight:700; color:var(--ink-muted); cursor:pointer; white-space:nowrap; }
+  .set-seg input:checked + span{ background:var(--accent); color:var(--accent-on); }
+  .set-seg input:focus-visible + span{ outline:2px solid var(--accent-ink); outline-offset:2px; }
+  .set-check{ display:flex; align-items:flex-start; gap:10px; cursor:pointer; }
+  .set-check input{ margin-top:3px; accent-color:var(--accent); flex:none; }
+  .set-read{ display:flex; justify-content:space-between; gap:12px; padding:10px 0;
+             border-top:1px solid var(--line); font-size:13.5px; }
+  .set-read:first-of-type{ border-top:none; }
+  .set-read span{ color:var(--ink-muted); }
+  .set-save{ margin-top:22px; display:flex; align-items:center; gap:14px; flex-wrap:wrap; }
+  .set-save button{ background:var(--accent); color:var(--accent-on); border:none;
+                    border-radius:99px; padding:11px 26px; font-size:14px; font-weight:700;
+                    font-family:inherit; cursor:pointer; }
+  .set-saved{ font-size:13px; color:var(--good); font-weight:700; }
+  .set-danger{ margin-top:26px; padding-top:16px; border-top:1px solid var(--line); }
+  .set-danger a{ font-size:13px; font-weight:700; color:var(--ink-muted); text-decoration:none; }
+  .set-danger a:hover{ color:var(--critical); }
+</style>
+<main><div class="wrap set-wrap">
+  <div class="set-title">Settings</div>
+  <div class="set-sub">Signed in as {{ current_user.username }}.</div>
+  {% if error %}<div class="error">Couldn&rsquo;t save: {{ error }}</div>{% endif %}
+
+  <form method="post">
+    <div class="panel">
+      <div class="set-group" style="margin-top:0;">
+        <h3>Rankings</h3>
+        <div class="set-field">
+          <label>Default format</label>
+          <div class="set-seg">
+            {% for value, label in [('1qb', '1QB'), ('superflex', 'Superflex')] %}
+            <label><input type="radio" name="pref_format" value="{{ value }}"
+                   {{ 'checked' if current_user.pref_format == value }}><span>{{ label }}</span></label>
+            {% endfor %}
+          </div>
+        </div>
+        <div class="set-field">
+          <label>Default mode</label>
+          <div class="set-seg">
+            {% for value, label in [('dynasty', 'Dynasty'), ('redraft', 'Redraft')] %}
+            <label><input type="radio" name="pref_mode" value="{{ value }}"
+                   {{ 'checked' if current_user.pref_mode == value }}><span>{{ label }}</span></label>
+            {% endfor %}
+          </div>
+          <div class="hint">What Rankings opens on. You can still switch on the page itself &mdash;
+            this only decides where it starts.</div>
+        </div>
+      </div>
+
+      <div class="set-group">
+        <h3>Leagues</h3>
+        <div class="set-field">
+          <label for="sleeperUser">Sleeper username</label>
+          <input type="text" id="sleeperUser" name="sleeper_username"
+                 value="{{ current_user.sleeper_username or '' }}"
+                 placeholder="your Sleeper handle" autocapitalize="off" autocorrect="off">
+          <div class="hint">
+            Used to find your leagues and to show how many of your players are in each game.
+            {% if league_count %}{{ league_count }} league{{ '' if league_count == 1 else 's' }} synced &mdash;
+            {% endif %}<a href="/league-manager" style="color:var(--accent-ink);">manage synced leagues</a>.
+          </div>
+        </div>
+      </div>
+
+      <div class="set-group">
+        <h3>Email</h3>
+        <label class="set-check">
+          <input type="checkbox" name="newsletter_opt_in"
+                 {{ 'checked' if current_user.newsletter_opt_in }}>
+          <span style="font-size:13.5px;">Send me occasional updates about new features.</span>
+        </label>
+      </div>
+
+      <div class="set-save">
+        <button type="submit">Save changes</button>
+        {% if saved %}<span class="set-saved">Saved.</span>{% endif %}
+      </div>
+    </div>
+  </form>
+
+  <div class="panel">
+    <div class="set-group" style="margin-top:0;">
+      <h3>Account</h3>
+      <div class="set-read"><b>Username</b><span>{{ current_user.username }}</span></div>
+      <div class="set-read"><b>Email</b><span>{{ current_user.email or '&mdash;'|safe }}</span></div>
+      <div class="set-read"><b>Plan</b><span>{{ 'Member' if current_user.is_member else 'Free' }}</span></div>
+      <div class="set-danger"><a href="/logout">Log out</a></div>
+    </div>
+  </div>
+</div></main>
+"""
+
 
 LOGIN_PAGE_HTML = AUTH_STYLE + """
 <div class="auth-top"><a class="auth-logo" href="/">Fantasy Football Calc</a></div>
