@@ -1706,6 +1706,39 @@ def _play_headline(text, yards, scoring):
     return f"{yd}rush" if yd else "Rush"
 
 
+# A made kick, a conversion, a safety -- every way of putting points on
+# the board that is not a touchdown.
+_FG_GOOD_RE = re.compile(r"field goal is good", re.I)
+_XP_GOOD_RE = re.compile(r"extra point is good", re.I)
+_TWO_PT_GOOD_RE = re.compile(r"(?:conversion|attempt) succeeds", re.I)
+_SAFETY_RE = re.compile(r"\bsafety\b", re.I)
+
+
+def play_is_scoring(text, espn_flag=None):
+    """Did this play put points on the board?
+
+    Read from ESPN's sentence, which is the same authority the headline
+    uses -- so a row titled "19-yd TD catch" can never come out in the
+    plain colour. ESPN's own scoringPlay flag is only a fallback: inside
+    the drive feed it is missing or false often enough that a genuine
+    touchdown was rendering white while the title beside it said TD.
+
+    The flag is also not allowed to overrule an explicit miss: a kick
+    the sentence calls No Good scored nothing, whatever the field says."""
+    low = (text or "").lower()
+    if "touchdown" in low:
+        return True
+    if _FG_GOOD_RE.search(low) or _XP_GOOD_RE.search(low):
+        return True
+    if _TWO_PT_GOOD_RE.search(low):
+        return True
+    if _SAFETY_RE.search(low):
+        return True
+    missed = ("no good" in low or "is blocked" in low
+              or "conversion fails" in low or "attempt fails" in low)
+    return bool(espn_flag) and not missed
+
+
 def _play_notes(text, yards, down, distance, scoring):
     """The lines under a play: what else happened, one fact per line,
     each with a coloured dot saying whether it went well.
@@ -1931,7 +1964,12 @@ def extract_drive_plays(summary_json, limit=60):
                 "team": normalize_team_abbr(team) if team else None,
                 "period": _safe_int(period, 0) or None,
                 "clock": clock,
-                "down": start.get("down") or None,
+                # ESPN writes 0 -- and has written -1 -- for a snap with
+                # no down: a kickoff, a conversion, a play it could not
+                # place. Anything outside 1-4 is dropped rather than
+                # printed, which is where "-1th & 0" came from.
+                "down": (_safe_int(start.get("down"), 0)
+                         if _safe_int(start.get("down"), 0) in (1, 2, 3, 4) else None),
                 "distance": start.get("distance"),
                 "yardline": start.get("possessionText") or start.get("downDistanceText"),
                 # How far there was left to go, which is the one field
@@ -1942,7 +1980,7 @@ def extract_drive_plays(summary_json, limit=60):
                 "down_distance": start.get("downDistanceText"),
                 "text": text[:400],
                 "yards": play_yards(text, play.get("statYardage")),
-                "scoring": bool(play.get("scoringPlay")),
+                "scoring": play_is_scoring(text, play.get("scoringPlay")),
                 "away_score": play.get("awayScore"),
                 "home_score": play.get("homeScore"),
             })
@@ -12364,9 +12402,13 @@ GAME_DETAIL_HTML = BASE_STYLE + make_header("scores") + """
   .gd-play-title{ font-size:17px; font-weight:800; font-family:"Big Shoulders Display";
                   text-transform:uppercase; letter-spacing:0.01em; line-height:1.15; }
   .gd-play.score .gd-play-title{ color:var(--scored); }
-  /* The row is a link now; it should still read as a row. */
-  a.gd-play{ display:block; text-decoration:none; color:inherit; }
-  a.gd-play:hover{ background:var(--paper-sunken); }
+  /* The row opens the play, but it is a div carrying data-href rather
+     than an anchor -- it contains player links, and anchors do not
+     nest. It should still behave like something you can press. */
+  .gd-play[data-href]{ cursor:pointer; }
+  .gd-play[data-href]:hover{ background:var(--paper-sunken); }
+  .gd-play[data-href]:focus-visible{ outline:2px solid var(--accent-ink);
+                                     outline-offset:-2px; }
   .gd-play-who{ font-size:12.5px; color:var(--ink-secondary); margin-top:2px; }
   .gd-play-who b{ color:var(--ink); font-weight:700; }
   .gd-play-who .fps{ color:var(--ink-muted); }
@@ -12897,7 +12939,14 @@ window.gdRenderFeed = function(plays, status){
              '<span class="gd-play-dot"></span>' + esc(n.label) + '</div>';
     }).join('');
     // Every play opens its own page. Without an id there is nothing to
-    // open, so that row stays a plain block rather than a dead link.
+    // open, so that row simply isn't clickable.
+    //
+    // Carried as data-href rather than as an <a>. The row already
+    // contains player links, and an anchor inside an anchor is invalid
+    // HTML: the parser closes the outer one early and re-opens it around
+    // the rest, which split a single play into two .gd-play elements --
+    // one holding the situation line, one holding everything else.
+    //
     // The event id comes straight from the template rather than from a
     // const declared further down this script -- which would be in its
     // temporal dead zone if anything ever renders plays during the
@@ -12906,9 +12955,10 @@ window.gdRenderFeed = function(plays, status){
       ? '/play?game=' + encodeURIComponent({{ event_id|tojson }}) +
         '&id=' + encodeURIComponent(p.id)
       : null;
-    const tag = href ? 'a' : 'div';
-    const attr = href ? ' href="' + href + '"' : '';
-    return '<' + tag + ' class="gd-play' + (p.scoring ? ' score' : '') + '"' + attr + '>' +
+    const attr = href
+      ? ' data-href="' + esc(href) + '" role="link" tabindex="0"'
+      : '';
+    return '<div class="gd-play' + (p.scoring ? ' score' : '') + '"' + attr + '>' +
       '<div class="gd-play-head"><span>' + sit + '</span><span>' + score + '</span></div>' +
       '<div class="gd-play-body">' +
         faces +
@@ -12918,8 +12968,30 @@ window.gdRenderFeed = function(plays, status){
           (notes ? '<div class="gd-play-notes">' + notes + '</div>' : '') +
         '</div>' +
       '</div>' +
-    '</' + tag + '>';
+    '</div>';
   }).join('');
+
+  // One delegated handler for the whole feed, rather than a listener per
+  // row: the poll repaints this list every few seconds mid-drive, and
+  // per-row listeners would be re-bound each time. A click that landed
+  // on a player link is left alone -- that link is the more specific
+  // thing the reader asked for.
+  if (!el.dataset.playNav){
+    el.dataset.playNav = '1';
+    el.addEventListener('click', function(e){
+      if (e.target.closest('a')) return;
+      const row = e.target.closest('.gd-play[data-href]');
+      if (row) window.location.href = row.dataset.href;
+    });
+    el.addEventListener('keydown', function(e){
+      if (e.key !== 'Enter' && e.key !== ' ') return;
+      const row = e.target.closest && e.target.closest('.gd-play[data-href]');
+      if (row && !e.target.closest('a')){
+        e.preventDefault();
+        window.location.href = row.dataset.href;
+      }
+    });
+  }
 };
 
 // The momentum curve: the home side's win probability after every play.
