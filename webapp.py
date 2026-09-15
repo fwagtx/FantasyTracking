@@ -13667,9 +13667,6 @@ RANKINGS_HTML = BASE_STYLE + make_header("rankings") + VOTE_MODAL_HTML + """
              background-size:11px 7px; padding-right:30px; cursor:pointer; }
   .rk-icon-btn{ width:36px; height:36px; border-radius:8px; background:var(--rk-surface); border:1px solid var(--rk-line); color:var(--rk-muted); display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:15px; }
   .rk-icon-btn.active{ color:var(--rk-text); border-color:var(--accent); }
-  .rk-rookie-toggle{ font-size:12px; font-weight:700; padding:0 13px; height:36px; border-radius:99px; border:1px solid var(--rk-line); background:var(--rk-surface); color:var(--rk-muted); cursor:pointer; display:flex; align-items:center; gap:6px; user-select:none; }
-  .rk-rookie-toggle svg{ flex:none; }
-  .rk-rookie-toggle.active{ background:#f0b429; color:#1a1206; border-color:#f0b429; }
   .rk-search{ background:var(--rk-surface); border:1px solid var(--rk-line); color:var(--rk-text); border-radius:8px; padding:9px 12px; font-size:13.5px; width:180px; font-family:inherit; }
 
   .rk-tier-bar{ display:flex; align-items:center; gap:10px; padding:8px 14px; margin-top:18px; border-radius:8px; font-family:"Big Shoulders Display"; font-weight:800; font-size:15px; letter-spacing:0.03em; }
@@ -13742,21 +13739,30 @@ RANKINGS_HTML = BASE_STYLE + make_header("rankings") + VOTE_MODAL_HTML + """
       <option value="dynasty" {{ 'selected' if mode == 'dynasty' }}>Dynasty</option>
       <option value="redraft" {{ 'selected' if mode == 'redraft' }}>Redraft</option>
     </select>
-    <select class="rk-select" id="posSelect">
-      <option value="overall">Overall</option>
-      <option value="QB">QB</option>
-      <option value="RB">RB</option>
-      <option value="WR">WR</option>
-      <option value="TE">TE</option>
+    <!-- One dropdown for who you are looking at. Rookies used to be a
+         separate pill beside it, which meant two controls to reach
+         "rookie wide receivers"; as a group inside this list every
+         combination the pair allowed is still one choice away. -->
+    <select class="rk-select" id="posSelect" aria-label="Position">
+      <option value="overall">All Positions</option>
+      <optgroup label="Position">
+        <option value="QB">QB</option>
+        <option value="RB">RB</option>
+        <option value="WR">WR</option>
+        <option value="TE">TE</option>
+      </optgroup>
+      <optgroup label="Rookies">
+        <option value="rookies">All Rookies</option>
+        <option value="rookies:QB">Rookie QB</option>
+        <option value="rookies:RB">Rookie RB</option>
+        <option value="rookies:WR">Rookie WR</option>
+        <option value="rookies:TE">Rookie TE</option>
+      </optgroup>
     </select>
     <select class="rk-select" id="fmtSelect" aria-label="Format">
       <option value="1qb" {{ 'selected' if fmt == '1qb' }}>1QB</option>
       <option value="superflex" {{ 'selected' if fmt == 'superflex' }}>Superflex</option>
     </select>
-    <div class="rk-rookie-toggle" id="rookieToggle" title="Show only rookies">
-      <svg viewBox="0 0 24 24" width="12" height="12"><path d="M12 1.5l2.98 6.63 7.27.7-5.5 4.83 1.63 7.13L12 17.06l-6.38 3.73 1.63-7.13-5.5-4.83 7.27-.7z" fill="currentColor"/></svg>
-      Rookies
-    </div>
     <input class="rk-search" id="rkSearch" type="text" placeholder="Search player...">
     <div class="rk-icon-btn" id="viewList" title="List view">&#9776;</div>
     <div class="rk-icon-btn" id="viewGrid" title="Grid view">&#9638;</div>
@@ -13883,8 +13889,18 @@ let state = {
   sortKey: 'overall_rank',
   sortDir: 1,
   minSnap: 0, minGames: 0, minValue: 0,
-  rookiesOnly: false,
 };
+
+// The position dropdown's value carries both halves of the old pair:
+// "WR" is every wide receiver, "rookies" is every rookie, and
+// "rookies:WR" is both. Split once, here, so the filter below and the
+// empty-state message cannot read it differently.
+function posParts(value){
+  const v = String(value || 'overall');
+  const rookies = v.indexOf('rookies') === 0;
+  const pos = rookies ? v.slice(8) : (v === 'overall' ? '' : v);
+  return {rookies: rookies, pos: pos};
+}
 
 function playerUrl(sid) {
   const numqbs = RK_FMT === 'superflex' ? 2 : 1;
@@ -13905,9 +13921,10 @@ function percentileClass(values, val, higherIsBetter) {
 }
 
 function getFiltered() {
+  const want = posParts(state.pos);
   let rows = RK_DATA.filter(r => {
-    if (state.pos !== 'overall' && r.position !== state.pos) return false;
-    if (state.rookiesOnly && !r.is_rookie) return false;
+    if (want.pos && r.position !== want.pos) return false;
+    if (want.rookies && !r.is_rookie) return false;
     if (state.search && !r.name.toLowerCase().includes(state.search.toLowerCase())) return false;
     if (r.snap_pct !== null && r.snap_pct < state.minSnap) return false;
     if (r.games < state.minGames) return false;
@@ -14105,11 +14122,6 @@ document.getElementById('posSelect').addEventListener('change', e => { state.pos
 });
 document.getElementById('viewList').addEventListener('click', () => { state.view = 'list'; render(); });
 document.getElementById('viewGrid').addEventListener('click', () => { state.view = 'grid'; render(); });
-document.getElementById('rookieToggle').addEventListener('click', () => {
-  state.rookiesOnly = !state.rookiesOnly;
-  document.getElementById('rookieToggle').classList.toggle('active', state.rookiesOnly);
-  render();
-});
 document.getElementById('rkSearch').addEventListener('input', e => { state.search = e.target.value; render(); });
 
 const filterModal = document.getElementById('filterModal');
