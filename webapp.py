@@ -747,7 +747,6 @@ def player_photo_url(sid):
 
 ESPN_NFL_RSS = "https://www.espn.com/espn/rss/nfl/news"
 ROTOWIRE_NFL_RSS = "https://www.rotowire.com/rss/news.php?sport=NFL"
-NEWS_SOURCE_URL = "https://www.espn.com/nfl/"  # kept for the page-level "powered by" footer link
 
 
 def _strip_html(raw):
@@ -810,7 +809,124 @@ def get_rotowire_nfl_news(cache={}):
     return _fetch_rss_feed(ROTOWIRE_NFL_RSS, "RotoWire", cache)
 
 
-def get_player_news(full_name, team, limit=3):
+# Per-athlete news. THE BUG this fixes: the two feeds above are
+# LEAGUE-WIDE -- ESPN's front-page NFL feed and RotoWire's, together
+# maybe fifty items on a busy day, all of them the biggest stories in
+# the league. Searching them for a given player was never going to work
+# for the other seventeen hundred: a tight end is simply never in the
+# day's top fifty headlines, so every one of those pages read "no recent
+# headlines" forever. It was not the matching that was broken; nothing
+# was being asked about the player at all.
+#
+# Sleeper's dump carries espn_id for very nearly every player, and ESPN
+# publishes news per athlete, so that is what gets asked now.
+# Written out rather than built from ESPN_SITE_BASE: that constant is
+# defined several hundred lines below this block, and referring to it
+# here would fail at import.
+ESPN_ATHLETE_NEWS_URLS = (
+    "https://site.api.espn.com/apis/site/v2/sports/football/nfl"
+    "/news?athlete={id}&limit=12",
+    "https://site.web.api.espn.com/apis/common/v3/sports/football/nfl"
+    "/athletes/{id}/news?limit=12",
+)
+_espn_athlete_news_cache = {}
+
+
+def _news_time(value):
+    """Relative time from either date format these sources use.
+
+    The RSS feeds send RFC-822 ("Mon, 15 Sep 2026 12:00:00 GMT"); the
+    JSON API sends ISO-8601. The old helper only knew the first, so an
+    API-sourced item would have silently lost its timestamp."""
+    if not value:
+        return ""
+    stamp = str(value).strip()
+    try:
+        if "," in stamp or stamp.endswith("GMT"):
+            return _relative_time(stamp)
+        dt = datetime.fromisoformat(stamp.replace("Z", "+00:00"))
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=timezone.utc)
+        secs = (datetime.now(timezone.utc) - dt).total_seconds()
+        if secs < 3600:
+            return f"{max(1, int(secs // 60))}m ago"
+        if secs < 86400:
+            return f"{int(secs // 3600)}h ago"
+        return f"{int(secs // 86400)}d ago"
+    except Exception:
+        return _relative_time(stamp)
+
+
+def espn_athlete_news(espn_id, cache=_espn_athlete_news_cache):
+    """Headlines ESPN files against this specific player.
+
+    Two URLs because the exact one could not be verified from the
+    sandbox that wrote this (no outbound access to ESPN); whichever
+    answers with articles wins, and /api/news-status on the deployed app
+    reports which one did. Parsed defensively for the same reason: an
+    unfamiliar shape yields no items rather than an exception, because a
+    news panel is never worth a 500 on a player page.
+
+    Cached per player for 15 minutes, and a miss is cached too --
+    otherwise every view of a player ESPN has nothing on would go back
+    out and ask again."""
+    if not espn_id:
+        return []
+    key = str(espn_id)
+    entry = cache.get(key)
+    now = time.time()
+    if entry and now - entry["time"] < 900:
+        return entry["items"]
+
+    items, used = [], None
+    for template in ESPN_ATHLETE_NEWS_URLS:
+        try:
+            r = requests.get(template.format(id=key), timeout=8,
+                             headers={"User-Agent": "Mozilla/5.0"})
+            r.raise_for_status()
+            payload = r.json()
+        except Exception:
+            continue
+        articles = payload.get("articles") if isinstance(payload, dict) else None
+        if not isinstance(articles, list):
+            continue
+        for art in articles:
+            if not isinstance(art, dict):
+                continue
+            title = (art.get("headline") or art.get("title") or "").strip()
+            link = ""
+            links = art.get("links")
+            if isinstance(links, dict):
+                web = links.get("web")
+                if isinstance(web, dict):
+                    link = (web.get("href") or "").strip()
+                elif isinstance(web, str):
+                    link = web.strip()
+            link = link or (art.get("link") or "").strip()
+            desc = _strip_html(art.get("description") or art.get("story") or "")
+            if not (title and link):
+                continue
+            items.append({
+                "title": title, "link": link,
+                "desc": (desc[:220] + "...") if len(desc) > 220 else desc,
+                "ago": _news_time(art.get("published") or art.get("lastModified")),
+                "source": "ESPN",
+            })
+        if items:
+            used = template
+            break
+
+    cache[key] = {"items": items, "time": now, "url": used}
+    return items
+
+
+def _league_feed_matches(full_name, team, limit):
+    """The old behaviour, kept as a supplement.
+
+    These feeds are where a genuinely league-wide story about a player
+    shows up -- a trade, a suspension -- often before it reaches that
+    player's own ESPN page, so they are still worth reading. They are no
+    longer the only thing asked."""
     if not full_name:
         return []
     all_items = get_espn_nfl_news() + get_rotowire_nfl_news()
@@ -835,12 +951,64 @@ def get_player_news(full_name, team, limit=3):
             matches.append({
                 "title": it["title"], "link": it["link"],
                 "desc": (it["desc"][:220] + "...") if len(it["desc"]) > 220 else it["desc"],
-                "ago": _relative_time(it["pub_date"]),
+                "ago": _news_time(it["pub_date"]),
                 "source": it["source"],
             })
         if len(matches) >= limit:
             break
     return matches
+
+
+# Where each source's own site lives, for the credit line.
+NEWS_SOURCE_SITES = {
+    "ESPN": "https://www.espn.com/nfl/",
+    "RotoWire": "https://www.rotowire.com/football/",
+}
+
+
+def news_sources_used(items):
+    """[(name, url)] for the sources actually on this page, in the order
+    they appear.
+
+    The credit line used to name ESPN and RotoWire on every player,
+    including the ones showing no headlines at all -- crediting two
+    publishers for nothing, and telling a reader a RotoWire story was
+    involved when none was. A credit is only true if the thing credited
+    is on the page."""
+    seen, out = set(), []
+    for item in items or []:
+        name = item.get("source")
+        if name and name not in seen:
+            seen.add(name)
+            out.append((name, NEWS_SOURCE_SITES.get(name)))
+    return out
+
+
+def get_player_news(full_name, team, limit=3, espn_id=None):
+    """Headlines about one player, best source first.
+
+    The player's own ESPN page leads, because it is about them by
+    definition rather than by a name appearing somewhere in a paragraph.
+    The league-wide feeds fill in behind it, and are the whole answer for
+    anyone Sleeper has no espn_id for.
+
+    Deduplicated on the link: a story big enough to reach ESPN's front
+    page is usually also filed against the player, and listing it twice
+    would look like two separate pieces of news."""
+    items, seen = [], set()
+    for item in espn_athlete_news(espn_id):
+        if item["link"] not in seen:
+            seen.add(item["link"])
+            items.append(item)
+        if len(items) >= limit:
+            return items
+    for item in _league_feed_matches(full_name, team, limit):
+        if item["link"] not in seen:
+            seen.add(item["link"])
+            items.append(item)
+        if len(items) >= limit:
+            break
+    return items
 
 # ---------------- Team depth chart (from Sleeper's own player data) ----------------
 
@@ -5822,6 +5990,50 @@ def unsubscribe_page():
     return render_template_string(UNSUBSCRIBE_HTML, done=done)
 
 
+@app.route("/api/news-status")
+def api_news_status():
+    """Which source answered, for a named player.
+
+    The sandbox this was written in has no outbound access to ESPN, so
+    the exact per-athlete news URL could not be confirmed there. This
+    reports, from the deployed app, which of the candidate URLs actually
+    returned articles and how many -- so "the news is empty" can be
+    answered with a reason instead of a guess.
+
+    Secret-protected: it makes an outbound call per hit."""
+    if not _secret_ok():
+        return jsonify({"error": "nope"}), 403
+    name = (request.args.get("name") or "").strip().lower()
+    players = get_all_players()
+    hit = None
+    for sid, p in players.items():
+        full = f"{p.get('first_name','')} {p.get('last_name','')}".strip()
+        if full.lower() == name or (name and name in full.lower()):
+            hit = (sid, p, full)
+            break
+    if not hit:
+        return jsonify({"error": "no player matched", "name": name}), 404
+    sid, p, full = hit
+    espn_id = p.get("espn_id")
+    _espn_athlete_news_cache.pop(str(espn_id), None)
+    per_player = espn_athlete_news(espn_id)
+    cached = _espn_athlete_news_cache.get(str(espn_id)) or {}
+    league = _league_feed_matches(full, p.get("team"), 3)
+    return jsonify({
+        "player": full, "sleeper_id": sid, "team": p.get("team"),
+        "espn_id": espn_id,
+        "espn_id_present": bool(espn_id),
+        "per_player_items": len(per_player),
+        "url_that_worked": cached.get("url"),
+        "candidate_urls": list(ESPN_ATHLETE_NEWS_URLS),
+        "league_feed_items": len(league),
+        "league_feed_sizes": {"espn": len(get_espn_nfl_news()),
+                              "rotowire": len(get_rotowire_nfl_news())},
+        "sample": (per_player or league)[:2],
+        "sources_credited": [n for n, _ in news_sources_used(per_player or league)],
+    })
+
+
 @app.route("/privacy")
 def privacy_page():
     return render_template_string(PRIVACY_HTML, updated=LEGAL_UPDATED)
@@ -6211,13 +6423,15 @@ def player_detail():
     }
     raw_team = p.get("team")
     depth_chart = get_team_depth_chart(raw_team, all_players)
-    news = get_player_news(full_name, raw_team)
+    # Sleeper carries ESPN's own id for nearly every player, which is
+    # what makes per-player news possible at all.
+    news = get_player_news(full_name, raw_team, espn_id=p.get("espn_id"))
     return render_template_string(
         PLAYER_HTML, p=info, username=username, sid=sid, num_qbs=num_qbs, tab=tab, ref=ref,
         season=season, prev_season=prev_season, next_season=next_season,
         weekly=weekly, career_rows=career_rows,
         depth_chart=depth_chart, news=news,
-        news_source_url=NEWS_SOURCE_URL,
+        news_sources=news_sources_used(news),
     )
 
 
@@ -12508,7 +12722,17 @@ PLAYER_HTML = BASE_STYLE + make_header("league") + """
     {% else %}
       <p class="muted" style="margin-top:10px;">No recent headlines mention {{ p.name }} right now.</p>
     {% endif %}
-    <div class="news-credit">News via <a href="{{ news_source_url }}" target="_blank" rel="noopener">ESPN</a> and <a href="https://www.rotowire.com/football/" target="_blank" rel="noopener">RotoWire</a> &middot; headline &amp; summary only, links back to the original article.</div>
+    {# Only the sources that actually produced a headline above. No
+       news means no credit line at all -- there is nothing to credit. #}
+    {% if news_sources %}
+    <div class="news-credit">
+      {%- for name, url in news_sources -%}
+        {%- if not loop.first %}{{ ' and ' if loop.last else ', ' }}{% endif -%}
+        {%- if url %}<a href="{{ url }}" target="_blank" rel="noopener">{{ name }}</a>
+        {%- else %}{{ name }}{% endif -%}
+      {%- endfor %} &middot; headline &amp; summary only, links back to the original article.
+    </div>
+    {% endif %}
   </div>
 
   {% if depth_chart %}
