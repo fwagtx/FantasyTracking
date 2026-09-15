@@ -337,6 +337,8 @@ def init_db():
             cur.execute("ALTER TABLE users ADD COLUMN IF NOT EXISTS pref_format TEXT;")
             cur.execute("ALTER TABLE users ADD COLUMN IF NOT EXISTS pref_mode TEXT;")
             cur.execute("ALTER TABLE users ADD COLUMN IF NOT EXISTS pref_scoring TEXT;")
+            cur.execute("ALTER TABLE users ADD COLUMN IF NOT EXISTS pref_theme TEXT;")
+            cur.execute("ALTER TABLE users ADD COLUMN IF NOT EXISTS pref_accent TEXT;")
             # Avatars live apart from users because load_user does a
             # SELECT * on that row for every single request -- putting
             # image bytes there would drag a picture through every page
@@ -453,6 +455,8 @@ class User(UserMixin):
         self.pref_format = row.get("pref_format") or "1qb"
         self.pref_mode = row.get("pref_mode") or "dynasty"
         self.pref_scoring = row.get("pref_scoring") or DEFAULT_SCORING
+        self.pref_theme = normalize_theme(row.get("pref_theme"))
+        self.pref_accent = normalize_accent(row.get("pref_accent"))
         self.avatar_version = row.get("avatar_version") or 0
         self.username_changed_at = row.get("username_changed_at")
         self.newsletter_opt_in = bool(row.get("newsletter_opt_in"))
@@ -1570,6 +1574,25 @@ PREGAME_POLL_MS = 15000      # waiting for kickoff, where seconds do not matter
 # both run the same poll loop, so a kwarg is a thing to forget.
 app.jinja_env.globals["live_poll_ms"] = LIVE_POLL_MS
 app.jinja_env.globals["pregame_poll_ms"] = PREGAME_POLL_MS
+
+
+@app.context_processor
+def _theme_context():
+    """The reader's theme, injected into every template.
+
+    A context processor rather than a keyword on forty render calls: the
+    theme has to reach the stylesheet on every page, and a page that
+    forgot to pass it would render dark for someone who chose light --
+    the one failure that is worse than not offering the setting."""
+    theme, accent, signed_in = DEFAULT_THEME, DEFAULT_ACCENT, False
+    try:
+        if current_user.is_authenticated:
+            signed_in = True
+            theme = normalize_theme(getattr(current_user, "pref_theme", None))
+            accent = normalize_accent(getattr(current_user, "pref_accent", None))
+    except Exception:
+        pass
+    return {"site_theme": theme, "site_accent": accent, "site_signed_in": signed_in}
 
 
 def espn_game_summary(event_id, cache={}):
@@ -5465,9 +5488,52 @@ def settings_page():
     leagues = get_synced_league_ids(current_user.id)
     return render_template_string(
         SETTINGS_HTML, saved=saved, error=error, scoring_formats=SCORING_FORMATS,
+        themes=THEMES, accents=ACCENTS,
         username_next_change=username_change_allowed_at(current_user.username_changed_at),
         username_cooldown_days=USERNAME_CHANGE_DAYS,
         league_count=len(leagues) if leagues else 0)
+
+
+@app.route("/api/theme", methods=["POST"])
+def api_theme():
+    """Save a theme choice.
+
+    Its own endpoint rather than a field on the Settings form, because a
+    theme is the one setting whose result you judge by looking at it --
+    picking one has to change the page under your hands, not after a
+    save and a reload. The page applies the change itself and posts here
+    so it survives to the next visit and to another device.
+
+    A guest is answered normally and simply has nothing saved: the
+    browser is the only place their choice can live, and the page has
+    already put it there."""
+    data = request.get_json(silent=True) or request.form or {}
+    theme = normalize_theme(data.get("theme"))
+    accent = normalize_accent(data.get("accent"))
+    try:
+        if not current_user.is_authenticated:
+            return jsonify({"ok": True, "stored": False,
+                            "theme": theme, "accent": accent})
+    except Exception:
+        return jsonify({"ok": True, "stored": False,
+                        "theme": theme, "accent": accent})
+    try:
+        conn = get_db()
+        try:
+            with conn.cursor() as cur:
+                cur.execute("UPDATE users SET pref_theme = %s, pref_accent = %s "
+                            "WHERE id = %s", (theme, accent, current_user.id))
+            conn.commit()
+        finally:
+            conn.close()
+        current_user.pref_theme, current_user.pref_accent = theme, accent
+        return jsonify({"ok": True, "stored": True,
+                        "theme": theme, "accent": accent})
+    except Exception as e:
+        # The page has already applied it and written localStorage, so a
+        # failure here costs the sync, not the change.
+        return jsonify({"ok": False, "stored": False, "error": str(e),
+                        "theme": theme, "accent": accent}), 500
 
 
 @app.route("/forgot-password", methods=["GET", "POST"])
@@ -10054,29 +10120,169 @@ ICON_LINKS = """
 """
 
 
-BASE_STYLE = """
+# Runs before anything paints. It sits at the very top of both
+# stylesheets, so the attributes are on <html> by the time the first
+# rule is evaluated -- a theme applied after paint is a white flash on
+# every page load for anyone who chose dark, or the reverse.
+#
+# For a signed-in reader the server's value wins: it is the one that
+# follows them to another device. For a guest there is nowhere to store
+# it but the browser, so localStorage wins there. Either way the choice
+# is mirrored into localStorage, which is what lets the login and signup
+# pages render in the right theme before anyone has signed in.
+THEME_BOOT = """
+<script>
+(function(){
+  try{
+    var d = document.documentElement;
+    var srvT = {{ site_theme|tojson }}, srvA = {{ site_accent|tojson }};
+    var signedIn = {{ site_signed_in|tojson }};
+    var t = srvT, a = srvA;
+    if (!signedIn) {
+      try {
+        t = localStorage.getItem('ffc-theme') || srvT;
+        a = localStorage.getItem('ffc-accent') || srvA;
+      } catch (e) {}
+    }
+    d.setAttribute('data-theme', t);
+    d.setAttribute('data-accent', a);
+    try {
+      localStorage.setItem('ffc-theme', t);
+      localStorage.setItem('ffc-accent', a);
+    } catch (e) {}
+    // The browser chrome around the page follows it too, otherwise a
+    // light page sits under a black status bar on a phone.
+    window.ffcPaintChrome = function(){
+      var bg = getComputedStyle(d).getPropertyValue('--paper').trim();
+      var m = document.querySelector('meta[name="theme-color"]');
+      if (m && bg) m.setAttribute('content', bg);
+      d.style.colorScheme = (d.getAttribute('data-theme') === 'light') ? 'light' : 'dark';
+    };
+    window.ffcPaintChrome();
+  }catch(e){}
+})();
+</script>
+"""
+
+
+# --- theme tokens --------------------------------------------------------
+#
+# One block, shared by the signed-in stylesheet and the login pages, so a
+# reader who picks a theme keeps it through signing in and out.
+#
+# Every page used to carry its own copy of the same six dark values
+# (--sc-bg, --pf-bg, --rk-bg ...). Those are now aliases of the tokens
+# below, which is what lets one attribute on <html> retheme the whole
+# site instead of eight places needing to agree.
+#
+# Dark is :root, so it is what you get with no attribute set at all and
+# nothing changes for anyone who never opens Settings.
+THEME_TOKENS = """
+  :root{
+    --paper:#0d0f0d; --paper-raised:#151815; --paper-sunken:#1c201c;
+    --ink:#e8e6df; --ink-secondary:#a8ada4; --ink-muted:#8b9089;
+    --line:rgba(255,255,255,0.10); --line-strong:rgba(255,255,255,0.18);
+    --good:#1fae5a; --good-wash:rgba(31,174,90,0.16);
+    --warning:#d1a521; --warning-wash:rgba(209,165,33,0.16);
+    --critical:#e2534a; --critical-wash:rgba(226,83,74,0.16);
+    /* Plays that put points on the board. Deliberately NOT the accent:
+       the accent is the colour of every link and control here, so an
+       accent-coloured play list would say nothing about which rows
+       scored -- and it would stop meaning anything at all the moment
+       someone set their primary colour to blue. Defined once so the
+       game feed and the performance page cannot drift apart. */
+    --scored:#4c9dff;
+    --pos-qb:#1baf7a; --pos-rb:#4a90e2; --pos-wr:#e0397a; --pos-te:#9575e8;
+    --shadow: 0 1px 2px rgba(0,0,0,0.2), 0 8px 24px -12px rgba(0,0,0,0.5);
+    /* Which of the two accent inks below is legible on this ground. */
+    --accent-ink: var(--accent-ink-dark);
+  }
+
+  /* Light. The inks for good/warning/critical are darkened here: the
+     dark-theme values are tuned to glow on near-black and several of
+     them -- the amber especially -- fall under readable contrast the
+     moment the ground goes white. */
+  :root[data-theme="light"]{
+    --paper:#f6f6f3; --paper-raised:#ffffff; --paper-sunken:#eceee8;
+    --ink:#16181a; --ink-secondary:#474d53; --ink-muted:#6b7280;
+    --line:rgba(0,0,0,0.11); --line-strong:rgba(0,0,0,0.20);
+    --good:#12833f; --good-wash:rgba(18,131,63,0.13);
+    --warning:#8a6d0f; --warning-wash:rgba(138,109,15,0.14);
+    --critical:#c0392b; --critical-wash:rgba(192,57,43,0.12);
+    --scored:#1b6fd4;
+    --shadow: 0 1px 2px rgba(16,24,40,0.05), 0 8px 24px -12px rgba(16,24,40,0.18);
+    --accent-ink: var(--accent-ink-light);
+  }
+
+  /* Gray. Not a third palette so much as dark with the ground lifted
+     off black -- easier on an OLED phone at night than true black, and
+     the reference offers it, so it costs a few lines to have. */
+  :root[data-theme="gray"]{
+    --paper:#1b1d1f; --paper-raised:#242729; --paper-sunken:#2c3033;
+    --line:rgba(255,255,255,0.12); --line-strong:rgba(255,255,255,0.20);
+  }
+
+  /* Primary colour. Each preset sets the fill plus BOTH inks, and the
+     theme above decides which ink is used -- a link tinted to glow on
+     black is unreadable on white, and the reverse. Amber is the
+     default because it is what the site already looked like. */
+  :root{ --accent:#b97a1f; --accent-ink-dark:#e0a542; --accent-ink-light:#8a5a12; --accent-on:#fff8ec; }
+  :root[data-accent="blue"]{   --accent:#2f74d0; --accent-ink-dark:#5fa3ff; --accent-ink-light:#1a56a8; --accent-on:#fff; }
+  :root[data-accent="red"]{    --accent:#cf3b34; --accent-ink-dark:#f0736a; --accent-ink-light:#a92b25; --accent-on:#fff; }
+  :root[data-accent="green"]{  --accent:#1f9d57; --accent-ink-dark:#4fcb86; --accent-ink-light:#12703c; --accent-on:#fff; }
+  :root[data-accent="yellow"]{ --accent:#c9a21a; --accent-ink-dark:#e9c84a; --accent-ink-light:#7d6208; --accent-on:#241d00; }
+  :root[data-accent="purple"]{ --accent:#7c5cd6; --accent-ink-dark:#a98cff; --accent-ink-light:#5b34c0; --accent-on:#fff; }
+  :root[data-accent="orange"]{ --accent:#d2711f; --accent-ink-dark:#f0964a; --accent-ink-light:#a5530e; --accent-on:#fff; }
+  :root[data-accent="pink"]{   --accent:#d63b76; --accent-ink-dark:#f472a5; --accent-ink-light:#ad2159; --accent-on:#fff; }
+"""
+
+
+# What Settings offers, and the only values either preference accepts.
+# (key, label) -- the swatch a reader sees comes from the CSS above, so
+# a colour is defined in exactly one place.
+THEMES = [("dark", "Dark"), ("light", "Light"), ("gray", "Gray")]
+ACCENTS = [
+    ("amber", "Amber"), ("blue", "Blue"), ("red", "Red"), ("green", "Green"),
+    ("yellow", "Yellow"), ("purple", "Purple"), ("orange", "Orange"),
+    ("pink", "Pink"),
+]
+DEFAULT_THEME, DEFAULT_ACCENT = "dark", "amber"
+_THEME_KEYS = {k for k, _ in THEMES}
+_ACCENT_KEYS = {k for k, _ in ACCENTS}
+
+
+def _normalize_choice(value, allowed, fallback):
+    """One of `allowed`, or the fallback.
+
+    str() rather than a bare truthiness check because these arrive from
+    a JSON body a client controls: {"theme": 7} would otherwise reach
+    .strip() and 500 the endpoint. Anything unrecognised becomes the
+    default, so nothing a caller sends is ever echoed into an attribute
+    on <html>."""
+    try:
+        value = str(value or "").strip().lower()
+    except Exception:
+        return fallback
+    return value if value in allowed else fallback
+
+
+def normalize_theme(value):
+    return _normalize_choice(value, _THEME_KEYS, DEFAULT_THEME)
+
+
+def normalize_accent(value):
+    return _normalize_choice(value, _ACCENT_KEYS, DEFAULT_ACCENT)
+
+
+BASE_STYLE = THEME_BOOT + """
 <meta name="viewport" content="width=device-width, initial-scale=1">
 """ + ICON_LINKS + """
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800;900&family=Source+Sans+3:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
 <style>
-  html{ -webkit-text-size-adjust:100%; text-size-adjust:100%; }  :root{
-    --paper:#0d0f0d; --paper-raised:#151815; --paper-sunken:#1c201c;
-    --ink:#e8e6df; --ink-secondary:#a8ada4; --ink-muted:#8b9089;
-    --line:rgba(255,255,255,0.10); --line-strong:rgba(255,255,255,0.18);
-    --accent:#b97a1f; --accent-ink:#e0a542; --accent-on:#fff8ec;
-    --good:#1fae5a; --good-wash:rgba(31,174,90,0.16);
-    --warning:#d1a521; --warning-wash:rgba(209,165,33,0.16);
-    --critical:#e2534a; --critical-wash:rgba(226,83,74,0.16);
-    /* Plays that put points on the board. Deliberately NOT the accent:
-       orange is the colour of every link and control here, so an accent
-       play list says nothing about which rows scored. Defined once so
-       the game feed and the performance page cannot drift apart. */
-    --scored:#4c9dff;
-    --pos-qb:#1baf7a; --pos-rb:#4a90e2; --pos-wr:#e0397a; --pos-te:#9575e8;
-    --shadow: 0 1px 2px rgba(0,0,0,0.2), 0 8px 24px -12px rgba(0,0,0,0.5);
-  }
+  html{ -webkit-text-size-adjust:100%; text-size-adjust:100%; }
+""" + THEME_TOKENS + """
   *{ box-sizing:border-box; }
   body{ margin:0; background:var(--paper); color:var(--ink); font-family:"Source Sans 3",system-ui,sans-serif; -webkit-font-smoothing:antialiased; }
   h1,h2,h3{ font-family:"Big Shoulders Display",system-ui,sans-serif; font-weight:800; text-transform:uppercase; letter-spacing:0.01em; margin:0; line-height:0.95; }
@@ -11672,8 +11878,8 @@ PLAYER_HTML = BASE_STYLE + make_header("league") + """
 SCORES_HTML = BASE_STYLE + make_header("scores") + """
 <style>
   .sc-page{
-    --sc-bg:#0d0f0d; --sc-surface:#151815; --sc-surface2:#1c201c;
-    --sc-line:rgba(255,255,255,0.08); --sc-text:#e8e6df; --sc-muted:#8b9089;
+    --sc-bg:var(--paper); --sc-surface:var(--paper-raised); --sc-surface2:var(--paper-sunken);
+    --sc-line:var(--line); --sc-text:var(--ink); --sc-muted:var(--ink-muted);
     --sc-live:#d1a521; --sc-live-wash:rgba(209,165,33,0.16);
     background:var(--sc-bg); color:var(--sc-text); padding-bottom:60px;
     font-family:"Source Sans 3",system-ui,sans-serif;
@@ -12705,8 +12911,8 @@ const scServerTodayKey = {{ today_key|tojson }};
 
 STANDINGS_HTML = BASE_STYLE + make_header("standings") + """
 <style>
-  .st-page{ --st-bg:#0d0f0d; --st-surface:#151815; --st-line:rgba(255,255,255,0.08);
-            --st-text:#e8e6df; --st-muted:#8b9089;
+  .st-page{ --st-bg:var(--paper); --st-surface:var(--paper-raised); --st-line:var(--line);
+            --st-text:var(--ink); --st-muted:var(--ink-muted);
             background:var(--st-bg); color:var(--st-text); padding-bottom:60px;
             font-family:"Source Sans 3",system-ui,sans-serif; }
   .st-title{ font-family:"Big Shoulders Display"; font-size:26px; font-weight:800;
@@ -12914,8 +13120,8 @@ STANDINGS_HTML = BASE_STYLE + make_header("standings") + """
 
 TEAM_HTML = BASE_STYLE + make_header("live") + """
 <style>
-  .tm-page{ --tm-bg:#0d0f0d; --tm-surface:#151815; --tm-surface2:#1c201c;
-            --tm-line:rgba(255,255,255,0.08); --tm-text:#e8e6df; --tm-muted:#8b9089;
+  .tm-page{ --tm-bg:var(--paper); --tm-surface:var(--paper-raised); --tm-surface2:var(--paper-sunken);
+            --tm-line:var(--line); --tm-text:var(--ink); --tm-muted:var(--ink-muted);
             background:var(--tm-bg); color:var(--tm-text); padding-bottom:60px;
             font-family:"Source Sans 3",system-ui,sans-serif; }
   .tm-head{ display:flex; align-items:center; gap:16px; padding:20px 0 14px; }
@@ -13152,8 +13358,8 @@ TEAM_HTML = BASE_STYLE + make_header("live") + """
 FEED_PAGE_HTML = BASE_STYLE + make_header("live") + """
 <style>
   .fd-page{
-    --fd-bg:#0d0f0d; --fd-surface:#151815; --fd-surface2:#1c201c;
-    --fd-line:rgba(255,255,255,0.08); --fd-text:#e8e6df; --fd-muted:#8b9089;
+    --fd-bg:var(--paper); --fd-surface:var(--paper-raised); --fd-surface2:var(--paper-sunken);
+    --fd-line:var(--line); --fd-text:var(--ink); --fd-muted:var(--ink-muted);
     background:var(--fd-bg); color:var(--fd-text); padding-bottom:60px; min-height:100vh;
     font-family:"Source Sans 3",system-ui,sans-serif;
   }
@@ -13249,8 +13455,8 @@ FEED_PAGE_HTML = BASE_STYLE + make_header("live") + """
 PLAY_DETAIL_HTML = BASE_STYLE + make_header("live") + """
 <style>
   .pd-page{
-    --pd-bg:#0d0f0d; --pd-surface:#151815; --pd-surface2:#1c201c;
-    --pd-line:rgba(255,255,255,0.08); --pd-text:#e8e6df; --pd-muted:#8b9089;
+    --pd-bg:var(--paper); --pd-surface:var(--paper-raised); --pd-surface2:var(--paper-sunken);
+    --pd-line:var(--line); --pd-text:var(--ink); --pd-muted:var(--ink-muted);
     background:var(--pd-bg); color:var(--pd-text); padding-bottom:60px; min-height:100vh;
     font-family:"Source Sans 3",system-ui,sans-serif;
   }
@@ -13445,8 +13651,8 @@ PLAY_DETAIL_HTML = BASE_STYLE + make_header("live") + """
 PERFORMANCES_HTML = BASE_STYLE + make_header("performances") + """
 <style>
   .pl-page{
-    --pl-bg:#0d0f0d; --pl-surface:#151815; --pl-surface2:#1c201c;
-    --pl-line:rgba(255,255,255,0.08); --pl-text:#e8e6df; --pl-muted:#8b9089;
+    --pl-bg:var(--paper); --pl-surface:var(--paper-raised); --pl-surface2:var(--paper-sunken);
+    --pl-line:var(--line); --pl-text:var(--ink); --pl-muted:var(--ink-muted);
     background:var(--pl-bg); color:var(--pl-text); padding-bottom:60px;
     font-family:"Source Sans 3",system-ui,sans-serif;
   }
@@ -13580,8 +13786,8 @@ PERFORMANCES_HTML = BASE_STYLE + make_header("performances") + """
 PERFORMANCE_HTML = BASE_STYLE + make_header("live") + """
 <style>
   .pf-page{
-    --pf-bg:#0d0f0d; --pf-surface:#151815; --pf-surface2:#1c201c;
-    --pf-line:rgba(255,255,255,0.08); --pf-text:#e8e6df; --pf-muted:#8b9089;
+    --pf-bg:var(--paper); --pf-surface:var(--paper-raised); --pf-surface2:var(--paper-sunken);
+    --pf-line:var(--line); --pf-text:var(--ink); --pf-muted:var(--ink-muted);
     /* Scoring plays, from the one place the colour is defined. */
     --pf-scored:var(--scored);
     background:var(--pf-bg); color:var(--pf-text); padding-bottom:60px;
@@ -15379,8 +15585,8 @@ MATCHUPS_HTML = BASE_STYLE + make_header("matchups") + """
 RANKINGS_HTML = BASE_STYLE + make_header("rankings") + VOTE_MODAL_HTML + """
 <style>
   .rk-page{
-    --rk-bg:#0d0f0d; --rk-surface:#151815; --rk-surface2:#1c201c;
-    --rk-line:rgba(255,255,255,0.08); --rk-text:#e8e6df; --rk-muted:#8b9089;
+    --rk-bg:var(--paper); --rk-surface:var(--paper-raised); --rk-surface2:var(--paper-sunken);
+    --rk-line:var(--line); --rk-text:var(--ink); --rk-muted:var(--ink-muted);
     --rk-good:#1fae5a; --rk-good-wash:rgba(31,174,90,0.16);
     --rk-warn:#d1a521; --rk-warn-wash:rgba(209,165,33,0.16);
     --rk-bad:#e2534a; --rk-bad-wash:rgba(226,83,74,0.16);
@@ -16285,42 +16491,44 @@ COMING_SOON_HTML = BASE_STYLE + make_header("mock") + """
 </div></main>
 """
 
-AUTH_STYLE = """
+AUTH_STYLE = THEME_BOOT + """
 <meta name="viewport" content="width=device-width, initial-scale=1">
 """ + ICON_LINKS + """
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  html{ -webkit-text-size-adjust:100%; text-size-adjust:100%; }  body{ margin:0; background:#0d0f0d; color:#e8e6df; font-family:"Source Sans 3",system-ui,sans-serif; min-height:100vh; }
+  html{ -webkit-text-size-adjust:100%; text-size-adjust:100%; }
+""" + THEME_TOKENS + """
+  body{ margin:0; background:var(--paper); color:var(--ink); font-family:"Source Sans 3",system-ui,sans-serif; min-height:100vh; }
   .auth-top{ display:flex; justify-content:flex-end; padding:24px 32px; }
-  .auth-logo{ font-family:"Big Shoulders Display"; font-weight:800; font-size:18px; text-transform:uppercase; color:#e8e6df; text-decoration:none; }
+  .auth-logo{ font-family:"Big Shoulders Display"; font-weight:800; font-size:18px; text-transform:uppercase; color:var(--ink); text-decoration:none; }
   .auth-wrap{ max-width:400px; margin:20px auto 80px; padding:0 24px; }
   .auth-wrap h1{ font-family:"Big Shoulders Display"; font-size:32px; font-weight:800; text-transform:uppercase; margin:0; }
-  .auth-sub{ color:#8b9089; font-size:14px; margin-top:8px; }
+  .auth-sub{ color:var(--ink-muted); font-size:14px; margin-top:8px; }
   .auth-sub a{ color:#b97a1f; text-decoration:none; font-weight:600; }
   .auth-field{ margin-top:18px; }
-  .auth-field label{ font-size:12.5px; font-weight:600; color:#8b9089; display:block; margin-bottom:6px; }
+  .auth-field label{ font-size:12.5px; font-weight:600; color:var(--ink-muted); display:block; margin-bottom:6px; }
   .auth-field input[type=text], .auth-field input[type=email], .auth-field input[type=password]{
-    width:100%; background:#151815; border:1px solid rgba(255,255,255,0.12); color:#e8e6df;
+    width:100%; background:var(--paper-raised); border:1px solid var(--line-strong); color:var(--ink);
     border-radius:8px; padding:12px 14px; font-size:15px; font-family:inherit; box-sizing:border-box;
   }
   .pw-row{ position:relative; }
-  .pw-toggle{ position:absolute; right:12px; top:50%; transform:translateY(-50%); background:none; border:none; color:#8b9089; font-size:12px; font-weight:600; cursor:pointer; }
+  .pw-toggle{ position:absolute; right:12px; top:50%; transform:translateY(-50%); background:none; border:none; color:var(--ink-muted); font-size:12px; font-weight:600; cursor:pointer; }
   .username-row{ display:flex; gap:8px; }
   .username-row input{ flex:1; }
-  .gen-btn{ background:#1c201c; border:1px solid rgba(255,255,255,0.12); color:#e8e6df; border-radius:8px; padding:0 16px; font-weight:600; cursor:pointer; font-size:13px; }
+  .gen-btn{ background:var(--paper-sunken); border:1px solid var(--line-strong); color:var(--ink); border-radius:8px; padding:0 16px; font-weight:600; cursor:pointer; font-size:13px; }
   .username-status{ font-size:12px; margin-top:6px; min-height:16px; }
   .username-status.ok{ color:#1fae5a; }
   .username-status.bad{ color:#e2534a; }
-  .username-status.checking{ color:#8b9089; }
-  .checkbox-row{ display:flex; align-items:flex-start; gap:8px; margin-top:16px; font-size:13px; color:#8b9089; }
+  .username-status.checking{ color:var(--ink-muted); }
+  .checkbox-row{ display:flex; align-items:flex-start; gap:8px; margin-top:16px; font-size:13px; color:var(--ink-muted); }
   .checkbox-row input{ margin-top:2px; }
   .checkbox-row a{ color:#b97a1f; text-decoration:none; }
   .join-btn{ width:100%; margin-top:22px; padding:13px; border-radius:8px; border:none; background:#2fae4e; color:#fff; font-weight:800; font-size:15px; cursor:pointer; }
   .join-btn:disabled{ background:#264d31; color:#7a9a83; cursor:not-allowed; }
-  .divider{ display:flex; align-items:center; gap:12px; margin:22px 0; color:#8b9089; font-size:12.5px; }
-  .divider::before, .divider::after{ content:''; flex:1; height:1px; background:rgba(255,255,255,0.12); }
+  .divider{ display:flex; align-items:center; gap:12px; margin:22px 0; color:var(--ink-muted); font-size:12.5px; }
+  .divider::before, .divider::after{ content:''; flex:1; height:1px; background:var(--line-strong); }
   .oauth-btn{ width:100%; display:flex; align-items:center; justify-content:center; gap:10px; padding:12px; border-radius:8px; font-weight:700; font-size:14px; text-decoration:none; margin-top:10px; box-sizing:border-box; }
   .oauth-google{ background:#fff; color:#1f1f1f; border:1px solid rgba(0,0,0,0.1); }
   .auth-error{ background:rgba(226,83,74,0.16); color:#e2534a; padding:10px 14px; border-radius:8px; font-size:13.5px; margin-top:16px; }
@@ -16438,6 +16646,39 @@ SETTINGS_HTML = BASE_STYLE + make_header("") + """
               text-transform:uppercase; margin:18px 0 2px; }
   .set-sub{ font-size:12px; color:var(--ink-muted); margin-bottom:14px; }
   .set-group{ margin-top:22px; }
+
+  /* Theme picker. A list of rows rather than a grid of swatches: the
+     name is what you read, the colour only confirms it -- and a row is
+     a bigger tap target than a dot. */
+  .thm-list{ display:flex; flex-direction:column; margin-top:6px;
+             border:1px solid var(--line); border-radius:12px; overflow:hidden; }
+  .thm-row{ display:flex; align-items:center; gap:12px; width:100%;
+            background:none; border:none; border-top:1px solid var(--line);
+            padding:13px 14px; cursor:pointer; text-align:left;
+            font-family:inherit; font-size:15px; font-weight:700;
+            color:var(--ink); -webkit-tap-highlight-color:transparent; }
+  .thm-row:first-child{ border-top:none; }
+  .thm-row:hover{ background:var(--paper-sunken); }
+  .thm-row:focus-visible{ outline:2px solid var(--accent-ink); outline-offset:-2px; }
+  .thm-name{ flex:1; min-width:0; }
+  .thm-row.on .thm-name{ color:var(--accent-ink); }
+  /* The tick holds its space whether or not it is shown, so choosing a
+     different row does not shift the colour dots sideways. */
+  .thm-tick{ flex:none; width:18px; text-align:center; font-size:15px;
+             color:var(--accent-ink); visibility:hidden; }
+  .thm-row.on .thm-tick{ visibility:visible; }
+  .thm-dot{ flex:none; width:19px; height:19px; border-radius:50%;
+            border:1px solid var(--line-strong); }
+  /* Each swatch is painted by the same preset that paints the site, so
+     a dot cannot end up showing a colour the theme does not use. */
+  .thm-dot[data-accent="amber"]{  background:#b97a1f; }
+  .thm-dot[data-accent="blue"]{   background:#2f74d0; }
+  .thm-dot[data-accent="red"]{    background:#cf3b34; }
+  .thm-dot[data-accent="green"]{  background:#1f9d57; }
+  .thm-dot[data-accent="yellow"]{ background:#c9a21a; }
+  .thm-dot[data-accent="purple"]{ background:#7c5cd6; }
+  .thm-dot[data-accent="orange"]{ background:#d2711f; }
+  .thm-dot[data-accent="pink"]{   background:#d63b76; }
   .set-group h3{ font-family:"Big Shoulders Display"; font-size:15px; font-weight:800;
                  text-transform:uppercase; letter-spacing:0.04em; color:var(--ink-muted);
                  margin:0 0 10px; }
@@ -16635,6 +16876,40 @@ document.addEventListener('change', function(e){
         </div>
       </div>
 
+      <!-- Theme saves itself the moment you tap, so it deliberately
+           takes no part in the form it sits inside: every control here
+           is type="button" (a bare <button> in a form submits it) and
+           none carries a name, so none of it rides along with Save. -->
+      <div class="set-group">
+        <h3>Theme</h3>
+        <div class="thm-list" id="thmThemes">
+          {% for key, label in themes %}
+          <button type="button" class="thm-row {{ 'on' if current_user.pref_theme == key }}"
+                  data-theme-key="{{ key }}" aria-pressed="{{ 'true' if current_user.pref_theme == key else 'false' }}">
+            <span class="thm-name">{{ label }}</span>
+            <span class="thm-tick" aria-hidden="true">&#10003;</span>
+          </button>
+          {% endfor %}
+        </div>
+        <div class="hint">Applies as you tap, on every page and on this device&rsquo;s
+          browser chrome. Signed in, it follows you to your phone.</div>
+
+        <h3 style="margin-top:20px;">Primary color</h3>
+        <div class="thm-list" id="thmAccents">
+          {% for key, label in accents %}
+          <button type="button" class="thm-row {{ 'on' if current_user.pref_accent == key }}"
+                  data-accent-key="{{ key }}" aria-pressed="{{ 'true' if current_user.pref_accent == key else 'false' }}">
+            <span class="thm-name">{{ label }}</span>
+            <span class="thm-tick" aria-hidden="true">&#10003;</span>
+            <span class="thm-dot" data-accent="{{ key }}"></span>
+          </button>
+          {% endfor %}
+        </div>
+        <div class="hint">Every link, button and highlight on the site. The blue used
+          for scoring plays stays blue &mdash; it marks points on the board, so it has
+          to mean something other than &ldquo;this is a link&rdquo;.</div>
+      </div>
+
       <div class="set-group">
         <h3>Scoring</h3>
         <div class="set-field" style="margin-top:0;">
@@ -16752,6 +17027,51 @@ document.addEventListener('change', function(e){
     </div>
   </div>
 </div></main>
+<script>
+(function(){
+  var root = document.documentElement;
+
+  // Apply first, save second. The change is the thing the reader asked
+  // for, so it must not wait on a round trip -- and if the save fails,
+  // the page is still the colour they picked and localStorage still
+  // holds it for the next visit.
+  function persist(){
+    var body = {theme: root.getAttribute('data-theme'),
+                accent: root.getAttribute('data-accent')};
+    try {
+      localStorage.setItem('ffc-theme', body.theme);
+      localStorage.setItem('ffc-accent', body.accent);
+    } catch (e) {}
+    fetch('/api/theme', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(body)
+    }).catch(function(){ /* applied locally either way */ });
+  }
+
+  function wire(listId, attr, storeKey){
+    var list = document.getElementById(listId);
+    if (!list) return;
+    list.addEventListener('click', function(e){
+      var row = e.target.closest('.thm-row');
+      if (!row || !list.contains(row)) return;
+      var value = row.getAttribute(attr);
+      if (!value) return;
+      root.setAttribute(storeKey, value);
+      Array.prototype.forEach.call(list.querySelectorAll('.thm-row'), function(r){
+        var on = r === row;
+        r.classList.toggle('on', on);
+        r.setAttribute('aria-pressed', on ? 'true' : 'false');
+      });
+      if (window.ffcPaintChrome) window.ffcPaintChrome();
+      persist();
+    });
+  }
+
+  wire('thmThemes', 'data-theme-key', 'data-theme');
+  wire('thmAccents', 'data-accent-key', 'data-accent');
+})();
+</script>
 """
 
 
