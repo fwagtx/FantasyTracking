@@ -148,6 +148,36 @@ def _no_stale_pages(response):
     return response
 
 
+# How long Cloudflare's edge may hand the same poll answer to everyone
+# who asks. Five seconds is the poll cadence itself, so no viewer sees
+# anything older than they would have without the edge; what changes is
+# that ten thousand viewers cost the origin one request per game per
+# five seconds instead of ten thousand.
+POLL_EDGE_TTL_S = 5
+
+
+def _poll_response(payload, public):
+    """JSON for a live poll, in the shape the edge and the browser need.
+
+    `public` means the answer is the same for everyone -- a game's score
+    is, a signed-in reader's own scoring format is not -- and only then
+    may the edge share it. A private answer is never stored anywhere.
+
+    Either way the body carries a weak ETag and honours If-None-Match,
+    so a revalidation for an unchanged score is a 304 with no body:
+    that is what the edge sends when its copy expires, and it costs the
+    origin a hash rather than a transfer. Weak because the gzip hook
+    downstream changes the bytes but not the meaning."""
+    resp = jsonify(payload)
+    resp.set_etag(hashlib.sha1(resp.get_data()).hexdigest()[:20], weak=True)
+    if public:
+        resp.headers["Cache-Control"] = (f"public, max-age=0, s-maxage={POLL_EDGE_TTL_S}, "
+                                         f"stale-while-revalidate={POLL_EDGE_TTL_S}")
+    else:
+        resp.headers["Cache-Control"] = "private, no-store"
+    return resp.make_conditional(request)
+
+
 @app.after_request
 def _compress_response(response):
     """Gzips every text/HTML/JSON response for a client that says it can
@@ -507,6 +537,25 @@ def init_db():
             """)
             cur.execute("CREATE INDEX IF NOT EXISTS idx_team_state_changed "
                         "ON player_team_state (changed_at DESC);")
+            # FantasyCalc publishes only today's value, so a rise or a
+            # fall exists only if someone wrote yesterday's down. One row
+            # per player per format per mode per day; the Rankings page
+            # reads the row from a week back and reports the difference.
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS player_value_history (
+                    sleeper_id    TEXT NOT NULL,
+                    num_qbs       INTEGER NOT NULL,
+                    dynasty       BOOLEAN NOT NULL,
+                    num_teams     INTEGER NOT NULL DEFAULT 12,
+                    day           DATE NOT NULL,
+                    value         INTEGER,
+                    overall_rank  INTEGER,
+                    position_rank INTEGER,
+                    PRIMARY KEY (sleeper_id, num_qbs, dynasty, num_teams, day)
+                );
+            """)
+            cur.execute("CREATE INDEX IF NOT EXISTS idx_value_history_day "
+                        "ON player_value_history (num_qbs, dynasty, num_teams, day);")
             # Sportsbook lines for this week's props, from The Odds API
             # when a key is configured. Kept in the database so a restart
             # never re-spends the request quota re-fetching what was
@@ -628,6 +677,142 @@ oauth.register(
     server_metadata_url="https://accounts.google.com/.well-known/openid-configuration",
     client_kwargs={"scope": "openid email profile"},
 )
+
+
+# ---------------- Value history: what moved, and by how much ----------------
+#
+# FantasyCalc's values are re-read every hour, so the Rankings page is
+# never more than an hour behind a move. What it could not do was SAY
+# that a move had happened: the API publishes today's number and
+# nothing before it. So the site keeps its own record -- every combo
+# the page offers, every player, once a day -- and the page reads the
+# row from a week ago and shows the difference in places and in value.
+# The 30-day trend FantasyCalc does publish is shown on the days before
+# that record is a week deep, and beside it after.
+VALUE_HISTORY_COMBOS = [(1, True), (2, True), (1, False), (2, False)]
+VALUE_HISTORY_TEAMS = 12          # what the Rankings page prices at
+VALUE_MOVE_DAYS = 7
+_value_snapshot_lock = threading.Lock()
+_value_snapshot_day = {"day": None}
+_value_history_cache = {}
+
+
+def _today():
+    """date.today(), as a function so a test can hold the calendar still."""
+    return date.today()
+
+
+def record_value_snapshots(today=None):
+    """Write today's value and ranks for every player in every combo.
+
+    A combo whose fetch came back empty -- FantasyCalc down, or a bad
+    hour -- writes nothing rather than a day of zeros that would read
+    as everyone collapsing. Re-running on the same day overwrites."""
+    if not DATABASE_URL:
+        return 0
+    today = today or _today()
+    written = 0
+    conn = get_db()
+    try:
+        with conn.cursor() as cur:
+            for num_qbs, dynasty in VALUE_HISTORY_COMBOS:
+                fc = get_fantasycalc_values(num_qbs, dynasty, VALUE_HISTORY_TEAMS)
+                rows = [(sid, num_qbs, dynasty, VALUE_HISTORY_TEAMS, today,
+                         int(v.get("value") or 0), v.get("overall_rank"), v.get("position_rank"))
+                        for sid, v in (fc.get("players") or {}).items()]
+                if not rows:
+                    continue
+                # Eight columns, eight values.
+                psycopg2.extras.execute_values(
+                    cur,
+                    """INSERT INTO player_value_history
+                           (sleeper_id, num_qbs, dynasty, num_teams, day,
+                            value, overall_rank, position_rank)
+                       VALUES %s
+                       ON CONFLICT (sleeper_id, num_qbs, dynasty, num_teams, day) DO UPDATE SET
+                           value = EXCLUDED.value, overall_rank = EXCLUDED.overall_rank,
+                           position_rank = EXCLUDED.position_rank""",
+                    rows)
+                written += len(rows)
+        conn.commit()
+    finally:
+        conn.close()
+    _value_history_cache.clear()
+    return written
+
+
+def _record_value_snapshots_background(today=None):
+    """Once a day per process, off the request path. Both the warm ping
+    and a visit to Rankings call this, so the record grows whether or
+    not the cron is running."""
+    if not DATABASE_URL:
+        return
+    today = today or _today()
+    with _value_snapshot_lock:
+        if _value_snapshot_day["day"] == today:
+            return
+        _value_snapshot_day["day"] = today
+
+    def _run():
+        try:
+            with _BACKGROUND_SYNC_SLOTS:
+                record_value_snapshots(today=today)
+        except Exception:
+            # Let the next call try again today.
+            with _value_snapshot_lock:
+                if _value_snapshot_day["day"] == today:
+                    _value_snapshot_day["day"] = None
+
+    threading.Thread(target=_run, daemon=True).start()
+
+
+def get_value_movement(num_qbs, dynasty, num_teams=VALUE_HISTORY_TEAMS,
+                       days=VALUE_MOVE_DAYS, cache=_value_history_cache):
+    """{since, days, rows: {sleeper_id: {value, overall_rank, position_rank}}}
+    for the snapshot `days` ago -- the most recent one at least that old,
+    or the oldest we have while the record is younger than that, so a
+    week-old feature has a three-day answer rather than none. `days` in
+    the result is the real age, so the page can say which."""
+    key = (num_qbs, dynasty, num_teams, days)
+    now = time.time()
+    entry = cache.get(key)
+    if entry and now - entry["time"] < 600:
+        return entry["data"]
+    out = {"since": None, "days": None, "rows": {}}
+    if DATABASE_URL:
+        try:
+            today = _today()
+            conn = get_db()
+            try:
+                with conn.cursor() as cur:
+                    cur.execute(
+                        """SELECT MAX(day) AS day FROM player_value_history
+                           WHERE num_qbs = %s AND dynasty = %s AND num_teams = %s AND day <= %s""",
+                        (num_qbs, dynasty, num_teams, today - timedelta(days=days)))
+                    day = (cur.fetchone() or {}).get("day")
+                    if not day:
+                        cur.execute(
+                            """SELECT MIN(day) AS day FROM player_value_history
+                               WHERE num_qbs = %s AND dynasty = %s AND num_teams = %s AND day < %s""",
+                            (num_qbs, dynasty, num_teams, today))
+                        day = (cur.fetchone() or {}).get("day")
+                    if day:
+                        cur.execute(
+                            """SELECT sleeper_id, value, overall_rank, position_rank
+                               FROM player_value_history
+                               WHERE num_qbs = %s AND dynasty = %s AND num_teams = %s AND day = %s""",
+                            (num_qbs, dynasty, num_teams, day))
+                        out = {"since": day, "days": (today - day).days,
+                               "rows": {r["sleeper_id"]: {"value": r["value"],
+                                                          "overall_rank": r["overall_rank"],
+                                                          "position_rank": r["position_rank"]}
+                                        for r in cur.fetchall()}}
+            finally:
+                conn.close()
+        except Exception:
+            out = {"since": None, "days": None, "rows": {}}
+    cache[key] = {"data": out, "time": now}
+    return out
 
 
 def pick_offense_trio(num_qbs=1, is_dynasty=True):
@@ -10464,8 +10649,12 @@ def api_performers():
         info = get_current_week_info()
         season = request.args.get("season", default=info["season"], type=int)
         week = request.args.get("week", default=info["week"], type=int)
-        return jsonify({"performers": get_week_performers(season, week),
-                        "season": season, "week": week})
+        # The board is scored in the reader's own format, so a signed-in
+        # reader's answer is theirs alone; an anonymous one is the site
+        # default and the same for every anonymous viewer.
+        return _poll_response({"performers": get_week_performers(season, week),
+                               "season": season, "week": week},
+                              public=not current_user.is_authenticated)
     except Exception as e:
         # Same contract as /api/game-live: a degraded board is fine, a 500
         # that kills the page's poll loop is not.
@@ -10485,14 +10674,17 @@ def api_scoreboard():
             data = espn_day_scoreboard(date_str)
             games = [c for c in (espn_event_to_card(ev) for ev in data.get("events", [])) if c]
             _annotate_my_players(games, username)
-            return jsonify({"games": games})
+            return _poll_response({"games": games}, public=not username)
         info = get_current_week_info()
         season = request.args.get("season", default=info["season"], type=int)
         week = request.args.get("week", default=info["week"], type=int)
         season_type = request.args.get("seasontype", default=info["season_type"], type=int)
         games, _ = _week_games(season, week, season_type)
         _annotate_my_players(games, username)
-        return jsonify({"games": games, "season": season, "week": week, "season_type": season_type})
+        # With a username the cards carry that person's players; without
+        # one they are the same for everyone.
+        return _poll_response({"games": games, "season": season, "week": week,
+                               "season_type": season_type}, public=not username)
     except Exception as e:
         return jsonify({"games": [], "error": str(e)})
 
@@ -10561,7 +10753,8 @@ def api_game_live():
         summary = espn_game_summary(event_id)
         detail = extract_game_detail(summary)
         gw = summary_season_week(summary, get_current_week_info())
-        return jsonify({
+        # Nothing here is about the viewer: a score is a score.
+        return _poll_response({
             "season": gw["season"], "week": gw["week"],
             "status": detail["status"], "period": detail["period"], "clock": detail["clock"],
             "status_detail": detail["status_detail"],
@@ -10577,7 +10770,7 @@ def api_game_live():
             "box": attach_box_photos(extract_box_score(summary)),
             "totals": extract_team_totals(summary),
             "win_prob": detail["win_prob"],
-        })
+        }, public=True)
     except Exception as e:
         return jsonify({"status": "final", "error": str(e)})
 
@@ -10787,6 +10980,12 @@ def rankings():
         stats_season = default_stats_season(by_season)
     season_stats = by_season.get(stats_season) or {}
 
+    # Where everyone stood a week ago, in THIS format and mode -- a
+    # superflex rise is measured against superflex, redraft against
+    # redraft. And make sure today gets written down for next week.
+    movement = get_value_movement(num_qbs, is_dynasty)
+    _record_value_snapshots_background()
+
     prelim = []
     for sid, v in fc_players.items():
         p = all_players.get(sid)
@@ -10812,6 +11011,7 @@ def rankings():
     rows = []
     for r in prelim:
         p, v, stat_line = r["p"], r["v"], r["stat_line"]
+        old = movement["rows"].get(r["sid"])
         games = stat_line.get("games", 0)
         fpts = stat_line.get("fpts", 0.0)
         overall_rank = r["overall_rank"]
@@ -10840,6 +11040,15 @@ def rankings():
             "position_rank": v.get("position_rank") or 999,
             "value": v.get("value", 0), "overall_rank": overall_rank,
             "tier": tier,
+            # Positive is up: places climbed, value gained. None, not
+            # zero, for a player the record has not seen yet.
+            "rank_delta": (int(old["overall_rank"]) - overall_rank)
+                          if old and old.get("overall_rank") else None,
+            "pos_rank_delta": (int(old["position_rank"]) - (v.get("position_rank") or 999))
+                              if old and old.get("position_rank") and v.get("position_rank") else None,
+            "value_delta": (int(v.get("value") or 0) - int(old["value"]))
+                           if old and old.get("value") is not None else None,
+            "trend_30day": v.get("trend_30day"),
         })
     rows.sort(key=lambda r: r["overall_rank"])
     # 300 instead of 100 so filtering down to a single position (e.g. TE,
@@ -10847,6 +11056,7 @@ def rankings():
     return render_template_string(RANKINGS_HTML, rows=rows[:300], fmt=fmt, mode=mode,
                                   pos_filter=pos_filter, view=view,
                                   stats_season=stats_season, stats_seasons=stats_seasons,
+                                  since_days=movement["days"],
                                   scoring_name=scoring_label(current_scoring()))
 
 
@@ -12009,6 +12219,9 @@ def api_warm():
             # ODDS_REFRESH_HOURS with one.
             refresh_book_lines(info["season"], info["week"])
             get_streak_trends(info["season"], info["week"])
+            # Today's values, written down so next week's Rankings can
+            # say who rose and who fell. Once a day; the rest are no-ops.
+            _record_value_snapshots_background()
         except Exception:
             pass
 
@@ -18736,6 +18949,14 @@ RANKINGS_HTML = BASE_STYLE + make_header("rankings") + VOTE_MODAL_HTML + """
   .rk-stat.warn{ background:var(--rk-warn-wash); color:var(--rk-warn); }
   .rk-stat.bad{ background:var(--rk-bad-wash); color:var(--rk-bad); }
   .rk-stat.flat{ color:var(--rk-muted); background:transparent; }
+  /* Movement: the arrow and the places moved lead, the value change
+     follows smaller. One cell, so the eye reads "up three" first. */
+  .rk-move{ white-space:nowrap; }
+  .rk-move b{ font-weight:700; }
+  .rk-move small{ font-size:10.5px; opacity:0.85; margin-left:4px; }
+  .rk-since{ font-size:12px; color:var(--rk-muted); text-transform:none; font-family:'Source Sans 3'; }
+  .rk-card-move{ margin-left:5px; font-weight:700; }
+  .rk-card-move.up{ color:var(--rk-good); } .rk-card-move.down{ color:var(--rk-bad); }
 
   .rk-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(130px,1fr)); gap:10px; margin-top:14px; }
   .rk-card{ background:var(--rk-surface); border-radius:10px; overflow:hidden; position:relative; cursor:pointer; border:1px solid var(--rk-line); }
@@ -18773,7 +18994,7 @@ RANKINGS_HTML = BASE_STYLE + make_header("rankings") + VOTE_MODAL_HTML + """
 <div class="rk-page">
 <div class="wrap">
   <div class="rk-toolbar">
-    <span class="rk-title">Rankings <span style="font-size:12px; color:var(--rk-muted); text-transform:none; font-family:'Source Sans 3';">&middot; GP/FPTS from {{ stats_season }} &middot; {{ scoring_name }}</span></span>
+    <span class="rk-title">Rankings <span style="font-size:12px; color:var(--rk-muted); text-transform:none; font-family:'Source Sans 3';">&middot; GP/FPTS from {{ stats_season }} &middot; {{ scoring_name }}</span> <span class="rk-since" id="rkSince"></span></span>
     <!-- Mode and format were two pairs of pills sitting beside a
          dropdown that did the same job, which is four bubbles and a
          select competing for the same glance. All three are selects
@@ -18916,9 +19137,14 @@ const RK_DATA = [
    is_rookie:{{ r.is_rookie|tojson }},
    team:{{ r.team|tojson }}, age:{{ r.age|tojson }}, games:{{ r.games|tojson }}, fpts:{{ r.fpts|tojson }},
    fpts_per_game:{{ r.fpts_per_game|tojson }}, snap_pct:{{ r.snap_pct|tojson }}, position_rank:{{ r.position_rank|tojson }}, value:{{ r.value|tojson }},
-   overall_rank:{{ r.overall_rank|tojson }}, tier:{{ r.tier|tojson }}},
+   overall_rank:{{ r.overall_rank|tojson }}, tier:{{ r.tier|tojson }},
+   rank_delta:{{ r.get('rank_delta')|tojson }}, pos_rank_delta:{{ r.get('pos_rank_delta')|tojson }},
+   value_delta:{{ r.get('value_delta')|tojson }}, trend_30day:{{ r.get('trend_30day')|tojson }}},
   {% endfor %}
 ];
+// How old the comparison is, in days -- null while the record has
+// nothing yet, in which case the 30-day trend stands in.
+const RK_SINCE_DAYS = {{ (since_days if since_days is defined else none)|tojson }};
 const RK_FMT = {{ fmt|tojson }};
 const RK_MODE = {{ mode|tojson }};
 const RK_STATS_SEASON = {{ stats_season|tojson }};
@@ -18993,12 +19219,12 @@ function getFiltered() {
 }
 
 const OVERALL_COLS = [
-  {key:'overall_rank', label:'#'}, {key:'name', label:'Player'}, {key:'position', label:'Pos'},
+  {key:'overall_rank', label:'#'}, {key:'rank_delta', label:'Trend'}, {key:'name', label:'Player'}, {key:'position', label:'Pos'},
   {key:'team', label:'TM'}, {key:'snap_pct', label:'Snap%'}, {key:'games', label:'GP'},
   {key:'fpts_per_game', label:'FPTS/G'}, {key:'position_rank', label:'Pos Rank'}, {key:'overall_rank', label:'Ovr Rank'},
 ];
 const POSITION_COLS = [
-  {key:'overall_rank', label:'#'}, {key:'name', label:'Player'}, {key:'snap_pct', label:'Snap%'},
+  {key:'overall_rank', label:'#'}, {key:'rank_delta', label:'Trend'}, {key:'name', label:'Player'}, {key:'snap_pct', label:'Snap%'},
   {key:'games', label:'GP'}, {key:'fpts', label:'FPTS'}, {key:'fpts_per_game', label:'FPTS/G'},
   {key:'overall_rank', label:'Ovr Rank'},
 ];
@@ -19014,7 +19240,9 @@ function renderHeader() {
     th.innerHTML = c.label + ` <span class="arrow">${arrow}</span>`;
     th.onclick = () => {
       if (state.sortKey === c.key) state.sortDir *= -1;
-      else { state.sortKey = c.key; state.sortDir = 1; }
+      // Trend sorts risers first on the first click; everything else
+      // ascending, as before.
+      else { state.sortKey = c.key; state.sortDir = c.key === 'rank_delta' ? -1 : 1; }
       render();
     };
     headerRow.appendChild(th);
@@ -19024,6 +19252,31 @@ function renderHeader() {
 function statCell(val, cls, suffix) {
   if (val === null || val === undefined) return '<span class="rk-stat flat">&mdash;</span>';
   return `<span class="rk-stat ${cls}">${val}${suffix || ''}</span>`;
+}
+
+function signed(v) { return (v > 0 ? '+' : '') + v; }
+
+// Up three places and +120 in value, from the site's own record; or,
+// while that record is too young to say, FantasyCalc's 30-day value
+// trend on its own.
+function trendCell(r) {
+  if (r.rank_delta !== null && r.rank_delta !== undefined) {
+    const d = r.rank_delta, v = r.value_delta;
+    const cls = d > 0 ? 'good' : (d < 0 ? 'bad' : 'flat');
+    const arrow = d > 0 ? '&#9650;' : (d < 0 ? '&#9660;' : '&ndash;');
+    return `<span class="rk-stat rk-move ${cls}"><b>${arrow}${d ? Math.abs(d) : ''}</b>` +
+           (v !== null && v !== undefined && v !== 0 ? `<small>${signed(v)}</small>` : '') + `</span>`;
+  }
+  const t = r.trend_30day;
+  if (t === null || t === undefined) return statCell(null);
+  const cls = t > 0 ? 'good' : (t < 0 ? 'bad' : 'flat');
+  return `<span class="rk-stat rk-move ${cls}"><b>${signed(t)}</b><small>30d</small></span>`;
+}
+
+function moveBadge(r) {
+  const d = r.rank_delta;
+  if (d === null || d === undefined || d === 0) return '';
+  return `<span class="rk-card-move ${d > 0 ? 'up' : 'down'}">${d > 0 ? '&#9650;' : '&#9660;'}${Math.abs(d)}</span>`;
 }
 
 function buildRowEl(r, cols, valArrays) {
@@ -19052,6 +19305,8 @@ function buildRowEl(r, cols, valArrays) {
       cells += `<td class="col-position_rank">${statCell(r.position_rank, percentileClass(posRankVals, r.position_rank, false))}</td>`;
     } else if (c.key === 'overall_rank') {
       cells += `<td class="col-overall_rank">${statCell(r.overall_rank, 'flat')}</td>`;
+    } else if (c.key === 'rank_delta') {
+      cells += `<td class="col-rank_delta">${trendCell(r)}</td>`;
     }
   });
   tr.innerHTML = cells;
@@ -19117,7 +19372,7 @@ function renderGrid(rows) {
     const color = posColors[r.position] || '#888';
     card.innerHTML = `
       <img class="rk-card-photo" src="${r.photo}" style="border-color:${color};" onerror="this.style.visibility='hidden'">
-      <div class="rk-card-rank">#${r.overall_rank}</div>
+      <div class="rk-card-rank">#${r.overall_rank}${moveBadge(r)}</div>
       <div class="rk-card-stats">
         ${statCell(r.value, percentileClass(valueVals, r.value, true))}
         ${statCell(r.fpts_per_game, percentileClass(fpgVals, r.fpts_per_game, true))}
@@ -19142,6 +19397,10 @@ function updateUrl() {
 
 function render() {
   const rows = getFiltered();
+  const since = document.getElementById('rkSince');
+  if (since) since.textContent = RK_SINCE_DAYS
+    ? '\u00b7 Trend vs ' + RK_SINCE_DAYS + ' day' + (RK_SINCE_DAYS === 1 ? '' : 's') + ' ago'
+    : '\u00b7 Trend: 30-day value change';
   document.getElementById('rkEmpty').style.display = rows.length ? 'none' : 'block';
   renderHeader();
   if (state.view === 'grid') {
