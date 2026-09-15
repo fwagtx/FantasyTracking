@@ -507,6 +507,25 @@ def init_db():
             """)
             cur.execute("CREATE INDEX IF NOT EXISTS idx_team_state_changed "
                         "ON player_team_state (changed_at DESC);")
+            # Sportsbook lines for this week's props, from The Odds API
+            # when a key is configured. Kept in the database so a restart
+            # never re-spends the request quota re-fetching what was
+            # already fetched, and so the warm ping can measure "how old
+            # is what we have" against a real timestamp.
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS prop_lines (
+                    season      INTEGER NOT NULL,
+                    week        INTEGER NOT NULL,
+                    sleeper_id  TEXT NOT NULL,
+                    prop        TEXT NOT NULL,
+                    line        REAL NOT NULL,
+                    over_price  INTEGER,
+                    under_price INTEGER,
+                    book        TEXT NOT NULL,
+                    fetched_at  TIMESTAMP DEFAULT NOW(),
+                    PRIMARY KEY (season, week, sleeper_id, prop)
+                );
+            """)
         conn.commit()
     finally:
         conn.close()
@@ -8756,6 +8775,330 @@ def streak_seasons(season):
     return [int(season) - n for n in range(STREAK_SEASONS_BACK, -1, -1)]
 
 
+# Who counts as a starter, by Sleeper's own depth chart. Sleeper slots
+# receivers and defenders by alignment (LWR/RWR/SWR, LDE/RDE/DT, LCB/RCB/
+# SS/FS), so order 1 within a slot IS the starter and there are three
+# starting receivers at order 1. The wider allowances cover teams that
+# list a flat WR1..WR6 instead, and committee backfields, where an RB2
+# gets real work. Recent snap share is the second signal: a depth chart
+# Sleeper has not updated yet, or a player it has not slotted at all, is
+# still a starter if he is on the field for half his team's snaps.
+STREAK_DEPTH = {"QB": 1, "RB": 2, "WR": 3, "TE": 1, "K": 1, "DL": 1, "LB": 1, "DB": 1}
+STREAK_STARTER_SNAP = 0.5
+STREAK_STARTER_GAMES = 3
+
+
+def _snap_share(stats):
+    """This game's share of the team's snaps, offence or defence."""
+    stats = stats or {}
+    played = stats.get("off_snp") or stats.get("def_snp")
+    team = stats.get("tm_off_snp") or stats.get("tm_def_snp")
+    if isinstance(played, (int, float)) and isinstance(team, (int, float)) and team > 0:
+        return min(1.0, played / team)
+    return None
+
+
+def streak_is_starter(p, log=None):
+    """Depth chart first, snap share second. Neither alone is enough:
+    the chart can lag a change by a day, and snap share alone would
+    list a backup for the week the starter left hurt in the first
+    quarter."""
+    if not isinstance(p, dict) or not p.get("team"):
+        return False
+    if (p.get("status") or "Active") != "Active":
+        return False
+    group = streak_position_group(p.get("position"))
+    limit = STREAK_DEPTH.get(group)
+    if not limit:
+        return False
+    order = _safe_int(p.get("depth_chart_order"), 0)
+    if 1 <= order <= limit:
+        return True
+    shares = [sh for sh in (_snap_share(st) for _, _, st in (log or [])[-STREAK_STARTER_GAMES:])
+              if sh is not None]
+    return bool(shares) and sum(shares) / len(shares) >= STREAK_STARTER_SNAP
+
+
+# ---------------- Book lines: The Odds API ----------------
+#
+# Sportsbooks do not publish their prop lines for reuse, and reading them
+# off FanDuel's or DraftKings' own pages breaks those sites' terms. The
+# Odds API licenses exactly those books' lines for use in an app like
+# this one, so that is the source: set ODDS_API_KEY in Render and the
+# book's line replaces the site's shaped one for every prop it carries,
+# FanDuel first, DraftKings where FanDuel has none. No key, and nothing
+# here runs; the site's own line stands.
+#
+# Quota: every event fetch costs one credit per market asked for, so a
+# full refresh is roughly 20 markets x the games left this week. Only
+# the warm ping refreshes, never a page view, and never more often than
+# ODDS_REFRESH_HOURS -- so a burst of visitors cannot spend the quota.
+ODDS_API_BASE = "https://api.the-odds-api.com/v4"
+ODDS_SPORT = "americanfootball_nfl"
+ODDS_BOOKS = ("fanduel", "draftkings")
+ODDS_BOOK_LABELS = {"fanduel": "FanDuel", "draftkings": "DraftKings", STREAK_LINE_SOURCE: "Site line"}
+ODDS_REFRESH_S = max(1, _safe_int(os.environ.get("ODDS_REFRESH_HOURS"), 12)) * 3600
+ODDS_MARKETS = {
+    "pass_yd": "player_pass_yds", "pass_td": "player_pass_tds",
+    "pass_cmp": "player_pass_completions", "pass_att": "player_pass_attempts",
+    "pass_int": "player_pass_interceptions", "pass_lng": "player_pass_longest_completion",
+    "rush_yd": "player_rush_yds", "rush_att": "player_rush_attempts", "rush_lng": "player_rush_longest",
+    "rec": "player_receptions", "rec_yd": "player_reception_yds", "rec_lng": "player_reception_longest",
+    "rush_rec_yd": "player_rush_reception_yds", "any_td": "player_anytime_td",
+    "kick_pts": "player_kicking_points", "fgm": "player_field_goals", "xpm": "player_pats",
+    "idp_tkl": "player_tackles_assists", "idp_tkl_solo": "player_solo_tackles",
+    "idp_sack": "player_sacks", "idp_int": "player_defensive_interceptions",
+}
+# If the full list is refused (a market key the API no longer knows), a
+# refresh falls back to the ones every book carries rather than to none.
+ODDS_CORE_MARKETS = ("player_pass_yds", "player_pass_tds", "player_rush_yds",
+                     "player_receptions", "player_reception_yds", "player_anytime_td")
+ODDS_MARKET_TO_PROP = {v: k for k, v in ODDS_MARKETS.items()}
+_odds_state = {"last": 0.0, "last_key": None, "error": None, "remaining": None, "used": None,
+               "events": 0, "lines": 0, "unmatched": [], "books": {}, "fell_back": False}
+_book_lines_cache = {}
+_odds_lock = threading.Lock()
+_NAME_SUFFIXES = {"jr", "sr", "ii", "iii", "iv", "v"}
+
+
+def odds_api_key():
+    return (os.environ.get("ODDS_API_KEY") or "").strip()
+
+
+def _odds_norm_name(name):
+    """'Marvin Harrison Jr.' and 'marvin harrison' are one person."""
+    words = re.sub(r"[^a-z0-9 ]", " ", (name or "").lower().replace("'", "")).split()
+    return " ".join(w for w in words if w not in _NAME_SUFFIXES)
+
+
+def _odds_team_abbr(full_name):
+    """'Buffalo Bills' -> 'BUF', tolerating a city rename by matching the
+    nickname when the full name is unknown."""
+    key = (full_name or "").lower().strip()
+    if not key:
+        return None
+    by_name = {v.lower(): k for k, v in TEAM_NAMES.items()}
+    if key in by_name:
+        return by_name[key]
+    nick = key.split()[-1]
+    for name, abbr in by_name.items():
+        if name.split()[-1] == nick:
+            return abbr
+    return None
+
+
+def _odds_player_index(players):
+    by_team, by_name = {}, {}
+    for sid, p in (players or {}).items():
+        if not isinstance(p, dict) or not p.get("team"):
+            continue
+        n = _odds_norm_name(f"{p.get('first_name', '')} {p.get('last_name', '')}")
+        if not n:
+            continue
+        by_team.setdefault((p["team"], n), sid)
+        by_name.setdefault(n, []).append(sid)
+    return by_team, by_name
+
+
+def parse_odds_event(event, index):
+    """{(sleeper_id, prop): {line, over, under, book}} from one event's
+    odds payload, plus the names nothing matched.
+
+    Outcomes come as name=Over/Under with the player in `description`;
+    the anytime-TD market lists the player as the name with no point,
+    which is a 0.5 line by definition. Both shapes are read."""
+    by_team, by_name = index
+    home = _odds_team_abbr(event.get("home_team"))
+    away = _odds_team_abbr(event.get("away_team"))
+    out, unmatched = {}, []
+    for bm in event.get("bookmakers") or []:
+        book = bm.get("key")
+        if book not in ODDS_BOOKS:
+            continue
+        for mk in bm.get("markets") or []:
+            prop = ODDS_MARKET_TO_PROP.get(mk.get("key"))
+            if not prop:
+                continue
+            per_player = {}
+            for oc in mk.get("outcomes") or []:
+                if not isinstance(oc, dict):
+                    continue
+                side = (oc.get("name") or "").strip()
+                who = oc.get("description") or ""
+                if side.lower() not in ("over", "under", "yes", "no"):
+                    who, side = side, "Yes"
+                if not who:
+                    continue
+                entry = per_player.setdefault(who, {})
+                if side.lower() in ("over", "yes"):
+                    point = oc.get("point")
+                    if point is None and prop == "any_td":
+                        point = 0.5
+                    entry["line"] = point
+                    entry["over"] = oc.get("price")
+                else:
+                    entry["under"] = oc.get("price")
+            for who, entry in per_player.items():
+                if not isinstance(entry.get("line"), (int, float)):
+                    continue
+                n = _odds_norm_name(who)
+                sid = by_team.get((home, n)) or by_team.get((away, n))
+                if not sid:
+                    cands = by_name.get(n) or []
+                    sid = cands[0] if len(cands) == 1 else None
+                if not sid:
+                    unmatched.append(who)
+                    continue
+                key = (sid, prop)
+                have = out.get(key)
+                if have and ODDS_BOOKS.index(have["book"]) <= ODDS_BOOKS.index(book):
+                    continue
+                out[key] = {"line": float(entry["line"]), "over": entry.get("over"),
+                            "under": entry.get("under"), "book": book}
+    return out, unmatched
+
+
+def _save_book_lines(season, week, lines):
+    if not DATABASE_URL or not lines:
+        return 0
+    rows = [(int(season), int(week), sid, prop, v["line"], v.get("over"), v.get("under"), v["book"])
+            for (sid, prop), v in lines.items()]
+    conn = get_db()
+    try:
+        with conn.cursor() as cur:
+            # Eight columns, eight values -- see record_injury_changes for
+            # how a mismatch here fails silently.
+            psycopg2.extras.execute_values(
+                cur,
+                """INSERT INTO prop_lines
+                       (season, week, sleeper_id, prop, line, over_price, under_price, book)
+                   VALUES %s
+                   ON CONFLICT (season, week, sleeper_id, prop) DO UPDATE SET
+                       line = EXCLUDED.line, over_price = EXCLUDED.over_price,
+                       under_price = EXCLUDED.under_price, book = EXCLUDED.book,
+                       fetched_at = NOW()""",
+                rows)
+        conn.commit()
+    finally:
+        conn.close()
+    return len(rows)
+
+
+def get_book_lines(season, week, cache=_book_lines_cache):
+    """{(sleeper_id, prop): {line, over, under, book, fetched_at}} for the
+    week, from the database. Never fetches: a page view must not be
+    able to spend the quota."""
+    key = (int(season), int(week))
+    now = time.time()
+    entry = cache.get(key)
+    if entry and now - entry["time"] < 600:
+        return entry["data"]
+    data = {}
+    if DATABASE_URL:
+        try:
+            conn = get_db()
+            try:
+                with conn.cursor() as cur:
+                    cur.execute(
+                        """SELECT sleeper_id, prop, line, over_price, under_price, book, fetched_at
+                           FROM prop_lines WHERE season = %s AND week = %s""", key)
+                    for r in cur.fetchall():
+                        data[(r["sleeper_id"], r["prop"])] = {
+                            "line": r["line"], "over": r["over_price"], "under": r["under_price"],
+                            "book": r["book"], "fetched_at": r["fetched_at"]}
+            finally:
+                conn.close()
+        except Exception:
+            data = {}
+    cache[key] = {"data": data, "time": now}
+    return data
+
+
+def _odds_commence(value):
+    try:
+        return datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+    except Exception:
+        return None
+
+
+def fetch_book_lines(season, week):
+    """One refresh: this week's events, then each event's player-prop
+    markets from the books we read. Returns the number of lines saved."""
+    key = odds_api_key()
+    if not key:
+        return 0
+    index = _odds_player_index(_players_or_empty())
+    r = requests.get(f"{ODDS_API_BASE}/sports/{ODDS_SPORT}/events",
+                     params={"apiKey": key}, timeout=20)
+    r.raise_for_status()
+    events = r.json() if isinstance(r.json(), list) else []
+    now = datetime.now(timezone.utc)
+    # Games still to come this week. A finished game's lines are gone
+    # from the books anyway, and each event costs quota.
+    upcoming = [e for e in events
+                if (c := _odds_commence(e.get("commence_time"))) is not None
+                and now - timedelta(hours=6) <= c <= now + timedelta(days=8)]
+    markets = ",".join(ODDS_MARKETS.values())
+    lines, unmatched, books = {}, [], {}
+    fell_back = False
+    for e in upcoming:
+        params = {"apiKey": key, "regions": "us", "markets": markets,
+                  "oddsFormat": "american", "bookmakers": ",".join(ODDS_BOOKS)}
+        r = requests.get(f"{ODDS_API_BASE}/sports/{ODDS_SPORT}/events/{e.get('id')}/odds",
+                         params=params, timeout=25)
+        if r.status_code == 422 and not fell_back:
+            # A market key the API no longer recognises refuses the
+            # whole request. Drop to the core set for the rest of the
+            # run rather than come back with nothing.
+            fell_back = True
+            markets = ",".join(ODDS_CORE_MARKETS)
+            params["markets"] = markets
+            r = requests.get(f"{ODDS_API_BASE}/sports/{ODDS_SPORT}/events/{e.get('id')}/odds",
+                             params=params, timeout=25)
+        _odds_state["remaining"] = r.headers.get("x-requests-remaining")
+        _odds_state["used"] = r.headers.get("x-requests-used")
+        r.raise_for_status()
+        got, un = parse_odds_event(r.json() or {}, index)
+        lines.update(got)
+        unmatched.extend(un)
+        for v in got.values():
+            books[v["book"]] = books.get(v["book"], 0) + 1
+    _save_book_lines(season, week, lines)
+    _book_lines_cache.clear()
+    _streaks_cache.clear()
+    _odds_state.update({"events": len(upcoming), "lines": len(lines), "books": books,
+                        "unmatched": sorted(set(unmatched))[:40], "fell_back": fell_back})
+    return len(lines)
+
+
+def refresh_book_lines(season, week, force=False):
+    """Fetch if what we have is older than ODDS_REFRESH_HOURS. Called
+    from the warm ping; a process restart measures age from the
+    database's own timestamp, so a deploy never spends a refresh."""
+    if not odds_api_key():
+        return False
+    key = (int(season), int(week))
+    now = time.time()
+    with _odds_lock:
+        last = _odds_state["last"] if _odds_state["last_key"] == key else 0.0
+        if not last:
+            newest = [v.get("fetched_at") for v in get_book_lines(season, week).values()
+                      if isinstance(v.get("fetched_at"), datetime)]
+            if newest:
+                when = _as_naive_utc(max(newest))
+                last = (when - datetime(1970, 1, 1)).total_seconds() if when else 0.0
+        if not force and last and now - last < ODDS_REFRESH_S:
+            _odds_state["last"], _odds_state["last_key"] = last, key
+            return False
+        _odds_state["last"], _odds_state["last_key"] = now, key
+    try:
+        fetch_book_lines(season, week)
+        _odds_state["error"] = None
+    except Exception as e:
+        _odds_state["error"] = str(e)[:300]
+    return True
+
+
 def build_streak_games(rows, prop, team, sched):
     """One player's chronological game list for one prop. The opponent
     is looked up by the player's CURRENT team -- the same accepted
@@ -8773,14 +9116,18 @@ def build_streak_games(rows, prop, team, sched):
     return games
 
 
-def _streak_player_row(sid, p, prop, rows, sched, season, opponent=None):
+def _streak_player_row(sid, p, prop, rows, sched, season, opponent=None, book=None):
     games = build_streak_games(rows, prop, p.get("team"), sched)
     if len(games) < STREAK_MIN_GAMES:
         return None
     values = [g["value"] for g in games]
-    line = streak_line(values)
-    if line is None:
+    site_line = streak_line(values)
+    if site_line is None:
         return None
+    # The book's line when a book has one this week; the site's own
+    # otherwise. Both travel with the row so the page can say which.
+    line = float(book["line"]) if book and isinstance(book.get("line"), (int, float)) else site_line
+    source = book["book"] if book and book.get("book") in ODDS_BOOK_LABELS else STREAK_LINE_SOURCE
     shown = games[-STREAK_BARS:]
     recent = values[-STREAK_LINE_GAMES:]
     avg = round(sum(recent) / len(recent), 1)
@@ -8793,7 +9140,10 @@ def _streak_player_row(sid, p, prop, rows, sched, season, opponent=None):
         "photo": player_photo_url(sid),
         "prop": prop[0], "prop_label": prop[1], "prop_short": prop[2],
         "integer": prop[5],
-        "line": line, "line_source": STREAK_LINE_SOURCE,
+        "line": line, "site_line": site_line, "line_source": source,
+        "book_label": ODDS_BOOK_LABELS.get(source, source),
+        "over_price": (book or {}).get("over") if source != STREAK_LINE_SOURCE else None,
+        "under_price": (book or {}).get("under") if source != STREAK_LINE_SOURCE else None,
         "avg": avg, "edge": round(avg - line, 1),
         "games": shown, "windows": windows,
     }
@@ -8829,6 +9179,7 @@ def get_streak_board(prop_key, season, week, cache=_streaks_cache):
     logs = _streak_logs(seasons)
     sched = _streak_schedule_index(seasons)
     opps = _streak_opponents(players, season, week, sched)
+    books = get_book_lines(season, week)
     rows = []
     for sid, p in players.items():
         if not isinstance(p, dict) or not p.get("team"):
@@ -8838,8 +9189,13 @@ def get_streak_board(prop_key, season, week, cache=_streaks_cache):
         log = logs.get(sid)
         if not log:
             continue
+        # Starters only. A backup quarterback has a log and a line and
+        # no business on a props board.
+        if not streak_is_starter(p, log):
+            continue
         row = _streak_player_row(sid, p, prop, log, sched, int(season),
-                                 opponent=opps.get(p.get("team")))
+                                 opponent=opps.get(p.get("team")),
+                                 book=books.get((sid, prop[0])))
         if row:
             rows.append(row)
     rows.sort(key=lambda r: (-(r["windows"]["l10"]["pct"] or 0), -r["edge"]))
@@ -8904,10 +9260,11 @@ def get_streak_detail(sid, season, week):
     nxt = get_schedule_for_team_week(int(season), int(week), team) if team else None
     opponent = nxt["opponent"] if nxt else None
 
+    books = get_book_lines(season, week)
     per_prop = {}
     for prop in props:
         row = _streak_player_row(sid, p, prop, logs.get(sid) or [], sched, int(season),
-                                 opponent=opponent)
+                                 opponent=opponent, book=books.get((sid, prop[0])))
         if row:
             # The detail page shows the full log, not the list's twenty.
             row["games"] = build_streak_games(logs.get(sid) or [], prop, team, sched)
@@ -8948,7 +9305,7 @@ def get_streak_detail(sid, season, week):
         "grade": ({"grade": grade["grade"], "grade_class": grade["grade_class"]}
                   if grade else None),
         "dvp_rank": dvp_rank,
-        "line_source": STREAK_LINE_SOURCE,
+        "starter": streak_is_starter(p, logs.get(sid)),
     }
 
 
@@ -9929,17 +10286,20 @@ def performance_page():
 STREAK_GROUPS = ["QB", "RB", "WR", "TE", "K", "DL", "LB", "DB"]
 
 
-def _streak_list_row(r, season, opp_next):
-    """The slice of a board row the list page draws. The full row
-    carries every window's numbers; the page recomputes those itself
-    from the games so a window switch is instant, and needs only this."""
+def _streak_list_row(r, season, opp_next, games=None):
+    """The slice of a board row the list page draws. The page recomputes
+    every window itself from the games so a switch is instant -- and it
+    is handed the WHOLE log, not the twenty the bars show, so its H2H
+    counts the same games the player's own page counts."""
     return {
         "sid": r["sid"], "name": r["name"], "team": r["team"], "group": r["group"],
         "photo": r["photo"], "prop": r["prop"], "prop_short": r["prop_short"],
-        "line": r["line"], "integer": r["integer"], "avg": r["avg"], "edge": r["edge"],
+        "line": r["line"], "site_line": r["site_line"], "line_source": r["line_source"],
+        "book_label": r["book_label"], "over_price": r.get("over_price"),
+        "avg": r["avg"], "edge": r["edge"],
         "season_now": int(season), "opp_next": opp_next,
         "games": [{"value": g["value"], "season": g["season"], "opp": g["opp"],
-                   "home": g["home"], "date": g["date"]} for g in r["games"]],
+                   "home": g["home"], "date": g["date"]} for g in (games or r["games"])],
     }
 
 
@@ -9960,21 +10320,115 @@ def streaks_page():
     win = (request.args.get("win") or "l10").strip().lower()
     if win not in dict(STREAK_WINDOWS):
         win = "l10"
-    tabs = [("trends", "Trends")] + [(k, STREAK_PROP_BY_KEY[k][2]) for k in STREAK_LIST_TABS if k != "trends"]
+    # Position first, then that position's own props -- so a receiver's
+    # tabs are receiving and a defender's are tackles, and nobody has to
+    # wonder whether the other positions exist.
+    if pos:
+        own = [p[0] for p in streak_props_for(pos)]
+        if prop != "trends" and prop not in own:
+            prop = "trends"
+        tabs = [("trends", "Trends")] + [(k, STREAK_PROP_BY_KEY[k][2]) for k in own]
+    else:
+        tabs = [("trends", "Trends")] + [(k, STREAK_PROP_BY_KEY[k][2]) for k in STREAK_LIST_TABS if k != "trends"]
+    positions = [("", "All")] + [(g, g) for g in STREAK_GROUPS]
+    logs = None
     try:
         board = get_streak_trends(season, week) if prop == "trends" else get_streak_board(prop, season, week)
-        sched = _streak_schedule_index(streak_seasons(season))
-        rows = [_streak_list_row(r, season, (sched.get((season, week, r["team"])) or {}).get("opp"))
-                for r in board]
+        if pos:
+            board = [r for r in board if r["group"] == pos]
+        seasons = streak_seasons(season)
+        sched = _streak_schedule_index(seasons)
+        logs = _streak_logs(seasons)
+        rows = []
+        for r in board:
+            whole = build_streak_games(logs.get(r["sid"]) or [], STREAK_PROP_BY_KEY[r["prop"]],
+                                       r["team"], sched)
+            rows.append(_streak_list_row(
+                r, season, (sched.get((season, week, r["team"])) or {}).get("opp"), games=whole))
+        books_seen = sorted({r["book_label"] for r in rows if r["line_source"] != STREAK_LINE_SOURCE})
         return render_template_string(
-            STREAKS_HTML, rows=rows, prop=prop, pos=pos, win=win, tabs=tabs,
-            windows=list(STREAK_WINDOWS), groups=STREAK_GROUPS, season=season, week=week,
+            STREAKS_HTML, rows=rows, prop=prop, pos=pos, win=win, tabs=tabs, positions=positions,
+            windows=list(STREAK_WINDOWS), books_seen=books_seen, season=season, week=week,
             load_error=None)
     except Exception as e:
         return render_template_string(
-            STREAKS_HTML, rows=[], prop=prop, pos=pos, win=win, tabs=tabs,
-            windows=list(STREAK_WINDOWS), groups=STREAK_GROUPS, season=season, week=week,
+            STREAKS_HTML, rows=[], prop=prop, pos=pos, win=win, tabs=tabs, positions=positions,
+            windows=list(STREAK_WINDOWS), books_seen=[], season=season, week=week,
             load_error=str(e))
+
+
+@app.route("/api/streaks-status")
+def api_streaks_status():
+    """Is Streaks fed? Rows per season and how many carry a stat line,
+    starters listed per position, and the state of the book-line feed:
+    whether a key is set, when it last ran, what it matched and what it
+    could not, and the quota the API reports back."""
+    if not _secret_ok():
+        return jsonify({"ok": False, "error": "unauthorized"}), 401
+    info = get_current_week_info()
+    season, week = info["season"], info["week"]
+    out = {"ok": True, "database": bool(DATABASE_URL), "season": season, "week": week,
+           "seasons": {}, "starters": {}, "odds": {}}
+    if DATABASE_URL:
+        try:
+            conn = get_db()
+            try:
+                with conn.cursor() as cur:
+                    cur.execute(
+                        """SELECT season, COUNT(*) AS rows, COUNT(stats) AS with_stats
+                           FROM player_stats WHERE season = ANY(%s) GROUP BY season""",
+                        (streak_seasons(season),))
+                    for r in cur.fetchall():
+                        out["seasons"][str(r["season"])] = {"rows": r["rows"], "with_stats": r["with_stats"]}
+                    cur.execute("SELECT book, COUNT(*) AS n, MAX(fetched_at) AS newest FROM prop_lines "
+                                "WHERE season = %s AND week = %s GROUP BY book", (season, week))
+                    out["odds"]["stored"] = {r["book"]: {"lines": r["n"], "newest": str(r["newest"])}
+                                             for r in cur.fetchall()}
+            finally:
+                conn.close()
+        except Exception as e:
+            out["db_error"] = str(e)
+    try:
+        for g in STREAK_GROUPS:
+            # The lead prop's board, but only this position's rows on it:
+            # receiving yards is one board for backs, receivers and
+            # tight ends alike.
+            out["starters"][g] = sum(1 for r in get_streak_board(STREAK_LEAD[g], season, week)
+                                     if r["group"] == g)
+    except Exception as e:
+        out["board_error"] = str(e)
+    out["odds"].update({
+        "key_set": bool(odds_api_key()), "refresh_hours": ODDS_REFRESH_S // 3600,
+        "last_run": (datetime.utcfromtimestamp(_odds_state["last"]).isoformat()
+                     if _odds_state["last"] else None),
+        "error": _odds_state["error"], "events": _odds_state["events"],
+        "lines": _odds_state["lines"], "books": _odds_state["books"],
+        "unmatched": _odds_state["unmatched"], "fell_back": _odds_state["fell_back"],
+        "quota_remaining": _odds_state["remaining"], "quota_used": _odds_state["used"],
+    })
+    return jsonify(out)
+
+
+@app.route("/api/refresh-odds", methods=["GET", "POST"])
+def api_refresh_odds():
+    """Pull this week's book lines now, whatever their age. Spends
+    quota, so it is guarded like every other job route and runs in the
+    background like every other sync."""
+    if not _secret_ok():
+        return jsonify({"ok": False, "error": "unauthorized"}), 401
+    if not odds_api_key():
+        return jsonify({"ok": False, "error": "ODDS_API_KEY is not set"}), 400
+    info = get_current_week_info()
+
+    def _run():
+        try:
+            with _BACKGROUND_SYNC_SLOTS:
+                refresh_book_lines(info["season"], info["week"], force=True)
+        except Exception:
+            pass
+
+    threading.Thread(target=_run, daemon=True).start()
+    return jsonify({"ok": True, "started": True, "season": info["season"], "week": info["week"]})
 
 
 @app.route("/streaks/player")
@@ -11550,6 +12004,10 @@ def api_warm():
             # this ping is what keeps the first visitor from paying for
             # the scan -- and it is also what triggers the one-off refill
             # of rows written before the stats column existed.
+            # Book lines first, so the boards below are built on them.
+            # No-op without ODDS_API_KEY, and never more often than
+            # ODDS_REFRESH_HOURS with one.
+            refresh_book_lines(info["season"], info["week"])
             get_streak_trends(info["season"], info["week"])
         except Exception:
             pass
@@ -15513,9 +15971,11 @@ STREAKS_HTML = BASE_STYLE + make_header("streaks") + """
              text-transform:uppercase; margin:18px 0 2px; }
   .sk-sub{ font-size:12px; color:var(--sk-muted); margin-bottom:12px; line-height:1.5; max-width:70ch; }
 
-  /* Two rows of controls, sticky under the header: the window the
-     numbers are read over, then who and which prop. Pills scroll
-     sideways on a phone rather than wrapping into a wall. */
+  /* Three rows of controls, sticky under the header: the window the
+     numbers are read over; who; then which of that position's props.
+     Position and prop are links (each board is its own build); the
+     window and the search are the client's. Pills scroll sideways on a
+     phone rather than wrapping into a wall. */
   .sk-bars{ position:sticky; top:64px; z-index:30; padding:8px 0 10px;
             background:color-mix(in srgb, var(--sk-bg) 94%, transparent); backdrop-filter:blur(8px);
             border-bottom:1px solid var(--sk-line); display:flex; flex-direction:column; gap:8px; }
@@ -15525,12 +15985,8 @@ STREAKS_HTML = BASE_STYLE + make_header("streaks") + """
             background:var(--sk-surface); color:var(--sk-muted); font-size:13px; font-weight:700;
             text-decoration:none; cursor:pointer; font-family:inherit; white-space:nowrap; }
   .sk-pill.on{ background:var(--sk-text); color:var(--sk-bg); border-color:var(--sk-text); }
+  .sk-pill.pos{ padding:7px 12px; font-family:"IBM Plex Mono"; }
   .sk-row2{ display:flex; gap:8px; align-items:center; }
-  .sk-select{ flex:none; background-color:var(--sk-surface); border:1px solid var(--sk-line);
-              color:var(--sk-text); border-radius:99px; padding:8px 30px 8px 14px; font-size:13px;
-              font-weight:700; font-family:inherit; appearance:none; -webkit-appearance:none; cursor:pointer;
-              background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5 6 6.5 11 1.5' stroke='%238b9089' stroke-width='1.8' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-              background-repeat:no-repeat; background-position:right 11px center; background-size:11px 7px; }
   .sk-search{ flex:1; min-width:90px; background:var(--sk-surface); border:1px solid var(--sk-line);
               color:var(--sk-text); border-radius:99px; padding:8px 14px; font-size:13px; font-family:inherit; }
 
@@ -15548,6 +16004,7 @@ STREAKS_HTML = BASE_STYLE + make_header("streaks") + """
   .sk-prop{ font-size:14px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   .sk-prop .o{ color:var(--good); font-weight:700; margin-right:4px; }
   .sk-prop .ln{ font-family:"IBM Plex Mono"; font-weight:700; }
+  .sk-prop .px{ color:var(--sk-muted); font-size:12px; margin-left:5px; font-family:"IBM Plex Mono"; }
   .sk-prop .rate{ color:var(--sk-muted); font-size:12px; margin-left:6px; font-family:"IBM Plex Mono"; }
   .sk-edge{ text-align:center; }
   .sk-edge .lab{ display:block; font-size:10px; letter-spacing:0.08em; color:var(--sk-muted);
@@ -15577,7 +16034,7 @@ STREAKS_HTML = BASE_STYLE + make_header("streaks") + """
 <div class="wrap">
   {% if load_error %}<div class="error">Couldn't load streaks right now: {{ load_error }}</div>{% endif %}
   <div class="sk-title">Streaks</div>
-  <div class="sk-sub">Every player prop, game by game, against a line. Green cleared it, red didn't.
+  <div class="sk-sub">Every starter's props, game by game, against the line. Green cleared it, red didn't.
     Tap a player to move the line yourself.</div>
 
   <div class="sk-bars">
@@ -15587,44 +16044,46 @@ STREAKS_HTML = BASE_STYLE + make_header("streaks") + """
       {% endfor %}
     </div>
     <div class="sk-row2">
-      <select class="sk-select" id="skPos" aria-label="Position">
-        <option value="">All</option>
-        {% for g in groups %}<option value="{{ g }}" {{ 'selected' if g == pos }}>{{ g }}</option>{% endfor %}
-      </select>
-      <input class="sk-search" id="skSearch" type="search" placeholder="Search" aria-label="Search players">
+      <div class="sk-pills" style="flex:1;">
+        {% for key, label in positions %}
+        <a class="sk-pill pos {{ 'on' if key == pos }}" href="/streaks?pos={{ key }}&win={{ win }}">{{ label }}</a>
+        {% endfor %}
+      </div>
     </div>
-    <div class="sk-pills">
-      {% for key, label in tabs %}
-      <a class="sk-pill {{ 'on' if key == prop }}" href="/streaks?prop={{ key }}{% if pos %}&pos={{ pos }}{% endif %}&win={{ win }}">{{ label }}</a>
-      {% endfor %}
+    <div class="sk-row2">
+      <div class="sk-pills" style="flex:1;">
+        {% for key, label in tabs %}
+        <a class="sk-pill {{ 'on' if key == prop }}" href="/streaks?pos={{ pos }}&prop={{ key }}&win={{ win }}">{{ label }}</a>
+        {% endfor %}
+      </div>
+      <input class="sk-search" id="skSearch" type="search" placeholder="Search" aria-label="Search players" style="flex:0 1 150px;">
     </div>
   </div>
 
   <div class="sk-list" id="skList"></div>
-  <div class="sk-foot">Lines are this site's own, shaped from each player's last ten games
-    &mdash; the median, landed on the half. They are a starting point, not a sportsbook's number;
-    open any player to set your own.</div>
+  <div class="sk-foot" id="skFoot"></div>
 </div>
 </div>
 
 <script>
 const SK_ROWS = {{ rows|tojson }};
 const SK_WIN = {{ win|tojson }};
-const SK_PROP = {{ prop|tojson }};
-const SK_POS = {{ pos|tojson }};
+const SK_BOOKS = {{ books_seen|tojson }};
 (function(){
   const list = document.getElementById('skList');
-  const posEl = document.getElementById('skPos');
   const searchEl = document.getElementById('skSearch');
-  let win = SK_WIN, pos = SK_POS || '', q = '';
+  let win = SK_WIN, q = '';
   const WIN_N = {l5:5, l10:10, l20:20};
 
   // A whole number reads as one; anything else keeps one decimal. A
   // 273-yard game is not "273.0", and a 1.9 TD average is not "2".
   function fmt(v){ const r = Math.round(v*10)/10; return Number.isInteger(r) ? String(r) : r.toFixed(1); }
   function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+  function price(p){ return p == null ? '' : (p > 0 ? '+' + p : String(p)); }
 
-  // Which of a row's games the chosen window covers, oldest first.
+  // Which of a row's games the chosen window covers, oldest first. The
+  // row carries its whole log, so H2H here counts the same games the
+  // player's own page counts.
   function windowGames(r){
     const g = r.games;
     if (win === 'season') return g.filter(x => x.season === r.season_now);
@@ -15633,8 +16092,7 @@ const SK_POS = {{ pos|tojson }};
   }
 
   function render(){
-    let rows = SK_ROWS.filter(r => (!pos || r.group === pos) &&
-                                   (!q || r.name.toLowerCase().includes(q)));
+    let rows = SK_ROWS.filter(r => !q || r.name.toLowerCase().includes(q));
     const shaped = rows.map(r => {
       const g = windowGames(r);
       const n = g.length;
@@ -15646,46 +16104,45 @@ const SK_POS = {{ pos|tojson }};
     if (!shaped.length){
       list.innerHTML = '<div class="sk-empty">Nothing to show for this window yet.<br>' +
         'Streaks fill in as game logs sync; a fresh season needs a few weeks.</div>';
-      return;
-    }
-    list.innerHTML = shaped.map(x => {
-      const r = x.r;
-      const max = Math.max(...x.g.map(v => v.value), r.line, 1);
-      const bars = x.g.map(v => {
-        const h = Math.max(8, Math.round(100 * v.value / max));
-        const cls = v.value > r.line ? 'hit' : (v.value === 0 ? 'flat' : '');
-        return '<i class="' + cls + '" style="height:' + h + '%" title="' + esc(v.date) + ' ' +
-               (v.opp ? (v.home ? 'vs ' : '@') + esc(v.opp) : '') + ': ' + fmt(v.value) + '"></i>';
+    } else {
+      list.innerHTML = shaped.map(x => {
+        const r = x.r;
+        const shownBars = x.g.slice(-20);
+        const max = Math.max(...shownBars.map(v => v.value), r.line, 1);
+        const bars = shownBars.map(v => {
+          const h = Math.max(8, Math.round(100 * v.value / max));
+          const cls = v.value > r.line ? 'hit' : (v.value === 0 ? 'flat' : '');
+          return '<i class="' + cls + '" style="height:' + h + '%" title="' + esc(v.date) + ' ' +
+                 (v.opp ? (v.home ? 'vs ' : '@') + esc(v.opp) : '') + ': ' + fmt(v.value) + '"></i>';
+        }).join('');
+        const up = x.avg > r.line;
+        return '<a class="sk-item" href="/streaks/player?sid=' + encodeURIComponent(r.sid) + '&prop=' + encodeURIComponent(r.prop) + '">' +
+          '<img src="' + esc(r.photo) + '" alt="" loading="lazy" onerror="this.style.visibility=\\'hidden\\'">' +
+          '<span class="sk-main"><span class="sk-name">' + esc(r.name) + '<span class="tm">' + esc(r.team) + '</span></span>' +
+          '<span class="sk-prop"><span class="o">O</span><span class="ln">' + fmt(r.line) + '</span> ' + esc(r.prop_short) +
+          (r.over_price != null ? '<span class="px">' + price(r.over_price) + '</span>' : '') +
+          '<span class="rate">' + x.hits + '/' + x.n + ' &middot; ' + x.pct + '%</span></span></span>' +
+          '<span class="sk-edge"><span class="lab">EDGE</span><span class="val ' + (up ? 'up' : 'down') + '">' + fmt(x.avg) + '</span></span>' +
+          '<span class="sk-bars-mini">' + bars + '</span></a>';
       }).join('');
-      const up = x.avg > r.line;
-      return '<a class="sk-item" href="/streaks/player?sid=' + encodeURIComponent(r.sid) + '&prop=' + encodeURIComponent(r.prop) + '">' +
-        '<img src="' + esc(r.photo) + '" alt="" loading="lazy" onerror="this.style.visibility=\\'hidden\\'">' +
-        '<span class="sk-main"><span class="sk-name">' + esc(r.name) + '<span class="tm">' + esc(r.team) + '</span></span>' +
-        '<span class="sk-prop"><span class="o">O</span><span class="ln">' + fmt(r.line) + '</span> ' + esc(r.prop_short) +
-        '<span class="rate">' + x.hits + '/' + x.n + ' &middot; ' + x.pct + '%</span></span></span>' +
-        '<span class="sk-edge"><span class="lab">EDGE</span><span class="val ' + (up ? 'up' : 'down') + '">' + fmt(x.avg) + '</span></span>' +
-        '<span class="sk-bars-mini">' + bars + '</span></a>';
-    }).join('');
+    }
+    document.getElementById('skFoot').innerHTML = SK_BOOKS.length
+      ? 'Lines from ' + SK_BOOKS.map(esc).join(' and ') + ' where the book has one this week, and this ' +
+        'site\\'s own otherwise \\u2014 the median of the player\\'s last ten games, landed on the half. ' +
+        'Open any player to move it.'
+      : 'Lines are this site\\'s own, shaped from each player\\'s last ten games \\u2014 the median, landed ' +
+        'on the half. They are a starting point, not a sportsbook\\'s number; open any player to set your own.';
   }
 
   document.getElementById('skWindows').addEventListener('click', e => {
     const b = e.target.closest('[data-win]'); if (!b) return;
     win = b.dataset.win;
     document.querySelectorAll('#skWindows .sk-pill').forEach(p => p.classList.toggle('on', p === b));
-    // Keep the prop links carrying the same window, so switching prop keeps it.
+    // Keep every link carrying the same window, so moving between
+    // positions or props keeps it. The attribute, not the property:
+    // reading .href hands back the absolute URL.
     document.querySelectorAll('.sk-pills a.sk-pill').forEach(a => {
-      // The attribute, not the property: reading .href hands back the
-      // absolute URL and writing it back would bake the origin in.
       a.setAttribute('href', a.getAttribute('href').replace(/([?&])win=[^&]*/, '$1win=' + win));
-    });
-    render();
-  });
-  posEl.addEventListener('change', () => {
-    pos = posEl.value;
-    document.querySelectorAll('.sk-pills a.sk-pill').forEach(a => {
-      const u = new URL(a.getAttribute('href'), location.href);
-      if (pos) u.searchParams.set('pos', pos); else u.searchParams.delete('pos');
-      a.setAttribute('href', u.pathname + u.search);
     });
     render();
   });
@@ -15718,6 +16175,8 @@ STREAK_PLAYER_HTML = BASE_STYLE + make_header("streaks") + """
   .sp-who{ flex:1; min-width:0; }
   .sp-name{ font-family:"Big Shoulders Display"; font-size:30px; font-weight:800; line-height:1.05; }
   .sp-club{ color:var(--sp-muted); font-size:14px; margin-top:4px; line-height:1.4; }
+  .sp-bench{ display:inline-block; margin-top:6px; font-size:11.5px; font-weight:700; padding:3px 9px;
+             border-radius:99px; background:var(--warning-wash); color:var(--warning); }
   .sp-mug{ position:relative; flex:none; width:72px; height:72px; margin-right:12px; }
   .sp-mug img.face{ width:72px; height:72px; border-radius:50%; object-fit:cover; background:var(--sp-surface2); }
   .sp-mug img.crest{ position:absolute; right:-12px; bottom:-2px; width:28px; height:28px; object-fit:contain; }
@@ -15729,6 +16188,8 @@ STREAK_PLAYER_HTML = BASE_STYLE + make_header("streaks") + """
   .sp-fact .v{ font-size:17px; font-weight:700; margin-top:2px; font-family:"IBM Plex Mono";
                font-variant-numeric:tabular-nums; }
   .sp-fact .v.text{ font-family:inherit; }
+  .sp-fact .v small{ display:block; font-size:10.5px; font-weight:600; color:var(--sp-muted);
+                     font-family:"Source Sans 3",system-ui,sans-serif; margin-top:1px; }
   .sp-fact .v .up{ color:var(--good); } .sp-fact .v .down{ color:var(--critical); }
   .sp-fact .v img{ width:18px; height:18px; object-fit:contain; vertical-align:-3px; margin-right:3px; }
   .sp-gauge{ grid-row:1 / span 2; align-self:center; text-align:center; padding:8px 12px;
@@ -15763,9 +16224,12 @@ STREAK_PLAYER_HTML = BASE_STYLE + make_header("streaks") + """
   .sp-x span b{ display:block; font-weight:600; }
   .sp-chart-note{ font-size:11.5px; color:var(--sp-muted); margin-top:10px; line-height:1.5; }
 
-  /* Move the line. A stepper for the exact figure, a slider for the
-     feel of it, and the book's -- here the site's -- number beside so
-     you always know how far you have wandered. */
+  /* Move the line. A stepper for the exact figure, and a ruler you
+     drag: every tick is one unit, from half a point up to well past
+     the player's best game, so the line can go anywhere. The white
+     mark is fixed; the strip moves under it. The book's -- or the
+     site's -- own number is the green tick, so you always know how far
+     you have wandered from it. */
   .sp-adjust{ margin-top:18px; border:1px solid var(--sp-line); border-radius:14px; background:var(--sp-surface);
               padding:14px; }
   .sp-adjust h3{ font-family:"Big Shoulders Display"; font-size:15px; font-weight:800; text-transform:uppercase;
@@ -15782,9 +16246,20 @@ STREAK_PLAYER_HTML = BASE_STYLE + make_header("streaks") + """
   .sp-under .hr.good{ color:var(--good); } .sp-under .hr.warn{ color:var(--warning); } .sp-under .hr.bad{ color:var(--critical); }
   .sp-under button{ background:none; border:none; color:var(--accent-ink); font-weight:700; cursor:pointer;
                     font-family:inherit; font-size:13px; padding:0 0 0 4px; }
-  .sp-slider{ width:100%; margin-top:12px; accent-color:var(--accent); }
-  .sp-ticks{ display:flex; justify-content:space-between; font-family:"IBM Plex Mono"; font-size:11px;
-             color:var(--sp-muted); margin-top:2px; }
+  .sp-ruler-wrap{ position:relative; margin-top:14px; }
+  .sp-ruler{ overflow-x:auto; scrollbar-width:none; scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch;
+             cursor:grab; }
+  .sp-ruler::-webkit-scrollbar{ display:none; }
+  .sp-strip{ display:flex; align-items:flex-end; height:48px; padding:0 calc(50% - 10px); width:max-content; }
+  .sp-tick{ flex:none; width:20px; height:48px; position:relative; scroll-snap-align:center; }
+  .sp-tick::before{ content:''; position:absolute; left:9px; bottom:16px; width:2px; height:10px;
+                    background:var(--line-strong); border-radius:1px; }
+  .sp-tick.major::before{ height:18px; }
+  .sp-tick.book::before{ background:var(--good); height:24px; width:3px; left:8.5px; }
+  .sp-tick b{ position:absolute; left:50%; transform:translateX(-50%); bottom:0; font-family:"IBM Plex Mono";
+              font-size:11px; font-weight:600; color:var(--sp-muted); white-space:nowrap; }
+  .sp-ruler-mark{ position:absolute; left:50%; top:4px; width:3px; height:30px; margin-left:-1.5px;
+                  background:var(--sp-text); border-radius:2px; z-index:2; pointer-events:none; }
 
   .sp-filters{ display:flex; gap:8px; flex-wrap:wrap; margin-top:16px; }
   .sp-chip{ padding:8px 14px; border-radius:99px; border:1px solid var(--sp-line); background:var(--sp-surface);
@@ -15817,6 +16292,7 @@ STREAK_PLAYER_HTML = BASE_STYLE + make_header("streaks") + """
     <div class="sp-who">
       <div class="sp-name">{{ d.name }}</div>
       <div class="sp-club">{{ d.team_name or 'Free agent' }}<br>{{ d.position_name }}</div>
+      {% if not d.starter %}<span class="sp-bench">Not a starter this week</span>{% endif %}
     </div>
     <div class="sp-mug">
       <img class="face" src="{{ d.photo }}" alt="" onerror="this.style.visibility='hidden'">
@@ -15825,7 +16301,7 @@ STREAK_PLAYER_HTML = BASE_STYLE + make_header("streaks") + """
   </div>
 
   <div class="sp-facts">
-    <div class="sp-fact"><div class="k" id="spAvgK">L10 avg</div><div class="v" id="spAvg">&ndash;</div></div>
+    <div class="sp-fact"><div class="k">L10 avg</div><div class="v" id="spAvg">&ndash;</div></div>
     <div class="sp-fact"><div class="k">Line</div><div class="v" id="spLine">&ndash;</div></div>
     <div class="sp-fact"><div class="k">Prop</div><div class="v text" id="spPropName">&ndash;</div></div>
     {% if d.grade %}
@@ -15858,15 +16334,18 @@ STREAK_PLAYER_HTML = BASE_STYLE + make_header("streaks") + """
       <output id="spOut">&ndash;</output>
       <button type="button" id="spPlus" aria-label="Raise the line">+</button>
     </div>
-    <div class="sp-under">Site line <b id="spBook">&ndash;</b> &middot; <span class="hr" id="spHr">&ndash;</span> hit rate &middot;
+    <div class="sp-under"><span id="spBookLab">Site line</span> <b id="spBook">&ndash;</b><span id="spPrice"></span> &middot;
+      <span class="hr" id="spHr">&ndash;</span> hit rate &middot;
       <button type="button" id="spReset">Reset</button></div>
-    <input class="sp-slider" type="range" id="spSlider" min="0" max="20" step="1" value="10" aria-label="Line">
-    <div class="sp-ticks"><span id="spLo"></span><span id="spHi"></span></div>
+    <div class="sp-ruler-wrap">
+      <div class="sp-ruler-mark"></div>
+      <div class="sp-ruler" id="spRuler" aria-label="Drag to move the line"><div class="sp-strip" id="spStrip"></div></div>
+    </div>
   </div>
 
   <div class="sp-filters" id="spFilters"></div>
 
-  <a class="sp-back" href="/streaks?prop={{ prop }}">&larr; Back to streaks</a>
+  <a class="sp-back" href="/streaks?pos={{ d.group }}&prop={{ prop }}">&larr; Back to streaks</a>
   {% elif not load_error %}
   <div class="sp-empty">No game log for this player yet.<br>Streaks fill in as stat lines sync.</div>
   <a class="sp-back" href="/streaks">&larr; Back to streaks</a>
@@ -15882,18 +16361,20 @@ const SP_SEASON = {{ season|tojson }};
 (function(){
   const $ = id => document.getElementById(id);
   const WIN_N = {l5:5, l10:10, l20:20};
+  const TICK = 20;
   let prop = SP.per_prop[SP_PROP] ? SP_PROP : (SP.props[0] || {}).key;
   let win = 'l10';
-  let line = null;          // the reader's line; null means the site's
+  let line = null;          // the reader's line; null means the given one
+  let rulerFor = null, rulerLo = 0.5, scrollTimer = null;
   const opp = SP.next ? SP.next.opponent : null;
+  const ruler = $('spRuler'), strip = $('spStrip');
 
   function cur(){ return SP.per_prop[prop]; }
-  // A whole number reads as one; anything else keeps one decimal. A
-  // 273-yard game is not "273.0", and a 1.9 TD average is not "2".
   function fmt(v){ const r = Math.round(v*10)/10; return Number.isInteger(r) ? String(r) : r.toFixed(1); }
   function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
   function ordinal(n){ const s = ['th','st','nd','rd'], v = n % 100; return n + (s[(v-20)%10] || s[v] || s[0]); }
   function tone(pct){ return pct == null ? '' : (pct >= 60 ? 'good' : (pct >= 40 ? 'warn' : 'bad')); }
+  function price(p){ return p == null ? '' : (p > 0 ? '+' + p : String(p)); }
   function activeLine(){ return line == null ? cur().line : line; }
 
   function games(){ return cur().games; }
@@ -15908,6 +16389,30 @@ const SP_SEASON = {{ season|tojson }};
     return {n, hits, pct: n ? Math.round(100*hits/n) : null};
   }
 
+  // The ruler runs from half a point to ten past the player's best game
+  // (or ten past the line, whichever is further), one tick per unit,
+  // a label every ten. Rebuilt only when the prop changes.
+  function buildRuler(){
+    const r = cur();
+    const best = Math.max(...r.games.map(g => g.value), r.line);
+    const hi = Math.max(r.line + 10, Math.ceil(best) + 10.5, 10.5);
+    rulerLo = 0.5;
+    const n = Math.round(hi - rulerLo) + 1;
+    let html = '';
+    for (let i = 0; i < n; i++){
+      const v = rulerLo + i;
+      const major = i % 10 === 0;
+      html += '<span class="sp-tick' + (major ? ' major' : '') + (v === r.line ? ' book' : '') + '"' +
+              (major ? '><b>' + fmt(v) + '</b></span>' : '></span>');
+    }
+    strip.innerHTML = html;
+    rulerFor = prop;
+  }
+  function syncRuler(){
+    const idx = Math.round(activeLine() - rulerLo);
+    if (Math.round(ruler.scrollLeft / TICK) !== idx) ruler.scrollLeft = idx * TICK;
+  }
+
   function render(){
     const r = cur(); if (!r) return;
     const L = activeLine();
@@ -15915,11 +16420,12 @@ const SP_SEASON = {{ season|tojson }};
     const winRate = rate(shown, L);
     const last10 = games().slice(-10);
     const avg = last10.length ? last10.reduce((a, x) => a + x.value, 0) / last10.length : null;
+    const fromBook = r.line_source !== 'site';
 
     // Facts.
     $('spAvg').innerHTML = avg == null ? '&ndash;' :
       '<span class="' + (avg > L ? 'up' : 'down') + '">' + (avg > L ? '&#9650;' : '&#9660;') + '</span> ' + fmt(avg);
-    $('spLine').textContent = fmt(L);
+    $('spLine').innerHTML = fmt(L) + '<small>' + esc(r.book_label) + (fromBook && r.over_price != null ? ' &middot; O ' + price(r.over_price) : '') + '</small>';
     $('spPropName').textContent = r.prop_label;
     $('spHit').innerHTML = winRate.pct == null ? '&ndash;' :
       '<span class="' + (winRate.pct >= 50 ? 'up' : 'down') + '">' + (winRate.pct >= 50 ? '&#9650;' : '&#9660;') + '</span> ' + winRate.pct + '%';
@@ -15953,13 +16459,13 @@ const SP_SEASON = {{ season|tojson }};
     // Adjuster.
     $('spAdjTitle').textContent = r.prop_label + ' prop line';
     $('spOut').textContent = fmt(L);
+    $('spBookLab').textContent = r.book_label;
     $('spBook').textContent = fmt(r.line);
+    $('spPrice').textContent = fromBook && r.over_price != null ? ' (O ' + price(r.over_price) + ')' : '';
     $('spHr').textContent = winRate.pct == null ? '\\u2013' : winRate.pct + '%';
     $('spHr').className = 'hr ' + tone(winRate.pct);
-    const lo = Math.max(0.5, r.line - 10), hi = r.line + 10;
-    const sl = $('spSlider');
-    sl.min = 0; sl.max = Math.round(hi - lo); sl.value = Math.round(L - lo);
-    $('spLo').textContent = fmt(lo); $('spHi').textContent = fmt(hi);
+    if (rulerFor !== prop) buildRuler();
+    syncRuler();
 
     // Filters.
     let chips = '';
@@ -15979,10 +16485,16 @@ const SP_SEASON = {{ season|tojson }};
   $('spMinus').onclick = () => setLine(activeLine() - 1);
   $('spPlus').onclick = () => setLine(activeLine() + 1);
   $('spReset').onclick = () => { line = null; render(); };
-  $('spSlider').addEventListener('input', () => {
-    const r = cur(); const lo = Math.max(0.5, r.line - 10);
-    setLine(lo + Number($('spSlider').value));
-  });
+  // Dragging the strip: settle on the tick under the mark. The handler
+  // only acts on a real change, so the programmatic scroll from
+  // syncRuler above lands on the same figure and does nothing.
+  ruler.addEventListener('scroll', () => {
+    clearTimeout(scrollTimer);
+    scrollTimer = setTimeout(() => {
+      const v = rulerLo + Math.round(ruler.scrollLeft / TICK);
+      if (v !== activeLine()) setLine(v);
+    }, 80);
+  }, {passive: true});
   $('spProps').addEventListener('click', e => {
     const b = e.target.closest('[data-prop]'); if (!b) return;
     prop = b.dataset.prop; line = null;
@@ -15994,7 +16506,6 @@ const SP_SEASON = {{ season|tojson }};
     const b = e.target.closest('[data-win]'); if (!b) return;
     win = b.dataset.win;
     document.querySelectorAll('#spWindows .sp-pill').forEach(p => p.classList.toggle('on', p === b));
-    $('spAvgK').textContent = 'L10 avg';
     render();
   });
   render();
