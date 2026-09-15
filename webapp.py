@@ -11495,8 +11495,14 @@ LEAGUE_DETAIL_HTML = BASE_STYLE + make_header("league") + """
       <div class="legend-groups">
         <div class="legend-group">
           <h4>Each player row</h4>
+          {# Grades are only computed for a signed-in reader, so for a
+             guest there is no badge in any row -- and a legend entry
+             explaining one would be describing something not on the
+             page. #}
+          {% if detail.columns.values()|sum(attribute='players', start=[])|selectattr('grade')|first is defined %}
           <span class="legend-row"><span class="grade-badge grade-bp">B+</span>
             Matchup grade this week</span>
+          {% endif %}
           <span class="legend-row"><span class="rank-plain">12</span>
             Rank at their position</span>
           <span class="legend-row"><span class="rank-badge flat">41</span>
