@@ -115,11 +115,16 @@ def _no_stale_pages(response):
     downloadable file set direct_passthrough) is left alone, as is
     anything a route has already given an explicit policy."""
     try:
-        if (response.direct_passthrough
-                or "Cache-Control" in response.headers
-                or not (response.mimetype or "").startswith("text/html")):
+        if response.direct_passthrough or "Cache-Control" in response.headers:
             return response
-        response.headers["Cache-Control"] = "no-cache, must-revalidate"
+        mime = (response.mimetype or "")
+        if mime.startswith("text/html"):
+            response.headers["Cache-Control"] = "no-cache, must-revalidate"
+        elif mime.startswith("application/json"):
+            # The live poll asks the same URL every few seconds. A cached
+            # answer to that is a frozen scoreboard, so these are never
+            # stored at all rather than merely revalidated.
+            response.headers["Cache-Control"] = "no-store"
     except Exception:
         pass
     return response
@@ -1495,15 +1500,34 @@ def espn_event_to_card(ev):
     }
 
 
+# How stale the live game feed is allowed to get, on the server and in
+# the browser. ESPN republishes a summary within a few seconds of a
+# snap, so these are what decide how soon a play reaches the page.
+LIVE_SUMMARY_TTL_S = 5
+LIVE_POLL_MS = 5000          # while a game is in progress
+PREGAME_POLL_MS = 15000      # waiting for kickoff, where seconds do not matter
+
+# Available to every template rather than passed per render: the game
+# page renders from two places (the normal path and the error path) and
+# both run the same poll loop, so a kwarg is a thing to forget.
+app.jinja_env.globals["live_poll_ms"] = LIVE_POLL_MS
+app.jinja_env.globals["pregame_poll_ms"] = PREGAME_POLL_MS
+
+
 def espn_game_summary(event_id, cache={}):
-    """Full game detail: venue, officials, box score, leaders. TTL 20s
-    while live, 300s pregame (inactives/injury designations can still
-    change), 86400s once final (a finished game never changes again)."""
+    """Full game detail: venue, officials, box score, leaders.
+
+    TTL 5s while the game is live -- the play feed is meant to move as
+    the game does, and a 20s copy meant a snap could sit unseen for
+    twenty seconds after ESPN had already published it. 300s pregame
+    (inactives and designations can still change), 86400s once final,
+    since a finished game never changes again."""
     now = time.time()
     entry = cache.get(event_id)
     if entry:
         state = entry.get("state")
-        ttl = 20 if state == "in" else (86400 if state == "post" else 300)
+        ttl = (LIVE_SUMMARY_TTL_S if state == "in"
+               else (86400 if state == "post" else 300))
         if now - entry["time"] < ttl:
             return entry["data"]
     try:
@@ -12383,16 +12407,16 @@ GAME_DETAIL_HTML = BASE_STYLE + make_header("scores") + """
 
   .gd-play{ padding:12px 0; border-top:1px solid var(--line); }
   .gd-play:first-child{ border-top:none; }
-  .gd-play-head{ display:flex; justify-content:space-between; gap:10px; font-size:11px;
-                 color:var(--ink-muted); margin-bottom:7px; }
-  /* Both halves carry crests now, so each is its own little row rather
-     than a run of text. */
-  .gd-play-head > span{ display:inline-flex; align-items:center; gap:4px; min-width:0; }
+  /* One left-aligned line: score, clock, down. Wraps rather than
+     truncates on a narrow phone. */
+  .gd-play-head{ display:flex; align-items:center; flex-wrap:wrap; gap:4px;
+                 font-size:11.5px; color:var(--ink-muted); margin-bottom:7px; }
   .gd-play-crest{ width:15px; height:15px; object-fit:contain; flex:none; }
   /* The score is the one thing in this line worth reading at speed. */
   .gd-play-head b{ color:var(--ink); font-family:"IBM Plex Mono"; font-weight:700;
-                   font-size:12px; font-variant-numeric:tabular-nums; }
-  .gd-play-dash{ opacity:0.6; }
+                   font-size:12.5px; font-variant-numeric:tabular-nums; }
+  .gd-play-dash{ opacity:0.55; }
+  .gd-play-dot-sep{ opacity:0.45; margin:0 3px; }
   .gd-play-body{ display:flex; gap:11px; align-items:flex-start; }
   /* Two overlapping faces for a play with two players in it. Sized so
      the pair occupies the same column width as a single face does, and
@@ -12930,19 +12954,25 @@ window.gdRenderFeed = function(plays, status){
   }
 
   el.innerHTML = plays.map(function(p){
-    const sit = [
-      p.team ? crest(teamOf(p.team)) + esc(p.team) : null,
-      p.period ? 'Q' + p.period + (p.clock ? ' ' + esc(p.clock) : '') : null,
-      p.down ? ord(p.down) + ' &amp; ' + esc(p.distance) : null
-    ].filter(Boolean).join(' &middot; ');
-    // Away crest, away score, home score, home crest -- the same order
-    // the scoreboard at the top of the page uses, so a glance at either
-    // reads the same way round.
+    // The reference feed leads every row with the state of the game and
+    // then the clock: crest, score, crest, then Q3 10:07, then the down.
+    // Away crest first, the same order as the scoreboard at the top of
+    // the page, so a glance at either reads the same way round.
     const score = (p.away_score != null && p.home_score != null)
       ? crest(GDT.away) + '<b>' + esc(p.away_score) + '</b>' +
         '<span class="gd-play-dash">&ndash;</span>' +
         '<b>' + esc(p.home_score) + '</b>' + crest(GDT.home)
       : '';
+    // The abbreviation sits against the down and distance, which is the
+    // thing it qualifies -- "KC 3rd & 7" reads the way it is said.
+    const downText = p.down
+      ? (p.team ? esc(p.team) + ' ' : '') + ord(p.down) + ' &amp; ' + esc(p.distance)
+      : null;
+    const sit = [
+      score || null,
+      p.period ? 'Q' + p.period + (p.clock ? ' ' + esc(p.clock) : '') : null,
+      downText
+    ].filter(Boolean).join('<span class="gd-play-dot-sep">&middot;</span>');
     // Two faces, stacked, the way the reference feed does it: the
     // player the play belongs to in front, whoever else it ran through
     // behind them. One face when that is all there is.
@@ -12994,7 +13024,7 @@ window.gdRenderFeed = function(plays, status){
       ? ' data-href="' + esc(href) + '" role="link" tabindex="0"'
       : '';
     return '<div class="gd-play' + (p.scoring ? ' score' : '') + '"' + attr + '>' +
-      '<div class="gd-play-head"><span>' + sit + '</span><span>' + score + '</span></div>' +
+      '<div class="gd-play-head">' + sit + '</div>' +
       '<div class="gd-play-body">' +
         faces +
         '<div class="gd-play-main">' +
@@ -13143,8 +13173,36 @@ window.gdRenderField = function(field, awayAbbr){
   const initialStatus = {{ detail.status|tojson }};
   if (initialStatus === 'final') return;  // nothing left to poll for
   const eventId = {{ event_id|tojson }};
-  const POLL_MS = 10000;
+  // Five seconds while the game is live, matched to how long the server
+  // holds its own copy of ESPN's feed -- so a snap reaches the page
+  // within a few seconds of ESPN publishing it rather than up to twenty.
+  const POLL_MS = {{ live_poll_ms|tojson }};
+  const PREGAME_MS = {{ pregame_poll_ms|tojson }};
   let requestId = 0;
+
+  // ---- one timer, and it is never allowed to run twice ----
+  // Returning to a backgrounded tab used to leave the old timer running
+  // beside the fresh one, doubling the request rate every switch.
+  let timer = null;
+  function schedule(fn, ms){
+    if (timer) clearTimeout(timer);
+    timer = setTimeout(fn, ms);
+  }
+
+  // A phone locks, a tab goes to the background, and a browser throttles
+  // or suspends timers there anyway -- so polling stops while nobody is
+  // looking and fires IMMEDIATELY on the way back, which is the moment
+  // the screen is most obviously stale.
+  function hidden(){ return document.visibilityState === 'hidden'; }
+
+  // A failing network backs off rather than hammering, and recovers to
+  // full speed the moment one request succeeds.
+  let backoff = 0;
+  function nextDelay(base){
+    return backoff ? Math.min(30000, base * Math.pow(2, backoff)) : base;
+  }
+  function failed(fn, base){ backoff = Math.min(backoff + 1, 3); schedule(fn, nextDelay(base)); }
+  function ok(){ backoff = 0; }
 
   // A page opened before kickoff has none of the live panels (win
   // probability, quarter-by-quarter, box score, "your players") rendered
@@ -13154,21 +13212,25 @@ window.gdRenderField = function(field, awayAbbr){
   // "fully autonomous": leave it open through kickoff and it updates
   // itself with no manual refresh, here and for every stat below.
   function pollPregame(){
-    fetch('/api/game-live?id=' + encodeURIComponent(eventId))
+    if (hidden()) { schedule(pollPregame, PREGAME_MS); return; }
+    fetch('/api/game-live?id=' + encodeURIComponent(eventId), {cache: 'no-store'})
       .then(function(r){ return r.json(); })
       .then(function(data){
+        ok();
         if (data.status && data.status !== 'scheduled') { try { window.location.reload(); } catch (e) {} return; }
-        setTimeout(pollPregame, POLL_MS);
+        schedule(pollPregame, PREGAME_MS);
       })
-      .catch(function(){ setTimeout(pollPregame, POLL_MS); });
+      .catch(function(){ failed(pollPregame, PREGAME_MS); });
   }
 
   function pollLive(){
+    if (hidden()) { schedule(pollLive, POLL_MS); return; }
     const thisRequestId = ++requestId;
-    fetch('/api/game-live?id=' + encodeURIComponent(eventId))
+    fetch('/api/game-live?id=' + encodeURIComponent(eventId), {cache: 'no-store'})
       .then(function(r){ return r.json(); })
       .then(function(data){
         if (thisRequestId !== requestId) return;
+        ok();
         document.getElementById('gdAwayScore').textContent = data.away_score ?? 0;
         document.getElementById('gdHomeScore').textContent = data.home_score ?? 0;
         const statusEl = document.getElementById('gdStatus');
@@ -13218,12 +13280,28 @@ window.gdRenderField = function(field, awayAbbr){
           if (data.status === 'final') { try { window.location.reload(); } catch (e) {} }  // pick up the final box score/leaders
           return;
         }
-        setTimeout(pollLive, POLL_MS);
+        schedule(pollLive, POLL_MS);
       })
-      .catch(function(){ setTimeout(pollLive, POLL_MS); });
+      .catch(function(){ failed(pollLive, POLL_MS); });
   }
 
-  setTimeout(initialStatus === 'scheduled' ? pollPregame : pollLive, POLL_MS);
+  const poll = initialStatus === 'scheduled' ? pollPregame : pollLive;
+  // Coming back to the tab refreshes at once. Whatever is on screen was
+  // painted before the phone was locked, and it is the staleness you
+  // notice -- waiting out the rest of an interval to fix it is the one
+  // delay a reader actually sees.
+  document.addEventListener('visibilitychange', function(){
+    if (!hidden()) { backoff = 0; schedule(poll, 0); }
+  });
+  // The back button can restore a page whole, timers and all, without
+  // ever firing visibilitychange -- and that copy can be hours old.
+  window.addEventListener('pageshow', function(e){
+    if (e.persisted) { backoff = 0; schedule(poll, 0); }
+  });
+  // The first tick waits a normal interval: the server rendered this
+  // page from a copy that is at most a few seconds old, so there is
+  // nothing to catch up on yet.
+  schedule(poll, initialStatus === 'scheduled' ? PREGAME_MS : POLL_MS);
 })();
 </script>
 """
