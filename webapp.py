@@ -104,6 +104,14 @@ app.config["SESSION_COOKIE_SECURE"] = True
 app.config["MAX_CONTENT_LENGTH"] = 12 * 1024 * 1024
 app.config["REMEMBER_COOKIE_SECURE"] = True
 app.config["REMEMBER_COOKIE_HTTPONLY"] = True
+# Lax, not Strict: Strict withholds the cookie on any cross-site
+# navigation, so following a password-reset link out of an email inbox
+# would land you logged out on a page that assumes you are not. Lax still
+# refuses to send the cookie on a cross-site POST, which is the CSRF case
+# that matters. Set explicitly rather than left to the browser default,
+# which differs between them and has changed more than once.
+app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
+app.config["REMEMBER_COOKIE_SAMESITE"] = "Lax"
 
 _COMPRESSIBLE_MIMETYPES = (
     "text/html", "text/css", "text/javascript", "text/plain",
@@ -175,6 +183,50 @@ def _compress_response(response):
     except Exception:
         # Never let a compression bug turn into a broken page -- worst
         # case, this request just goes out uncompressed.
+        pass
+    return response
+
+
+SITE_FOOTER = (
+    '<footer class="site"><div class="wrap">'
+    '<span class="foot-links">'
+    '<a href="/privacy">Privacy</a>'
+    '<a href="/terms">Terms</a>'
+    '<a href="/support">Support</a>'
+    '</span>'
+    '<span class="foot-note">Not affiliated with the NFL, the NFLPA, '
+    'ESPN or Sleeper. Rankings and grades are estimates, not advice.</span>'
+    '</div></footer>'
+)
+
+
+# Registered AFTER the compressor on purpose. Flask runs after_request
+# handlers in reverse registration order, so this one runs first and the
+# footer is part of the body by the time it is gzipped -- the other way
+# round would append plain text after a compressed stream.
+@app.after_request
+def _append_footer(response):
+    """Puts the policy links on every page.
+
+    Done here rather than in forty templates: a link that exists only in
+    Settings is invisible to anyone without an account, and an App Store
+    reviewer arrives signed out. Appended at the end of the document --
+    these pages have no explicit </body>, so trailing content lands in
+    the body where it belongs."""
+    try:
+        if (response.direct_passthrough
+                or response.status_code >= 300
+                or response.mimetype != "text/html"
+                or "Content-Encoding" in response.headers):
+            return response
+        body = response.get_data(as_text=True)
+        # A page that somehow already has one, and the footer's own
+        # pages, are left alone.
+        if 'footer class="site"' in body:
+            return response
+        response.set_data(body + SITE_FOOTER)
+    except Exception:
+        # A footer is never worth a 500.
         pass
     return response
 
@@ -5109,6 +5161,46 @@ def user_by_email(email):
         conn.close()
 
 
+# --- unsubscribing ------------------------------------------------------
+#
+# The link in an email has to work for someone who is not signed in and
+# may not remember they have an account, so it carries proof of its own:
+# an HMAC over the user id, keyed on the app secret. Nothing to store,
+# nothing to expire, and a link cannot be edited to unsubscribe somebody
+# else -- changing the id invalidates the signature.
+def unsubscribe_token(user_id):
+    return hmac.new(app.secret_key.encode(), f"unsub:{user_id}".encode(),
+                    hashlib.sha256).hexdigest()[:32]
+
+
+def unsubscribe_link(user_id):
+    return f"{SITE_URL}/unsubscribe?u={user_id}&t={unsubscribe_token(user_id)}"
+
+
+def _email_footer(user_id):
+    """The unsubscribe line every message carries, in both formats.
+
+    CAN-SPAM wants a working opt-out in commercial mail. It goes on
+    transactional mail too -- a password reset is not marketing and says
+    so, but a reader deciding they want out should never have to work out
+    which kind of email they are holding."""
+    if not user_id:
+        return "", ""
+    link = unsubscribe_link(user_id)
+    text = ("\n\n--\n"
+            "Fantasy Football Calc\n"
+            f"Stop receiving emails: {link}\n"
+            f"Privacy policy: {SITE_URL}/privacy")
+    body = (
+        '<hr style="border:none;border-top:1px solid #ddd;margin:26px 0 14px;">'
+        '<p style="color:#888;font-size:12px;line-height:1.6;margin:0;">'
+        'Fantasy Football Calc<br>'
+        f'<a href="{link}" style="color:#888;">Stop receiving emails</a> &middot; '
+        f'<a href="{SITE_URL}/privacy" style="color:#888;">Privacy policy</a>'
+        '</p>')
+    return text, body
+
+
 def send_password_reset_email(row, token):
     link = f"{SITE_URL}/reset-password?token={token}"
     name = row.get("username") or "there"
@@ -5117,7 +5209,9 @@ def send_password_reset_email(row, token):
         f"Someone asked to reset the password for your Fantasy Football Calc "
         f"account. Open this link to choose a new one:\n\n{link}\n\n"
         f"The link works once and expires in {PASSWORD_RESET_TTL_HOURS} hours.\n\n"
-        f"If this wasn't you, ignore this email -- your password has not changed."
+        f"If this wasn't you, ignore this email -- your password has not changed.\n\n"
+        f"This is an account security email, not a newsletter: it is sent only "
+        f"when someone asks to reset this account's password."
     )
     body = (
         f'<p>Hi {html.escape(str(name))},</p>'
@@ -5129,9 +5223,13 @@ def send_password_reset_email(row, token):
         f'<p style="color:#666;font-size:13px;">The link works once and expires in '
         f'{PASSWORD_RESET_TTL_HOURS} hours. If this wasn\'t you, ignore this email '
         f'&mdash; your password has not changed.</p>'
+        f'<p style="color:#888;font-size:12px;">This is an account security email, '
+        f'not a newsletter: it is sent only when someone asks to reset this '
+        f'account\'s password.</p>'
     )
+    foot_text, foot_html = _email_footer(row.get("id"))
     sent = send_email(row.get("email"), "Reset your Fantasy Football Calc password",
-                      text, body)
+                      text + foot_text, body + foot_html)
     if not sent:
         # Recoverable rather than lost: without a mail provider the link
         # is in the log, which is the only place it could safely go. It
@@ -5566,6 +5664,84 @@ def settings_page(section=None):
         league_count=league_count)
 
 
+def export_account_data(user_id):
+    """Everything this account is, as plain data.
+
+    The password hash is deliberately absent: it is the one field whose
+    export would only ever help someone attacking the account offline,
+    and "your data" does not mean "the thing that protects your data"."""
+    out = {
+        "exported_at": datetime.utcnow().isoformat() + "Z",
+        "account": {}, "synced_leagues": [], "votes": [], "avatar": None,
+    }
+    conn = get_db()
+    try:
+        with conn.cursor() as cur:
+            cur.execute(
+                "SELECT id, email, username, oauth_provider, referral_code, "
+                "newsletter_opt_in, is_member, created_at, username_changed_at, "
+                "pref_format, pref_mode, pref_scoring, pref_theme, pref_accent "
+                "FROM users WHERE id = %s", (user_id,))
+            row = cur.fetchone() or {}
+            out["account"] = {k: (v.isoformat() if hasattr(v, "isoformat") else v)
+                              for k, v in dict(row).items()}
+            cur.execute("SELECT league_id FROM synced_leagues WHERE user_id = %s",
+                        (user_id,))
+            out["synced_leagues"] = [r["league_id"] for r in cur.fetchall()]
+            cur.execute("SELECT sleeper_id, player_name, position, label, created_at "
+                        "FROM votes WHERE user_id = %s ORDER BY created_at", (user_id,))
+            out["votes"] = [
+                {**{k: v for k, v in dict(r).items() if k != "created_at"},
+                 "created_at": r["created_at"].isoformat() if r.get("created_at") else None}
+                for r in cur.fetchall()]
+            cur.execute("SELECT mimetype, length(image) AS bytes FROM user_avatars "
+                        "WHERE user_id = %s", (user_id,))
+            av = cur.fetchone()
+            if av:
+                # The bytes themselves are downloadable at /avatar/<id>;
+                # inlining a megabyte of base64 helps nobody read this.
+                out["avatar"] = {"mimetype": av.get("mimetype"),
+                                 "bytes": av.get("bytes"),
+                                 "download": f"{SITE_URL}/avatar/{user_id}"}
+    finally:
+        conn.close()
+    return out
+
+
+def delete_account(user_id):
+    """Erase the account, for real.
+
+    Everything that identifies the person goes: the row itself, the
+    avatar, the synced league list, any live password-reset tokens.
+
+    Start/Bench/Cut votes are kept but unlinked -- their user_id is set
+    to NULL. The vote is what the community rankings are built from, and
+    once it points at nobody it is no longer personal data; deleting it
+    instead would quietly degrade everyone else's rankings to no benefit
+    for the person leaving. This is the one thing that survives, which is
+    why the confirmation screen says so in as many words.
+
+    All of it in one transaction: a half-deleted account -- avatar gone,
+    login still working -- is worse than either outcome."""
+    conn = get_db()
+    try:
+        with conn.cursor() as cur:
+            cur.execute("UPDATE votes SET user_id = NULL WHERE user_id = %s", (user_id,))
+            anonymized = cur.rowcount
+            cur.execute("DELETE FROM password_resets WHERE user_id = %s", (user_id,))
+            cur.execute("DELETE FROM synced_leagues WHERE user_id = %s", (user_id,))
+            cur.execute("DELETE FROM user_avatars WHERE user_id = %s", (user_id,))
+            cur.execute("DELETE FROM users WHERE id = %s", (user_id,))
+            removed = cur.rowcount
+        conn.commit()
+    except Exception:
+        conn.rollback()
+        raise
+    finally:
+        conn.close()
+    return {"deleted": bool(removed), "votes_anonymized": anonymized}
+
+
 @app.route("/api/theme", methods=["POST"])
 def api_theme():
     """Save a theme choice.
@@ -5606,6 +5782,112 @@ def api_theme():
         # failure here costs the sync, not the change.
         return jsonify({"ok": False, "stored": False, "error": str(e),
                         "theme": theme, "accent": accent}), 500
+
+
+# When the legal pages last changed in a way worth dating. Bumped by
+# hand, because "today" would claim a revision every time the server
+# restarted and make the date meaningless.
+LEGAL_UPDATED = "15 September 2026"
+SUPPORT_EMAIL = os.environ.get("SUPPORT_EMAIL") or "support@fantasyfootballcalc.com"
+
+
+@app.route("/unsubscribe")
+def unsubscribe_page():
+    """One click, from a link in an email, with no sign-in.
+
+    hmac.compare_digest rather than == so a wrong token cannot be found
+    one character at a time by timing the responses.
+
+    A bad or edited link is told the same thing a good one is. Whether a
+    given address has an account is not something a stranger holding a
+    guessed URL gets to learn, and the reader either way ends up
+    unsubscribed or already was."""
+    raw = request.args.get("u") or ""
+    token = request.args.get("t") or ""
+    done = False
+    try:
+        user_id = int(raw)
+        if hmac.compare_digest(token, unsubscribe_token(user_id)):
+            conn = get_db()
+            try:
+                with conn.cursor() as cur:
+                    cur.execute("UPDATE users SET newsletter_opt_in = FALSE "
+                                "WHERE id = %s", (user_id,))
+                conn.commit()
+            finally:
+                conn.close()
+            done = True
+    except Exception:
+        pass
+    return render_template_string(UNSUBSCRIBE_HTML, done=done)
+
+
+@app.route("/privacy")
+def privacy_page():
+    return render_template_string(PRIVACY_HTML, updated=LEGAL_UPDATED)
+
+
+@app.route("/terms")
+def terms_page():
+    return render_template_string(TERMS_HTML, updated=LEGAL_UPDATED)
+
+
+@app.route("/support")
+@app.route("/contact")
+def support_page():
+    return render_template_string(SUPPORT_HTML, support_email=SUPPORT_EMAIL)
+
+
+@app.route("/settings/export")
+@login_required
+def export_account():
+    """Download everything on this account, as JSON."""
+    try:
+        data = export_account_data(current_user.id)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    body = json.dumps(data, indent=2, default=str)
+    resp = make_response(body)
+    resp.headers["Content-Type"] = "application/json"
+    stamp = datetime.utcnow().strftime("%Y-%m-%d")
+    resp.headers["Content-Disposition"] = (
+        f'attachment; filename="fantasyfootballcalc-{current_user.username}-{stamp}.json"')
+    # Never cached, never stored by a proxy: this is the whole account.
+    resp.headers["Cache-Control"] = "no-store, private"
+    return resp
+
+
+@app.route("/settings/delete", methods=["GET", "POST"])
+@login_required
+def delete_account_page():
+    """Delete this account, permanently.
+
+    Its own screen rather than a button on Settings: this is the one
+    action here that cannot be undone by doing it again, and it should
+    take a deliberate visit rather than a mis-tap.
+
+    Confirmation is typing the username. A password would be no proof
+    for the Google sign-in half of the userbase, who have none, and a
+    plain "are you sure" is a reflex rather than a decision."""
+    error = None
+    if request.method == "POST":
+        typed = (request.form.get("confirm_username") or "").strip()
+        if typed.lower() != (current_user.username or "").lower():
+            error = "That isn't your username, so nothing was deleted."
+        else:
+            try:
+                user_id = current_user.id
+                result = delete_account(user_id)
+                if not result["deleted"]:
+                    error = "That account no longer exists."
+                else:
+                    logout_user()
+                    return redirect("/?deleted=1")
+            except Exception as e:
+                error = str(e)
+    return render_template_string(
+        DELETE_ACCOUNT_HTML, error=error,
+        league_count=len(get_synced_league_ids(current_user.id) or []))
 
 
 @app.route("/forgot-password", methods=["GET", "POST"])
@@ -10447,7 +10729,20 @@ BASE_STYLE = THEME_BOOT + """
   nav.links .acct-menu a.out:hover{ color:var(--critical); background:var(--critical-wash); }
   .acct-menu .ico{ width:15px; text-align:center; flex:none; opacity:0.8; }
 
-  main{ padding: 32px 0 80px; }
+  main{ padding: 32px 0 40px; }
+
+  /* Site footer. The policy links have to be reachable without an
+     account -- a reviewer arrives signed out, and so does everyone
+     deciding whether to sign up. */
+  footer.site{ border-top:1px solid var(--line); margin-top:40px;
+               padding:22px 0 40px; }
+  footer.site .wrap{ display:flex; align-items:center; justify-content:space-between;
+                     gap:12px 22px; flex-wrap:wrap; }
+  footer.site a{ font-size:12.5px; font-weight:600; color:var(--ink-muted);
+                 text-decoration:none; }
+  footer.site a:hover{ color:var(--accent-ink); }
+  .foot-links{ display:flex; gap:18px; flex-wrap:wrap; }
+  .foot-note{ font-size:11.5px; color:var(--ink-muted); line-height:1.6; }
   .panel{ background:var(--paper-raised); border:1px solid var(--line); border-radius:16px; box-shadow:var(--shadow); padding:22px 24px; margin-top:18px; }
   .panel h2{ font-size:20px; margin-top:6px; margin-bottom:2px; }
   .eyebrow{ font-family:"IBM Plex Mono",monospace; font-size:11.5px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:var(--accent-ink); }
@@ -11267,6 +11562,311 @@ def make_header(active=""):
   </nav>
 </div></header>
 """
+
+# --- the legal pages -----------------------------------------------------
+#
+# Written against what the code actually does -- every data item listed
+# below is a real column, and every third party named is one the app
+# really talks to. A policy that describes a different app is worse than
+# none, because it is a published statement that happens to be false.
+#
+# NOT reviewed by a lawyer. Accurate, specific and honest is what this
+# can be; "sufficient" is a judgement someone qualified has to make.
+LEGAL_STYLE = """
+<style>
+  .lg-wrap{ max-width:760px; }
+  .lg-updated{ font-size:12.5px; color:var(--ink-muted); margin-top:4px; }
+  .lg-panel h3{ font-family:"Big Shoulders Display"; font-size:17px; font-weight:800;
+                text-transform:uppercase; letter-spacing:0.02em; margin:26px 0 8px; }
+  .lg-panel h3:first-of-type{ margin-top:0; }
+  .lg-panel p{ font-size:14.5px; line-height:1.75; color:var(--ink-secondary);
+               margin-top:10px; }
+  .lg-panel b{ color:var(--ink); }
+  .lg-panel a{ color:var(--accent-ink); }
+  .lg-panel ul{ margin:10px 0 0; padding-left:22px; font-size:14.5px; line-height:1.85;
+                color:var(--ink-secondary); }
+  .lg-panel li{ margin-bottom:5px; }
+  .lg-note{ margin-top:22px; padding:13px 15px; border-radius:10px;
+            background:var(--paper-sunken); font-size:13px; line-height:1.65;
+            color:var(--ink-muted); }
+</style>
+"""
+
+UNSUBSCRIBE_HTML = BASE_STYLE + make_header("") + LEGAL_STYLE + """
+<main><div class="wrap lg-wrap" style="max-width:560px;">
+  <div class="panel lg-panel" style="margin-top:30px;">
+    <h3>{{ 'You are unsubscribed' if done else 'Nothing to do' }}</h3>
+    <p>{% if done %}You will not get feature updates from us again. Account
+      emails &mdash; password resets and anything about your account&rsquo;s
+      security &mdash; are still sent, because they are the only way to get back
+      in if you are locked out.
+      {% else %}That link has expired or was changed. If you still want to stop
+      the emails, the setting is in <a href="/settings/email">Settings</a>.
+      {% endif %}</p>
+    <p style="margin-top:16px;"><a href="/scores">&larr; Back to the site</a></p>
+  </div>
+</div></main>
+"""
+
+
+PRIVACY_HTML = BASE_STYLE + make_header("") + LEGAL_STYLE + """
+<main><div class="wrap lg-wrap">
+  <div class="set-title">Privacy Policy</div>
+  <div class="lg-updated">Last updated {{ updated }}</div>
+
+  <div class="panel lg-panel" style="margin-top:16px;">
+    <h3>The short version</h3>
+    <p>We store what an account needs to work and nothing else. We do not sell
+      your data, we do not run advertising, and there is no third-party
+      analytics or tracking on this site. You can download everything we hold
+      about you, or delete all of it, from Settings, without asking us.</p>
+
+    <h3>What we store</h3>
+    <p>If you create an account:</p>
+    <ul>
+      <li><b>Email address</b> &mdash; to sign you in and to send password resets</li>
+      <li><b>Username</b> &mdash; shown on the site</li>
+      <li><b>Password</b> &mdash; stored only as a one-way hash. We cannot read it,
+        and neither can anyone who obtained the database.</li>
+      <li><b>Google account identifier</b> &mdash; only if you sign in with Google,
+        and only the opaque ID Google issues for this site. We never receive
+        your Google password.</li>
+      <li><b>Profile picture</b> &mdash; only if you upload one</li>
+      <li><b>Your Sleeper username and the IDs of leagues you sync</b> &mdash; so
+        League Manager can show your rosters. We do not change anything on
+        Sleeper.</li>
+      <li><b>Your preferences</b> &mdash; scoring format, rankings defaults, theme
+        and primary colour</li>
+      <li><b>Your Start/Bench/Cut votes</b> &mdash; which feed the community
+        rankings</li>
+      <li><b>When the account was created</b></li>
+    </ul>
+    <p>We do <b>not</b> store your IP address, your location, a device
+      fingerprint, or any advertising identifier.</p>
+
+    <h3>Cookies</h3>
+    <p>One cookie, used to keep you signed in. It is marked Secure, HttpOnly and
+      SameSite=Lax, which means it is only ever sent over HTTPS, cannot be read
+      by scripts, and is not sent from other sites. There are no advertising or
+      analytics cookies. Your theme choice is stored in your browser&rsquo;s
+      local storage so pages render in the right colours before they load; that
+      never leaves your device.</p>
+
+    <h3>Who else is involved</h3>
+    <ul>
+      <li><b>Render</b> &mdash; hosts the site and the database</li>
+      <li><b>Google</b> &mdash; only if you choose to sign in with Google</li>
+      <li><b>Resend</b> &mdash; sends password-reset and account emails</li>
+      <li><b>Sleeper, ESPN and FantasyCalc</b> &mdash; we read football data from
+        them. We do not send them anything about you.</li>
+    </ul>
+    <p>Player photographs and team logos shown on this site are loaded directly
+      from Sleeper&rsquo;s and ESPN&rsquo;s servers. Those requests come from
+      your browser, so those companies can see that a request was made, the same
+      as any image on any website.</p>
+
+    <h3>Your rights</h3>
+    <p>Whoever and wherever you are, not only where the law requires it:</p>
+    <ul>
+      <li><b>See it</b> &mdash; <a href="/settings/export">download everything</a>
+        we hold about you, as a file</li>
+      <li><b>Correct it</b> &mdash; change your username, email, picture and
+        settings yourself</li>
+      <li><b>Delete it</b> &mdash; <a href="/settings/delete">delete your
+        account</a>. It is immediate and permanent. Your Start/Bench/Cut votes
+        remain in the community rankings with the link to you removed, so they
+        no longer identify you; that is stated plainly on the deletion screen
+        before you confirm.</li>
+      <li><b>Stop the emails</b> &mdash; every email we send has an unsubscribe
+        link, and the setting is in <a href="/settings/email">Settings</a>.
+        Password resets are not marketing and are always sent.</li>
+    </ul>
+
+    <h3>Children</h3>
+    <p>This site is not intended for children under 13, and we do not knowingly
+      collect information from them. If you believe a child has created an
+      account, contact us and we will delete it.</p>
+
+    <h3>Changes</h3>
+    <p>If this policy changes in a way that affects what we collect or who we
+      share it with, we will say so on this page and update the date above.</p>
+
+    <h3>Contact</h3>
+    <p>Questions about any of this: <a href="/support">get in touch</a>.</p>
+
+    <div class="lg-note">This policy describes how the site actually works today,
+      written against the code rather than from a template. It has not been
+      reviewed by a lawyer.</div>
+  </div>
+</div></main>
+"""
+
+TERMS_HTML = BASE_STYLE + make_header("") + LEGAL_STYLE + """
+<main><div class="wrap lg-wrap">
+  <div class="set-title">Terms of Service</div>
+  <div class="lg-updated">Last updated {{ updated }}</div>
+
+  <div class="panel lg-panel" style="margin-top:16px;">
+    <h3>What this is</h3>
+    <p>Fantasy Football Calc is a free fantasy football tool: live NFL scores,
+      player rankings, trade valuations and matchup grades. By using it you
+      agree to what is on this page.</p>
+
+    <h3>Your account</h3>
+    <p>You are responsible for keeping your password to yourself and for what
+      happens under your account. Tell us if you think someone else has got
+      into it. You can close your account at any time from
+      <a href="/settings/delete">Settings</a>.</p>
+
+    <h3>What you may not do</h3>
+    <ul>
+      <li>Break into other people&rsquo;s accounts, or try to</li>
+      <li>Scrape the site in bulk, or hammer it hard enough to degrade it for
+        everyone else</li>
+      <li>Use it for anything illegal</li>
+      <li>Submit deliberately false Start/Bench/Cut votes to distort the
+        community rankings</li>
+    </ul>
+
+    <h3>The numbers are estimates</h3>
+    <p>Rankings, trade values, matchup grades and performance scores are
+      calculated from public data and from our own models. They are opinions
+      expressed as numbers, not predictions and not advice. Live scores come
+      from third parties and can be wrong, late or missing. <b>Do not rely on
+      anything here for betting or for any decision with money attached.</b></p>
+
+    <h3>Who owns what</h3>
+    <p>The site, its design and its calculations are ours. NFL team names, logos
+      and player names and likenesses belong to their respective owners; we are
+      not affiliated with, endorsed by or sponsored by the NFL, the NFLPA, any
+      NFL club, ESPN or Sleeper.</p>
+
+    <h3>Availability</h3>
+    <p>This is a free service and it comes with no uptime promise. We may change
+      or withdraw features, and the third-party data sources we depend on may
+      change or disappear without notice.</p>
+
+    <h3>Liability</h3>
+    <p>The service is provided as is. To the fullest extent the law allows, we
+      are not liable for any loss arising from using it or from being unable to
+      use it.</p>
+
+    <h3>Contact</h3>
+    <p><a href="/support">Get in touch</a> with any question about these terms.</p>
+
+    <div class="lg-note">These terms have not been reviewed by a lawyer.</div>
+  </div>
+</div></main>
+"""
+
+SUPPORT_HTML = BASE_STYLE + make_header("") + LEGAL_STYLE + """
+<main><div class="wrap lg-wrap">
+  <div class="set-title">Support</div>
+  <div class="lg-updated">We read everything that comes in.</div>
+
+  <div class="panel lg-panel" style="margin-top:16px;">
+    <h3>Get in touch</h3>
+    <p>Email <a href="mailto:{{ support_email }}">{{ support_email }}</a> &mdash;
+      bugs, questions, wrong numbers, feature ideas, or anything about your
+      account.</p>
+    <p>If you are reporting something that looks wrong on the site, the page
+      address and roughly when you saw it are the two things that make it
+      findable.</p>
+
+    <h3>Common questions</h3>
+    <p><b>A player&rsquo;s points look wrong.</b> Check your scoring format in
+      <a href="/settings/scoring">Settings</a> &mdash; every number on the site
+      is counted in the format you have chosen there.</p>
+    <p><b>My leagues aren&rsquo;t showing.</b> Set your Sleeper username in
+      <a href="/settings/leagues">Settings</a>, then sync from League Manager.</p>
+    <p><b>I forgot my password.</b> Use <a href="/forgot-password">the reset
+      link</a>. If you signed up with Google, sign in with Google instead
+      &mdash; there is no password on that account to reset.</p>
+    <p><b>I want my data, or I want out.</b>
+      <a href="/settings/export">Download everything</a> or
+      <a href="/settings/delete">delete your account</a>. Neither needs us.</p>
+
+    <h3>Security</h3>
+    <p>If you have found a security problem, please email it to us before
+      posting it anywhere public, and we will get to it quickly.</p>
+  </div>
+</div></main>
+"""
+
+
+DELETE_ACCOUNT_HTML = BASE_STYLE + make_header("") + """
+<style>
+  .del-wrap{ max-width:620px; }
+  .del-panel{ border-color:var(--critical); }
+  .del-list{ margin:14px 0 0; padding-left:20px; font-size:14px; line-height:1.9;
+             color:var(--ink-secondary); }
+  .del-list b{ color:var(--ink); }
+  .del-keep{ margin-top:16px; padding:12px 14px; border-radius:10px;
+             background:var(--paper-sunken); font-size:13.5px; line-height:1.6;
+             color:var(--ink-secondary); }
+  .del-confirm{ margin-top:20px; }
+  .del-confirm label{ display:block; font-size:13px; font-weight:600;
+                      color:var(--ink-secondary); margin-bottom:7px; }
+  .del-confirm input{ width:100%; background:var(--paper-sunken);
+                      border:1px solid var(--line-strong); color:var(--ink);
+                      border-radius:9px; padding:12px 14px; font-size:15px;
+                      font-family:inherit; }
+  .del-actions{ display:flex; align-items:center; gap:14px; margin-top:18px;
+                flex-wrap:wrap; }
+  .del-actions button{ background:var(--critical); color:#fff; border:none;
+                       border-radius:10px; padding:12px 20px; font-size:14px;
+                       font-weight:700; cursor:pointer; font-family:inherit; }
+  .del-actions a{ font-size:13.5px; font-weight:700; color:var(--ink-secondary);
+                  text-decoration:none; }
+  .del-actions a:hover{ color:var(--accent-ink); }
+</style>
+<main><div class="wrap del-wrap">
+  <a class="set-back" href="/settings/account">&larr; Account</a>
+  <div class="set-title">Delete account</div>
+  {% if error %}<div class="error">{{ error }}</div>{% endif %}
+
+  <div class="panel del-panel">
+    <p style="font-size:15px;">This cannot be undone. There is no grace period and
+      no way for us to restore the account afterwards.</p>
+    <p style="margin-top:14px; font-size:14px; color:var(--ink-secondary);">
+      Deleting removes:</p>
+    <ul class="del-list">
+      <li><b>Your login</b> &mdash; username, email address and password</li>
+      <li><b>Your profile picture</b></li>
+      <li><b>Your synced leagues</b>{% if league_count %} ({{ league_count }}
+          currently synced){% endif %} &mdash; the link between this account and
+          your Sleeper leagues. Nothing on Sleeper itself is touched.</li>
+      <li><b>Your settings</b> &mdash; scoring format, rankings defaults and theme</li>
+      <li><b>Any pending password-reset links</b></li>
+    </ul>
+    <div class="del-keep">
+      <b style="color:var(--ink);">One thing is kept, unlinked:</b> your
+      Start/Bench/Cut votes stay in the community rankings, with the connection
+      to you removed. They become anonymous counts that no longer identify you.
+      Everyone&rsquo;s rankings are built from those votes, so removing yours
+      would quietly make the board worse for other people without making you any
+      more deleted.
+    </div>
+
+    <form method="post" class="del-confirm">
+      <label for="delConfirm">Type <b style="color:var(--ink);">{{ current_user.username }}</b>
+        to confirm</label>
+      <input type="text" id="delConfirm" name="confirm_username"
+             autocomplete="off" autocapitalize="off" autocorrect="off"
+             spellcheck="false" placeholder="{{ current_user.username }}">
+      <div class="del-actions">
+        <button type="submit">Delete my account permanently</button>
+        <a href="/settings/account">Cancel</a>
+      </div>
+    </form>
+    <p style="margin-top:16px; font-size:12.5px; color:var(--ink-muted);">
+      Want a copy first? <a href="/settings/export"
+      style="color:var(--accent-ink);">Download your data</a> before deleting.
+    </p>
+  </div>
+</div></main>
+"""
+
 
 SBC_PAGE_HTML = BASE_STYLE + make_header("sbc") + """
 <main><div class="wrap" style="max-width:700px;">
@@ -17179,7 +17779,14 @@ document.addEventListener('change', function(e){
       <h3>Account</h3>
       <div class="set-read"><b>Email</b><span>{{ current_user.email or '&mdash;'|safe }}</span></div>
       <div class="set-read"><b>Plan</b><span>{{ 'Member' if current_user.is_member else 'Free' }}</span></div>
+      <div class="set-read"><b>Your data</b>
+        <span><a href="/settings/export" style="color:var(--accent-ink);">Download everything</a></span></div>
       <div class="set-danger"><a href="/logout">Log out</a></div>
+      <!-- Deletion gets its own screen, not a button here: it is the one
+           thing on this page that cannot be undone by doing it again. -->
+      <div class="set-danger" style="margin-top:4px;">
+        <a href="/settings/delete" style="color:var(--critical);">Delete account</a>
+      </div>
     </div>
   </div>
   {% endif %}
