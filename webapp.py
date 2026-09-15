@@ -382,6 +382,14 @@ def init_db():
             # plus this one number rescores a whole season exactly --
             # no second source, no re-deriving points from raw stats.
             cur.execute("ALTER TABLE player_stats ADD COLUMN IF NOT EXISTS rec REAL DEFAULT 0;")
+            # The whole stat line, as Sleeper sent it. Streaks needs
+            # every game's passing, rushing, receiving, kicking and
+            # tackling figures, and until now the sync kept four numbers
+            # from a dict of sixty and threw the rest away. JSONB rather
+            # than sixty columns because Sleeper's key set is not ours to
+            # freeze: a stat they add simply appears, one they rename
+            # simply stops being read.
+            cur.execute("ALTER TABLE player_stats ADD COLUMN IF NOT EXISTS stats JSONB;")
             cur.execute("ALTER TABLE users ADD COLUMN IF NOT EXISTS sleeper_username TEXT;")
             # Rankings defaults. Format and mode were URL parameters only,
             # so every visit started on 1QB dynasty regardless of the
@@ -4472,6 +4480,11 @@ def fetch_season_stats_from_sleeper(season):
                     "rec": rec if isinstance(rec, (int, float)) else 0,
                     "off_snp": off_snp if isinstance(off_snp, (int, float)) else 0,
                     "tm_off_snp": tm_off_snp if isinstance(tm_off_snp, (int, float)) else 0,
+                    # Only the numbers. Sleeper's dict carries nothing
+                    # else, but a stray string would fail the JSONB cast
+                    # for the whole row.
+                    "stats": {k: v for k, v in stats.items()
+                              if isinstance(v, (int, float)) and not isinstance(v, bool)},
                 }
     return weekly
 
@@ -4625,14 +4638,16 @@ def sync_season_to_db(season):
                 for week, w in weeks.items():
                     cur.execute(
                         """INSERT INTO player_stats (sleeper_id, season, week, fpts, rec,
-                                                     off_snp, tm_off_snp, updated_at)
-                           VALUES (%s, %s, %s, %s, %s, %s, %s, NOW())
+                                                     off_snp, tm_off_snp, stats, updated_at)
+                           VALUES (%s, %s, %s, %s, %s, %s, %s, %s, NOW())
                            ON CONFLICT (sleeper_id, season, week)
                            DO UPDATE SET fpts = EXCLUDED.fpts, rec = EXCLUDED.rec,
                                          off_snp = EXCLUDED.off_snp,
-                                         tm_off_snp = EXCLUDED.tm_off_snp, updated_at = NOW()""",
+                                         tm_off_snp = EXCLUDED.tm_off_snp,
+                                         stats = EXCLUDED.stats, updated_at = NOW()""",
                         (pid, int(season), week, w["pts"], w.get("rec") or 0,
-                         w["off_snp"], w["tm_off_snp"]),
+                         w["off_snp"], w["tm_off_snp"],
+                         psycopg2.extras.Json(w.get("stats") or {})),
                     )
                     rows_saved += 1
         conn.commit()
@@ -4744,6 +4759,60 @@ def ensure_season_stats_synced(season):
             # its own up-to-an-hour-old cached "nothing here" result.
             _defense_vs_position_cache.clear()
             _matchup_grade_cache.clear()
+
+    threading.Thread(target=_run, daemon=True).start()
+
+
+_stat_lines_checked = set()
+
+
+def ensure_stat_lines_synced(season):
+    """Refill a season whose rows predate the `stats` column.
+
+    ensure_season_stats_synced counts weeks and is satisfied by a season
+    that was synced last year -- correctly, for what it guards. But such
+    a season has every row's stat line NULL, because the column did not
+    exist when the rows were written, and Streaks reads nothing else. So
+    this asks the narrower question once per season per process: are
+    there rows here with no stat line? If so, one resync in the
+    background, through the same single-flight lock the other two
+    syncers share. Rows that already carry a line are left alone by
+    ON CONFLICT ... DO UPDATE, which simply writes the same thing."""
+    if season in _stat_lines_checked or not DATABASE_URL:
+        return
+    if not _seed_probe_due("statlines", season):
+        return
+    try:
+        conn = get_db()
+        try:
+            with conn.cursor() as cur:
+                cur.execute(
+                    "SELECT COUNT(*) AS n FROM player_stats "
+                    "WHERE season = %s AND stats IS NULL", (int(season),))
+                missing = (cur.fetchone() or {}).get("n", 0)
+        finally:
+            conn.close()
+    except Exception:
+        return
+    if not missing:
+        _stat_lines_checked.add(season)
+        return
+    with _stats_sync_lock:
+        if season in _stats_sync_busy_seasons:
+            return
+        _stats_sync_busy_seasons.add(season)
+
+    def _run():
+        try:
+            with _BACKGROUND_SYNC_SLOTS:
+                sync_season_to_db(season)
+            _stat_lines_checked.add(season)
+        except Exception:
+            pass
+        finally:
+            with _stats_sync_lock:
+                _stats_sync_busy_seasons.discard(season)
+            _streaks_cache.clear()
 
     threading.Thread(target=_run, daemon=True).start()
 
@@ -8453,6 +8522,445 @@ def get_moves_today(limit=MOVE_FEED_SIZE):
     return get_moves_report(limit=limit)
 
 
+# ---------------- Streaks: prop lines and hit rates, game by game ----------------
+#
+# The lines here are the site's own, not a sportsbook's. There is no
+# free, licensable source of book player-prop lines -- they are the
+# books' product, and every aggregator that carries them charges for it
+# -- so each player's default line is shaped from their own last ten
+# games the way a book shapes one: the median, landed on the .5 so an
+# over or under is always decidable. The reader moves it anyway; that is
+# the point of the page. `line_source` travels with every row so a
+# licensed feed can replace the default later without the UI knowing.
+#
+# Everything reads the stat line Sleeper already sends for every
+# player-game (player_stats.stats), so a prop is a formula over keys
+# Sleeper names, not a second data source.
+
+STREAK_BARS = 20          # games on the chart and in a list row
+STREAK_LINE_GAMES = 10    # games the default line is shaped from
+STREAK_MIN_GAMES = 3      # fewer than this and a player is not listed
+STREAK_LIST_MAX = 250
+STREAK_SEASONS_BACK = 1   # this season plus last: enough for 20 games
+STREAK_WINDOWS = (("season", "This season"), ("h2h", "H2H"),
+                  ("l5", "L5"), ("l10", "L10"), ("l20", "L20"))
+STREAK_LINE_SOURCE = "site"
+
+# key, label, short label, position groups, ((sleeper key, weight), ...), whole numbers?
+STREAK_PROPS = [
+    ("pass_yd",      "Passing Yards",       "Pass Yds",  ("QB",),               (("pass_yd", 1),), False),
+    ("pass_td",      "Passing TDs",         "Pass TD",   ("QB",),               (("pass_td", 1),), True),
+    ("pass_cmp",     "Completions",         "Comp",      ("QB",),               (("pass_cmp", 1),), True),
+    ("pass_att",     "Pass Attempts",       "Pass Att",  ("QB",),               (("pass_att", 1),), True),
+    ("pass_int",     "Interceptions",       "INT",       ("QB",),               (("pass_int", 1),), True),
+    ("pass_lng",     "Longest Completion",  "Pass Long", ("QB",),               (("pass_lng", 1),), False),
+    ("pass_rush_yd", "Pass + Rush Yards",   "Pass+Rush", ("QB",),               (("pass_yd", 1), ("rush_yd", 1)), False),
+    ("rush_yd",      "Rushing Yards",       "Rush Yds",  ("QB", "RB", "WR"),    (("rush_yd", 1),), False),
+    ("rush_att",     "Carries",             "Carries",   ("RB",),               (("rush_att", 1),), True),
+    ("rush_td",      "Rushing TDs",         "Rush TD",   ("QB", "RB"),          (("rush_td", 1),), True),
+    ("rush_lng",     "Longest Rush",        "Rush Long", ("RB",),               (("rush_lng", 1),), False),
+    ("rec",          "Receptions",          "Catches",   ("RB", "WR", "TE"),    (("rec", 1),), True),
+    ("rec_yd",       "Receiving Yards",     "Rec Yds",   ("RB", "WR", "TE"),    (("rec_yd", 1),), False),
+    ("rec_td",       "Receiving TDs",       "Rec TD",    ("RB", "WR", "TE"),    (("rec_td", 1),), True),
+    ("rec_tgt",      "Targets",             "Targets",   ("RB", "WR", "TE"),    (("rec_tgt", 1),), True),
+    ("rec_lng",      "Longest Reception",   "Rec Long",  ("RB", "WR", "TE"),    (("rec_lng", 1),), False),
+    ("rush_rec_yd",  "Rush + Rec Yards",    "Rush+Rec",  ("RB", "WR", "TE"),    (("rush_yd", 1), ("rec_yd", 1)), False),
+    ("any_td",       "Anytime TD",          "TD",        ("QB", "RB", "WR", "TE"), (("rush_td", 1), ("rec_td", 1)), True),
+    ("fgm",          "Field Goals Made",    "FG",        ("K",),                (("fgm", 1),), True),
+    ("xpm",          "Extra Points Made",   "XP",        ("K",),                (("xpm", 1),), True),
+    ("kick_pts",     "Kicking Points",      "Kick Pts",  ("K",),                (("fgm", 3), ("xpm", 1)), True),
+    ("fgm_lng",      "Longest Field Goal",  "FG Long",   ("K",),                (("fgm_lng", 1),), False),
+    ("idp_tkl",      "Tackles",             "Tackles",   ("DL", "LB", "DB"),    (("idp_tkl", 1),), True),
+    ("idp_tkl_solo", "Solo Tackles",        "Solo",      ("DL", "LB", "DB"),    (("idp_tkl_solo", 1),), True),
+    ("idp_sack",     "Sacks",               "Sacks",     ("DL", "LB", "DB"),    (("idp_sack", 1),), False),
+    ("idp_tkl_loss", "Tackles for Loss",    "TFL",       ("DL", "LB", "DB"),    (("idp_tkl_loss", 1),), True),
+    ("idp_int",      "Interceptions",       "INT",       ("LB", "DB"),          (("idp_int", 1),), True),
+    ("idp_pass_def", "Passes Defended",     "PD",        ("LB", "DB"),          (("idp_pass_def", 1),), True),
+]
+STREAK_PROP_BY_KEY = {p[0]: p for p in STREAK_PROPS}
+# The tabs the list page offers, in the order the reference shows them:
+# the cross-prop trends first, then the props most people come for.
+STREAK_LIST_TABS = ["trends", "any_td", "pass_yd", "rec_yd", "rush_yd", "rec",
+                    "pass_td", "rec_tgt", "rush_att", "pass_rush_yd", "rush_rec_yd",
+                    "kick_pts", "idp_tkl", "idp_sack"]
+
+_streaks_cache = {}
+_streak_logs_cache = {}
+_streak_sched_cache = {}
+
+
+def streak_position_group(position):
+    """QB/RB/WR/TE/K as themselves, every defender as DL/LB/DB."""
+    if not position:
+        return None
+    if position in POSITIONS or position in KICKER_POSITIONS:
+        return position
+    return IDP_POSITION_MAP.get(position)
+
+
+# What each group's tabs lead with, and which family of props comes
+# first. The catalogue above is one list shared by every group, so
+# without this a receiver's first tab was Rush Yds -- it sits earlier in
+# the list than the receiving props because quarterbacks and backs share
+# it. A receiver opens on Rec Yds, a back on Rush Yds, a quarterback on
+# Pass Yds, a kicker on Kicking Points, and a lineman on sacks; the rest
+# of the group's own family follows in catalogue order, then the shared
+# props.
+STREAK_LEAD = {"QB": "pass_yd", "RB": "rush_yd", "WR": "rec_yd", "TE": "rec_yd",
+               "K": "kick_pts", "DL": "idp_sack", "LB": "idp_tkl", "DB": "idp_tkl"}
+STREAK_FAMILY = {"QB": ("pass",), "RB": ("rush",), "WR": ("rec",), "TE": ("rec",),
+                 "K": ("fgm", "xpm", "kick"), "DL": ("idp",), "LB": ("idp",), "DB": ("idp",)}
+
+
+def streak_props_for(position):
+    group = streak_position_group(position)
+    props = [p for p in STREAK_PROPS if group in p[3]]
+    lead = STREAK_LEAD.get(group)
+    family = STREAK_FAMILY.get(group, ())
+    return sorted(props, key=lambda p: (p[0] != lead, not p[0].startswith(family)))
+
+
+def streak_prop_value(prop, stats):
+    """The prop's figure for one game, from Sleeper's stat line."""
+    total = 0.0
+    for key, weight in prop[4]:
+        v = (stats or {}).get(key)
+        if isinstance(v, (int, float)) and not isinstance(v, bool):
+            total += v * weight
+    return round(total, 1)
+
+
+def _median(values):
+    vals = sorted(values)
+    n = len(vals)
+    if not n:
+        return None
+    mid = n // 2
+    return vals[mid] if n % 2 else (vals[mid - 1] + vals[mid]) / 2.0
+
+
+def streak_line(values, games=STREAK_LINE_GAMES):
+    """The default line: the median of the last `games` figures, landed
+    on the .5 just above its floor. Always a half so no game pushes;
+    always within half a unit of what the player has actually been
+    doing, which is where a book puts it too. None with nothing to
+    shape it from."""
+    recent = [v for v in values[-games:] if isinstance(v, (int, float))]
+    if not recent:
+        return None
+    return math.floor(_median(recent)) + 0.5
+
+
+def streak_windows(games, line, opponent=None, season=None):
+    """Hit rates against `line` over every window the page offers.
+
+    `games` is chronological. A window with no games reports None
+    rather than 0%, so "never played them" and "never beat the line
+    against them" cannot be confused."""
+    def rate(subset):
+        n = len(subset)
+        hits = sum(1 for g in subset if g["value"] > line)
+        return {"hits": hits, "n": n,
+                "pct": round(100.0 * hits / n) if n else None}
+    out = {
+        "l5": rate(games[-5:]),
+        "l10": rate(games[-10:]),
+        "l20": rate(games[-20:]),
+        "season": rate([g for g in games if g["season"] == season]),
+        "h2h": rate([g for g in games if opponent and g["opp"] == opponent]),
+    }
+    return out
+
+
+def _streak_schedule_index(seasons, cache=_streak_sched_cache):
+    """{(season, week, team): {opp, home, date}} for every game in
+    `seasons`, from one query. A player's log is 20 opponent lookups and
+    a list is 250 players' worth; per-row lookups would be thousands of
+    round trips."""
+    key = tuple(sorted(seasons))
+    now = time.time()
+    entry = cache.get(key)
+    if entry and now - entry["time"] < 600:
+        return entry["data"]
+    index = {}
+    if DATABASE_URL:
+        try:
+            conn = get_db()
+            try:
+                with conn.cursor() as cur:
+                    cur.execute(
+                        """SELECT season, week, home_team, away_team, kickoff
+                           FROM nfl_schedule WHERE season = ANY(%s)""",
+                        (list(key),))
+                    rows = cur.fetchall()
+            finally:
+                conn.close()
+            for r in rows:
+                when = r.get("kickoff")
+                label = None
+                if isinstance(when, datetime):
+                    try:
+                        local = (when.replace(tzinfo=timezone.utc) if when.tzinfo is None
+                                 else when).astimezone(NFL_TZ)
+                        label = f"{local.month}/{local.day}"
+                    except Exception:
+                        label = None
+                home, away = r["home_team"], r["away_team"]
+                index[(r["season"], r["week"], home)] = {"opp": away, "home": True, "date": label}
+                index[(r["season"], r["week"], away)] = {"opp": home, "home": False, "date": label}
+        except Exception:
+            index = {}
+    cache[key] = {"data": index, "time": now}
+    return index
+
+
+def _streak_logs(seasons, cache=_streak_logs_cache):
+    """{sleeper_id: [(season, week, stats), ...]} chronological, for
+    every row in `seasons` that carries a stat line. One query, cached
+    ten minutes; the boards and the detail page both read from it."""
+    key = tuple(sorted(seasons))
+    now = time.time()
+    entry = cache.get(key)
+    if entry and now - entry["time"] < 600:
+        return entry["data"]
+    logs = {}
+    if DATABASE_URL:
+        try:
+            conn = get_db()
+            try:
+                with conn.cursor() as cur:
+                    cur.execute(
+                        """SELECT sleeper_id, season, week, stats FROM player_stats
+                           WHERE season = ANY(%s) AND stats IS NOT NULL
+                           ORDER BY season, week""",
+                        (list(key),))
+                    for r in cur.fetchall():
+                        st = r.get("stats")
+                        if isinstance(st, str):
+                            try:
+                                st = json.loads(st)
+                            except Exception:
+                                st = None
+                        if not isinstance(st, dict):
+                            continue
+                        logs.setdefault(r["sleeper_id"], []).append((r["season"], r["week"], st))
+            finally:
+                conn.close()
+        except Exception:
+            logs = {}
+    cache[key] = {"data": logs, "time": now}
+    return logs
+
+
+def streak_seasons(season):
+    return [int(season) - n for n in range(STREAK_SEASONS_BACK, -1, -1)]
+
+
+def build_streak_games(rows, prop, team, sched):
+    """One player's chronological game list for one prop. The opponent
+    is looked up by the player's CURRENT team -- the same accepted
+    approximation defense-vs-position uses; a mid-season trade
+    misattributes a handful of old weeks."""
+    games = []
+    for season, week, stats in rows:
+        meta = sched.get((season, week, team)) or {}
+        games.append({
+            "season": season, "week": week,
+            "opp": meta.get("opp"), "home": meta.get("home"),
+            "date": meta.get("date") or f"W{week}",
+            "value": streak_prop_value(prop, stats),
+        })
+    return games
+
+
+def _streak_player_row(sid, p, prop, rows, sched, season, opponent=None):
+    games = build_streak_games(rows, prop, p.get("team"), sched)
+    if len(games) < STREAK_MIN_GAMES:
+        return None
+    values = [g["value"] for g in games]
+    line = streak_line(values)
+    if line is None:
+        return None
+    shown = games[-STREAK_BARS:]
+    recent = values[-STREAK_LINE_GAMES:]
+    avg = round(sum(recent) / len(recent), 1)
+    windows = streak_windows(games, line, opponent=opponent, season=season)
+    return {
+        "sid": sid,
+        "name": f"{p.get('first_name', '')} {p.get('last_name', '')}".strip(),
+        "team": p.get("team"), "position": p.get("position"),
+        "group": streak_position_group(p.get("position")),
+        "photo": player_photo_url(sid),
+        "prop": prop[0], "prop_label": prop[1], "prop_short": prop[2],
+        "integer": prop[5],
+        "line": line, "line_source": STREAK_LINE_SOURCE,
+        "avg": avg, "edge": round(avg - line, 1),
+        "games": shown, "windows": windows,
+    }
+
+
+def _streak_opponents(players, season, week, sched):
+    """{team: opponent this week} so every row's H2H means the same
+    thing: the club they are about to play."""
+    out = {}
+    for p in players.values():
+        t = (p or {}).get("team")
+        if t and t not in out:
+            out[t] = (sched.get((season, week, t)) or {}).get("opp")
+    return out
+
+
+def get_streak_board(prop_key, season, week, cache=_streaks_cache):
+    """Every listed player for one prop, best L10 hit rate first."""
+    prop = STREAK_PROP_BY_KEY.get(prop_key)
+    if not prop:
+        return []
+    key = ("board", prop_key, int(season), int(week))
+    now = time.time()
+    entry = cache.get(key)
+    if entry and now - entry["time"] < 600:
+        return entry["data"]
+    seasons = streak_seasons(season)
+    for yr in seasons:
+        ensure_season_stats_synced(yr)
+        ensure_stat_lines_synced(yr)
+        ensure_schedule_synced(yr)
+    players = _players_or_empty()
+    logs = _streak_logs(seasons)
+    sched = _streak_schedule_index(seasons)
+    opps = _streak_opponents(players, season, week, sched)
+    rows = []
+    for sid, p in players.items():
+        if not isinstance(p, dict) or not p.get("team"):
+            continue
+        if streak_position_group(p.get("position")) not in prop[3]:
+            continue
+        log = logs.get(sid)
+        if not log:
+            continue
+        row = _streak_player_row(sid, p, prop, log, sched, int(season),
+                                 opponent=opps.get(p.get("team")))
+        if row:
+            rows.append(row)
+    rows.sort(key=lambda r: (-(r["windows"]["l10"]["pct"] or 0), -r["edge"]))
+    rows = rows[:STREAK_LIST_MAX]
+    cache[key] = {"data": rows, "time": now}
+    return rows
+
+
+def get_streak_trends(season, week, cache=_streaks_cache):
+    """The best current streaks across every prop: at least five games
+    in the last ten and an 80%+ hit rate, one row per player-prop."""
+    key = ("trends", int(season), int(week))
+    now = time.time()
+    entry = cache.get(key)
+    if entry and now - entry["time"] < 600:
+        return entry["data"]
+    rows = []
+    for prop in STREAK_PROPS:
+        for r in get_streak_board(prop[0], season, week):
+            w = r["windows"]["l10"]
+            if w["n"] >= 5 and (w["pct"] or 0) >= 80:
+                rows.append(r)
+    rows.sort(key=lambda r: (-(r["windows"]["l10"]["pct"] or 0),
+                             -(r["edge"] / r["line"] if r["line"] else 0)))
+    rows = rows[:STREAK_LIST_MAX]
+    cache[key] = {"data": rows, "time": now}
+    return rows
+
+
+def _kickoff_label(when):
+    """"12:00PM" on the league's clock, or None."""
+    if not isinstance(when, datetime):
+        return None
+    try:
+        local = (when.replace(tzinfo=timezone.utc) if when.tzinfo is None else when).astimezone(NFL_TZ)
+        return local.strftime("%-I:%M%p")
+    except Exception:
+        return None
+
+
+def get_streak_detail(sid, season, week):
+    """One player, every prop their position offers, the whole log.
+
+    Baked in full so the prop tabs switch without a round trip: a
+    player's log is forty games at most and a prop is a formula over
+    it, so the whole set is a few kilobytes."""
+    players = _players_or_empty()
+    p = players.get(sid)
+    if not isinstance(p, dict):
+        return None
+    props = streak_props_for(p.get("position"))
+    if not props:
+        return None
+    seasons = streak_seasons(season)
+    for yr in seasons:
+        ensure_season_stats_synced(yr)
+        ensure_stat_lines_synced(yr)
+        ensure_schedule_synced(yr)
+    logs = _streak_logs(seasons)
+    sched = _streak_schedule_index(seasons)
+    team = p.get("team")
+    nxt = get_schedule_for_team_week(int(season), int(week), team) if team else None
+    opponent = nxt["opponent"] if nxt else None
+
+    per_prop = {}
+    for prop in props:
+        row = _streak_player_row(sid, p, prop, logs.get(sid) or [], sched, int(season),
+                                 opponent=opponent)
+        if row:
+            # The detail page shows the full log, not the list's twenty.
+            row["games"] = build_streak_games(logs.get(sid) or [], prop, team, sched)
+            # Where this player's L10 average sits among the position.
+            board = get_streak_board(prop[0], season, week)
+            ranked = sorted(board, key=lambda r: -r["avg"])
+            row["pos_rank"] = next((i + 1 for i, r in enumerate(ranked) if r["sid"] == sid), None)
+            row["pos_count"] = len(ranked)
+            per_prop[prop[0]] = row
+
+    grade = None
+    dvp_rank = None
+    if p.get("position") in POSITIONS:
+        try:
+            grade = compute_matchup_grade(sid, int(season), int(week))
+        except Exception:
+            grade = None
+        if opponent:
+            try:
+                dvp_rank = ((get_defense_vs_position(int(season)).get(opponent) or {})
+                            .get(p.get("position")) or {}).get("rank")
+            except Exception:
+                dvp_rank = None
+
+    return {
+        "sid": sid,
+        "name": f"{p.get('first_name', '')} {p.get('last_name', '')}".strip(),
+        "team": team, "team_name": TEAM_NAMES.get(team, team),
+        "position": p.get("position"), "group": streak_position_group(p.get("position")),
+        "position_name": POSITION_NAMES.get(p.get("position"), p.get("position")),
+        "photo": player_photo_url(sid), "logo": team_logo_url(team),
+        "props": [{"key": pr[0], "label": pr[1], "short": pr[2]} for pr in props
+                  if pr[0] in per_prop],
+        "per_prop": per_prop,
+        "next": ({"opponent": opponent, "home": nxt["home"],
+                  "kickoff": _kickoff_label(nxt.get("kickoff")),
+                  "logo": team_logo_url(opponent)} if nxt else None),
+        "grade": ({"grade": grade["grade"], "grade_class": grade["grade_class"]}
+                  if grade else None),
+        "dvp_rank": dvp_rank,
+        "line_source": STREAK_LINE_SOURCE,
+    }
+
+
+POSITION_NAMES = {
+    "QB": "Quarterback", "RB": "Running Back", "WR": "Wide Receiver", "TE": "Tight End",
+    "K": "Kicker", "DE": "Defensive End", "DT": "Defensive Tackle", "NT": "Nose Tackle",
+    "DL": "Defensive Line", "LB": "Linebacker", "OLB": "Outside Linebacker",
+    "ILB": "Inside Linebacker", "MLB": "Middle Linebacker", "CB": "Cornerback",
+    "S": "Safety", "FS": "Free Safety", "SS": "Strong Safety", "DB": "Defensive Back",
+}
+
+
 _injury_state_lock = threading.Lock()
 _injury_state_last = {"time": 0.0}
 INJURY_STATE_REFRESH_S = 900
@@ -9416,6 +9924,78 @@ def performance_page():
             PERFORMANCE_HTML, detail=None, log=[], peers=[], sid=sid, quarters=[],
             season=int(SEASON), week=1, load_error=str(e), score_mark=SCORE_MARK_SVG,
         )
+
+
+STREAK_GROUPS = ["QB", "RB", "WR", "TE", "K", "DL", "LB", "DB"]
+
+
+def _streak_list_row(r, season, opp_next):
+    """The slice of a board row the list page draws. The full row
+    carries every window's numbers; the page recomputes those itself
+    from the games so a window switch is instant, and needs only this."""
+    return {
+        "sid": r["sid"], "name": r["name"], "team": r["team"], "group": r["group"],
+        "photo": r["photo"], "prop": r["prop"], "prop_short": r["prop_short"],
+        "line": r["line"], "integer": r["integer"], "avg": r["avg"], "edge": r["edge"],
+        "season_now": int(season), "opp_next": opp_next,
+        "games": [{"value": g["value"], "season": g["season"], "opp": g["opp"],
+                   "home": g["home"], "date": g["date"]} for g in r["games"]],
+    }
+
+
+@app.route("/streaks")
+def streaks_page():
+    """Every player prop against a line, game by game. The prop is a
+    server-side choice (each board is its own cached build); the window,
+    the position and the search are the client's."""
+    info = get_current_week_info()
+    season = request.args.get("season", default=info["season"], type=int)
+    week = request.args.get("week", default=info["week"], type=int)
+    prop = (request.args.get("prop") or "trends").strip()
+    if prop != "trends" and prop not in STREAK_PROP_BY_KEY:
+        prop = "trends"
+    pos = (request.args.get("pos") or "").strip().upper()
+    if pos not in STREAK_GROUPS:
+        pos = ""
+    win = (request.args.get("win") or "l10").strip().lower()
+    if win not in dict(STREAK_WINDOWS):
+        win = "l10"
+    tabs = [("trends", "Trends")] + [(k, STREAK_PROP_BY_KEY[k][2]) for k in STREAK_LIST_TABS if k != "trends"]
+    try:
+        board = get_streak_trends(season, week) if prop == "trends" else get_streak_board(prop, season, week)
+        sched = _streak_schedule_index(streak_seasons(season))
+        rows = [_streak_list_row(r, season, (sched.get((season, week, r["team"])) or {}).get("opp"))
+                for r in board]
+        return render_template_string(
+            STREAKS_HTML, rows=rows, prop=prop, pos=pos, win=win, tabs=tabs,
+            windows=list(STREAK_WINDOWS), groups=STREAK_GROUPS, season=season, week=week,
+            load_error=None)
+    except Exception as e:
+        return render_template_string(
+            STREAKS_HTML, rows=[], prop=prop, pos=pos, win=win, tabs=tabs,
+            windows=list(STREAK_WINDOWS), groups=STREAK_GROUPS, season=season, week=week,
+            load_error=str(e))
+
+
+@app.route("/streaks/player")
+def streak_player_page():
+    """One player, every prop, the whole log, and a line you can move."""
+    sid = (request.args.get("sid") or "").strip()
+    prop = (request.args.get("prop") or "").strip()
+    info = get_current_week_info()
+    season = request.args.get("season", default=info["season"], type=int)
+    week = request.args.get("week", default=info["week"], type=int)
+    try:
+        d = get_streak_detail(sid, season, week) if sid else None
+        if d and prop not in d["per_prop"]:
+            prop = d["props"][0]["key"] if d["props"] else prop
+        return render_template_string(
+            STREAK_PLAYER_HTML, d=d, prop=prop, season=season, week=week,
+            windows=list(STREAK_WINDOWS), load_error=None)
+    except Exception as e:
+        return render_template_string(
+            STREAK_PLAYER_HTML, d=None, prop=prop, season=season, week=week,
+            windows=list(STREAK_WINDOWS), load_error=str(e))
 
 
 @app.route("/api/performers")
@@ -10965,6 +11545,12 @@ def api_warm():
             # This job already runs every twelve minutes, so taking the
             # snapshot here is what actually makes the feed automatic.
             record_team_changes(build_team_assignments())
+            # Streaks reads two seasons of stat lines in one pass and
+            # builds a board per prop from them. Cached ten minutes, so
+            # this ping is what keeps the first visitor from paying for
+            # the scan -- and it is also what triggers the one-off refill
+            # of rows written before the stats column existed.
+            get_streak_trends(info["season"], info["week"])
         except Exception:
             pass
 
@@ -12153,6 +12739,7 @@ NAV_GROUPS = [
         ("league", "/league-manager", "League Manager", "Your synced leagues and rosters"),
         ("rankings", "/rankings", "Rankings", "Dynasty and redraft player values"),
         ("matchups", "/matchups", "Matchups", "Start-sit grades for the week"),
+        ("streaks", "/streaks", "Streaks", "Prop lines and hit rates, game by game"),
         ("trade", "/trade-calculator", "Trade Calculator", "Weigh any trade both ways"),
         ("sbc", "/start-bench-cut", "Start/Bench/Cut", "Help keep the rankings sharp"),
     ]),
@@ -14912,6 +15499,509 @@ FEED_PAGE_HTML = BASE_STYLE + make_header("live") + """
 </div>
 """
 
+
+
+STREAKS_HTML = BASE_STYLE + make_header("streaks") + """
+<style>
+  .sk-page{
+    --sk-bg:var(--paper); --sk-surface:var(--paper-raised); --sk-surface2:var(--paper-sunken);
+    --sk-line:var(--line); --sk-text:var(--ink); --sk-muted:var(--ink-muted);
+    background:var(--sk-bg); color:var(--sk-text); padding-bottom:60px; min-height:100vh;
+    font-family:"Source Sans 3",system-ui,sans-serif;
+  }
+  .sk-title{ font-family:"Big Shoulders Display"; font-size:26px; font-weight:800;
+             text-transform:uppercase; margin:18px 0 2px; }
+  .sk-sub{ font-size:12px; color:var(--sk-muted); margin-bottom:12px; line-height:1.5; max-width:70ch; }
+
+  /* Two rows of controls, sticky under the header: the window the
+     numbers are read over, then who and which prop. Pills scroll
+     sideways on a phone rather than wrapping into a wall. */
+  .sk-bars{ position:sticky; top:64px; z-index:30; padding:8px 0 10px;
+            background:color-mix(in srgb, var(--sk-bg) 94%, transparent); backdrop-filter:blur(8px);
+            border-bottom:1px solid var(--sk-line); display:flex; flex-direction:column; gap:8px; }
+  .sk-pills{ display:flex; gap:6px; overflow-x:auto; scrollbar-width:none; padding:2px 0; }
+  .sk-pills::-webkit-scrollbar{ display:none; }
+  .sk-pill{ flex:none; padding:8px 14px; border-radius:99px; border:1px solid var(--sk-line);
+            background:var(--sk-surface); color:var(--sk-muted); font-size:13px; font-weight:700;
+            text-decoration:none; cursor:pointer; font-family:inherit; white-space:nowrap; }
+  .sk-pill.on{ background:var(--sk-text); color:var(--sk-bg); border-color:var(--sk-text); }
+  .sk-row2{ display:flex; gap:8px; align-items:center; }
+  .sk-select{ flex:none; background-color:var(--sk-surface); border:1px solid var(--sk-line);
+              color:var(--sk-text); border-radius:99px; padding:8px 30px 8px 14px; font-size:13px;
+              font-weight:700; font-family:inherit; appearance:none; -webkit-appearance:none; cursor:pointer;
+              background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5 6 6.5 11 1.5' stroke='%238b9089' stroke-width='1.8' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+              background-repeat:no-repeat; background-position:right 11px center; background-size:11px 7px; }
+  .sk-search{ flex:1; min-width:90px; background:var(--sk-surface); border:1px solid var(--sk-line);
+              color:var(--sk-text); border-radius:99px; padding:8px 14px; font-size:13px; font-family:inherit; }
+
+  .sk-list{ margin-top:12px; border:1px solid var(--sk-line); border-radius:12px; overflow:hidden;
+            background:var(--sk-surface); }
+  .sk-item{ display:grid; grid-template-columns:44px minmax(0,1fr) 58px minmax(96px,150px);
+            gap:12px; align-items:center; padding:12px 14px; border-top:1px solid var(--sk-line);
+            text-decoration:none; color:var(--sk-text); }
+  .sk-item:first-child{ border-top:none; }
+  .sk-item:hover{ background:var(--sk-surface2); }
+  .sk-item img{ width:44px; height:44px; border-radius:50%; object-fit:cover; background:var(--sk-surface2); }
+  .sk-main{ min-width:0; display:flex; flex-direction:column; gap:3px; }
+  .sk-name{ font-weight:700; font-size:15px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .sk-name .tm{ color:var(--sk-muted); font-weight:600; font-size:12px; margin-left:6px; font-family:"IBM Plex Mono"; }
+  .sk-prop{ font-size:14px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .sk-prop .o{ color:var(--good); font-weight:700; margin-right:4px; }
+  .sk-prop .ln{ font-family:"IBM Plex Mono"; font-weight:700; }
+  .sk-prop .rate{ color:var(--sk-muted); font-size:12px; margin-left:6px; font-family:"IBM Plex Mono"; }
+  .sk-edge{ text-align:center; }
+  .sk-edge .lab{ display:block; font-size:10px; letter-spacing:0.08em; color:var(--sk-muted);
+                 font-family:"Big Shoulders Display"; font-weight:700; }
+  .sk-edge .val{ display:block; font-family:"IBM Plex Mono"; font-size:16px; font-weight:700;
+                 font-variant-numeric:tabular-nums; }
+  .sk-edge .val.up{ color:var(--good); } .sk-edge .val.down{ color:var(--critical); }
+  /* The bars: one per game in the chosen window, oldest left. Height is
+     the figure against the best of the window; colour is the only thing
+     that matters at this size -- did it clear the line. */
+  .sk-bars-mini{ display:flex; align-items:flex-end; gap:2px; height:38px; }
+  .sk-bars-mini i{ flex:1; min-width:3px; border-radius:2px 2px 0 0; background:var(--critical);
+                   min-height:3px; }
+  .sk-bars-mini i.hit{ background:var(--good); }
+  .sk-bars-mini i.flat{ background:var(--sk-muted); opacity:0.5; }
+  .sk-empty{ color:var(--sk-muted); padding:36px; text-align:center; font-size:13px; line-height:1.6; }
+  .sk-foot{ font-size:11.5px; color:var(--sk-muted); margin-top:14px; line-height:1.55; max-width:70ch; }
+  @media (max-width:640px){
+    .sk-title{ font-size:22px; }
+    .sk-item{ grid-template-columns:40px minmax(0,1fr) 52px 84px; gap:9px; padding:11px 10px; }
+    .sk-item img{ width:40px; height:40px; }
+    .sk-name{ font-size:14px; } .sk-prop{ font-size:13px; }
+  }
+</style>
+
+<div class="sk-page">
+<div class="wrap">
+  {% if load_error %}<div class="error">Couldn't load streaks right now: {{ load_error }}</div>{% endif %}
+  <div class="sk-title">Streaks</div>
+  <div class="sk-sub">Every player prop, game by game, against a line. Green cleared it, red didn't.
+    Tap a player to move the line yourself.</div>
+
+  <div class="sk-bars">
+    <div class="sk-pills" id="skWindows">
+      {% for key, label in windows %}
+      <button type="button" class="sk-pill {{ 'on' if key == win }}" data-win="{{ key }}">{{ label }}</button>
+      {% endfor %}
+    </div>
+    <div class="sk-row2">
+      <select class="sk-select" id="skPos" aria-label="Position">
+        <option value="">All</option>
+        {% for g in groups %}<option value="{{ g }}" {{ 'selected' if g == pos }}>{{ g }}</option>{% endfor %}
+      </select>
+      <input class="sk-search" id="skSearch" type="search" placeholder="Search" aria-label="Search players">
+    </div>
+    <div class="sk-pills">
+      {% for key, label in tabs %}
+      <a class="sk-pill {{ 'on' if key == prop }}" href="/streaks?prop={{ key }}{% if pos %}&pos={{ pos }}{% endif %}&win={{ win }}">{{ label }}</a>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="sk-list" id="skList"></div>
+  <div class="sk-foot">Lines are this site's own, shaped from each player's last ten games
+    &mdash; the median, landed on the half. They are a starting point, not a sportsbook's number;
+    open any player to set your own.</div>
+</div>
+</div>
+
+<script>
+const SK_ROWS = {{ rows|tojson }};
+const SK_WIN = {{ win|tojson }};
+const SK_PROP = {{ prop|tojson }};
+const SK_POS = {{ pos|tojson }};
+(function(){
+  const list = document.getElementById('skList');
+  const posEl = document.getElementById('skPos');
+  const searchEl = document.getElementById('skSearch');
+  let win = SK_WIN, pos = SK_POS || '', q = '';
+  const WIN_N = {l5:5, l10:10, l20:20};
+
+  // A whole number reads as one; anything else keeps one decimal. A
+  // 273-yard game is not "273.0", and a 1.9 TD average is not "2".
+  function fmt(v){ const r = Math.round(v*10)/10; return Number.isInteger(r) ? String(r) : r.toFixed(1); }
+  function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+  // Which of a row's games the chosen window covers, oldest first.
+  function windowGames(r){
+    const g = r.games;
+    if (win === 'season') return g.filter(x => x.season === r.season_now);
+    if (win === 'h2h') return g.filter(x => r.opp_next && x.opp === r.opp_next);
+    return g.slice(-(WIN_N[win] || 10));
+  }
+
+  function render(){
+    let rows = SK_ROWS.filter(r => (!pos || r.group === pos) &&
+                                   (!q || r.name.toLowerCase().includes(q)));
+    const shaped = rows.map(r => {
+      const g = windowGames(r);
+      const n = g.length;
+      const hits = g.filter(x => x.value > r.line).length;
+      const avg = n ? g.reduce((a, x) => a + x.value, 0) / n : null;
+      return {r, g, n, hits, pct: n ? Math.round(100*hits/n) : null, avg};
+    }).filter(x => x.n > 0);
+    shaped.sort((a, b) => (b.pct - a.pct) || ((b.avg - b.r.line) - (a.avg - a.r.line)));
+    if (!shaped.length){
+      list.innerHTML = '<div class="sk-empty">Nothing to show for this window yet.<br>' +
+        'Streaks fill in as game logs sync; a fresh season needs a few weeks.</div>';
+      return;
+    }
+    list.innerHTML = shaped.map(x => {
+      const r = x.r;
+      const max = Math.max(...x.g.map(v => v.value), r.line, 1);
+      const bars = x.g.map(v => {
+        const h = Math.max(8, Math.round(100 * v.value / max));
+        const cls = v.value > r.line ? 'hit' : (v.value === 0 ? 'flat' : '');
+        return '<i class="' + cls + '" style="height:' + h + '%" title="' + esc(v.date) + ' ' +
+               (v.opp ? (v.home ? 'vs ' : '@') + esc(v.opp) : '') + ': ' + fmt(v.value) + '"></i>';
+      }).join('');
+      const up = x.avg > r.line;
+      return '<a class="sk-item" href="/streaks/player?sid=' + encodeURIComponent(r.sid) + '&prop=' + encodeURIComponent(r.prop) + '">' +
+        '<img src="' + esc(r.photo) + '" alt="" loading="lazy" onerror="this.style.visibility=\\'hidden\\'">' +
+        '<span class="sk-main"><span class="sk-name">' + esc(r.name) + '<span class="tm">' + esc(r.team) + '</span></span>' +
+        '<span class="sk-prop"><span class="o">O</span><span class="ln">' + fmt(r.line) + '</span> ' + esc(r.prop_short) +
+        '<span class="rate">' + x.hits + '/' + x.n + ' &middot; ' + x.pct + '%</span></span></span>' +
+        '<span class="sk-edge"><span class="lab">EDGE</span><span class="val ' + (up ? 'up' : 'down') + '">' + fmt(x.avg) + '</span></span>' +
+        '<span class="sk-bars-mini">' + bars + '</span></a>';
+    }).join('');
+  }
+
+  document.getElementById('skWindows').addEventListener('click', e => {
+    const b = e.target.closest('[data-win]'); if (!b) return;
+    win = b.dataset.win;
+    document.querySelectorAll('#skWindows .sk-pill').forEach(p => p.classList.toggle('on', p === b));
+    // Keep the prop links carrying the same window, so switching prop keeps it.
+    document.querySelectorAll('.sk-pills a.sk-pill').forEach(a => {
+      // The attribute, not the property: reading .href hands back the
+      // absolute URL and writing it back would bake the origin in.
+      a.setAttribute('href', a.getAttribute('href').replace(/([?&])win=[^&]*/, '$1win=' + win));
+    });
+    render();
+  });
+  posEl.addEventListener('change', () => {
+    pos = posEl.value;
+    document.querySelectorAll('.sk-pills a.sk-pill').forEach(a => {
+      const u = new URL(a.getAttribute('href'), location.href);
+      if (pos) u.searchParams.set('pos', pos); else u.searchParams.delete('pos');
+      a.setAttribute('href', u.pathname + u.search);
+    });
+    render();
+  });
+  searchEl.addEventListener('input', () => { q = searchEl.value.trim().toLowerCase(); render(); });
+  render();
+})();
+</script>
+"""
+
+
+STREAK_PLAYER_HTML = BASE_STYLE + make_header("streaks") + """
+<style>
+  .sp-page{
+    --sp-bg:var(--paper); --sp-surface:var(--paper-raised); --sp-surface2:var(--paper-sunken);
+    --sp-line:var(--line); --sp-text:var(--ink); --sp-muted:var(--ink-muted);
+    background:var(--sp-bg); color:var(--sp-text); padding-bottom:70px; min-height:100vh;
+    font-family:"Source Sans 3",system-ui,sans-serif;
+  }
+  .sp-pills{ display:flex; gap:6px; overflow-x:auto; scrollbar-width:none; padding:14px 0 4px; }
+  .sp-pills::-webkit-scrollbar{ display:none; }
+  .sp-pill{ flex:none; padding:8px 14px; border-radius:99px; border:1px solid var(--sp-line);
+            background:var(--sp-surface); color:var(--sp-muted); font-size:13px; font-weight:700;
+            cursor:pointer; font-family:inherit; white-space:nowrap; }
+  .sp-pill.on{ background:var(--sp-text); color:var(--sp-bg); border-color:var(--sp-text); }
+  .sp-pill b{ display:block; font-family:"IBM Plex Mono"; font-size:13px; margin-top:1px; }
+  .sp-pill b.good{ color:var(--good); } .sp-pill b.warn{ color:var(--warning); } .sp-pill b.bad{ color:var(--critical); }
+  .sp-pill.on b{ color:inherit; }
+
+  .sp-head{ display:flex; align-items:flex-start; gap:14px; margin-top:14px; }
+  .sp-who{ flex:1; min-width:0; }
+  .sp-name{ font-family:"Big Shoulders Display"; font-size:30px; font-weight:800; line-height:1.05; }
+  .sp-club{ color:var(--sp-muted); font-size:14px; margin-top:4px; line-height:1.4; }
+  .sp-mug{ position:relative; flex:none; width:72px; height:72px; margin-right:12px; }
+  .sp-mug img.face{ width:72px; height:72px; border-radius:50%; object-fit:cover; background:var(--sp-surface2); }
+  .sp-mug img.crest{ position:absolute; right:-12px; bottom:-2px; width:28px; height:28px; object-fit:contain; }
+
+  .sp-facts{ display:grid; grid-template-columns:1fr 1fr 1.4fr auto; gap:10px 14px; margin-top:18px;
+             padding:14px; border:1px solid var(--sp-line); border-radius:14px; background:var(--sp-surface); }
+  .sp-fact .k{ font-family:"Big Shoulders Display"; font-size:12px; letter-spacing:0.06em;
+               text-transform:uppercase; color:var(--sp-muted); }
+  .sp-fact .v{ font-size:17px; font-weight:700; margin-top:2px; font-family:"IBM Plex Mono";
+               font-variant-numeric:tabular-nums; }
+  .sp-fact .v.text{ font-family:inherit; }
+  .sp-fact .v .up{ color:var(--good); } .sp-fact .v .down{ color:var(--critical); }
+  .sp-fact .v img{ width:18px; height:18px; object-fit:contain; vertical-align:-3px; margin-right:3px; }
+  .sp-gauge{ grid-row:1 / span 2; align-self:center; text-align:center; padding:8px 12px;
+             border-radius:12px; background:var(--sp-surface2); min-width:86px; }
+  .sp-gauge .g{ display:inline-block; font-family:"IBM Plex Mono"; font-size:22px; font-weight:800;
+                padding:6px 12px; border-radius:99px; }
+  .sp-gauge .lab{ display:block; font-size:12px; color:var(--sp-muted); margin-top:6px; }
+
+  /* The chart. Bars are the player's figure per game; the rule is the
+     line; both live in the same percent space so moving the line
+     moves the rule without redrawing a bar. */
+  .sp-chart{ margin-top:18px; border:1px solid var(--sp-line); border-radius:14px; background:var(--sp-surface);
+             padding:14px 12px 10px; }
+  .sp-plot{ position:relative; height:220px; display:flex; align-items:flex-end; gap:5px; padding-left:36px; }
+  .sp-axis{ position:absolute; left:0; top:0; bottom:0; width:32px; font-family:"IBM Plex Mono";
+            font-size:11px; color:var(--sp-muted); }
+  .sp-axis span{ position:absolute; right:0; transform:translateY(-50%); }
+  .sp-axis .line-lab{ color:var(--sp-text); font-weight:700; }
+  .sp-rule{ position:absolute; left:36px; right:0; height:2px; background:var(--sp-text);
+            transform:translateY(1px); z-index:2; pointer-events:none; opacity:0.9; }
+  .sp-bar{ flex:1; min-width:0; position:relative; display:flex; flex-direction:column; justify-content:flex-end;
+           height:100%; }
+  .sp-bar i{ display:block; width:100%; border-radius:4px 4px 0 0; background:var(--critical); min-height:4px; }
+  .sp-bar.hit i{ background:var(--good); }
+  .sp-bar.flat i{ background:var(--sp-muted); opacity:0.55; }
+  .sp-bar b{ position:absolute; left:0; right:0; bottom:4px; text-align:center; font-family:"IBM Plex Mono";
+             font-size:12px; font-weight:700; color:#fff; text-shadow:0 1px 2px rgba(0,0,0,0.5); }
+  .sp-bar.small b{ bottom:auto; top:-18px; color:var(--sp-text); text-shadow:none; }
+  .sp-x{ display:flex; gap:5px; padding-left:36px; margin-top:6px; }
+  .sp-x span{ flex:1; min-width:0; text-align:center; font-family:"IBM Plex Mono"; font-size:10px;
+              color:var(--sp-muted); line-height:1.35; overflow:hidden; }
+  .sp-x span b{ display:block; font-weight:600; }
+  .sp-chart-note{ font-size:11.5px; color:var(--sp-muted); margin-top:10px; line-height:1.5; }
+
+  /* Move the line. A stepper for the exact figure, a slider for the
+     feel of it, and the book's -- here the site's -- number beside so
+     you always know how far you have wandered. */
+  .sp-adjust{ margin-top:18px; border:1px solid var(--sp-line); border-radius:14px; background:var(--sp-surface);
+              padding:14px; }
+  .sp-adjust h3{ font-family:"Big Shoulders Display"; font-size:15px; font-weight:800; text-transform:uppercase;
+                 letter-spacing:0.04em; margin:0 0 10px; color:var(--sp-muted); }
+  .sp-step{ display:flex; align-items:center; justify-content:center; gap:14px; }
+  .sp-step button{ width:44px; height:44px; border-radius:50%; border:1px solid var(--sp-line);
+                   background:var(--sp-surface2); color:var(--sp-text); font-size:22px; cursor:pointer;
+                   font-family:inherit; line-height:1; }
+  .sp-step output{ font-family:"IBM Plex Mono"; font-size:30px; font-weight:800; min-width:110px; text-align:center;
+                   font-variant-numeric:tabular-nums; }
+  .sp-under{ text-align:center; font-size:13px; color:var(--sp-muted); margin-top:8px; }
+  .sp-under b{ color:var(--sp-text); font-family:"IBM Plex Mono"; }
+  .sp-under .hr{ font-family:"IBM Plex Mono"; font-weight:700; }
+  .sp-under .hr.good{ color:var(--good); } .sp-under .hr.warn{ color:var(--warning); } .sp-under .hr.bad{ color:var(--critical); }
+  .sp-under button{ background:none; border:none; color:var(--accent-ink); font-weight:700; cursor:pointer;
+                    font-family:inherit; font-size:13px; padding:0 0 0 4px; }
+  .sp-slider{ width:100%; margin-top:12px; accent-color:var(--accent); }
+  .sp-ticks{ display:flex; justify-content:space-between; font-family:"IBM Plex Mono"; font-size:11px;
+             color:var(--sp-muted); margin-top:2px; }
+
+  .sp-filters{ display:flex; gap:8px; flex-wrap:wrap; margin-top:16px; }
+  .sp-chip{ padding:8px 14px; border-radius:99px; border:1px solid var(--sp-line); background:var(--sp-surface);
+            font-size:13px; font-weight:700; color:var(--sp-text); }
+  .sp-chip .r{ font-family:"IBM Plex Mono"; margin-left:4px; }
+  .sp-chip .r.good{ color:var(--good); } .sp-chip .r.warn{ color:var(--warning); } .sp-chip .r.bad{ color:var(--critical); }
+  .sp-back{ display:inline-block; margin-top:22px; color:var(--accent-ink); text-decoration:none; font-weight:700; font-size:13px; }
+  .sp-empty{ color:var(--sp-muted); padding:36px; text-align:center; font-size:13.5px; line-height:1.6;
+             border:1px solid var(--sp-line); border-radius:14px; margin-top:18px; }
+  @media (max-width:640px){
+    .sp-facts{ grid-template-columns:1fr 1fr 1.3fr; }
+    .sp-gauge{ grid-row:auto; grid-column:1 / -1; display:flex; align-items:center; justify-content:center; gap:12px; }
+    .sp-gauge .lab{ margin:0; }
+    .sp-name{ font-size:26px; }
+    .sp-plot{ height:190px; }
+  }
+</style>
+
+<div class="sp-page">
+<div class="wrap">
+  {% if load_error %}<div class="error">Couldn't load this player right now: {{ load_error }}</div>{% endif %}
+  {% if d %}
+  <div class="sp-pills" id="spProps">
+    {% for pr in d.props %}
+    <button type="button" class="sp-pill {{ 'on' if pr.key == prop }}" data-prop="{{ pr.key }}">{{ pr.short }}</button>
+    {% endfor %}
+  </div>
+
+  <div class="sp-head">
+    <div class="sp-who">
+      <div class="sp-name">{{ d.name }}</div>
+      <div class="sp-club">{{ d.team_name or 'Free agent' }}<br>{{ d.position_name }}</div>
+    </div>
+    <div class="sp-mug">
+      <img class="face" src="{{ d.photo }}" alt="" onerror="this.style.visibility='hidden'">
+      {% if d.logo %}<img class="crest" src="{{ d.logo }}" alt="" onerror="this.style.display='none'">{% endif %}
+    </div>
+  </div>
+
+  <div class="sp-facts">
+    <div class="sp-fact"><div class="k" id="spAvgK">L10 avg</div><div class="v" id="spAvg">&ndash;</div></div>
+    <div class="sp-fact"><div class="k">Line</div><div class="v" id="spLine">&ndash;</div></div>
+    <div class="sp-fact"><div class="k">Prop</div><div class="v text" id="spPropName">&ndash;</div></div>
+    {% if d.grade %}
+    <div class="sp-gauge"><span class="g grade-badge grade-{{ d.grade.grade_class }}">{{ d.grade.grade }}</span>
+      <span class="lab">Matchup</span></div>
+    {% endif %}
+    <div class="sp-fact"><div class="k">Hit rate</div><div class="v" id="spHit">&ndash;</div></div>
+    <div class="sp-fact"><div class="k">Pos rank</div><div class="v" id="spRank">&ndash;</div></div>
+    <div class="sp-fact"><div class="k">Opponent</div><div class="v text">
+      {% if d.next %}{% if d.next.logo %}<img src="{{ d.next.logo }}" alt="">{% endif %}{{ '' if d.next.home else '@' }}{{ d.next.opponent }}{% if d.next.kickoff %} &middot; {{ d.next.kickoff }}{% endif %}
+      {% else %}Bye{% endif %}</div></div>
+  </div>
+
+  <div class="sp-chart">
+    <div class="sp-plot" id="spPlot"></div>
+    <div class="sp-x" id="spX"></div>
+    <div class="sp-chart-note" id="spNote"></div>
+  </div>
+
+  <div class="sp-pills" id="spWindows">
+    {% for key, label in windows %}
+    <button type="button" class="sp-pill {{ 'on' if key == 'l10' }}" data-win="{{ key }}">{{ label }}<b data-pct="{{ key }}">&ndash;</b></button>
+    {% endfor %}
+  </div>
+
+  <div class="sp-adjust">
+    <h3 id="spAdjTitle">Prop line</h3>
+    <div class="sp-step">
+      <button type="button" id="spMinus" aria-label="Lower the line">&minus;</button>
+      <output id="spOut">&ndash;</output>
+      <button type="button" id="spPlus" aria-label="Raise the line">+</button>
+    </div>
+    <div class="sp-under">Site line <b id="spBook">&ndash;</b> &middot; <span class="hr" id="spHr">&ndash;</span> hit rate &middot;
+      <button type="button" id="spReset">Reset</button></div>
+    <input class="sp-slider" type="range" id="spSlider" min="0" max="20" step="1" value="10" aria-label="Line">
+    <div class="sp-ticks"><span id="spLo"></span><span id="spHi"></span></div>
+  </div>
+
+  <div class="sp-filters" id="spFilters"></div>
+
+  <a class="sp-back" href="/streaks?prop={{ prop }}">&larr; Back to streaks</a>
+  {% elif not load_error %}
+  <div class="sp-empty">No game log for this player yet.<br>Streaks fill in as stat lines sync.</div>
+  <a class="sp-back" href="/streaks">&larr; Back to streaks</a>
+  {% endif %}
+</div>
+</div>
+
+{% if d %}
+<script>
+const SP = {{ d|tojson }};
+const SP_PROP = {{ prop|tojson }};
+const SP_SEASON = {{ season|tojson }};
+(function(){
+  const $ = id => document.getElementById(id);
+  const WIN_N = {l5:5, l10:10, l20:20};
+  let prop = SP.per_prop[SP_PROP] ? SP_PROP : (SP.props[0] || {}).key;
+  let win = 'l10';
+  let line = null;          // the reader's line; null means the site's
+  const opp = SP.next ? SP.next.opponent : null;
+
+  function cur(){ return SP.per_prop[prop]; }
+  // A whole number reads as one; anything else keeps one decimal. A
+  // 273-yard game is not "273.0", and a 1.9 TD average is not "2".
+  function fmt(v){ const r = Math.round(v*10)/10; return Number.isInteger(r) ? String(r) : r.toFixed(1); }
+  function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+  function ordinal(n){ const s = ['th','st','nd','rd'], v = n % 100; return n + (s[(v-20)%10] || s[v] || s[0]); }
+  function tone(pct){ return pct == null ? '' : (pct >= 60 ? 'good' : (pct >= 40 ? 'warn' : 'bad')); }
+  function activeLine(){ return line == null ? cur().line : line; }
+
+  function games(){ return cur().games; }
+  function windowGames(key){
+    const g = games();
+    if (key === 'season') return g.filter(x => x.season === SP_SEASON);
+    if (key === 'h2h') return g.filter(x => opp && x.opp === opp);
+    return g.slice(-(WIN_N[key] || 10));
+  }
+  function rate(list, L){
+    const n = list.length, hits = list.filter(x => x.value > L).length;
+    return {n, hits, pct: n ? Math.round(100*hits/n) : null};
+  }
+
+  function render(){
+    const r = cur(); if (!r) return;
+    const L = activeLine();
+    const shown = windowGames(win);
+    const winRate = rate(shown, L);
+    const last10 = games().slice(-10);
+    const avg = last10.length ? last10.reduce((a, x) => a + x.value, 0) / last10.length : null;
+
+    // Facts.
+    $('spAvg').innerHTML = avg == null ? '&ndash;' :
+      '<span class="' + (avg > L ? 'up' : 'down') + '">' + (avg > L ? '&#9650;' : '&#9660;') + '</span> ' + fmt(avg);
+    $('spLine').textContent = fmt(L);
+    $('spPropName').textContent = r.prop_label;
+    $('spHit').innerHTML = winRate.pct == null ? '&ndash;' :
+      '<span class="' + (winRate.pct >= 50 ? 'up' : 'down') + '">' + (winRate.pct >= 50 ? '&#9650;' : '&#9660;') + '</span> ' + winRate.pct + '%';
+    $('spRank').textContent = r.pos_rank ? ordinal(r.pos_rank) : '\\u2013';
+
+    // Chart.
+    const max = Math.max(...shown.map(x => x.value), L, 1) * 1.08;
+    const pct = v => Math.round(100 * v / max);
+    $('spPlot').innerHTML =
+      '<div class="sp-axis"><span style="top:' + (100 - pct(max/1.08)) + '%">' + fmt(max/1.08) + '</span>' +
+      '<span class="line-lab" style="top:' + (100 - pct(L)) + '%">' + fmt(L) + '</span>' +
+      '<span style="top:100%">0</span></div>' +
+      '<div class="sp-rule" style="bottom:' + pct(L) + '%"></div>' +
+      shown.map(x => {
+        const h = pct(x.value);
+        const cls = (x.value > L ? 'hit' : (x.value === 0 ? 'flat' : '')) + (h < 14 ? ' small' : '');
+        return '<div class="sp-bar ' + cls + '"><i style="height:' + Math.max(h, 2) + '%"></i><b>' + fmt(x.value) + '</b></div>';
+      }).join('');
+    $('spX').innerHTML = shown.map(x =>
+      '<span>' + esc(x.date) + '<b>' + (x.opp ? (x.home ? '' : '@') + esc(x.opp) : '') + '</b></span>').join('');
+    $('spNote').textContent = 'Each bar is one game, oldest on the left. The rule is the line: ' +
+      winRate.hits + ' of ' + winRate.n + ' cleared it over this window.';
+
+    // Window pills.
+    document.querySelectorAll('#spWindows [data-pct]').forEach(b => {
+      const rr = rate(windowGames(b.dataset.pct), L);
+      b.textContent = rr.pct == null ? '\\u2013' : rr.pct + '%';
+      b.className = tone(rr.pct);
+    });
+
+    // Adjuster.
+    $('spAdjTitle').textContent = r.prop_label + ' prop line';
+    $('spOut').textContent = fmt(L);
+    $('spBook').textContent = fmt(r.line);
+    $('spHr').textContent = winRate.pct == null ? '\\u2013' : winRate.pct + '%';
+    $('spHr').className = 'hr ' + tone(winRate.pct);
+    const lo = Math.max(0.5, r.line - 10), hi = r.line + 10;
+    const sl = $('spSlider');
+    sl.min = 0; sl.max = Math.round(hi - lo); sl.value = Math.round(L - lo);
+    $('spLo').textContent = fmt(lo); $('spHi').textContent = fmt(hi);
+
+    // Filters.
+    let chips = '';
+    if (SP.dvp_rank) chips += '<span class="sp-chip">DvP <span class="r ' +
+      (SP.dvp_rank >= 20 ? 'good' : (SP.dvp_rank >= 12 ? 'warn' : 'bad')) + '">' + ordinal(SP.dvp_rank) + '</span></span>';
+    if (opp) { const h = rate(windowGames('h2h'), L);
+      chips += '<span class="sp-chip">vs ' + esc(opp) + ' <span class="r ' + tone(h.pct) + '">' + (h.pct == null ? 'never' : h.hits + '/' + h.n) + '</span></span>'; }
+    $('spFilters').innerHTML = chips;
+  }
+
+  function setLine(v){
+    const r = cur();
+    v = Math.max(0.5, Math.round(v * 2) / 2);
+    line = (v === r.line) ? null : v;
+    render();
+  }
+  $('spMinus').onclick = () => setLine(activeLine() - 1);
+  $('spPlus').onclick = () => setLine(activeLine() + 1);
+  $('spReset').onclick = () => { line = null; render(); };
+  $('spSlider').addEventListener('input', () => {
+    const r = cur(); const lo = Math.max(0.5, r.line - 10);
+    setLine(lo + Number($('spSlider').value));
+  });
+  $('spProps').addEventListener('click', e => {
+    const b = e.target.closest('[data-prop]'); if (!b) return;
+    prop = b.dataset.prop; line = null;
+    document.querySelectorAll('#spProps .sp-pill').forEach(p => p.classList.toggle('on', p === b));
+    try { history.replaceState(null, '', '/streaks/player?sid=' + encodeURIComponent(SP.sid) + '&prop=' + prop); } catch (e) {}
+    render();
+  });
+  $('spWindows').addEventListener('click', e => {
+    const b = e.target.closest('[data-win]'); if (!b) return;
+    win = b.dataset.win;
+    document.querySelectorAll('#spWindows .sp-pill').forEach(p => p.classList.toggle('on', p === b));
+    $('spAvgK').textContent = 'L10 avg';
+    render();
+  });
+  render();
+})();
+</script>
+{% endif %}
+"""
 
 
 PLAY_DETAIL_HTML = BASE_STYLE + make_header("live") + """
