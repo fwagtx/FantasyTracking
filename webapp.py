@@ -11103,13 +11103,18 @@ THEME_TOKENS = """
     --good:#1fae5a; --good-wash:rgba(31,174,90,0.16);
     --warning:#d1a521; --warning-wash:rgba(209,165,33,0.16);
     --critical:#e2534a; --critical-wash:rgba(226,83,74,0.16);
-    /* Plays that put points on the board. Deliberately NOT the accent:
-       the accent is the colour of every link and control here, so an
-       accent-coloured play list would say nothing about which rows
-       scored -- and it would stop meaning anything at all the moment
-       someone set their primary colour to blue. Defined once so the
-       game feed and the performance page cannot drift apart. */
-    --scored:#4c9dff;
+    /* Plays that put points on the board. This WAS a fixed blue, on the
+       reasoning that the accent already marks links so a scoring play
+       needed a colour of its own. That was the wrong trade: it left one
+       stubbornly blue thing on a page someone had just made red, and
+       what actually distinguishes a scoring row is that it is tinted at
+       all -- a plain play is --ink either way. So it follows the primary
+       colour now, through --accent-ink rather than --accent, because
+       this is text and --accent-ink is the half of the pair picked for
+       legibility against whichever ground the theme set. Defined once so
+       the game feed, the play page and the performance page cannot
+       drift apart. */
+    --scored:var(--accent-ink);
     --pos-qb:#1baf7a; --pos-rb:#4a90e2; --pos-wr:#e0397a; --pos-te:#9575e8;
     /* Defense. The depth chart has always built DL/LB/DB groups
        (DEPTH_SLOT_PRIORITY), but only the four offensive ones ever had a
@@ -11136,7 +11141,8 @@ THEME_TOKENS = """
     --good:#12833f; --good-wash:rgba(18,131,63,0.13);
     --warning:#8a6d0f; --warning-wash:rgba(138,109,15,0.14);
     --critical:#c0392b; --critical-wash:rgba(192,57,43,0.12);
-    --scored:#1b6fd4;
+    /* No --scored here: it is var(--accent-ink), and --accent-ink is
+       redefined just below to the light ink, so it follows on its own. */
     --shadow: 0 1px 2px rgba(16,24,40,0.05), 0 8px 24px -12px rgba(16,24,40,0.18);
     --accent-ink: var(--accent-ink-light);
   }
@@ -14847,8 +14853,11 @@ PLAY_DETAIL_HTML = BASE_STYLE + make_header("live") + """
   .pd-who a:hover{ color:var(--accent-ink); }
   .pd-who .fps{ color:var(--pd-muted); }
 
+  /* A filled button, so it takes --accent and the ink that preset
+     declares as legible ON it -- not --scored, which is a text colour
+     and was hardcoding navy for its own label regardless of the fill. */
   .pd-cta{ display:block; text-align:center; margin-top:18px; padding:13px 16px;
-           border-radius:99px; background:var(--scored); color:#04121f; font-weight:800;
+           border-radius:99px; background:var(--accent); color:var(--accent-on); font-weight:800;
            font-size:15px; text-decoration:none; }
 
   .pd-panel{ margin-top:22px; }
@@ -15250,8 +15259,9 @@ PERFORMANCE_HTML = BASE_STYLE + make_header("live") + """
                 font-size:11.5px; color:var(--pf-muted); }
   .pf-feed-sit img{ width:15px; height:15px; object-fit:contain; vertical-align:-2px; }
   .pf-feed-sit b{ color:var(--pf-text); font-family:"IBM Plex Mono"; font-weight:700; }
-  /* Plain white for an ordinary play, blue for one that scored -- so
-     the rows that mattered are visible without reading a word. */
+  /* Plain ink for an ordinary play, the primary colour for one that
+     scored -- so the rows that mattered are visible without reading a
+     word, in whichever colour the reader chose. */
   .pf-feed-title{ font-size:15.5px; font-weight:700; color:var(--pf-text); margin-top:3px; }
   .pf-feed-title.scored{ color:var(--pf-scored); }
   .pf-feed-rate{ flex:none; display:flex; align-items:center; gap:5px;
@@ -17896,7 +17906,11 @@ AUTH_STYLE = THEME_BOOT + """
   .auth-wrap{ max-width:400px; margin:20px auto 80px; padding:0 24px; }
   .auth-wrap h1{ font-family:"Big Shoulders Display"; font-size:32px; font-weight:800; text-transform:uppercase; margin:0; }
   .auth-sub{ color:var(--ink-muted); font-size:14px; margin-top:8px; }
-  .auth-sub a{ color:#b97a1f; text-decoration:none; font-weight:600; }
+  /* The accent, not a copy of what the accent happens to default to.
+     The theme boot script runs on these pages too, so a reader who set
+     a primary colour and then signed out was looking at two amber links
+     on an otherwise re-coloured page. */
+  .auth-sub a{ color:var(--accent-ink); text-decoration:none; font-weight:600; }
   .auth-field{ margin-top:18px; }
   .auth-field label{ font-size:12.5px; font-weight:600; color:var(--ink-muted); display:block; margin-bottom:6px; }
   .auth-field input[type=text], .auth-field input[type=email], .auth-field input[type=password]{
@@ -17914,7 +17928,7 @@ AUTH_STYLE = THEME_BOOT + """
   .username-status.checking{ color:var(--ink-muted); }
   .checkbox-row{ display:flex; align-items:flex-start; gap:8px; margin-top:16px; font-size:13px; color:var(--ink-muted); }
   .checkbox-row input{ margin-top:2px; }
-  .checkbox-row a{ color:#b97a1f; text-decoration:none; }
+  .checkbox-row a{ color:var(--accent-ink); text-decoration:none; }
   .join-btn{ width:100%; margin-top:22px; padding:13px; border-radius:8px; border:none; background:#2fae4e; color:#fff; font-weight:800; font-size:15px; cursor:pointer; }
   .join-btn:disabled{ background:#264d31; color:#7a9a83; cursor:not-allowed; }
   .divider{ display:flex; align-items:center; gap:12px; margin:22px 0; color:var(--ink-muted); font-size:12.5px; }
@@ -18438,9 +18452,9 @@ document.addEventListener('change', function(e){
           </button>
           {% endfor %}
         </div>
-        <div class="hint">Every link, button and highlight on the site. The blue used
-          for scoring plays stays blue &mdash; it marks points on the board, so it has
-          to mean something other than &ldquo;this is a link&rdquo;.</div>
+        <div class="hint">Every link, button and highlight on the site &mdash; including
+          the touchdowns and field goals in a play list, which are tinted to mark
+          points on the board and follow whichever colour you pick here.</div>
       </div>
   </div>
 
