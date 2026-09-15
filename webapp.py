@@ -13647,27 +13647,20 @@ RANKINGS_HTML = BASE_STYLE + make_header("rankings") + VOTE_MODAL_HTML + """
     background:var(--rk-bg); color:var(--rk-text); margin:0 -24px; padding:0 24px 60px;
     font-family:"Source Sans 3",system-ui,sans-serif;
   }
-  .rk-toolbar{ position:sticky; top:64px; z-index:40; background:color-mix(in srgb, var(--rk-bg) 92%, transparent); backdrop-filter:blur(8px); border-bottom:1px solid var(--rk-line); padding:16px 0; display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+  /* Not sticky. This wraps to three rows on a phone, and a pinned
+     three-row bar over a 300-row list is a letterbox whatever it does
+     on the way down -- sliding it in and out on scroll direction was
+     tried and never felt settled under a thumb. It is content now: it
+     scrolls off with the page, and nothing can sit on top of a player. */
+  .rk-toolbar{ position:static; background:var(--rk-bg); border-bottom:1px solid var(--rk-line); padding:16px 0; display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
 
-  /* Two sticky layers -- the site header and this toolbar -- and on a
-     phone the toolbar wraps to three rows. Together they hold about a
-     third of the screen, so a long ranking gets read through a
-     letterbox. Both slide away on the way down and come straight back
-     on the way up: the list gets the whole screen, and the filters are
-     never more than a flick away.
-
-     The toolbar clears its own height PLUS the header's, since it is
-     stuck 64px down and would otherwise leave its bottom edge showing. */
-  header.site, .rk-page .rk-toolbar{
-    transition:transform .2s ease;
-    will-change:transform;
-  }
+  /* The one sticky thing left is the 64px site header. It slides away
+     on the way down and comes straight back on the way up, so a long
+     ranking gets the whole screen. */
+  header.site{ transition:transform .2s ease; will-change:transform; }
   body.rk-bars-away header.site{ transform:translateY(-100%); }
-  body.rk-bars-away .rk-page .rk-toolbar{ transform:translateY(calc(-100% - 64px)); }
-  /* Someone who asked for motion to stop gets bars that simply stay. */
-  @media (prefers-reduced-motion:reduce){
-    header.site, .rk-page .rk-toolbar{ transition:none; }
-  }
+  /* Someone who asked for motion to stop gets a header that simply stays. */
+  @media (prefers-reduced-motion:reduce){ header.site{ transition:none; } }
   .rk-title{ font-family:"Big Shoulders Display"; font-size:22px; font-weight:800; text-transform:uppercase; margin-right:auto; color:var(--rk-text); }
   /* A styled select loses the platform's own arrow, and a control with
      no arrow does not read as a control. Drawn back on explicitly. */
@@ -13841,12 +13834,13 @@ RANKINGS_HTML = BASE_STYLE + make_header("rankings") + VOTE_MODAL_HTML + """
 </div>
 
 <script>
-// The sticky bars get out of the way on the way down and come back on
+// The site header gets out of the way on the way down and comes back on
 // the way up -- see .rk-bars-away. Kept deliberately dumb: one class,
-// one rAF-throttled read of scrollY, no measurement of the bars.
+// one rAF-throttled read of scrollY, no measurement of the header.
 (function(){
   const body = document.body;
-  // Far enough down that the bars are always there when the page is
+  const searchEl = document.getElementById('rkSearch');
+  // Far enough down that the header is always there when the page is
   // first read, and past any address-bar collapse on a phone.
   const ARMED_AT = 150;
   // Ignore the jitter of a finger resting on the screen and the
@@ -13858,12 +13852,12 @@ RANKINGS_HTML = BASE_STYLE + make_header("rankings") + VOTE_MODAL_HTML + """
   function apply(){
     queued = false;
     const y = Math.max(0, window.scrollY || 0);
-    // Typing in the search box or working a select scrolls the page on
-    // a phone as the keyboard opens. Pulling the control being used out
-    // from under the finger is the one thing worse than a bar in the way.
-    const busy = document.activeElement &&
-                 document.activeElement.closest &&
-                 document.activeElement.closest('.rk-toolbar');
+    // Typing in the search box scrolls the page on a phone as the
+    // keyboard opens; the header stays put for that. ONLY the search
+    // box: a <select> keeps focus after a choice is made, so treating
+    // any toolbar control as "in use" pinned the header open for the
+    // rest of the visit once the position dropdown had been touched.
+    const busy = document.activeElement === searchEl;
     if (Math.abs(y - last) < DELTA) return;
     const down = y > last;
     last = y;
@@ -13874,11 +13868,9 @@ RANKINGS_HTML = BASE_STYLE + make_header("rankings") + VOTE_MODAL_HTML + """
   window.addEventListener('scroll', function(){
     if (!queued){ queued = true; requestAnimationFrame(apply); }
   }, {passive:true});
-  // A filter that changes the list under you should hand the bars back.
-  document.addEventListener('focusin', function(e){
-    if (e.target.closest && e.target.closest('.rk-toolbar')){
-      body.classList.remove('rk-bars-away');
-    }
+  // Starting to type hands the header back.
+  if (searchEl) searchEl.addEventListener('focus', function(){
+    body.classList.remove('rk-bars-away');
   });
 })();
 const RK_DATA = [
