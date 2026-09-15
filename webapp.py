@@ -1052,7 +1052,30 @@ def get_player_news(full_name, team, limit=3, espn_id=None):
 
 # ---------------- Team depth chart (from Sleeper's own player data) ----------------
 
-DEPTH_SLOT_PRIORITY = {"QB": 0, "RB": 1, "WR": 2, "TE": 3, "DL": 4, "LB": 5, "DB": 6}
+# The order depth-chart columns appear in: offense, then defense, then
+# special teams. Written as an ordered list and turned into the lookup,
+# so adding a group means adding it in one place and in the position it
+# should actually appear.
+#
+# K used to be missing from this entirely. It still rendered -- it is in
+# SCORED_POSITIONS, so the chart built the column -- but it fell to the
+# catch-all rank below, which put it last by luck rather than by intent
+# and tied it with every other unlisted group.
+DEPTH_GROUP_ORDER = ["QB", "RB", "WR", "TE", "DL", "LB", "DB", "K"]
+DEPTH_SLOT_PRIORITY = {group: i for i, group in enumerate(DEPTH_GROUP_ORDER)}
+
+
+def depth_group_rank(base):
+    """Where a group's column sits, left to right.
+
+    A group with no place of its own sorts after every group that has
+    one, and alphabetically among its peers rather than tying with them
+    on a single number -- so the column order is always deterministic,
+    whatever SCORED_POSITIONS grows to hold."""
+    rank = DEPTH_SLOT_PRIORITY.get(base)
+    if rank is None:
+        return (len(DEPTH_GROUP_ORDER), base or "")
+    return (rank, "")
 
 # Sleeper labels defensive depth slots by field alignment (LDE, MLB, RCB,
 # SS...) rather than by the DL/LB/DB groups IDP formats actually use --
@@ -1085,7 +1108,7 @@ def _depth_slot_base(slot):
 def _depth_slot_sort_key(slot):
     base = _depth_slot_base(slot)
     digits = re.sub(r"\D", "", slot)
-    return (DEPTH_SLOT_PRIORITY.get(base, 9), int(digits) if digits else 0)
+    return depth_group_rank(base) + (int(digits) if digits else 0,)
 
 
 # Sleeper's own injury_status field is refreshed by Sleeper throughout the
@@ -1175,7 +1198,7 @@ def get_team_depth_chart(team, all_players):
             "injury": _injury_badge(pl),
         })
     result = []
-    for base in sorted(groups.keys(), key=lambda b: DEPTH_SLOT_PRIORITY.get(b, 9)):
+    for base in sorted(groups.keys(), key=depth_group_rank):
         players = sorted(groups[base], key=lambda x: x["order"])
         for i, pl in enumerate(players, start=1):
             pl["rank_label"] = f"{base}{i}"
@@ -10849,6 +10872,15 @@ THEME_TOKENS = """
        game feed and the performance page cannot drift apart. */
     --scored:#4c9dff;
     --pos-qb:#1baf7a; --pos-rb:#4a90e2; --pos-wr:#e0397a; --pos-te:#9575e8;
+    /* Defense. The depth chart has always built DL/LB/DB groups
+       (DEPTH_SLOT_PRIORITY), but only the four offensive ones ever had a
+       colour, so those three headers rendered white-on-nothing -- which
+       is invisible on a light ground and wrong on a dark one. Hues
+       chosen to sit clear of the four above: orange, cyan, gold. */
+    --pos-dl:#e07a2f; --pos-lb:#14a8b8; --pos-db:#c8a02e;
+    /* Special teams. Kickers are in SCORED_POSITIONS and the depth chart
+       has always built the column, so it needed a colour like the rest. */
+    --pos-k:#b03a48;
     --shadow: 0 1px 2px rgba(0,0,0,0.2), 0 8px 24px -12px rgba(0,0,0,0.5);
     /* Which of the two accent inks below is legible on this ground. */
     --accent-ink: var(--accent-ink-dark);
@@ -11073,10 +11105,12 @@ BASE_STYLE = THEME_BOOT + """
   .tier-purgatory{ background:var(--critical-wash); color:var(--critical); }
   .wl{ font-family:"IBM Plex Mono"; font-size:11.5px; color:var(--ink-secondary); width:44px; flex:none; }
   .value-bar{ flex:1; height:22px; border-radius:6px; overflow:hidden; display:flex; background:var(--paper-sunken); }
-  .value-bar .seg{ height:100%; display:flex; align-items:center; justify-content:center; color:#fff; font-family:"IBM Plex Mono"; font-size:11px; font-weight:700; min-width:16px; }
+  .value-bar .seg{ height:100%; display:flex; align-items:center; justify-content:center; color:#fff; background:var(--ink-muted); font-family:"IBM Plex Mono"; font-size:11px; font-weight:700; min-width:16px; }
   .rank-bubble{ display:inline-flex; align-items:center; justify-content:center; min-width:17px; height:17px; border-radius:50%; padding:0 3px; }
   .seg-qb{ background:var(--pos-qb); } .seg-rb{ background:var(--pos-rb); }
   .seg-wr{ background:var(--pos-wr); } .seg-te{ background:var(--pos-te); }
+  .seg-dl{ background:var(--pos-dl); } .seg-lb{ background:var(--pos-lb); }
+  .seg-db{ background:var(--pos-db); } .seg-k{ background:var(--pos-k); }
   .legend-row{ display:flex; gap:14px; flex-wrap:wrap; margin-top:14px; padding-top:12px; border-top:1px solid var(--line); }
   .legend-item{ display:flex; align-items:center; gap:6px; font-size:11.5px; color:var(--ink-secondary); font-weight:600; }
   .legend-item i{ width:9px; height:9px; border-radius:2px; display:inline-block; }
@@ -11098,9 +11132,16 @@ BASE_STYLE = THEME_BOOT + """
   .team-chip:hover{ border-color:var(--accent); }
 
   .col-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:16px; margin-top:14px; }
-  .col-head{ font-family:"IBM Plex Mono"; font-size:11px; font-weight:700; letter-spacing:0.05em; text-transform:uppercase; padding:6px 8px; border-radius:6px; margin-bottom:8px; color:#fff; display:flex; align-items:center; justify-content:space-between; }
+  /* The background is on the BASE rule, not only on the per-position
+     ones. The class comes straight from the position name, so a group
+     with no rule of its own used to get white text on no background at
+     all -- and the fix for that is a default, not three more rules that
+     leave the next group just as invisible. */
+  .col-head{ font-family:"IBM Plex Mono"; font-size:11px; font-weight:700; letter-spacing:0.05em; text-transform:uppercase; padding:6px 8px; border-radius:6px; margin-bottom:8px; color:#fff; background:var(--ink-muted); display:flex; align-items:center; justify-content:space-between; }
   .col-head.qb{ background:var(--pos-qb); } .col-head.rb{ background:var(--pos-rb); }
   .col-head.wr{ background:var(--pos-wr); } .col-head.te{ background:var(--pos-te); }
+  .col-head.dl{ background:var(--pos-dl); } .col-head.lb{ background:var(--pos-lb); }
+  .col-head.db{ background:var(--pos-db); } .col-head.k{ background:var(--pos-k); }
   .col-head .rank-badge-inline{ background:rgba(255,255,255,0.28); border-radius:5px; padding:2px 7px; font-size:11px; }
   .player-row{ display:flex; justify-content:space-between; align-items:center; gap:8px; padding:7px 4px; border-top:1px solid var(--line); font-size:13px; }
   .player-row:first-of-type{ border-top:none; }
