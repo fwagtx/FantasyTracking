@@ -6420,17 +6420,24 @@ PERFORMER_GROUPS = [
 POWER_BOARD_SIZE = 10
 
 
-def get_power_board(season, season_type=2, limit=POWER_BOARD_SIZE):
-    """The top of the power ranking, ready to render: rank, logo, record
-    and point differential.
+RANK_WINDOWS = [("d7", "7-day"), ("d30", "30-day"), ("season", "Season")]
 
-    Ranked on the four-round window rather than the whole season, which
-    is the one people mean by "power ranking" -- who is good NOW, not who
-    banked wins in September. Teams with nothing in that window fall back
-    to their season rank inside get_team_rankings, so nobody is missing.
+
+def get_power_board(season, season_type=2, limit=POWER_BOARD_SIZE, window="d30"):
+    """The power ranking, ready to render: rank, logo, record, point
+    differential, and the per-game figure the rank was computed on.
+
+    `window` is one of the three the team page shows -- the latest round,
+    the last four, or the whole season. The scores page asks for the
+    four-round one, which is what people mean by "power ranking": who is
+    good NOW, not who banked wins in September. Teams with nothing in a
+    window fall back to the next one out inside get_team_rankings, so
+    nobody is missing.
 
     Returns [] rather than raising when the season has no finished games
     yet; the strip simply does not render."""
+    if window not in dict(RANK_WINDOWS):
+        window = "d30"
     try:
         ranks = get_team_rankings(season, season_type)
         standings = get_team_standings(season, season_type)
@@ -6439,7 +6446,7 @@ def get_power_board(season, season_type=2, limit=POWER_BOARD_SIZE):
         return []
     out = []
     for team, r in (ranks or {}).items():
-        place = r.get("d30") or r.get("season")
+        place = r.get(window) or r.get("season")
         if not place:
             continue
         st = standings.get(team) or {}
@@ -6457,6 +6464,11 @@ def get_power_board(season, season_type=2, limit=POWER_BOARD_SIZE):
             # only: a win is not a win until the whistle.
             "diff": live_diff.get(team, st.get("diff")),
             "live": team in live_diff and live_diff[team] != st.get("diff"),
+            # Average margin per game inside the window -- the number the
+            # rank actually came from.
+            "avg": r.get(window + "_avg"),
+            "games": r.get(window + "_games"),
+            "inherited": bool(r.get(window + "_inherited")),
         })
     out.sort(key=lambda t: t["rank"])
     return out[:limit]
@@ -7152,13 +7164,30 @@ def get_team_rankings(season, season_type=2, cache=_team_rank_cache):
                 t["games"] += 1
         ranked = sorted(((team, v["diff"] / v["games"]) for team, v in totals.items() if v["games"]),
                         key=lambda kv: -kv[1])
-        for i, (team, _avg) in enumerate(ranked, 1):
+        for i, (team, avg) in enumerate(ranked, 1):
             out[team][label] = i
+            # The figure the rank was computed from, so a list of the
+            # ranking can show WHY a team sits where it does rather than
+            # only that it does.
+            out[team][label + "_avg"] = round(avg, 1)
+            out[team][label + "_games"] = totals[team]["games"]
+        # Teams with no game in this window come AFTER every team that
+        # played one, in the order the next window out ranks them, and
+        # the numbering carries on. They used to copy that wider rank
+        # outright, which handed a team on its bye the same "1st" as the
+        # team that had just won -- fine as a lone figure on a team page,
+        # nonsense as a list of the league.
         fallback = wider.get(label)
         if fallback:
-            for vals in out.values():
-                if label not in vals and fallback in vals:
-                    vals[label] = vals[fallback]
+            rest = sorted((t for t, vals in out.items()
+                           if label not in vals and fallback in vals),
+                          key=lambda t: out[t][fallback])
+            for i, team in enumerate(rest, len(ranked) + 1):
+                vals = out[team]
+                vals[label] = i
+                vals[label + "_avg"] = vals.get(fallback + "_avg")
+                vals[label + "_games"] = vals.get(fallback + "_games")
+                vals[label + "_inherited"] = True
 
     # While games are being played the ranking is worth recomputing often;
     # between rounds it cannot change, so it is cached the usual way.
@@ -7507,11 +7536,16 @@ def standings_page():
 
         standings = get_team_standings(season)
         by_div, field, draft, rankings = {}, [], [], []
+        window = request.args.get("window") or "d30"
+        if window not in dict(RANK_WINDOWS):
+            window = "d30"
         if view == "rankings":
             # The whole power ranking, the way the scores page shows the
             # top ten of it -- so "full rankings" finishes that list
-            # rather than dropping you into the division tables.
-            for t in get_power_board(season, limit=len(NFL_DIVISIONS)):
+            # rather than dropping you into the division tables. The
+            # window is the one tapped on a team page: 7-day, 30-day or
+            # season, exactly the three figures shown there.
+            for t in get_power_board(season, limit=len(NFL_DIVISIONS), window=window):
                 st = standings.get(t["team"]) or {}
                 t.update({"pct": st.get("pct", 0.0), "last5": st.get("last5", "-"),
                           "ppg": st.get("ppg", 0.0),
@@ -7530,12 +7564,14 @@ def standings_page():
         played = any(r["games"] for r in standings.values())
         return render_template_string(
             STANDINGS_HTML, by_div=by_div, field=field, draft=draft, rankings=rankings,
+            window=window, windows=RANK_WINDOWS,
             view=view, conf=conf, season=season, played=played, markers=PLAYOFF_MARKERS,
             traded_emoji=TRADED_PICK_EMOJI,
             conferences=CONFERENCES, divisions=DIVISIONS, load_error=None)
     except Exception as e:
         return render_template_string(
             STANDINGS_HTML, by_div={}, field=[], draft=[], rankings=[], view="conference",
+            window="d30", windows=RANK_WINDOWS,
             conf="AFC", season=int(SEASON), played=False, markers=PLAYOFF_MARKERS,
             traded_emoji=TRADED_PICK_EMOJI,
             conferences=CONFERENCES, divisions=DIVISIONS, load_error=str(e))
@@ -11233,6 +11269,11 @@ STANDINGS_HTML = BASE_STYLE + make_header("scores") + """
                   color:var(--st-muted); padding:4px 0; }
   .st-empty{ color:var(--st-muted); padding:30px; text-align:center; font-size:13px; }
   .st-diff.pos{ color:var(--good); } .st-diff.neg{ color:var(--critical); }
+  /* Gold, silver, bronze on the top three, the way the reference does. */
+  .st-trophy{ font-size:12px; margin-right:3px; filter:grayscale(1) brightness(1.4); }
+  .st-trophy.t1{ filter:none; }
+  .st-trophy.t3{ filter:sepia(1) saturate(2) hue-rotate(-20deg) brightness(0.85); }
+  .st-row.st-top .st-seed{ width:auto; min-width:22px; }
   .st-live{ color:var(--sc-live, #e2534a); font-size:9px; margin-left:5px; vertical-align:2px; }
   @media (max-width:640px){
     .st-stats{ gap:7px; } .st-stat{ min-width:30px; } .st-stat b{ font-size:12.5px; }
@@ -11272,27 +11313,38 @@ STANDINGS_HTML = BASE_STYLE + make_header("scores") + """
     <div class="st-empty">No completed games yet this season.</div>
 
   {% elif view == 'rankings' %}
-  <!-- All thirty-two, in the order the scores page shows the top ten:
-       the four-round power ranking, on average point differential. -->
+  <!-- The same three windows the team page shows, as tabs. All
+       thirty-two, best first, ranked on average margin per game inside
+       the window. -->
+  <div class="st-subtabs">
+    {% for key, label in windows %}
+    <a class="st-tab {{ 'on' if key == window }}"
+       href="/standings?season={{ season }}&amp;view=rankings&amp;window={{ key }}">{{ label }}</a>
+    {% endfor %}
+  </div>
   {% for r in rankings %}
-  <a class="st-row" href="/team?abbr={{ r.team }}&amp;season={{ season }}">
-    <span class="st-seed">{{ r.rank }}</span>
+  <a class="st-row {{ 'st-top' if r.rank <= 3 }}" href="/team?abbr={{ r.team }}&amp;season={{ season }}">
+    <span class="st-seed">{% if r.rank <= 3 %}<span class="st-trophy t{{ r.rank }}">&#127942;</span>{% endif %}{{ r.rank }}</span>
     <img src="{{ r.logo }}" alt="" onerror="this.style.visibility='hidden'">
     <span class="st-name">
       <b>{{ r.team }}{% if r.live %}<span class="st-live" title="Includes a game in progress">&#9679;</span>{% endif %}</b>
-      <span>{{ r.conference }} {{ r.division }}</span>
+      <span>{{ r.record }} &middot; {{ r.conference }} {{ r.division }}{% if r.inherited %} &middot; no game this window{% endif %}</span>
     </span>
     <span class="st-stats">
-      {{ stat(r.record, 'W-L') }}
-      <span class="st-stat"><b class="st-diff {{ 'pos' if r.diff and r.diff > 0 else ('neg' if r.diff and r.diff < 0 else '') }}">{% if r.diff is not none %}{{ '%+d'|format(r.diff) }}{% else %}&mdash;{% endif %}</b><span>DIFF</span></span>
-      {{ stat(r.last5, 'L5') }}{{ stat(r.ppg, 'PPG') }}
+      <span class="st-stat"><b class="st-diff {{ 'pos' if r.avg and r.avg > 0 else ('neg' if r.avg and r.avg < 0 else '') }}">{% if r.avg is not none %}{{ '%+.1f'|format(r.avg) }}{% else %}&mdash;{% endif %}</b><span>MARGIN/G</span></span>
+      <span class="st-stat"><b class="st-diff {{ 'pos' if r.diff and r.diff > 0 else ('neg' if r.diff and r.diff < 0 else '') }}">{% if r.diff is not none %}{{ '%+d'|format(r.diff) }}{% else %}&mdash;{% endif %}</b><span>SEASON</span></span>
+      {{ stat(r.last5, 'L5') }}
     </span>
   </a>
   {% endfor %}
   <div class="st-sub" style="margin-top:16px;">
-    Who is good right now: ranked on average point differential over the
-    last four rounds, so a hot September doesn't carry a team through
-    November. A dot marks a team whose figure includes a game in progress.
+    {% if window == 'd7' %}The most recent round of games only.
+    {% elif window == 'd30' %}The last four rounds &mdash; who is good right now, so a hot
+    September doesn't carry a team through November.
+    {% else %}Every game this season.{% endif %}
+    Ranked on average margin of victory per game in that window; a team with no
+    game in the window keeps its rank from the next window out. A dot marks a
+    figure that includes a game in progress. Recomputed as the games are played.
   </div>
 
   {% elif view == 'conference' %}
@@ -11488,7 +11540,8 @@ TEAM_HTML = BASE_STYLE + make_header("scores") + """
   {% set standings_href = '/standings?season=' ~ season ~ ('&conf=' ~ team.conference if team.conference else '') %}
   <div class="tm-ranks">
     {% for key, label in [('d7', '7-day'), ('d30', '30-day'), ('season', 'Season')] %}
-    <a class="tm-rank" href="{{ standings_href }}" title="See where every team ranks">
+    <a class="tm-rank" href="/standings?season={{ team.rank_season or season }}&amp;view=rankings&amp;window={{ key }}"
+       title="See where every team ranks over the {{ label|lower }}">
       {% set v = team.rank.get(key) %}
       <b>{% if v %}{{ v }}<sup>{{ (v|ordinal)[-2:] }}</sup>{% else %}&ndash;{% endif %}</b>
       <span>{{ label }}</span>
