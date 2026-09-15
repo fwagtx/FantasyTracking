@@ -6434,6 +6434,7 @@ def get_power_board(season, season_type=2, limit=POWER_BOARD_SIZE):
     try:
         ranks = get_team_rankings(season, season_type)
         standings = get_team_standings(season, season_type)
+        live_diff = _live_point_diff(season, season_type)
     except Exception:
         return []
     out = []
@@ -6447,10 +6448,34 @@ def get_power_board(season, season_type=2, limit=POWER_BOARD_SIZE):
             record += f"-{st['ties']}"
         out.append({
             "team": team, "rank": place, "logo": team_logo_url(team),
-            "record": record, "diff": st.get("diff"),
+            "record": record,
+            # The rank counts a game in progress at its current score --
+            # that is what makes it live. The differential beside it must
+            # count the same game, or a team leading on Monday night sits
+            # at #3 reading "0-0, +0", which looks like a mistake rather
+            # than a game half played. The record stays finished games
+            # only: a win is not a win until the whistle.
+            "diff": live_diff.get(team, st.get("diff")),
+            "live": team in live_diff and live_diff[team] != st.get("diff"),
         })
     out.sort(key=lambda t: t["rank"])
     return out[:limit]
+
+
+def _live_point_diff(season, season_type=2):
+    """Season point differential per team, counting games in progress at
+    the score they hold right now. {} when nothing is live, so callers
+    fall through to the settled figure."""
+    games = _finished_games(season, season_type, include_live=True)
+    if not any(g.get("status") == "in_progress" for g in games):
+        return {}
+    out = {}
+    for g in games:
+        for team, own, opp in ((g["home_team"], g["home_score"], g["away_score"]),
+                               (g["away_team"], g["away_score"], g["home_score"])):
+            if team in NFL_DIVISIONS and own is not None and opp is not None:
+                out[team] = out.get(team, 0) + (own - opp)
+    return out
 
 
 # --- Injuries and birthdays ---------------------------------------------
@@ -7477,12 +7502,22 @@ def standings_page():
             conf = "AFC"
         if view in ("afc", "nfc"):
             conf, view = view.upper(), "conference"
-        elif view not in ("playoffs", "draft"):
+        elif view not in ("playoffs", "draft", "rankings"):
             view = "conference"
 
         standings = get_team_standings(season)
-        by_div, field, draft = {}, [], []
-        if view == "conference":
+        by_div, field, draft, rankings = {}, [], [], []
+        if view == "rankings":
+            # The whole power ranking, the way the scores page shows the
+            # top ten of it -- so "full rankings" finishes that list
+            # rather than dropping you into the division tables.
+            for t in get_power_board(season, limit=len(NFL_DIVISIONS)):
+                st = standings.get(t["team"]) or {}
+                t.update({"pct": st.get("pct", 0.0), "last5": st.get("last5", "-"),
+                          "ppg": st.get("ppg", 0.0),
+                          "conference": st.get("conference"), "division": st.get("division")})
+                rankings.append(t)
+        elif view == "conference":
             for d in DIVISIONS:
                 members = [r for r in standings.values()
                            if r["conference"] == conf and r["division"] == d]
@@ -7494,13 +7529,13 @@ def standings_page():
             draft = get_draft_order(season)
         played = any(r["games"] for r in standings.values())
         return render_template_string(
-            STANDINGS_HTML, by_div=by_div, field=field, draft=draft, view=view,
-            conf=conf, season=season, played=played, markers=PLAYOFF_MARKERS,
+            STANDINGS_HTML, by_div=by_div, field=field, draft=draft, rankings=rankings,
+            view=view, conf=conf, season=season, played=played, markers=PLAYOFF_MARKERS,
             traded_emoji=TRADED_PICK_EMOJI,
             conferences=CONFERENCES, divisions=DIVISIONS, load_error=None)
     except Exception as e:
         return render_template_string(
-            STANDINGS_HTML, by_div={}, field=[], draft=[], view="conference",
+            STANDINGS_HTML, by_div={}, field=[], draft=[], rankings=[], view="conference",
             conf="AFC", season=int(SEASON), played=False, markers=PLAYOFF_MARKERS,
             traded_emoji=TRADED_PICK_EMOJI,
             conferences=CONFERENCES, divisions=DIVISIONS, load_error=str(e))
@@ -10371,6 +10406,7 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + """
                  color:var(--sc-text); }
   .sc-power-row:first-child{ border-top:none; }
   .sc-power-row:hover{ background:var(--sc-surface2); }
+  .sc-power-live{ color:var(--sc-live); font-size:8px; margin-left:5px; vertical-align:2px; }
   .sc-power-rank{ font-family:"IBM Plex Mono"; font-size:12.5px; color:var(--sc-muted);
                   width:20px; flex:none; text-align:right; font-variant-numeric:tabular-nums; }
   .sc-power-row img{ width:26px; height:26px; object-fit:contain; flex:none; }
@@ -10480,7 +10516,7 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + """
   <div class="sc-group" id="scGroupTeams">
   <div class="sc-section-head">
     <h2>Team Rankings</h2>
-    <a class="sc-viewall" href="/standings">Full standings &rsaquo;</a>
+    <a class="sc-viewall" href="/standings?view=rankings">Full rankings &rsaquo;</a>
   </div>
   <div class="sc-power">
     {% for t in power %}
@@ -10488,7 +10524,7 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + """
       <span class="sc-power-rank">{{ t.rank }}</span>
       <img src="{{ t.logo }}" alt="" loading="lazy"
            onerror="this.style.visibility='hidden'">
-      <span class="sc-power-name">{{ t.team }}</span>
+      <span class="sc-power-name">{{ t.team }}{% if t.live %}<span class="sc-power-live" title="Includes a game in progress">&#9679;</span>{% endif %}</span>
       <span class="sc-power-rec">{{ t.record }}</span>
       <span class="sc-power-diff {{ 'pos' if t.diff and t.diff > 0 else ('neg' if t.diff and t.diff < 0 else '') }}">
         {%- if t.diff is not none %}{{ '%+d'|format(t.diff) }}{% endif -%}
@@ -11196,6 +11232,8 @@ STANDINGS_HTML = BASE_STYLE + make_header("scores") + """
   .st-legend div{ display:flex; align-items:center; gap:9px; font-size:12.5px;
                   color:var(--st-muted); padding:4px 0; }
   .st-empty{ color:var(--st-muted); padding:30px; text-align:center; font-size:13px; }
+  .st-diff.pos{ color:var(--good); } .st-diff.neg{ color:var(--critical); }
+  .st-live{ color:var(--sc-live, #e2534a); font-size:9px; margin-left:5px; vertical-align:2px; }
   @media (max-width:640px){
     .st-stats{ gap:7px; } .st-stat{ min-width:30px; } .st-stat b{ font-size:12.5px; }
     .st-row img{ width:27px; height:27px; }
@@ -11218,6 +11256,8 @@ STANDINGS_HTML = BASE_STYLE + make_header("scores") + """
   {%- endmacro %}
 
   <div class="st-tabs">
+    <a class="st-tab {{ 'on' if view == 'rankings' }}"
+       href="/standings?season={{ season }}&amp;view=rankings">Rankings</a>
     {% for c in conferences %}
     <a class="st-tab {{ 'on' if view == 'conference' and c == conf }}"
        href="/standings?season={{ season }}&amp;view={{ c }}">{{ c }}</a>
@@ -11230,6 +11270,30 @@ STANDINGS_HTML = BASE_STYLE + make_header("scores") + """
 
   {% if not played %}
     <div class="st-empty">No completed games yet this season.</div>
+
+  {% elif view == 'rankings' %}
+  <!-- All thirty-two, in the order the scores page shows the top ten:
+       the four-round power ranking, on average point differential. -->
+  {% for r in rankings %}
+  <a class="st-row" href="/team?abbr={{ r.team }}&amp;season={{ season }}">
+    <span class="st-seed">{{ r.rank }}</span>
+    <img src="{{ r.logo }}" alt="" onerror="this.style.visibility='hidden'">
+    <span class="st-name">
+      <b>{{ r.team }}{% if r.live %}<span class="st-live" title="Includes a game in progress">&#9679;</span>{% endif %}</b>
+      <span>{{ r.conference }} {{ r.division }}</span>
+    </span>
+    <span class="st-stats">
+      {{ stat(r.record, 'W-L') }}
+      <span class="st-stat"><b class="st-diff {{ 'pos' if r.diff and r.diff > 0 else ('neg' if r.diff and r.diff < 0 else '') }}">{% if r.diff is not none %}{{ '%+d'|format(r.diff) }}{% else %}&mdash;{% endif %}</b><span>DIFF</span></span>
+      {{ stat(r.last5, 'L5') }}{{ stat(r.ppg, 'PPG') }}
+    </span>
+  </a>
+  {% endfor %}
+  <div class="st-sub" style="margin-top:16px;">
+    Who is good right now: ranked on average point differential over the
+    last four rounds, so a hot September doesn't carry a team through
+    November. A dot marks a team whose figure includes a game in progress.
+  </div>
 
   {% elif view == 'conference' %}
   {% for d in divisions %}
@@ -11300,7 +11364,7 @@ STANDINGS_HTML = BASE_STYLE + make_header("scores") + """
   </div>
   {% endif %}
 
-  {% if played and view != 'draft' %}
+  {% if played and view not in ('draft', 'rankings') %}
   <div class="st-legend">
     {% for key in ['bye', 'division', 'wildcard'] %}
     <div><span class="st-mark">{{ markers[key].emoji }}</span> {{ markers[key].label }}</div>
