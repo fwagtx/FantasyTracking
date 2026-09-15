@@ -5339,9 +5339,53 @@ def avatar_image(user_id):
     return resp
 
 
+# Which screens Settings is made of, in the order they are listed.
+# (key, label) -- the summary beside each is computed per reader below.
+SETTINGS_SECTIONS = [
+    ("profile", "Profile"),
+    ("rankings", "Rankings"),
+    ("scoring", "Scoring"),
+    ("theme", "Theme"),
+    ("leagues", "Leagues"),
+    ("email", "Email"),
+    ("account", "Account"),
+]
+_SECTION_LABELS = dict(SETTINGS_SECTIONS)
+
+
+def settings_summaries(league_count):
+    """What each row on the index says it is currently set to.
+
+    The common reason to open Settings is to check something rather than
+    change it, and a row that answers the question without being opened
+    saves the trip."""
+    fmt = "Superflex" if current_user.pref_format == "superflex" else "1QB"
+    mode = "Redraft" if current_user.pref_mode == "redraft" else "Dynasty"
+    theme = _label_for(THEMES, getattr(current_user, "pref_theme", None))
+    accent = _label_for(ACCENTS, getattr(current_user, "pref_accent", None))
+    return {
+        "profile": "Picture, username and password",
+        "rankings": f"{fmt} \u00b7 {mode}",
+        "scoring": scoring_label(normalize_scoring(current_user.pref_scoring)),
+        "theme": f"{theme} \u00b7 {accent}",
+        "leagues": ("No leagues synced yet" if not league_count
+                    else f"{league_count} league{'s' if league_count != 1 else ''} synced"),
+        "email": ("Updates on" if current_user.newsletter_opt_in else "Updates off"),
+        "account": current_user.email or "Signed in",
+    }
+
+
+def _label_for(pairs, key):
+    for k, label in pairs:
+        if k == key:
+            return label
+    return pairs[0][1]
+
+
 @app.route("/settings", methods=["GET", "POST"])
+@app.route("/settings/<section>", methods=["GET", "POST"])
 @login_required
-def settings_page():
+def settings_page(section=None):
     """Everything about an account that was previously either fixed at
     signup or hidden inside another page.
 
@@ -5349,6 +5393,12 @@ def settings_page():
     choice was set once at signup and never again, and the rankings
     format and mode existed only as URL parameters -- so every visit
     began on 1QB dynasty no matter what league you actually play in."""
+    # An unknown section is the index, not a 404: a stale bookmark or a
+    # typed URL should land somewhere useful rather than on an error.
+    if section is not None and section not in _SECTION_LABELS:
+        return redirect("/settings")
+    back = f"/settings/{section}" if section else "/settings"
+
     saved = request.args.get("saved") == "1"
     error = None
     if request.method == "POST":
@@ -5357,7 +5407,7 @@ def settings_page():
         if request.form.get("action") == "remove_avatar":
             try:
                 current_user.avatar_version = delete_avatar(current_user.id)
-                return redirect("/settings?saved=1")
+                return redirect(back + "?saved=1")
             except Exception as e:
                 error = str(e)
 
@@ -5390,7 +5440,7 @@ def settings_page():
                         conn.close()
                     current_user.username = wanted
                     current_user.username_changed_at = (row or {}).get("username_changed_at")
-                    return redirect("/settings?saved=1")
+                    return redirect(back + "?saved=1")
                 except Exception as e:
                     error = str(e)
 
@@ -5427,7 +5477,7 @@ def settings_page():
                             conn.commit()
                         finally:
                             conn.close()
-                        return redirect("/settings?saved=1")
+                        return redirect(back + "?saved=1")
                     except Exception as e:
                         error = str(e)
 
@@ -5450,48 +5500,70 @@ def settings_page():
                     except Exception as e:
                         error = str(e)
 
-        sleeper = (request.form.get("sleeper_username") or "").strip()
-        fmt = request.form.get("pref_format")
-        mode = request.form.get("pref_mode")
-        scoring = normalize_scoring(request.form.get("pref_scoring"))
-        if fmt not in ("1qb", "superflex"):
-            fmt = "1qb"
-        if mode not in ("dynasty", "redraft"):
-            mode = "dynasty"
-        news = bool(request.form.get("newsletter_opt_in"))
-        if len(sleeper) > 64:
-            error = "That Sleeper username is too long."
-        elif not error:
+        # Only what this form actually submitted.
+        #
+        # This block used to read all five preferences off every POST and
+        # write all five back. That was survivable while they shared one
+        # page and one Save, and became a data-loss bug the moment each
+        # got its own screen: the Scoring form posts no pref_format, so
+        # .get() returned None, the guard below turned None into "1qb",
+        # and saving your scoring format quietly reset a superflex reader
+        # to 1QB. A field absent from the form is a field the reader did
+        # not touch, so it is left alone.
+        updates = {}
+        if "sleeper_username" in request.form:
+            sleeper = (request.form.get("sleeper_username") or "").strip()
+            if len(sleeper) > 64:
+                error = "That Sleeper username is too long."
+            else:
+                updates["sleeper_username"] = sleeper or None
+        if "pref_format" in request.form:
+            fmt = request.form.get("pref_format")
+            updates["pref_format"] = fmt if fmt in ("1qb", "superflex") else "1qb"
+        if "pref_mode" in request.form:
+            mode = request.form.get("pref_mode")
+            updates["pref_mode"] = mode if mode in ("dynasty", "redraft") else "dynasty"
+        if "pref_scoring" in request.form:
+            updates["pref_scoring"] = normalize_scoring(request.form.get("pref_scoring"))
+        # An unticked checkbox submits nothing at all, so it cannot be
+        # detected by presence. The form carries a hidden marker to say
+        # "this screen owns the newsletter setting", and the checkbox
+        # itself then means ticked or not.
+        if "newsletter_present" in request.form:
+            updates["newsletter_opt_in"] = bool(request.form.get("newsletter_opt_in"))
+
+        if updates and not error:
             try:
+                assigns = ", ".join(f"{col} = %s" for col in updates)
                 conn = get_db()
                 try:
                     with conn.cursor() as cur:
-                        cur.execute(
-                            """UPDATE users SET sleeper_username = %s, pref_format = %s,
-                                      pref_mode = %s, pref_scoring = %s, newsletter_opt_in = %s
-                               WHERE id = %s""",
-                            (sleeper or None, fmt, mode, scoring, news, current_user.id))
+                        cur.execute(f"UPDATE users SET {assigns} WHERE id = %s",
+                                    (*updates.values(), current_user.id))
                     conn.commit()
                 finally:
                     conn.close()
                 # Keep the object backing this request in step, so the page
                 # that renders next shows what was just saved rather than
                 # what it was loaded with.
-                current_user.sleeper_username = sleeper or None
-                current_user.pref_format, current_user.pref_mode = fmt, mode
-                current_user.pref_scoring = scoring
-                current_user.newsletter_opt_in = news
-                return redirect("/settings?saved=1")
+                for col, value in updates.items():
+                    setattr(current_user, col, value)
+                return redirect(back + "?saved=1")
             except Exception as e:
                 error = str(e)
 
     leagues = get_synced_league_ids(current_user.id)
+    league_count = len(leagues) if leagues else 0
+    summaries = settings_summaries(league_count)
     return render_template_string(
         SETTINGS_HTML, saved=saved, error=error, scoring_formats=SCORING_FORMATS,
         themes=THEMES, accents=ACCENTS,
+        section=section, section_label=_SECTION_LABELS.get(section, "Settings"),
+        sections=[(key, label, summaries.get(key, ""))
+                  for key, label in SETTINGS_SECTIONS],
         username_next_change=username_change_allowed_at(current_user.username_changed_at),
         username_cooldown_days=USERNAME_CHANGE_DAYS,
-        league_count=len(leagues) if leagues else 0)
+        league_count=league_count)
 
 
 @app.route("/api/theme", methods=["POST"])
@@ -16647,6 +16719,22 @@ SETTINGS_HTML = BASE_STYLE + make_header("") + """
   .set-sub{ font-size:12px; color:var(--ink-muted); margin-bottom:14px; }
   .set-group{ margin-top:22px; }
 
+  /* The index: one row per screen, with what it is currently set to. */
+  .set-index{ padding:0; overflow:hidden; }
+  .set-index-row{ display:flex; align-items:center; gap:12px; padding:15px 18px;
+                  border-top:1px solid var(--line); text-decoration:none; color:inherit; }
+  .set-index-row:first-child{ border-top:none; }
+  .set-index-row:hover{ background:var(--paper-sunken); }
+  .set-index-main{ flex:1; min-width:0; display:flex; flex-direction:column; gap:2px; }
+  .set-index-main b{ font-size:15px; font-weight:700; }
+  .set-index-main span{ font-size:12.5px; color:var(--ink-muted);
+                        overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .set-index-go{ flex:none; font-size:20px; color:var(--ink-muted); line-height:1; }
+  .set-index-row:hover .set-index-go{ color:var(--accent-ink); }
+  .set-back{ display:inline-block; font-size:13px; font-weight:700;
+             color:var(--accent-ink); text-decoration:none; margin-bottom:10px; }
+  .set-back:hover{ text-decoration:underline; }
+
   /* Theme picker. A list of rows rather than a grid of swatches: the
      name is what you read, the colour only confirms it -- and a row is
      a bigger tap target than a dot. */
@@ -16821,10 +16909,35 @@ document.addEventListener('change', function(e){
 });
 </script>
 <main><div class="wrap set-wrap">
+  {% if section %}
+  <a class="set-back" href="/settings">&larr; Settings</a>
+  <div class="set-title">{{ section_label }}</div>
+  {% else %}
   <div class="set-title">Settings</div>
   <div class="set-sub">Signed in as {{ current_user.username }}.</div>
+  {% endif %}
   {% if error %}<div class="error">Couldn&rsquo;t save: {{ error }}</div>{% endif %}
 
+  {% if not section %}
+  <!-- The index. Nine groups stacked on one page meant scrolling past
+       eight of them to reach the ninth; each is its own screen now, and
+       this lists them with what they are currently set to, so the common
+       case -- checking a setting rather than changing it -- is answered
+       without opening anything. -->
+  <div class="panel set-index">
+    {% for key, label, summary in sections %}
+    <a class="set-index-row" href="/settings/{{ key }}">
+      <span class="set-index-main">
+        <b>{{ label }}</b>
+        {% if summary %}<span>{{ summary }}</span>{% endif %}
+      </span>
+      <span class="set-index-go" aria-hidden="true">&rsaquo;</span>
+    </a>
+    {% endfor %}
+  </div>
+  {% if saved %}<div class="set-saved" style="margin-top:14px;">Saved.</div>{% endif %}
+
+  {% elif section == 'profile' %}
   <form method="post" enctype="multipart/form-data">
     <div class="panel">
       <div class="set-group" style="margin-top:0;">
@@ -16851,7 +16964,68 @@ document.addEventListener('change', function(e){
           </div>
         </div>
       </div>
+      <div class="set-save">
+        <button type="submit">Save changes</button>
+        {% if saved %}<span class="set-saved">Saved.</span>{% endif %}
+      </div>
+    </div>
+  </form>
+  <form method="post">
+    <div class="panel">
+      <div class="set-group" style="margin-top:0;">
+        <h3>Username</h3>
+        <div class="set-field" style="margin-top:0;">
+          <div class="set-username">
+            <input type="text" name="new_username" maxlength="20"
+                   value="{{ current_user.username }}" autocapitalize="off"
+                   autocorrect="off" {{ 'disabled' if username_next_change }}>
+            <button class="set-small-btn" type="submit" name="action" value="change_username"
+                    {{ 'disabled' if username_next_change }}>Change</button>
+          </div>
+          <div class="hint">
+            {% if username_next_change %}
+            Changed recently. You can change it again on
+            {{ username_next_change.strftime('%-d %B %Y') }}.
+            {% else %}
+            1&ndash;20 letters, numbers or underscores. Once changed, it&rsquo;s
+            {{ username_cooldown_days }} days before you can change it again.
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+  <form method="post">
+    <div class="panel">
+      <div class="set-group" style="margin-top:0;">
+        <h3>Password</h3>
+        <div class="set-field" style="margin-top:0;">
+          <label for="curPw">Current password</label>
+          <input type="password" id="curPw" name="current_password" autocomplete="current-password">
+        </div>
+        <div class="set-field">
+          <label for="newPw">New password</label>
+          <input type="password" id="newPw" name="new_password" minlength="8"
+                 autocomplete="new-password">
+        </div>
+        <div class="set-field">
+          <label for="confirmPw">Confirm new password</label>
+          <input type="password" id="confirmPw" name="confirm_password" minlength="8"
+                 autocomplete="new-password">
+        </div>
+        <div class="set-save">
+          <button class="set-small-btn" type="submit" name="action" value="change_password">
+            Change password</button>
+          <span class="hint" style="margin:0;">Forgot it?
+            <a href="/forgot-password" style="color:var(--accent-ink);">Reset by email</a></span>
+        </div>
+      </div>
+    </div>
+  </form>
 
+  {% elif section == 'rankings' %}
+  <form method="post">
+    <div class="panel">
       <div class="set-group">
         <h3>Rankings</h3>
         <div class="set-field">
@@ -16875,6 +17049,47 @@ document.addEventListener('change', function(e){
             this only decides where it starts.</div>
         </div>
       </div>
+      <div class="set-save">
+        <button type="submit">Save changes</button>
+        {% if saved %}<span class="set-saved">Saved.</span>{% endif %}
+      </div>
+    </div>
+  </form>
+
+  {% elif section == 'scoring' %}
+  <form method="post">
+    <div class="panel">
+      <div class="set-group">
+        <h3>Scoring</h3>
+        <div class="set-field" style="margin-top:0;">
+          <div class="set-scoring">
+            {% for key, label, note in scoring_formats %}
+            <label class="set-score-opt">
+              <input type="radio" name="pref_scoring" value="{{ key }}"
+                     {{ 'checked' if current_user.pref_scoring == key }}>
+              <span><b>{{ label }}</b><i>{{ note }}</i></span>
+            </label>
+            {% endfor %}
+          </div>
+          <div class="hint">
+            Every fantasy point on the site is counted this way &mdash; the rankings,
+            the live scoreboard, each player&rsquo;s game grade and the matchup grades.
+            The formats differ only in what a catch is worth, so a season rescores
+            exactly rather than being estimated.
+          </div>
+        </div>
+      </div>
+      <div class="set-save">
+        <button type="submit">Save changes</button>
+        {% if saved %}<span class="set-saved">Saved.</span>{% endif %}
+      </div>
+    </div>
+  </form>
+
+  {% elif section == 'theme' %}
+  <!-- No form and no Save: every control here applies as you tap and
+       saves itself through /api/theme. -->
+  <div class="panel">
 
       <!-- Theme saves itself the moment you tap, so it deliberately
            takes no part in the form it sits inside: every control here
@@ -16909,28 +17124,13 @@ document.addEventListener('change', function(e){
           for scoring plays stays blue &mdash; it marks points on the board, so it has
           to mean something other than &ldquo;this is a link&rdquo;.</div>
       </div>
+  </div>
 
-      <div class="set-group">
-        <h3>Scoring</h3>
-        <div class="set-field" style="margin-top:0;">
-          <div class="set-scoring">
-            {% for key, label, note in scoring_formats %}
-            <label class="set-score-opt">
-              <input type="radio" name="pref_scoring" value="{{ key }}"
-                     {{ 'checked' if current_user.pref_scoring == key }}>
-              <span><b>{{ label }}</b><i>{{ note }}</i></span>
-            </label>
-            {% endfor %}
-          </div>
-          <div class="hint">
-            Every fantasy point on the site is counted this way &mdash; the rankings,
-            the live scoreboard, each player&rsquo;s game grade and the matchup grades.
-            The formats differ only in what a catch is worth, so a season rescores
-            exactly rather than being estimated.
-          </div>
-        </div>
-      </div>
-
+  {% elif section == 'leagues' %}
+  <!-- This screen holds the Sleeper username, which is a saved field,
+       so it needs a form and a Save of its own. -->
+  <form method="post">
+    <div class="panel">
       <div class="set-group">
         <h3>Leagues</h3>
         <div class="set-field">
@@ -16945,16 +17145,6 @@ document.addEventListener('change', function(e){
           </div>
         </div>
       </div>
-
-      <div class="set-group">
-        <h3>Email</h3>
-        <label class="set-check">
-          <input type="checkbox" name="newsletter_opt_in"
-                 {{ 'checked' if current_user.newsletter_opt_in }}>
-          <span style="font-size:13.5px;">Send me occasional updates about new features.</span>
-        </label>
-      </div>
-
       <div class="set-save">
         <button type="submit">Save changes</button>
         {% if saved %}<span class="set-saved">Saved.</span>{% endif %}
@@ -16962,62 +17152,28 @@ document.addEventListener('change', function(e){
     </div>
   </form>
 
-  <!-- Its own form. A username change has its own rules and its own way
-       of failing, and should not ride along with the settings above. -->
+  {% elif section == 'email' %}
   <form method="post">
     <div class="panel">
-      <div class="set-group" style="margin-top:0;">
-        <h3>Username</h3>
-        <div class="set-field" style="margin-top:0;">
-          <div class="set-username">
-            <input type="text" name="new_username" maxlength="20"
-                   value="{{ current_user.username }}" autocapitalize="off"
-                   autocorrect="off" {{ 'disabled' if username_next_change }}>
-            <button class="set-small-btn" type="submit" name="action" value="change_username"
-                    {{ 'disabled' if username_next_change }}>Change</button>
-          </div>
-          <div class="hint">
-            {% if username_next_change %}
-            Changed recently. You can change it again on
-            {{ username_next_change.strftime('%-d %B %Y') }}.
-            {% else %}
-            1&ndash;20 letters, numbers or underscores. Once changed, it&rsquo;s
-            {{ username_cooldown_days }} days before you can change it again.
-            {% endif %}
-          </div>
-        </div>
+      <div class="set-group">
+        <h3>Email</h3>
+        <!-- An unticked checkbox submits nothing, so this marker is how
+             the handler knows this screen owns the setting at all. -->
+        <input type="hidden" name="newsletter_present" value="1">
+        <label class="set-check">
+          <input type="checkbox" name="newsletter_opt_in"
+                 {{ 'checked' if current_user.newsletter_opt_in }}>
+          <span style="font-size:13.5px;">Send me occasional updates about new features.</span>
+        </label>
+      </div>
+      <div class="set-save">
+        <button type="submit">Save changes</button>
+        {% if saved %}<span class="set-saved">Saved.</span>{% endif %}
       </div>
     </div>
   </form>
 
-  <form method="post">
-    <div class="panel">
-      <div class="set-group" style="margin-top:0;">
-        <h3>Password</h3>
-        <div class="set-field" style="margin-top:0;">
-          <label for="curPw">Current password</label>
-          <input type="password" id="curPw" name="current_password" autocomplete="current-password">
-        </div>
-        <div class="set-field">
-          <label for="newPw">New password</label>
-          <input type="password" id="newPw" name="new_password" minlength="8"
-                 autocomplete="new-password">
-        </div>
-        <div class="set-field">
-          <label for="confirmPw">Confirm new password</label>
-          <input type="password" id="confirmPw" name="confirm_password" minlength="8"
-                 autocomplete="new-password">
-        </div>
-        <div class="set-save">
-          <button class="set-small-btn" type="submit" name="action" value="change_password">
-            Change password</button>
-          <span class="hint" style="margin:0;">Forgot it?
-            <a href="/forgot-password" style="color:var(--accent-ink);">Reset by email</a></span>
-        </div>
-      </div>
-    </div>
-  </form>
-
+  {% elif section == 'account' %}
   <div class="panel">
     <div class="set-group" style="margin-top:0;">
       <h3>Account</h3>
@@ -17026,6 +17182,7 @@ document.addEventListener('change', function(e){
       <div class="set-danger"><a href="/logout">Log out</a></div>
     </div>
   </div>
+  {% endif %}
 </div></main>
 <script>
 (function(){
