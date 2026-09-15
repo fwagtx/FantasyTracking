@@ -4282,6 +4282,13 @@ def _refresh_season_stats_background(season):
     threading.Thread(target=_run, daemon=True).start()
 
 
+# Seasons the Rankings page will show games and points for: this one
+# and the three behind it. Four is what the rest of the site already
+# keeps synced (DEF_HISTORY_SEASONS_BACK), so every option here has data
+# behind it rather than offering a year of empty columns.
+RANKINGS_STATS_SEASONS = [str(int(SEASON) - n) for n in range(0, 4)]
+
+
 def get_season_stats(season, cache={}):
     """player_id -> {games, fpts, weeks, snap_pct} for a season. Reads
     only from our own database -- never calls Sleeper live during a page
@@ -7908,10 +7915,14 @@ def rankings():
     pos_filter = request.args.get("pos", "overall")
     view = request.args.get("view", "list")
     num_qbs = 2 if fmt == "superflex" else 1
-    # Show last completed season's games/points, not the current one --
-    # early in the year the current season has 0 games for everyone,
-    # which isn't useful to look at.
-    stats_season = str(int(SEASON) - 1)
+    # Which season's games and points sit beside the values. The default
+    # is the last completed one: early in the year the current season has
+    # 0 games for everyone, which says nothing. The dropdown lets anyone
+    # switch to this season once it has games worth reading, and back.
+    stats_seasons = RANKINGS_STATS_SEASONS
+    stats_season = request.args.get("stats") or str(int(SEASON) - 1)
+    if stats_season not in stats_seasons:
+        stats_season = str(int(SEASON) - 1)
 
     with ThreadPoolExecutor(max_workers=3) as executor:
         fc_future = executor.submit(get_fantasycalc_values, num_qbs, is_dynasty)
@@ -7978,7 +7989,9 @@ def rankings():
     rows.sort(key=lambda r: r["overall_rank"])
     # 300 instead of 100 so filtering down to a single position (e.g. TE,
     # which ranks lower overall than WR/RB) still has a real list to show.
-    return render_template_string(RANKINGS_HTML, rows=rows[:300], fmt=fmt, mode=mode, pos_filter=pos_filter, view=view, stats_season=stats_season)
+    return render_template_string(RANKINGS_HTML, rows=rows[:300], fmt=fmt, mode=mode,
+                                  pos_filter=pos_filter, view=view,
+                                  stats_season=stats_season, stats_seasons=stats_seasons)
 
 
 def consolidation_adjusted_value(items):
@@ -13763,6 +13776,13 @@ RANKINGS_HTML = BASE_STYLE + make_header("rankings") + VOTE_MODAL_HTML + """
       <option value="1qb" {{ 'selected' if fmt == '1qb' }}>1QB</option>
       <option value="superflex" {{ 'selected' if fmt == 'superflex' }}>Superflex</option>
     </select>
+    <!-- Which season the GP / FPTS/G / SNAP% columns describe. Same
+         columns either way -- only the year behind them changes. -->
+    <select class="rk-select" id="statsSelect" aria-label="Stats season">
+      {% for yr in stats_seasons %}
+      <option value="{{ yr }}" {{ 'selected' if yr == stats_season }}>{{ yr }} stats</option>
+      {% endfor %}
+    </select>
     <input class="rk-search" id="rkSearch" type="text" placeholder="Search player...">
     <div class="rk-icon-btn" id="viewList" title="List view">&#9776;</div>
     <div class="rk-icon-btn" id="viewGrid" title="Grid view">&#9638;</div>
@@ -13872,6 +13892,7 @@ const RK_DATA = [
 ];
 const RK_FMT = {{ fmt|tojson }};
 const RK_MODE = {{ mode|tojson }};
+const RK_STATS_SEASON = {{ stats_season|tojson }};
 const RK_AUTHED = {{ current_user.is_authenticated | tojson }};
 const posColors = {QB:'#1baf7a', RB:'#2a78d6', WR:'#e0397a', TE:'#7b5ce0'};
 // Multi-point star with "R" for a rookie (years_exp === 0 in Sleeper's
@@ -13904,7 +13925,9 @@ function posParts(value){
 
 function playerUrl(sid) {
   const numqbs = RK_FMT === 'superflex' ? 2 : 1;
-  const ref = encodeURIComponent('/rankings?format=' + RK_FMT + '&mode=' + RK_MODE + '&pos=' + state.pos + '&view=' + state.view);
+  const ref = encodeURIComponent('/rankings?format=' + RK_FMT + '&mode=' + RK_MODE +
+                                 '&pos=' + state.pos + '&view=' + state.view +
+                                 '&stats=' + RK_STATS_SEASON);
   return `/player?sid=${sid}&numqbs=${numqbs}&ref=${ref}`;
 }
 
@@ -14082,6 +14105,9 @@ function updateUrl() {
   const url = new URL(window.location.href);
   url.searchParams.set('pos', state.pos);
   url.searchParams.set('view', state.view);
+  // Chosen season included, so a shared link and the back button both
+  // land on the board that was actually being read.
+  url.searchParams.set('stats', RK_STATS_SEASON);
   window.history.replaceState({}, '', url);
 }
 
@@ -14109,12 +14135,13 @@ document.getElementById('posSelect').addEventListener('change', e => { state.pos
 // Mode and format come from the server (they change which value set is
 // loaded), so these navigate rather than re-render, carrying the rest of
 // the toolbar's state across with them.
-['modeSelect', 'fmtSelect'].forEach(function(id){
+const RK_NAV_PARAM = {modeSelect: 'mode', fmtSelect: 'format', statsSelect: 'stats'};
+Object.keys(RK_NAV_PARAM).forEach(function(id){
   const el = document.getElementById(id);
   if (!el) return;
   el.addEventListener('change', function(e){
     const url = new URL(window.location.href);
-    url.searchParams.set(id === 'modeSelect' ? 'mode' : 'format', e.target.value);
+    url.searchParams.set(RK_NAV_PARAM[id], e.target.value);
     url.searchParams.set('pos', state.pos);
     url.searchParams.set('view', state.view);
     window.location.href = url.toString();
