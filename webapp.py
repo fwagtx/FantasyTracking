@@ -7222,7 +7222,7 @@ def _clean_injury_field(value):
 
 
 def _espn_injury_detail(item):
-    """What is actually wrong, e.g. "Left Knee Sprain" or "Hamstring".
+    """What is actually wrong, e.g. "Left/Knee/Sprain" or "Hamstring".
 
     Assembled from the parts ESPN splits it across -- side, location and
     the kind of injury -- because any one of them alone is usually the
@@ -7234,15 +7234,19 @@ def _espn_injury_detail(item):
     location = _clean_injury_field(details.get("location"))
     kind = (_clean_injury_field(details.get("detail"))
             or _clean_injury_field(details.get("type")))
-    # "Left Knee Sprain", skipping whichever parts are unknown, and never
-    # repeating one ("Knee Knee").
+    # "Left/Knee/Sprain", skipping whichever parts are unknown, and never
+    # repeating one ("Knee/Knee"). The parts are joined with a slash
+    # rather than a space because ESPN's three fields are three separate
+    # facts -- run together, "Leg Knee" reads like one garbled ailment,
+    # where "Leg/Knee" reads as the list it actually is. A single known
+    # part comes back bare, with no slash to separate it from nothing.
     parts, seen = [], set()
     for part in (side, location, kind):
         key = (part or "").lower()
         if part and key not in seen:
             seen.add(key)
             parts.append(part)
-    return " ".join(parts) or None
+    return "/".join(parts) or None
 
 
 def _espn_injury_reason(item, limit=160):
