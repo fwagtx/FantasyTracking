@@ -482,6 +482,23 @@ def init_db():
             """)
             cur.execute("CREATE INDEX IF NOT EXISTS idx_injury_state_changed "
                         "ON player_injury_state (changed_at DESC);")
+            # Roster moves, watched exactly the way designations are:
+            # Sleeper's dump carries each player's current team, so a
+            # signing, a release and a trade are all just that field
+            # changing. A player off every roster is stored as 'NR', not
+            # NULL, so that NULL keeps one meaning only: never seen. That
+            # is what makes "NR -> KC" and "CHI -> NR" reportable without
+            # the first fill reading as two thousand signings.
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS player_team_state (
+                    sleeper_id    TEXT PRIMARY KEY,
+                    team          TEXT,
+                    previous_team TEXT,
+                    changed_at    TIMESTAMP DEFAULT NOW()
+                );
+            """)
+            cur.execute("CREATE INDEX IF NOT EXISTS idx_team_state_changed "
+                        "ON player_team_state (changed_at DESC);")
         conn.commit()
     finally:
         conn.close()
@@ -8157,10 +8174,19 @@ def record_injury_changes(statuses):
             # A player we have never seen before is not a change -- there
             # is nothing to have changed FROM. Seed them with no previous
             # status, so the arrow appears the moment something moves.
+            # Three columns, not four. execute_values sniffs the
+            # placeholder count from the first row, so naming changed_at
+            # here while passing three values built an INSERT with more
+            # target columns than expressions -- which Postgres rejects
+            # outright. It was caught by the bare `except` below and
+            # reported as "0 changes", so the report kept working off the
+            # live dump and only the arrows silently never appeared.
+            # changed_at defaults to NOW() on insert and is set
+            # explicitly on the update, so it never needed naming.
             psycopg2.extras.execute_values(
                 cur,
                 """INSERT INTO player_injury_state
-                       (sleeper_id, status, previous_status, changed_at)
+                       (sleeper_id, status, previous_status)
                    VALUES %s
                    ON CONFLICT (sleeper_id) DO UPDATE SET
                        previous_status = player_injury_state.status,
@@ -8218,6 +8244,196 @@ def build_injury_statuses():
         hit = espn_by_sid.get(sid)
         statuses[sid] = (hit or {}).get("status") or _injury_status_of(p)
     return statuses, espn_by_sid
+
+
+# ---------------- Roster moves ----------------
+#
+# Every signing, release, waiver claim and trade in the league, found the
+# same way the injury arrows are: Sleeper's player dump carries each
+# player's current team, so a move is that field changing. No separate
+# transactions API to depend on, and it updates as soon as Sleeper does.
+#
+# A team of None means not on any roster. That is what makes the three
+# kinds of row distinguishable at all:
+#   None -> "KC"    signed, claimed off waivers, activated
+#   "CHI" -> None   released, waived, cut
+#   "ATL" -> "DAL"  traded
+MOVE_FEED_SIZE = 6
+# How long a move stays on the board. A signing is news the day it
+# happens and history a fortnight later, so it ages off rather than
+# accumulating -- the same reasoning as RETURN_NEWS_DAYS.
+MOVE_NEWS_DAYS = 14
+NOT_ROSTERED = "NR"
+
+_team_state_lock = threading.Lock()
+_team_state_last = {"time": 0.0}
+TEAM_STATE_REFRESH_S = 900
+_moves_feed_cache = {}
+
+
+def build_team_assignments():
+    """{sleeper_id: team or None} for everyone worth watching.
+
+    Restricted to players who carry a real position: Sleeper's dump runs
+    to thousands of entries, most of them long-retired or never-rostered,
+    and a move only means something for someone who could be on a
+    roster."""
+    players = _players_or_empty()
+    if not players:
+        return {}
+    # NOT_ROSTERED rather than None, deliberately. NULL in this column
+    # has to mean one thing only: "never seen before". A player genuinely
+    # off every roster is a known state, not an unknown one, and if both
+    # were NULL then the first time this table is ever filled every
+    # rostered player in the league would read as a fresh signing.
+    return {sid: (p.get("team") or NOT_ROSTERED)
+            for sid, p in players.items()
+            if isinstance(p, dict) and p.get("position") in SCORED_POSITIONS}
+
+
+def record_team_changes(assignments):
+    """Write every team that moved since the last time we looked.
+
+    Mirrors record_injury_changes deliberately -- same seeding rule, same
+    background-thread discipline, same "no database is a valid
+    configuration" behaviour. A player seen for the first time is seeded
+    rather than reported: there is nothing for them to have moved FROM,
+    and without this every player would appear as a signing the first
+    time the table was ever filled."""
+    if not DATABASE_URL or not isinstance(assignments, dict) or not assignments:
+        return 0
+    conn = get_db()
+    changed = 0
+    try:
+        with conn.cursor() as cur:
+            cur.execute("SELECT sleeper_id, team FROM player_team_state")
+            known = {r["sleeper_id"]: r["team"] for r in cur.fetchall()}
+            rows = [(sid, team, known.get(sid))
+                    for sid, team in assignments.items()
+                    if sid not in known or known.get(sid) != team]
+            if not rows:
+                return 0
+            psycopg2.extras.execute_values(
+                cur,
+                """INSERT INTO player_team_state
+                       (sleeper_id, team, previous_team)
+                   VALUES %s
+                   ON CONFLICT (sleeper_id) DO UPDATE SET
+                       previous_team = player_team_state.team,
+                       team = EXCLUDED.team,
+                       changed_at = NOW()""",
+                rows,
+            )
+            changed = len(rows)
+        conn.commit()
+    except Exception:
+        changed = 0
+    finally:
+        conn.close()
+    _moves_feed_cache.clear()
+    return changed
+
+
+def _record_team_changes_background():
+    """Keep the move history current off the request path, driven by
+    traffic rather than a cron -- the same arrangement the injury
+    arrows use, and for the same reason: nothing to configure."""
+    now = time.time()
+    with _team_state_lock:
+        if now - _team_state_last["time"] < TEAM_STATE_REFRESH_S:
+            return
+        _team_state_last["time"] = now
+
+    def _run():
+        try:
+            with _BACKGROUND_SYNC_SLOTS:
+                record_team_changes(build_team_assignments())
+        except Exception:
+            pass
+
+    threading.Thread(target=_run, daemon=True).start()
+
+
+def _rostered(value):
+    return bool(value) and value != NOT_ROSTERED
+
+
+def _move_kind(previous_team, team):
+    """What actually happened, in the words a reader uses."""
+    if _rostered(previous_team) and _rostered(team):
+        return "traded"
+    if _rostered(team):
+        return "signed"
+    return "released"
+
+
+def get_moves_report(limit=None, days=MOVE_NEWS_DAYS, cache=_moves_feed_cache):
+    """Every roster move the app has watched happen, newest first.
+
+    Returns [] rather than raising for a missing database or an empty
+    player dump -- a decoration feed is never worth the page it sits on.
+    """
+    key = ("moves", days)
+    now = time.time()
+    entry = cache.get(key)
+    if entry and now - entry["time"] < 300:
+        rows = entry["rows"]
+        return rows[:limit] if limit else rows
+
+    _record_team_changes_background()
+    rows = []
+    if not DATABASE_URL:
+        return []
+    players = _players_or_empty()
+    try:
+        conn = get_db()
+        try:
+            with conn.cursor() as cur:
+                cur.execute(
+                    """SELECT sleeper_id, team, previous_team, changed_at
+                       FROM player_team_state
+                       WHERE previous_team IS NOT NULL
+                         AND previous_team IS DISTINCT FROM team
+                       ORDER BY changed_at DESC
+                       LIMIT 400""")
+                found = cur.fetchall()
+        finally:
+            conn.close()
+    except Exception:
+        return []
+
+    for r in found:
+        if not _is_recent(r.get("changed_at"), days):
+            continue
+        sid = r["sleeper_id"]
+        p = players.get(sid) or {}
+        name = f"{p.get('first_name','')} {p.get('last_name','')}".strip()
+        if not name:
+            continue
+        team, prev = r.get("team"), r.get("previous_team")
+        rows.append({
+            "sid": sid, "name": name,
+            "position": p.get("position"),
+            "photo": player_photo_url(sid),
+            # The crest on the mugshot is where they are NOW -- which for
+            # a release is nowhere, so it falls back to the old one
+            # rather than leaving a hole.
+            "logo": team_logo_url(team if _rostered(team) else prev),
+            "from_team": prev or NOT_ROSTERED,
+            "from_logo": team_logo_url(prev) if _rostered(prev) else None,
+            "to_team": team or NOT_ROSTERED,
+            "to_logo": team_logo_url(team) if _rostered(team) else None,
+            "kind": _move_kind(prev, team),
+            "ago": _time_ago(r.get("changed_at")),
+            "changed_at": r.get("changed_at"),
+        })
+    cache[key] = {"rows": rows, "time": now}
+    return rows[:limit] if limit else rows
+
+
+def get_moves_today(limit=MOVE_FEED_SIZE):
+    """The short list the scoreboard has room for."""
+    return get_moves_report(limit=limit)
 
 
 _injury_state_lock = threading.Lock()
@@ -8924,6 +9140,7 @@ def scores_page():
             performers=performers, power=get_power_board(season, season_type),
             perf_groups=PERFORMER_GROUPS,
             injuries=_safe_feed(get_injury_changes),
+            moves=_safe_feed(get_moves_today),
             birthdays=_safe_feed(get_birthdays_today),
         )
     except Exception as e:
@@ -8937,7 +9154,7 @@ def scores_page():
             current_season=int(SEASON), current_week=1, today_key=date.today().isoformat(),
             load_error=str(e), username=username, has_synced_leagues=False,
             performers=[], power=[], perf_groups=PERFORMER_GROUPS,
-            injuries=[], birthdays=[],
+            injuries=[], moves=[], birthdays=[],
         )
 
 
@@ -8955,6 +9172,28 @@ def injuries_page():
     except Exception as e:
         return render_template_string(
             FEED_PAGE_HTML, title="Injuries", kind="injuries", rows=[],
+            blurb=None, empty=None, load_error=str(e))
+
+
+@app.route("/moves")
+def moves_page():
+    """Every signing, release and trade the app has watched happen, not
+    just the handful the scores board has room for."""
+    try:
+        rows = _safe_feed(get_moves_report)
+        return render_template_string(
+            FEED_PAGE_HTML, title="Moves", kind="moves", rows=rows,
+            blurb=("Every roster change in the last two weeks, newest first. "
+                   "Sleeper publishes only where a player is now, so these "
+                   "exist because the app keeps its own record of where each "
+                   "one was and writes down what moved. NR means no NFL "
+                   "roster \u2014 a free agent, or a player who has just been "
+                   "let go."),
+            empty="No roster moves have come through in the last two weeks.",
+            load_error=None)
+    except Exception as e:
+        return render_template_string(
+            FEED_PAGE_HTML, title="Moves", kind="moves", rows=[],
             blurb=None, empty=None, load_error=str(e))
 
 
@@ -11824,7 +12063,7 @@ LOGO_SVG = """<svg viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000
 # current without being listed.
 NAV_LIVE = ("live", "/scores", "Live")
 NAV_LIVE_KEYS = ("live", "scores", "standings", "performances",
-                 "injuries", "birthdays")
+                 "injuries", "moves", "birthdays")
 
 # myCalc stays a menu: its five destinations have no shared landing page
 # that lists them the way /scores lists the live ones.
@@ -13046,6 +13285,21 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + """
   .sc-game-live-clock{ font-size:13px; font-weight:800; color:var(--sc-live); white-space:nowrap; }
 
   /* --- daily performer board --- */
+  /* A move reads as one crest becoming another. "NR" stands in wherever
+     a side of that is no roster at all -- a signing has no crest to come
+     from, a release none to go to. */
+  .sc-move{ display:inline-flex; align-items:center; gap:7px; }
+  .sc-move img{ width:19px; height:19px; object-fit:contain; }
+  .sc-move .nr{ display:inline-flex; align-items:center; justify-content:center;
+                min-width:26px; height:19px; padding:0 5px; border-radius:99px;
+                background:var(--sc-surface2); color:var(--sc-muted);
+                font-family:"IBM Plex Mono"; font-size:10px; font-weight:700; }
+  .sc-move .arrow{ color:var(--sc-muted); font-size:12px; }
+  .sc-move-kind{ font-size:11.5px; font-weight:700; text-transform:capitalize; }
+  .sc-move-kind.signed{ color:var(--good); }
+  .sc-move-kind.released{ color:var(--critical); }
+  .sc-move-kind.traded{ color:var(--warning); }
+
   .sc-section-head{ display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin:26px 0 10px; }
   .sc-section-head h2{ font-family:"Big Shoulders Display"; font-size:22px; font-weight:800; text-transform:uppercase; margin:0; color:var(--sc-text); }
   .sc-section-head .sub{ font-size:11.5px; color:var(--sc-muted); }
@@ -13321,6 +13575,44 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + """
           {%- if r.from %}{{ r.from }} <span class="arrow">&rarr;</span> {% endif -%}
           <b class="{{ r.tone or ('good' if r.good else 'bad') }}">{{ r.to }}</b>
           {%- if r.detail %} <b class="{{ r.tone or 'admin' }}">&middot; {{ r.detail }}</b>{% endif -%}
+        </span>
+      </span>
+      <span class="sc-feed-meta">
+        <span class="sc-feed-club">{{ r.position }}</span>
+        {%- if r.ago %}<b>{{ r.ago }}</b>{% endif -%}
+      </span>
+    </a>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  {% if moves %}
+  <div class="sc-section-head">
+    <h2>Moves</h2>
+    <a class="sc-viewall" href="/moves">View all &rsaquo;</a>
+  </div>
+  <div class="sc-feed">
+    {% for r in moves %}
+    <a class="sc-feed-row" href="/player?sid={{ r.sid }}">
+      <span class="sc-feed-mug">
+        <img class="face" src="{{ r.photo }}" alt="" loading="lazy"
+             onerror="this.style.visibility='hidden'">
+        {% if r.logo %}<img class="crest" src="{{ r.logo }}" alt="" loading="lazy"
+             onerror="this.style.display='none'">{% endif %}
+      </span>
+      <span class="sc-feed-main">
+        <span class="sc-feed-name">{{ r.name }}</span>
+        <span class="sc-feed-sub">
+          <span class="sc-move">
+            {% if r.from_logo %}<img src="{{ r.from_logo }}" alt="{{ r.from_team }}"
+                 onerror="this.style.display='none'">
+            {% else %}<span class="nr">{{ r.from_team }}</span>{% endif %}
+            <span class="arrow">&rarr;</span>
+            {% if r.to_logo %}<img src="{{ r.to_logo }}" alt="{{ r.to_team }}"
+                 onerror="this.style.display='none'">
+            {% else %}<span class="nr">{{ r.to_team }}</span>{% endif %}
+          </span>
+          <span class="sc-move-kind {{ r.kind }}">{{ r.kind }}</span>
         </span>
       </span>
       <span class="sc-feed-meta">
@@ -14446,6 +14738,21 @@ FEED_PAGE_HTML = BASE_STYLE + make_header("live") + """
      corner of the headshot: at 19px over a photo it read as a smudge,
      and the team is the thing being looked for. */
   .fd-club{ white-space:nowrap; }
+  /* A move is two crests and an arrow: the clubs are the sentence, and
+     at this size a logo reads faster than an abbreviation. "NR" stands
+     in when one end of the move is no roster at all. */
+  .fd-move{ display:inline-flex; align-items:center; gap:7px; vertical-align:-4px; }
+  .fd-move img{ width:19px; height:19px; object-fit:contain; }
+  .fd-move .nr{ display:inline-flex; align-items:center; justify-content:center;
+                min-width:19px; height:19px; padding:0 4px; border-radius:4px;
+                background:var(--fd-surface2); color:var(--fd-muted);
+                font-family:"IBM Plex Mono"; font-size:10px; font-weight:700; }
+  .fd-move .arrow{ color:var(--fd-muted); font-size:12px; }
+  .fd-move-kind{ font-size:11.5px; font-weight:700; text-transform:capitalize;
+                 margin-left:7px; }
+  .fd-move-kind.signed{ color:var(--good); }
+  .fd-move-kind.released{ color:var(--critical); }
+  .fd-move-kind.traded{ color:var(--warning); }
   .fd-empty{ color:var(--fd-muted); padding:34px; text-align:center; font-size:13.5px; }
   .fd-back{ display:inline-block; margin-top:20px; color:var(--accent-ink);
             text-decoration:none; font-weight:700; font-size:13px; }
@@ -14464,8 +14771,8 @@ FEED_PAGE_HTML = BASE_STYLE + make_header("live") + """
       <span class="fd-mug">
         <img class="face" src="{{ r.photo }}" alt="" loading="lazy"
              onerror="this.style.visibility='hidden'">
-        <img class="crest" src="{{ r.logo }}" alt="" loading="lazy"
-             onerror="this.style.display='none'">
+        {% if r.logo %}<img class="crest" src="{{ r.logo }}" alt="" loading="lazy"
+             onerror="this.style.display='none'">{% endif %}
       </span>
       <span class="fd-main">
         <span class="fd-name">{{ r.name }}</span>
@@ -14474,6 +14781,17 @@ FEED_PAGE_HTML = BASE_STYLE + make_header("live") + """
             {%- if r.from %}{{ r.from }} <span class="arrow">&rarr;</span> {% endif -%}
             <b class="{{ r.tone or ('good' if r.good else 'bad') }}">{{ r.to }}</b>
             {%- if r.detail %} <b class="{{ r.tone or 'admin' }}">&middot; {{ r.detail }}</b>{% endif -%}
+          {%- elif kind == 'moves' -%}
+            <span class="fd-move">
+              {% if r.from_logo %}<img src="{{ r.from_logo }}" alt="{{ r.from_team }}"
+                   onerror="this.style.display='none'">
+              {% else %}<span class="nr">{{ r.from_team }}</span>{% endif %}
+              <span class="arrow">&rarr;</span>
+              {% if r.to_logo %}<img src="{{ r.to_logo }}" alt="{{ r.to_team }}"
+                   onerror="this.style.display='none'">
+              {% else %}<span class="nr">{{ r.to_team }}</span>{% endif %}
+            </span>
+            <span class="fd-move-kind {{ r.kind }}">{{ r.kind }}</span>
           {%- else -%}
             Happy {{ r.age_label }} Birthday &#127881;
           {%- endif -%}
