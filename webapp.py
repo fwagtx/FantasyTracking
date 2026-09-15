@@ -10245,9 +10245,41 @@ BASE_STYLE = """
   .grade-badge.grade-bp, .grade-badge.grade-b, .grade-badge.grade-bm{ background:var(--good-wash); color:var(--good); }
   .grade-badge.grade-cp, .grade-badge.grade-c, .grade-badge.grade-cm{ background:var(--warning-wash); color:var(--warning); }
   .grade-badge.grade-dp, .grade-badge.grade-d, .grade-badge.grade-dm, .grade-badge.grade-f{ background:var(--critical-wash); color:var(--critical); }
-  .legend-key{ display:flex; flex-wrap:wrap; gap:10px 20px; align-items:center; }
-  .legend-key-item{ display:flex; align-items:center; gap:8px; font-size:12.5px; color:var(--ink-secondary); }
-  .col-head-sample{ display:inline-flex; padding:3px 6px; border-radius:5px; background:var(--ink-muted); flex:none; }
+  /* The roster legend. Three groups side by side on a wide screen,
+     stacked on a phone -- each with its own heading, so an item's
+     meaning comes from the group it sits in rather than from its
+     wording alone. */
+  .legend-groups{ display:grid; grid-template-columns:repeat(auto-fit,minmax(215px,1fr));
+                  gap:16px 28px; }
+  .legend-group h4{ font-family:"IBM Plex Mono",monospace; font-size:10.5px; font-weight:700;
+                    letter-spacing:0.07em; text-transform:uppercase; color:var(--ink-muted);
+                    margin:0 0 7px; }
+  .legend-row{ display:flex; align-items:center; gap:9px; padding:3px 0;
+               font-size:12.5px; line-height:1.45; color:var(--ink-secondary); }
+  /* Every sample is the same width, so the labels line up into a column
+     instead of stepping in and out with the digit count. */
+  .legend-row > span:first-child{ flex:none; min-width:36px; text-align:center;
+                                  font-family:"IBM Plex Mono",monospace; font-size:11px;
+                                  font-weight:700; padding:3px 6px; border-radius:5px; }
+  /* A sample with no colour of its own still needs to read as a chip --
+     this is the one the row itself leaves unstyled. */
+  .legend-row .rank-plain{ background:var(--paper-raised); color:var(--ink-secondary); }
+
+  /* THE BUG: this sample was a bare .rank-badge-inline inside
+     .col-head-sample, but that badge's only rule is scoped to
+     ".col-head .rank-badge-inline" -- an ancestor the legend does not
+     have. So it rendered with no background and no padding, as muted
+     text on a muted grey box, which is why "Rank 3" was unreadable.
+     It now carries its own styling and wears a real position colour, so
+     it looks like the header it is describing. */
+  .col-head-sample{ display:inline-flex; align-items:center; gap:6px;
+                    background:var(--pos-qb); color:#fff;
+                    font-family:"IBM Plex Mono",monospace; font-size:10.5px; font-weight:700;
+                    letter-spacing:0.05em; text-transform:uppercase;
+                    padding:4px 7px; border-radius:6px; flex:none; }
+  .legend-row .col-head-sample{ min-width:0; }
+  .col-head-sample b{ background:rgba(255,255,255,0.28); color:#fff; border-radius:5px;
+                      padding:1px 6px; font-weight:700; }
 
   .player-hero{ display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
   .player-hero img{ width:72px; height:72px; border-radius:14px; object-fit:cover; background:var(--paper-sunken); }
@@ -11453,15 +11485,40 @@ LEAGUE_DETAIL_HTML = BASE_STYLE + make_header("league") + """
       {% endfor %}
     </div>
 
+    <!-- Three labelled groups rather than five chips in a row. The old
+         legend put "what a column header means" next to "what a row
+         number means" next to "what a colour means" at one weight, so
+         reading it meant working out which of the three any item was
+         about. It also never explained the grade badge at all, which is
+         the first thing in every row. -->
     <div class="legend-box">
-      <div class="legend-key">
-        <span class="legend-key-item"><span class="col-head-sample"><span class="rank-badge-inline">Rank 3</span></span> Team's rank at that position</span>
-        <span class="legend-key-item"><span class="rank-pair"><span class="rank-plain">12</span></span> Player's rank at their position</span>
-        <span class="legend-key-item"><span class="rank-pair"><span class="rank-badge good">8</span></span> Top 12 player league-wide</span>
-        <span class="legend-key-item"><span class="rank-pair"><span class="rank-badge warning">28</span></span> Top 36 player league-wide</span>
-        <span class="legend-key-item"><span class="rank-pair"><span class="rank-badge critical">54</span></span> Outside the top 36</span>
+      <div class="legend-groups">
+        <div class="legend-group">
+          <h4>Each player row</h4>
+          <span class="legend-row"><span class="grade-badge grade-bp">B+</span>
+            Matchup grade this week</span>
+          <span class="legend-row"><span class="rank-plain">12</span>
+            Rank at their position</span>
+          <span class="legend-row"><span class="rank-badge flat">41</span>
+            Overall rank, among all players</span>
+        </div>
+        <div class="legend-group">
+          <h4>Overall rank color</h4>
+          <span class="legend-row"><span class="rank-badge good">8</span>
+            Top 12 overall</span>
+          <span class="legend-row"><span class="rank-badge warning">28</span>
+            13th to 36th</span>
+          <span class="legend-row"><span class="rank-badge critical">54</span>
+            37th or lower</span>
+        </div>
+        <div class="legend-group">
+          <h4>Column header</h4>
+          <span class="legend-row"><span class="col-head-sample">QB
+            <b>Rank 3</b></span>
+            Your team&rsquo;s rank at that position</span>
+        </div>
       </div>
-      <p class="muted" style="margin-top:10px;">Click a player's photo or name for full detail.</p>
+      <p class="muted" style="margin-top:12px;">Click a player&rsquo;s photo or name for full detail.</p>
     </div>
   </div>
   {% endif %}
