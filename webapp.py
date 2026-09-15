@@ -20,12 +20,16 @@ Optional:
 import base64
 import bisect
 import gzip
+import hashlib
+import hmac
 import json
 import html
 import math
 import os
 import random
 import re
+import secrets
+import smtplib
 import threading
 import time
 import urllib.parse
@@ -33,6 +37,7 @@ import xml.etree.ElementTree as ET
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import date, datetime, timedelta, timezone
 from zoneinfo import ZoneInfo
+from email.message import EmailMessage
 from email.utils import parsedate_to_datetime
 import requests
 import psycopg2
@@ -347,6 +352,22 @@ def init_db():
             # A counter on the users row, so a page can build a
             # cache-busting avatar URL without reading the image.
             cur.execute("ALTER TABLE users ADD COLUMN IF NOT EXISTS avatar_version INTEGER DEFAULT 0;")
+            # When the username was last changed, so the cooldown has
+            # something to measure from. NULL means never changed.
+            cur.execute("ALTER TABLE users ADD COLUMN IF NOT EXISTS username_changed_at TIMESTAMP;")
+            # Reset tokens are stored HASHED. A raw token in the table is
+            # a password-equivalent secret sitting in plain text, and a
+            # leaked backup would hand over every account with one open.
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS password_resets (
+                    token_hash TEXT PRIMARY KEY,
+                    user_id    INTEGER NOT NULL REFERENCES users(id),
+                    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+                    expires_at TIMESTAMP NOT NULL,
+                    used_at    TIMESTAMP
+                );
+            """)
+            cur.execute("CREATE INDEX IF NOT EXISTS idx_password_resets_user ON password_resets (user_id);")
             cur.execute("""
                 CREATE TABLE IF NOT EXISTS synced_leagues (
                     user_id INTEGER REFERENCES users(id),
@@ -433,6 +454,7 @@ class User(UserMixin):
         self.pref_mode = row.get("pref_mode") or "dynasty"
         self.pref_scoring = row.get("pref_scoring") or DEFAULT_SCORING
         self.avatar_version = row.get("avatar_version") or 0
+        self.username_changed_at = row.get("username_changed_at")
         self.newsletter_opt_in = bool(row.get("newsletter_opt_in"))
 
 
@@ -4880,6 +4902,188 @@ def api_check_username():
     return jsonify({"available": True, "reason": None})
 
 
+# --- sending mail --------------------------------------------------------
+#
+# Plain SMTP through the standard library, so this adds no dependency and
+# works with whatever provider gets pointed at it -- Resend, SendGrid,
+# Postmark, SES, Fastmail, all of them speak SMTP.
+#
+# Nothing is configured here. Set these five and mail starts sending; set
+# none and the app keeps working, the reset flow still answers the same
+# way it always does, and the link is written to the log instead of an
+# inbox so it is recoverable rather than lost.
+SMTP_HOST = os.environ.get("SMTP_HOST")
+SMTP_PORT = _safe_int(os.environ.get("SMTP_PORT"), 587)
+SMTP_USER = os.environ.get("SMTP_USER")
+SMTP_PASSWORD = os.environ.get("SMTP_PASSWORD")
+MAIL_FROM = os.environ.get("MAIL_FROM") or "no-reply@fantasyfootballcalc.com"
+MAIL_FROM_NAME = os.environ.get("MAIL_FROM_NAME") or "Fantasy Football Calc"
+# Where links in an email point. Behind a proxy the request's own host is
+# whatever the proxy said it was, which is not something to build a
+# password-reset link out of.
+SITE_URL = (os.environ.get("SITE_URL") or "https://fantasyfootballcalc.com").rstrip("/")
+
+
+def mail_configured():
+    return bool(SMTP_HOST and MAIL_FROM)
+
+
+def send_email(to_address, subject, text_body, html_body=None):
+    """True if it went out. False is never fatal to the caller -- a page
+    that depends on mail having been delivered is a page that breaks
+    every time a mail provider has a bad minute."""
+    if not to_address:
+        return False
+    if not mail_configured():
+        app.logger.warning(
+            "email not configured (set SMTP_HOST/SMTP_USER/SMTP_PASSWORD/MAIL_FROM); "
+            "would have sent %r to %s", subject, to_address)
+        return False
+    try:
+        msg = EmailMessage()
+        msg["Subject"] = subject
+        msg["From"] = f"{MAIL_FROM_NAME} <{MAIL_FROM}>"
+        msg["To"] = to_address
+        msg.set_content(text_body)
+        if html_body:
+            msg.add_alternative(html_body, subtype="html")
+        # 465 is implicit TLS; everything else starts plain and upgrades.
+        if SMTP_PORT == 465:
+            server = smtplib.SMTP_SSL(SMTP_HOST, SMTP_PORT, timeout=15)
+        else:
+            server = smtplib.SMTP(SMTP_HOST, SMTP_PORT, timeout=15)
+        try:
+            if SMTP_PORT != 465:
+                server.starttls()
+            if SMTP_USER:
+                server.login(SMTP_USER, SMTP_PASSWORD or "")
+            server.send_message(msg)
+        finally:
+            server.quit()
+        return True
+    except Exception:
+        app.logger.exception("could not send %r to %s", subject, to_address)
+        return False
+
+
+# --- password resets -----------------------------------------------------
+PASSWORD_RESET_TTL_HOURS = 2
+MIN_PASSWORD_LENGTH = 8
+
+
+def _hash_reset_token(token):
+    return hashlib.sha256(token.encode()).hexdigest()
+
+
+def create_password_reset(user_id):
+    """A fresh single-use token. Any earlier one for this account is
+    spent at the same time: asking again should invalidate the link in
+    the older email rather than leave two doors open."""
+    token = secrets.token_urlsafe(32)
+    conn = get_db()
+    try:
+        with conn.cursor() as cur:
+            cur.execute(
+                "UPDATE password_resets SET used_at = NOW() "
+                "WHERE user_id = %s AND used_at IS NULL", (int(user_id),))
+            cur.execute(
+                "INSERT INTO password_resets (token_hash, user_id, expires_at) "
+                "VALUES (%s, %s, NOW() + INTERVAL '%s hours')",
+                (_hash_reset_token(token), int(user_id), PASSWORD_RESET_TTL_HOURS))
+        conn.commit()
+    finally:
+        conn.close()
+    return token
+
+
+def consume_password_reset(token, new_password):
+    """Set the password if the token is good. Returns (ok, message).
+
+    The token is checked and spent inside one transaction, so the same
+    link cannot be used twice by two requests arriving together."""
+    if not token:
+        return False, "That reset link is not valid."
+    conn = get_db()
+    try:
+        with conn.cursor() as cur:
+            cur.execute(
+                """SELECT user_id FROM password_resets
+                   WHERE token_hash = %s AND used_at IS NULL AND expires_at > NOW()
+                   FOR UPDATE""",
+                (_hash_reset_token(token),))
+            row = cur.fetchone()
+            if not row:
+                return False, "That reset link has expired or has already been used."
+            cur.execute("UPDATE password_resets SET used_at = NOW() WHERE token_hash = %s",
+                        (_hash_reset_token(token),))
+            cur.execute("UPDATE users SET password_hash = %s WHERE id = %s",
+                        (generate_password_hash(new_password), row["user_id"]))
+            # Every other outstanding link for this account dies with it.
+            cur.execute("UPDATE password_resets SET used_at = NOW() "
+                        "WHERE user_id = %s AND used_at IS NULL", (row["user_id"],))
+        conn.commit()
+        return True, None
+    except Exception as e:
+        app.logger.exception("password reset failed")
+        return False, str(e)
+    finally:
+        conn.close()
+
+
+def user_by_email(email):
+    conn = get_db()
+    try:
+        with conn.cursor() as cur:
+            cur.execute("SELECT * FROM users WHERE lower(email) = lower(%s)", (email,))
+            return cur.fetchone()
+    finally:
+        conn.close()
+
+
+def send_password_reset_email(row, token):
+    link = f"{SITE_URL}/reset-password?token={token}"
+    name = row.get("username") or "there"
+    text = (
+        f"Hi {name},\n\n"
+        f"Someone asked to reset the password for your Fantasy Football Calc "
+        f"account. Open this link to choose a new one:\n\n{link}\n\n"
+        f"The link works once and expires in {PASSWORD_RESET_TTL_HOURS} hours.\n\n"
+        f"If this wasn't you, ignore this email -- your password has not changed."
+    )
+    body = (
+        f'<p>Hi {html.escape(str(name))},</p>'
+        f'<p>Someone asked to reset the password for your Fantasy Football Calc account. '
+        f'Choose a new one here:</p>'
+        f'<p><a href="{link}" style="background:#b97a1f;color:#fff8ec;padding:11px 22px;'
+        f'border-radius:99px;text-decoration:none;font-weight:700;display:inline-block;">'
+        f'Reset your password</a></p>'
+        f'<p style="color:#666;font-size:13px;">The link works once and expires in '
+        f'{PASSWORD_RESET_TTL_HOURS} hours. If this wasn\'t you, ignore this email '
+        f'&mdash; your password has not changed.</p>'
+    )
+    sent = send_email(row.get("email"), "Reset your Fantasy Football Calc password",
+                      text, body)
+    if not sent:
+        # Recoverable rather than lost: without a mail provider the link
+        # is in the log, which is the only place it could safely go. It
+        # must never reach the page -- that would let anyone reset any
+        # account by typing the address.
+        app.logger.warning("password reset link for user %s: %s", row.get("id"), link)
+    return sent
+
+
+# --- changing a username -------------------------------------------------
+USERNAME_CHANGE_DAYS = 30
+
+
+def username_change_allowed_at(changed_at):
+    """When the next change is allowed, or None if it is allowed now."""
+    if not changed_at:
+        return None
+    nxt = changed_at + timedelta(days=USERNAME_CHANGE_DAYS)
+    return nxt if nxt > datetime.utcnow() else None
+
+
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
     error = None
@@ -5088,6 +5292,76 @@ def settings_page():
             except Exception as e:
                 error = str(e)
 
+        # Changing the username, and changing the password while signed
+        # in, are their own submits: each has its own rules and its own
+        # way of failing, and neither should ride along with the rest.
+        if request.form.get("action") == "change_username":
+            wanted = (request.form.get("new_username") or "").strip()
+            blocked_until = username_change_allowed_at(current_user.username_changed_at)
+            if blocked_until:
+                error = "You can change your username again on %s." % blocked_until.strftime("%-d %B %Y")
+            elif wanted.lower() == (current_user.username or "").lower():
+                error = "That's already your username."
+            elif not username_valid(wanted):
+                error = "Username must be 1-20 letters, numbers, or underscores."
+            elif not username_available(wanted):
+                error = "That username is taken."
+            else:
+                try:
+                    conn = get_db()
+                    try:
+                        with conn.cursor() as cur:
+                            cur.execute(
+                                "UPDATE users SET username = %s, username_changed_at = NOW() "
+                                "WHERE id = %s RETURNING username_changed_at",
+                                (wanted, current_user.id))
+                            row = cur.fetchone()
+                        conn.commit()
+                    finally:
+                        conn.close()
+                    current_user.username = wanted
+                    current_user.username_changed_at = (row or {}).get("username_changed_at")
+                    return redirect("/settings?saved=1")
+                except Exception as e:
+                    error = str(e)
+
+        if not error and request.form.get("action") == "change_password":
+            current = request.form.get("current_password") or ""
+            new = request.form.get("new_password") or ""
+            confirm = request.form.get("confirm_password") or ""
+            stored = None
+            try:
+                conn = get_db()
+                try:
+                    with conn.cursor() as cur:
+                        cur.execute("SELECT password_hash FROM users WHERE id = %s",
+                                    (current_user.id,))
+                        stored = (cur.fetchone() or {}).get("password_hash")
+                finally:
+                    conn.close()
+            except Exception as e:
+                error = str(e)
+            if not error:
+                if len(new) < MIN_PASSWORD_LENGTH:
+                    error = "Password must be at least %d characters." % MIN_PASSWORD_LENGTH
+                elif new != confirm:
+                    error = "Those two passwords don't match."
+                elif stored and not check_password_hash(stored, current):
+                    error = "That current password isn't right."
+                else:
+                    try:
+                        conn = get_db()
+                        try:
+                            with conn.cursor() as cur:
+                                cur.execute("UPDATE users SET password_hash = %s WHERE id = %s",
+                                            (generate_password_hash(new), current_user.id))
+                            conn.commit()
+                        finally:
+                            conn.close()
+                        return redirect("/settings?saved=1")
+                    except Exception as e:
+                        error = str(e)
+
         upload = request.files.get("avatar")
         if not error and upload and upload.filename:
             data = upload.read(AVATAR_MAX_BYTES + 1)
@@ -5145,7 +5419,56 @@ def settings_page():
     leagues = get_synced_league_ids(current_user.id)
     return render_template_string(
         SETTINGS_HTML, saved=saved, error=error, scoring_formats=SCORING_FORMATS,
+        username_next_change=username_change_allowed_at(current_user.username_changed_at),
+        username_cooldown_days=USERNAME_CHANGE_DAYS,
         league_count=len(leagues) if leagues else 0)
+
+
+@app.route("/forgot-password", methods=["GET", "POST"])
+def forgot_password():
+    """Ask for a reset link.
+
+    The answer is the same whether or not the address has an account. A
+    form that says "no such user" is a way to find out who has one."""
+    sent = False
+    error = None
+    if request.method == "POST":
+        email = (request.form.get("email") or "").strip().lower()
+        if not email or "@" not in email:
+            error = "Enter the email address on your account."
+        else:
+            try:
+                row = user_by_email(email)
+                if row:
+                    send_password_reset_email(row, create_password_reset(row["id"]))
+            except Exception:
+                # Even a database failure must not change the answer --
+                # a slow or broken response for real addresses only is
+                # the same leak by another route.
+                app.logger.exception("reset request failed for %s", email)
+            sent = True
+    return render_template_string(FORGOT_PASSWORD_HTML, sent=sent, error=error,
+                                  mail_on=mail_configured())
+
+
+@app.route("/reset-password", methods=["GET", "POST"])
+def reset_password():
+    token = request.args.get("token") or request.form.get("token") or ""
+    error = None
+    if request.method == "POST":
+        password = request.form.get("password") or ""
+        confirm = request.form.get("confirm") or ""
+        if len(password) < MIN_PASSWORD_LENGTH:
+            error = "Password must be at least %d characters." % MIN_PASSWORD_LENGTH
+        elif password != confirm:
+            error = "Those two passwords don't match."
+        else:
+            ok, why = consume_password_reset(token, password)
+            if ok:
+                return render_template_string(RESET_PASSWORD_HTML, token=token,
+                                              error=None, done=True)
+            error = why
+    return render_template_string(RESET_PASSWORD_HTML, token=token, error=error, done=False)
 
 
 @app.route("/logout")
@@ -15723,6 +16046,17 @@ SETTINGS_HTML = BASE_STYLE + make_header("") + """
   .set-seg input:focus-visible + span{ outline:2px solid var(--accent-ink); outline-offset:2px; }
   /* Four choices with a line of explanation each -- too much to sit in a
      pill row, and the note is the part that tells them apart. */
+  .set-username{ display:flex; gap:8px; align-items:center; }
+  .set-username input{ flex:1; min-width:0; }
+  .set-small-btn{ flex:none; padding:10px 18px; border-radius:99px; cursor:pointer;
+                  border:1px solid var(--line-strong); background:transparent;
+                  color:var(--ink); font-family:inherit; font-size:13px; font-weight:700; }
+  .set-small-btn:hover:not(:disabled){ border-color:var(--accent-ink); color:var(--accent-ink); }
+  .set-small-btn:disabled, .set-username input:disabled{ opacity:0.5; cursor:not-allowed; }
+  .set-field input[type=password]{
+    width:100%; background:var(--paper-sunken); border:1px solid var(--line);
+    color:var(--ink); border-radius:8px; padding:10px 12px; font-size:14px;
+    font-family:inherit; box-sizing:border-box; }
   .set-avatar{ display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
   .set-avatar-img{ width:72px; height:72px; border-radius:50%; object-fit:cover; flex:none;
                    background:var(--paper-sunken); border:1px solid var(--line); }
@@ -15939,16 +16273,134 @@ document.addEventListener('change', function(e){
     </div>
   </form>
 
+  <!-- Its own form. A username change has its own rules and its own way
+       of failing, and should not ride along with the settings above. -->
+  <form method="post">
+    <div class="panel">
+      <div class="set-group" style="margin-top:0;">
+        <h3>Username</h3>
+        <div class="set-field" style="margin-top:0;">
+          <div class="set-username">
+            <input type="text" name="new_username" maxlength="20"
+                   value="{{ current_user.username }}" autocapitalize="off"
+                   autocorrect="off" {{ 'disabled' if username_next_change }}>
+            <button class="set-small-btn" type="submit" name="action" value="change_username"
+                    {{ 'disabled' if username_next_change }}>Change</button>
+          </div>
+          <div class="hint">
+            {% if username_next_change %}
+            Changed recently. You can change it again on
+            {{ username_next_change.strftime('%-d %B %Y') }}.
+            {% else %}
+            1&ndash;20 letters, numbers or underscores. Once changed, it&rsquo;s
+            {{ username_cooldown_days }} days before you can change it again.
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <form method="post">
+    <div class="panel">
+      <div class="set-group" style="margin-top:0;">
+        <h3>Password</h3>
+        <div class="set-field" style="margin-top:0;">
+          <label for="curPw">Current password</label>
+          <input type="password" id="curPw" name="current_password" autocomplete="current-password">
+        </div>
+        <div class="set-field">
+          <label for="newPw">New password</label>
+          <input type="password" id="newPw" name="new_password" minlength="8"
+                 autocomplete="new-password">
+        </div>
+        <div class="set-field">
+          <label for="confirmPw">Confirm new password</label>
+          <input type="password" id="confirmPw" name="confirm_password" minlength="8"
+                 autocomplete="new-password">
+        </div>
+        <div class="set-save">
+          <button class="set-small-btn" type="submit" name="action" value="change_password">
+            Change password</button>
+          <span class="hint" style="margin:0;">Forgot it?
+            <a href="/forgot-password" style="color:var(--accent-ink);">Reset by email</a></span>
+        </div>
+      </div>
+    </div>
+  </form>
+
   <div class="panel">
     <div class="set-group" style="margin-top:0;">
       <h3>Account</h3>
-      <div class="set-read"><b>Username</b><span>{{ current_user.username }}</span></div>
       <div class="set-read"><b>Email</b><span>{{ current_user.email or '&mdash;'|safe }}</span></div>
       <div class="set-read"><b>Plan</b><span>{{ 'Member' if current_user.is_member else 'Free' }}</span></div>
       <div class="set-danger"><a href="/logout">Log out</a></div>
     </div>
   </div>
 </div></main>
+"""
+
+
+FORGOT_PASSWORD_HTML = AUTH_STYLE + """
+<div class="auth-top"><a class="auth-logo" href="/">Fantasy Football Calc</a></div>
+<div class="auth-wrap">
+  {% if sent %}
+  <h1>Check your email</h1>
+  <!-- Deliberately not "we sent it to that address": whether an address
+       has an account is not something a form should tell a stranger. -->
+  <p class="auth-sub">If that address has an account, a link to choose a new
+    password is on its way. It works once and expires in two hours.</p>
+  {% if not mail_on %}
+  <div class="auth-error" style="background:rgba(209,165,33,0.16); color:#d1a521;">
+    Email delivery isn&rsquo;t configured on this server yet, so nothing was
+    actually sent. The link is in the server log.
+  </div>
+  {% endif %}
+  <p class="auth-sub" style="margin-top:18px;"><a href="/login">Back to sign in</a></p>
+  {% else %}
+  <h1>Forgot Password</h1>
+  <p class="auth-sub">Enter the email on your account and we&rsquo;ll send you a link.</p>
+  {% if error %}<div class="auth-error">{{ error }}</div>{% endif %}
+  <form method="post">
+    <div class="auth-field">
+      <label>Email</label>
+      <input type="email" name="email" required autocomplete="email">
+    </div>
+    <button type="submit" class="join-btn">Send reset link</button>
+  </form>
+  <p class="auth-sub" style="margin-top:16px;"><a href="/login">Back to sign in</a></p>
+  {% endif %}
+</div>
+"""
+
+
+RESET_PASSWORD_HTML = AUTH_STYLE + """
+<div class="auth-top"><a class="auth-logo" href="/">Fantasy Football Calc</a></div>
+<div class="auth-wrap">
+  {% if done %}
+  <h1>Password Changed</h1>
+  <p class="auth-sub">You can sign in with your new password now.</p>
+  <p class="auth-sub" style="margin-top:18px;"><a href="/login">Sign in</a></p>
+  {% else %}
+  <h1>Choose a New Password</h1>
+  <p class="auth-sub">At least 8 characters.</p>
+  {% if error %}<div class="auth-error">{{ error }}</div>{% endif %}
+  <form method="post">
+    <input type="hidden" name="token" value="{{ token }}">
+    <div class="auth-field">
+      <label>New password</label>
+      <input type="password" name="password" minlength="8" required autocomplete="new-password">
+    </div>
+    <div class="auth-field">
+      <label>Confirm new password</label>
+      <input type="password" name="confirm" minlength="8" required autocomplete="new-password">
+    </div>
+    <button type="submit" class="join-btn">Save new password</button>
+  </form>
+  <p class="auth-sub" style="margin-top:16px;">
+    Link expired? <a href="/forgot-password">Ask for another</a></p>
+  {% endif %}
+</div>
 """
 
 
@@ -15970,7 +16422,7 @@ LOGIN_PAGE_HTML = AUTH_STYLE + """
         <button type="button" class="pw-toggle" onclick="togglePw()">SHOW</button>
       </div>
     </div>
-    <p class="auth-sub" style="margin-top:10px;"><a href="#">Forgot password?</a></p>
+    <p class="auth-sub" style="margin-top:10px;"><a href="/forgot-password">Forgot password?</a></p>
     <button type="submit" class="join-btn">Sign In</button>
   </form>
   <div class="divider">or</div>
