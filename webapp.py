@@ -1361,11 +1361,36 @@ INJURY_BADGE = {
     "OUT": ("OUT", "Out", "out"),
     "DOUBTFUL": ("DOUB", "Doubtful", "doubtful"),
     "QUESTIONABLE": ("Q", "Questionable", "questionable"),
-    "PUP": ("PUP", "Physically Unable to Perform", "admin"),
+    # Red, not grey: a player on PUP is out, whatever the list is called.
+    "PUP": ("PUP", "Physically Unable to Perform", "out"),
     "SUSPENDED": ("SUSP", "Suspended", "admin"),
     "NA": ("NA", "Not Active", "admin"),
     "COV": ("COV", "COVID-19 list", "admin"),
 }
+# What the board prints for a designation. The full title stays the
+# designation's identity -- it is what the transition record compares
+# and stores, so renaming it there would register "Physically Unable
+# to Perform -> PUP" as a move for every player already on the list --
+# and this is only how it reads.
+INJURY_DISPLAY = {"Physically Unable to Perform": "PUP"}
+# ESPN writes the same designations in its own casing ("Physically
+# Unable To Perform" after .title()), which would miss the colour
+# lookup entirely; this folds any spelling back to the one title.
+_CANON_STATUS = {t.lower(): t for _, t, _ in INJURY_BADGE.values()}
+
+
+def canonical_status(text):
+    """One title per designation, whichever source spelled it."""
+    raw = (text or "").strip()
+    if not raw:
+        return None
+    return _CANON_STATUS.get(raw.lower(), raw.title())
+
+
+def display_status(status):
+    return INJURY_DISPLAY.get(status, status)
+
+
 INJURY_TIER_COLOR = {
     "probable": "var(--good)",
     "out": "var(--critical)", "doubtful": "#e27834",
@@ -8472,7 +8497,7 @@ def espn_injuries(cache=_espn_injuries_cache):
                 "team": normalize_team_abbr(team) if team else None,
                 "name": name,
                 "espn_id": str(athlete.get("id") or "") or None,
-                "status": status.title() if status else ACTIVE_STATUS,
+                "status": canonical_status(status) or ACTIVE_STATUS,
                 "detail": _espn_injury_detail(item),
                 "reason": _espn_injury_reason(item),
                 # When the designation was actually published, which is
@@ -9717,8 +9742,8 @@ def get_injury_report(limit=None, cache=_injury_feed_cache):
             "team": p.get("team"),
             "logo": team_logo_url(p.get("team")),
             "photo": player_photo_url(sid),
-            "from": (past or {}).get("previous_status"),
-            "to": status,
+            "from": display_status((past or {}).get("previous_status")),
+            "to": display_status(status),
             "detail": hit.get("detail"),
             "good": status == ACTIVE_STATUS,
             "tone": injury_tone(status),
@@ -9762,7 +9787,7 @@ def injury_tone(status):
 
 
 _INJURY_ORDER = {
-    ACTIVE_STATUS: 0, "Injured Reserve": 1, "Out": 2, "Doubtful": 3,
+    ACTIVE_STATUS: 0, "Injured Reserve": 1, "Physically Unable to Perform": 1, "Out": 2, "Doubtful": 3,
     "Questionable": 4,
 }
 
