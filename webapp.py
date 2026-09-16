@@ -9526,7 +9526,13 @@ def get_moves_today(limit=MOVE_FEED_SIZE):
 # Sleeper names, not a second data source.
 
 STREAK_BARS = 20          # games on the chart and in a list row
-STREAK_LINE_GAMES = 10    # games the default line is shaped from
+# The default line is shaped from twice the games the board judges
+# against it (the last ten). Shaped from the same ten, at most half of
+# them could ever clear it, and no hit rate would say anything -- an
+# 80% "trend" was impossible by construction.
+STREAK_LINE_GAMES = 20    # games the default line is shaped from
+STREAK_TREND_GAMES = 5    # games a trend needs in the last ten
+STREAK_TREND_PCT = 80     # and the share on one side of the line
 STREAK_MIN_GAMES = 3      # fewer than this and a player is not listed
 STREAK_LIST_MAX = 250
 STREAK_SEASONS_BACK = 1   # this season plus last: enough for 20 games
@@ -9648,8 +9654,10 @@ def streak_windows(games, line, opponent=None, season=None):
     def rate(subset):
         n = len(subset)
         hits = sum(1 for g in subset if g["value"] > line)
-        return {"hits": hits, "n": n,
-                "pct": round(100.0 * hits / n) if n else None}
+        unders = sum(1 for g in subset if g["value"] < line)
+        return {"hits": hits, "unders": unders, "n": n,
+                "pct": round(100.0 * hits / n) if n else None,
+                "under_pct": round(100.0 * unders / n) if n else None}
     out = {
         "l5": rate(games[-5:]),
         "l10": rate(games[-10:]),
@@ -9658,6 +9666,23 @@ def streak_windows(games, line, opponent=None, season=None):
         "h2h": rate([g for g in games if opponent and g["opp"] == opponent]),
     }
     return out
+
+
+def _streak_date_label(when, today=None):
+    """"11/15" for a game played this calendar year, "11/15/25" for one
+    played in another. The year is only shown where it tells the two
+    apart, and "this year" is read off the clock, so the labels turn
+    over on their own each January."""
+    if not isinstance(when, datetime):
+        return None
+    try:
+        local = (when.replace(tzinfo=timezone.utc) if when.tzinfo is None else when).astimezone(NFL_TZ)
+    except Exception:
+        return None
+    today = today or datetime.now(NFL_TZ)
+    if local.year != today.year:
+        return f"{local.month}/{local.day}/{local.year % 100:02d}"
+    return f"{local.month}/{local.day}"
 
 
 def _streak_schedule_index(seasons, cache=_streak_sched_cache):
@@ -9683,16 +9708,9 @@ def _streak_schedule_index(seasons, cache=_streak_sched_cache):
                     rows = cur.fetchall()
             finally:
                 conn.close()
+            today = datetime.now(NFL_TZ)
             for r in rows:
-                when = r.get("kickoff")
-                label = None
-                if isinstance(when, datetime):
-                    try:
-                        local = (when.replace(tzinfo=timezone.utc) if when.tzinfo is None
-                                 else when).astimezone(NFL_TZ)
-                        label = f"{local.month}/{local.day}"
-                    except Exception:
-                        label = None
+                label = _streak_date_label(r.get("kickoff"), today)
                 home, away = r["home_team"], r["away_team"]
                 index[(r["season"], r["week"], home)] = {"opp": away, "home": True, "date": label}
                 index[(r["season"], r["week"], away)] = {"opp": home, "home": False, "date": label}
@@ -10180,9 +10198,23 @@ def get_streak_board(prop_key, season, week, cache=_streaks_cache):
     return rows
 
 
+def _streak_run(games, line, side):
+    """Consecutive games on `side` of the line, counting back from the
+    most recent one: the "six straight" a streak is named for."""
+    n = 0
+    for g in reversed(games):
+        v = g["value"]
+        if (v > line) if side == "over" else (v < line):
+            n += 1
+        else:
+            break
+    return n
+
+
 def get_streak_trends(season, week, cache=_streaks_cache):
-    """The best current streaks across every prop: at least five games
-    in the last ten and an 80%+ hit rate, one row per player-prop."""
+    """The best current streaks across every prop, on either side of the
+    line: at least five games in the last ten and 80%+ of them over, or
+    80%+ of them under. One row per player-prop, carrying which side."""
     key = ("trends", int(season), int(week))
     now = time.time()
     entry = cache.get(key)
@@ -10192,10 +10224,20 @@ def get_streak_trends(season, week, cache=_streaks_cache):
     for prop in STREAK_PROPS:
         for r in get_streak_board(prop[0], season, week):
             w = r["windows"]["l10"]
-            if w["n"] >= 5 and (w["pct"] or 0) >= 80:
-                rows.append(r)
-    rows.sort(key=lambda r: (-(r["windows"]["l10"]["pct"] or 0),
-                             -(r["edge"] / r["line"] if r["line"] else 0)))
+            if w["n"] < STREAK_TREND_GAMES:
+                continue
+            if (w["pct"] or 0) >= STREAK_TREND_PCT:
+                side, pct = "over", w["pct"]
+            elif (w.get("under_pct") or 0) >= STREAK_TREND_PCT and r["line"] >= 1:
+                # Under a 0.5 line just means "doesn't do this" -- a receiver
+                # with no rushing scores is not on an under streak.
+                side, pct = "under", w["under_pct"]
+            else:
+                continue
+            rows.append(dict(r, side=side, trend_pct=pct,
+                             streak=_streak_run(r["games"], r["line"], side)))
+    rows.sort(key=lambda r: (-r["trend_pct"], -r["streak"],
+                             -(abs(r["edge"]) / r["line"] if r["line"] else 0)))
     rows = rows[:STREAK_LIST_MAX]
     cache[key] = {"data": rows, "time": now}
     return rows
@@ -11272,6 +11314,8 @@ def _streak_list_row(r, season, opp_next, games=None):
         "photo": r["photo"], "prop": r["prop"], "prop_short": r["prop_short"],
         "line": r["line"], "site_line": r["site_line"], "line_source": r["line_source"],
         "book_label": r["book_label"], "over_price": r.get("over_price"),
+        "under_price": r.get("under_price"),
+        "side": r.get("side") or "over", "streak": r.get("streak") or 0,
         "avg": r["avg"], "edge": r["edge"],
         "season_now": int(season), "opp_next": opp_next,
         "games": [{"value": g["value"], "season": g["season"], "opp": g["opp"],
@@ -11470,16 +11514,17 @@ def streak_player_page():
     season = request.args.get("season", default=info["season"], type=int)
     week = request.args.get("week", default=info["week"], type=int)
     try:
+        side = "under" if (request.args.get("side") or "").lower() == "under" else "over"
         d = get_streak_detail(sid, season, week) if sid else None
         if d and prop not in d["per_prop"]:
             prop = d["props"][0]["key"] if d["props"] else prop
         return render_template_string(
-            STREAK_PLAYER_HTML, d=d, prop=prop, season=season, week=week,
+            STREAK_PLAYER_HTML, d=d, prop=prop, side=side, season=season, week=week,
             windows=list(STREAK_WINDOWS), unlocked=plus_unlocked(open_before=True),
             gate=gate_kind(), load_error=None)
     except Exception as e:
         return render_template_string(
-            STREAK_PLAYER_HTML, d=None, prop=prop, season=season, week=week,
+            STREAK_PLAYER_HTML, d=None, prop=prop, side="over", season=season, week=week,
             windows=list(STREAK_WINDOWS), unlocked=plus_unlocked(open_before=True),
             gate=gate_kind(), load_error=str(e))
 
@@ -17087,6 +17132,10 @@ STREAKS_HTML = BASE_STYLE + make_header("streaks") + """
   .sk-name .tm{ color:var(--sk-muted); font-weight:600; font-size:12px; margin-left:6px; font-family:"IBM Plex Mono"; }
   .sk-prop{ font-size:14px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   .sk-prop .o{ color:var(--good); font-weight:700; margin-right:4px; }
+  .sk-prop .o.u{ color:var(--warning); }
+  .sk-prop .streak{ margin-left:8px; font-size:11px; font-weight:700; padding:1px 8px; border-radius:999px;
+                    background:var(--good-wash); color:var(--good); white-space:nowrap; }
+  .sk-prop .streak.u{ background:var(--warning-wash); color:var(--warning); }
   .sk-prop .ln{ font-family:"IBM Plex Mono"; font-weight:700; }
   .sk-prop .px{ color:var(--sk-muted); font-size:12px; margin-left:5px; font-family:"IBM Plex Mono"; }
   .sk-prop .rate{ color:var(--sk-muted); font-size:12px; margin-left:6px; font-family:"IBM Plex Mono"; }
@@ -17199,14 +17248,19 @@ const SK_BOOKS = {{ books_seen|tojson }};
 
   function render(){
     let rows = SK_ROWS.filter(r => !q || r.name.toLowerCase().includes(q));
+    // A row is judged on its own side of the line: an under streak
+    // counts the games that stayed under, and its edge runs the other way.
     const shaped = rows.map(r => {
       const g = windowGames(r);
       const n = g.length;
-      const hits = g.filter(x => x.value > r.line).length;
+      const under = r.side === 'under';
+      const cleared = x => under ? x.value < r.line : x.value > r.line;
+      const hits = g.filter(cleared).length;
       const avg = n ? g.reduce((a, x) => a + x.value, 0) / n : null;
-      return {r, g, n, hits, pct: n ? Math.round(100*hits/n) : null, avg};
+      const edge = avg == null ? 0 : (under ? r.line - avg : avg - r.line);
+      return {r, g, n, hits, pct: n ? Math.round(100*hits/n) : null, avg, under, cleared, edge};
     }).filter(x => x.n > 0);
-    shaped.sort((a, b) => (b.pct - a.pct) || ((b.avg - b.r.line) - (a.avg - a.r.line)));
+    shaped.sort((a, b) => (b.pct - a.pct) || (b.edge - a.edge));
     if (!shaped.length){
       list.innerHTML = '<div class="sk-empty">Nothing to show for this window yet.<br>' +
         'Streaks fill in as game logs sync; a fresh season needs a few weeks.</div>';
@@ -17217,26 +17271,28 @@ const SK_BOOKS = {{ books_seen|tojson }};
         const max = Math.max(...shownBars.map(v => v.value), r.line, 1);
         const bars = shownBars.map(v => {
           const h = Math.max(8, Math.round(100 * v.value / max));
-          const cls = v.value > r.line ? 'hit' : (v.value === 0 ? 'flat' : '');
+          const cls = x.cleared(v) ? 'hit' : (v.value === 0 ? 'flat' : '');
           return '<i class="' + cls + '" style="height:' + h + '%" title="' + esc(v.date) + ' ' +
                  (v.opp ? (v.home ? 'vs ' : '@') + esc(v.opp) : '') + ': ' + fmt(v.value) + '"></i>';
         }).join('');
-        const up = x.avg > r.line;
-        return '<a class="sk-item" href="/streaks/player?sid=' + encodeURIComponent(r.sid) + '&prop=' + encodeURIComponent(r.prop) + '">' +
+        const up = x.edge > 0;
+        const px = x.under ? r.under_price : r.over_price;
+        const run = r.streak >= 3 ? '<span class="streak' + (x.under ? ' u' : '') + '">' + r.streak + ' straight</span>' : '';
+        return '<a class="sk-item" href="/streaks/player?sid=' + encodeURIComponent(r.sid) + '&prop=' + encodeURIComponent(r.prop) + (x.under ? '&side=under' : '') + '">' +
           '<img src="' + esc(r.photo) + '" alt="" loading="lazy" onerror="this.style.visibility=\\'hidden\\'">' +
           '<span class="sk-main"><span class="sk-name">' + esc(r.name) + '<span class="tm">' + esc(r.team) + '</span></span>' +
-          '<span class="sk-prop"><span class="o">O</span><span class="ln">' + fmt(r.line) + '</span> ' + esc(r.prop_short) +
-          (r.over_price != null ? '<span class="px">' + price(r.over_price) + '</span>' : '') +
-          '<span class="rate">' + x.hits + '/' + x.n + ' &middot; ' + x.pct + '%</span></span></span>' +
+          '<span class="sk-prop"><span class="o' + (x.under ? ' u' : '') + '">' + (x.under ? 'U' : 'O') + '</span><span class="ln">' + fmt(r.line) + '</span> ' + esc(r.prop_short) +
+          (px != null ? '<span class="px">' + price(px) + '</span>' : '') +
+          '<span class="rate">' + x.hits + '/' + x.n + ' &middot; ' + x.pct + '%</span>' + run + '</span></span>' +
           '<span class="sk-edge"><span class="lab">EDGE</span><span class="val ' + (up ? 'up' : 'down') + '">' + fmt(x.avg) + '</span></span>' +
           '<span class="sk-bars-mini">' + bars + '</span></a>';
       }).join('');
     }
     document.getElementById('skFoot').innerHTML = SK_BOOKS.length
       ? 'Lines from ' + SK_BOOKS.map(esc).join(' and ') + ' where the book has one this week, and this ' +
-        'site\\'s own otherwise \\u2014 the median of the player\\'s last ten games, landed on the half. ' +
+        'site\\'s own otherwise \\u2014 the median of the player\\'s last twenty games, landed on the half. ' +
         'Open any player to move it.'
-      : 'Lines are this site\\'s own, shaped from each player\\'s last ten games \\u2014 the median, landed ' +
+      : 'Lines are this site\\'s own, shaped from each player\\'s last twenty games \\u2014 the median, landed ' +
         'on the half. They are a starting point, not a sportsbook\\'s number; open any player to set your own.';
   }
 
@@ -17347,6 +17403,8 @@ STREAK_PLAYER_HTML = BASE_STYLE + make_header("streaks") + """
   .sp-step output{ font-family:"IBM Plex Mono"; font-size:30px; font-weight:800; min-width:110px; text-align:center;
                    font-variant-numeric:tabular-nums; }
   .sp-under{ text-align:center; font-size:13px; color:var(--sp-muted); margin-top:8px; }
+  .sp-side{ display:flex; justify-content:center; gap:6px; margin:4px 0 12px; }
+  .sp-side .sp-pill{ font-size:12px; padding:5px 14px; }
   .sp-under b{ color:var(--sp-text); font-family:"IBM Plex Mono"; }
   .sp-under .hr{ font-family:"IBM Plex Mono"; font-weight:700; }
   .sp-under .hr.good{ color:var(--good); } .sp-under .hr.warn{ color:var(--warning); } .sp-under .hr.bad{ color:var(--critical); }
@@ -17436,6 +17494,10 @@ STREAK_PLAYER_HTML = BASE_STYLE + make_header("streaks") + """
   {% if not unlocked %}<div class="gate-wrap" id="spGate"><div class="gate-blur" style="max-height:none;" aria-hidden="true">{% endif %}
   <div class="sp-adjust">
     <h3 id="spAdjTitle">Prop line</h3>
+    <div class="sp-side" id="spSide" role="group" aria-label="Over or under">
+      <button type="button" class="sp-pill on" data-side="over">Over</button>
+      <button type="button" class="sp-pill" data-side="under">Under</button>
+    </div>
     <div class="sp-step">
       <button type="button" id="spMinus" aria-label="Lower the line">&minus;</button>
       <output id="spOut">&ndash;</output>
@@ -17478,6 +17540,7 @@ STREAK_PLAYER_HTML = BASE_STYLE + make_header("streaks") + """
 const SP = {{ d|tojson }};
 const SP_PROP = {{ prop|tojson }};
 const SP_SEASON = {{ season|tojson }};
+const SP_SIDE = {{ (side if side is defined else 'over')|tojson }};
 (function(){
   const $ = id => document.getElementById(id);
   const WIN_N = {l5:5, l10:10, l20:20};
@@ -17485,6 +17548,7 @@ const SP_SEASON = {{ season|tojson }};
   let prop = SP.per_prop[SP_PROP] ? SP_PROP : (SP.props[0] || {}).key;
   let win = 'l10';
   let line = null;          // the reader's line; null means the given one
+  let side = SP_SIDE === 'under' ? 'under' : 'over';   // which side of it counts as a hit
   let rulerFor = null, rulerLo = 0.5, scrollTimer = null;
   const opp = SP.next ? SP.next.opponent : null;
   const ruler = $('spRuler'), strip = $('spStrip');
@@ -17504,8 +17568,9 @@ const SP_SEASON = {{ season|tojson }};
     if (key === 'h2h') return g.filter(x => opp && x.opp === opp);
     return g.slice(-(WIN_N[key] || 10));
   }
+  function cleared(x, L){ return side === 'under' ? x.value < L : x.value > L; }
   function rate(list, L){
-    const n = list.length, hits = list.filter(x => x.value > L).length;
+    const n = list.length, hits = list.filter(x => cleared(x, L)).length;
     return {n, hits, pct: n ? Math.round(100*hits/n) : null};
   }
 
@@ -17541,11 +17606,13 @@ const SP_SEASON = {{ season|tojson }};
     const last10 = games().slice(-10);
     const avg = last10.length ? last10.reduce((a, x) => a + x.value, 0) / last10.length : null;
     const fromBook = r.line_source !== 'site';
+    const ou = side === 'under' ? 'U' : 'O';
+    const px = side === 'under' ? r.under_price : r.over_price;
 
     // Facts.
     $('spAvg').innerHTML = avg == null ? '&ndash;' :
       '<span class="' + (avg > L ? 'up' : 'down') + '">' + (avg > L ? '&#9650;' : '&#9660;') + '</span> ' + fmt(avg);
-    $('spLine').innerHTML = fmt(L) + '<small>' + esc(r.book_label) + (fromBook && r.over_price != null ? ' &middot; O ' + price(r.over_price) : '') + '</small>';
+    $('spLine').innerHTML = fmt(L) + '<small>' + esc(r.book_label) + (fromBook && px != null ? ' &middot; ' + ou + ' ' + price(px) : '') + '</small>';
     $('spPropName').textContent = r.prop_label;
     $('spHit').innerHTML = winRate.pct == null ? '&ndash;' :
       '<span class="' + (winRate.pct >= 50 ? 'up' : 'down') + '">' + (winRate.pct >= 50 ? '&#9650;' : '&#9660;') + '</span> ' + winRate.pct + '%';
@@ -17561,13 +17628,13 @@ const SP_SEASON = {{ season|tojson }};
       '<div class="sp-rule" style="bottom:' + pct(L) + '%"></div>' +
       shown.map(x => {
         const h = pct(x.value);
-        const cls = (x.value > L ? 'hit' : (x.value === 0 ? 'flat' : '')) + (h < 14 ? ' small' : '');
+        const cls = (cleared(x, L) ? 'hit' : (x.value === 0 ? 'flat' : '')) + (h < 14 ? ' small' : '');
         return '<div class="sp-bar ' + cls + '"><i style="height:' + Math.max(h, 2) + '%"></i><b>' + fmt(x.value) + '</b></div>';
       }).join('');
     $('spX').innerHTML = shown.map(x =>
       '<span>' + esc(x.date) + '<b>' + (x.opp ? (x.home ? '' : '@') + esc(x.opp) : '') + '</b></span>').join('');
     $('spNote').textContent = 'Each bar is one game, oldest on the left. The rule is the line: ' +
-      winRate.hits + ' of ' + winRate.n + ' cleared it over this window.';
+      winRate.hits + ' of ' + winRate.n + (side === 'under' ? ' stayed under it' : ' cleared it') + ' over this window.';
 
     // Window pills.
     document.querySelectorAll('#spWindows [data-pct]').forEach(b => {
@@ -17581,7 +17648,8 @@ const SP_SEASON = {{ season|tojson }};
     $('spOut').textContent = fmt(L);
     $('spBookLab').textContent = r.book_label;
     $('spBook').textContent = fmt(r.line);
-    $('spPrice').textContent = fromBook && r.over_price != null ? ' (O ' + price(r.over_price) + ')' : '';
+    $('spPrice').textContent = fromBook && px != null ? ' (' + ou + ' ' + price(px) + ')' : '';
+    document.querySelectorAll('#spSide [data-side]').forEach(b => b.classList.toggle('on', b.dataset.side === side));
     $('spHr').textContent = winRate.pct == null ? '\\u2013' : winRate.pct + '%';
     $('spHr').className = 'hr ' + tone(winRate.pct);
     if (rulerFor !== prop) buildRuler();
@@ -17605,6 +17673,11 @@ const SP_SEASON = {{ season|tojson }};
   $('spMinus').onclick = () => setLine(activeLine() - 1);
   $('spPlus').onclick = () => setLine(activeLine() + 1);
   $('spReset').onclick = () => { line = null; render(); };
+  $('spSide').addEventListener('click', e => {
+    const b = e.target.closest('[data-side]'); if (!b || b.dataset.side === side) return;
+    side = b.dataset.side; render();
+    try { history.replaceState(null, '', '/streaks/player?sid=' + encodeURIComponent(SP.sid) + '&prop=' + prop + (side === 'under' ? '&side=under' : '')); } catch (e) {}
+  });
   // Dragging the strip: settle on the tick under the mark. The handler
   // only acts on a real change, so the programmatic scroll from
   // syncRuler above lands on the same figure and does nothing.
@@ -17619,7 +17692,7 @@ const SP_SEASON = {{ season|tojson }};
     const b = e.target.closest('[data-prop]'); if (!b) return;
     prop = b.dataset.prop; line = null;
     document.querySelectorAll('#spProps .sp-pill').forEach(p => p.classList.toggle('on', p === b));
-    try { history.replaceState(null, '', '/streaks/player?sid=' + encodeURIComponent(SP.sid) + '&prop=' + prop); } catch (e) {}
+    try { history.replaceState(null, '', '/streaks/player?sid=' + encodeURIComponent(SP.sid) + '&prop=' + prop + (side === 'under' ? '&side=under' : '')); } catch (e) {}
     render();
   });
   $('spWindows').addEventListener('click', e => {
