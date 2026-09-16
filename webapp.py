@@ -9365,11 +9365,18 @@ def get_streak_board(prop_key, season, week, cache=_streaks_cache):
     sched = _streak_schedule_index(seasons)
     opps = _streak_opponents(players, season, week, sched)
     books = get_book_lines(season, week)
+    # A player whose team has no game this week has no props this week
+    # -- the list moves with the schedule, so a bye drops off and comes
+    # back. Only enforced once the week's schedule is actually known:
+    # an empty index means "not synced yet", not "everyone is on bye".
+    week_known = any(k[0] == int(season) and k[1] == int(week) for k in sched)
     rows = []
     for sid, p in players.items():
         if not isinstance(p, dict) or not p.get("team"):
             continue
         if streak_position_group(p.get("position")) not in prop[3]:
+            continue
+        if week_known and not opps.get(p.get("team")):
             continue
         log = logs.get(sid)
         if not log:
@@ -16183,6 +16190,7 @@ STREAKS_HTML = BASE_STYLE + make_header("streaks") + """
   .sk-title{ font-family:"Big Shoulders Display"; font-size:26px; font-weight:800;
              text-transform:uppercase; margin:18px 0 2px; }
   .sk-sub{ font-size:12px; color:var(--sk-muted); margin-bottom:12px; line-height:1.5; max-width:70ch; }
+  .sk-week{ font-size:13px; color:var(--sk-muted); text-transform:none; font-family:"Source Sans 3",system-ui,sans-serif; font-weight:600; }
 
   /* Three rows of controls, sticky under the header: the window the
      numbers are read over; who; then which of that position's props.
@@ -16246,9 +16254,9 @@ STREAKS_HTML = BASE_STYLE + make_header("streaks") + """
 <div class="sk-page">
 <div class="wrap">
   {% if load_error %}<div class="error">Couldn't load streaks right now: {{ load_error }}</div>{% endif %}
-  <div class="sk-title">Streaks</div>
-  <div class="sk-sub">Every starter's props, game by game, against the line. Green cleared it, red didn't.
-    Tap a player to move the line yourself.</div>
+  <div class="sk-title">Streaks <span class="sk-week">&middot; Week {{ week }}</span></div>
+  <div class="sk-sub">Every starter with a game this week, game by game, against the line. Green cleared it,
+    red didn't. Tap a player to move the line yourself.</div>
 
   <div class="sk-bars">
     <div class="sk-pills" id="skWindows">
