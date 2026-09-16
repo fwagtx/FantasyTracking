@@ -6360,13 +6360,101 @@ def _claim(cur, key):
     return cur.rowcount == 1
 
 
+def _session_email(sess):
+    details = sess.get("customer_details") or {}
+    email = details.get("email") or sess.get("customer_email") or ""
+    email = email.strip().lower()
+    return email if "@" in email else ""
+
+
+def _account_for_email(cur, email):
+    """(user_id, created). The account already using this email, or a
+    new one named from it: no password yet, that comes from the link in
+    the welcome email."""
+    cur.execute("SELECT id FROM users WHERE lower(email) = lower(%s)", (email,))
+    row = cur.fetchone()
+    if row:
+        return row["id"], False
+    base = re.sub(r"[^A-Za-z0-9_]", "", email.split("@")[0])[:15] or "user"
+    username, suffix = base, 1
+    while not username_available(username):
+        suffix += 1
+        username = f"{base}{suffix}"
+    cur.execute("INSERT INTO users (email, username) VALUES (%s, %s) RETURNING id", (email, username))
+    return cur.fetchone()["id"], True
+
+
+def _welcome_later(user_id):
+    """After the account's row is committed: a set-your-password link,
+    by email. Not before -- the token row points at the account."""
+    def _run():
+        try:
+            row = None
+            conn = get_db()
+            try:
+                with conn.cursor() as cur:
+                    cur.execute("SELECT * FROM users WHERE id = %s", (user_id,))
+                    row = cur.fetchone()
+            finally:
+                conn.close()
+            if row and row.get("email"):
+                send_welcome_email(row, create_password_reset(user_id))
+        except Exception:
+            app.logger.exception("welcome email for user %s failed", user_id)
+    return _run
+
+
+def send_welcome_email(row, token):
+    link = f"{SITE_URL}/reset-password?token={token}"
+    name = row.get("username") or "there"
+    text = (
+        f"Hi {name},\n\n"
+        f"Thanks for joining myCalc+. Your Fantasy Football Calc account was made "
+        f"from this email address when you paid. Choose a password here so you can "
+        f"sign in on any device:\n\n{link}\n\n"
+        f"The link works once and expires in {PASSWORD_RESET_TTL_HOURS} hours; you can "
+        f"ask for another from the sign-in page any time.\n\n"
+        f"Your username is {name}. Manage your plan under Settings > myCalc+.\n"
+    )
+    body = (
+        f'<p>Hi {html.escape(str(name))},</p>'
+        f'<p>Thanks for joining myCalc+. Your Fantasy Football Calc account was made from '
+        f'this email address when you paid. Choose a password so you can sign in on any device:</p>'
+        f'<p><a href="{link}" style="background:#b97a1f;color:#fff8ec;padding:11px 22px;'
+        f'border-radius:99px;text-decoration:none;font-weight:700;display:inline-block;">'
+        f'Set your password</a></p>'
+        f'<p style="color:#666;font-size:13px;">The link works once and expires in '
+        f'{PASSWORD_RESET_TTL_HOURS} hours; you can ask for another from the sign-in page any time. '
+        f'Your username is <b>{html.escape(str(name))}</b>. Manage your plan under Settings &rsaquo; myCalc+.</p>'
+    )
+    return send_email(row["email"], "Welcome to myCalc+: set your password", text, body)
+
+
 def _grant_from_session(cur, sess):
-    """Give an account what its completed Checkout session bought."""
+    """Give an account what its completed Checkout session bought.
+    Returns {"result", "user_id", "created", "after"}: `after` is work
+    for once the row is committed (a welcome email), or None."""
+    out = {"result": "", "user_id": None, "created": False, "after": None}
     user_id = _session_user_id(sess)
-    if not user_id:
-        return "no-user"
-    if not _claim(cur, "cs:" + str(sess.get("id"))):
-        return "already"
+    if not user_id and (sess.get("metadata") or {}).get("guest") == "1":
+        email = _session_email(sess)
+        if not email:
+            out["result"] = "no-email"
+            return out
+        if not _claim(cur, "cs:" + str(sess.get("id"))):
+            out["result"] = "already"
+            return out
+        user_id, created = _account_for_email(cur, email)
+        out["created"] = created
+        if created:
+            out["after"] = _welcome_later(user_id)
+    elif not user_id:
+        out["result"] = "no-user"
+        return out
+    elif not _claim(cur, "cs:" + str(sess.get("id"))):
+        out["result"] = "already"
+        return out
+    out["user_id"] = user_id
     customer = _obj_id(sess.get("customer"))
     if customer:
         cur.execute("UPDATE users SET stripe_customer_id = COALESCE(stripe_customer_id, %s) WHERE id = %s",
@@ -6383,30 +6471,35 @@ def _grant_from_session(cur, sess):
                 period_end = None
         _users_set(cur, user_id, plan="monthly", member_status="active", stripe_subscription_id=sub_id,
                    cancel_at_period_end=False, current_period_end=period_end)
-        return "granted"
+        out["result"] = "granted"
+        return out
     if sess.get("payment_status") not in ("paid", "no_payment_required"):
-        return "unpaid"
+        out["result"] = "unpaid"
+        return out
     plan = meta.get("plan") if meta.get("plan") in ("season", "founding") else "season"
     fields = dict(plan=plan, member_status="active", access_until=season_pass_end(),
                   stripe_subscription_id=None, cancel_at_period_end=False, current_period_end=None)
     if plan == "founding":
         fields["founding_member"] = True
     _users_set(cur, user_id, **fields)
-    return "granted"
+    out["result"] = "granted"
+    return out
 
 
 def apply_checkout_session(sess):
     """The success page's path to the same grant the webhook makes."""
     if not DATABASE_URL:
-        return "no-database"
+        return {"result": "no-database", "user_id": None, "created": False, "after": None}
     conn = get_db()
     try:
         with conn.cursor() as cur:
-            result = _grant_from_session(cur, sess)
+            out = _grant_from_session(cur, sess)
         conn.commit()
-        return result
     finally:
         conn.close()
+    if callable(out.get("after")):
+        threading.Thread(target=out["after"], daemon=True).start()
+    return out
 
 
 def _find_user_for_subscription(cur, sub):
@@ -6431,7 +6524,7 @@ def _find_user_for_subscription(cur, sub):
 
 
 def _on_checkout_completed(cur, sess):
-    _grant_from_session(cur, sess)
+    return _grant_from_session(cur, sess).get("after")
 
 
 def _on_subscription_updated(cur, sub):
@@ -6559,12 +6652,16 @@ def get_or_create_stripe_customer(user):
 
 def checkout_params(user, plan, customer_id):
     """The Checkout session, as Stripe wants it. Pure, so a test can read
-    it without a network."""
-    who = {"app_user_id": str(user.id), "plan": plan}
+    it without a network. `user` is None for a guest: Stripe collects the
+    email, and the account is made from it once the payment lands."""
+    if user is None:
+        who = {"plan": plan, "guest": "1"}
+    else:
+        who = {"app_user_id": str(user.id), "plan": plan}
     params = dict(
-        mode=PLAN_MODES[plan], customer=customer_id,
+        mode=PLAN_MODES[plan],
         line_items=[{"price": STRIPE_PRICES[plan], "quantity": 1}],
-        client_reference_id=str(user.id), metadata=who,
+        metadata=who,
         success_url=SITE_URL + "/billing/success?session_id={CHECKOUT_SESSION_ID}",
         cancel_url=SITE_URL + "/plus",
         allow_promotion_codes=True,
@@ -6573,6 +6670,14 @@ def checkout_params(user, plan, customer_id):
         # product without an eligible tax code is refused outright.
         managed_payments={"enabled": False},
     )
+    if user is None:
+        # A one-time payment does not make a Customer on its own; the
+        # portal and the receipt email both need one.
+        if PLAN_MODES[plan] == "payment":
+            params["customer_creation"] = "always"
+    else:
+        params["customer"] = customer_id
+        params["client_reference_id"] = str(user.id)
     if PLAN_MODES[plan] == "subscription":
         params["subscription_data"] = {"metadata": who}
         # A 100%-off code (the owner's own test code, a friend's) needs
@@ -6584,8 +6689,9 @@ def checkout_params(user, plan, customer_id):
 
 
 @app.route("/billing/checkout/<plan>", methods=["POST"])
-@login_required
 def billing_checkout(plan):
+    """Signed in or not. A guest pays first and gets an account from the
+    email on the receipt; nobody has to make one to buy."""
     if plan not in PLAN_MODES:
         return redirect("/plus")
     if plan == "founding" and not founding_window_open():
@@ -6595,8 +6701,11 @@ def billing_checkout(plan):
     if viewer_has_plus():
         return redirect("/plus?notice=already")
     try:
-        customer_id = get_or_create_stripe_customer(current_user)
-        sess = _stripe().checkout.Session.create(**checkout_params(current_user, plan, customer_id))
+        if current_user.is_authenticated:
+            customer_id = get_or_create_stripe_customer(current_user)
+            sess = _stripe().checkout.Session.create(**checkout_params(current_user, plan, customer_id))
+        else:
+            sess = _stripe().checkout.Session.create(**checkout_params(None, plan, None))
     except Exception:
         app.logger.exception("Stripe checkout could not be started")
         return redirect("/plus?notice=error")
@@ -6604,24 +6713,54 @@ def billing_checkout(plan):
 
 
 @app.route("/billing/success")
-@login_required
 def billing_success():
     """Thank-you page. Applies the grant from the retrieved session too,
     verified server-side with the secret key, so the page can say "you're
-    in" without waiting on the webhook. The session must belong to the
-    signed-in account; an id pasted from someone else's URL grants nothing."""
+    in" without waiting on the webhook.
+
+    Signed in: the session must belong to this account; an id pasted from
+    someone else's URL grants nothing. A guest: the account is the one
+    made from the receipt email, and the page signs them into it -- but
+    only an account this purchase created (no password, no Google
+    sign-in). Paying with someone else's email never opens their
+    existing account; it just gives it the plan."""
     sid = (request.args.get("session_id") or "").strip()
     result = None
-    if sid and billing_configured():
-        try:
-            sess = _plain(_stripe().checkout.Session.retrieve(sid, expand=["subscription"]))
-            if _session_user_id(sess) == int(current_user.id) and sess.get("status") == "complete":
-                result = apply_checkout_session(sess)
-        except Exception:
-            app.logger.exception("could not confirm checkout session")
-    fresh = load_user(current_user.id) if DATABASE_URL else None
-    summary = plan_summary(fresh or current_user)
-    return render_template_string(BILLING_SUCCESS_HTML, summary=summary, result=result)
+    guest_state = None   # "new" / "existing" / None
+    if current_user.is_authenticated:
+        if sid and billing_configured():
+            try:
+                sess = _plain(_stripe().checkout.Session.retrieve(sid, expand=["subscription"]))
+                if _session_user_id(sess) == int(current_user.id) and sess.get("status") == "complete":
+                    result = apply_checkout_session(sess)
+            except Exception:
+                app.logger.exception("could not confirm checkout session")
+        fresh = load_user(current_user.id) if DATABASE_URL else None
+        summary = plan_summary(fresh or current_user)
+        return render_template_string(BILLING_SUCCESS_HTML, summary=summary, result=result, guest=None)
+    if not sid or not billing_configured() or not DATABASE_URL:
+        return redirect("/plus")
+    try:
+        sess = _plain(_stripe().checkout.Session.retrieve(sid, expand=["subscription"]))
+    except Exception:
+        app.logger.exception("could not confirm checkout session")
+        return redirect("/plus?notice=error")
+    meta = sess.get("metadata") or {}
+    email = _session_email(sess)
+    if meta.get("guest") != "1" or sess.get("status") != "complete" or not email:
+        return redirect("/plus")
+    result = apply_checkout_session(sess)
+    row = user_by_email(email)
+    if not row:
+        return redirect("/plus?notice=error")
+    fresh_account = not row.get("password_hash") and not row.get("oauth_provider")
+    if fresh_account:
+        login_user(User(row), remember=True)
+        guest_state = "new"
+    else:
+        guest_state = "existing"
+    return render_template_string(BILLING_SUCCESS_HTML, summary=plan_summary(User(row)),
+                                  result=result, guest=guest_state, email=email)
 
 
 @app.route("/billing/portal", methods=["POST"])
@@ -21763,8 +21902,9 @@ PLUS_HTML = BASE_STYLE + make_header("plus") + PLUS_STYLE + """
         {% elif current_user.is_authenticated %}
           <form method="post" action="/billing/checkout/{{ c.plan }}"><button class="btn" type="submit">{{ c.cta }}</button></form>
         {% else %}
-          <a class="btn" href="/signup">Create account</a>
-          <p class="plus-signin">Already have one? <a href="/login?next=/plus">Sign in</a></p>
+          <form method="post" action="/billing/checkout/{{ c.plan }}"><button class="btn" type="submit">{{ c.cta }}</button></form>
+          <p class="plus-signin">No account needed: we make one from your receipt email.
+            Already have one? <a href="/login?next=/plus">Sign in</a></p>
         {% endif %}
       </div>
       <p class="plus-fine">{{ c.fine }}</p>
@@ -21790,10 +21930,23 @@ BILLING_SUCCESS_HTML = BASE_STYLE + make_header("plus") + PLUS_STYLE + """
 <main><div class="wrap plus-wrap" style="max-width:620px;">
   <div class="panel plus-hero">
     <p class="eyebrow">myCalc+</p>
-    {% if summary.active %}
+    {% if guest == 'existing' %}
+    <h2>Thanks. That email already has an account.</h2>
+    <p class="muted">{{ email }} is signed up here already, so the plan went onto that account:
+      {{ summary.label }}{% if summary.detail %} &middot; {{ summary.detail }}{% endif %}.
+      Sign in to use it. Forgot the password? The sign-in page can send a reset link.</p>
+    <div class="plus-cta" style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:22px;">
+      <a class="btn" href="/login?next=/rankings" style="width:auto;">Sign in</a>
+      <a class="btn ghost" href="/forgot-password" style="width:auto;">Reset password</a>
+    </div>
+    {% elif summary.active %}
     <h2>You're in.</h2>
     <p class="muted">{{ summary.label }}{% if summary.detail %} &middot; {{ summary.detail }}{% endif %}.
       Every rankings tier, every Streaks list and every matchup grade is open now.</p>
+    {% if guest == 'new' %}
+    <p class="muted" style="margin-top:12px;">We made your account from {{ email }} and signed you in on this device.
+      A link to set your password is on its way to that inbox, so you can sign in anywhere.</p>
+    {% endif %}
     <div class="plus-cta" style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:22px;">
       <a class="btn" href="/rankings" style="width:auto;">Open Rankings</a>
       <a class="btn ghost" href="/streaks" style="width:auto;">Open Streaks</a>
