@@ -19135,6 +19135,11 @@ RANKINGS_HTML = BASE_STYLE + make_header("rankings") + VOTE_MODAL_HTML + """
   /* Movement: the arrow and the places moved lead, the value change
      follows smaller. One cell, so the eye reads "up three" first. */
   .rk-move{ white-space:nowrap; }
+  /* A rank that held gets a pill like a rise or a fall does -- grey,
+     so the column reads as three states rather than two and a gap.
+     Scoped here because the bare .flat tone is transparent on purpose
+     everywhere else. */
+  .rk-move.flat{ background:color-mix(in srgb, var(--rk-muted) 18%, transparent); color:var(--rk-muted); }
   .rk-move b{ font-weight:700; }
   .rk-move small{ font-size:10.5px; opacity:0.85; margin-left:4px; }
   .rk-since{ font-size:12px; color:var(--rk-muted); text-transform:none; font-family:'Source Sans 3'; }
