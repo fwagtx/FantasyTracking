@@ -13601,10 +13601,11 @@ BASE_STYLE = THEME_BOOT + """
   .value-bar{ flex:1; height:22px; border-radius:6px; overflow:hidden; display:flex; background:var(--paper-sunken); }
   .value-bar .seg{ height:100%; display:flex; align-items:center; justify-content:center; color:#fff; background:var(--ink-muted); font-family:"IBM Plex Mono"; font-size:11px; font-weight:700; min-width:16px; }
   .rank-bubble{ display:inline-flex; align-items:center; justify-content:center; min-width:17px; height:17px; border-radius:50%; padding:0 3px; }
-  .seg-qb{ background:var(--pos-qb); } .seg-rb{ background:var(--pos-rb); }
-  .seg-wr{ background:var(--pos-wr); } .seg-te{ background:var(--pos-te); }
-  .seg-dl{ background:var(--pos-dl); } .seg-lb{ background:var(--pos-lb); }
-  .seg-db{ background:var(--pos-db); } .seg-k{ background:var(--pos-k); }
+  /* As specific as the grey default above, or the grey wins. */
+  .value-bar .seg-qb{ background:var(--pos-qb); } .value-bar .seg-rb{ background:var(--pos-rb); }
+  .value-bar .seg-wr{ background:var(--pos-wr); } .value-bar .seg-te{ background:var(--pos-te); }
+  .value-bar .seg-dl{ background:var(--pos-dl); } .value-bar .seg-lb{ background:var(--pos-lb); }
+  .value-bar .seg-db{ background:var(--pos-db); } .value-bar .seg-k{ background:var(--pos-k); }
   .legend-row{ display:flex; gap:14px; flex-wrap:wrap; margin-top:14px; padding-top:12px; border-top:1px solid var(--line); }
   .legend-item{ display:flex; align-items:center; gap:6px; font-size:11.5px; color:var(--ink-secondary); font-weight:600; }
   .legend-item i{ width:9px; height:9px; border-radius:2px; display:inline-block; }
