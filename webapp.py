@@ -9676,6 +9676,7 @@ STREAK_BARS = 20          # games on the chart and in a list row
 STREAK_LINE_GAMES = 20    # games the default line is shaped from
 STREAK_TREND_GAMES = 5    # games a trend needs in the last ten
 STREAK_TREND_PCT = 80     # and the share on one side of the line
+STREAK_UNDER_MIN_LINE = 2 # an under streak needs a line worth going under
 STREAK_MIN_GAMES = 3      # fewer than this and a player is not listed
 STREAK_LIST_MAX = 250
 STREAK_SEASONS_BACK = 1   # this season plus last: enough for 20 games
@@ -10371,15 +10372,18 @@ def get_streak_trends(season, week, cache=_streaks_cache):
                 continue
             if (w["pct"] or 0) >= STREAK_TREND_PCT:
                 side, pct = "over", w["pct"]
-            elif (w.get("under_pct") or 0) >= STREAK_TREND_PCT and r["line"] >= 1:
-                # Under a 0.5 line just means "doesn't do this" -- a receiver
-                # with no rushing scores is not on an under streak.
+            elif (w.get("under_pct") or 0) >= STREAK_TREND_PCT and r["line"] >= STREAK_UNDER_MIN_LINE:
+                # Under a 0.5 or 1.5 line just means "doesn't do this much"
+                # -- a receiver with no two-score games is not on an under
+                # streak, and those would outrank every real over.
                 side, pct = "under", w["under_pct"]
             else:
                 continue
             rows.append(dict(r, side=side, trend_pct=pct,
                              streak=_streak_run(r["games"], r["line"], side)))
-    rows.sort(key=lambda r: (-r["trend_pct"], -r["streak"],
+    # Strongest first: the rate, then how many games it is built on,
+    # then the run, then how far the average sits from the line.
+    rows.sort(key=lambda r: (-r["trend_pct"], -r["windows"]["l10"]["n"], -r["streak"],
                              -(abs(r["edge"]) / r["line"] if r["line"] else 0)))
     rows = rows[:STREAK_LIST_MAX]
     cache[key] = {"data": rows, "time": now}
@@ -17404,7 +17408,9 @@ const SK_BOOKS = {{ books_seen|tojson }};
       const edge = avg == null ? 0 : (under ? r.line - avg : avg - r.line);
       return {r, g, n, hits, pct: n ? Math.round(100*hits/n) : null, avg, under, cleared, edge};
     }).filter(x => x.n > 0);
-    shaped.sort((a, b) => (b.pct - a.pct) || (b.edge - a.edge));
+    // Highest rate first; at the same rate, the one built on more games,
+    // then the longer run, then the wider edge.
+    shaped.sort((a, b) => (b.pct - a.pct) || (b.n - a.n) || ((b.r.streak || 0) - (a.r.streak || 0)) || (b.edge - a.edge));
     if (!shaped.length){
       list.innerHTML = '<div class="sk-empty">Nothing to show for this window yet.<br>' +
         'Streaks fill in as game logs sync; a fresh season needs a few weeks.</div>';
