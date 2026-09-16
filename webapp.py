@@ -40,6 +40,7 @@ from zoneinfo import ZoneInfo
 from email.message import EmailMessage
 from email.utils import parsedate_to_datetime
 import requests
+import stripe
 import psycopg2
 import psycopg2.extras
 import psycopg2.pool
@@ -429,6 +430,23 @@ def init_db():
             cur.execute("ALTER TABLE users ADD COLUMN IF NOT EXISTS pref_scoring TEXT;")
             cur.execute("ALTER TABLE users ADD COLUMN IF NOT EXISTS pref_theme TEXT;")
             cur.execute("ALTER TABLE users ADD COLUMN IF NOT EXISTS pref_accent TEXT;")
+            # myCalc+ billing. The old is_member flag stays as a hand-set
+            # complimentary switch; everything Stripe reports lives here.
+            for col in ("stripe_customer_id TEXT", "stripe_subscription_id TEXT", "plan TEXT",
+                        "member_status TEXT", "access_until TIMESTAMP", "current_period_end TIMESTAMP",
+                        "cancel_at_period_end BOOLEAN DEFAULT FALSE",
+                        "founding_member BOOLEAN DEFAULT FALSE", "plan_updated_at TIMESTAMP"):
+                cur.execute(f"ALTER TABLE users ADD COLUMN IF NOT EXISTS {col};")
+            cur.execute("CREATE INDEX IF NOT EXISTS idx_users_stripe_customer ON users (stripe_customer_id);")
+            cur.execute("CREATE INDEX IF NOT EXISTS idx_users_stripe_subscription ON users (stripe_subscription_id);")
+            # Every Stripe event id and Checkout session id applied so far:
+            # a redelivery, or the success page racing the webhook, is a no-op.
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS processed_stripe_events (
+                    event_id TEXT PRIMARY KEY,
+                    processed_at TIMESTAMP DEFAULT NOW()
+                );
+            """)
             # Avatars live apart from users because load_user does a
             # SELECT * on that row for every single request -- putting
             # image bytes there would drag a picture through every page
@@ -595,7 +613,18 @@ class User(UserMixin):
         self.id = str(row["id"])
         self.email = row["email"]
         self.username = row["username"]
-        self.is_member = row["is_member"]
+        # Billing. is_member is the computed answer (see has_mycalc_plus);
+        # the column of the same name is a hand-set complimentary flag.
+        self.comped = bool(row.get("is_member"))
+        self.plan = row.get("plan") or "none"
+        self.member_status = row.get("member_status") or ""
+        self.access_until = row.get("access_until")
+        self.current_period_end = row.get("current_period_end")
+        self.cancel_at_period_end = bool(row.get("cancel_at_period_end"))
+        self.founding_member = bool(row.get("founding_member"))
+        self.stripe_customer_id = row.get("stripe_customer_id")
+        self.stripe_subscription_id = row.get("stripe_subscription_id")
+        self.is_member = has_mycalc_plus(row)
         self.sleeper_username = row.get("sleeper_username")
         self.pref_format = row.get("pref_format") or "1qb"
         self.pref_mode = row.get("pref_mode") or "dynasty"
@@ -4966,6 +4995,10 @@ def ensure_season_stats_synced(season):
     timing out (see that function's docstring) -- so this must never
     repeat that mistake no matter how tempting a synchronous "just fetch
     it now" would be here."""
+    # Callers pass the season as a string as often as an int (the
+    # rankings seasons are strings); one type from here on, so the
+    # comparison below and the seeded set both behave.
+    season = int(season)
     if season in _stats_seeded_seasons or not DATABASE_URL:
         return False
     if not _seed_probe_due("stats", season):
@@ -5961,7 +5994,7 @@ def login():
         if not error:
             if row and row["password_hash"] and check_password_hash(row["password_hash"], password):
                 login_user(User(row), remember=True)
-                return redirect("/")
+                return redirect(_safe_next() or "/")
             error = "Incorrect email/username or password."
     return render_template_string(LOGIN_PAGE_HTML, error=error)
 
@@ -6076,12 +6109,639 @@ def avatar_image(user_id):
 
 # Which screens Settings is made of, in the order they are listed.
 # (key, label) -- the summary beside each is computed per reader below.
+# --- myCalc+ billing (Stripe) --------------------------------------------
+#
+# One paid tier, two ways to buy it: a monthly subscription, or a season
+# pass paid once. Stripe Checkout takes the card on Stripe's own page;
+# the webhook at /api/stripe-webhook is what grants and revokes access.
+# The success page applies the same grant from the retrieved session so
+# a buyer sees "you're in" without waiting on webhook delivery -- both
+# paths are idempotent on the Checkout session id, so whichever lands
+# second is a no-op.
+#
+# Nothing here is fatal at import. A missing key logs a loud warning and
+# turns the pricing page's buttons into "not open yet" rather than taking
+# the site down with it, because every push deploys live and the keys
+# are added by hand in Render after the code ships.
+
+STRIPE_API_VERSION = "2026-08-26.dahlia"
+STRIPE_SECRET_KEY = os.environ.get("STRIPE_SECRET_KEY", "")
+STRIPE_PUBLISHABLE_KEY = os.environ.get("STRIPE_PUBLISHABLE_KEY", "")
+STRIPE_WEBHOOK_SECRET = os.environ.get("STRIPE_WEBHOOK_SECRET", "")
+STRIPE_PRICES = {
+    "monthly": os.environ.get("STRIPE_PRICE_MONTHLY", ""),
+    "season": os.environ.get("STRIPE_PRICE_SEASON", ""),
+    "founding": os.environ.get("STRIPE_PRICE_FOUNDING", ""),
+}
+PLAN_MODES = {"monthly": "subscription", "season": "payment", "founding": "payment"}
+PLAN_NAMES = {"monthly": "myCalc+ Monthly", "season": "myCalc+ Season Pass",
+              "founding": "myCalc+ Founding Season Pass"}
+# Display only. Stripe charges the price object; these just have to
+# agree with it on the pricing page.
+PLAN_PRICES = {"monthly": "$6.99", "season": "$29.99", "founding": "$19.99"}
+# The gate is a switch, off until the owner has watched a real purchase
+# land. Off, every page behaves exactly as before billing existed (the
+# sign-in gates only); on, the myCalc+ pages ask for the plan.
+PAYWALL = (os.environ.get("PAYWALL") or "").strip().lower() in ("1", "true", "yes", "on")
+# Last day the founding price is on sale, inclusive, Central time.
+FOUNDING_CUTOFF = os.environ.get("FOUNDING_CUTOFF") or "2026-10-04"
+# A season pass runs through the end of February: the league year turns
+# over in March, and so does the pass.
+SEASON_PASS_END_MONTH_DAY = (2, 28)
+CENTRAL_TZ = ZoneInfo("America/Chicago")
+# past_due keeps access: Stripe retries the card for weeks before it
+# gives up, and customer.subscription.deleted is the real end signal.
+MEMBER_STATUSES_WITH_ACCESS = ("active", "trialing", "past_due")
+STREAK_FREE_ROWS = 3
+FREE_LEAGUE_LIMIT = 1
+
+
+def billing_missing():
+    """Names of the Stripe variables not set on this server. The founding
+    price is optional: without it the launch offer simply isn't shown."""
+    checks = (("STRIPE_SECRET_KEY", STRIPE_SECRET_KEY),
+              ("STRIPE_WEBHOOK_SECRET", STRIPE_WEBHOOK_SECRET),
+              ("STRIPE_PRICE_MONTHLY", STRIPE_PRICES["monthly"]),
+              ("STRIPE_PRICE_SEASON", STRIPE_PRICES["season"]))
+    return [name for name, val in checks if not val]
+
+
+def billing_configured():
+    return not billing_missing()
+
+
+if billing_missing():
+    app.logger.warning("myCalc+ checkout is not open on this server: set %s in the environment",
+                       ", ".join(billing_missing()))
+
+
+def _stripe():
+    """The client, keyed and pinned. Set on every call rather than once
+    at import so a test can swap the key and so a key added later takes
+    effect on the next request."""
+    stripe.api_key = STRIPE_SECRET_KEY
+    stripe.api_version = STRIPE_API_VERSION
+    return stripe
+
+
+def founding_window_open(today=None):
+    """The launch price is on sale through FOUNDING_CUTOFF, Central time,
+    and only while a founding price exists to sell."""
+    if not STRIPE_PRICES["founding"]:
+        return False
+    try:
+        cutoff = date.fromisoformat(FOUNDING_CUTOFF)
+    except ValueError:
+        return False
+    today = today or datetime.now(CENTRAL_TZ).date()
+    return today <= cutoff
+
+
+def founding_cutoff_label():
+    try:
+        return date.fromisoformat(FOUNDING_CUTOFF).strftime("%B %-d")
+    except ValueError:
+        return ""
+
+
+def season_pass_end(when=None):
+    """When a pass bought at `when` stops: Feb 28, 23:59:59 Central, of
+    the year this season ends in. Returned as naive UTC, which is how
+    the users table keeps every other timestamp."""
+    when = when or datetime.now(timezone.utc)
+    if when.tzinfo is None:
+        when = when.replace(tzinfo=timezone.utc)
+    local = when.astimezone(CENTRAL_TZ)
+    year = local.year + 1 if local.month >= 3 else local.year
+    month, day = SEASON_PASS_END_MONTH_DAY
+    end_local = datetime(year, month, day, 23, 59, 59, tzinfo=CENTRAL_TZ)
+    return end_local.astimezone(timezone.utc).replace(tzinfo=None)
+
+
+def has_mycalc_plus(row, now=None):
+    """The one access check, on a users row. Everything that gates a page
+    goes through here, so there is exactly one place the rules live."""
+    if not row:
+        return False
+    if row.get("is_member"):
+        return True  # set by hand in the database: a complimentary account
+    plan = row.get("plan") or "none"
+    now = now or datetime.utcnow()
+    if plan == "monthly":
+        return (row.get("member_status") or "") in MEMBER_STATUSES_WITH_ACCESS
+    if plan in ("season", "founding"):
+        until = row.get("access_until")
+        return until is not None and now < until
+    return False
+
+
+def viewer_has_plus():
+    return bool(current_user.is_authenticated and getattr(current_user, "is_member", False))
+
+
+def plus_unlocked(open_before=False):
+    """Whether the viewer gets a myCalc+ page in full. With the gate off,
+    a page keeps whatever it asked for before billing existed: sign-in
+    (Rankings, Matchups, League Manager) or nothing at all (Streaks,
+    open_before=True). With it on, the plan is the key."""
+    if PAYWALL:
+        return viewer_has_plus()
+    return open_before or bool(current_user.is_authenticated)
+
+
+def gate_kind():
+    """Which card covers a locked page: a guest is asked to sign up, a
+    free account is asked for the plan."""
+    return "plus" if current_user.is_authenticated else "signup"
+
+
+def _central_date(dt):
+    """A stored naive-UTC timestamp, as the date a reader in the US would
+    call it."""
+    if not dt:
+        return ""
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=timezone.utc)
+    return dt.astimezone(CENTRAL_TZ).strftime("%-d %b %Y")
+
+
+def plan_summary(user, now=None):
+    """What to tell the account holder about their plan."""
+    now = now or datetime.utcnow()
+    plan = getattr(user, "plan", None) or "none"
+    status = getattr(user, "member_status", None) or ""
+    until = getattr(user, "access_until", None)
+    period_end = getattr(user, "current_period_end", None)
+    out = {"plan": plan, "active": bool(getattr(user, "is_member", False)), "label": "Free",
+           "detail": "", "status": status, "manage": False, "past_due": False,
+           "founding": bool(getattr(user, "founding_member", False)),
+           "comped": bool(getattr(user, "comped", False)),
+           "has_customer": bool(getattr(user, "stripe_customer_id", None))}
+    if plan == "monthly":
+        out["manage"] = out["has_customer"]
+        if status in MEMBER_STATUSES_WITH_ACCESS:
+            out["label"] = PLAN_NAMES["monthly"]
+            if getattr(user, "cancel_at_period_end", False):
+                out["detail"] = f"Ends {_central_date(period_end)}" if period_end else "Ends at the end of this period"
+            elif status == "past_due":
+                out["detail"] = "Last payment failed"
+                out["past_due"] = True
+            else:
+                out["detail"] = f"Renews {_central_date(period_end)}" if period_end else "Active"
+        else:
+            out["detail"] = "Monthly plan ended"
+    elif plan in ("season", "founding"):
+        if until and now < until:
+            out["label"] = PLAN_NAMES["season"] + (" (Founding)" if plan == "founding" else "")
+            out["detail"] = f"Through {_central_date(until)}"
+        else:
+            out["detail"] = f"Season Pass ended {_central_date(until)}" if until else "Season Pass ended"
+    if out["comped"] and out["label"] == "Free":
+        out["label"] = "myCalc+"
+        out["detail"] = "Complimentary"
+    return out
+
+
+def _plain(obj):
+    """A Stripe object as a plain dict. The library's objects stopped
+    being dicts in v15; everything below reads with .get, so the
+    conversion happens once, at the boundary."""
+    if hasattr(obj, "to_dict") and not isinstance(obj, dict):
+        obj = obj.to_dict()
+    if isinstance(obj, dict):
+        return {k: _plain(v) for k, v in obj.items()}
+    if isinstance(obj, list):
+        return [_plain(v) for v in obj]
+    return obj
+
+
+def _obj_id(value):
+    """Stripe sends related objects as an id, or expanded as the object.
+    Either way, the id."""
+    if isinstance(value, dict):
+        return value.get("id")
+    return value or None
+
+
+def _period_end(sub):
+    """current_period_end lives on the subscription in older API versions
+    and on its items in newer ones."""
+    if not isinstance(sub, dict):
+        return None
+    ts = sub.get("current_period_end")
+    if not ts:
+        items = ((sub.get("items") or {}).get("data") or [])
+        ts = items[0].get("current_period_end") if items else None
+    return datetime.utcfromtimestamp(int(ts)) if ts else None
+
+
+def _session_user_id(sess):
+    meta = sess.get("metadata") or {}
+    raw = meta.get("app_user_id") or sess.get("client_reference_id")
+    try:
+        return int(raw)
+    except (TypeError, ValueError):
+        return None
+
+
+def _users_set(cur, user_id, **fields):
+    """UPDATE users SET ... for the billing columns. Column names come
+    from this file, never from a request."""
+    cols = ", ".join(f"{k} = %s" for k in fields)
+    cur.execute(f"UPDATE users SET {cols}, plan_updated_at = NOW() WHERE id = %s",
+                (*fields.values(), user_id))
+
+
+def _claim(cur, key):
+    """True the first time a key is seen. Webhook event ids and Checkout
+    session ids both go through here, so a redelivered event or a success
+    page that raced the webhook changes nothing the second time."""
+    cur.execute("INSERT INTO processed_stripe_events (event_id) VALUES (%s) ON CONFLICT DO NOTHING", (key,))
+    return cur.rowcount == 1
+
+
+def _grant_from_session(cur, sess):
+    """Give an account what its completed Checkout session bought."""
+    user_id = _session_user_id(sess)
+    if not user_id:
+        return "no-user"
+    if not _claim(cur, "cs:" + str(sess.get("id"))):
+        return "already"
+    customer = _obj_id(sess.get("customer"))
+    if customer:
+        cur.execute("UPDATE users SET stripe_customer_id = COALESCE(stripe_customer_id, %s) WHERE id = %s",
+                    (customer, user_id))
+    meta = sess.get("metadata") or {}
+    if sess.get("mode") == "subscription":
+        sub = sess.get("subscription")
+        sub_id = _obj_id(sub)
+        period_end = _period_end(sub) if isinstance(sub, dict) else None
+        if sub_id and period_end is None and STRIPE_SECRET_KEY:
+            try:
+                period_end = _period_end(_plain(_stripe().Subscription.retrieve(sub_id)))
+            except Exception:
+                period_end = None
+        _users_set(cur, user_id, plan="monthly", member_status="active", stripe_subscription_id=sub_id,
+                   cancel_at_period_end=False, current_period_end=period_end)
+        return "granted"
+    if sess.get("payment_status") not in ("paid", "no_payment_required"):
+        return "unpaid"
+    plan = meta.get("plan") if meta.get("plan") in ("season", "founding") else "season"
+    fields = dict(plan=plan, member_status="active", access_until=season_pass_end(),
+                  stripe_subscription_id=None, cancel_at_period_end=False, current_period_end=None)
+    if plan == "founding":
+        fields["founding_member"] = True
+    _users_set(cur, user_id, **fields)
+    return "granted"
+
+
+def apply_checkout_session(sess):
+    """The success page's path to the same grant the webhook makes."""
+    if not DATABASE_URL:
+        return "no-database"
+    conn = get_db()
+    try:
+        with conn.cursor() as cur:
+            result = _grant_from_session(cur, sess)
+        conn.commit()
+        return result
+    finally:
+        conn.close()
+
+
+def _find_user_for_subscription(cur, sub):
+    meta = sub.get("metadata") or {}
+    try:
+        if meta.get("app_user_id"):
+            return int(meta["app_user_id"])
+    except (TypeError, ValueError):
+        pass
+    if sub.get("id"):
+        cur.execute("SELECT id FROM users WHERE stripe_subscription_id = %s", (sub["id"],))
+        row = cur.fetchone()
+        if row:
+            return row["id"]
+    customer = _obj_id(sub.get("customer"))
+    if customer:
+        cur.execute("SELECT id FROM users WHERE stripe_customer_id = %s", (customer,))
+        row = cur.fetchone()
+        if row:
+            return row["id"]
+    return None
+
+
+def _on_checkout_completed(cur, sess):
+    _grant_from_session(cur, sess)
+
+
+def _on_subscription_updated(cur, sub):
+    user_id = _find_user_for_subscription(cur, sub)
+    if not user_id:
+        return
+    fields = dict(member_status=sub.get("status") or "", stripe_subscription_id=sub.get("id"),
+                  cancel_at_period_end=bool(sub.get("cancel_at_period_end")),
+                  current_period_end=_period_end(sub))
+    # A subscription never overrides a season pass that is still running;
+    # it takes over the moment the pass ends.
+    cur.execute("SELECT plan, access_until FROM users WHERE id = %s", (user_id,))
+    row = cur.fetchone() or {}
+    pass_live = (row.get("plan") in ("season", "founding") and row.get("access_until")
+                 and datetime.utcnow() < row["access_until"])
+    if not pass_live:
+        fields["plan"] = "monthly"
+    _users_set(cur, user_id, **fields)
+
+
+def _on_subscription_deleted(cur, sub):
+    user_id = _find_user_for_subscription(cur, sub)
+    if not user_id:
+        return
+    _users_set(cur, user_id, member_status="canceled", cancel_at_period_end=False,
+               current_period_end=_period_end(sub))
+
+
+def _on_payment_failed(cur, inv):
+    """Mark the account past due and tell the person; access stays until
+    Stripe gives up on the card and deletes the subscription."""
+    sub_id = _obj_id(inv.get("subscription"))
+    if not sub_id:
+        sub_id = ((inv.get("parent") or {}).get("subscription_details") or {}).get("subscription")
+    probe = {"id": sub_id, "customer": inv.get("customer"), "metadata": {}}
+    user_id = _find_user_for_subscription(cur, probe)
+    if not user_id:
+        return None
+    cur.execute("SELECT email, username, plan FROM users WHERE id = %s", (user_id,))
+    row = cur.fetchone() or {}
+    if row.get("plan") != "monthly":
+        return None
+    _users_set(cur, user_id, member_status="past_due")
+    to, name = row.get("email"), row.get("username") or "there"
+    if not to:
+        return None
+    link = SITE_URL + "/settings/plan"
+    text = (f"Hi {name},\n\nYour myCalc+ payment didn't go through. Stripe will retry the card "
+            f"over the next few days, and your access continues in the meantime.\n\n"
+            f"To update your card now: {link}\n\nIf you meant to cancel, there is nothing to do.\n")
+
+    def _later():
+        send_email(to, "Your myCalc+ payment didn't go through", text)
+    return _later
+
+
+STRIPE_HANDLERS = {
+    "checkout.session.completed": _on_checkout_completed,
+    "customer.subscription.updated": _on_subscription_updated,
+    "customer.subscription.deleted": _on_subscription_deleted,
+    "invoice.payment_failed": _on_payment_failed,
+}
+
+
+def handle_stripe_event(event):
+    """One verified event, applied once. The event id is claimed inside
+    the same transaction as the change, so a handler that fails leaves
+    no claim behind and Stripe's retry gets a clean run."""
+    etype = event.get("type") or ""
+    handler = STRIPE_HANDLERS.get(etype)
+    if not handler:
+        return "ignored"
+    if not DATABASE_URL:
+        return "no-database"
+    obj = (event.get("data") or {}).get("object") or {}
+    after = None
+    conn = get_db()
+    try:
+        with conn.cursor() as cur:
+            if not _claim(cur, str(event.get("id"))):
+                return "duplicate"
+            after = handler(cur, obj)
+        conn.commit()
+    finally:
+        conn.close()
+    if callable(after):
+        threading.Thread(target=after, daemon=True).start()
+    return "handled"
+
+
+@app.route("/api/stripe-webhook", methods=["POST"])
+def stripe_webhook():
+    """Stripe's events, verified against the signing secret on the raw
+    body. Any 2xx tells Stripe it landed; anything else is retried."""
+    if not STRIPE_WEBHOOK_SECRET:
+        return jsonify({"ok": False, "error": "STRIPE_WEBHOOK_SECRET is not set"}), 503
+    payload = request.get_data()
+    sig = request.headers.get("Stripe-Signature", "")
+    try:
+        event = stripe.Webhook.construct_event(payload, sig, STRIPE_WEBHOOK_SECRET)
+    except (ValueError, stripe.SignatureVerificationError):
+        return jsonify({"ok": False, "error": "bad signature"}), 400
+    result = handle_stripe_event(_plain(event))
+    return jsonify({"ok": True, "result": result})
+
+
+def get_or_create_stripe_customer(user):
+    """Exactly one Stripe customer per account, made before Checkout so
+    the portal has someone to show."""
+    if getattr(user, "stripe_customer_id", None):
+        return user.stripe_customer_id
+    customer = _stripe().Customer.create(email=user.email or None, name=user.username,
+                                         metadata={"app_user_id": str(user.id)})
+    conn = get_db()
+    try:
+        with conn.cursor() as cur:
+            cur.execute("UPDATE users SET stripe_customer_id = COALESCE(stripe_customer_id, %s) WHERE id = %s",
+                        (customer["id"], user.id))
+        conn.commit()
+    finally:
+        conn.close()
+    user.stripe_customer_id = customer["id"]
+    return customer["id"]
+
+
+def checkout_params(user, plan, customer_id):
+    """The Checkout session, as Stripe wants it. Pure, so a test can read
+    it without a network."""
+    who = {"app_user_id": str(user.id), "plan": plan}
+    params = dict(
+        mode=PLAN_MODES[plan], customer=customer_id,
+        line_items=[{"price": STRIPE_PRICES[plan], "quantity": 1}],
+        client_reference_id=str(user.id), metadata=who,
+        success_url=SITE_URL + "/billing/success?session_id={CHECKOUT_SESSION_ID}",
+        cancel_url=SITE_URL + "/plus",
+        allow_promotion_codes=True,
+    )
+    if PLAN_MODES[plan] == "subscription":
+        params["subscription_data"] = {"metadata": who}
+        # A 100%-off code (the owner's own test code, a friend's) needs
+        # no card at all; Stripe only asks for one if there is a charge.
+        params["payment_method_collection"] = "if_required"
+    else:
+        params["payment_intent_data"] = {"metadata": who}
+    return params
+
+
+@app.route("/billing/checkout/<plan>", methods=["POST"])
+@login_required
+def billing_checkout(plan):
+    if plan not in PLAN_MODES:
+        return redirect("/plus")
+    if plan == "founding" and not founding_window_open():
+        return redirect("/plus?notice=founding-closed")
+    if not billing_configured() or not STRIPE_PRICES[plan]:
+        return redirect("/plus?notice=not-open")
+    if viewer_has_plus():
+        return redirect("/plus?notice=already")
+    try:
+        customer_id = get_or_create_stripe_customer(current_user)
+        sess = _stripe().checkout.Session.create(**checkout_params(current_user, plan, customer_id))
+    except Exception:
+        app.logger.exception("Stripe checkout could not be started")
+        return redirect("/plus?notice=error")
+    return redirect(sess["url"], code=303)
+
+
+@app.route("/billing/success")
+@login_required
+def billing_success():
+    """Thank-you page. Applies the grant from the retrieved session too,
+    verified server-side with the secret key, so the page can say "you're
+    in" without waiting on the webhook. The session must belong to the
+    signed-in account; an id pasted from someone else's URL grants nothing."""
+    sid = (request.args.get("session_id") or "").strip()
+    result = None
+    if sid and billing_configured():
+        try:
+            sess = _plain(_stripe().checkout.Session.retrieve(sid, expand=["subscription"]))
+            if _session_user_id(sess) == int(current_user.id) and sess.get("status") == "complete":
+                result = apply_checkout_session(sess)
+        except Exception:
+            app.logger.exception("could not confirm checkout session")
+    fresh = load_user(current_user.id) if DATABASE_URL else None
+    summary = plan_summary(fresh or current_user)
+    return render_template_string(BILLING_SUCCESS_HTML, summary=summary, result=result)
+
+
+@app.route("/billing/portal", methods=["POST"])
+@login_required
+def billing_portal():
+    """Stripe's own page for cancelling, changing the card and reading
+    invoices. The portal's rules are set in the Dashboard, not here."""
+    customer_id = getattr(current_user, "stripe_customer_id", None)
+    if not customer_id or not billing_configured():
+        return redirect("/plus")
+    try:
+        sess = _stripe().billing_portal.Session.create(customer=customer_id,
+                                                       return_url=SITE_URL + "/settings/plan")
+    except Exception:
+        app.logger.exception("Stripe portal could not be opened")
+        return redirect("/settings/plan?error=portal")
+    return redirect(sess["url"], code=303)
+
+
+PLUS_NOTICES = {
+    "founding-closed": "The founding price has ended. The Season Pass is below at its regular price.",
+    "not-open": "Checkout isn't open yet. Check back soon.",
+    "already": "You're already on myCalc+.",
+    "error": "Stripe couldn't start checkout just now. Nothing was charged; please try again in a minute.",
+}
+
+
+def plus_cards():
+    """The three cards on the pricing page. While the founding window is
+    open the Season card sells the founding price."""
+    founding = founding_window_open()
+    season = {
+        "key": "season", "name": "Season Pass", "featured": True,
+        "price": PLAN_PRICES["founding"] if founding else PLAN_PRICES["season"],
+        "was": PLAN_PRICES["season"] if founding else "",
+        "per": "once", "plan": "founding" if founding else "season",
+        "tagline": "One payment. Whole season.",
+        "bullets": ["Everything in Monthly", "Week 1 through the Super Bowl",
+                    "No renewals, no offseason charges"],
+        "cta": "Get the Season Pass",
+        "fine": ("Founding price through %s. Everyone who buys now keeps it next season. "
+                 "Access runs through February 28." % founding_cutoff_label()) if founding
+                else "One-time payment, no auto-renew. Access runs through February 28.",
+    }
+    return [
+        {"key": "free", "name": "Free", "featured": False, "price": "$0", "was": "", "per": "",
+         "plan": None, "tagline": "Everything you need on game day.",
+         "bullets": ["Live scores, game pages and standings", "Injuries, moves and birthdays",
+                     "Top tier of the rankings", "Basic trade calculator", "One synced league"],
+         "cta": "", "fine": "No card required."},
+        {"key": "monthly", "name": "Monthly", "featured": False, "price": PLAN_PRICES["monthly"],
+         "was": "", "per": "per month", "plan": "monthly",
+         "tagline": "The full toolkit, one month at a time.",
+         "bullets": ["Every rankings tier, with 7-day movement", "Streaks: every prop, adjustable lines",
+                     "Matchup grades, on the page and in League Manager", "Unlimited synced leagues"],
+         "cta": "Start Monthly", "fine": "Billed monthly through Stripe. Cancel anytime from Settings."},
+        season,
+    ]
+
+
+@app.route("/plus")
+@app.route("/pricing")
+def plus_page():
+    summary = plan_summary(current_user) if current_user.is_authenticated else None
+    return render_template_string(
+        PLUS_HTML, summary=summary, cards=plus_cards(), open=billing_configured(),
+        support_email=SUPPORT_EMAIL, notice=PLUS_NOTICES.get(request.args.get("notice") or ""))
+
+
+@app.route("/api/billing-status")
+def api_billing_status():
+    """Is billing wired? Which variables are present (never their values),
+    the gate switch, the founding window, and how many accounts are on
+    each plan."""
+    if not _secret_ok():
+        return jsonify({"ok": False, "error": "unauthorized"}), 401
+    out = {"ok": True, "configured": billing_configured(), "missing": billing_missing(),
+           "paywall": PAYWALL, "founding_open": founding_window_open(), "founding_cutoff": FOUNDING_CUTOFF,
+           "api_version": STRIPE_API_VERSION, "site_url": SITE_URL,
+           "prices": {k: bool(v) for k, v in STRIPE_PRICES.items()},
+           "plans": {}, "events_processed": 0, "last_event_at": None}
+    if DATABASE_URL:
+        try:
+            conn = get_db()
+            try:
+                with conn.cursor() as cur:
+                    cur.execute("SELECT COALESCE(plan, 'none') AS plan, COALESCE(member_status, '') AS status, "
+                                "COUNT(*) AS n FROM users GROUP BY 1, 2")
+                    for r in cur.fetchall():
+                        out["plans"][f"{r['plan']}:{r['status']}"] = r["n"]
+                    cur.execute("SELECT COUNT(*) AS n, MAX(processed_at) AS newest FROM processed_stripe_events")
+                    r = cur.fetchone() or {}
+                    out["events_processed"] = r.get("n") or 0
+                    out["last_event_at"] = str(r["newest"]) if r.get("newest") else None
+            finally:
+                conn.close()
+        except Exception as e:
+            out["db_error"] = str(e)
+    return jsonify(out)
+
+
+
+def _plan_summary_line(user):
+    s = plan_summary(user)
+    return s["label"] + (" \u00b7 " + s["detail"] if s["detail"] else "")
+
+
+def _safe_next():
+    """A ?next= that stays on this site: a path, never a URL."""
+    nxt = request.args.get("next") or ""
+    if not nxt.startswith("/") or nxt.startswith("//"):
+        return ""
+    # The checkout routes only take a POST; a login that was bounced off
+    # one lands on the pricing page instead of a 405.
+    return "/plus" if nxt.startswith("/billing/") else nxt
+
+
 SETTINGS_SECTIONS = [
     ("profile", "Profile"),
     ("rankings", "Rankings"),
     ("scoring", "Scoring"),
     ("theme", "Theme"),
     ("leagues", "Leagues"),
+    ("plan", "myCalc+"),
     ("email", "Email"),
     ("account", "Account"),
 ]
@@ -6105,6 +6765,7 @@ def settings_summaries(league_count):
         "theme": f"{theme} \u00b7 {accent}",
         "leagues": ("No leagues synced yet" if not league_count
                     else f"{league_count} league{'s' if league_count != 1 else ''} synced"),
+        "plan": _plan_summary_line(current_user),
         "email": ("Updates on" if current_user.newsletter_opt_in else "Updates off"),
         "account": current_user.email or "Signed in",
     }
@@ -6298,7 +6959,7 @@ def settings_page(section=None):
                   for key, label in SETTINGS_SECTIONS],
         username_next_change=username_change_allowed_at(current_user.username_changed_at),
         username_cooldown_days=USERNAME_CHANGE_DAYS,
-        league_count=league_count)
+        league_count=league_count, plan=plan_summary(current_user))
 
 
 def export_account_data(user_id):
@@ -6771,9 +7432,16 @@ def leagues_page():
             elif chosen_param:
                 valid_ids = {lg["league_id"] for lg in brief}
                 chosen_ids = [lid for lid in chosen_param if lid in valid_ids]
-                if current_user.is_authenticated:
+                over_limit = (current_user.is_authenticated and not plus_unlocked()
+                              and len(chosen_ids) > FREE_LEAGUE_LIMIT)
+                if current_user.is_authenticated and not over_limit:
                     set_synced_league_ids(current_user.id, chosen_ids)
-                if not chosen_ids:
+                if over_limit:
+                    error = ("Free accounts sync one league. myCalc+ syncs all of them; "
+                             "the plans are under myCalc in the menu.")
+                    picker = {"leagues": brief, "display_name": display_name,
+                              "preselected": set(chosen_ids), "default_all": False}
+                elif not chosen_ids:
                     error = "Pick at least one league to sync."
                     picker = {"leagues": brief, "display_name": display_name, "preselected": set(), "default_all": False}
                 else:
@@ -6810,10 +7478,16 @@ def league_detail():
         # asking. Every grade lookup below hits already-warm caches, so this
         # adds no new I/O for a signed-in visitor.
         if detail.get("mode") == "roster" and current_user.is_authenticated:
+            unlocked = plus_unlocked()
             info = get_current_week_info()
-            ensure_schedule_synced(info["season"])
+            if unlocked:
+                ensure_schedule_synced(info["season"])
             for col in detail["columns"].values():
                 for p in col["players"]:
+                    if not unlocked:
+                        # The badge's place is kept, as a link to the plan.
+                        p["grade"], p["grade_class"], p["grade_locked"] = None, None, True
+                        continue
                     grade = compute_matchup_grade(p["sleeper_id"], info["season"], info["week"])
                     p["grade"] = grade["grade"] if grade else None
                     p["grade_class"] = grade["grade_class"] if grade else None
@@ -10638,6 +11312,12 @@ def streaks_page():
         board = get_streak_trends(season, week) if prop == "trends" else get_streak_board(prop, season, week)
         if pos:
             board = [r for r in board if r["group"] == pos]
+        # Free sees the top of the list; the rest waits behind the plan.
+        unlocked = plus_unlocked(open_before=True)
+        sk_locked = 0
+        if not unlocked and len(board) > STREAK_FREE_ROWS:
+            sk_locked = len(board) - STREAK_FREE_ROWS
+            board = board[:STREAK_FREE_ROWS]
         seasons = streak_seasons(season)
         sched = _streak_schedule_index(seasons)
         logs = _streak_logs(seasons)
@@ -10651,12 +11331,12 @@ def streaks_page():
         return render_template_string(
             STREAKS_HTML, rows=rows, prop=prop, pos=pos, win=win, tabs=tabs, positions=positions,
             windows=list(STREAK_WINDOWS), books_seen=books_seen, season=season, week=week,
-            load_error=None)
+            sk_locked=sk_locked, gate=gate_kind(), load_error=None)
     except Exception as e:
         return render_template_string(
             STREAKS_HTML, rows=[], prop=prop, pos=pos, win=win, tabs=tabs, positions=positions,
             windows=list(STREAK_WINDOWS), books_seen=[], season=season, week=week,
-            load_error=str(e))
+            sk_locked=0, gate=gate_kind(), load_error=str(e))
 
 
 @app.route("/api/history-status")
@@ -10795,11 +11475,13 @@ def streak_player_page():
             prop = d["props"][0]["key"] if d["props"] else prop
         return render_template_string(
             STREAK_PLAYER_HTML, d=d, prop=prop, season=season, week=week,
-            windows=list(STREAK_WINDOWS), load_error=None)
+            windows=list(STREAK_WINDOWS), unlocked=plus_unlocked(open_before=True),
+            gate=gate_kind(), load_error=None)
     except Exception as e:
         return render_template_string(
             STREAK_PLAYER_HTML, d=None, prop=prop, season=season, week=week,
-            windows=list(STREAK_WINDOWS), load_error=str(e))
+            windows=list(STREAK_WINDOWS), unlocked=plus_unlocked(open_before=True),
+            gate=gate_kind(), load_error=str(e))
 
 
 @app.route("/api/performers")
@@ -10975,7 +11657,8 @@ def matchups_page():
     rows = []
     load_error = None
     timing = []
-    if current_user.is_authenticated:
+    unlocked = plus_unlocked()
+    if unlocked:
         try:
             ensure_schedule_synced(season)
             timing.append(("schedule", time.monotonic() - t0))
@@ -11051,6 +11734,7 @@ def matchups_page():
     html = render_template_string(
         MATCHUPS_HTML, rows=rows, season=season, week=week,
         current_season=info["season"], current_week=info["week"], load_error=load_error,
+        unlocked=unlocked, gate=gate_kind(),
     )
     timing.append(("render", time.monotonic() - t3))
     timing.append(("total", time.monotonic() - t0))
@@ -11067,11 +11751,12 @@ def matchups_page():
 @app.route("/api/matchup-compare")
 def api_matchup_compare():
     """Head-to-head start/sit call for two players -- backs the
-    Matchups page's comparison tool. Auth-gated like the rest of
-    matchup grading (see matchups_page's docstring re: the future
-    is_member swap)."""
-    if not current_user.is_authenticated:
-        return jsonify({"ok": False, "error": "Sign in to compare players."}), 401
+    Matchups page's comparison tool. Gated like the rest of matchup
+    grading: sign-in, and the plan once the gate is on."""
+    if not plus_unlocked():
+        msg = ("Comparing players is a myCalc+ feature." if current_user.is_authenticated
+               else "Sign in to compare players.")
+        return jsonify({"ok": False, "error": msg}), 401
     sid_a = request.args.get("a", "")
     sid_b = request.args.get("b", "")
     if not sid_a or not sid_b:
@@ -11222,7 +11907,8 @@ def rankings():
                                   pos_filter=pos_filter, view=view,
                                   stats_season=stats_season, stats_seasons=stats_seasons,
                                   since_days=movement["days"],
-                                  scoring_name=scoring_label(current_scoring()))
+                                  scoring_name=scoring_label(current_scoring()),
+                                  rk_unlocked=plus_unlocked(), rk_gate=gate_kind())
 
 
 def consolidation_adjusted_value(items):
@@ -12920,6 +13606,7 @@ BASE_STYLE = THEME_BOOT + """
   .grade-badge.grade-bp, .grade-badge.grade-b, .grade-badge.grade-bm{ background:var(--good-wash); color:var(--good); }
   .grade-badge.grade-cp, .grade-badge.grade-c, .grade-badge.grade-cm{ background:var(--warning-wash); color:var(--warning); }
   .grade-badge.grade-dp, .grade-badge.grade-d, .grade-badge.grade-dm, .grade-badge.grade-f{ background:var(--critical-wash); color:var(--critical); }
+  .grade-badge.grade-lock{ background:var(--paper-sunken); color:var(--ink-muted); text-decoration:none; }
   /* The roster legend. Three groups side by side on a wide screen,
      stacked on a phone -- each with its own heading, so an item's
      meaning comes from the group it sits in rather than from its
@@ -13593,6 +14280,7 @@ NAV_GROUPS = [
         ("rankings", "/rankings", "Rankings", "Dynasty and redraft player values"),
         ("matchups", "/matchups", "Matchups", "Start-sit grades for the week"),
         ("streaks", "/streaks", "Streaks", "Prop lines and hit rates, game by game"),
+        ("plus", "/plus", "myCalc+", "Every tier, every list, every grade"),
         ("trade", "/trade-calculator", "Trade Calculator", "Weigh any trade both ways"),
         ("sbc", "/start-bench-cut", "Start/Bench/Cut", "Help keep the rankings sharp"),
     ]),
@@ -14455,7 +15143,7 @@ LEAGUE_DETAIL_HTML = BASE_STYLE + make_header("league") + """
             <a class="pname" href="/player?sid={{ p.sleeper_id }}&numqbs={{ detail.num_qbs }}&u={{ username }}&ref={{ ('/league?league_id=' ~ league_id ~ '&roster_id=' ~ detail.roster_id ~ '&u=' ~ username)|urlencode }}">{{ p.name }}</a>
           </div>
           <span class="rank-pair">
-            {% if p.grade %}<span class="grade-badge grade-{{ p.grade_class }}">{{ p.grade }}</span>{% endif %}
+            {% if p.grade %}<span class="grade-badge grade-{{ p.grade_class }}">{{ p.grade }}</span>{% elif p.grade_locked %}<a class="grade-badge grade-lock" href="/plus" title="Matchup grades are a myCalc+ feature">+</a>{% endif %}
             <span class="rank-plain">{{ p.position_rank or '\u2014' }}</span>
             <span class="rank-badge {{ p.tier }}">{{ p.overall_rank or '\u2014' }}</span>
           </span>
@@ -16457,6 +17145,28 @@ STREAKS_HTML = BASE_STYLE + make_header("streaks") + """
   </div>
 
   <div class="sk-list" id="skList"></div>
+  {% if sk_locked %}
+  <div class="gate-wrap sk-gate" id="skGate">
+    <div class="gate-blur" aria-hidden="true">
+      {% for i in range(3) %}
+      <span class="sk-item"><span class="sk-main"><span class="sk-name">Locked player<span class="tm">NFL</span></span>
+        <span class="sk-prop"><span class="o">O</span><span class="ln">64.5</span> Rec Yds<span class="rate">8/10 &middot; 80%</span></span></span>
+        <span class="sk-edge"><span class="lab">EDGE</span><span class="val up">71.2</span></span></span>
+      {% endfor %}
+    </div>
+    <div class="gate-card">
+      {% if gate == 'plus' %}
+      <h3>{{ sk_locked }} more with <span style="color:var(--accent-ink);">myCalc+</span></h3>
+      <p>Every starter on this prop, every window, and a line you can move on any of them.</p>
+      <a href="/plus" class="btn" style="margin-top:18px; width:100%;">See myCalc+ plans</a>
+      {% else %}
+      <h3>{{ sk_locked }} more <span style="color:var(--accent-ink);">Streaks</span></h3>
+      <p>Sign in to see the full list for this prop.</p>
+      <a href="/login?next=/streaks" class="btn" style="margin-top:18px; width:100%;">Sign in</a>
+      {% endif %}
+    </div>
+  </div>
+  {% endif %}
   <div class="sk-foot" id="skFoot"></div>
 </div>
 </div>
@@ -16723,6 +17433,7 @@ STREAK_PLAYER_HTML = BASE_STYLE + make_header("streaks") + """
     {% endfor %}
   </div>
 
+  {% if not unlocked %}<div class="gate-wrap" id="spGate"><div class="gate-blur" style="max-height:none;" aria-hidden="true">{% endif %}
   <div class="sp-adjust">
     <h3 id="spAdjTitle">Prop line</h3>
     <div class="sp-step">
@@ -16738,6 +17449,19 @@ STREAK_PLAYER_HTML = BASE_STYLE + make_header("streaks") + """
       <div class="sp-ruler" id="spRuler" aria-label="Drag to move the line"><div class="sp-strip" id="spStrip"></div></div>
     </div>
   </div>
+  {% if not unlocked %}</div>
+    <div class="gate-card">
+      {% if gate == 'plus' %}
+      <h3>Move the line with <span style="color:var(--accent-ink);">myCalc+</span></h3>
+      <p>Set your own number and watch the hit rate follow it, on every prop for every starter.</p>
+      <a href="/plus" class="btn" style="margin-top:18px; width:100%;">See myCalc+ plans</a>
+      {% else %}
+      <h3>Sign in to <span style="color:var(--accent-ink);">move the line</span></h3>
+      <p>Set your own number and watch the hit rate follow it.</p>
+      <a href="/login" class="btn" style="margin-top:18px; width:100%;">Sign in</a>
+      {% endif %}
+    </div>
+  </div>{% endif %}
 
   <div class="sp-filters" id="spFilters"></div>
 
@@ -18813,7 +19537,7 @@ MATCHUPS_HTML = BASE_STYLE + make_header("matchups") + """
   }
 </style>
 <main><div class="wrap">
-  {% if current_user.is_authenticated %}
+  {% if unlocked %}
   <div class="panel">
     <p class="eyebrow">Head-to-Head</p>
     <h2>Start/Sit Calculator</h2>
@@ -18840,7 +19564,7 @@ MATCHUPS_HTML = BASE_STYLE + make_header("matchups") + """
     <p class="eyebrow">Matchups</p>
     <h2>Who's worth starting this week</h2>
     {% if load_error %}<div class="error">Couldn't load matchup grades right now: {{ load_error }}</div>{% endif %}
-    {% if current_user.is_authenticated %}
+    {% if unlocked %}
     <div class="mu-toolbar">
       <input type="text" class="mu-search" id="muSearch" placeholder="Search player...">
       <div class="format-toggle" id="muPosTabs">
@@ -18884,6 +19608,16 @@ MATCHUPS_HTML = BASE_STYLE + make_header("matchups") + """
         <div class="mu-row"><span class="mu-rank">3</span><img src=""><span class="pos-chip" style="background:var(--pos-wr);">WR</span><span class="mu-name">Sample Player MIA</span><span class="mu-opp">vs NYJ</span><span class="mu-stars"><span class="star-rating"><span class="star-bg">★★★★★</span><span class="star-fg" style="width:15%;">★★★★★</span></span></span><span class="mu-grade dm">D-</span></div>
       </div>
       <div class="gate-card">
+        {% if gate == 'plus' %}
+        <h3>Matchup Grades are <span style="color:var(--accent-ink);">myCalc+</span></h3>
+        <p>A start/sit grade for every player, every week, from the opponent's defense, the recent trend and the injury report.</p>
+        <div class="gate-benefits">
+          <span>A-F grade for every startable player, every week</span>
+          <span>The same grades inside League Manager, on your roster</span>
+          <span>Head-to-head calculator for any two players</span>
+        </div>
+        <a href="/plus" class="btn" style="margin-top:22px; width:100%;">See myCalc+ plans</a>
+        {% else %}
         <h3>Unlock <span style="color:var(--accent-ink);">Matchup Grades</span></h3>
         <p>Create a free account to see every player's start/sit grade, based on their opponent's defense, recent trend, and injury status.</p>
         <div class="gate-benefits">
@@ -18892,6 +19626,7 @@ MATCHUPS_HTML = BASE_STYLE + make_header("matchups") + """
           <span>Updates as injury reports and matchups change</span>
         </div>
         <a href="/signup" class="btn" style="margin-top:22px; width:100%;">Create Account</a>
+        {% endif %}
       </div>
     </div>
     {% endif %}
@@ -19240,6 +19975,16 @@ RANKINGS_HTML = BASE_STYLE + make_header("rankings") + VOTE_MODAL_HTML + """
         <table class="rk-table"><tbody id="rkGatedBody"></tbody></table>
       </div>
       <div class="gate-card">
+        {% if rk_gate is defined and rk_gate == 'plus' %}
+        <h3>The full Rankings are <span style="color:var(--accent-ink);">myCalc+</span></h3>
+        <p>Every tier below the top one, with 7-day movement on every player.</p>
+        <div class="gate-benefits">
+          <span>Every player ranked, redraft and dynasty</span>
+          <span>Rank and value movement over the last week</span>
+          <span>Streaks and Matchup grades included</span>
+        </div>
+        <a href="/plus" class="btn" style="margin-top:22px; width:100%;">See myCalc+ plans</a>
+        {% else %}
         <h3>Unlock the Full <span style="color:var(--accent-ink);">Rankings</span></h3>
         <p>Create a free account to see every player, not just the top tier.</p>
         <div class="gate-benefits">
@@ -19249,6 +19994,7 @@ RANKINGS_HTML = BASE_STYLE + make_header("rankings") + VOTE_MODAL_HTML + """
           <span>Unlimited trade calculator access</span>
         </div>
         <a href="/signup" class="btn" style="margin-top:22px; width:100%;">Create Account</a>
+        {% endif %}
       </div>
     </div>
   </div>
@@ -19336,7 +20082,7 @@ const RK_SINCE_DAYS = {{ (since_days if since_days is defined else none)|tojson 
 const RK_FMT = {{ fmt|tojson }};
 const RK_MODE = {{ mode|tojson }};
 const RK_STATS_SEASON = {{ stats_season|tojson }};
-const RK_AUTHED = {{ current_user.is_authenticated | tojson }};
+const RK_AUTHED = {{ (rk_unlocked if rk_unlocked is defined else current_user.is_authenticated) | tojson }};
 const posColors = {QB:'#1baf7a', RB:'#2a78d6', WR:'#e0397a', TE:'#7b5ce0'};
 // Multi-point star with "R" for a rookie (years_exp === 0 in Sleeper's
 // own data) -- inline SVG so it scales crisply at any size instead of
@@ -20622,6 +21368,35 @@ document.addEventListener('change', function(e){
     </div>
   </form>
 
+  {% elif section == 'plan' %}
+  {% if plan is not defined %}{% set plan = {'label': 'Free', 'detail': '', 'active': False, 'manage': False,
+                                             'past_due': False, 'founding': False, 'has_customer': False} %}{% endif %}
+  <div class="panel">
+    <div class="set-group" style="margin-top:0;">
+      <h3>myCalc+</h3>
+      <div class="set-read"><b>Plan</b><span>{{ plan.label }}</span></div>
+      {% if plan.detail %}<div class="set-read"><b>Status</b><span>{{ plan.detail }}</span></div>{% endif %}
+      {% if plan.founding %}<div class="set-read"><b>Founding member</b><span>Founding price locked for next season</span></div>{% endif %}
+      {% if plan.past_due %}
+      <div class="error" style="margin-top:12px;">Your last payment didn't go through. Update your card below to keep myCalc+.</div>
+      {% endif %}
+      {% if request.args.get('error') == 'portal' %}<div class="error" style="margin-top:12px;">Stripe's billing page couldn't open just now. Try again in a minute.</div>{% endif %}
+      <div class="set-actions" style="margin-top:16px; display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+        {% if plan.manage %}
+        <form method="post" action="/billing/portal"><button class="btn" type="submit">Manage subscription</button></form>
+        <span class="muted" style="font-size:13px;">Cancel, change your card or download invoices on Stripe's secure page.</span>
+        {% elif plan.active %}
+          {% if plan.has_customer %}
+          <form method="post" action="/billing/portal"><button class="btn" type="submit">Billing history</button></form>
+          {% endif %}
+          <span class="muted" style="font-size:13px;">A season pass has nothing to cancel; it simply ends.</span>
+        {% else %}
+        <a class="btn" href="/plus">See myCalc+ plans</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
   {% elif section == 'email' %}
   <form method="post">
     <div class="panel">
@@ -20648,7 +21423,7 @@ document.addEventListener('change', function(e){
     <div class="set-group" style="margin-top:0;">
       <h3>Account</h3>
       <div class="set-read"><b>Email</b><span>{{ current_user.email or '&mdash;'|safe }}</span></div>
-      <div class="set-read"><b>Plan</b><span>{{ 'Member' if current_user.is_member else 'Free' }}</span></div>
+      <div class="set-read"><b>Plan</b><span>{{ plan.label if plan is defined else ('myCalc+' if current_user.is_member else 'Free') }}</span></div>
       <div class="set-read"><b>Your data</b>
         <span><a href="/settings/export" style="color:var(--accent-ink);">Download everything</a></span></div>
       <div class="set-danger"><a href="/logout">Log out</a></div>
@@ -20834,6 +21609,124 @@ CHAT_HTML = BASE_STYLE + make_header() + """
       <button class="btn" type="submit">Ask</button>
     </form>
     {% if answer %}<div class="answer">{{ answer }}</div>{% endif %}
+  </div>
+</div></main>
+"""
+
+# --- myCalc+ pricing and thank-you pages ---------------------------------
+PLUS_STYLE = """
+<style>
+  .plus-wrap{ max-width:1040px; }
+  .plus-hero{ text-align:center; padding:34px 28px; }
+  .plus-hero h2{ font-size:34px; }
+  .plus-hero .muted{ max-width:560px; margin:10px auto 0; line-height:1.6; }
+  .plus-current{ display:inline-flex; gap:10px; align-items:center; margin-top:16px; padding:9px 14px;
+                 border-radius:999px; background:var(--good-wash); color:var(--good); font-weight:700; font-size:13.5px; }
+  .plus-current a{ color:inherit; }
+  .plus-notice{ margin-top:14px; padding:10px 14px; border-radius:10px; background:var(--paper-sunken);
+                color:var(--ink-secondary); font-size:13.5px; }
+  .plus-grid{ display:grid; grid-template-columns:repeat(3, 1fr); gap:16px; margin-top:18px; }
+  .plus-card{ display:flex; flex-direction:column; margin-top:0; }
+  .plus-card.featured{ border-color:var(--accent); box-shadow:0 0 0 1px var(--accent) inset, var(--shadow); }
+  .plus-name{ font-family:"Big Shoulders Display"; font-size:20px; font-weight:800; text-transform:uppercase;
+              letter-spacing:0.03em; }
+  .plus-badge{ display:inline-block; margin-left:8px; padding:2px 8px; border-radius:999px; font-family:"Source Sans 3";
+               font-size:11px; font-weight:700; letter-spacing:0.04em; background:var(--accent); color:var(--accent-on); vertical-align:middle; }
+  .plus-price{ margin-top:10px; font-family:"Big Shoulders Display"; font-size:44px; font-weight:800; line-height:1; }
+  .plus-price small{ font-family:"Source Sans 3"; font-size:14px; font-weight:600; color:var(--ink-muted); margin-left:6px; }
+  .plus-price s{ font-size:22px; color:var(--ink-muted); margin-right:8px; font-weight:600; }
+  .plus-tag{ margin-top:8px; color:var(--ink-secondary); font-size:14px; }
+  .plus-card ul{ list-style:none; padding:0; margin:16px 0 0; display:flex; flex-direction:column; gap:8px; flex:1; }
+  .plus-card li{ font-size:14px; color:var(--ink-secondary); padding-left:22px; position:relative; line-height:1.45; }
+  .plus-card li::before{ content:"\\2713"; position:absolute; left:0; color:var(--accent-ink); font-weight:700; }
+  .plus-cta{ margin-top:18px; }
+  .plus-cta .btn{ width:100%; }
+  .plus-cta .btn[disabled]{ opacity:0.55; cursor:not-allowed; }
+  .plus-cta .btn.ghost{ background:transparent; color:var(--ink); border-color:var(--line-strong); }
+  .plus-have{ display:block; text-align:center; padding:12px; border-radius:8px; background:var(--good-wash);
+              color:var(--good); font-weight:700; font-size:14px; }
+  .plus-signin{ text-align:center; font-size:13px; color:var(--ink-muted); margin-top:8px; }
+  .plus-signin a{ color:var(--accent-ink); }
+  .plus-fine{ margin-top:12px; font-size:12.5px; color:var(--ink-muted); line-height:1.5; }
+  .plus-notes ul{ margin:10px 0 0; padding-left:20px; font-size:13.5px; color:var(--ink-secondary); line-height:1.8; }
+  .plus-notes h3{ font-family:"Big Shoulders Display"; font-size:17px; font-weight:800; text-transform:uppercase; }
+  @media (max-width:820px){ .plus-grid{ grid-template-columns:1fr; } .plus-hero h2{ font-size:28px; } }
+</style>
+"""
+
+PLUS_HTML = BASE_STYLE + make_header("plus") + PLUS_STYLE + """
+<main><div class="wrap plus-wrap">
+  <div class="panel plus-hero">
+    <p class="eyebrow">myCalc+</p>
+    <h2>Every tier. Every list. Every grade.</h2>
+    <p class="muted">Free covers game day. myCalc+ opens the rest of the toolkit: the full rankings with movement,
+      Streaks for every prop with a line you can move, and a start/sit grade on every player you own.</p>
+    {% if summary and summary.active %}
+    <div class="plus-current">You're on {{ summary.label }}{% if summary.detail %} &middot; {{ summary.detail }}{% endif %}
+      <a href="/settings/plan">Manage</a></div>
+    {% endif %}
+    {% if notice %}<div class="plus-notice">{{ notice }}</div>{% endif %}
+  </div>
+
+  <div class="plus-grid">
+    {% for c in cards %}
+    <div class="panel plus-card {{ 'featured' if c.featured }}" data-plan="{{ c.plan or 'free' }}">
+      <div class="plus-name">{{ c.name }}{% if c.was %}<span class="plus-badge">Founding price</span>{% endif %}</div>
+      <div class="plus-price">{% if c.was %}<s>{{ c.was }}</s>{% endif %}{{ c.price }}{% if c.per %}<small>{{ c.per }}</small>{% endif %}</div>
+      <p class="plus-tag">{{ c.tagline }}</p>
+      <ul>{% for b in c.bullets %}<li>{{ b }}</li>{% endfor %}</ul>
+      <div class="plus-cta">
+        {% if not c.plan %}
+          <a class="btn ghost" href="/scores">Keep using Free</a>
+        {% elif summary and summary.active %}
+          <span class="plus-have">Included in your plan</span>
+        {% elif not open %}
+          <button class="btn" type="button" disabled>Checkout opens soon</button>
+        {% elif current_user.is_authenticated %}
+          <form method="post" action="/billing/checkout/{{ c.plan }}"><button class="btn" type="submit">{{ c.cta }}</button></form>
+        {% else %}
+          <a class="btn" href="/signup">Create account</a>
+          <p class="plus-signin">Already have one? <a href="/login?next=/plus">Sign in</a></p>
+        {% endif %}
+      </div>
+      <p class="plus-fine">{{ c.fine }}</p>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="panel plus-notes">
+    <h3>The small print</h3>
+    <ul>
+      <li>Prices are in US dollars and include all fees. Payments are handled by Stripe; this site never sees your card.</li>
+      <li>Monthly renews until you cancel. Cancel from Settings and keep access to the end of the paid month.</li>
+      <li>The Season Pass is a single payment with no auto-renew. Access runs through February 28.</li>
+      <li>Lines on Streaks are this site's own computed lines, not sportsbook odds. Nothing here is betting advice.</li>
+      <li>Full refund within 7 days of purchase if you haven't used a myCalc+ feature. Email
+          <a href="mailto:{{ support_email }}" style="color:var(--accent-ink);">{{ support_email }}</a>.</li>
+    </ul>
+  </div>
+</div></main>
+"""
+
+BILLING_SUCCESS_HTML = BASE_STYLE + make_header("plus") + PLUS_STYLE + """
+<main><div class="wrap plus-wrap" style="max-width:620px;">
+  <div class="panel plus-hero">
+    <p class="eyebrow">myCalc+</p>
+    {% if summary.active %}
+    <h2>You're in.</h2>
+    <p class="muted">{{ summary.label }}{% if summary.detail %} &middot; {{ summary.detail }}{% endif %}.
+      Every rankings tier, every Streaks list and every matchup grade is open now.</p>
+    <div class="plus-cta" style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:22px;">
+      <a class="btn" href="/rankings" style="width:auto;">Open Rankings</a>
+      <a class="btn ghost" href="/streaks" style="width:auto;">Open Streaks</a>
+      <a class="btn ghost" href="/matchups" style="width:auto;">Open Matchups</a>
+    </div>
+    {% else %}
+    <h2>Thanks. Setting up your access.</h2>
+    <p class="muted">Stripe has your payment. Your account switches to myCalc+ within a minute; refresh this page
+      or check <a href="/settings/plan" style="color:var(--accent-ink);">Settings &rsaquo; myCalc+</a>.
+      If it hasn't switched after a few minutes, email support with the time of your purchase.</p>
+    {% endif %}
   </div>
 </div></main>
 """
