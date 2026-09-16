@@ -4631,65 +4631,66 @@ def compute_idp_points(stats):
     return round(points, 1)
 
 
-def fetch_season_stats_from_sleeper(season):
-    """The actual Sleeper fetch -- parallel across all 18 weeks. This is
-    the slow part; it's only ever called by the scheduled sync job, or
-    once as a fallback the very first time a season is requested before
-    it's been synced yet (after which it's saved and never live-fetched
-    again). Returns {pid: {week: {pts, off_snp, tm_off_snp}}}.
+def fetch_week_stats_from_sleeper(season, week):
+    """{pid: {pts, rec, off_snp, tm_off_snp, stats}} for one week, from
+    Sleeper. Empty on any failure -- a week that could not be read is a
+    week to try again next time, not a season to abandon.
 
     Confirmed via /api/debug-sleeper that the real response is a LIST of
     entries like {"player_id": "...", "stats": {...}, ...} -- not a dict
     keyed by player_id like earlier code assumed. That mismatch was the
     actual bug causing every sync to silently save 0 rows despite a real
     200 OK response."""
-    def fetch_week(week):
-        try:
-            r = requests.get(
-                f"https://api.sleeper.com/stats/nfl/{season}/{week}",
-                params={"season_type": "regular"},
-                timeout=15,
-            )
-            if r.status_code != 200:
-                return week, None
-            data = r.json()
-            return week, data if isinstance(data, list) else None
-        except Exception:
-            return week, None
-
-    weekly = {}
-    with ThreadPoolExecutor(max_workers=3) as executor:
-        futures = [executor.submit(fetch_week, w) for w in range(1, 19)]
-        for future in as_completed(futures):
-            week, entries = future.result()
-            if not entries:
+    try:
+        r = requests.get(
+            f"https://api.sleeper.com/stats/nfl/{season}/{week}",
+            params={"season_type": "regular"},
+            timeout=15,
+        )
+        if r.status_code != 200:
+            return {}
+        data = r.json()
+    except Exception:
+        return {}
+    if not isinstance(data, list):
+        return {}
+    out = {}
+    for entry in data:
+        if not isinstance(entry, dict):
+            continue
+        pid = entry.get("player_id")
+        stats = entry.get("stats")
+        if not pid or not isinstance(stats, dict):
+            continue
+        pts = stats.get("pts_ppr")
+        if pts is None:
+            pts = compute_idp_points(stats)
+            if pts is None:
                 continue
-            for entry in entries:
-                if not isinstance(entry, dict):
-                    continue
-                pid = entry.get("player_id")
-                stats = entry.get("stats")
-                if not pid or not isinstance(stats, dict):
-                    continue
-                pts = stats.get("pts_ppr")
-                if pts is None:
-                    pts = compute_idp_points(stats)
-                    if pts is None:
-                        continue
-                off_snp = stats.get("off_snp")
-                tm_off_snp = stats.get("tm_off_snp")
-                rec = stats.get("rec")
-                weekly.setdefault(pid, {})[week] = {
-                    "pts": round(pts, 1),
-                    "rec": rec if isinstance(rec, (int, float)) else 0,
-                    "off_snp": off_snp if isinstance(off_snp, (int, float)) else 0,
-                    "tm_off_snp": tm_off_snp if isinstance(tm_off_snp, (int, float)) else 0,
-                    # Only the numbers. Sleeper's dict carries nothing
-                    # else, but a stray string would fail the JSONB cast
-                    # for the whole row.
-                    "stats": {k: v for k, v in stats.items()
-                              if isinstance(v, (int, float)) and not isinstance(v, bool)},
-                }
+        off_snp = stats.get("off_snp")
+        tm_off_snp = stats.get("tm_off_snp")
+        rec = stats.get("rec")
+        out[pid] = {
+            "pts": round(pts, 1),
+            "rec": rec if isinstance(rec, (int, float)) else 0,
+            "off_snp": off_snp if isinstance(off_snp, (int, float)) else 0,
+            "tm_off_snp": tm_off_snp if isinstance(tm_off_snp, (int, float)) else 0,
+            # Only the numbers. Sleeper's dict carries nothing else, but
+            # a stray string would fail the JSONB cast for the whole row.
+            "stats": {k: v for k, v in stats.items()
+                      if isinstance(v, (int, float)) and not isinstance(v, bool)},
+        }
+    return out
+
+
+def fetch_season_stats_from_sleeper(season):
+    """{pid: {week: row}} for a whole season, one week at a time. Kept
+    for callers that want the season in hand; the sync below does not,
+    and writes each week as it arrives instead."""
+    weekly = {}
+    for week in range(1, weeks_in_season(season) + 1):
+        for pid, row in fetch_week_stats_from_sleeper(season, week).items():
+            weekly.setdefault(pid, {})[week] = row
     return weekly
 
 
@@ -4826,38 +4827,50 @@ def get_live_week_stats(season, week, cache=_live_week_stats_cache, allow_fetch=
         return _live_in_scoring(entry["data"], scoring) if entry else {}
 
 
-def sync_season_to_db(season):
-    """Fetch a season fresh from Sleeper and permanently save every
-    player-week row to the database. This is what the scheduled GitHub
-    Actions job calls -- the only place that should be hitting Sleeper's
-    stats endpoint live on a regular basis. Returns rows saved."""
-    weekly = fetch_season_stats_from_sleeper(season)
-    if not weekly or not DATABASE_URL:
+def sync_week_stats_to_db(season, week):
+    """One week: fetched, written, forgotten. Returns rows saved."""
+    if not DATABASE_URL:
+        return 0
+    rows = fetch_week_stats_from_sleeper(season, week)
+    if not rows:
         return 0
     conn = get_db()
-    rows_saved = 0
     try:
         with conn.cursor() as cur:
-            for pid, weeks in weekly.items():
-                for week, w in weeks.items():
-                    cur.execute(
-                        """INSERT INTO player_stats (sleeper_id, season, week, fpts, rec,
-                                                     off_snp, tm_off_snp, stats, updated_at)
-                           VALUES (%s, %s, %s, %s, %s, %s, %s, %s, NOW())
-                           ON CONFLICT (sleeper_id, season, week)
-                           DO UPDATE SET fpts = EXCLUDED.fpts, rec = EXCLUDED.rec,
-                                         off_snp = EXCLUDED.off_snp,
-                                         tm_off_snp = EXCLUDED.tm_off_snp,
-                                         stats = EXCLUDED.stats, updated_at = NOW()""",
-                        (pid, int(season), week, w["pts"], w.get("rec") or 0,
-                         w["off_snp"], w["tm_off_snp"],
-                         psycopg2.extras.Json(w.get("stats") or {})),
-                    )
-                    rows_saved += 1
+            # Nine columns; eight values and NOW() in the template.
+            psycopg2.extras.execute_values(
+                cur,
+                """INSERT INTO player_stats (sleeper_id, season, week, fpts, rec,
+                                             off_snp, tm_off_snp, stats, updated_at)
+                   VALUES %s
+                   ON CONFLICT (sleeper_id, season, week)
+                   DO UPDATE SET fpts = EXCLUDED.fpts, rec = EXCLUDED.rec,
+                                 off_snp = EXCLUDED.off_snp,
+                                 tm_off_snp = EXCLUDED.tm_off_snp,
+                                 stats = EXCLUDED.stats, updated_at = NOW()""",
+                [(pid, int(season), int(week), w["pts"], w.get("rec") or 0,
+                  w["off_snp"], w["tm_off_snp"], psycopg2.extras.Json(w.get("stats") or {}))
+                 for pid, w in rows.items()],
+                template="(%s, %s, %s, %s, %s, %s, %s, %s, NOW())",
+                page_size=500)
         conn.commit()
     finally:
         conn.close()
-    return rows_saved
+    return len(rows)
+
+
+def sync_season_to_db(season):
+    """Every week of a season, fetched and saved one week at a time.
+
+    This used to pull all eighteen weeks into memory at once and then
+    write them. On a 512 MB instance that spike -- eighteen responses
+    parsed into dicts, held together -- was the shape of the memory
+    limit Render restarted the service for. Streaming keeps the working
+    set to one week whatever the season. Returns rows saved."""
+    if not DATABASE_URL:
+        return 0
+    return sum(sync_week_stats_to_db(season, week)
+               for week in range(1, weeks_in_season(season) + 1))
 
 
 # NOTE: startup-time auto-backfill was removed. Kicking off an 11-season
@@ -4929,9 +4942,9 @@ def ensure_season_stats_synced(season):
     repeat that mistake no matter how tempting a synchronous "just fetch
     it now" would be here."""
     if season in _stats_seeded_seasons or not DATABASE_URL:
-        return
+        return False
     if not _seed_probe_due("stats", season):
-        return
+        return False
     conn = get_db()
     try:
         with conn.cursor() as cur:
@@ -4940,13 +4953,13 @@ def ensure_season_stats_synced(season):
     finally:
         conn.close()
     info = get_current_week_info()
-    weeks_expected = SCHEDULE_WEEKS_PER_SEASON if season < info["season"] else min(info["week"], SCHEDULE_WEEKS_PER_SEASON)
+    weeks_expected = weeks_in_season(season) if season < info["season"] else min(info["week"], weeks_in_season(season))
     if weeks_present >= weeks_expected:
         _stats_seeded_seasons.add(season)
-        return
+        return False
     with _stats_sync_lock:
         if season in _stats_sync_busy_seasons:
-            return
+            return False
         _stats_sync_busy_seasons.add(season)
 
     def _run():
@@ -4965,6 +4978,7 @@ def ensure_season_stats_synced(season):
             _matchup_grade_cache.clear()
 
     threading.Thread(target=_run, daemon=True).start()
+    return True
 
 
 _stat_lines_checked = set()
@@ -5019,6 +5033,77 @@ def ensure_stat_lines_synced(season):
             _streaks_cache.clear()
 
     threading.Thread(target=_run, daemon=True).start()
+
+
+# ---------------- History that fills itself ----------------
+#
+# Two things used to depend on someone remembering to press a button in
+# GitHub: the officiating record behind the referee panel, and the
+# seasons before last year behind "all time" performances. Both are now
+# fed by the same half-hourly ping as everything else, in pieces small
+# enough that a 512 MB instance never notices -- a dozen games, one
+# season -- and both re-check coverage rather than assume it, so a gap
+# left by a failed fetch is filled next time round.
+REFEREE_SEASONS_BACK = 2
+REFEREE_SYNC_PER_PING = 12
+
+
+def _forget_referee_tendencies():
+    """The aggregate is a six-hour cache; a fresh batch of games means it
+    should be counted again."""
+    try:
+        get_referee_tendencies.__defaults__[0].clear()
+    except Exception:
+        pass
+
+
+def ensure_referee_history(limit=REFEREE_SYNC_PER_PING):
+    """Officiating data for finished games that have none yet, newest
+    first, `limit` per call. Returns how many were written."""
+    if not DATABASE_URL:
+        return 0
+    info = get_current_week_info()
+    since = int(info["season"]) - REFEREE_SEASONS_BACK
+    try:
+        conn = get_db()
+        try:
+            with conn.cursor() as cur:
+                cur.execute(
+                    """SELECT s.espn_event_id, s.season, s.week
+                       FROM nfl_schedule s
+                       LEFT JOIN referee_games r ON r.espn_event_id = s.espn_event_id
+                       WHERE r.espn_event_id IS NULL AND s.status = 'final' AND s.season >= %s
+                       ORDER BY s.season DESC, s.week DESC
+                       LIMIT %s""", (since, int(limit)))
+                todo = cur.fetchall()
+        finally:
+            conn.close()
+    except Exception:
+        return 0
+    done = 0
+    for g in todo:
+        try:
+            if sync_referee_game(g["espn_event_id"], g["season"], g["week"]):
+                done += 1
+        except Exception:
+            continue
+    if done:
+        _forget_referee_tendencies()
+    return done
+
+
+def ensure_history_backfilled():
+    """The seasons before last year, one at a time: the newest season
+    with a gap gets a background sync, and the rest wait for the next
+    call. Returns the season it started, or None when all are whole."""
+    if not DATABASE_URL:
+        return None
+    info = get_current_week_info()
+    for yr in range(int(info["season"]) - 2, PERF_EARLIEST_SEASON - 1, -1):
+        ensure_schedule_synced(yr)
+        if ensure_season_stats_synced(yr):
+            return yr
+    return None
 
 
 def _refresh_season_stats_background(season):
@@ -10549,6 +10634,54 @@ def streaks_page():
             load_error=str(e))
 
 
+@app.route("/api/history-status")
+def api_history_status():
+    """How complete the record is, season by season: stat weeks and
+    schedule weeks against what the season should have, and officiating
+    data against the games that have finished."""
+    if not _secret_ok():
+        return jsonify({"ok": False, "error": "unauthorized"}), 401
+    info = get_current_week_info()
+    out = {"ok": True, "database": bool(DATABASE_URL), "season": info["season"],
+           "week": info["week"], "referee_seasons_back": REFEREE_SEASONS_BACK,
+           "referee_per_ping": REFEREE_SYNC_PER_PING, "seasons": {}}
+    if not DATABASE_URL:
+        return jsonify(out)
+    try:
+        conn = get_db()
+        try:
+            with conn.cursor() as cur:
+                cur.execute("SELECT season, COUNT(DISTINCT week) AS n FROM player_stats "
+                            "WHERE season >= %s GROUP BY season", (PERF_EARLIEST_SEASON,))
+                stats = {r["season"]: r["n"] for r in cur.fetchall()}
+                cur.execute("SELECT season, COUNT(DISTINCT week) AS n FROM nfl_schedule "
+                            "WHERE season >= %s GROUP BY season", (PERF_EARLIEST_SEASON,))
+                sched = {r["season"]: r["n"] for r in cur.fetchall()}
+                cur.execute(
+                    """SELECT s.season, COUNT(*) FILTER (WHERE s.status = 'final') AS finals,
+                              COUNT(r.espn_event_id) AS done
+                       FROM nfl_schedule s
+                       LEFT JOIN referee_games r ON r.espn_event_id = s.espn_event_id
+                       WHERE s.season >= %s GROUP BY s.season""", (PERF_EARLIEST_SEASON,))
+                refs = {r["season"]: (r["finals"], r["done"]) for r in cur.fetchall()}
+        finally:
+            conn.close()
+    except Exception as e:
+        out["db_error"] = str(e)
+        return jsonify(out)
+    for yr in range(PERF_EARLIEST_SEASON, int(info["season"]) + 1):
+        expected = weeks_in_season(yr) if yr < info["season"] else min(info["week"], weeks_in_season(yr))
+        finals, done = refs.get(yr, (0, 0))
+        out["seasons"][str(yr)] = {
+            "stats_weeks": stats.get(yr, 0), "schedule_weeks": sched.get(yr, 0),
+            "weeks_expected": expected,
+            "stats_complete": stats.get(yr, 0) >= expected,
+            "referee_done": done, "referee_finals": finals,
+            "referee_tracked": yr >= int(info["season"]) - REFEREE_SEASONS_BACK,
+        }
+    return jsonify(out)
+
+
 @app.route("/api/streaks-status")
 def api_streaks_status():
     """Is Streaks fed? Rows per season and how many carry a stat line,
@@ -11808,6 +11941,17 @@ _schedule_seeded_seasons = set()
 SCHEDULE_WEEKS_PER_SEASON = 18
 
 
+def weeks_in_season(season):
+    """Regular-season weeks: seventeen through 2020, eighteen since.
+
+    Every "is this season complete?" check compared against a flat 18,
+    so a season from 2015-2020 could never be complete -- 17 is less
+    than 18 -- and was re-synced on every probe, forever. With the
+    head-to-head history reaching back to 2020, that was an 18-week
+    Sleeper download every half hour for nothing."""
+    return SCHEDULE_WEEKS_PER_SEASON if int(season) >= 2021 else 17
+
+
 def ensure_schedule_synced(season):
     """Self-heals the common "just deployed, the 2-hour cron hasn't
     fired yet" gap: if nfl_schedule doesn't have (nearly) every week of
@@ -11845,7 +11989,7 @@ def ensure_schedule_synced(season):
     # happened" for the current season, but the full season for any
     # prior (fully completed) one.
     info = get_current_week_info()
-    weeks_expected = SCHEDULE_WEEKS_PER_SEASON if season < info["season"] else min(info["week"], SCHEDULE_WEEKS_PER_SEASON)
+    weeks_expected = weeks_in_season(season) if season < info["season"] else min(info["week"], weeks_in_season(season))
     if weeks_present >= weeks_expected:
         _schedule_seeded_seasons.add(season)
     else:
@@ -12024,7 +12168,7 @@ def api_schedule_status():
                     (season,),
                 )
                 row = cur.fetchone() or {"n": 0, "rows": 0}
-                weeks_expected = SCHEDULE_WEEKS_PER_SEASON if season < info["season"] else min(info["week"], SCHEDULE_WEEKS_PER_SEASON)
+                weeks_expected = weeks_in_season(season) if season < info["season"] else min(info["week"], weeks_in_season(season))
                 result[str(season)] = {
                     "weeks_present": row["n"], "weeks_expected": weeks_expected,
                     "rows": row["rows"], "complete": row["n"] >= weeks_expected,
@@ -12206,6 +12350,12 @@ def api_warm():
             # seasons just need their raw rows present, seeded above.
             for offset in range(0, DEF_HISTORY_SEASONS_BACK + 1):
                 get_defense_vs_position(int(SEASON) - offset)
+            # History fills itself from here: a dozen finished games'
+            # officiating data, and one older season's stats, per ping.
+            # Referee games before the tendencies, so the aggregate
+            # counts what was just written.
+            ensure_referee_history()
+            ensure_history_backfilled()
             get_referee_tendencies()
             # Moves needs TWO snapshots of Sleeper's team field before it
             # can report anything -- the first one has nothing to compare
