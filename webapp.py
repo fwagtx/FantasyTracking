@@ -6568,6 +6568,10 @@ def checkout_params(user, plan, customer_id):
         success_url=SITE_URL + "/billing/success?session_id={CHECKOUT_SESSION_ID}",
         cancel_url=SITE_URL + "/plus",
         allow_promotion_codes=True,
+        # Not the merchant-of-record product. Stripe's newer API versions
+        # switch Managed Payments on by default, and a session on a
+        # product without an eligible tax code is refused outright.
+        managed_payments={"enabled": False},
     )
     if PLAN_MODES[plan] == "subscription":
         params["subscription_data"] = {"metadata": who}
