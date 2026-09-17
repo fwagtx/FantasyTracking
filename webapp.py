@@ -340,17 +340,48 @@ class _PooledConnection:
         return getattr(self._conn, name)
 
 
+DB_CHECKOUT_TRIES = 3
+
+
+def _connection_alive(conn):
+    """One trivial round trip. A pooled connection that sat through the
+    database going to sleep (Neon suspends after five idle minutes) or
+    through a network blip looks open from here and is dead on the other
+    end; only asking it finds out. The cost is a millisecond or two per
+    checkout, against an error page for the first reader back."""
+    try:
+        if getattr(conn, "closed", 0):
+            return False
+        with conn.cursor() as cur:
+            cur.execute("SELECT 1")
+            cur.fetchone()
+        conn.rollback()
+        return True
+    except Exception:
+        return False
+
+
 def get_db():
-    """A pooled connection -- see _PooledConnection's docstring. Falls
-    back to a plain unpooled connection if the pool can't be created
-    (e.g. a malformed DATABASE_URL), so a pool-specific failure doesn't
-    take down every DB-using route that already worked before pooling
-    existed."""
+    """A pooled connection -- see _PooledConnection's docstring -- that
+    has just answered a query, so a stale one is replaced before a
+    request ever sees it. Falls back to a plain unpooled connection if
+    the pool can't be created (e.g. a malformed DATABASE_URL), so a
+    pool-specific failure doesn't take down every DB-using route that
+    already worked before pooling existed."""
     try:
         pool = _get_db_pool()
-        return _PooledConnection(pool.getconn(), pool)
     except Exception:
         return psycopg2.connect(DATABASE_URL, cursor_factory=psycopg2.extras.RealDictCursor)
+    for _ in range(DB_CHECKOUT_TRIES):
+        conn = pool.getconn()
+        if _connection_alive(conn):
+            return _PooledConnection(conn, pool)
+        # Dead: hand it back closed so the pool makes a fresh one next.
+        try:
+            pool.putconn(conn, close=True)
+        except Exception:
+            pass
+    return psycopg2.connect(DATABASE_URL, cursor_factory=psycopg2.extras.RealDictCursor)
 
 
 def init_db():
@@ -13204,8 +13235,26 @@ def api_sync_referee_game():
 # a route nobody has thought about yet still fails as a page.
 # Built at call time rather than at import: BASE_STYLE and make_header
 # are defined further down the file than this handler needs to live.
+# The page a crash lands on. A plain GET that has not been retried yet
+# waits two seconds and asks for itself once more, carrying a marker so
+# the second failure stops there: the usual cause is a data source or
+# the database catching its breath, and by then it has. A POST is never
+# replayed -- that would resubmit whatever was sent -- and a page that
+# already retried gets the honest message and the links.
+ERROR_RETRY_MARK = "__retry"
 _ERROR_BODY = """
 <div class="wrap" style="padding:60px 0; text-align:center;">
+  {% if auto_retry %}
+  <h1 style="font-family:'Big Shoulders Display'; font-size:34px; text-transform:uppercase;">
+    Reconnecting&hellip;</h1>
+  <p style="color:var(--ink-secondary); max-width:46ch; margin:10px auto 0; line-height:1.6;">
+    We hit a snag loading this page. Trying again in a moment.
+  </p>
+  <p style="margin-top:22px;">
+    <a href="{{ retry_path }}" style="color:var(--accent-ink); font-weight:700;">Try now</a>
+  </p>
+  <script>setTimeout(function(){ location.replace({{ retry_path|tojson }}); }, 2000);</script>
+  {% else %}
   <h1 style="font-family:'Big Shoulders Display'; font-size:34px; text-transform:uppercase;">
     Something went wrong</h1>
   <p style="color:var(--ink-secondary); max-width:46ch; margin:10px auto 0; line-height:1.6;">
@@ -13217,8 +13266,19 @@ _ERROR_BODY = """
     <span style="color:var(--ink-muted); padding:0 8px;">&middot;</span>
     <a href="/scores" style="color:var(--accent-ink); font-weight:700;">Go to Scores</a>
   </p>
+  {% endif %}
 </div>
 """
+
+
+def _error_retry_path():
+    """The same address with the retry marker on it, or None when the
+    page must not retry itself: not a GET, or already retried once."""
+    if request.method != "GET" or request.args.get(ERROR_RETRY_MARK):
+        return None
+    args = request.args.to_dict(flat=False)
+    args[ERROR_RETRY_MARK] = ["1"]
+    return request.path + "?" + urllib.parse.urlencode(args, doseq=True)
 
 
 @app.errorhandler(Exception)
@@ -13238,7 +13298,14 @@ def handle_unexpected_error(e):
         return jsonify({"ok": False, "error": "internal error"}), 500
     try:
         page = BASE_STYLE + make_header("") + _ERROR_BODY
-        return render_template_string(page, path=request.full_path or "/"), 500
+        retry = _error_retry_path()
+        # The plain address for the Try again link: no marker, so a
+        # reader's own click gets a page that can retry itself again.
+        clean = request.args.to_dict(flat=False)
+        clean.pop(ERROR_RETRY_MARK, None)
+        path = request.path + ("?" + urllib.parse.urlencode(clean, doseq=True) if clean else "")
+        return render_template_string(page, path=path or "/", auto_retry=bool(retry),
+                                      retry_path=retry), 500
     except Exception:
         # Even the error page failed. Say so in plain text rather than
         # recursing into the handler that just broke.
