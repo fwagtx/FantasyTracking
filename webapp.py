@@ -5209,21 +5209,35 @@ def _refresh_season_stats_background(season):
 RANKINGS_STATS_SEASONS = [str(int(SEASON) - n) for n in range(0, 2)]
 
 # How much of a season has to exist before the board opens on it.
-STATS_SEASON_READY_GAMES = 4
+STATS_SEASON_READY_GAMES = 1
 STATS_SEASON_READY_PLAYERS = 50
+
+
+def rookie_year(p):
+    """The season a player was a rookie. Sleeper's years_exp counts the
+    seasons before the current one, so a 2026 rookie carries 0 in 2026
+    and 1 in 2027 -- the year comes out the same either way, which is
+    what lets a past season's board tag that season's rookies rather
+    than this one's."""
+    ye = (p or {}).get("years_exp")
+    if ye is None:
+        return None
+    try:
+        return int(SEASON) - int(ye)
+    except (TypeError, ValueError):
+        return None
 
 
 def default_stats_season(by_season):
     """Which season's games and points the board opens on, decided from
     the data rather than from the calendar.
 
-    In September the current season has one or two games for everybody,
-    and a rate computed off that is noise wearing a number's clothes --
-    a receiver's entire body of work reading "3.2 FPTS/G" because one
-    Sunday was quiet. So the board opens on last season until this one
-    has enough games behind it to be worth reading, and then switches on
-    its own. Nobody has to touch the dropdown for it to be right in
-    September and right again in December.
+    The season being played, as soon as it is being played: once a real
+    week of games is in the record the board opens on this year, and
+    last year stays a dropdown away. Before kickoff, when this season
+    has nothing to show, it opens on last season instead, and switches
+    on its own after Week 1. Nobody touches the dropdown for it to be
+    right in August and right again in September.
 
     Counting players rather than weeks is deliberate: it is true whether
     or not a given week finished syncing, and it can't be fooled by one
@@ -12090,7 +12104,9 @@ def rankings():
             "sid": r["sid"], "photo": player_photo_url(r["sid"]),
             "name": f"{p.get('first_name','')} {p.get('last_name','')}".strip(),
             "position": v.get("position"), "team": p.get("team") or "FA",
-            "is_rookie": p.get("years_exp") == 0,
+            # A rookie of the season on the board, not of today: on the
+            # 2025 board the 2025 class wears the badge, not this year's.
+            "is_rookie": rookie_year(p) == int(stats_season),
             "age": compute_age_decimal(p.get("birth_date")),
             "games": games,
             "fpts": round(fpts, 1) if games else 0,
@@ -20383,10 +20399,10 @@ const RK_MODE = {{ mode|tojson }};
 const RK_STATS_SEASON = {{ stats_season|tojson }};
 const RK_AUTHED = {{ (rk_unlocked if rk_unlocked is defined else current_user.is_authenticated) | tojson }};
 const posColors = {QB:'#1baf7a', RB:'#2a78d6', WR:'#e0397a', TE:'#7b5ce0'};
-// Multi-point star with "R" for a rookie (years_exp === 0 in Sleeper's
-// own data) -- inline SVG so it scales crisply at any size instead of
-// relying on a font glyph.
-const ROOKIE_BADGE = '<svg class="rookie-badge" viewBox="0 0 24 24" width="15" height="15" title="Rookie" aria-label="Rookie">' +
+// Multi-point star with "R" for a rookie of the season on the board --
+// inline SVG so it scales crisply at any size instead of relying on a
+// font glyph.
+const ROOKIE_BADGE = '<svg class="rookie-badge" viewBox="0 0 24 24" width="15" height="15" title="' + RK_STATS_SEASON + ' rookie" aria-label="' + RK_STATS_SEASON + ' rookie">' +
   '<path d="M12 1.5l2.98 6.63 7.27.7-5.5 4.83 1.63 7.13L12 17.06l-6.38 3.73 1.63-7.13-5.5-4.83 7.27-.7z" fill="#f0b429"/>' +
   '<text x="12" y="13.5" text-anchor="middle" dominant-baseline="central" font-size="8.5" font-weight="800" fill="#1a1206" font-family="IBM Plex Mono, monospace">R</text>' +
   '</svg>';
