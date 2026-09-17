@@ -14678,10 +14678,13 @@ def make_header(active=""):
 
 # A feed's day rules, drawn in the browser. Each row carries the
 # instant it happened (data-ts) or, for a birthday, its calendar day
-# (data-day). The page groups rows by the reader's local day, writes a
-# rule above the first row of each day already behind them, and none
-# for today -- and redraws at their next midnight, so a list left open
-# overnight files yesterday's rows under yesterday on its own.
+# (data-day). On a full "View all" page (.fd-list) the page groups rows
+# by the reader's local day, writes a rule above the first row of each
+# day already behind them, and none for today -- and redraws at their
+# next midnight, so a list left open overnight files yesterday's rows
+# under yesterday on its own. The short lists on the scores page
+# (.sc-feed) get no rules at all; they still hide a birthday the
+# reader's clock has not reached and stamp today's from their midnight.
 FEED_DAYS_JS = """
 <script>
 (function(){
@@ -14725,7 +14728,7 @@ FEED_DAYS_JS = """
         var stamp = row.querySelector('.feed-ago');
         if (stamp && isDay) stamp.textContent = ago(d, now, true);
         var k = key(d);
-        if (k === today) { last = k; return; }
+        if (k === today || !fd) { last = k; return; }
         if (k !== last){
           var rule = document.createElement('div');
           rule.className = cls + ' feed-day'; rule.textContent = label(d);
