@@ -610,6 +610,19 @@ def init_db():
                 );
             """)
             cur.execute("CREATE INDEX IF NOT EXISTS idx_draft_entries_day ON draft_entries (draft_day);")
+            # Player contracts, one row per active OverTheCap contract,
+            # posted by the contracts job (see /api/sync-contracts).
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS player_contracts (
+                    key TEXT PRIMARY KEY,
+                    gsis_id TEXT,
+                    name_key TEXT,
+                    position TEXT,
+                    data JSONB NOT NULL,
+                    source_stamp TEXT,
+                    updated_at TIMESTAMP DEFAULT NOW()
+                );
+            """)
             # Avatars live apart from users because load_user does a
             # SELECT * on that row for every single request -- putting
             # image bytes there would drag a picture through every page
@@ -2308,6 +2321,7 @@ PREGAME_POLL_MS = 15000      # waiting for kickoff, where seconds do not matter
 # page renders from two places (the normal path and the error path) and
 # both run the same poll loop, so a kwarg is a thing to forget.
 app.jinja_env.globals["live_poll_ms"] = LIVE_POLL_MS
+app.jinja_env.globals["bio_link"] = lambda sid: bio_link(sid)
 app.jinja_env.globals["pregame_poll_ms"] = PREGAME_POLL_MS
 
 
@@ -7928,6 +7942,317 @@ def player_detail():
         depth_chart=depth_chart, news=news,
         news_sources=news_sources_used(news),
     )
+
+
+# --- Player bio and contract sheet ----------------------------------------
+#
+# "View bio" on a player page opens a sheet with the facts the site
+# already holds (birth date, size, college, from Sleeper) and the
+# contract, which comes from OverTheCap by way of nflverse's daily
+# contracts release. That file is parquet, and reading it takes more
+# memory than this server has to spare, so a GitHub Actions job
+# (scripts/sync_contracts.py) reads it and posts the active rows here;
+# see /api/sync-contracts. Nothing on a page fetches it.
+
+CONTRACT_SOURCE_URL = "https://overthecap.com/"
+CONTRACT_REFRESH_S = 6 * 3600
+# OverTheCap's contract types, as a reader would say them.
+CONTRACT_TYPE_LABELS = {
+    "Drafted": "Rookie contract", "UDFA": "Undrafted free agent", "Extension": "Extension",
+    "UFA": "Free agent", "SFA": "Free agent", "RFA": "Restricted free agent",
+    "ERFA": "Exclusive-rights free agent", "Franchise": "Franchise tag",
+    "Transition": "Transition tag", "Practice": "Practice squad",
+}
+# The parts of a cap number, in the order OverTheCap names them.
+CAP_PARTS = (
+    ("prorated_bonus", "Signing bonus"), ("option_bonus", "Option bonus"),
+    ("roster_bonus", "Roster bonus"), ("base_salary", "Base salary"),
+    ("workout_bonus", "Workout bonus"), ("per_game_roster_bonus", "Per-game roster bonus"),
+    ("other_bonus", "Other bonus"),
+)
+_contracts_cache = {}
+
+
+def _f(x):
+    try:
+        return float(x) if x is not None and x != "" else 0.0
+    except (TypeError, ValueError):
+        return 0.0
+
+
+def compact_contract_row(raw):
+    """One OverTheCap row (as nflverse publishes it), reduced to what
+    the sheet shows. Returns None for a row with no name."""
+    if not isinstance(raw, dict) or not (raw.get("player") or "").strip():
+        return None
+    seasons = []
+    for s in raw.get("season_history") or []:
+        if not isinstance(s, dict):
+            continue
+        year = _safe_int(s.get("year"), None)
+        if year is None:      # the "Total" row
+            continue
+        row = {"year": year, "team": s.get("team")}
+        for key, _label in CAP_PARTS:
+            row[key] = round(_f(s.get(key)), 6)
+        row["guaranteed_salary"] = round(_f(s.get("guaranteed_salary")), 6)
+        row["cap_number"] = round(_f(s.get("cap_number")), 6)
+        row["cap_percent"] = round(_f(s.get("cap_percent")), 6)
+        row["cash_paid"] = round(_f(s.get("cash_paid")), 6)
+        seasons.append(row)
+    seasons.sort(key=lambda r: r["year"])
+    history = [h for h in (raw.get("contract_history") or []) if isinstance(h, dict)]
+    current = next((h for h in history if (h.get("status") or "") == "Active"), history[-1] if history else {})
+    return {
+        "player": raw["player"].strip(), "position": (raw.get("position") or "").upper(),
+        "team": raw.get("team"), "year_signed": _safe_int(raw.get("year_signed"), None),
+        "years": _safe_int(raw.get("years"), None), "value": _f(raw.get("value")),
+        "apy": _f(raw.get("apy")), "guaranteed": _f(raw.get("guaranteed")),
+        "contract_type": current.get("contract_type") or "",
+        "gsis_id": (raw.get("gsis_id") or "").strip() or None,
+        "otc_id": _safe_int(raw.get("otc_id"), None), "player_page": raw.get("player_page"),
+        "height": raw.get("height"), "weight": raw.get("weight"), "college": raw.get("college"),
+        "draft_year": _safe_int(raw.get("draft_year"), None), "draft_round": _safe_int(raw.get("draft_round"), None),
+        "draft_overall": _safe_int(raw.get("draft_overall"), None), "draft_team": raw.get("draft_team"),
+        "date_of_birth": raw.get("date_of_birth") or None,
+        "seasons": seasons,
+    }
+
+
+def _contract_rows_from_db():
+    """Every stored contract row, as compact dicts."""
+    conn = get_db()
+    try:
+        with conn.cursor() as cur:
+            cur.execute("SELECT data FROM player_contracts")
+            out = []
+            for r in cur.fetchall():
+                d = r["data"]
+                if isinstance(d, str):
+                    d = json.loads(d)
+                if isinstance(d, dict):
+                    out.append(d)
+            return out
+    finally:
+        conn.close()
+
+
+def _store_contract_rows(rows, stamp=None):
+    """Replace the table with these rows, in one transaction, so a
+    reader never sees it half-written."""
+    conn = get_db()
+    try:
+        with conn.cursor() as cur:
+            cur.execute("DELETE FROM player_contracts")
+            psycopg2.extras.execute_values(
+                cur,
+                "INSERT INTO player_contracts (key, gsis_id, name_key, position, data, source_stamp) VALUES %s",
+                [(r["gsis_id"] or f"otc:{r.get('otc_id')}:{normalize_name(r['player'])}",
+                  r["gsis_id"], normalize_name(r["player"]), r["position"],
+                  json.dumps(r), stamp) for r in rows],
+                page_size=500)
+        conn.commit()
+    finally:
+        conn.close()
+    _contracts_cache.clear()
+
+
+def contracts_index(cache=_contracts_cache):
+    """{'by_gsis': {...}, 'by_name': {name_key: [rows]}}, cached."""
+    now = time.time()
+    if cache.get("index") and now - cache.get("time", 0) < CONTRACT_REFRESH_S:
+        return cache["index"]
+    by_gsis, by_name = {}, {}
+    try:
+        rows = _contract_rows_from_db()
+    except Exception:
+        app.logger.exception("contracts: could not read player_contracts")
+        rows = []
+    for r in rows:
+        if r.get("gsis_id"):
+            by_gsis[r["gsis_id"]] = r
+        by_name.setdefault(normalize_name(r["player"]), []).append(r)
+    cache["index"] = {"by_gsis": by_gsis, "by_name": by_name, "count": len(rows)}
+    cache["time"] = now
+    return cache["index"]
+
+
+def find_contract(p):
+    """The OverTheCap row for a Sleeper player: by NFL (gsis) id when
+    both sides carry one, else by name, with position breaking a tie."""
+    if not isinstance(p, dict):
+        return None
+    idx = contracts_index()
+    gsis = (p.get("gsis_id") or "").strip()
+    if gsis and gsis in idx["by_gsis"]:
+        return idx["by_gsis"][gsis]
+    name = normalize_name(f"{p.get('first_name', '')} {p.get('last_name', '')}".strip())
+    cands = idx["by_name"].get(name) or []
+    if len(cands) == 1:
+        return cands[0]
+    pos = (p.get("position") or "").upper()
+    same = [c for c in cands if c.get("position") == pos]
+    return same[0] if len(same) == 1 else None
+
+
+def money_m(x, none="—"):
+    """Millions of dollars the way a contract is spoken: $67.5m, $8.68m,
+    $7.8k. Trailing zeros go, so $22.5m is not $22.50m."""
+    if x is None:
+        return none
+    x = float(x)
+    if abs(x) >= 1:
+        s = f"{x:.2f}".rstrip("0").rstrip(".")
+        return f"${s}m"
+    if abs(x) >= 0.001:
+        s = f"{x * 1000:.1f}".rstrip("0").rstrip(".")
+        return f"${s}k"
+    return "$0"
+
+
+def _nickname_abbr(nick):
+    """'Lions' -> 'DET'. OverTheCap names the drafting club by nickname,
+    and an old one for a club that has moved or renamed."""
+    if not nick:
+        return None
+    nick = str(nick).strip()
+    old = {"Redskins": "WAS", "Football Team": "WAS", "Oilers": "TEN", "Rams": "LAR",
+           "Chargers": "LAC", "Raiders": "LV"}
+    if nick in old:
+        return old[nick]
+    for abbr, full in TEAM_NAMES.items():
+        if full.split(" ")[-1] == nick:
+            return abbr
+    return nick
+
+
+def _whole_age(birth):
+    try:
+        y, m, d = [int(x) for x in str(birth)[:10].split("-")]
+        today = date.today()
+        return today.year - y - ((today.month, today.day) < (m, d)), date(y, m, d)
+    except (ValueError, TypeError):
+        return None, None
+
+
+def contract_summary(c, season=None):
+    """What the sheet says about a contract, every number formatted."""
+    if not c:
+        return None
+    season = _safe_int(season if season is not None else SEASON, int(SEASON))
+    seasons = c.get("seasons") or []
+    # Paid years: a void year carries a cap number and no money.
+    paid = [s for s in seasons if s.get("cash_paid", 0) > 0 or s.get("base_salary", 0) > 0]
+    until = max((s["year"] for s in paid), default=None)
+    if until is None and c.get("year_signed") and c.get("years"):
+        until = c["year_signed"] + c["years"] - 1
+    yrs = c.get("years")
+    line = f"{yrs} yr{'s' if yrs != 1 else ''}, {money_m(c.get('value'))}" if yrs else money_m(c.get("value"))
+    if c.get("apy"):
+        line += f" ({money_m(c['apy'])}/yr)"
+    out = {
+        "line": line,
+        "until": f"Signed until {until}" if until else None,
+        "type": CONTRACT_TYPE_LABELS.get(c.get("contract_type") or "", None),
+        "source": c.get("player_page") or CONTRACT_SOURCE_URL,
+        "cap": None,
+        "guarantees": None,
+    }
+    this = next((s for s in seasons if s["year"] == season), None)
+    if this and this.get("cap_number", 0) > 0:
+        parts = [(label, this.get(key, 0)) for key, label in CAP_PARTS if this.get(key, 0) > 0]
+        parts.sort(key=lambda t: -t[1])
+        total = this["cap_number"]
+        out["cap"] = {
+            "year": season, "label": f"{season} cap hit",
+            "hit": money_m(total),
+            "pct": (f"{this['cap_percent'] * 100:.1f}% of cap" if this.get("cap_percent") else None),
+            "parts": [{"label": label, "amount": money_m(v), "share": round(v / total, 4)} for label, v in parts],
+        }
+    if c.get("value"):
+        g = c.get("guaranteed") or 0
+        out["guarantees"] = {
+            "total": money_m(c["value"]), "at_signing": money_m(g),
+            "share": round(min(1.0, g / c["value"]), 4) if c["value"] else 0,
+        }
+    return out
+
+
+def player_bio(sid, season=None):
+    """Everything the sheet shows for one player, or None if Sleeper
+    has never heard of them."""
+    p = _players_or_empty().get(str(sid))
+    if not isinstance(p, dict):
+        return None
+    c = find_contract(p)
+    birth = p.get("birth_date") or (c or {}).get("date_of_birth")
+    age, born = _whole_age(birth)
+    status = (p.get("status") or "").strip()
+    tone = "good" if status == "Active" else ("bad" if status in (
+        "Injured Reserve", "Physically Unable to Perform", "Non Football Injury", "Suspended") else "")
+    height = format_height(p.get("height")) or (c or {}).get("height")
+    weight = p.get("weight") or (c or {}).get("weight")
+    college = p.get("college") or (c or {}).get("college")
+    draft = None
+    if c and c.get("draft_year") and c.get("draft_round") and c.get("draft_overall"):
+        draft = (f"{c['draft_year']} Round {c['draft_round']} Pick {c['draft_overall']}"
+                 f" by {_nickname_abbr(c.get('draft_team')) or '?'}")
+    elif c and c.get("draft_year") and c.get("contract_type") == "UDFA":
+        draft = f"{c['draft_year']} Undrafted"
+    return {
+        "sid": str(sid),
+        "name": f"{p.get('first_name', '')} {p.get('last_name', '')}".strip(),
+        "photo": player_photo_url(sid),
+        "team": p.get("team"), "position": p.get("position"),
+        "status": status or None, "status_tone": tone,
+        "age": age, "born": born.strftime("%b %-d, %Y") if born else None,
+        "height": height, "weight": f"{weight} lbs" if weight else None,
+        "college": college, "draft": draft,
+        "contract": contract_summary(c, season),
+    }
+
+
+@app.route("/api/player-bio")
+def api_player_bio():
+    sid = (request.args.get("sid") or "").strip()
+    bio = player_bio(sid) if sid else None
+    if not bio:
+        return jsonify({"ok": False, "error": "unknown player"}), 404
+    return jsonify({"ok": True, "bio": bio})
+
+
+@app.route("/api/sync-contracts", methods=["POST"])
+def api_sync_contracts():
+    """The contracts job posts nflverse's active rows here (JSON, gzip
+    optional). Secret-protected like every job endpoint."""
+    if not _secret_ok():
+        return jsonify({"ok": False, "error": "unauthorized"}), 401
+    body = request.get_data()
+    if body[:2] == b"\x1f\x8b":
+        body = gzip.decompress(body)
+    try:
+        payload = json.loads(body.decode("utf-8"))
+    except (ValueError, UnicodeDecodeError) as e:
+        return jsonify({"ok": False, "error": f"bad body: {e}"}), 400
+    raw_rows = payload.get("rows") if isinstance(payload, dict) else payload
+    if not isinstance(raw_rows, list):
+        return jsonify({"ok": False, "error": "rows missing"}), 400
+    rows = [r for r in (compact_contract_row(x) for x in raw_rows) if r]
+    if len(rows) < 500:
+        # A near-empty file is a broken upstream, not an empty league;
+        # keep what we have.
+        return jsonify({"ok": False, "error": f"only {len(rows)} rows, keeping the current table"}), 400
+    stamp = (payload.get("stamp") if isinstance(payload, dict) else None) or None
+    _store_contract_rows(rows, stamp)
+    return jsonify({"ok": True, "stored": len(rows), "stamp": stamp})
+
+
+@app.route("/api/contracts-status")
+def api_contracts_status():
+    if not _secret_ok():
+        return jsonify({"ok": False, "error": "unauthorized"}), 401
+    idx = contracts_index()
+    return jsonify({"ok": True, "rows": idx["count"], "with_gsis": len(idx["by_gsis"])})
 
 
 @app.route("/api/player-search")
@@ -16193,7 +16518,148 @@ LEAGUE_DETAIL_HTML = BASE_STYLE + make_header("league") + """
 </div></main>
 """
 
-PLAYER_HTML = BASE_STYLE + make_header("league") + """
+# The bio sheet: one component, shared by every page a player opens on.
+# "View bio" (data-bio="<sleeper id>") fetches /api/player-bio and draws
+# the sheet from the answer; every string in it is pre-formatted by the
+# server, so the script only lays it out.
+BIO_LINK_SVG = ('<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">'
+                '<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7z"/></svg>')
+BIO_SHEET = """
+<style>
+  .bio-link{ display:inline-flex; align-items:center; gap:5px; color:var(--accent-ink); font-weight:700;
+             font-size:14px; text-decoration:none; cursor:pointer; }
+  .bio-link:hover{ text-decoration:underline; }
+  .bio-sheet{ position:fixed; inset:0; z-index:400; display:none; }
+  .bio-sheet.open{ display:block; }
+  .bio-back{ position:absolute; inset:0; background:rgba(0,0,0,0.62); }
+  .bio-card{ position:absolute; left:0; right:0; bottom:0; max-height:88vh; overflow:auto; background:var(--paper);
+             color:var(--ink); border-radius:18px 18px 0 0; padding:10px 18px 30px; box-sizing:border-box;
+             font-family:"Source Sans 3",system-ui,sans-serif; animation:bio-up .22s ease-out; }
+  @keyframes bio-up{ from{ transform:translateY(24px); opacity:0; } to{ transform:none; opacity:1; } }
+  @media (min-width:700px){
+    .bio-card{ left:50%; right:auto; bottom:auto; top:50%; transform:translate(-50%,-50%); width:520px;
+               border-radius:18px; animation:none; padding:18px 22px 26px; }
+  }
+  .bio-grip{ width:38px; height:4px; border-radius:2px; background:var(--line-strong); margin:0 auto 16px; }
+  @media (min-width:700px){ .bio-grip{ display:none; } }
+  .bio-head{ display:flex; align-items:center; gap:12px; }
+  .bio-head img{ width:56px; height:56px; border-radius:50%; object-fit:cover; background:var(--paper-sunken); flex:none; }
+  .bio-name{ font-size:24px; font-weight:800; line-height:1.15; }
+  .bio-pill{ display:inline-block; margin-left:8px; padding:3px 10px; border-radius:999px; font-size:13px; font-weight:700;
+             background:var(--paper-sunken); color:var(--ink-secondary); vertical-align:middle; }
+  .bio-pill.good{ background:var(--good-wash); color:var(--good); }
+  .bio-pill.bad{ background:var(--critical-wash); color:var(--critical); }
+  .bio-h{ font-size:20px; font-weight:700; color:var(--ink-secondary); margin:20px 0 8px; }
+  .bio-line{ font-size:19px; line-height:1.5; }
+  .bio-line .m{ color:var(--ink-muted); }
+  .bio-rule{ border-top:1px solid var(--line); margin:18px 0 2px; }
+  .bio-cap{ background:var(--paper-sunken); border-radius:16px; padding:16px; margin-top:14px; }
+  .bio-cap-row{ display:flex; justify-content:space-between; align-items:baseline; gap:10px; }
+  .bio-cap-lab{ font-size:13px; letter-spacing:.05em; color:var(--ink-muted); text-transform:uppercase; }
+  .bio-cap-hit{ text-align:right; white-space:nowrap; }
+  .bio-cap-hit b{ font-size:24px; font-weight:800; font-family:"IBM Plex Mono",monospace; }
+  .bio-cap-hit span{ font-size:14px; color:var(--ink-muted); margin-left:6px; }
+  .bio-bar{ display:flex; height:10px; border-radius:5px; overflow:hidden; background:var(--line); margin:10px 0 12px; gap:2px; }
+  .bio-seg{ background:var(--accent); min-width:2px; }
+  .bio-seg.i1, .bio-leg .d.i1{ opacity:.7; } .bio-seg.i2, .bio-leg .d.i2{ opacity:.45; }
+  .bio-seg.i3, .bio-leg .d.i3{ opacity:.28; } .bio-seg.i4, .bio-leg .d.i4{ opacity:.18; }
+  .bio-seg.rest{ background:transparent; }
+  .bio-leg{ display:flex; justify-content:space-between; align-items:center; font-size:15px; padding:3px 0; }
+  .bio-leg .d{ display:inline-block; width:9px; height:9px; border-radius:50%; background:var(--accent); margin-right:9px; flex:none; }
+  .bio-leg .l{ display:flex; align-items:center; color:var(--ink-secondary); }
+  .bio-leg .v{ font-family:"IBM Plex Mono",monospace; }
+  .bio-leg.g{ justify-content:flex-start; gap:18px; }
+  .bio-leg .m{ color:var(--ink-muted); }
+  .bio-src{ font-size:12px; color:var(--ink-muted); margin-top:16px; }
+  .bio-src a{ color:var(--accent-ink); }
+  .bio-empty{ font-size:16px; color:var(--ink-muted); }
+  .bio-close{ position:absolute; top:12px; right:14px; width:32px; height:32px; border-radius:50%; border:none;
+              background:var(--paper-sunken); color:var(--ink-secondary); font-size:18px; cursor:pointer; display:none; }
+  @media (min-width:700px){ .bio-close{ display:block; } }
+</style>
+<div class="bio-sheet" id="bioSheet" role="dialog" aria-modal="true" aria-label="Player bio">
+  <div class="bio-back" data-bio-close></div>
+  <div class="bio-card">
+    <div class="bio-grip"></div>
+    <button type="button" class="bio-close" data-bio-close aria-label="Close">&times;</button>
+    <div id="bioBody"></div>
+  </div>
+</div>
+<script>
+(function(){
+  var sheet = document.getElementById('bioSheet'), body = document.getElementById('bioBody'), cache = {};
+  function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  function line(main, rest){
+    if (!main && !rest) return '';
+    return '<div class="bio-line">' + esc(main || '') + (rest ? (main ? ' <span class="m">&middot; ' : '<span class="m">') + esc(rest) + '</span>' : '') + '</div>';
+  }
+  function render(b){
+    var h = '<div class="bio-head"><img src="' + esc(b.photo) + '" alt="" onerror="this.style.visibility=\\'hidden\\'">' +
+            '<div><span class="bio-name">' + esc(b.name) + '</span>' +
+            (b.status ? '<span class="bio-pill ' + esc(b.status_tone) + '">' + esc(b.status) + '</span>' : '') + '</div></div>';
+    h += '<div class="bio-h">Bio</div>';
+    h += line(b.age != null ? b.age + ' years old' : null, b.born);
+    h += line(b.height, b.weight);
+    h += line(b.college, null);
+    h += line(b.draft, null);
+    var c = b.contract;
+    h += '<div class="bio-rule"></div><div class="bio-h">Contract</div>';
+    if (!c){
+      h += '<div class="bio-empty">No contract on file.</div>';
+    } else {
+      var bits = [c.until, c.type].filter(Boolean).map(esc).join(' &middot; ');
+      h += '<div class="bio-line">' + esc(c.line) + (bits ? ' <span class="m">&middot; ' + bits + '</span>' : '') + '</div>';
+      if (c.cap || c.guarantees){
+        h += '<div class="bio-cap">';
+        if (c.cap){
+          h += '<div class="bio-cap-row"><span class="bio-cap-lab">' + esc(c.cap.label) + '</span>' +
+               '<span class="bio-cap-hit"><b>' + esc(c.cap.hit) + '</b>' + (c.cap.pct ? '<span>' + esc(c.cap.pct) + '</span>' : '') + '</span></div>';
+          h += '<div class="bio-bar">' + c.cap.parts.map(function(p, i){
+                 return '<div class="bio-seg i' + Math.min(i, 4) + '" style="flex:' + (p.share * 100).toFixed(2) + ' 0 0;"></div>'; }).join('') + '</div>';
+          h += c.cap.parts.map(function(p, i){
+                 return '<div class="bio-leg"><span class="l"><span class="d i' + Math.min(i, 4) + '"></span>' + esc(p.label) + '</span><span class="v">' + esc(p.amount) + '</span></div>'; }).join('');
+        }
+        if (c.guarantees){
+          h += '<div class="bio-cap-row" style="margin-top:' + (c.cap ? '16px' : '0') + ';"><span class="bio-cap-lab">Guarantees</span>' +
+               '<span class="m" style="font-size:14px;color:var(--ink-muted);">of ' + esc(c.guarantees.total) + ' total</span></div>';
+          h += '<div class="bio-bar"><div class="bio-seg" style="flex:' + (c.guarantees.share * 100).toFixed(2) + ' 0 0;"></div>' +
+               '<div class="bio-seg rest" style="flex:' + ((1 - c.guarantees.share) * 100).toFixed(2) + ' 0 0;"></div></div>';
+          h += '<div class="bio-leg g"><span class="l"><span class="d"></span><span class="v">' + esc(c.guarantees.at_signing) + '</span>&nbsp;<span class="m">at signing</span></span></div>';
+        }
+        h += '</div>';
+      }
+      h += '<div class="bio-src">Contract via <a href="' + esc(c.source) + '" target="_blank" rel="noopener">OverTheCap</a>, through nflverse. Refreshed daily.</div>';
+    }
+    body.innerHTML = h;
+  }
+  function open(sid){
+    sheet.classList.add('open'); document.body.style.overflow = 'hidden';
+    if (cache[sid]){ render(cache[sid]); return; }
+    body.innerHTML = '<div class="bio-empty">Loading&hellip;</div>';
+    fetch('/api/player-bio?sid=' + encodeURIComponent(sid), {credentials: 'same-origin'})
+      .then(function(r){ return r.json(); })
+      .then(function(d){ if (!d.ok) throw new Error(d.error || 'no bio'); cache[sid] = d.bio; if (sheet.classList.contains('open')) render(d.bio); })
+      .catch(function(){ body.innerHTML = '<div class="bio-empty">Couldn\\'t load the bio. Try again in a moment.</div>'; });
+  }
+  function close(){ sheet.classList.remove('open'); document.body.style.overflow = ''; }
+  document.addEventListener('click', function(e){
+    var a = e.target.closest('[data-bio]');
+    if (a){ e.preventDefault(); open(a.getAttribute('data-bio')); return; }
+    if (e.target.closest('[data-bio-close]')) close();
+  });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape') close(); });
+})();
+</script>
+"""
+
+
+def bio_link(sid):
+    """The 'View bio' link for a player, wired to the sheet."""
+    return (f'<a href="/player?sid={html.escape(str(sid))}" class="bio-link" data-bio="{html.escape(str(sid))}">'
+            f'{BIO_LINK_SVG} View bio</a>')
+
+
+PLAYER_HTML = BASE_STYLE + make_header("league") + BIO_SHEET + """
 <main><div class="wrap" style="max-width:700px;">
   {% if tab == 'general' %}
   <a href="{{ ref }}" class="muted">&larr; Back</a>
@@ -16207,6 +16673,7 @@ PLAYER_HTML = BASE_STYLE + make_header("league") + """
         <span class="pos-chip" style="background:var(--pos-{{ p.position.lower() }});">{{ p.position }}{{ p.position_rank if p.position_rank else '' }}</span>
         <h2 style="margin-top:6px;">{{ p.name }}</h2>
         <span class="muted">{{ p.team }}{% if p.age %} &middot; {{ p.age }} yo{% endif %}</span>
+        <div style="margin-top:6px;">{{ bio_link(sid)|safe }}</div>
       </div>
     </div>
     <div class="fact-grid">
@@ -18527,7 +18994,7 @@ const SK_BOOKS = {{ books_seen|tojson }};
 """
 
 
-STREAK_PLAYER_HTML = BASE_STYLE + make_header("streaks") + """
+STREAK_PLAYER_HTML = BASE_STYLE + make_header("streaks") + BIO_SHEET + """
 <style>
   .sp-page{
     --sp-bg:var(--paper); --sp-surface:var(--paper-raised); --sp-surface2:var(--paper-sunken);
@@ -18668,6 +19135,7 @@ STREAK_PLAYER_HTML = BASE_STYLE + make_header("streaks") + """
     <div class="sp-who">
       <div class="sp-name">{{ d.name }}</div>
       <div class="sp-club">{{ d.team_name or 'Free agent' }}<br>{{ d.position_name }}</div>
+      <div style="margin-top:6px;">{{ bio_link(d.sid)|safe }}</div>
       {% if not d.starter %}<span class="sp-bench">Not a starter this week</span>{% endif %}
     </div>
     <div class="sp-mug">
@@ -19254,7 +19722,7 @@ PERFORMANCES_HTML = BASE_STYLE + make_header("performances") + """
 """
 
 
-PERFORMANCE_HTML = BASE_STYLE + make_header("live") + """
+PERFORMANCE_HTML = BASE_STYLE + make_header("live") + BIO_SHEET + """
 <style>
   .pf-page{
     --pf-bg:var(--paper); --pf-surface:var(--paper-raised); --pf-surface2:var(--paper-sunken);
@@ -19478,6 +19946,7 @@ PERFORMANCE_HTML = BASE_STYLE + make_header("live") + """
         {% endif %}
         &middot; Week {{ detail.week }}
       </div>
+      <div style="margin-top:4px;">{{ bio_link(detail.sid)|safe }}</div>
       <div class="pf-headline">
         {% for value, label in detail.headline %}
         <span><b>{{ value }}</b><span>{{ label }}</span></span>

@@ -1,0 +1,49 @@
+name: Sync Player Contracts
+
+on:
+  schedule:
+    # Daily, after nflverse's morning refresh of the OverTheCap table
+    # (about 08:30 Eastern). One run a day is plenty: contracts change
+    # a few times a week in season, not by the hour.
+    - cron: "0 14 * * *"
+  workflow_dispatch: {}
+
+jobs:
+  sync-contracts:
+    runs-on: ubuntu-latest
+    env:
+      SITE_PASSWORD: ${{ secrets.SITE_PASSWORD }}
+      EVENT_NAME: ${{ github.event_name }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install pyarrow
+        run: pip install --quiet pyarrow
+      - name: Read nflverse's contracts file into a payload
+        run: python scripts/sync_contracts.py contracts.json.gz
+      - name: Post the active contracts to the site
+        run: |
+          # Same rules as the other sync jobs: a scheduled run with no
+          # secret skips green with a notice, a manual one fails red;
+          # curl fails the step on a non-2xx; and the body is read for
+          # an ok:false the server might return with a 200.
+          if [ -z "$SITE_PASSWORD" ]; then
+            if [ "$EVENT_NAME" = "schedule" ]; then
+              echo "::notice::SITE_PASSWORD is not set, so this scheduled run has nothing to authenticate with -- skipping. Set the repository secret to turn this job back on."
+              exit 0
+            fi
+            echo "::error::SITE_PASSWORD repository secret is not set -- this job cannot authenticate."
+            exit 1
+          fi
+          body=$(curl -sS --fail-with-body -X POST \
+            -H "X-Sync-Secret: $SITE_PASSWORD" \
+            -H "Content-Type: application/json" \
+            -H "Content-Encoding: gzip" \
+            --data-binary @contracts.json.gz \
+            "https://fantasyfootballcalc.com/api/sync-contracts") || {
+              echo "::error::sync-contracts request failed: $body"; exit 1; }
+          echo "$body"
+          case "$body" in *'"ok": false'*|*'"ok":false'*)
+            echo "::error::server rejected the sync: $body"; exit 1;; esac
