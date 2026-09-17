@@ -231,6 +231,116 @@ SITE_FOOTER = (
 )
 
 
+# --- the phone tab bar ----------------------------------------------------
+#
+# On a phone the top menu is a hamburger, then a group, then a page:
+# three taps from Scores to Streaks. This is the bar along the bottom
+# every sports app has: the five destinations one tap away at all
+# times, the current one lit. Desktop keeps the top bar, where the
+# dropdown is a hover away. Self-contained (its own styles and script)
+# so a page with a template of its own gets it too, and injected here
+# beside the footer for the same reason the footer is.
+#
+# Each tab remembers where you were in its section (the day on Scores,
+# the prop on Streaks), so coming back lands where you left. And the
+# whole document cross-fades between pages on browsers that can, so a
+# tap feels like sliding between screens rather than reloading.
+TABBAR_SECTIONS = (
+    ("scores", "Scores", "/scores",
+     '<svg viewBox="0 0 24 24"><path d="M4 5h16v14H4z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 12h8M8 9h4M8 15h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>'),
+    ("rankings", "Rankings", "/rankings",
+     '<svg viewBox="0 0 24 24"><path d="M5 20V10M12 20V4M19 20v-7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>'),
+    ("streaks", "Streaks", "/streaks",
+     '<svg viewBox="0 0 24 24"><path d="M4 16l5-6 4 4 7-9" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 5h5v5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>'),
+    ("matchups", "Matchups", "/matchups",
+     '<svg viewBox="0 0 24 24"><circle cx="8" cy="9" r="3.2" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="16" cy="9" r="3.2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3 19c0-3 2.5-5 5-5s5 2 5 5M11 19c0-3 2.5-5 5-5s5 2 5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>'),
+    ("you", "You", "/settings",
+     '<svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>'),
+)
+# Where each path belongs. A prefix match, longest first.
+TABBAR_PATHS = (
+    ("/rankings", "rankings"), ("/player", "rankings"), ("/trade-calculator", "rankings"),
+    ("/start-bench-cut", "rankings"), ("/streaks", "streaks"), ("/matchups", "matchups"),
+    ("/settings", "you"), ("/league", "you"), ("/league-manager", "you"), ("/plus", "you"), ("/pricing", "you"),
+    ("/billing", "you"), ("/login", "you"), ("/signup", "you"), ("/forgot-password", "you"),
+    ("/reset-password", "you"), ("/scores", "scores"), ("/game", "scores"), ("/standings", "scores"),
+    ("/performances", "scores"), ("/performance", "scores"), ("/team", "scores"), ("/play", "scores"),
+    ("/injuries", "scores"), ("/moves", "scores"), ("/birthdays", "scores"), ("/draft", "scores"),
+)
+# Which sections are myCalc+ once the gate is on: the calculator, with a
+# plus beside it, marks them in the menu and on the bar.
+PLUS_KEYS = ("rankings", "matchups", "streaks", "plus")
+PLUS_MARK_SVG = ('<svg class="plus-mark" viewBox="0 0 30 26" aria-label="myCalc+" role="img">'
+                 '<rect x="1" y="1" width="24" height="24" rx="5" fill="var(--accent)"/>'
+                 '<path d="M6 13H20M6 8H14M6 18H14" stroke="var(--accent-on)" stroke-width="2" stroke-linecap="round"/>'
+                 '<circle cx="24" cy="20" r="5.5" fill="var(--ink)"/>'
+                 '<path d="M24 17v6M21 20h6" stroke="var(--paper)" stroke-width="1.8" stroke-linecap="round"/></svg>')
+
+
+def tabbar_section(path):
+    path = path or "/"
+    if path == "/":
+        return "rankings"
+    for prefix, key in sorted(TABBAR_PATHS, key=lambda t: -len(t[0])):
+        if path == prefix or path.startswith(prefix + "/") or path.startswith(prefix + "?"):
+            return key
+    return None
+
+
+TABBAR_STYLE = """<style>
+  @view-transition { navigation: auto; }
+  ::view-transition-old(root), ::view-transition-new(root){ animation-duration:.16s; }
+  .plus-mark{ width:15px; height:13px; vertical-align:-2px; margin-left:5px; flex:none; }
+  .tabbar{ display:none; }
+  @media (max-width: 760px){
+    body{ padding-bottom:calc(66px + env(safe-area-inset-bottom, 0px)); }
+    .tabbar{ display:grid; grid-template-columns:repeat(5, 1fr); position:fixed; left:0; right:0; bottom:0; z-index:55;
+             height:calc(58px + env(safe-area-inset-bottom, 0px)); padding-bottom:env(safe-area-inset-bottom, 0px);
+             background:color-mix(in srgb, var(--paper-raised, #14130f) 94%, transparent); backdrop-filter:blur(12px);
+             border-top:1px solid var(--line, #2a2823); }
+    .tabbar a{ display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; text-decoration:none;
+               color:var(--ink-muted, #8a877e); font-family:"Source Sans 3",system-ui,sans-serif; font-size:10.5px; font-weight:700;
+               letter-spacing:0.02em; position:relative; -webkit-tap-highlight-color:transparent; }
+    .tabbar a svg{ width:24px; height:24px; }
+    .tabbar a.on{ color:var(--accent-ink, #e0a63c); }
+    .tabbar a.on::before{ content:""; position:absolute; top:0; left:22%; right:22%; height:2px; border-radius:0 0 2px 2px; background:var(--accent, #b97a1f); }
+    .tabbar .plus-mark{ position:absolute; top:6px; right:calc(50% - 22px); width:12px; height:10px; margin:0; }
+  }
+</style>"""
+
+TABBAR_SCRIPT = """<script>
+(function(){
+  var bar = document.querySelector('.tabbar'); if (!bar) return;
+  var here = bar.getAttribute('data-here');
+  // Remember this page for its section, and point every other tab at
+  // where the reader last was in that section.
+  try {
+    var q = location.search.replace(/[?&]__retry=1/, '');
+    if (here) sessionStorage.setItem('ffc-tab:' + here, location.pathname + (q && q !== '?' ? q : ''));
+    Array.prototype.forEach.call(bar.querySelectorAll('a[data-tab]'), function(a){
+      var key = a.getAttribute('data-tab');
+      if (key === here) return;
+      var last = sessionStorage.getItem('ffc-tab:' + key);
+      if (last && last.indexOf('/') === 0) a.setAttribute('href', last);
+    });
+  } catch (e) {}
+})();
+</script>"""
+
+
+def tabbar_html(path, signed_in):
+    here = tabbar_section(path)
+    links = []
+    for key, label, href, icon in TABBAR_SECTIONS:
+        if key == "you" and not signed_in:
+            href = "/login"
+        mark = PLUS_MARK_SVG if key in PLUS_KEYS else ""
+        links.append(f'<a href="{href}" data-tab="{key}" class="{"on" if key == here else ""}" aria-label="{label}">'
+                     f'{icon}{mark}<span>{label}</span></a>')
+    return (TABBAR_STYLE + f'<nav class="tabbar" data-here="{here or ""}" aria-label="Sections">' + "".join(links)
+            + '</nav>' + TABBAR_SCRIPT)
+
+
 # Registered AFTER the compressor on purpose. Flask runs after_request
 # handlers in reverse registration order, so this one runs first and the
 # footer is part of the body by the time it is gzipped -- the other way
@@ -255,7 +365,11 @@ def _append_footer(response):
         # pages, are left alone.
         if 'footer class="site"' in body:
             return response
-        response.set_data(body + SITE_FOOTER)
+        try:
+            signed_in = bool(current_user.is_authenticated)
+        except Exception:
+            signed_in = False
+        response.set_data(body + SITE_FOOTER + tabbar_html(request.path, signed_in))
     except Exception:
         # A footer is never worth a 500.
         pass
@@ -15083,7 +15197,7 @@ def make_header(active=""):
         here = active == key or any(item[0] == active for item in items)
         links = "".join(
             f'''<a class="{cls(k)}" href="{href}">
-               <span class="navgrp-lab">{text}</span>
+               <span class="navgrp-lab">{text}{PLUS_MARK_SVG if k in PLUS_KEYS else ""}</span>
                <span class="navgrp-desc">{desc}</span>
              </a>'''
             for k, href, text, desc in items
@@ -16921,6 +17035,13 @@ const scServerTodayKey = {{ today_key|tojson }};
   function pickOpeningDay(){
     const today = scTodayKey;
     const keys = allDayKeys();
+    // Back within the same visit, on the same calendar day: the day you
+    // were on. A new day starts fresh, so yesterday's browsing never
+    // hides today's games.
+    try {
+      const kept = (sessionStorage.getItem('ffc-sc-day') || '').split('|');
+      if (kept[1] === today && keys.indexOf(kept[0]) >= 0) return kept[0];
+    } catch (e) {}
     if (!keys.length || keys.indexOf(today) >= 0) return today;
     const ahead = keys.filter(function(k){ return k > today; });
     const behind = keys.filter(function(k){ return k < today; });
@@ -17093,6 +17214,7 @@ const scServerTodayKey = {{ today_key|tojson }};
 
   function selectDay(key){
     selectedDay = key;
+    try { sessionStorage.setItem('ffc-sc-day', key + '|' + scTodayKey); } catch (e) {}
     // Sync the label off the schedule first, so a day whose games are
     // still loading (or fail to load) doesn't sit under the wrong week.
     syncWeekToDay(key);
