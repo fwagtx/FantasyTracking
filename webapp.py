@@ -478,6 +478,24 @@ def init_db():
                     processed_at TIMESTAMP DEFAULT NOW()
                 );
             """)
+            # Rating Draft picks: one row per slot, keyed on the NFL day.
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS draft_entries (
+                    user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+                    draft_day DATE NOT NULL,
+                    season INTEGER NOT NULL,
+                    week INTEGER NOT NULL,
+                    slot INTEGER NOT NULL,
+                    sleeper_id TEXT NOT NULL,
+                    multiplier REAL NOT NULL,
+                    boost REAL NOT NULL,
+                    event_id TEXT,
+                    submitted_at TIMESTAMP DEFAULT NOW(),
+                    updated_at TIMESTAMP DEFAULT NOW(),
+                    PRIMARY KEY (user_id, draft_day, slot)
+                );
+            """)
+            cur.execute("CREATE INDEX IF NOT EXISTS idx_draft_entries_day ON draft_entries (draft_day);")
             # Avatars live apart from users because load_user does a
             # SELECT * on that row for every single request -- putting
             # image bytes there would drag a picture through every page
@@ -7217,6 +7235,7 @@ def delete_account(user_id):
             cur.execute("DELETE FROM password_resets WHERE user_id = %s", (user_id,))
             cur.execute("DELETE FROM synced_leagues WHERE user_id = %s", (user_id,))
             cur.execute("DELETE FROM user_avatars WHERE user_id = %s", (user_id,))
+            cur.execute("DELETE FROM draft_entries WHERE user_id = %s", (user_id,))
             cur.execute("DELETE FROM users WHERE id = %s", (user_id,))
             removed = cur.rowcount
         conn.commit()
@@ -11749,6 +11768,449 @@ def streak_player_page():
             gate=gate_kind(), load_error=str(e))
 
 
+# --- Rating Draft ----------------------------------------------------------
+#
+# A free community game on the scores page. Pick five players from one
+# NFL day's games into five slots worth 2.0x, 1.8x, 1.6x, 1.4x and 1.2x.
+# Each player carries a boost, bigger the lower they usually rate, so a
+# rotational lineman can be worth as much as a star. A pick's points are
+# the site's own performance rating for that game times the slot
+# multiplier plus the boost; the five add up to the entry's total, and
+# everyone who entered that day is ranked on it.
+#
+# A day is the NFL's calendar day (Eastern), so the same draft means the
+# same thing in Texas and in London. It opens the day before its first
+# kickoff. A game locks its players at kickoff; the other slots stay
+# open until their own games start. When every game is final the day
+# is a past result and its leaderboard stands.
+
+DRAFT_SLOTS = (2.0, 1.8, 1.6, 1.4, 1.2)
+DRAFT_BOOST_MAX = 1.6
+DRAFT_BOOST_GAMES = 5            # games behind a player's expected rating
+DRAFT_OPENS_DAYS_BEFORE = 1
+DRAFT_LEADERBOARD_MAX = 200
+DRAFT_NAME = "Rating Draft"
+
+
+def _draft_now():
+    """The clock, as a function so a test can hold it still."""
+    return datetime.utcnow()
+_draft_pool_cache = {}
+_draft_board_cache = {}
+
+
+def _draft_kickoff_utc(card):
+    """A card's kickoff as naive UTC, or None."""
+    raw = card.get("date") or ""
+    try:
+        when = datetime.fromisoformat(str(raw).replace("Z", "+00:00"))
+    except Exception:
+        return None
+    return _as_naive_utc(when)
+
+
+def draft_day_of(card):
+    """The NFL calendar day (Eastern) a game belongs to."""
+    when = _draft_kickoff_utc(card)
+    if not when:
+        return None
+    return when.replace(tzinfo=timezone.utc).astimezone(NFL_TZ).date()
+
+
+def draft_opens_at(day):
+    """Midnight Eastern, the day before, as naive UTC."""
+    local = datetime(day.year, day.month, day.day, tzinfo=NFL_TZ) - timedelta(days=DRAFT_OPENS_DAYS_BEFORE)
+    return _as_naive_utc(local)
+
+
+def draft_game_locked(card, now=None):
+    """A game locks its players the moment it starts: by status when the
+    scoreboard already says so, by the clock otherwise."""
+    if card.get("status") != "scheduled":
+        return True
+    kick = _draft_kickoff_utc(card)
+    return bool(kick and kick <= (now or _draft_now()))
+
+
+def draft_state(day, games, now=None):
+    """none / upcoming / open / live / final."""
+    if not games:
+        return "none"
+    now = now or _draft_now()
+    if now < draft_opens_at(day):
+        return "upcoming"
+    if all(g.get("status") == "final" for g in games):
+        return "final"
+    if any(draft_game_locked(g, now) for g in games):
+        return "live"
+    return "open"
+
+
+def draft_day_games(season, week, day, season_type=2):
+    """That day's games, from the week's scoreboard."""
+    games, _ = _week_games(season, week, season_type)
+    return [g for g in games if draft_day_of(g) == day]
+
+
+def _draft_rating(position, fpts, season):
+    try:
+        return float(grade_performance(position, fpts, season)["score"])
+    except Exception:
+        return 0.0
+
+
+def draft_expected_rating(sid, position, season, stats_by_season):
+    """What a player usually rates: the mean rating of their last few
+    games, this season and last. None with no games behind them."""
+    logged = []
+    for yr in sorted(stats_by_season):
+        weeks = ((stats_by_season[yr] or {}).get(sid) or {}).get("weeks") or {}
+        for wk in sorted(weeks, key=lambda w: _safe_int(w, 0)):
+            logged.append((yr, _safe_int(wk, 0), weeks[wk]))
+    recent = logged[-DRAFT_BOOST_GAMES:]
+    if not recent:
+        return None
+    ratings = [_draft_rating(position, fpts, yr) for yr, _, fpts in recent]
+    return round(sum(ratings) / len(ratings), 2)
+
+
+def draft_boosts(expected):
+    """{sid: boost} from {sid: expected rating or None}. The boost runs
+    from 0 for players who usually rate at the top of this pool to
+    DRAFT_BOOST_MAX for those at the bottom, measured between the pool's
+    90th and 10th percentiles so one freak average does not squash the
+    scale. A player with nothing behind them gets the full boost: the
+    site has no reason to expect much of them."""
+    known = sorted(v for v in expected.values() if v is not None)
+    out = {}
+    if not known:
+        return {sid: DRAFT_BOOST_MAX for sid in expected}
+    hi = known[min(len(known) - 1, int(round(0.9 * (len(known) - 1))))]
+    lo = known[int(round(0.1 * (len(known) - 1)))]
+    span = hi - lo
+    for sid, v in expected.items():
+        if v is None:
+            out[sid] = DRAFT_BOOST_MAX
+        elif span <= 0:
+            out[sid] = round(DRAFT_BOOST_MAX / 2, 1)
+        else:
+            share = max(0.0, min(1.0, (hi - v) / span))
+            out[sid] = round(DRAFT_BOOST_MAX * share, 1)
+    return out
+
+
+def draft_pool(season, week, day, games, cache=_draft_pool_cache):
+    """Every active player on a team playing that day, with their boost.
+    Locks and live ratings are added by the caller; this part changes
+    only when the players or the record do, so it is cached a while."""
+    key = (season, week, day)
+    now = time.time()
+    entry = cache.get(key)
+    if entry and now - entry["time"] < 300:
+        return entry["data"]
+    players = _players_or_empty()
+    by_team = {}
+    for g in games:
+        for side in ("home", "away"):
+            abbr = (g.get(side) or {}).get("abbr")
+            if abbr:
+                by_team[abbr] = (g, (g.get("away" if side == "home" else "home") or {}).get("abbr"))
+    stats = {}
+    for yr in (season - 1, season):
+        try:
+            stats[yr] = get_season_stats(yr)
+        except Exception:
+            stats[yr] = {}
+    rows, expected = [], {}
+    for sid, p in players.items():
+        if not isinstance(p, dict):
+            continue
+        team, pos = p.get("team"), p.get("position")
+        if not team or team not in by_team or pos not in SCORED_POSITIONS:
+            continue
+        if (p.get("status") or "Active") != "Active":
+            continue
+        g, opp = by_team[team]
+        expected[sid] = draft_expected_rating(sid, pos, season, stats)
+        rows.append({
+            "sid": sid, "name": f"{p.get('first_name', '')} {p.get('last_name', '')}".strip(),
+            "position": pos, "team": team, "opponent": opp, "event_id": g.get("id"),
+            "photo": player_photo_url(sid), "logo": team_logo_url(team),
+            "expected": expected[sid], "rank": _safe_int(p.get("search_rank"), 999999),
+        })
+    boosts = draft_boosts(expected)
+    for r in rows:
+        r["boost"] = boosts.get(r["sid"], DRAFT_BOOST_MAX)
+    rows.sort(key=lambda r: (r["rank"], r["name"]))
+    cache[key] = {"data": rows, "time": now}
+    return rows
+
+
+def draft_ratings(season, week, positions, allow_fetch=True):
+    """{sid: rating} for the week from the live stat line: a player with
+    no line yet (game not started, or did not play) rates 0."""
+    live = get_live_week_stats(season, week, allow_fetch=allow_fetch) or {}
+    out = {}
+    for sid, pos in positions.items():
+        rec = live.get(sid)
+        out[sid] = _draft_rating(pos, (rec or {}).get("pts", 0.0), season) if rec else 0.0
+    return out
+
+
+def draft_points(rating, multiplier, boost):
+    return round(float(rating or 0) * (float(multiplier) + float(boost)), 2)
+
+
+# ---- the record ----
+def _draft_load_entries(day):
+    """[{user_id, username, slot, sleeper_id, multiplier, boost, event_id, submitted_at}] for a day."""
+    if not DATABASE_URL:
+        return []
+    conn = get_db()
+    try:
+        with conn.cursor() as cur:
+            cur.execute(
+                """SELECT e.user_id, u.username, e.slot, e.sleeper_id, e.multiplier, e.boost,
+                          e.event_id, e.submitted_at
+                   FROM draft_entries e JOIN users u ON u.id = e.user_id
+                   WHERE e.draft_day = %s ORDER BY e.user_id, e.slot""", (day,))
+            return [dict(r) for r in cur.fetchall()]
+    finally:
+        conn.close()
+
+
+def _draft_save_slots(user_id, day, season, week, picks):
+    """Write the slots. `picks` is {slot: (sid, multiplier, boost, event_id) or None}."""
+    if not DATABASE_URL:
+        return
+    conn = get_db()
+    try:
+        with conn.cursor() as cur:
+            for slot, pick in picks.items():
+                if pick is None:
+                    cur.execute("DELETE FROM draft_entries WHERE user_id = %s AND draft_day = %s AND slot = %s",
+                                (user_id, day, slot))
+                    continue
+                sid, mult, boost, event_id = pick
+                cur.execute(
+                    """INSERT INTO draft_entries (user_id, draft_day, season, week, slot, sleeper_id,
+                                                  multiplier, boost, event_id)
+                       VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+                       ON CONFLICT (user_id, draft_day, slot) DO UPDATE SET
+                         sleeper_id = EXCLUDED.sleeper_id, multiplier = EXCLUDED.multiplier,
+                         boost = EXCLUDED.boost, event_id = EXCLUDED.event_id, updated_at = NOW()""",
+                    (user_id, day, season, week, slot, sid, mult, boost, event_id))
+        conn.commit()
+    finally:
+        conn.close()
+
+
+def draft_leaderboard(day, season, week, pool_by_sid, ratings, entries=None):
+    """Every entry ranked on its total, best first; ties to the earlier
+    submission. Each carries its five picks with rating and points."""
+    entries = _draft_load_entries(day) if entries is None else entries
+    by_user = {}
+    for e in entries:
+        u = by_user.setdefault(e["user_id"], {"user_id": e["user_id"], "username": e["username"],
+                                              "slots": [None] * len(DRAFT_SLOTS), "total": 0.0,
+                                              "submitted_at": e.get("submitted_at")})
+        i = _safe_int(e["slot"], 0) - 1
+        if not 0 <= i < len(DRAFT_SLOTS):
+            continue
+        p = pool_by_sid.get(e["sleeper_id"]) or {}
+        rating = ratings.get(e["sleeper_id"], 0.0)
+        pts = draft_points(rating, e["multiplier"], e["boost"])
+        u["slots"][i] = {"sid": e["sleeper_id"], "name": p.get("name") or e["sleeper_id"],
+                         "short": _draft_short_name(p.get("name") or ""), "photo": p.get("photo"),
+                         "team": p.get("team"), "position": p.get("position"),
+                         "multiplier": float(e["multiplier"]), "boost": float(e["boost"]),
+                         "rating": rating, "points": pts, "event_id": e.get("event_id")}
+        u["total"] = round(u["total"] + pts, 2)
+        if e.get("submitted_at") and (u["submitted_at"] is None or e["submitted_at"] < u["submitted_at"]):
+            u["submitted_at"] = e["submitted_at"]
+    rows = list(by_user.values())
+    rows.sort(key=lambda r: (-r["total"], r["submitted_at"] or datetime.max))
+    for i, r in enumerate(rows, 1):
+        r["rank"] = i
+        r["submitted_at"] = r["submitted_at"].isoformat() if r.get("submitted_at") else None
+    return rows
+
+
+def _draft_short_name(name):
+    parts = (name or "").split()
+    if len(parts) < 2:
+        return name or ""
+    return f"{parts[0][0]}. {' '.join(parts[1:])}"
+
+
+def _draft_card(g, now):
+    return {"id": g.get("id"), "date": g.get("date"), "status": g.get("status"),
+            "home": {"abbr": (g.get("home") or {}).get("abbr"), "logo": (g.get("home") or {}).get("logo")},
+            "away": {"abbr": (g.get("away") or {}).get("abbr"), "logo": (g.get("away") or {}).get("logo")},
+            "locked": draft_game_locked(g, now)}
+
+
+def build_draft_day(season, week, day, season_type=2, user_id=None, now=None, with_pool=True):
+    """Everything the page needs for one day: state, games, the pool
+    (with locks and live ratings), the reader's own picks, the board."""
+    now = now or _draft_now()
+    games = draft_day_games(season, week, day, season_type)
+    state = draft_state(day, games, now)
+    out = {"name": DRAFT_NAME, "day": day.isoformat(), "season": season, "week": week,
+           "state": state, "opens_at": draft_opens_at(day).isoformat() + "Z",
+           "slots": list(DRAFT_SLOTS), "games": [_draft_card(g, now) for g in games],
+           "pool": [], "mine": [None] * len(DRAFT_SLOTS), "board": [], "entries": 0, "my_rank": None}
+    if state in ("none", "upcoming"):
+        return out
+    pool = draft_pool(season, week, day, games)
+    locked_events = {g.get("id") for g in games if draft_game_locked(g, now)}
+    ratings = {}
+    if state in ("live", "final"):
+        ratings = draft_ratings(season, week, {r["sid"]: r["position"] for r in pool},
+                                allow_fetch=True)
+    by_sid = {r["sid"]: r for r in pool}
+    if with_pool and state in ("open", "live"):
+        out["pool"] = [dict(r, locked=r["event_id"] in locked_events, rating=ratings.get(r["sid"]))
+                       for r in pool]
+    entries = _draft_load_entries(day)
+    out["entries"] = len({e["user_id"] for e in entries})
+    if state in ("live", "final"):
+        board = draft_leaderboard(day, season, week, by_sid, ratings, entries=entries)
+        out["board"] = board[:DRAFT_LEADERBOARD_MAX]
+        if user_id is not None:
+            mine_row = next((r for r in board if str(r["user_id"]) == str(user_id)), None)
+            out["my_rank"] = mine_row["rank"] if mine_row else None
+            out["my_total"] = mine_row["total"] if mine_row else None
+    if user_id is not None:
+        for e in entries:
+            if str(e["user_id"]) != str(user_id):
+                continue
+            i = _safe_int(e["slot"], 0) - 1
+            if 0 <= i < len(DRAFT_SLOTS):
+                p = by_sid.get(e["sleeper_id"]) or {}
+                out["mine"][i] = {"sid": e["sleeper_id"], "name": p.get("name") or e["sleeper_id"],
+                                  "short": _draft_short_name(p.get("name") or ""),
+                                  "photo": p.get("photo"), "team": p.get("team"), "position": p.get("position"),
+                                  "multiplier": float(e["multiplier"]), "boost": float(e["boost"]),
+                                  "event_id": e.get("event_id"), "locked": e.get("event_id") in locked_events,
+                                  "rating": ratings.get(e["sleeper_id"]),
+                                  "points": draft_points(ratings.get(e["sleeper_id"], 0.0), e["multiplier"], e["boost"])
+                                  if ratings else None}
+    return out
+
+
+def _draft_args():
+    """(season, week, season_type, day) from the request. The day is the
+    NFL day of the first game named in ?games=, or ?day= itself."""
+    info = get_current_week_info()
+    season = request.args.get("season", default=info["season"], type=int)
+    week = request.args.get("week", default=info["week"], type=int)
+    season_type = request.args.get("seasontype", default=info["season_type"], type=int)
+    day = None
+    raw_day = (request.args.get("day") or "").strip()
+    if raw_day:
+        try:
+            day = date.fromisoformat(raw_day)
+        except ValueError:
+            day = None
+    if day is None:
+        ids = [x for x in (request.args.get("games") or "").split(",") if x]
+        for wk in (week, week - 1, week + 1):
+            if wk < 1 or not ids:
+                continue
+            games, _ = _week_games(season, wk, season_type)
+            first = next((g for g in games if g.get("id") in ids), None)
+            if first:
+                day, week = draft_day_of(first), wk
+                break
+    return season, week, season_type, day
+
+
+@app.route("/api/draft")
+def api_draft():
+    try:
+        season, week, season_type, day = _draft_args()
+        if day is None:
+            return jsonify({"name": DRAFT_NAME, "state": "none", "games": [], "pool": [], "board": []})
+        uid = current_user.id if current_user.is_authenticated else None
+        payload = build_draft_day(season, week, day, season_type, user_id=uid,
+                                  with_pool=request.args.get("pool", "1") != "0")
+        payload["signed_in"] = bool(uid)
+        resp = jsonify(payload)
+        resp.headers["Cache-Control"] = "private, no-store"
+        return resp
+    except Exception as e:
+        app.logger.exception("draft board failed")
+        return jsonify({"name": DRAFT_NAME, "state": "none", "games": [], "pool": [], "board": [],
+                        "error": str(e)}), 200
+
+
+@app.route("/api/draft", methods=["POST"])
+def api_draft_save():
+    """Save the reader's five picks. Only slots whose game has not kicked
+    off can change; a slot already holding a player whose game has
+    started stays as it is whatever is sent."""
+    if not current_user.is_authenticated:
+        return jsonify({"ok": False, "error": "Sign in to draft."}), 401
+    body = request.get_json(silent=True) or {}
+    try:
+        day = date.fromisoformat(str(body.get("day") or ""))
+    except ValueError:
+        return jsonify({"ok": False, "error": "Which day?"}), 400
+    info = get_current_week_info()
+    season = _safe_int(body.get("season"), info["season"])
+    week = _safe_int(body.get("week"), info["week"])
+    season_type = _safe_int(body.get("seasontype"), info["season_type"])
+    now = _draft_now()
+    games = draft_day_games(season, week, day, season_type)
+    state = draft_state(day, games, now)
+    if state not in ("open", "live"):
+        return jsonify({"ok": False, "error": {"none": "No games that day.", "upcoming": "This draft opens the day before the games.",
+                                               "final": "This day is finished."}.get(state, "Closed.")}), 400
+    pool = {r["sid"]: r for r in draft_pool(season, week, day, games)}
+    locked_events = {g.get("id") for g in games if draft_game_locked(g, now)}
+    wanted = list(body.get("slots") or [])[:len(DRAFT_SLOTS)]
+    wanted += [None] * (len(DRAFT_SLOTS) - len(wanted))
+    mine = {}
+    for e in _draft_load_entries(day):
+        if str(e["user_id"]) == str(current_user.id):
+            mine[_safe_int(e["slot"], 0)] = e
+    picks, seen = {}, set()
+    for i, sid in enumerate(wanted, 1):
+        held = mine.get(i)
+        if held and held.get("event_id") in locked_events:
+            seen.add(held["sleeper_id"])
+            continue  # frozen: its game has started
+        if not sid:
+            picks[i] = None
+            continue
+        p = pool.get(str(sid))
+        if not p:
+            return jsonify({"ok": False, "error": "That player is not in this day's games."}), 400
+        if p["event_id"] in locked_events:
+            return jsonify({"ok": False, "error": f"{p['name']}'s game has already started."}), 400
+        if p["sid"] in seen:
+            return jsonify({"ok": False, "error": f"{p['name']} is already in your lineup."}), 400
+        seen.add(p["sid"])
+        picks[i] = (p["sid"], DRAFT_SLOTS[i - 1], p["boost"], p["event_id"])
+    _draft_save_slots(current_user.id, day, season, week, picks)
+    _draft_board_cache.clear()
+    return jsonify({"ok": True, "mine": build_draft_day(season, week, day, season_type,
+                                                        user_id=current_user.id, with_pool=False)["mine"]})
+
+
+@app.route("/draft")
+def draft_page():
+    """The whole leaderboard for one day, live while games are on and
+    standing afterwards as that day's past result."""
+    try:
+        season, week, season_type, day = _draft_args()
+    except Exception:
+        season, week, season_type, day = int(SEASON), 1, 2, None
+    return render_template_string(DRAFT_PAGE_HTML, day=(day.isoformat() if day else ""),
+                                  season=season, week=week, season_type=season_type, name=DRAFT_NAME)
+
+
 @app.route("/api/performers")
 def api_performers():
     """The week's performer board as JSON, for the /scores live poll.
@@ -15987,6 +16449,64 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + FEED_DAYS_JS + """
   .sc-day{ text-align:center; padding:7px 13px; font-size:12px; font-weight:700; letter-spacing:0.02em;
            color:var(--sc-muted); background:var(--sc-surface2); border-top:1px solid var(--sc-line); }
   .sc-day:first-child{ border-top:none; }
+  /* ---- Rating Draft ---- */
+  .sc-draft{ margin-top:18px; }
+  .sc-draft-card{ border:1px solid var(--sc-line); border-radius:12px; background:var(--sc-surface); padding:14px 14px 12px; }
+  .sc-draft-sub{ font-size:12.5px; color:var(--sc-muted); line-height:1.5; margin:0 0 12px; }
+  .sc-draft-slots{ display:grid; grid-template-columns:repeat(5, 1fr); gap:8px; }
+  .sc-draft-slot{ display:flex; flex-direction:column; align-items:center; gap:4px; min-width:0; cursor:default; }
+  .sc-draft-slot .mult{ font-family:"IBM Plex Mono"; font-size:11.5px; font-weight:700; color:var(--sc-text); }
+  .sc-draft-slot .disc{ position:relative; width:56px; height:56px; border-radius:50%; background:var(--sc-surface2); border:2px solid var(--sc-line);
+                        display:flex; align-items:center; justify-content:center; overflow:hidden; }
+  .sc-draft-slot .disc img{ width:100%; height:100%; object-fit:cover; object-position:top; }
+  .sc-draft-slot .disc svg{ width:26px; height:26px; fill:var(--sc-muted); }
+  .sc-draft-slot.filled .disc{ border-color:var(--accent); }
+  .sc-draft-slot.locked .disc{ border-color:var(--sc-muted); }
+  .sc-draft-slot .who{ font-size:11.5px; color:var(--sc-muted); max-width:100%; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .sc-draft-slot.filled .who{ color:var(--sc-text); }
+  .sc-draft-slot .pts{ font-family:"IBM Plex Mono"; font-size:11px; font-weight:700; color:var(--good); }
+  .sc-draft-actions{ display:flex; align-items:center; gap:12px; margin-top:12px; flex-wrap:wrap; }
+  .sc-draft-btn{ flex:1; min-width:140px; padding:10px 16px; border-radius:10px; border:1px solid var(--accent); background:transparent;
+                 color:var(--accent-ink); font-family:"Source Sans 3"; font-weight:700; font-size:15px; cursor:pointer; text-align:center; text-decoration:none; }
+  .sc-draft-btn.primary{ background:var(--accent); color:var(--accent-on); }
+  .sc-draft-btn[disabled]{ opacity:0.5; cursor:not-allowed; }
+  .sc-draft-meta{ font-size:12.5px; color:var(--sc-muted); white-space:nowrap; }
+  .sc-draft-meta b{ color:var(--sc-text); }
+  .sc-draft-board{ margin-top:12px; border-top:1px solid var(--sc-line); padding-top:8px; }
+  .sc-draft-row{ display:flex; align-items:center; gap:10px; padding:7px 0; font-size:13.5px; border-top:1px solid var(--sc-line); }
+  .sc-draft-row:first-child{ border-top:none; }
+  .sc-draft-row .rk{ width:22px; font-family:"IBM Plex Mono"; font-weight:700; color:var(--accent-ink); }
+  .sc-draft-row .nm{ flex:1; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-weight:700; }
+  .sc-draft-row .tot{ font-family:"IBM Plex Mono"; font-weight:700; }
+  .sc-draft-row.me{ background:color-mix(in srgb, var(--accent) 10%, transparent); border-radius:8px; padding-left:6px; padding-right:6px; }
+  .sc-draft-err{ color:var(--critical); font-size:13px; margin-top:8px; }
+  /* the drafting sheet */
+  .sc-draft-modal{ position:fixed; inset:0; z-index:60; background:rgba(0,0,0,0.55); display:none; align-items:flex-end; justify-content:center; }
+  .sc-draft-modal.on{ display:flex; }
+  .sc-draft-sheet{ width:100%; max-width:620px; max-height:92vh; background:var(--sc-surface); border-radius:16px 16px 0 0; border:1px solid var(--sc-line);
+                   display:flex; flex-direction:column; overflow:hidden; }
+  @media (min-width:700px){ .sc-draft-modal{ align-items:center; } .sc-draft-sheet{ border-radius:16px; max-height:86vh; } }
+  .sc-draft-head{ display:flex; align-items:center; justify-content:space-between; padding:14px 16px 10px; }
+  .sc-draft-head b{ font-family:"Big Shoulders Display"; font-size:20px; text-transform:uppercase; }
+  .sc-draft-head button{ background:none; border:none; color:var(--accent-ink); font-weight:700; font-size:14px; cursor:pointer; }
+  .sc-draft-hint{ padding:0 16px 10px; font-size:12.5px; color:var(--sc-muted); }
+  .sc-draft-sheet .sc-draft-slots{ padding:0 16px 10px; }
+  .sc-draft-sheet .sc-draft-slot.filled{ cursor:pointer; }
+  .sc-draft-search{ margin:0 16px 8px; padding:10px 12px; border-radius:10px; border:1px solid var(--sc-line); background:var(--sc-surface2); color:var(--sc-text); font-size:14px; }
+  .sc-draft-list{ flex:1; overflow:auto; border-top:1px solid var(--sc-line); }
+  .sc-draft-p{ display:flex; align-items:center; gap:10px; padding:9px 16px; border-bottom:1px solid var(--sc-line); cursor:pointer; }
+  .sc-draft-p:hover{ background:var(--sc-surface2); }
+  .sc-draft-p img{ width:34px; height:34px; border-radius:50%; object-fit:cover; object-position:top; background:var(--sc-surface2); }
+  .sc-draft-p .pn{ flex:1; min-width:0; }
+  .sc-draft-p .pn b{ font-size:14px; display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .sc-draft-p .pn span{ font-size:12px; color:var(--sc-muted); }
+  .sc-draft-p .bst{ font-family:"IBM Plex Mono"; font-weight:700; color:var(--good); font-size:13px; }
+  .sc-draft-p .ck{ width:22px; height:22px; border-radius:50%; border:2px solid var(--accent); flex:none; }
+  .sc-draft-p.picked .ck{ background:var(--accent); }
+  .sc-draft-p.locked{ opacity:0.45; cursor:not-allowed; }
+  .sc-draft-p.locked .ck{ border-color:var(--sc-muted); }
+  .sc-draft-foot{ padding:10px 16px 14px; border-top:1px solid var(--sc-line); display:flex; gap:10px; align-items:center; }
+  .sc-draft-foot .sc-draft-btn{ flex:1; }
   /* The crest sits on the corner of the headshot rather than beside it,
      so a row stays one column of faces however long the names run. */
   /* Headshot with the team crest hung off its bottom-right, half
@@ -16112,6 +16632,17 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + FEED_DAYS_JS + """
   </div>
 
   <div class="sc-games" id="scGames"></div>
+  <div class="sc-draft" id="scDraft"></div>
+  <div class="sc-draft-modal" id="scDraftModal" role="dialog" aria-modal="true" aria-label="Draft lineup">
+    <div class="sc-draft-sheet">
+      <div class="sc-draft-head"><b>Draft lineup</b><button type="button" id="scDraftClose">Cancel</button></div>
+      <div class="sc-draft-hint">Five players, five slots, highest rating total wins. Lower-rated players carry bigger boosts. Tap a player to add them, tap a slot to clear it.</div>
+      <div class="sc-draft-slots" id="scDraftSlots"></div>
+      <input type="search" class="sc-draft-search" id="scDraftSearch" placeholder="Search a player or team" aria-label="Search players">
+      <div class="sc-draft-list" id="scDraftList"></div>
+      <div class="sc-draft-foot"><button type="button" class="sc-draft-btn primary" id="scDraftSubmit">Submit</button><span class="sc-draft-err" id="scDraftErr"></span></div>
+    </div>
+  </div>
 
   <!-- First after the scores: the day's best performances, every
        position in one ranked list. The per-position sections further
@@ -16573,16 +17104,16 @@ const scServerTodayKey = {{ today_key|tojson }};
           syncWeekToDay(key);
           renderDayTabs();
           renderGames();
-          renderPerformers();
+          renderPerformers(); loadDraft();
           renderMonth();
         })
-        .catch(function(){ daysIndex[key] = []; renderGames(); renderPerformers(); });
+        .catch(function(){ daysIndex[key] = []; renderGames(); renderPerformers(); loadDraft(); });
       return;
     }
     syncWeekToDay(key);
     renderDayTabs();
     renderGames();
-    renderPerformers();
+    renderPerformers(); loadDraft();
     renderMonth();
   }
 
@@ -16836,6 +17367,158 @@ const scServerTodayKey = {{ today_key|tojson }};
     if (games.some(function(g){ return g.status === 'in_progress'; })) refreshPerformers();
   }, 45000);
 
+
+  // ---- Rating Draft: five picks from this day's games, scored on the
+  // site's own ratings. The server owns the rules (what is locked, what
+  // the boosts are, who is ahead); this only draws and sends.
+  const draftEl = document.getElementById('scDraft');
+  function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  const SILHOUETTE = '<svg viewBox="0 0 24 24"><path d="M12 12a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9zm0 2c-4 0-8 2-8 5v2h16v-2c0-3-4-5-8-5z"/></svg>';
+  let draft = null, draftDay = null, draftPicks = [], draftTimer = null, draftQ = '', draftBusy = false;
+  function fmt2(v){ return v == null ? '' : (Math.round(v * 100) / 100).toFixed(2).replace(/\.?0+$/, ''); }
+  function boostTxt(b){ return b ? '+' + (Math.round(b * 10) / 10).toFixed(1) + 'x' : ''; }
+  function draftQuery(){
+    const games = daysIndex[selectedDay] || [];
+    if (!games.length) return null;
+    const g0 = games[0];
+    return 'season=' + encodeURIComponent(g0.season || scSeason) + '&week=' + encodeURIComponent(g0.week || scWeek) +
+           '&games=' + encodeURIComponent(games.map(function(g){ return g.id; }).join(','));
+  }
+  function loadDraft(){
+    clearTimeout(draftTimer);
+    const qs = draftQuery(), forDay = selectedDay;
+    if (!qs){ draft = null; draftEl.innerHTML = ''; return; }
+    fetch('/api/draft?' + qs, {credentials: 'same-origin'}).then(function(r){ return r.json(); }).then(function(d){
+      if (forDay !== selectedDay) return;
+      draft = d; draftDay = d.day;
+      if (!draftModalOpen()) draftPicks = (d.mine || []).map(function(x){ return x ? x.sid : null; });
+      renderDraft();
+      if (d.state === 'live') draftTimer = setTimeout(loadDraft, 30000);
+      else if (d.state === 'open') draftTimer = setTimeout(loadDraft, 120000);
+    }).catch(function(){});
+  }
+  function slotHtml(i, pick, opts){
+    const mult = (draft && draft.slots ? draft.slots[i] : [2,1.8,1.6,1.4,1.2][i]).toFixed(1) + 'x';
+    let cls = 'sc-draft-slot' + (pick ? ' filled' : '') + (pick && pick.locked ? ' locked' : '');
+    let html = '<div class="' + cls + '" data-slot="' + i + '"><span class="mult">' + mult + '</span><span class="disc">' +
+      (pick && pick.photo ? '<img src="' + esc(pick.photo) + '" alt="" onerror="this.remove()">' : SILHOUETTE) + '</span>' +
+      '<span class="who">' + (pick ? esc(pick.short || pick.name) : 'Empty') + '</span>';
+    if (pick && opts && opts.points && pick.points != null) html += '<span class="pts">' + fmt2(pick.points) + '</span>';
+    return html + '</div>';
+  }
+  function draftStateLine(d){
+    if (d.state === 'upcoming'){
+      let when = ''; try { when = new Date(d.opens_at).toLocaleDateString(undefined, {weekday: 'long', month: 'short', day: 'numeric'}); } catch (e) {}
+      return 'Opens ' + when + '. Five picks from this day’s games, scored on their ratings.';
+    }
+    if (d.state === 'open') return 'Pick five players from this day’s games. Lower-rated players carry bigger boosts. Locks game by game at kickoff.';
+    if (d.state === 'live') return 'Live. Slots lock as their games kick off; the board moves with the ratings.';
+    return 'Final. Past result for this day.';
+  }
+  function renderDraft(){
+    const d = draft;
+    if (!d || d.state === 'none'){ draftEl.innerHTML = ''; return; }
+    const mine = d.mine || [];
+    const scored = d.state === 'live' || d.state === 'final';
+    let h = '<div class="sc-section-head"><h2>' + esc(d.name) + '</h2>' +
+      (scored ? '<a class="sc-viewall" href="/draft?day=' + esc(d.day) + '&season=' + d.season + '&week=' + d.week + '">' +
+        (d.state === 'final' ? 'Past results' : 'Leaderboard') + ' &rsaquo;</a>' : '') + '</div>' +
+      '<div class="sc-draft-card"><p class="sc-draft-sub">' + esc(draftStateLine(d)) + '</p>';
+    if (d.state !== 'upcoming'){
+      h += '<div class="sc-draft-slots">' + [0,1,2,3,4].map(function(i){ return slotHtml(i, mine[i], {points: scored}); }).join('') + '</div>';
+      h += '<div class="sc-draft-actions">';
+      const have = mine.some(function(x){ return x; });
+      if (d.state === 'open' || d.state === 'live'){
+        if (d.signed_in) h += '<button type="button" class="sc-draft-btn' + (have ? '' : ' primary') + '" id="scDraftOpen">' + (have ? 'Edit picks' : 'Draft') + '</button>';
+        else h += '<a class="sc-draft-btn primary" href="/login?next=/scores">Sign in to draft</a>';
+      }
+      h += '<span class="sc-draft-meta"><b>' + (d.entries || 0) + '</b> ' + (d.entries === 1 ? 'entry' : 'entries') +
+        (d.my_rank ? ' &middot; you are <b>#' + d.my_rank + '</b> with <b>' + fmt2(d.my_total) + '</b>' : '') + '</span></div>';
+      if (scored && d.board && d.board.length){
+        h += '<div class="sc-draft-board">' + d.board.slice(0, 5).map(function(r){
+          return '<div class="sc-draft-row' + (d.my_rank === r.rank ? ' me' : '') + '"><span class="rk">' + r.rank + '</span><span class="nm">' + esc(r.username) + '</span><span class="tot">' + fmt2(r.total) + '</span></div>';
+        }).join('') + '</div>';
+      }
+    }
+    h += '</div>';
+    draftEl.innerHTML = h;
+    const open = document.getElementById('scDraftOpen');
+    if (open) open.onclick = openDraftModal;
+  }
+  // The sheet.
+  const modal = document.getElementById('scDraftModal');
+  function draftModalOpen(){ return modal && modal.classList.contains('on'); }
+  function openDraftModal(){
+    if (!draft) return;
+    draftPicks = (draft.mine || []).map(function(x){ return x ? x.sid : null; });
+    while (draftPicks.length < 5) draftPicks.push(null);
+    draftQ = ''; document.getElementById('scDraftSearch').value = '';
+    modal.classList.add('on'); renderSheet();
+  }
+  function closeDraftModal(){ modal.classList.remove('on'); }
+  function poolBySid(){ const m = {}; (draft.pool || []).forEach(function(p){ m[p.sid] = p; }); return m; }
+  function renderSheet(){
+    const by = poolBySid(), mine = draft.mine || [];
+    const picks = draftPicks.map(function(sid, i){
+      if (!sid) return null;
+      const p = by[sid] || (mine[i] && mine[i].sid === sid ? mine[i] : null);
+      return p ? {sid: sid, short: p.short || shortName(p.name), name: p.name, photo: p.photo, locked: !!p.locked || !!(mine[i] && mine[i].sid === sid && mine[i].locked)} : null;
+    });
+    document.getElementById('scDraftSlots').innerHTML = [0,1,2,3,4].map(function(i){ return slotHtml(i, picks[i]); }).join('');
+    const q = draftQ.toLowerCase();
+    const picked = {}; draftPicks.forEach(function(s){ if (s) picked[s] = true; });
+    const rows = (draft.pool || []).filter(function(p){ return !q || p.name.toLowerCase().indexOf(q) >= 0 || (p.team || '').toLowerCase() === q; });
+    document.getElementById('scDraftList').innerHTML = rows.slice(0, 400).map(function(p){
+      return '<div class="sc-draft-p' + (picked[p.sid] ? ' picked' : '') + (p.locked ? ' locked' : '') + '" data-sid="' + esc(p.sid) + '">' +
+        '<img src="' + esc(p.photo || '') + '" alt="" loading="lazy" onerror="this.style.visibility=\\'hidden\\'">' +
+        '<span class="pn"><b>' + esc(p.name) + '</b><span>' + esc(p.team) + ' &middot; ' + esc(p.position) + (p.opponent ? ' &middot; vs ' + esc(p.opponent) : '') + (p.locked ? ' &middot; started' : '') + '</span></span>' +
+        '<span class="bst">' + boostTxt(p.boost) + '</span><span class="ck"></span></div>';
+    }).join('') || '<div class="sc-feed-quiet">No players match.</div>';
+    const n = draftPicks.filter(Boolean).length;
+    const sub = document.getElementById('scDraftSubmit');
+    sub.disabled = draftBusy || n === 0; sub.textContent = draftBusy ? 'Saving…' : (n < 5 ? 'Submit ' + n + ' of 5' : 'Submit');
+  }
+  function shortName(name){ const p = (name || '').split(' '); return p.length < 2 ? name : p[0][0] + '. ' + p.slice(1).join(' '); }
+  function draftError(msg){ document.getElementById('scDraftErr').textContent = msg || ''; }
+  document.getElementById('scDraftList').addEventListener('click', function(e){
+    const row = e.target.closest('[data-sid]'); if (!row) return;
+    const sid = row.dataset.sid, by = poolBySid(), p = by[sid];
+    draftError('');
+    const at = draftPicks.indexOf(sid);
+    if (at >= 0){
+      const held = (draft.mine || [])[at];
+      if (held && held.sid === sid && held.locked){ draftError(p.name + '’s game has started; that slot is locked.'); return; }
+      draftPicks[at] = null; renderSheet(); return;
+    }
+    if (!p || p.locked){ draftError('That game has already started.'); return; }
+    const empty = draftPicks.indexOf(null);
+    if (empty < 0){ draftError('All five slots are full. Tap a slot to clear it.'); return; }
+    draftPicks[empty] = sid; renderSheet();
+  });
+  document.getElementById('scDraftSlots').addEventListener('click', function(e){
+    const s = e.target.closest('[data-slot]'); if (!s) return;
+    const i = parseInt(s.dataset.slot, 10), held = (draft.mine || [])[i];
+    if (!draftPicks[i]) return;
+    if (held && held.sid === draftPicks[i] && held.locked){ draftError('That slot is locked: its game has started.'); return; }
+    draftPicks[i] = null; draftError(''); renderSheet();
+  });
+  document.getElementById('scDraftSearch').addEventListener('input', function(e){ draftQ = e.target.value.trim(); renderSheet(); });
+  document.getElementById('scDraftClose').onclick = closeDraftModal;
+  modal.addEventListener('click', function(e){ if (e.target === modal) closeDraftModal(); });
+  document.getElementById('scDraftSubmit').onclick = function(){
+    if (draftBusy) return;
+    draftBusy = true; renderSheet(); draftError('');
+    fetch('/api/draft', {method: 'POST', credentials: 'same-origin', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({day: draft.day, season: draft.season, week: draft.week, slots: draftPicks})})
+      .then(function(r){ return r.json(); })
+      .then(function(d){
+        draftBusy = false;
+        if (!d.ok){ draftError(d.error || 'Could not save.'); renderSheet(); return; }
+        closeDraftModal(); loadDraft();
+      })
+      .catch(function(){ draftBusy = false; draftError('Could not save. Try again.'); renderSheet(); });
+  };
+
   // Open on a day with football, decided here rather than at page build
   // so it uses the visitor's clock and the whole season's schedule.
   selectedDay = pickOpeningDay();
@@ -16845,6 +17528,7 @@ const scServerTodayKey = {{ today_key|tojson }};
   renderGames();
   renderPerformers();
   renderMonth();
+  loadDraft();
   // A day outside the week baked into the page has no games loaded yet;
   // selectDay fetches that day and repaints when it lands.
   if (!daysIndex[selectedDay]) selectDay(selectedDay);
@@ -22208,6 +22892,78 @@ BILLING_SUCCESS_HTML = BASE_STYLE + make_header("plus") + PLUS_STYLE + """
     {% endif %}
   </div>
 </div></main>
+"""
+
+# --- Rating Draft: the whole leaderboard for one day ----------------------
+DRAFT_PAGE_HTML = BASE_STYLE + make_header("scores") + """
+<style>
+  .dr-wrap{ max-width:820px; }
+  .dr-title{ font-family:"Big Shoulders Display"; font-size:30px; font-weight:800; text-transform:uppercase; margin-top:26px; }
+  .dr-sub{ color:var(--ink-muted); font-size:13px; margin-top:4px; }
+  .dr-sub b{ color:var(--ink); }
+  .dr-entry{ margin-top:12px; border:1px solid var(--line); border-radius:14px; background:var(--paper-raised); padding:12px 14px; }
+  .dr-entry.me{ border-color:var(--accent); }
+  .dr-head{ display:flex; align-items:center; gap:10px; }
+  .dr-head .rk{ font-family:"IBM Plex Mono"; font-size:18px; font-weight:700; color:var(--accent-ink); width:28px; }
+  .dr-head .nm{ flex:1; min-width:0; font-weight:700; font-size:16px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .dr-head .tot{ font-family:"IBM Plex Mono"; font-size:18px; font-weight:700; }
+  .dr-picks{ display:grid; grid-template-columns:repeat(5, 1fr); gap:8px; margin-top:10px; }
+  .dr-pick{ display:flex; flex-direction:column; align-items:center; gap:3px; min-width:0; }
+  .dr-pick .mult{ font-family:"IBM Plex Mono"; font-size:11px; color:var(--ink-muted); align-self:flex-start; }
+  .dr-pick .disc{ position:relative; width:62px; height:62px; border-radius:50%; background:var(--paper-sunken); overflow:hidden; border:2px solid var(--line-strong); }
+  .dr-pick .disc img{ width:100%; height:100%; object-fit:cover; object-position:top; }
+  .dr-pick .pts{ position:absolute; left:50%; bottom:-2px; transform:translateX(-50%); background:var(--ink); color:var(--paper); font-family:"IBM Plex Mono";
+                 font-size:11px; font-weight:700; padding:1px 7px; border-radius:999px; white-space:nowrap; }
+  .dr-pick .who{ font-size:11.5px; color:var(--ink-secondary); max-width:100%; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .dr-pick .bst{ font-size:10.5px; color:var(--good); font-family:"IBM Plex Mono"; }
+  .dr-empty{ color:var(--ink-muted); padding:30px; text-align:center; }
+  .dr-back{ display:inline-block; margin-top:20px; color:var(--accent-ink); text-decoration:none; font-weight:700; font-size:13px; }
+  @media (max-width:520px){ .dr-pick .disc{ width:52px; height:52px; } }
+</style>
+<main><div class="wrap dr-wrap">
+  <div class="dr-title" id="drTitle">{{ name }}</div>
+  <div class="dr-sub" id="drSub">Loading&hellip;</div>
+  <div id="drBoard"></div>
+  <a class="dr-back" href="/scores">&larr; Back to scores</a>
+</div></main>
+<script>
+const DR = {{ {"day": day, "season": season, "week": week, "season_type": season_type}|tojson }};
+(function(){
+  function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  function fmt2(v){ return v == null ? '–' : (Math.round(v * 100) / 100).toFixed(2).replace(/\.?0+$/, ''); }
+  const board = document.getElementById('drBoard'), sub = document.getElementById('drSub');
+  let timer = null;
+  function load(){
+    if (!DR.day){ sub.textContent = 'Pick a day on the scores page.'; return; }
+    fetch('/api/draft?day=' + encodeURIComponent(DR.day) + '&season=' + DR.season + '&week=' + DR.week + '&seasontype=' + DR.season_type + '&pool=0', {credentials: 'same-origin'})
+      .then(function(r){ return r.json(); }).then(render).catch(function(){ sub.textContent = 'Could not load the board.'; });
+  }
+  function render(d){
+    let when = DR.day; try { const p = DR.day.split('-'); when = new Date(+p[0], +p[1]-1, +p[2]).toLocaleDateString(undefined, {weekday: 'short', month: 'short', day: 'numeric'}); } catch (e) {}
+    document.getElementById('drTitle').textContent = d.name + ' · ' + when;
+    const n = d.entries || 0;
+    sub.innerHTML = (d.state === 'final' ? 'Final. ' : d.state === 'live' ? 'Live. ' : d.state === 'open' ? 'Open until kickoff. ' : '') +
+      '<b>' + n + '</b> ' + (n === 1 ? 'entry' : 'entries') + (d.my_rank ? ' &middot; you are <b>#' + d.my_rank + '</b>' : '') +
+      '. Points are the rating times the slot multiplier plus the player’s boost.';
+    if (!d.board || !d.board.length){
+      board.innerHTML = '<div class="dr-empty">' + (d.state === 'open' ? 'The board appears at the first kickoff.' : 'No entries for this day.') + '</div>';
+    } else {
+      board.innerHTML = d.board.map(function(r){
+        return '<div class="dr-entry' + (d.my_rank === r.rank ? ' me' : '') + '"><div class="dr-head"><span class="rk">' + r.rank + '</span><span class="nm">' + esc(r.username) + '</span><span class="tot">' + fmt2(r.total) + '</span></div>' +
+          '<div class="dr-picks">' + r.slots.map(function(s, i){
+            const mult = (d.slots[i] || 0).toFixed(1) + 'x';
+            if (!s) return '<div class="dr-pick"><span class="mult">' + mult + '</span><span class="disc"></span><span class="who">Empty</span></div>';
+            return '<div class="dr-pick"><span class="mult">' + mult + '</span><span class="disc">' + (s.photo ? '<img src="' + esc(s.photo) + '" alt="" loading="lazy" onerror="this.remove()">' : '') +
+              '<span class="pts">' + fmt2(s.points) + '</span></span><span class="who">' + esc(s.short || s.name) + '</span>' + (s.boost ? '<span class="bst">+' + s.boost.toFixed(1) + 'x</span>' : '') + '</div>';
+          }).join('') + '</div></div>';
+      }).join('');
+    }
+    clearTimeout(timer);
+    if (d.state === 'live') timer = setTimeout(load, 30000);
+  }
+  load();
+})();
+</script>
 """
 
 if __name__ == "__main__":
