@@ -661,6 +661,30 @@ def init_db():
                     PRIMARY KEY (user_id, league_id)
                 );
             """)
+            # ESPN leagues: the reader's two ESPN cookies, sealed, and the
+            # leagues they connected with them (see the ESPN section).
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS espn_credentials (
+                    user_id INTEGER PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+                    swid TEXT NOT NULL,
+                    espn_s2_enc TEXT NOT NULL,
+                    updated_at TIMESTAMP DEFAULT NOW()
+                );
+            """)
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS espn_leagues (
+                    user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+                    league_id TEXT NOT NULL,
+                    season INTEGER NOT NULL,
+                    name TEXT,
+                    team_id INTEGER,
+                    team_name TEXT,
+                    size INTEGER,
+                    logo TEXT,
+                    added_at TIMESTAMP DEFAULT NOW(),
+                    PRIMARY KEY (user_id, league_id)
+                );
+            """)
             cur.execute("""
                 CREATE TABLE IF NOT EXISTS nfl_schedule (
                     espn_event_id TEXT PRIMARY KEY,
@@ -871,6 +895,437 @@ def set_synced_league_ids(user_id, league_ids):
         conn.commit()
     finally:
         conn.close()
+
+# ---------------- ESPN Fantasy leagues ----------------
+#
+# ESPN has no public API and no sign-in for other sites. What every ESPN
+# league tool reads is the JSON the ESPN app itself uses, one call per
+# league and season. A public league needs only its id. A private one
+# needs two cookies from the reader's own ESPN session, espn_s2 and
+# SWID, which they copy out of their browser once. Those cookies are a
+# login to their ESPN account, so they are held encrypted, used only to
+# read the leagues they connect, never shown back, and dropped the
+# moment they disconnect.
+#
+# Everything downstream (League Manager, matchup grades, "your players"
+# on a game card) is built on Sleeper's shapes, so an ESPN league is
+# translated into those shapes once, here, and the rest of the site
+# never knows the difference. An ESPN league id is stored as
+# "espn:<id>" wherever league ids live.
+
+ESPN_FANTASY_BASE = "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl"
+ESPN_LEAGUE_TTL = 300
+ESPN_TIMEOUT = 20
+# ESPN lineup slot ids, in Sleeper's roster_positions vocabulary.
+ESPN_SLOT_NAMES = {
+    0: "QB", 1: "TQB", 2: "RB", 3: "RB_WR", 4: "WR", 5: "WR_TE", 6: "TE", 7: "SUPER_FLEX",
+    8: "DT", 9: "DE", 10: "LB", 11: "DL", 12: "CB", 13: "S", 14: "DB", 15: "IDP", 16: "DEF",
+    17: "K", 18: "P", 19: "HC", 20: "BN", 21: "IR", 23: "FLEX", 24: "EDR",
+}
+ESPN_BENCH_SLOTS = (20, 21)
+ESPN_POSITIONS = {1: "QB", 2: "RB", 3: "WR", 4: "TE", 5: "K", 16: "DEF"}
+ESPN_PRO_TEAMS = {
+    1: "ATL", 2: "BUF", 3: "CHI", 4: "CIN", 5: "CLE", 6: "DAL", 7: "DEN", 8: "DET", 9: "GB",
+    10: "TEN", 11: "IND", 12: "KC", 13: "LV", 14: "LAR", 15: "MIA", 16: "MIN", 17: "NE",
+    18: "NO", 19: "NYG", 20: "NYJ", 21: "PHI", 22: "ARI", 23: "PIT", 24: "LAC", 25: "SF",
+    26: "SEA", 27: "TB", 28: "WAS", 29: "CAR", 30: "JAX", 33: "BAL", 34: "HOU",
+}
+
+
+class EspnPrivateLeague(Exception):
+    """ESPN would not show the league without a signed-in session."""
+
+
+class EspnLeagueNotFound(Exception):
+    """No league with that id for that season."""
+
+
+def espn_league_id_from_text(text):
+    """The league id out of whatever was pasted: a bare number, or a
+    link from the ESPN app or site (…?leagueId=12345&…)."""
+    text = (text or "").strip()
+    if not text:
+        return None
+    if text.isdigit():
+        return text
+    m = re.search(r"[?&]leagueId=(\d+)", text)
+    if m:
+        return m.group(1)
+    m = re.search(r"/leagues?/(\d+)", text)
+    if m:
+        return m.group(1)
+    return None
+
+
+def _norm_swid(swid):
+    """SWID the way ESPN writes it: upper-case, in braces."""
+    s = (swid or "").strip().strip("{}").upper()
+    return "{" + s + "}" if s else ""
+
+
+def parse_espn_cookies(s2_text, swid_text):
+    """The two cookies, from either field, in whatever form they were
+    pasted: the bare values, or a whole 'espn_s2=…; SWID=…' line in one
+    box. Returns (espn_s2, swid), either empty when absent."""
+    blob = " ".join(x for x in (s2_text or "", swid_text or "") if x)
+    s2, swid = (s2_text or "").strip(), (swid_text or "").strip()
+    m = re.search(r"espn_s2\s*[=:]\s*([^;\s]+)", blob, re.I)
+    if m:
+        s2 = m.group(1)
+    m = re.search(r"SWID\s*[=:]\s*(\{?[0-9A-Fa-f-]{36}\}?)", blob, re.I)
+    if m:
+        swid = m.group(1)
+    s2 = s2.strip().strip('"').strip()
+    if s2.lower().startswith("espn_s2="):
+        s2 = s2[8:]
+    return s2, _norm_swid(swid)
+
+
+def _espn_fernet():
+    """The key the cookies are sealed with. ESPN_COOKIE_KEY when set (a
+    Fernet key: 32 url-safe base64 bytes), else one derived from the
+    app's secret, so it works out of the box and changes only if that
+    secret does."""
+    from cryptography.fernet import Fernet
+    key = os.environ.get("ESPN_COOKIE_KEY") or base64.urlsafe_b64encode(
+        hashlib.sha256(("espn-cookie:" + app.secret_key).encode()).digest()).decode()
+    return Fernet(key.encode() if isinstance(key, str) else key)
+
+
+def seal_secret(text):
+    return _espn_fernet().encrypt(text.encode("utf-8")).decode("ascii")
+
+
+def unseal_secret(token):
+    """None when it cannot be read (a changed key): the reader is asked
+    to reconnect rather than shown an error nobody can act on."""
+    from cryptography.fernet import InvalidToken
+    try:
+        return _espn_fernet().decrypt(token.encode("ascii")).decode("utf-8")
+    except (InvalidToken, ValueError, TypeError, AttributeError):
+        return None
+
+
+# --- storage: the cookies and the connected leagues, per account
+
+def espn_creds_get(user_id):
+    """{'swid', 's2'} or None. Never logged, never rendered."""
+    if not DATABASE_URL:
+        return None
+    conn = get_db()
+    try:
+        with conn.cursor() as cur:
+            cur.execute("SELECT swid, espn_s2_enc FROM espn_credentials WHERE user_id = %s", (user_id,))
+            row = cur.fetchone()
+    finally:
+        conn.close()
+    if not row:
+        return None
+    s2 = unseal_secret(row["espn_s2_enc"] or "")
+    return {"swid": row["swid"], "s2": s2} if s2 else None
+
+
+def espn_creds_set(user_id, swid, s2):
+    if not DATABASE_URL:
+        return
+    conn = get_db()
+    try:
+        with conn.cursor() as cur:
+            cur.execute("""INSERT INTO espn_credentials (user_id, swid, espn_s2_enc, updated_at)
+                           VALUES (%s, %s, %s, NOW())
+                           ON CONFLICT (user_id) DO UPDATE SET swid = EXCLUDED.swid,
+                               espn_s2_enc = EXCLUDED.espn_s2_enc, updated_at = NOW()""",
+                        (user_id, swid, seal_secret(s2)))
+        conn.commit()
+    finally:
+        conn.close()
+
+
+def espn_creds_delete(user_id):
+    if not DATABASE_URL:
+        return
+    conn = get_db()
+    try:
+        with conn.cursor() as cur:
+            cur.execute("DELETE FROM espn_credentials WHERE user_id = %s", (user_id,))
+        conn.commit()
+    finally:
+        conn.close()
+
+
+def espn_leagues_get(user_id):
+    if not DATABASE_URL:
+        return []
+    conn = get_db()
+    try:
+        with conn.cursor() as cur:
+            cur.execute("""SELECT league_id, season, name, team_id, team_name, size, logo
+                           FROM espn_leagues WHERE user_id = %s ORDER BY added_at""", (user_id,))
+            return [dict(r) for r in cur.fetchall()]
+    finally:
+        conn.close()
+
+
+def espn_league_add(user_id, league_id, season, name, team_id, team_name, size, logo):
+    if not DATABASE_URL:
+        return
+    conn = get_db()
+    try:
+        with conn.cursor() as cur:
+            cur.execute("""INSERT INTO espn_leagues (user_id, league_id, season, name, team_id, team_name, size, logo)
+                           VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                           ON CONFLICT (user_id, league_id) DO UPDATE SET season = EXCLUDED.season,
+                               name = EXCLUDED.name, team_id = COALESCE(EXCLUDED.team_id, espn_leagues.team_id),
+                               team_name = COALESCE(EXCLUDED.team_name, espn_leagues.team_name),
+                               size = EXCLUDED.size, logo = EXCLUDED.logo""",
+                        (user_id, str(league_id), int(season), name, team_id, team_name, size, logo))
+        conn.commit()
+    finally:
+        conn.close()
+
+
+def espn_league_set_team(user_id, league_id, team_id, team_name):
+    if not DATABASE_URL:
+        return
+    conn = get_db()
+    try:
+        with conn.cursor() as cur:
+            cur.execute("UPDATE espn_leagues SET team_id = %s, team_name = %s WHERE user_id = %s AND league_id = %s",
+                        (team_id, team_name, user_id, str(league_id)))
+        conn.commit()
+    finally:
+        conn.close()
+
+
+def espn_league_remove(user_id, league_id):
+    if not DATABASE_URL:
+        return
+    conn = get_db()
+    try:
+        with conn.cursor() as cur:
+            cur.execute("DELETE FROM espn_leagues WHERE user_id = %s AND league_id = %s", (user_id, str(league_id)))
+            cur.execute("DELETE FROM synced_leagues WHERE user_id = %s AND league_id = %s", (user_id, f"espn:{league_id}"))
+        conn.commit()
+    finally:
+        conn.close()
+
+
+def espn_disconnect(user_id):
+    """Forget the cookies and every ESPN league: what Disconnect does."""
+    for r in espn_leagues_get(user_id):
+        espn_league_remove(user_id, r["league_id"])
+    espn_creds_delete(user_id)
+    _espn_league_cache.clear()
+
+
+# --- the client
+
+_espn_league_cache = {}
+
+
+def espn_fetch_league(league_id, season, swid=None, s2=None, cache=_espn_league_cache):
+    """One league's teams, rosters and settings for a season. Cached a
+    few minutes per (league, season, session), so a private league read
+    with one reader's cookies is never served to another reader."""
+    key = (str(league_id), int(season), _norm_swid(swid), bool(s2))
+    now = time.time()
+    entry = cache.get(key)
+    if entry and now - entry["time"] < ESPN_LEAGUE_TTL:
+        return entry["data"]
+    url = f"{ESPN_FANTASY_BASE}/seasons/{int(season)}/segments/0/leagues/{int(league_id)}"
+    cookies = {"espn_s2": s2, "SWID": _norm_swid(swid)} if (s2 and swid) else {}
+    r = requests.get(url, params=[("view", "mTeam"), ("view", "mRoster"), ("view", "mSettings")],
+                     cookies=cookies, timeout=ESPN_TIMEOUT,
+                     headers={"Accept": "application/json",
+                              "User-Agent": "Mozilla/5.0 (compatible; FantasyFootballCalc/1.0)"})
+    if r.status_code in (401, 403):
+        raise EspnPrivateLeague("ESPN would not show this league without a signed-in session.")
+    if r.status_code == 404:
+        raise EspnLeagueNotFound("ESPN has no league with that id for this season.")
+    r.raise_for_status()
+    data = r.json()
+    if isinstance(data, list):
+        data = data[0] if data else {}
+    if not isinstance(data, dict) or "teams" not in data:
+        raise EspnLeagueNotFound("ESPN has no league with that id for this season.")
+    cache[key] = {"data": data, "time": now}
+    return data
+
+
+def espn_fetch_row(row, creds):
+    """A connected league's payload for the current season; the season
+    it was connected in when ESPN has nothing for this one yet (ESPN
+    keeps a league's id from year to year, so nothing to reconnect)."""
+    swid, s2 = (creds or {}).get("swid"), (creds or {}).get("s2")
+    seasons = [int(SEASON)]
+    if row.get("season") and int(row["season"]) not in seasons:
+        seasons.append(int(row["season"]))
+    last = None
+    for season in seasons:
+        try:
+            return espn_fetch_league(row["league_id"], season, swid=swid, s2=s2)
+        except EspnLeagueNotFound as e:
+            last = e
+    raise last
+
+
+def _espn_player_index(all_players, cache={}):
+    """espn_id -> sleeper id, and (name, position) -> sleeper id for the
+    few ESPN ids Sleeper does not carry. Rebuilt when the player dump is."""
+    if cache.get("src") is all_players:
+        return cache["idx"]
+    by_espn, by_name = {}, {}
+    for sid, p in all_players.items():
+        if not isinstance(p, dict):
+            continue
+        e = p.get("espn_id")
+        if e is not None and str(e).strip():
+            by_espn[str(e).strip()] = sid
+        pos = p.get("position")
+        if pos in ("QB", "RB", "WR", "TE", "K") and p.get("team"):
+            by_name.setdefault((normalize_name(f"{p.get('first_name', '')} {p.get('last_name', '')}"), pos), sid)
+    cache["src"], cache["idx"] = all_players, {"by_espn": by_espn, "by_name": by_name}
+    return cache["idx"]
+
+
+def espn_player_sid(player, all_players):
+    """The Sleeper id for an ESPN roster entry's player, or None."""
+    if not isinstance(player, dict):
+        return None
+    idx = _espn_player_index(all_players)
+    pos = ESPN_POSITIONS.get(player.get("defaultPositionId"))
+    if pos == "DEF":
+        abbr = ESPN_PRO_TEAMS.get(player.get("proTeamId"))
+        return abbr if abbr and abbr in all_players else None
+    sid = idx["by_espn"].get(str(player.get("id")))
+    if sid:
+        return sid
+    return idx["by_name"].get((normalize_name(player.get("fullName") or ""), pos))
+
+
+def _espn_team_name(t):
+    name = (t.get("name") or "").strip()
+    if not name:
+        name = f"{t.get('location', '') or ''} {t.get('nickname', '') or ''}".strip()
+    return name or f"Team {t.get('id')}"
+
+
+def parse_espn_league(payload, all_players, my_swid=None, my_team_id=None):
+    """An ESPN league in Sleeper's shapes: {league, users, rosters,
+    teams, my_team_id, my_owner_id}. Owners are keyed "team:<id>", so
+    "is you" is decided by the team, which is what the account records;
+    the SWID cookie finds that team on first connect."""
+    settings = payload.get("settings") or {}
+    members = {m.get("id"): m for m in (payload.get("members") or []) if isinstance(m, dict)}
+    roster_positions = []
+    for slot, n in ((settings.get("rosterSettings") or {}).get("lineupSlotCounts") or {}).items():
+        name = ESPN_SLOT_NAMES.get(_safe_int(slot, -1))
+        if name:
+            roster_positions += [name] * max(0, _safe_int(n, 0))
+    teams_raw = [t for t in (payload.get("teams") or []) if isinstance(t, dict)]
+    league = {
+        "league_id": f"espn:{payload.get('id')}", "name": settings.get("name") or "ESPN League",
+        "roster_positions": roster_positions, "total_rosters": settings.get("size") or len(teams_raw),
+        "season": payload.get("seasonId"), "source": "espn",
+    }
+    swid_norm = _norm_swid(my_swid)
+    my_id = _safe_int(my_team_id, None) if my_team_id is not None else None
+    users, rosters, teams = {}, [], []
+    for t in teams_raw:
+        tid = _safe_int(t.get("id"), None)
+        if tid is None:
+            continue
+        owner_key = f"team:{tid}"
+        owners = [o for o in (t.get("owners") or []) if isinstance(o, str)]
+        names = []
+        for o in owners:
+            m = members.get(o) or {}
+            n = (m.get("displayName") or f"{m.get('firstName', '') or ''} {m.get('lastName', '') or ''}").strip()
+            if n:
+                names.append(n)
+        users[owner_key] = {"name": _espn_team_name(t), "avatar_url": t.get("logo") or None,
+                            "manager": ", ".join(names)}
+        if my_id is None and swid_norm and any(_norm_swid(o) == swid_norm for o in owners):
+            my_id = tid
+        players, starters, unmapped = [], [], []
+        for e in ((t.get("roster") or {}).get("entries") or []):
+            if not isinstance(e, dict):
+                continue
+            pl = ((e.get("playerPoolEntry") or {}).get("player") or {})
+            sid = espn_player_sid(pl, all_players)
+            if not sid:
+                if pl.get("fullName"):
+                    unmapped.append(pl["fullName"])
+                continue
+            players.append(sid)
+            if e.get("lineupSlotId") not in ESPN_BENCH_SLOTS:
+                starters.append(sid)
+        rec = ((t.get("record") or {}).get("overall") or {})
+        rosters.append({"roster_id": tid, "owner_id": owner_key, "players": players, "starters": starters,
+                        "settings": {"wins": _safe_int(rec.get("wins"), 0), "losses": _safe_int(rec.get("losses"), 0)},
+                        "unmapped": unmapped})
+        teams.append({"team_id": tid, "name": _espn_team_name(t), "manager": ", ".join(names),
+                      "abbrev": t.get("abbrev"), "logo": t.get("logo") or None})
+    return {"league": league, "users": users, "rosters": rosters, "teams": teams,
+            "my_team_id": my_id, "my_owner_id": f"team:{my_id}" if my_id is not None else None}
+
+
+def espn_league_ids(user_id):
+    return {f"espn:{r['league_id']}" for r in espn_leagues_get(user_id)}
+
+
+def espn_brief(rows):
+    """Picker rows for connected ESPN leagues, in the Sleeper brief's shape."""
+    return [{"league_id": f"espn:{r['league_id']}", "name": r.get("name") or "ESPN League",
+             "avatar_url": r.get("logo"), "total_rosters": r.get("size") or 0, "source": "espn",
+             "team_name": r.get("team_name"), "espn_id": r["league_id"]} for r in rows]
+
+
+def build_espn_league(row, creds, all_players):
+    """One connected ESPN league, in the shape _build_one_league returns.
+    A league that cannot be read right now (cookies expired, ESPN down)
+    comes back with an "error" and no teams rather than taking the
+    whole page down with it."""
+    lid = f"espn:{row['league_id']}"
+    try:
+        payload = espn_fetch_row(row, creds)
+        parsed = parse_espn_league(payload, all_players, my_swid=(creds or {}).get("swid"),
+                                   my_team_id=row.get("team_id"))
+        league = parsed["league"]
+        teams = build_league_teams(lid, league, all_players, parsed["users"], parsed["my_owner_id"],
+                                   rosters=parsed["rosters"])
+        return {"league_id": lid, "league_name": league["name"], "num_qbs": league_num_qbs(league),
+                "teams": teams, "my_team": next((t for t in teams if t["is_you"]), None), "source": "espn"}
+    except EspnPrivateLeague:
+        msg = "ESPN wouldn't open this league. Your ESPN cookies may have expired: reconnect it below."
+    except EspnLeagueNotFound:
+        msg = "ESPN no longer has this league for this season."
+    except Exception as e:
+        app.logger.warning("espn league %s: %s", row.get("league_id"), e)
+        msg = "ESPN didn't answer just now. Try again in a minute."
+    return {"league_id": lid, "league_name": row.get("name") or "ESPN League", "num_qbs": 1,
+            "teams": [], "my_team": None, "source": "espn", "error": msg}
+
+
+def espn_league_detail_parts(league_id, account_id):
+    """(league, users, rosters, my_owner_id) for /league on an ESPN id."""
+    if account_id is None:
+        raise ValueError("Sign in to view an ESPN league.")
+    raw_id = league_id.split(":", 1)[1]
+    row = next((r for r in espn_leagues_get(account_id) if str(r["league_id"]) == raw_id), None)
+    if row is None:
+        raise ValueError("That ESPN league isn't connected to your account.")
+    creds = espn_creds_get(account_id)
+    try:
+        payload = espn_fetch_row(row, creds)
+    except EspnPrivateLeague:
+        raise ValueError("ESPN wouldn't open this league. Your ESPN cookies may have expired: reconnect it on League Manager.")
+    except EspnLeagueNotFound:
+        raise ValueError("ESPN no longer has this league for this season.")
+    parsed = parse_espn_league(payload, get_all_players(), my_swid=(creds or {}).get("swid"),
+                               my_team_id=row.get("team_id"))
+    return parsed["league"], parsed["users"], parsed["rosters"], parsed["my_owner_id"]
+
 
 # ---------------- Accounts: Google OAuth ----------------
 
@@ -5627,12 +6082,15 @@ def sleeper_avatar_url(avatar_id):
     return f"https://sleepercdn.com/avatars/thumbs/{avatar_id}" if avatar_id else None
 
 
-def build_league_teams(league_id, league, all_players, league_users, user_id):
+def build_league_teams(league_id, league, all_players, league_users, user_id, rosters=None):
+    """rosters, when given, are already in Sleeper's shape (an ESPN
+    league, translated); otherwise they are fetched from Sleeper."""
     with ThreadPoolExecutor(max_workers=2) as executor:
         fc_future = executor.submit(get_fantasycalc_values, league_num_qbs(league))
-        rosters_future = executor.submit(get_rosters, league_id)
+        rosters_future = executor.submit(get_rosters, league_id) if rosters is None else None
         fc = fc_future.result()
-        rosters = rosters_future.result()
+        if rosters_future is not None:
+            rosters = rosters_future.result()
     fc_players = fc["players"]
 
     team_infos = []
@@ -5706,34 +6164,55 @@ def _build_one_league(league, all_players, user_id):
         "num_qbs": league_num_qbs(league),
         "teams": teams,
         "my_team": next((t for t in teams if t["is_you"]), None),
+        "source": "sleeper",
     }
 
 
-def build_leagues_for_user(username, league_ids=None, cache={}):
+_league_build_cache = {}
+
+
+def _forget_league_builds(account_id):
+    """Drop an account's built leagues (after connecting or removing one)."""
+    for key in [k for k in _league_build_cache if len(k) > 2 and k[2] == account_id]:
+        _league_build_cache.pop(key, None)
+
+
+def build_leagues_for_user(username, league_ids=None, cache=_league_build_cache, account_id=None):
     """league_ids, when given, restricts building to just that subset --
     the whole point of the sync picker is to skip fetching and scoring
     leagues the user didn't ask to track, which is also what keeps this
     fast for anyone in a lot of leagues."""
-    key = (username.lower(), tuple(sorted(league_ids)) if league_ids is not None else None)
+    key = ((username or "").lower(), tuple(sorted(league_ids)) if league_ids is not None else None, account_id)
     now = time.time()
     entry = cache.get(key)
     if entry and now - entry["time"] < 600:
         return entry["data"]
 
     all_players = get_all_players()
-    user_id, display_name = get_user_id(username)
-    leagues = get_leagues(user_id, SEASON)
-    if league_ids is not None:
-        leagues = [lg for lg in leagues if lg["league_id"] in league_ids]
+    user_id, display_name, leagues = None, None, []
+    if username:
+        user_id, display_name = get_user_id(username)
+        leagues = get_leagues(user_id, SEASON)
+        if league_ids is not None:
+            leagues = [lg for lg in leagues if lg["league_id"] in league_ids]
+    # The account's ESPN leagues ride along, keyed "espn:<id>".
+    espn_rows, creds = [], None
+    if account_id is not None:
+        espn_rows = [r for r in espn_leagues_get(account_id)
+                     if league_ids is None or f"espn:{r['league_id']}" in league_ids]
+        if espn_rows:
+            creds = espn_creds_get(account_id)
 
     # Each league's build is an independent round-trip to Sleeper/FantasyCalc,
     # so building them in parallel turns the wall-clock cost from "sum of every
     # league" into "the slowest single league" -- the main lever on reload
     # speed once the picker has already cut the list down to what's synced.
     result = []
-    if leagues:
-        with ThreadPoolExecutor(max_workers=min(8, len(leagues))) as executor:
-            futures = [executor.submit(_build_one_league, league, all_players, user_id) for league in leagues]
+    jobs = ([(_build_one_league, (league, all_players, user_id)) for league in leagues]
+            + [(build_espn_league, (row, creds, all_players)) for row in espn_rows])
+    if jobs:
+        with ThreadPoolExecutor(max_workers=min(8, len(jobs))) as executor:
+            futures = [executor.submit(fn, *args) for fn, args in jobs]
             result = [f.result() for f in futures]
 
     data = {"display_name": display_name, "user_id": user_id, "leagues": result}
@@ -5741,7 +6220,7 @@ def build_leagues_for_user(username, league_ids=None, cache={}):
     return data
 
 
-def get_my_players_by_team(username, league_ids):
+def get_my_players_by_team(username, league_ids, account_id=None):
     """{"team_abbr": [{"sid","name","position","leagues":[...]}, ...]} for
     every DISTINCT player on the account's own roster, across every
     synced league, grouped by the NFL team they play for -- this is what
@@ -5756,7 +6235,7 @@ def get_my_players_by_team(username, league_ids):
     rendered for this account/selection."""
     if not league_ids:
         return {}
-    data = build_leagues_for_user(username, league_ids=set(league_ids))
+    data = build_leagues_for_user(username, league_ids=set(league_ids), account_id=account_id)
     all_players = get_all_players()
     by_team = {}
     seen = {}  # (team, sid) -> the entry already added to by_team, so a
@@ -5782,22 +6261,29 @@ def get_my_players_by_team(username, league_ids):
     return by_team
 
 
-def build_league_detail(league_id, username, roster_id=None):
+def build_league_detail(league_id, username, roster_id=None, account_id=None):
     all_players = get_all_players()
-    user_id, display_name = get_user_id(username)
-    leagues = get_leagues(user_id, SEASON)
-    league = next((l for l in leagues if l["league_id"] == league_id), None)
-    if league is None:
-        league = {"league_id": league_id, "name": "League", "roster_positions": []}
+    if str(league_id).startswith("espn:"):
+        league, league_users, rosters, my_owner = espn_league_detail_parts(league_id, account_id)
+        teams = build_league_teams(league_id, league, all_players, league_users, my_owner, rosters=rosters)
+    else:
+        user_id, display_name = get_user_id(username)
+        leagues = get_leagues(user_id, SEASON)
+        league = next((l for l in leagues if l["league_id"] == league_id), None)
+        if league is None:
+            league = {"league_id": league_id, "name": "League", "roster_positions": []}
 
-    league_users = {
-        u["user_id"]: {"name": u.get("display_name", "?"), "avatar_url": sleeper_avatar_url(u.get("avatar"))}
-        for u in get_league_users(league_id)
-    }
-    teams = build_league_teams(league_id, league, all_players, league_users, user_id)
+        league_users = {
+            u["user_id"]: {"name": u.get("display_name", "?"), "avatar_url": sleeper_avatar_url(u.get("avatar"))}
+            for u in get_league_users(league_id)
+        }
+        teams = build_league_teams(league_id, league, all_players, league_users, user_id)
     if not teams:
         raise ValueError("No teams found in this league.")
+    return _league_detail_from_teams(league, teams, roster_id)
 
+
+def _league_detail_from_teams(league, teams, roster_id):
     if roster_id is None:
         # No specific manager picked -- this is the "View League" landing
         # page, so show the full standings/rankings list (every team's tier
@@ -7299,7 +7785,9 @@ def settings_page(section=None):
                   for key, label in SETTINGS_SECTIONS],
         username_next_change=username_change_allowed_at(current_user.username_changed_at),
         username_cooldown_days=USERNAME_CHANGE_DAYS,
-        league_count=league_count, plan=plan_summary(current_user))
+        league_count=league_count, plan=plan_summary(current_user),
+        espn_connected=(section == "leagues" and bool(espn_creds_get(current_user.id))),
+        espn_leagues=(espn_leagues_get(current_user.id) if section == "leagues" else []))
 
 
 def export_account_data(user_id):
@@ -7310,7 +7798,7 @@ def export_account_data(user_id):
     and "your data" does not mean "the thing that protects your data"."""
     out = {
         "exported_at": datetime.utcnow().isoformat() + "Z",
-        "account": {}, "synced_leagues": [], "votes": [], "avatar": None,
+        "account": {}, "synced_leagues": [], "espn_leagues": [], "votes": [], "avatar": None,
     }
     conn = get_db()
     try:
@@ -7326,6 +7814,10 @@ def export_account_data(user_id):
             cur.execute("SELECT league_id FROM synced_leagues WHERE user_id = %s",
                         (user_id,))
             out["synced_leagues"] = [r["league_id"] for r in cur.fetchall()]
+            # The leagues, never the cookies.
+            cur.execute("SELECT league_id, season, name, team_id, team_name FROM espn_leagues WHERE user_id = %s",
+                        (user_id,))
+            out["espn_leagues"] = [dict(r) for r in cur.fetchall()]
             cur.execute("SELECT sleeper_id, player_name, position, label, created_at "
                         "FROM votes WHERE user_id = %s ORDER BY created_at", (user_id,))
             out["votes"] = [
@@ -7368,6 +7860,8 @@ def delete_account(user_id):
             anonymized = cur.rowcount
             cur.execute("DELETE FROM password_resets WHERE user_id = %s", (user_id,))
             cur.execute("DELETE FROM synced_leagues WHERE user_id = %s", (user_id,))
+            cur.execute("DELETE FROM espn_credentials WHERE user_id = %s", (user_id,))
+            cur.execute("DELETE FROM espn_leagues WHERE user_id = %s", (user_id,))
             cur.execute("DELETE FROM user_avatars WHERE user_id = %s", (user_id,))
             cur.execute("DELETE FROM draft_entries WHERE user_id = %s", (user_id,))
             cur.execute("DELETE FROM users WHERE id = %s", (user_id,))
@@ -7732,6 +8226,137 @@ def build_portfolio_summary(data, num_qbs=1):
     return {"leagues_count": leagues_count, "pos_pct": pos_pct, "exposure": exposure_list[:75]}
 
 
+# --- ESPN league actions ---------------------------------------------------
+
+ESPN_MESSAGES = {
+    "invalid": "That doesn't look like an ESPN league link or id. Paste the league's link from the ESPN app or site, or its numeric id.",
+    "notfound": "ESPN has no league with that id for this season. Check the link, and that the league is set up for this season.",
+    "badcookies": "ESPN didn't accept those cookies. Copy espn_s2 and SWID again from a browser where you're signed in to ESPN.",
+    "private": "This league is private, so ESPN needs your cookies to open it. Add them below and connect again.",
+    "down": "ESPN didn't answer just now. Try again in a minute.",
+    "limit": "Connected. Free accounts sync one league, so pick which league to sync under Add or remove leagues, or see myCalc+ for unlimited leagues.",
+    "connected": "Connected. Your ESPN league is synced below.",
+    "removed": "ESPN league removed.",
+    "expired": "ESPN wouldn't open that league. Your ESPN cookies may have expired: paste them again below and connect the league again.",
+    "signin": "Sign in to open an ESPN league.",
+    "gone": "That ESPN league isn't connected to your account, or ESPN no longer has it for this season.",
+}
+
+
+def _espn_team_picker(user_id, league_id):
+    """The teams of a connected league, for the reader to say which is
+    theirs (a public league read without cookies cannot tell)."""
+    row = next((r for r in espn_leagues_get(user_id) if str(r["league_id"]) == str(league_id)), None)
+    if row is None:
+        return None
+    creds = espn_creds_get(user_id)
+    try:
+        parsed = parse_espn_league(espn_fetch_row(row, creds), get_all_players())
+    except Exception:
+        return None
+    return {"league_id": row["league_id"], "name": parsed["league"]["name"], "teams": parsed["teams"]}
+
+
+@app.route("/league-manager/espn", methods=["POST"])
+@login_required
+def espn_connect():
+    lid = espn_league_id_from_text(request.form.get("league"))
+    if not lid:
+        return redirect("/league-manager?espn=invalid#espn")
+    s2, swid = parse_espn_cookies(request.form.get("espn_s2"), request.form.get("swid"))
+    given = bool(s2 and swid)
+    creds = {"swid": swid, "s2": s2} if given else espn_creds_get(current_user.id)
+    season = int(SEASON)
+    try:
+        payload = espn_fetch_league(lid, season, swid=(creds or {}).get("swid"), s2=(creds or {}).get("s2"))
+    except EspnPrivateLeague:
+        return redirect(f"/league-manager?espn={'badcookies' if given else 'private'}&league={lid}#espn")
+    except EspnLeagueNotFound:
+        return redirect(f"/league-manager?espn=notfound&league={lid}#espn")
+    except Exception as e:
+        app.logger.warning("espn connect %s: %s", lid, e)
+        return redirect(f"/league-manager?espn=down&league={lid}#espn")
+    if given:
+        # Saved only once ESPN has accepted them.
+        espn_creds_set(current_user.id, swid, s2)
+    parsed = parse_espn_league(payload, get_all_players(), my_swid=(creds or {}).get("swid"))
+    my = parsed["my_team_id"]
+    if my is None:
+        # A league connected before keeps the team the reader already picked.
+        earlier = next((r for r in espn_leagues_get(current_user.id) if str(r["league_id"]) == lid), None)
+        if earlier and earlier.get("team_id") is not None:
+            my = earlier["team_id"]
+    team_name = next((t["name"] for t in parsed["teams"] if t["team_id"] == my), None)
+    logo = next((t["logo"] for t in parsed["teams"] if t["team_id"] == my), None)
+    lg = parsed["league"]
+    espn_league_add(current_user.id, lid, season, lg["name"], my, team_name, lg["total_rosters"], logo)
+    # Synced straight away when the free limit allows it.
+    saved = get_synced_league_ids(current_user.id) or set()
+    new_id, limited = f"espn:{lid}", False
+    if new_id not in saved:
+        if plus_unlocked() or len(saved) < FREE_LEAGUE_LIMIT:
+            set_synced_league_ids(current_user.id, sorted(saved | {new_id}))
+        else:
+            limited = True
+    _forget_league_builds(current_user.id)
+    if my is None:
+        return redirect(f"/league-manager?espn=team&league={lid}#espn")
+    return redirect("/league-manager?espn=limit#espn" if limited else "/league-manager?espn=connected")
+
+
+@app.route("/league-manager/espn/team", methods=["POST"])
+@login_required
+def espn_pick_team():
+    lid = espn_league_id_from_text(request.form.get("league"))
+    team_id = request.form.get("team_id", type=int)
+    picker = _espn_team_picker(current_user.id, lid) if lid else None
+    team = next((t for t in (picker or {}).get("teams", []) if t["team_id"] == team_id), None)
+    if not team:
+        return redirect(f"/league-manager?espn=team&league={lid}#espn")
+    espn_league_set_team(current_user.id, lid, team["team_id"], team["name"])
+    _forget_league_builds(current_user.id)
+    return redirect("/league-manager?espn=connected")
+
+
+@app.route("/league-manager/espn/remove", methods=["POST"])
+@login_required
+def espn_remove():
+    lid = espn_league_id_from_text(request.form.get("league"))
+    if lid:
+        espn_league_remove(current_user.id, lid)
+        _forget_league_builds(current_user.id)
+    return redirect("/league-manager?espn=removed")
+
+
+@app.route("/settings/espn/disconnect", methods=["POST"])
+@login_required
+def espn_disconnect_route():
+    espn_disconnect(current_user.id)
+    _forget_league_builds(current_user.id)
+    return redirect("/settings/leagues?saved=1")
+
+
+@app.route("/api/espn-check")
+@login_required
+def api_espn_check():
+    """How each connected ESPN league reads right now: for the reader
+    (and for support), never the cookies."""
+    creds = espn_creds_get(current_user.id)
+    out = []
+    for row in espn_leagues_get(current_user.id):
+        item = {"league_id": row["league_id"], "name": row.get("name"), "team_id": row.get("team_id")}
+        try:
+            parsed = parse_espn_league(espn_fetch_row(row, creds), get_all_players(),
+                                       my_swid=(creds or {}).get("swid"), my_team_id=row.get("team_id"))
+            item.update(ok=True, teams=len(parsed["teams"]), my_team=parsed["my_team_id"],
+                        players_matched=sum(len(r["players"]) for r in parsed["rosters"]),
+                        players_unmatched=[n for r in parsed["rosters"] for n in r["unmapped"]][:20])
+        except Exception as e:
+            item.update(ok=False, error=e.__class__.__name__)
+        out.append(item)
+    return jsonify({"ok": True, "cookies_saved": bool(creds), "leagues": out})
+
+
 @app.route("/league-manager")
 def leagues_page():
     username = request.args.get("u", "").strip()
@@ -7743,16 +8368,29 @@ def leagues_page():
     portfolio = None
     used_saved = False
     picker = None
+    authed = current_user.is_authenticated
+    account_id = current_user.id if authed else None
+
+    # ESPN: the account's connected leagues, and the connect card's state.
+    espn_rows = espn_leagues_get(account_id) if authed else []
+    espn_connected = bool(authed and espn_creds_get(account_id))
+    espn_code = request.args.get("espn") or ""
+    espn_pick = _espn_team_picker(account_id, request.args.get("league")) if (authed and espn_code == "team") else None
+    espn_note = ESPN_MESSAGES.get(espn_code)
+    if espn_code == "team" and espn_pick is None:
+        espn_note = ESPN_MESSAGES["down"]
 
     if not username and current_user.is_authenticated and current_user.sleeper_username:
         username = current_user.sleeper_username
         used_saved = True
 
-    if username:
+    if username or espn_rows:
         try:
-            user_id, display_name, brief = get_leagues_brief(username)
+            brief, display_name = [], None
+            if username:
+                user_id, display_name, brief = get_leagues_brief(username)
 
-            if current_user.is_authenticated and username != (current_user.sleeper_username or ""):
+            if username and current_user.is_authenticated and username != (current_user.sleeper_username or ""):
                 conn = get_db()
                 try:
                     with conn.cursor() as cur:
@@ -7761,6 +8399,9 @@ def leagues_page():
                     current_user.sleeper_username = username
                 finally:
                     conn.close()
+            brief = brief + espn_brief(espn_rows)
+            if not display_name:
+                display_name = current_user.username if authed else username
 
             saved_ids = get_synced_league_ids(current_user.id) if current_user.is_authenticated else None
 
@@ -7786,22 +8427,26 @@ def leagues_page():
                     error = "Pick at least one league to sync."
                     picker = {"leagues": brief, "display_name": display_name, "preselected": set(), "default_all": False}
                 else:
-                    data = build_leagues_for_user(username, league_ids=set(chosen_ids))
+                    data = build_leagues_for_user(username, league_ids=set(chosen_ids), account_id=account_id)
                     portfolio = build_portfolio_summary(data, num_qbs=2 if fmt == "superflex" else 1)
             elif saved_ids is not None:
-                data = build_leagues_for_user(username, league_ids=saved_ids)
+                data = build_leagues_for_user(username, league_ids=saved_ids, account_id=account_id)
                 portfolio = build_portfolio_summary(data, num_qbs=2 if fmt == "superflex" else 1)
             else:
                 # First time we've seen this username with no saved selection --
                 # ask which leagues to sync instead of building every one of
                 # them up front.
                 picker = {"leagues": brief, "display_name": display_name, "preselected": set(), "default_all": True}
+            if data and not data.get("display_name"):
+                data["display_name"] = display_name
         except Exception as e:
             error = str(e)
 
     return render_template_string(
         HOME_HTML, username=username, data=data, error=error, portfolio=portfolio, fmt=fmt,
         used_saved=used_saved, picker=picker,
+        espn_note=espn_note, espn_private=(espn_code == "private"), espn_prefill=request.args.get("league") or "",
+        espn_pick=espn_pick, espn_connected=espn_connected, espn_leagues=espn_rows,
     )
 
 
@@ -7811,7 +8456,8 @@ def league_detail():
     username = request.args.get("u", "")
     roster_id = request.args.get("roster_id", type=int)
     try:
-        detail = build_league_detail(league_id, username, roster_id)
+        detail = build_league_detail(league_id, username, roster_id,
+                                     account_id=current_user.id if current_user.is_authenticated else None)
         # Matchup grades are an auth-gated perk (eventually a paid one, once
         # billing exists -- see /matchups) computed here in the route rather
         # than inside build_league_detail, which stays pure/auth-unaware so
@@ -7833,6 +8479,13 @@ def league_detail():
                     p["grade"] = grade["grade"] if grade else None
                     p["grade_class"] = grade["grade_class"] if grade else None
         return render_template_string(LEAGUE_DETAIL_HTML, detail=detail, username=username, league_id=league_id)
+    except ValueError as e:
+        if str(league_id).startswith("espn:"):
+            # An ESPN league that would not open: back to the connect
+            # card, which says why and takes fresh cookies.
+            code = "expired" if "cookies" in str(e) else ("signin" if "Sign in" in str(e) else "gone")
+            return redirect(f"/league-manager?espn={code}#espn")
+        return f"Error: {e}", 500
     except Exception as e:
         return f"Error: {e}", 500
 
@@ -8357,13 +9010,13 @@ def _annotate_my_players(games, username):
     my_away_players -- only does real work (and only for a signed-in
     account with leagues already synced on League Manager) so a
     request with no username attached costs nothing extra."""
-    if not username or not current_user.is_authenticated:
+    if not current_user.is_authenticated:
         return
     league_ids = get_synced_league_ids(current_user.id)
-    if not league_ids:
+    if not league_ids or (not username and not any(str(l).startswith("espn:") for l in league_ids)):
         return
     try:
-        by_team = get_my_players_by_team(username, league_ids)
+        by_team = get_my_players_by_team(username, league_ids, account_id=current_user.id)
     except Exception:
         return
     for g in games:
@@ -8375,13 +9028,13 @@ def _my_players_for_game(detail, username):
     """Same lookup as _annotate_my_players but shaped for a single game's
     detail dict ({"home": [...], "away": [...]} or None) -- used by the
     /game page's "Your Players In This Game" panel."""
-    if not username or not current_user.is_authenticated:
+    if not current_user.is_authenticated:
         return None
     league_ids = get_synced_league_ids(current_user.id)
-    if not league_ids:
+    if not league_ids or (not username and not any(str(l).startswith("espn:") for l in league_ids)):
         return None
     try:
-        by_team = get_my_players_by_team(username, league_ids)
+        by_team = get_my_players_by_team(username, league_ids, account_id=current_user.id)
     except Exception:
         return None
     home_abbr = detail.get("home", {}).get("abbr")
@@ -15767,6 +16420,12 @@ PRIVACY_HTML = BASE_STYLE + make_header("") + LEGAL_STYLE + """
       <li><b>Your Sleeper username and the IDs of leagues you sync</b> &mdash; so
         League Manager can show your rosters. We do not change anything on
         Sleeper.</li>
+      <li><b>ESPN cookies, only if you connect an ESPN league</b> &mdash; ESPN has no
+        sign-in for other sites, so reading a private ESPN league takes two cookies
+        from your own ESPN session (espn_s2 and SWID). We store them encrypted, use
+        them only to read the leagues you connect, never show them again, and delete
+        them the moment you disconnect ESPN under Settings &rsaquo; Leagues or delete
+        your account. We do not change anything on ESPN.</li>
       <li><b>Your preferences</b> &mdash; scoring format, rankings defaults, theme
         and primary colour</li>
       <li><b>Your Start/Bench/Cut votes</b> &mdash; which feed the community
@@ -16200,8 +16859,9 @@ HOME_HTML = BASE_STYLE + make_header("league") + VOTE_MODAL_HTML + """
   <div class="panel">
     <div style="display:flex; justify-content:space-between; align-items:baseline;">
       <h2>{{ lg.league_name }}</h2>
-      <span class="sample-tag">Live data</span>
+      <span class="sample-tag">{{ 'ESPN' if lg.source == 'espn' else 'Live data' }}</span>
     </div>
+    {% if lg.error %}<div class="error" style="margin-top:10px;">{{ lg.error }} <a href="/league-manager#espn" style="color:var(--accent-ink);">Reconnect</a></div>{% endif %}
     {% if t %}
     <div class="team-row">
       <img class="team-avatar" src="{{ t.avatar_url or 'data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2232%22 height=%2232%22><rect width=%2232%22 height=%2232%22 rx=%2216%22 fill=%22%23444841%22/></svg>' }}" alt="" onerror="this.style.visibility='hidden'">
@@ -16339,7 +16999,7 @@ HOME_HTML = BASE_STYLE + make_header("league") + VOTE_MODAL_HTML + """
 {% macro league_picker(picker, username, fmt) %}
 <div class="panel">
   <p class="eyebrow">Choose leagues to sync</p>
-  <h2>{{ picker.display_name }}'s leagues on Sleeper</h2>
+  <h2>{{ picker.display_name }}'s leagues</h2>
   <p class="muted" style="margin-top:6px;">We found {{ picker.leagues|length }} league{{ 's' if picker.leagues|length != 1 else '' }}. Pick the ones you want tracked here &mdash; you can add or remove leagues anytime.</p>
   <form method="get" action="/league-manager" id="leaguePickForm">
     <input type="hidden" name="u" value="{{ username }}">
@@ -16349,8 +17009,9 @@ HOME_HTML = BASE_STYLE + make_header("league") + VOTE_MODAL_HTML + """
       <label class="league-pick-row">
         <input type="checkbox" name="leagues" value="{{ lg.league_id }}" {% if lg.league_id in picker.preselected or picker.default_all %}checked{% endif %}>
         <img class="league-pick-avatar" src="{{ lg.avatar_url or 'data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2228%22 height=%2228%22><rect width=%2228%22 height=%2228%22 rx=%2214%22 fill=%22%23444841%22/></svg>' }}" alt="" onerror="this.style.visibility='hidden'">
-        <span class="league-pick-name">{{ lg.name }}</span>
+        <span class="league-pick-name">{{ lg.name }}{% if lg.source == 'espn' %}<span class="src-tag">ESPN</span>{% endif %}</span>
         <span class="muted mono" style="margin-left:auto;">{{ lg.total_rosters }} teams</span>
+        {% if lg.source == 'espn' %}<button type="submit" form="espnRemove{{ lg.espn_id }}" class="link-btn" style="margin-left:10px;">remove</button>{% endif %}
       </label>
       {% endfor %}
     </div>
@@ -16360,6 +17021,9 @@ HOME_HTML = BASE_STYLE + make_header("league") + VOTE_MODAL_HTML + """
       <button class="btn" type="submit" style="margin-left:auto;">Sync selected leagues</button>
     </div>
   </form>
+  {% for lg in picker.leagues if lg.source == 'espn' %}
+  <form id="espnRemove{{ lg.espn_id }}" method="post" action="/league-manager/espn/remove" style="display:none;"><input type="hidden" name="league" value="{{ lg.espn_id }}"></form>
+  {% endfor %}
 </div>
 <script>
 (function(){
@@ -16389,6 +17053,70 @@ HOME_HTML = BASE_STYLE + make_header("league") + VOTE_MODAL_HTML + """
     <p class="muted" style="margin-top:10px;">Saved <strong style="color:var(--accent-ink);">{{ username }}</strong> to your account &mdash; it'll load automatically next time you visit.</p>
     {% endif %}
     {% if error %}<div class="error">{{ error }}</div>{% endif %}
+  </div>
+
+  <div class="panel" id="espn">
+    <style>
+      .src-tag{ display:inline-block; margin-left:6px; padding:1px 7px; border-radius:999px; font-size:11px; font-weight:800;
+                letter-spacing:.04em; background:var(--critical-wash); color:var(--critical); vertical-align:middle; }
+      .espn-form label{ display:block; font-size:13px; color:var(--ink-secondary); margin:12px 0 5px; font-weight:700; }
+      .espn-form input, .espn-form select{ width:100%; box-sizing:border-box; padding:11px 13px; border-radius:10px;
+                border:1px solid var(--line-strong); background:var(--paper-sunken); color:var(--ink); font-size:15px; font-family:inherit; }
+      .espn-form details{ margin-top:14px; border:1px solid var(--line); border-radius:12px; padding:10px 14px; }
+      .espn-form summary{ cursor:pointer; font-weight:700; color:var(--accent-ink); }
+      .espn-form ol{ margin:10px 0 0 18px; padding:0; color:var(--ink-secondary); font-size:14px; line-height:1.55; }
+      .espn-form .row2{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+      @media (max-width:560px){ .espn-form .row2{ grid-template-columns:1fr; } }
+      .espn-note{ margin-top:12px; padding:10px 13px; border-radius:10px; background:var(--paper-sunken); font-size:14px; }
+    </style>
+    <p class="eyebrow">ESPN</p>
+    <h2>Connect an ESPN league</h2>
+    {% if not current_user.is_authenticated %}
+    <p class="muted" style="margin-top:6px;"><a href="/login?next=/league-manager" style="color:var(--accent-ink);">Sign in</a> or
+      <a href="/signup" style="color:var(--accent-ink);">create a free account</a> to connect ESPN leagues. They're saved to your
+      account, so connecting is a one-time step.</p>
+    {% else %}
+    <p class="muted" style="margin-top:6px;">Paste the league's link from the ESPN app or site. A public league connects straight away.
+      A private league needs your ESPN cookies once; they stay on your account for every league after that.</p>
+    {% if espn_note %}<div class="espn-note">{{ espn_note }}</div>{% endif %}
+    {% if espn_pick %}
+    <form method="post" action="/league-manager/espn/team" class="espn-form">
+      <input type="hidden" name="league" value="{{ espn_pick.league_id }}">
+      <label for="espnTeam">Which team is yours in {{ espn_pick.name }}?</label>
+      <select id="espnTeam" name="team_id">
+        {% for t in espn_pick.teams %}<option value="{{ t.team_id }}">{{ t.name }}{% if t.manager %} &middot; {{ t.manager }}{% endif %}</option>{% endfor %}
+      </select>
+      <button class="btn" type="submit" style="margin-top:14px;">That's my team</button>
+    </form>
+    {% else %}
+    <form method="post" action="/league-manager/espn" class="espn-form" autocomplete="off">
+      <label for="espnLeague">League link or id</label>
+      <input type="text" id="espnLeague" name="league" value="{{ espn_prefill }}" required inputmode="url"
+             placeholder="https://fantasy.espn.com/football/league?leagueId=…">
+      <details{% if espn_private or not espn_connected %} open{% endif %}>
+        <summary>{{ 'Update your ESPN cookies' if espn_connected else 'Private league? Add your ESPN cookies' }}</summary>
+        <p class="muted" style="margin-top:8px;">ESPN has no sign-in for other sites, so reading a private league takes two cookies
+          from your own ESPN session. They're stored encrypted, used only to read the leagues you connect, never shown again,
+          and you can remove them anytime under Settings &rsaquo; Leagues.</p>
+        <ol>
+          <li>On a computer, sign in at <b>espn.com</b> and open your league.</li>
+          <li>Open the browser's developer tools (press F12, or right-click the page and choose Inspect), then
+            <b>Application</b> (Chrome, Edge) or <b>Storage</b> (Firefox, Safari) &rsaquo; <b>Cookies</b> &rsaquo; espn.com.</li>
+          <li>Copy the values of <b>espn_s2</b> and <b>SWID</b> into the boxes below. Pasting the whole cookie line into either box works too.</li>
+        </ol>
+        <div class="row2">
+          <div><label for="espnS2">espn_s2</label>
+            <input type="text" id="espnS2" name="espn_s2" placeholder="AEB…" autocapitalize="off" autocorrect="off" spellcheck="false"></div>
+          <div><label for="espnSwid">SWID</label>
+            <input type="text" id="espnSwid" name="swid" placeholder="{1A2B3C4D-…}" autocapitalize="off" autocorrect="off" spellcheck="false"></div>
+        </div>
+      </details>
+      <button class="btn" type="submit" style="margin-top:16px;">Connect league</button>
+    </form>
+    {% if espn_connected %}<p class="muted" style="margin-top:10px;">Your ESPN cookies are saved on this account.
+      <a href="/settings/leagues" style="color:var(--accent-ink);">Manage or remove them</a>.</p>{% endif %}
+    {% endif %}
+    {% endif %}
   </div>
 
   {% if picker %}
@@ -23138,6 +23866,25 @@ document.addEventListener('change', function(e){
       </div>
     </div>
   </form>
+  <div class="panel" style="margin-top:14px;">
+    <div class="set-group">
+      <h3>ESPN</h3>
+      {% if espn_leagues %}
+      <div class="hint">{{ espn_leagues|length }} ESPN league{{ '' if espn_leagues|length == 1 else 's' }} connected:
+        {% for r in espn_leagues %}{{ r.name }}{% if not loop.last %}, {% endif %}{% endfor %}.
+        <a href="/league-manager#espn" style="color:var(--accent-ink);">Add another</a>.</div>
+      {% endif %}
+      {% if espn_connected %}
+      <div class="hint">Your ESPN cookies are saved, encrypted, and used only to read the leagues you connected.
+        Disconnecting removes the cookies and every ESPN league from this account.</div>
+      <form method="post" action="/settings/espn/disconnect" style="margin-top:10px;">
+        <button type="submit" class="link-btn" style="color:var(--critical);">Disconnect ESPN</button>
+      </form>
+      {% else %}
+      <div class="hint">No ESPN cookies saved. <a href="/league-manager#espn" style="color:var(--accent-ink);">Connect an ESPN league</a>.</div>
+      {% endif %}
+    </div>
+  </div>
 
   {% elif section == 'plan' %}
   {% if plan is not defined %}{% set plan = {'label': 'Free', 'detail': '', 'active': False, 'manage': False,
