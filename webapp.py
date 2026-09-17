@@ -7413,7 +7413,7 @@ def api_theme():
 # hand, because "today" would claim a revision every time the server
 # restarted and make the date meaningless.
 LEGAL_UPDATED = "15 September 2026"
-SUPPORT_EMAIL = os.environ.get("SUPPORT_EMAIL") or "support@fantasyfootballcalc.com"
+SUPPORT_EMAIL = os.environ.get("SUPPORT_EMAIL") or "fantasyfootballcalc@gmail.com"
 
 
 @app.route("/unsubscribe")
@@ -12639,6 +12639,11 @@ def api_matchup_compare():
 @app.route("/")
 @app.route("/rankings")
 def rankings():
+    # Home for someone signed in is game day. A guest's home stays the
+    # rankings, with the free-account card; /rankings itself is always
+    # the rankings.
+    if request.path == "/" and current_user.is_authenticated:
+        return redirect(SIGNED_IN_HOME)
     # No parameter means "whatever this person plays" -- their saved
     # default from Settings, or the site's if they have not set one or
     # are not signed in.
@@ -15478,10 +15483,6 @@ PRIVACY_HTML = BASE_STYLE + make_header("") + LEGAL_STYLE + """
 
     <h3>Contact</h3>
     <p>Questions about any of this: <a href="/support">get in touch</a>.</p>
-
-    <div class="lg-note">This policy describes how the site actually works today,
-      written against the code rather than from a template. It has not been
-      reviewed by a lawyer.</div>
   </div>
 </div></main>
 """
@@ -15538,8 +15539,6 @@ TERMS_HTML = BASE_STYLE + make_header("") + LEGAL_STYLE + """
 
     <h3>Contact</h3>
     <p><a href="/support">Get in touch</a> with any question about these terms.</p>
-
-    <div class="lg-note">These terms have not been reviewed by a lawyer.</div>
   </div>
 </div></main>
 """
