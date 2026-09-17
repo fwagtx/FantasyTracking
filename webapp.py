@@ -270,9 +270,14 @@ TABBAR_PATHS = (
 # Which sections are myCalc+ once the gate is on: the calculator, with a
 # plus beside it, marks them in the menu and on the bar.
 PLUS_KEYS = ("matchups", "streaks", "plus")
+# The favicon's calculator (display bar, four keys) with a plus beside it.
 PLUS_MARK_SVG = ('<svg class="plus-mark" viewBox="0 0 30 26" aria-label="myCalc+" role="img">'
-                 '<rect x="1" y="1" width="24" height="24" rx="5" fill="var(--accent)"/>'
-                 '<path d="M6 13H20M6 8H14M6 18H14" stroke="var(--accent-on)" stroke-width="2" stroke-linecap="round"/>'
+                 '<rect x="0" y="1" width="24" height="24" rx="5" fill="var(--accent)"/>'
+                 '<rect x="4.9" y="5.1" width="14.2" height="4.9" rx="1.3" fill="#17140d"/>'
+                 '<circle cx="8.3" cy="15.3" r="1.7" fill="#17140d"/>'
+                 '<circle cx="15.7" cy="15.3" r="1.7" fill="#17140d"/>'
+                 '<circle cx="8.3" cy="20.1" r="1.7" fill="#17140d"/>'
+                 '<circle cx="15.7" cy="20.1" r="1.7" fill="#17140d"/>'
                  '<circle cx="24" cy="20" r="5.5" fill="var(--ink)"/>'
                  '<path d="M24 17v6M21 20h6" stroke="var(--paper)" stroke-width="1.8" stroke-linecap="round"/></svg>')
 
@@ -15500,9 +15505,15 @@ SCORE_MARK_SVG = ('<svg class="score-mark" viewBox="0 0 12 14" fill="none" aria-
                   '</svg>')
 
 
-LOGO_SVG = """<svg viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-  <rect x="1" y="1" width="24" height="24" rx="5" fill="var(--ink)"/>
-  <path d="M6 13H20M6 8H14M6 18H14" stroke="var(--paper)" stroke-width="2" stroke-linecap="round"/>
+# The calculator, the same drawing as the favicon (FAVICON_SVG, 64 units
+# scaled to 26): a display bar and four keys on the accent colour.
+LOGO_SVG = """<svg viewBox="0 0 26 26" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <rect width="26" height="26" rx="5.3" fill="var(--accent)"/>
+  <rect x="5.3" y="4.5" width="15.4" height="5.3" rx="1.4" fill="#17140d"/>
+  <circle cx="8.9" cy="15.4" r="1.9" fill="#17140d"/>
+  <circle cx="17.1" cy="15.4" r="1.9" fill="#17140d"/>
+  <circle cx="8.9" cy="20.7" r="1.9" fill="#17140d"/>
+  <circle cx="17.1" cy="20.7" r="1.9" fill="#17140d"/>
 </svg>"""
 
 # The two halves of the site, and what lives in each.
