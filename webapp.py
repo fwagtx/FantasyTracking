@@ -10852,9 +10852,16 @@ def _day_started_at(day):
 
 
 def get_birthdays_today(limit=BIRTHDAY_FEED_SIZE, today=None):
-    """The scores board's short list: the season's birthdays so far,
-    newest first, capped."""
-    return get_birthdays(limit=limit, today=today)
+    """The scores board's short list: yesterday's, today's and tomorrow's
+    birthdays by the server's clock, newest first. Tomorrow's ride along
+    for a reader whose day has already turned, and the page hides
+    whichever rows are still ahead of the reader's own clock -- the
+    server cannot know where anyone is, so it sends the whole window
+    and lets the browser decide what "today" means."""
+    today = today or date.today()
+    rows = get_birthdays(today=today + timedelta(days=1), since=today - timedelta(days=1),
+                         now=datetime.utcnow())
+    return rows[:limit * 3] if limit else rows
 
 
 _team_rank_cache = {}
@@ -11281,14 +11288,14 @@ def birthdays_page():
     try:
         info = get_current_week_info()
         season = request.args.get("season", default=info["season"], type=int)
-        rows = _safe_feed(lambda: get_birthdays(season=season))
+        rows = _safe_feed(lambda: get_birthdays(season=season, today=date.today() + timedelta(days=1),
+                                                now=datetime.utcnow()))
         start = season_start_date(season)
         return render_template_string(
             FEED_PAGE_HTML, title="Birthdays", kind="birthdays", rows=rows,
             blurb=(f"Every birthday since the {season} season opened on "
-                   f"{start.strftime('%-d %B')}, newest first. The time beside a row "
-                   "is how long ago that day started, on the league's own Eastern "
-                   "clock. The list grows on its own as the season does."),
+                   f"{start.strftime('%-d %B')}, newest first, on your own clock. "
+                   "The list grows on its own as the season does."),
             empty="No birthdays yet this season.", load_error=None)
     except Exception as e:
         return render_template_string(
@@ -12060,9 +12067,17 @@ def rankings():
     _record_value_snapshots_background()
 
     prelim = []
+    board_season = int(stats_season)
+    past_board = board_season < int(SEASON)
     for sid, v in fc_players.items():
         p = all_players.get(sid)
         if not p or v.get("position") not in POSITIONS:
+            continue
+        # A past season's board lists the players who were in the league
+        # that season. This year's rookies had no 2025, so on the 2025
+        # board they are not a row of zeroes -- they are not there.
+        ry = rookie_year(p)
+        if past_board and ry is not None and ry > board_season:
             continue
         stat_line = season_stats.get(sid, {})
         prelim.append({
@@ -12071,6 +12086,16 @@ def rankings():
             "position_rank": v.get("position_rank") or 999,
             "position": v.get("position"),
         })
+    if past_board:
+        # With that year's newcomers gone the standings close up: the
+        # ranks run 1..N over the players actually on the board, overall
+        # and within each position, so the tiers below stay whole.
+        prelim.sort(key=lambda r: r["overall_rank"])
+        seen_pos = {}
+        for i, r in enumerate(prelim, 1):
+            r["overall_rank"] = i
+            seen_pos[r["position"]] = seen_pos.get(r["position"], 0) + 1
+            r["position_rank"] = seen_pos[r["position"]]
 
     # Find the single furthest-out overall rank among top-32 QBs, and
     # push the D/F boundary out to at least cover it. One shared
@@ -12112,7 +12137,7 @@ def rankings():
             "fpts": round(fpts, 1) if games else 0,
             "fpts_per_game": round(fpts / games, 1) if games else 0,
             "snap_pct": stat_line.get("snap_pct"),
-            "position_rank": v.get("position_rank") or 999,
+            "position_rank": r["position_rank"],
             "value": v.get("value", 0), "overall_rank": overall_rank,
             "tier": tier,
             # Positive is up: places climbed, value gained. None, not
@@ -14600,13 +14625,34 @@ FEED_DAYS_JS = """
     try { return d.toLocaleDateString(undefined, {month:'short', day:'numeric', year:'numeric'}); }
     catch (e) { return d.toDateString(); }
   }
+  function ago(d, now, isDay){
+    // A calendar day's age is measured from the reader's own midnight;
+    // a moment's from now. "1m" at the least, the way the feed writes it.
+    var start = isDay ? d : d, secs = Math.max(0, Math.floor((now - start) / 1000));
+    if (isDay){
+      var mid = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      if (key(d) === key(now)) secs = Math.max(0, Math.floor((now - mid) / 1000));
+      else return Math.max(1, Math.round((mid - d) / 86400000)) + 'd';
+    }
+    if (secs < 3600) return Math.max(1, Math.floor(secs / 60)) + 'm';
+    if (secs < 86400) return Math.floor(secs / 3600) + 'h';
+    return Math.floor(secs / 86400) + 'd';
+  }
   function draw(){
-    var today = key(new Date());
+    var now = new Date(), today = key(now);
+    var midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     document.querySelectorAll('.fd-list, .sc-feed').forEach(function(list){
-      list.querySelectorAll('.feed-day').forEach(function(n){ n.remove(); });
-      var cls = list.classList.contains('fd-list') ? 'fd-day' : 'sc-day', last = null;
+      list.querySelectorAll('.feed-day, .feed-quiet').forEach(function(n){ n.remove(); });
+      var fd = list.classList.contains('fd-list');
+      var cls = fd ? 'fd-day' : 'sc-day', last = null, shown = 0;
       Array.prototype.slice.call(list.children).forEach(function(row){   // a copy: inserting rules must not shift the walk
         var d = dayOf(row); if (!d) return;
+        var isDay = row.hasAttribute('data-day');
+        // A birthday the reader's clock has not reached yet waits for it.
+        if (isDay && d > midnight){ row.hidden = true; return; }
+        row.hidden = false; shown++;
+        var stamp = row.querySelector('.feed-ago');
+        if (stamp && isDay) stamp.textContent = ago(d, now, true);
         var k = key(d);
         if (k === today) { last = k; return; }
         if (k !== last){
@@ -14616,6 +14662,12 @@ FEED_DAYS_JS = """
         }
         last = k;
       });
+      if (!shown && list.querySelector('[data-day]')){
+        var q = document.createElement('div');
+        q.className = (fd ? 'fd-empty' : 'sc-feed-quiet') + ' feed-quiet';
+        q.textContent = 'No birthdays yet today.';
+        list.appendChild(q);
+      }
     });
   }
   function armMidnight(){
@@ -16070,7 +16122,7 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + FEED_DAYS_JS + """
       </span>
       <span class="sc-feed-meta">
         <span class="sc-feed-club">{{ r.position }}</span>
-        {%- if r.ago %}<b>{{ r.ago }}</b>{% endif -%}
+        {%- if r.ago %}<b class="feed-ago">{{ r.ago }}</b>{% endif -%}
       </span>
     </a>
     {% endfor %}
@@ -16115,7 +16167,7 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + FEED_DAYS_JS + """
       </span>
       <span class="sc-feed-meta">
         <span class="sc-feed-club">{{ r.position }}</span>
-        {%- if r.ago %}<b>{{ r.ago }}</b>{% endif -%}
+        {%- if r.ago %}<b class="feed-ago">{{ r.ago }}</b>{% endif -%}
       </span>
     </a>
     {% endfor %}
@@ -16148,7 +16200,7 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + FEED_DAYS_JS + """
       </span>
       <span class="sc-feed-meta">
         <span class="sc-feed-club">{{ b.position }}</span>
-        {%- if b.ago %}<b>{{ b.ago }}</b>{% endif -%}
+        {%- if b.ago %}<b class="feed-ago">{{ b.ago }}</b>{% endif -%}
       </span>
     </a>
     {% endfor %}
@@ -17311,7 +17363,7 @@ FEED_PAGE_HTML = BASE_STYLE + make_header("live") + FEED_DAYS_JS + """
       </span>
       <span class="fd-meta">
         <span class="fd-club">{{ r.position }}</span>
-        {%- if r.ago %}<b>{{ r.ago }}</b>{% endif -%}
+        {%- if r.ago %}<b class="feed-ago">{{ r.ago }}</b>{% endif -%}
       </span>
     </a>
     {% endfor %}
