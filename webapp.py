@@ -6333,13 +6333,19 @@ STRIPE_PRICES = {
     "monthly": os.environ.get("STRIPE_PRICE_MONTHLY", ""),
     "season": os.environ.get("STRIPE_PRICE_SEASON", ""),
     "founding": os.environ.get("STRIPE_PRICE_FOUNDING", ""),
+    # The $1 one-time price the trial charges on day one. Optional:
+    # without it the trial offer is simply not shown.
+    "trial": os.environ.get("STRIPE_PRICE_TRIAL", ""),
 }
-PLAN_MODES = {"monthly": "subscription", "season": "payment", "founding": "payment"}
+PLAN_MODES = {"monthly": "subscription", "season": "payment", "founding": "payment", "trial": "subscription"}
 PLAN_NAMES = {"monthly": "myCalc+ Monthly", "season": "myCalc+ Season Pass",
-              "founding": "myCalc+ Founding Season Pass"}
+              "founding": "myCalc+ Founding Season Pass", "trial": "myCalc+ Monthly"}
 # Display only. Stripe charges the price object; these just have to
 # agree with it on the pricing page.
-PLAN_PRICES = {"monthly": "$6.99", "season": "$29.99", "founding": "$19.99"}
+PLAN_PRICES = {"monthly": "$6.99", "season": "$29.99", "founding": "$19.99", "trial": "$1"}
+# The trial: $1 today for TRIAL_DAYS days of Monthly, then the monthly
+# price unless cancelled first. First-time members only.
+TRIAL_DAYS = 3
 # The gate is a switch, off until the owner has watched a real purchase
 # land. Off, every page behaves exactly as before billing existed (the
 # sign-in gates only); on, the myCalc+ pages ask for the plan.
@@ -6369,6 +6375,23 @@ def billing_missing():
 
 def billing_configured():
     return not billing_missing()
+
+
+def trial_open():
+    return billing_configured() and bool(STRIPE_PRICES["trial"]) and bool(STRIPE_PRICES["monthly"])
+
+
+def trial_eligible(user):
+    """First-time members only: a guest, or an account that has never
+    held a plan or a subscription. One trial per customer is also what
+    Stripe enforces on the customer record; this keeps the button honest."""
+    if user is None or not getattr(user, "is_authenticated", True):
+        return True
+    if getattr(user, "is_member", False):
+        return False
+    if getattr(user, "stripe_subscription_id", None):
+        return False
+    return (getattr(user, "plan", "none") or "none") == "none" and not (getattr(user, "member_status", "") or "")
 
 
 if billing_missing():
@@ -6670,7 +6693,8 @@ def _grant_from_session(cur, sess):
                 period_end = _period_end(_plain(_stripe().Subscription.retrieve(sub_id)))
             except Exception:
                 period_end = None
-        _users_set(cur, user_id, plan="monthly", member_status="active", stripe_subscription_id=sub_id,
+        status = "trialing" if meta.get("trial") == "1" else "active"
+        _users_set(cur, user_id, plan="monthly", member_status=status, stripe_subscription_id=sub_id,
                    cancel_at_period_end=False, current_period_end=period_end)
         out["result"] = "granted"
         return out
@@ -6855,13 +6879,22 @@ def checkout_params(user, plan, customer_id):
     """The Checkout session, as Stripe wants it. Pure, so a test can read
     it without a network. `user` is None for a guest: Stripe collects the
     email, and the account is made from it once the payment lands."""
+    trial = plan == "trial"
+    bought = "monthly" if trial else plan   # what the account ends up on
     if user is None:
-        who = {"plan": plan, "guest": "1"}
+        who = {"plan": bought, "guest": "1"}
     else:
-        who = {"app_user_id": str(user.id), "plan": plan}
+        who = {"app_user_id": str(user.id), "plan": bought}
+    if trial:
+        who["trial"] = "1"
+    # The trial is the monthly subscription with TRIAL_DAYS free, plus
+    # the $1 one-time price on the first invoice: $1 today, the monthly
+    # price when the trial ends.
+    line_items = ([{"price": STRIPE_PRICES["monthly"], "quantity": 1}, {"price": STRIPE_PRICES["trial"], "quantity": 1}]
+                  if trial else [{"price": STRIPE_PRICES[plan], "quantity": 1}])
     params = dict(
         mode=PLAN_MODES[plan],
-        line_items=[{"price": STRIPE_PRICES[plan], "quantity": 1}],
+        line_items=line_items,
         metadata=who,
         success_url=SITE_URL + "/billing/success?session_id={CHECKOUT_SESSION_ID}",
         cancel_url=SITE_URL + "/plus",
@@ -6884,6 +6917,12 @@ def checkout_params(user, plan, customer_id):
         # A 100%-off code (the owner's own test code, a friend's) needs
         # no card at all; Stripe only asks for one if there is a charge.
         params["payment_method_collection"] = "if_required"
+        if trial:
+            params["subscription_data"]["trial_period_days"] = TRIAL_DAYS
+            # The card that pays the $1 is the card that renews; a
+            # trial that somehow lost it ends rather than lingering.
+            params["subscription_data"]["trial_settings"] = {"end_behavior": {"missing_payment_method": "cancel"}}
+            params["payment_method_collection"] = "always"
     else:
         params["payment_intent_data"] = {"metadata": who}
     return params
@@ -6901,6 +6940,8 @@ def billing_checkout(plan):
         return redirect("/plus?notice=not-open")
     if viewer_has_plus():
         return redirect("/plus?notice=already")
+    if plan == "trial" and not (trial_open() and trial_eligible(current_user if current_user.is_authenticated else None)):
+        return redirect("/plus?notice=trial-used")
     try:
         if current_user.is_authenticated:
             customer_id = get_or_create_stripe_customer(current_user)
@@ -6928,17 +6969,20 @@ def billing_success():
     sid = (request.args.get("session_id") or "").strip()
     result = None
     guest_state = None   # "new" / "existing" / None
+    trial_started = False
     if current_user.is_authenticated:
         if sid and billing_configured():
             try:
                 sess = _plain(_stripe().checkout.Session.retrieve(sid, expand=["subscription"]))
                 if _session_user_id(sess) == int(current_user.id) and sess.get("status") == "complete":
                     result = apply_checkout_session(sess)
+                    trial_started = (sess.get("metadata") or {}).get("trial") == "1"
             except Exception:
                 app.logger.exception("could not confirm checkout session")
         fresh = load_user(current_user.id) if DATABASE_URL else None
         summary = plan_summary(fresh or current_user)
-        return render_template_string(BILLING_SUCCESS_HTML, summary=summary, result=result, guest=None)
+        return render_template_string(BILLING_SUCCESS_HTML, summary=summary, result=result, guest=None,
+                                      trial=trial_started, trial_days=TRIAL_DAYS, monthly_price=PLAN_PRICES["monthly"])
     if not sid or not billing_configured() or not DATABASE_URL:
         return redirect("/plus")
     try:
@@ -6961,7 +7005,8 @@ def billing_success():
     else:
         guest_state = "existing"
     return render_template_string(BILLING_SUCCESS_HTML, summary=plan_summary(User(row)),
-                                  result=result, guest=guest_state, email=email)
+                                  result=result, guest=guest_state, email=email,
+                                  trial=(meta.get("trial") == "1"), trial_days=TRIAL_DAYS, monthly_price=PLAN_PRICES["monthly"])
 
 
 @app.route("/billing/portal", methods=["POST"])
@@ -6985,6 +7030,7 @@ PLUS_NOTICES = {
     "founding-closed": "The founding price has ended. The Season Pass is below at its regular price.",
     "not-open": "Checkout isn't open yet. Check back soon.",
     "already": "You're already on myCalc+.",
+    "trial-used": "The $1 trial is for first-time members. Monthly and the Season Pass are below.",
     "error": "Stripe couldn't start checkout just now. Nothing was charged; please try again in a minute.",
 }
 
@@ -7027,9 +7073,12 @@ def plus_cards():
 @app.route("/pricing")
 def plus_page():
     summary = plan_summary(current_user) if current_user.is_authenticated else None
+    trial = (trial_open() and not (summary and summary["active"])
+             and trial_eligible(current_user if current_user.is_authenticated else None))
     return render_template_string(
         PLUS_HTML, summary=summary, cards=plus_cards(), open=billing_configured(),
-        support_email=SUPPORT_EMAIL, notice=PLUS_NOTICES.get(request.args.get("notice") or ""))
+        support_email=SUPPORT_EMAIL, notice=PLUS_NOTICES.get(request.args.get("notice") or ""),
+        trial=trial, trial_days=TRIAL_DAYS, trial_fee=PLAN_PRICES["trial"], monthly_price=PLAN_PRICES["monthly"])
 
 
 @app.route("/api/billing-status")
@@ -23481,6 +23530,13 @@ PLUS_STYLE = """
   .plus-signin a{ color:var(--accent-ink); }
   .plus-fine{ margin-top:12px; font-size:12.5px; color:var(--ink-muted); line-height:1.5; }
   .plus-notes ul{ margin:10px 0 0; padding-left:20px; font-size:13.5px; color:var(--ink-secondary); line-height:1.8; }
+  .plus-trial{ display:flex; flex-direction:row; align-items:center; justify-content:space-between; gap:18px 28px; flex-wrap:wrap; margin-top:16px; border-color:var(--accent); }
+  .plus-trial-text{ flex:1 1 380px; min-width:0; }
+  .plus-trial h3{ font-family:"Big Shoulders Display"; font-size:22px; font-weight:800; text-transform:uppercase; }
+  .plus-trial p{ margin-top:4px; color:var(--ink-secondary); font-size:14.5px; max-width:640px; }
+  .plus-trial form{ flex:none; text-align:center; }
+  .plus-trial .btn{ width:auto; padding-left:26px; padding-right:26px; }
+  .plus-trial .plus-signin{ margin-top:8px; }
   .plus-notes h3{ font-family:"Big Shoulders Display"; font-size:17px; font-weight:800; text-transform:uppercase; }
   @media (max-width:820px){ .plus-grid{ grid-template-columns:1fr; } .plus-hero h2{ font-size:28px; } }
 </style>
@@ -23527,10 +23583,26 @@ PLUS_HTML = BASE_STYLE + make_header("plus") + PLUS_STYLE + """
     {% endfor %}
   </div>
 
+  {% if trial %}
+  <div class="panel plus-trial" id="trial">
+    <div class="plus-trial-text">
+      <h3>Try myCalc+ for {{ trial_fee }}</h3>
+      <p>{{ trial_days }} days of everything in Monthly for {{ trial_fee }}, then {{ monthly_price }} a month.
+        Cancel from Settings before the trial ends and you owe nothing more.</p>
+    </div>
+    <form method="post" action="/billing/checkout/trial">
+      <button class="btn" type="submit">Try {{ trial_days }} days for {{ trial_fee }}</button>
+      {% if not current_user.is_authenticated %}<p class="plus-signin">No account needed: we make one from your receipt email.</p>{% endif %}
+    </form>
+  </div>
+  {% endif %}
+
   <div class="panel plus-notes">
     <h3>The small print</h3>
     <ul>
       <li>Prices are in US dollars and include all fees. Payments are handled by Stripe; this site never sees your card.</li>
+      {% if trial %}<li>The trial charges {{ trial_fee }} today, then {{ monthly_price }} a month from day {{ trial_days + 1 }} unless you cancel first.
+          One trial per customer. Stripe emails a reminder before it ends.</li>{% endif %}
       <li>Monthly renews until you cancel. Cancel from Settings and keep access to the end of the paid month.</li>
       <li>The Season Pass is a single payment with no auto-renew. Access runs through February 28.</li>
       <li>Lines on Streaks are this site's own computed lines, not sportsbook odds. Nothing here is betting advice.</li>
@@ -23556,7 +23628,8 @@ BILLING_SUCCESS_HTML = BASE_STYLE + make_header("plus") + PLUS_STYLE + """
     </div>
     {% elif summary.active %}
     <h2>You're in.</h2>
-    <p class="muted">{{ summary.label }}{% if summary.detail %} &middot; {{ summary.detail }}{% endif %}.
+    <p class="muted">{% if trial %}Your {{ trial_days }}-day trial is on: {{ monthly_price }} a month from day {{ trial_days + 1 }} unless you cancel from Settings first.
+      {% else %}{{ summary.label }}{% if summary.detail %} &middot; {{ summary.detail }}{% endif %}.{% endif %}
       Every Streaks list and every matchup grade is open now.</p>
     {% if guest == 'new' %}
     <p class="muted" style="margin-top:12px;">We made your account from {{ email }} and signed you in on this device.
