@@ -11525,6 +11525,10 @@ def streaks_page():
     win = (request.args.get("win") or "l10").strip().lower()
     if win not in dict(STREAK_WINDOWS):
         win = "l10"
+    # Trends only: overs, unders, or both. A prop board is overs by nature.
+    side = (request.args.get("side") or "all").strip().lower()
+    if side not in ("all", "over", "under"):
+        side = "all"
     # Position first, then that position's own props -- so a receiver's
     # tabs are receiving and a defender's are tackles, and nobody has to
     # wonder whether the other positions exist.
@@ -11560,12 +11564,12 @@ def streaks_page():
         return render_template_string(
             STREAKS_HTML, rows=rows, prop=prop, pos=pos, win=win, tabs=tabs, positions=positions,
             windows=list(STREAK_WINDOWS), books_seen=books_seen, season=season, week=week,
-            sk_locked=sk_locked, gate=gate_kind(), load_error=None)
+            side=side, sk_locked=sk_locked, gate=gate_kind(), load_error=None)
     except Exception as e:
         return render_template_string(
             STREAKS_HTML, rows=[], prop=prop, pos=pos, win=win, tabs=tabs, positions=positions,
             windows=list(STREAK_WINDOWS), books_seen=[], season=season, week=week,
-            sk_locked=0, gate=gate_kind(), load_error=str(e))
+            side=side, sk_locked=0, gate=gate_kind(), load_error=str(e))
 
 
 @app.route("/api/history-status")
@@ -17451,8 +17455,10 @@ STREAKS_HTML = BASE_STYLE + make_header("streaks") + """
     .sk-title{ font-size:22px; }
     .sk-item{ grid-template-columns:40px minmax(0,1fr) 52px 84px; gap:9px; padding:11px 10px; }
     .sk-item img{ width:40px; height:40px; }
-    .sk-name{ font-size:14px; } .sk-prop{ font-size:13px; }
+    .sk-name{ font-size:14px; } .sk-prop{ font-size:13px; white-space:normal; }
+    .sk-prop .streak{ display:inline-block; margin:3px 0 0; }
   }
+  .sk-sides{ margin-top:8px; }
 </style>
 
 <div class="sk-page">
@@ -17468,10 +17474,17 @@ STREAKS_HTML = BASE_STYLE + make_header("streaks") + """
       <button type="button" class="sk-pill {{ 'on' if key == win }}" data-win="{{ key }}">{{ label }}</button>
       {% endfor %}
     </div>
+    {% if prop == 'trends' %}
+    <div class="sk-pills sk-sides" id="skSides" role="group" aria-label="Overs or unders">
+      {% for key, label in (('all', 'All'), ('over', 'Overs'), ('under', 'Unders')) %}
+      <button type="button" class="sk-pill {{ 'on' if key == side }}" data-side="{{ key }}">{{ label }}</button>
+      {% endfor %}
+    </div>
+    {% endif %}
     <div class="sk-row2">
       <div class="sk-pills" style="flex:1;">
         {% for key, label in positions %}
-        <a class="sk-pill pos {{ 'on' if key == pos }}" href="/streaks?pos={{ key }}&win={{ win }}">{{ label }}</a>
+        <a class="sk-pill pos {{ 'on' if key == pos }}" href="/streaks?pos={{ key }}&win={{ win }}&side={{ side }}">{{ label }}</a>
         {% endfor %}
       </div>
     </div>
@@ -17515,11 +17528,12 @@ STREAKS_HTML = BASE_STYLE + make_header("streaks") + """
 <script>
 const SK_ROWS = {{ rows|tojson }};
 const SK_WIN = {{ win|tojson }};
+const SK_SIDE = {{ (side if side is defined else 'all')|tojson }};
 const SK_BOOKS = {{ books_seen|tojson }};
 (function(){
   const list = document.getElementById('skList');
   const searchEl = document.getElementById('skSearch');
-  let win = SK_WIN, q = '';
+  let win = SK_WIN, q = '', side = SK_SIDE;
   const WIN_N = {l5:5, l10:10, l20:20};
 
   // A whole number reads as one; anything else keeps one decimal. A
@@ -17539,7 +17553,8 @@ const SK_BOOKS = {{ books_seen|tojson }};
   }
 
   function render(){
-    let rows = SK_ROWS.filter(r => !q || r.name.toLowerCase().includes(q));
+    let rows = SK_ROWS.filter(r => (side === 'all' || (r.side || 'over') === side) &&
+                                   (!q || r.name.toLowerCase().includes(q)));
     // A row is judged on its own side of the line: an under streak
     // counts the games that stayed under, and its edge runs the other way.
     const shaped = rows.map(r => {
@@ -17556,8 +17571,10 @@ const SK_BOOKS = {{ books_seen|tojson }};
     // then the longer run, then the wider edge.
     shaped.sort((a, b) => (b.pct - a.pct) || (b.n - a.n) || ((b.r.streak || 0) - (a.r.streak || 0)) || (b.edge - a.edge));
     if (!shaped.length){
-      list.innerHTML = '<div class="sk-empty">Nothing to show for this window yet.<br>' +
-        'Streaks fill in as game logs sync; a fresh season needs a few weeks.</div>';
+      list.innerHTML = side !== 'all' && SK_ROWS.length
+        ? '<div class="sk-empty">No ' + (side === 'under' ? 'under' : 'over') + ' streaks for this window right now.</div>'
+        : '<div class="sk-empty">Nothing to show for this window yet.<br>' +
+          'Streaks fill in as game logs sync; a fresh season needs a few weeks.</div>';
     } else {
       list.innerHTML = shaped.map(x => {
         const r = x.r;
@@ -17600,6 +17617,17 @@ const SK_BOOKS = {{ books_seen|tojson }};
     document.querySelectorAll('.sk-pills a.sk-pill').forEach(a => {
       a.setAttribute('href', a.getAttribute('href').replace(/([?&])win=[^&]*/, '$1win=' + win));
     });
+    render();
+  });
+  const sides = document.getElementById('skSides');
+  if (sides) sides.addEventListener('click', e => {
+    const b = e.target.closest('[data-side]'); if (!b) return;
+    side = b.dataset.side;
+    sides.querySelectorAll('.sk-pill').forEach(p => p.classList.toggle('on', p === b));
+    document.querySelectorAll('.sk-pills a.sk-pill').forEach(a => {
+      a.setAttribute('href', a.getAttribute('href').replace(/([?&])side=[^&]*/, '$1side=' + side));
+    });
+    try { const u = new URL(location.href); u.searchParams.set('side', side); history.replaceState(null, '', u); } catch (e) {}
     render();
   });
   searchEl.addEventListener('input', () => { q = searchEl.value.trim().toLowerCase(); render(); });
