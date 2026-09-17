@@ -9642,6 +9642,7 @@ def get_moves_report(limit=None, days=MOVE_NEWS_DAYS, cache=_moves_feed_cache):
             "to_logo": team_logo_url(team) if _rostered(team) else None,
             "kind": _move_kind(prev, team),
             "ago": _time_ago(r.get("changed_at")),
+            "day": _feed_day(r.get("changed_at")),
             "changed_at": r.get("changed_at"),
         })
     cache[key] = {"rows": rows, "time": now}
@@ -10612,6 +10613,7 @@ def get_injury_report(limit=None, cache=_injury_feed_cache):
             "tone": injury_tone(status),
             "reported_at": reported,
             "ago": _time_ago(reported),
+            "day": _feed_day(reported),
             "severity": _INJURY_ORDER.get(status, 5),
         })
 
@@ -10681,6 +10683,23 @@ def _as_naive_utc(when):
     if when.tzinfo is not None:
         return when.astimezone(timezone.utc).replace(tzinfo=None)
     return when
+
+
+def _feed_day(when):
+    """"Sep 14, 2026" -- the day a feed entry belongs to, on the league's
+    clock, so a list can put a rule between one day and the next. A date
+    is taken as-is; a timestamp is read as UTC and moved to Eastern."""
+    if isinstance(when, datetime):
+        when = _as_naive_utc(when)
+        if not when:
+            return None
+        try:
+            when = when.replace(tzinfo=timezone.utc).astimezone(NFL_TZ).date()
+        except Exception:
+            return None
+    if not isinstance(when, date):
+        return None
+    return f"{when.strftime('%b')} {when.day}, {when.year}"
 
 
 def _time_ago(when, now=None):
@@ -10801,6 +10820,7 @@ def get_birthdays(season=None, limit=None, today=None, since=None, now=None):
             # hours since midnight rather than as nothing at all.
             "started_at": _day_started_at(when),
             "ago": _time_ago(_day_started_at(when), now),
+            "day": _feed_day(when),
             "rank": p.get("search_rank") or 999999,
         })
     # Newest first, and within a day the players people have heard of.
@@ -15774,6 +15794,9 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + """
                 color:var(--sc-text); }
   .sc-feed-row:first-child{ border-top:none; }
   .sc-feed-row:hover{ background:var(--sc-surface2); }
+  .sc-day{ text-align:center; padding:7px 13px; font-size:12px; font-weight:700; letter-spacing:0.02em;
+           color:var(--sc-muted); background:var(--sc-surface2); border-top:1px solid var(--sc-line); }
+  .sc-day:first-child{ border-top:none; }
   /* The crest sits on the corner of the headshot rather than beside it,
      so a row stays one column of faces however long the names run. */
   /* Headshot with the team crest hung off its bottom-right, half
@@ -15965,7 +15988,9 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + """
     <a class="sc-viewall" href="/injuries">View all &rsaquo;</a>
   </div>
   <div class="sc-feed">
+    {% set ns = namespace(day=None) %}
     {% for r in injuries %}
+    {% if r.day and r.day != ns.day %}<div class="sc-day">{{ r.day }}</div>{% set ns.day = r.day %}{% endif %}
     <a class="sc-feed-row" href="/player?sid={{ r.sid }}">
       <span class="sc-feed-mug">
         <img class="face" src="{{ r.photo }}" alt="" loading="lazy"
@@ -16003,7 +16028,9 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + """
   </div>
   {% if moves %}
   <div class="sc-feed">
+    {% set ns = namespace(day=None) %}
     {% for r in moves %}
+    {% if r.day and r.day != ns.day %}<div class="sc-day">{{ r.day }}</div>{% set ns.day = r.day %}{% endif %}
     <a class="sc-feed-row" href="/player?sid={{ r.sid }}">
       <span class="sc-feed-mug">
         <img class="face" src="{{ r.photo }}" alt="" loading="lazy"
@@ -16047,7 +16074,9 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + """
     <a class="sc-viewall" href="/birthdays">View all &rsaquo;</a>
   </div>
   <div class="sc-feed">
+    {% set ns = namespace(day=None) %}
     {% for b in birthdays %}
+    {% if b.day and b.day != ns.day %}<div class="sc-day">{{ b.day }}</div>{% set ns.day = b.day %}{% endif %}
     <a class="sc-feed-row" href="/player?sid={{ b.sid }}">
       <span class="sc-feed-mug">
         <img class="face" src="{{ b.photo }}" alt="" loading="lazy"
@@ -17130,6 +17159,11 @@ FEED_PAGE_HTML = BASE_STYLE + make_header("live") + """
            border-top:1px solid var(--fd-line); text-decoration:none; color:var(--fd-text); }
   .fd-row:first-child{ border-top:none; }
   .fd-row:hover{ background:var(--fd-surface2); }
+  /* One day from the next: a quiet rule with the date on it. */
+  .fd-day{ text-align:center; padding:9px 14px; font-size:12.5px; font-weight:700;
+           letter-spacing:0.02em; color:var(--fd-muted); background:var(--fd-surface2);
+           border-top:1px solid var(--fd-line); }
+  .fd-day:first-child{ border-top:none; }
   .fd-mug{ position:relative; flex:none; width:42px; height:42px; margin-right:9px; }
   .fd-mug img.face{ width:42px; height:42px; border-radius:50%; object-fit:cover;
                     background:var(--fd-surface2); }
@@ -17183,7 +17217,9 @@ FEED_PAGE_HTML = BASE_STYLE + make_header("live") + """
 
   {% if rows %}
   <div class="fd-list">
+    {% set ns = namespace(day=None) %}
     {% for r in rows %}
+    {% if r.day and r.day != ns.day %}<div class="fd-day">{{ r.day }}</div>{% set ns.day = r.day %}{% endif %}
     <a class="fd-row" href="/player?sid={{ r.sid }}">
       <span class="fd-mug">
         <img class="face" src="{{ r.photo }}" alt="" loading="lazy"
