@@ -9642,7 +9642,7 @@ def get_moves_report(limit=None, days=MOVE_NEWS_DAYS, cache=_moves_feed_cache):
             "to_logo": team_logo_url(team) if _rostered(team) else None,
             "kind": _move_kind(prev, team),
             "ago": _time_ago(r.get("changed_at")),
-            "day": _feed_day(r.get("changed_at")),
+            "ts": _feed_ts(r.get("changed_at")),
             "changed_at": r.get("changed_at"),
         })
     cache[key] = {"rows": rows, "time": now}
@@ -10613,7 +10613,7 @@ def get_injury_report(limit=None, cache=_injury_feed_cache):
             "tone": injury_tone(status),
             "reported_at": reported,
             "ago": _time_ago(reported),
-            "day": _feed_day(reported),
+            "ts": _feed_ts(reported),
             "severity": _INJURY_ORDER.get(status, 5),
         })
 
@@ -10685,21 +10685,18 @@ def _as_naive_utc(when):
     return when
 
 
-def _feed_day(when):
-    """"Sep 14, 2026" -- the day a feed entry belongs to, on the league's
-    clock, so a list can put a rule between one day and the next. A date
-    is taken as-is; a timestamp is read as UTC and moved to Eastern."""
-    if isinstance(when, datetime):
-        when = _as_naive_utc(when)
-        if not when:
-            return None
-        try:
-            when = when.replace(tzinfo=timezone.utc).astimezone(NFL_TZ).date()
-        except Exception:
-            return None
-    if not isinstance(when, date):
+def _feed_ts(when):
+    """A feed entry's moment as epoch seconds, for the page to place on
+    the reader's own calendar. The day a change belongs to depends on
+    where the reader is, which only their browser knows, so the server
+    hands over the instant and the page draws the day rules itself."""
+    when = _as_naive_utc(when)
+    if not when:
         return None
-    return f"{when.strftime('%b')} {when.day}, {when.year}"
+    try:
+        return int(when.replace(tzinfo=timezone.utc).timestamp())
+    except Exception:
+        return None
 
 
 def _time_ago(when, now=None):
@@ -10820,7 +10817,7 @@ def get_birthdays(season=None, limit=None, today=None, since=None, now=None):
             # hours since midnight rather than as nothing at all.
             "started_at": _day_started_at(when),
             "ago": _time_ago(_day_started_at(when), now),
-            "day": _feed_day(when),
+            "day_key": when.isoformat(),
             "rank": p.get("search_rank") or 999999,
         })
     # Newest first, and within a day the players people have heard of.
@@ -14567,6 +14564,57 @@ def make_header(active=""):
 </div></header>
 """
 
+# A feed's day rules, drawn in the browser. Each row carries the
+# instant it happened (data-ts) or, for a birthday, its calendar day
+# (data-day). The page groups rows by the reader's local day, writes a
+# rule above the first row of each day already behind them, and none
+# for today -- and redraws at their next midnight, so a list left open
+# overnight files yesterday's rows under yesterday on its own.
+FEED_DAYS_JS = """
+<script>
+(function(){
+  function key(d){ return d.getFullYear() + '-' + (d.getMonth()+1) + '-' + d.getDate(); }
+  function dayOf(row){
+    var ts = row.getAttribute('data-ts'), day = row.getAttribute('data-day');
+    if (ts) return new Date(parseInt(ts, 10) * 1000);
+    if (day) { var p = day.split('-'); return new Date(+p[0], +p[1]-1, +p[2]); }
+    return null;
+  }
+  function label(d){
+    try { return d.toLocaleDateString(undefined, {month:'short', day:'numeric', year:'numeric'}); }
+    catch (e) { return d.toDateString(); }
+  }
+  function draw(){
+    var today = key(new Date());
+    document.querySelectorAll('.fd-list, .sc-feed').forEach(function(list){
+      list.querySelectorAll('.feed-day').forEach(function(n){ n.remove(); });
+      var cls = list.classList.contains('fd-list') ? 'fd-day' : 'sc-day', last = null;
+      Array.prototype.slice.call(list.children).forEach(function(row){   // a copy: inserting rules must not shift the walk
+        var d = dayOf(row); if (!d) return;
+        var k = key(d);
+        if (k === today) { last = k; return; }
+        if (k !== last){
+          var rule = document.createElement('div');
+          rule.className = cls + ' feed-day'; rule.textContent = label(d);
+          list.insertBefore(rule, row);
+        }
+        last = k;
+      });
+    });
+  }
+  function armMidnight(){
+    var now = new Date(), next = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 2);
+    setTimeout(function(){ draw(); armMidnight(); }, next - now);
+  }
+  function init(){
+    draw(); armMidnight();
+    document.addEventListener('visibilitychange', function(){ if (!document.hidden) draw(); });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
+})();
+</script>
+"""
+
 # --- the legal pages -----------------------------------------------------
 #
 # Written against what the code actually does -- every data item listed
@@ -15561,7 +15609,7 @@ PLAYER_HTML = BASE_STYLE + make_header("league") + """
 </div></main>
 """
 
-SCORES_HTML = BASE_STYLE + make_header("scores") + """
+SCORES_HTML = BASE_STYLE + make_header("scores") + FEED_DAYS_JS + """
 <style>
   .sc-page{
     --sc-bg:var(--paper); --sc-surface:var(--paper-raised); --sc-surface2:var(--paper-sunken);
@@ -15988,10 +16036,8 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + """
     <a class="sc-viewall" href="/injuries">View all &rsaquo;</a>
   </div>
   <div class="sc-feed">
-    {% set ns = namespace(day=None) %}
     {% for r in injuries %}
-    {% if r.day and r.day != ns.day %}<div class="sc-day">{{ r.day }}</div>{% set ns.day = r.day %}{% endif %}
-    <a class="sc-feed-row" href="/player?sid={{ r.sid }}">
+    <a class="sc-feed-row" href="/player?sid={{ r.sid }}"{% if r.ts %} data-ts="{{ r.ts }}"{% elif r.day_key %} data-day="{{ r.day_key }}"{% endif %}>
       <span class="sc-feed-mug">
         <img class="face" src="{{ r.photo }}" alt="" loading="lazy"
              onerror="this.style.visibility='hidden'">
@@ -16028,10 +16074,8 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + """
   </div>
   {% if moves %}
   <div class="sc-feed">
-    {% set ns = namespace(day=None) %}
     {% for r in moves %}
-    {% if r.day and r.day != ns.day %}<div class="sc-day">{{ r.day }}</div>{% set ns.day = r.day %}{% endif %}
-    <a class="sc-feed-row" href="/player?sid={{ r.sid }}">
+    <a class="sc-feed-row" href="/player?sid={{ r.sid }}"{% if r.ts %} data-ts="{{ r.ts }}"{% elif r.day_key %} data-day="{{ r.day_key }}"{% endif %}>
       <span class="sc-feed-mug">
         <img class="face" src="{{ r.photo }}" alt="" loading="lazy"
              onerror="this.style.visibility='hidden'">
@@ -16074,10 +16118,8 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + """
     <a class="sc-viewall" href="/birthdays">View all &rsaquo;</a>
   </div>
   <div class="sc-feed">
-    {% set ns = namespace(day=None) %}
     {% for b in birthdays %}
-    {% if b.day and b.day != ns.day %}<div class="sc-day">{{ b.day }}</div>{% set ns.day = b.day %}{% endif %}
-    <a class="sc-feed-row" href="/player?sid={{ b.sid }}">
+    <a class="sc-feed-row" href="/player?sid={{ b.sid }}"{% if b.ts %} data-ts="{{ b.ts }}"{% elif b.day_key %} data-day="{{ b.day_key }}"{% endif %}>
       <span class="sc-feed-mug">
         <img class="face" src="{{ b.photo }}" alt="" loading="lazy"
              onerror="this.style.visibility='hidden'">
@@ -17141,7 +17183,7 @@ TEAM_HTML = BASE_STYLE + make_header("live") + """
 # One page for both feeds. They are the same row -- a face, a name, one
 # line about what changed and when -- so they are one template, and the
 # two differ only in what that line says.
-FEED_PAGE_HTML = BASE_STYLE + make_header("live") + """
+FEED_PAGE_HTML = BASE_STYLE + make_header("live") + FEED_DAYS_JS + """
 <style>
   .fd-page{
     --fd-bg:var(--paper); --fd-surface:var(--paper-raised); --fd-surface2:var(--paper-sunken);
@@ -17217,10 +17259,8 @@ FEED_PAGE_HTML = BASE_STYLE + make_header("live") + """
 
   {% if rows %}
   <div class="fd-list">
-    {% set ns = namespace(day=None) %}
     {% for r in rows %}
-    {% if r.day and r.day != ns.day %}<div class="fd-day">{{ r.day }}</div>{% set ns.day = r.day %}{% endif %}
-    <a class="fd-row" href="/player?sid={{ r.sid }}">
+    <a class="fd-row" href="/player?sid={{ r.sid }}"{% if r.ts %} data-ts="{{ r.ts }}"{% elif r.day_key %} data-day="{{ r.day_key }}"{% endif %}>
       <span class="fd-mug">
         <img class="face" src="{{ r.photo }}" alt="" loading="lazy"
              onerror="this.style.visibility='hidden'">
