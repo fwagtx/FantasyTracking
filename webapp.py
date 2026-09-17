@@ -6098,6 +6098,11 @@ def username_change_allowed_at(changed_at):
     return nxt if nxt > datetime.utcnow() else None
 
 
+# Where signing in or up lands you: game day, not the rankings. A login
+# bounced off a gated page still goes back there (?next=).
+SIGNED_IN_HOME = "/scores"
+
+
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
     error = None
@@ -6131,7 +6136,7 @@ def signup():
                     new_id = cur.fetchone()["id"]
                 conn.commit()
                 login_user(User({"id": new_id, "email": email, "username": username, "is_member": False}), remember=True)
-                return redirect("/")
+                return redirect(SIGNED_IN_HOME)
             except psycopg2.errors.UniqueViolation:
                 if conn:
                     conn.rollback()
@@ -6171,7 +6176,7 @@ def login():
         if not error:
             if row and row["password_hash"] and check_password_hash(row["password_hash"], password):
                 login_user(User(row), remember=True)
-                return redirect(_safe_next() or "/")
+                return redirect(_safe_next() or SIGNED_IN_HOME)
             error = "Incorrect email/username or password."
     return render_template_string(LOGIN_PAGE_HTML, error=error)
 
@@ -7683,7 +7688,7 @@ def google_callback():
         conn.close()
 
     login_user(User(row), remember=True)
-    return redirect("/")
+    return redirect(SIGNED_IN_HOME)
 
 
 def build_portfolio_summary(data, num_qbs=1):
