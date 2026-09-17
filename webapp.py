@@ -18979,7 +18979,7 @@ const SK_BOOKS = {{ books_seen|tojson }};
           '<span class="sk-main"><span class="sk-name">' + esc(r.name) + '<span class="tm">' + esc(r.team) + '</span></span>' +
           '<span class="sk-prop"><span class="o' + (x.under ? ' u' : '') + '">' + (x.under ? 'U' : 'O') + '</span><span class="ln">' + fmt(r.line) + '</span> ' + esc(r.prop_short) +
           (px != null ? '<span class="px">' + price(px) + '</span>' : '') +
-          '<span class="rate">' + x.hits + '/' + x.n + ' &middot; ' + x.pct + '%</span>' + run + '</span></span>' +
+          '<span class="rate">' + x.hits + '/' + x.n + ' &middot; ' + x.pct + '%' + (x.pct === 100 && x.n >= 3 ? ' <span class="fire" title="Cleared it every game in this window">&#x1F525;</span>' : '') + '</span>' + run + '</span></span>' +
           '<span class="sk-edge"><span class="lab">EDGE</span><span class="val ' + (up ? 'up' : 'down') + '">' + fmt(x.avg) + '</span></span>' +
           '<span class="sk-bars-mini">' + bars + '</span></a>';
       }).join('');
@@ -21623,6 +21623,11 @@ RANKINGS_HTML = BASE_STYLE + make_header("rankings") + VOTE_MODAL_HTML + """
              background-size:11px 7px; padding-right:30px; cursor:pointer; }
   .rk-icon-btn{ width:36px; height:36px; border-radius:8px; background:var(--rk-surface); border:1px solid var(--rk-line); color:var(--rk-muted); display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:15px; }
   .rk-icon-btn.active{ color:var(--rk-text); border-color:var(--accent); }
+  .rk-trend-tabs{ display:flex; gap:6px; padding:12px 0 2px; overflow-x:auto; scrollbar-width:none; }
+  .rk-trend-tabs::-webkit-scrollbar{ display:none; }
+  .rk-trend-tabs button{ flex:none; padding:8px 14px; border-radius:99px; border:1px solid var(--rk-line); background:var(--rk-surface);
+                         color:var(--rk-muted); font-size:13px; font-weight:700; cursor:pointer; font-family:inherit; white-space:nowrap; }
+  .rk-trend-tabs button.on{ background:var(--rk-text); color:var(--rk-bg); border-color:var(--rk-text); }
   .rk-search{ background:var(--rk-surface); border:1px solid var(--rk-line); color:var(--rk-text); border-radius:8px; padding:9px 12px; font-size:13.5px; width:180px; font-family:inherit; }
 
   .rk-tier-bar{ display:flex; align-items:center; gap:10px; padding:8px 14px; margin-top:18px; border-radius:8px; font-family:"Big Shoulders Display"; font-weight:800; font-size:15px; letter-spacing:0.03em; }
@@ -21699,7 +21704,7 @@ RANKINGS_HTML = BASE_STYLE + make_header("rankings") + VOTE_MODAL_HTML + """
 <div class="rk-page">
 <div class="wrap">
   <div class="rk-toolbar">
-    <span class="rk-title">Rankings <span style="font-size:12px; color:var(--rk-muted); text-transform:none; font-family:'Source Sans 3';">&middot; GP/FPTS from {{ stats_season }} &middot; {{ scoring_name }}</span> <span class="rk-since" id="rkSince"></span></span>
+    <span class="rk-title">Rankings</span>
     <!-- Mode and format were two pairs of pills sitting beside a
          dropdown that did the same job, which is four bubbles and a
          select competing for the same glance. All three are selects
@@ -21745,6 +21750,13 @@ RANKINGS_HTML = BASE_STYLE + make_header("rankings") + VOTE_MODAL_HTML + """
     <div class="rk-icon-btn" id="openFilters" title="Filters">&#9881;</div>
   </div>
 
+  <!-- The board, or the movers: everyone whose value rose since the
+       site's last comparison point, biggest rise first, or fell. -->
+  <div class="rk-trend-tabs" id="rkTrendTabs" role="tablist" aria-label="Rankings or trending">
+    <button type="button" data-trend="" role="tab">Rankings</button>
+    <button type="button" data-trend="up" role="tab">&#9650; Trending up</button>
+    <button type="button" data-trend="down" role="tab">&#9660; Trending down</button>
+  </div>
   <div id="rkListWrap">
     <table class="rk-table" id="rkTable">
       <thead>
@@ -21877,6 +21889,7 @@ const ROOKIE_BADGE = '<svg class="rookie-badge" viewBox="0 0 24 24" width="15" h
 let state = {
   pos: {{ pos_filter|tojson }},
   view: {{ view|tojson }},
+  trend: (function(){ const t = new URL(window.location.href).searchParams.get('trend'); return t === 'up' || t === 'down' ? t : ''; })(),
   search: '',
   sortKey: 'overall_rank',
   sortDir: 1,
@@ -21914,6 +21927,14 @@ function percentileClass(values, val, higherIsBetter) {
   return 'warn';
 }
 
+// How far a player moved: the value change since the site's comparison
+// point, or FantasyCalc's 30-day trend while that record is too young.
+function trendMetric(r) {
+  if (r.value_delta !== null && r.value_delta !== undefined) return r.value_delta;
+  if (r.trend_30day !== null && r.trend_30day !== undefined) return r.trend_30day;
+  return null;
+}
+
 function getFiltered() {
   const want = posParts(state.pos);
   let rows = RK_DATA.filter(r => {
@@ -21925,6 +21946,13 @@ function getFiltered() {
     if (r.value < state.minValue) return false;
     return true;
   });
+  if (state.trend) {
+    const sign = state.trend === 'up' ? 1 : -1;
+    rows = rows.filter(r => { const m = trendMetric(r); return m !== null && m * sign > 0; });
+    // Biggest move first; at the same value move, the bigger jump in rank.
+    rows.sort((a, b) => (trendMetric(b) - trendMetric(a)) * sign || ((b.rank_delta || 0) - (a.rank_delta || 0)) * sign);
+    return rows;
+  }
   rows.sort((a, b) => {
     const av = a[state.sortKey], bv = b[state.sortKey];
     if (av === null) return 1;
@@ -21955,6 +21983,8 @@ function renderHeader() {
     const arrow = state.sortKey === c.key ? (state.sortDir === 1 ? '&#9650;' : '&#9660;') : '';
     th.innerHTML = c.label + ` <span class="arrow">${arrow}</span>`;
     th.onclick = () => {
+      // Sorting a column is leaving the movers list for the board.
+      state.trend = '';
       if (state.sortKey === c.key) state.sortDir *= -1;
       // Trend sorts risers first on the first click; everything else
       // ascending, as before.
@@ -21995,14 +22025,17 @@ function moveBadge(r) {
   return `<span class="rk-card-move ${d > 0 ? 'up' : 'down'}">${d > 0 ? '&#9650;' : '&#9660;'}${Math.abs(d)}</span>`;
 }
 
-function buildRowEl(r, cols, valArrays) {
+function buildRowEl(r, cols, valArrays, place) {
   const { snapVals, gamesVals, fpgVals, fptsVals, posRankVals } = valArrays;
   const tr = document.createElement('tr');
   tr.className = 'rk-row';
   tr.onclick = () => window.location.href = playerUrl(r.sid);
   let cells = '';
-  cols.forEach(c => {
-    if (c.key === 'name') {
+  cols.forEach((c, i) => {
+    if (i === 0 && state.trend) {
+      // On the movers list the first column is the place on that list.
+      cells += `<td class="col-overall_rank">${statCell(place, 'flat')}</td>`;
+    } else if (c.key === 'name') {
       cells += `<td class="col-name"><span class="rk-pname"><img src="${r.photo}" onerror="this.style.visibility='hidden'">${r.name}${r.is_rookie ? ROOKIE_BADGE : ''}</span></td>`;
     } else if (c.key === 'position' && state.pos === 'overall') {
       const rankSuffix = r.position_rank ? r.position_rank : '';
@@ -22029,9 +22062,9 @@ function buildRowEl(r, cols, valArrays) {
   return tr;
 }
 
-function appendWithTierDividers(target, rows, cols, valArrays, startTier, showDividers) {
+function appendWithTierDividers(target, rows, cols, valArrays, startTier, showDividers, firstPlace) {
   let lastTier = startTier;
-  rows.forEach(r => {
+  rows.forEach((r, i) => {
     if (showDividers && r.tier !== lastTier) {
       lastTier = r.tier;
       const tr = document.createElement('tr');
@@ -22041,7 +22074,7 @@ function appendWithTierDividers(target, rows, cols, valArrays, startTier, showDi
       tr.appendChild(td);
       target.appendChild(tr);
     }
-    target.appendChild(buildRowEl(r, cols, valArrays));
+    target.appendChild(buildRowEl(r, cols, valArrays, (firstPlace || 1) + i));
   });
 }
 
@@ -22058,9 +22091,19 @@ function renderList(rows) {
     posRankVals: rows.map(r => r.position_rank),
   };
 
-  const showTiers = state.sortKey === 'overall_rank' && state.sortDir === 1 && state.pos === 'overall';
+  const showTiers = !state.trend && state.sortKey === 'overall_rank' && state.sortDir === 1 && state.pos === 'overall';
 
-  if (!RK_AUTHED && showTiers) {
+  if (!RK_AUTHED && state.trend) {
+    // A guest sees the top of the movers list; the rest waits for a free account.
+    const visible = rows.slice(0, 5), gated = rows.slice(5);
+    appendWithTierDividers(body, visible, cols, valArrays, null, false, 1);
+    if (gated.length) {
+      appendWithTierDividers(gatedBody, gated, cols, valArrays, null, false, 6);
+      gateWrap.style.display = 'block';
+    } else {
+      gateWrap.style.display = 'none';
+    }
+  } else if (!RK_AUTHED && showTiers) {
     const visible = rows.filter(r => r.tier === 'S');
     const gated = rows.filter(r => r.tier !== 'S');
     appendWithTierDividers(body, visible, cols, valArrays, null, true);
@@ -22105,6 +22148,7 @@ function updateUrl() {
   const url = new URL(window.location.href);
   url.searchParams.set('pos', state.pos);
   url.searchParams.set('view', state.view);
+  if (state.trend) url.searchParams.set('trend', state.trend); else url.searchParams.delete('trend');
   // Chosen season included, so a shared link and the back button both
   // land on the board that was actually being read.
   url.searchParams.set('stats', RK_STATS_SEASON);
@@ -22113,11 +22157,10 @@ function updateUrl() {
 
 function render() {
   const rows = getFiltered();
-  const since = document.getElementById('rkSince');
-  if (since) since.textContent = RK_SINCE_DAYS
-    ? '\u00b7 Trend vs ' + RK_SINCE_DAYS + ' day' + (RK_SINCE_DAYS === 1 ? '' : 's') + ' ago'
-    : '\u00b7 Trend: 30-day value change';
-  document.getElementById('rkEmpty').style.display = rows.length ? 'none' : 'block';
+  document.querySelectorAll('#rkTrendTabs button').forEach(b => b.classList.toggle('on', b.getAttribute('data-trend') === state.trend));
+  const empty = document.getElementById('rkEmpty');
+  empty.textContent = state.trend ? 'No one is trending ' + state.trend + ' right now.' : 'No players match your filters.';
+  empty.style.display = rows.length ? 'none' : 'block';
   renderHeader();
   if (state.view === 'grid') {
     document.getElementById('rkListWrap').style.display = 'none';
@@ -22135,6 +22178,13 @@ function render() {
 
 document.getElementById('posSelect').value = state.pos;
 document.getElementById('posSelect').addEventListener('change', e => { state.pos = e.target.value; render(); });
+document.getElementById('rkTrendTabs').addEventListener('click', e => {
+  const b = e.target.closest('button[data-trend]');
+  if (!b) return;
+  state.trend = b.getAttribute('data-trend');
+  if (!state.trend) { state.sortKey = 'overall_rank'; state.sortDir = 1; }
+  render();
+});
 
 // Mode and format come from the server (they change which value set is
 // loaded), so these navigate rather than re-render, carrying the rest of
