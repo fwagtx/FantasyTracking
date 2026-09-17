@@ -15266,6 +15266,12 @@ def make_header(active=""):
 # (.sc-feed) get no rules at all; they still hide a birthday the
 # reader's clock has not reached and stamp today's from their midnight.
 FEED_DAYS_JS = """
+<style>
+  /* A row the script hides stays hidden: the rows' own display:flex
+     would otherwise beat the attribute, and tomorrow's birthday would
+     show up a day early. */
+  .sc-feed-row[hidden], .fd-row[hidden]{ display:none !important; }
+</style>
 <script>
 (function(){
   function key(d){ return d.getFullYear() + '-' + (d.getMonth()+1) + '-' + d.getDate(); }
@@ -15303,8 +15309,8 @@ FEED_DAYS_JS = """
         var d = dayOf(row); if (!d) return;
         var isDay = row.hasAttribute('data-day');
         // A birthday the reader's clock has not reached yet waits for it.
-        if (isDay && d > midnight){ row.hidden = true; return; }
-        row.hidden = false; shown++;
+        if (isDay && d > midnight){ row.hidden = true; row.style.display = 'none'; return; }
+        row.hidden = false; row.style.display = ''; shown++;
         var stamp = row.querySelector('.feed-ago');
         if (stamp && isDay) stamp.textContent = ago(d, now, true);
         var k = key(d);
