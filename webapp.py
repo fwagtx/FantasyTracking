@@ -8037,6 +8037,24 @@ def _contract_rows_from_db():
         conn.close()
 
 
+def contract_key(r):
+    return r.get("gsis_id") or f"otc:{r.get('otc_id')}:{normalize_name(r['player'])}"
+
+
+def dedupe_contract_rows(rows):
+    """One row per player. OverTheCap occasionally lists two active
+    deals for one player (two practice-squad signings in a season, say);
+    keep the newest, and the larger when signed the same year, since
+    the table is keyed by player and the sheet shows one contract."""
+    best = {}
+    for r in rows:
+        k = contract_key(r)
+        cur = best.get(k)
+        if cur is None or (r.get("year_signed") or 0, r.get("value") or 0) > (cur.get("year_signed") or 0, cur.get("value") or 0):
+            best[k] = r
+    return list(best.values())
+
+
 def _store_contract_rows(rows, stamp=None):
     """Replace the table with these rows, in one transaction, so a
     reader never sees it half-written."""
@@ -8047,8 +8065,7 @@ def _store_contract_rows(rows, stamp=None):
             psycopg2.extras.execute_values(
                 cur,
                 "INSERT INTO player_contracts (key, gsis_id, name_key, position, data, source_stamp) VALUES %s",
-                [(r["gsis_id"] or f"otc:{r.get('otc_id')}:{normalize_name(r['player'])}",
-                  r["gsis_id"], normalize_name(r["player"]), r["position"],
+                [(contract_key(r), r["gsis_id"], normalize_name(r["player"]), r["position"],
                   json.dumps(r), stamp) for r in rows],
                 page_size=500)
         conn.commit()
@@ -8237,7 +8254,7 @@ def api_sync_contracts():
     raw_rows = payload.get("rows") if isinstance(payload, dict) else payload
     if not isinstance(raw_rows, list):
         return jsonify({"ok": False, "error": "rows missing"}), 400
-    rows = [r for r in (compact_contract_row(x) for x in raw_rows) if r]
+    rows = dedupe_contract_rows(r for r in (compact_contract_row(x) for x in raw_rows) if r)
     if len(rows) < 500:
         # A near-empty file is a broken upstream, not an empty league;
         # keep what we have.
