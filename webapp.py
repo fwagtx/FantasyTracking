@@ -269,7 +269,7 @@ TABBAR_PATHS = (
 )
 # Which sections are myCalc+ once the gate is on: the calculator, with a
 # plus beside it, marks them in the menu and on the bar.
-PLUS_KEYS = ("rankings", "matchups", "streaks", "plus")
+PLUS_KEYS = ("matchups", "streaks", "plus")
 PLUS_MARK_SVG = ('<svg class="plus-mark" viewBox="0 0 30 26" aria-label="myCalc+" role="img">'
                  '<rect x="1" y="1" width="24" height="24" rx="5" fill="var(--accent)"/>'
                  '<path d="M6 13H20M6 8H14M6 18H14" stroke="var(--accent-on)" stroke-width="2" stroke-linecap="round"/>'
@@ -6986,13 +6986,14 @@ def plus_cards():
         {"key": "free", "name": "Free", "featured": False, "price": "$0", "was": "", "per": "",
          "plan": None, "tagline": "Everything you need on game day.",
          "bullets": ["Live scores, game pages and standings", "Injuries, moves and birthdays",
-                     "Top tier of the rankings", "Basic trade calculator", "One synced league"],
+                     "Full rankings and Rating Draft with a free account", "Basic trade calculator", "One synced league"],
          "cta": "", "fine": "No card required."},
         {"key": "monthly", "name": "Monthly", "featured": False, "price": PLAN_PRICES["monthly"],
          "was": "", "per": "per month", "plan": "monthly",
          "tagline": "The full toolkit, one month at a time.",
-         "bullets": ["Every rankings tier, with 7-day movement", "Streaks: every prop, adjustable lines",
-                     "Matchup grades, on the page and in League Manager", "Unlimited synced leagues"],
+         "bullets": ["Streaks: every prop, every position, adjustable lines",
+                     "Matchup grades, on the page and in League Manager", "Unlimited synced leagues",
+                     "Everything we add to myCalc+ next"],
          "cta": "Start Monthly", "fine": "Billed monthly through Stripe. Cancel anytime from Settings."},
         season,
     ]
@@ -12769,7 +12770,9 @@ def rankings():
                                   stats_season=stats_season, stats_seasons=stats_seasons,
                                   since_days=movement["days"],
                                   scoring_name=scoring_label(current_scoring()),
-                                  rk_unlocked=plus_unlocked(), rk_gate=gate_kind())
+                                  # Rankings are free: a free account opens every tier,
+                                  # with or without the myCalc+ gate.
+                                  rk_unlocked=bool(current_user.is_authenticated), rk_gate="signup")
 
 
 def consolidation_adjusted_value(items):
@@ -21252,7 +21255,7 @@ RANKINGS_HTML = BASE_STYLE + make_header("rankings") + VOTE_MODAL_HTML + """
         <div class="gate-benefits">
           <span>Every player ranked, redraft and dynasty</span>
           <span>Rank and value movement over the last week</span>
-          <span>Streaks and Matchup grades included</span>
+          <span>Streaks and the whole toolkit included</span>
         </div>
         <a href="/plus" class="btn" style="margin-top:22px; width:100%;">See myCalc+ plans</a>
         {% else %}
@@ -22930,7 +22933,7 @@ PLUS_HTML = BASE_STYLE + make_header("plus") + PLUS_STYLE + """
   <div class="panel plus-hero">
     <p class="eyebrow">myCalc+</p>
     <h2>Every tier. Every list. Every grade.</h2>
-    <p class="muted">Free covers game day. myCalc+ opens the rest of the toolkit: the full rankings with movement,
+    <p class="muted">Free covers game day and the rankings. myCalc+ opens the rest of the toolkit:
       Streaks for every prop with a line you can move, and a start/sit grade on every player you own.</p>
     {% if summary and summary.active %}
     <div class="plus-current">You're on {{ summary.label }}{% if summary.detail %} &middot; {{ summary.detail }}{% endif %}
@@ -22996,7 +22999,7 @@ BILLING_SUCCESS_HTML = BASE_STYLE + make_header("plus") + PLUS_STYLE + """
     {% elif summary.active %}
     <h2>You're in.</h2>
     <p class="muted">{{ summary.label }}{% if summary.detail %} &middot; {{ summary.detail }}{% endif %}.
-      Every rankings tier, every Streaks list and every matchup grade is open now.</p>
+      Every Streaks list and every matchup grade is open now.</p>
     {% if guest == 'new' %}
     <p class="muted" style="margin-top:12px;">We made your account from {{ email }} and signed you in on this device.
       A link to set your password is on its way to that inbox, so you can sign in anywhere.</p>
