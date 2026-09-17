@@ -15177,13 +15177,14 @@ NAV_LIVE_KEYS = ("live", "scores", "standings", "performances",
 # that lists them the way /scores lists the live ones.
 NAV_GROUPS = [
     ("mycalc", "myCalc", [
+        # Free tools first, the myCalc+ ones (see PLUS_KEYS) last.
         ("league", "/league-manager", "League Manager", "Your synced leagues and rosters"),
         ("rankings", "/rankings", "Rankings", "Dynasty and redraft player values"),
+        ("trade", "/trade-calculator", "Trade Calculator", "Weigh any trade both ways"),
+        ("sbc", "/start-bench-cut", "Start/Bench/Cut", "Help keep the rankings sharp"),
         ("matchups", "/matchups", "Matchups", "Start-sit grades for the week"),
         ("streaks", "/streaks", "Streaks", "Prop lines and hit rates, game by game"),
         ("plus", "/plus", "myCalc+", "Every tier, every list, every grade"),
-        ("trade", "/trade-calculator", "Trade Calculator", "Weigh any trade both ways"),
-        ("sbc", "/start-bench-cut", "Start/Bench/Cut", "Help keep the rankings sharp"),
     ]),
 ]
 
