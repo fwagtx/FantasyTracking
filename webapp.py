@@ -9578,10 +9578,11 @@ def waivers_page():
 # against any box score, and it is the only honest way to rank a position
 # whose week-to-week scoring is as noisy as these two.
 KDST_POSITIONS = ("K", "DEF")
-KDST_POSITION_LABEL = {"K": "Kickers", "DEF": "D/ST"}
-# The ranges the board offers, and how each one scores a player.
-KDST_RANGES = (("season", "Season"), ("avg", "Per game"), ("last4", "Last 4"), ("week", "This week"))
-KDST_RANGE_LABEL = dict(KDST_RANGES)
+# The ranges a board can be scored over. Rankings shows all four at once
+# as its own sortable columns (see rankings_points_rows), so these are
+# the keys kdst_board validates against rather than tabs anybody clicks.
+KDST_RANGES = ("season", "avg", "last4", "week")
+KDST_RANGE_LABEL = {k: k for k in KDST_RANGES}
 KDST_LAST_N = 4
 _kdst_board_cache = {}
 
@@ -9738,29 +9739,55 @@ def kdst_rank_label(sid, position, season=None):
     return f"{'DST' if position == 'DEF' else 'K'}{rank}"
 
 
+def rankings_points_rows(season, week):
+    """Kickers and defences, shaped as Rankings rows.
+
+    Rankings ranks on dynasty value and FantasyCalc prices four
+    positions, so these two have none -- they are ranked on the points
+    they have actually scored instead. That is a different number, so
+    they carry `board: "points"` and the table gives them their own
+    columns: the season's total, the average, the last four weeks and
+    this week, each sortable, which is every view the old separate board
+    offered and all of them at once.
+
+    Every movement field is None on purpose. There is no value to have
+    moved, so no arrow is drawn and the Trending tabs skip them."""
+    out = []
+    for position in KDST_POSITIONS:
+        try:
+            season_rows = kdst_board(season, position, "season", week)
+            last4 = {r["sid"]: r["value"] for r in kdst_board(season, position, "last4", week)}
+            this_week = {r["sid"]: r["value"] for r in kdst_board(season, position, "week", week)}
+        except Exception:
+            app.logger.warning("rankings: %s board unavailable", position)
+            continue
+        for r in season_rows:
+            out.append({
+                "sid": r["sid"], "photo": r["photo"], "name": r["name"],
+                "position": position, "team": r["team"] or "FA",
+                "board": "points", "is_rookie": False, "age": None,
+                "games": r["games"], "fpts": r["total"], "fpts_per_game": r["avg"],
+                "fpts_last4": last4.get(r["sid"], 0.0), "fpts_week": this_week.get(r["sid"], 0.0),
+                "snap_pct": None,
+                # Rank on points, within the position. It is what the #
+                # column shows and what the table sorts by first.
+                "position_rank": r["rank"], "overall_rank": r["rank"],
+                "value": None, "tier": None,
+                "rank_delta": None, "pos_rank_delta": None, "value_delta": None,
+                "trend_30day": None,
+            })
+    return out
+
+
 @app.route("/kickers-dst")
 def kdst_page():
-    """The two positions Rankings cannot price, ranked on what they have
-    actually scored. Free: it is a stats board, not a projection."""
-    info = get_current_week_info()
-    season = request.args.get("season", default=info["season"], type=int)
-    week = request.args.get("week", default=info["week"], type=int)
+    """Kickers and defences live on Rankings now, as two more positions
+    in its filter. Kept as a redirect so a link from before still lands
+    somewhere useful."""
     position = (request.args.get("pos") or "K").strip().upper()
     if position not in KDST_POSITIONS:
         position = "K"
-    rng = (request.args.get("range") or "season").strip()
-    if rng not in KDST_RANGE_LABEL:
-        rng = "season"
-    rows, error = [], None
-    try:
-        rows = kdst_board(season, position, rng, week)
-    except Exception as e:
-        app.logger.warning("kickers/dst board: %s", e)
-        error = "That board could not be built just now. Try again in a moment."
-    return render_template_string(
-        KDST_HTML, rows=rows, error=error, position=position, rng=rng, season=season, week=week,
-        positions=KDST_POSITIONS, position_label=KDST_POSITION_LABEL, ranges=KDST_RANGES,
-        scoring_name=scoring_label(current_scoring()))
+    return redirect(f"/rankings?pos={position}")
 
 
 # --- Player bio and contract sheet ----------------------------------------
@@ -15098,7 +15125,15 @@ def _rankings_render(fmt, mode, is_dynasty, pos_filter, view, num_qbs):
     rows.sort(key=lambda r: r["overall_rank"])
     # 300 instead of 100 so filtering down to a single position (e.g. TE,
     # which ranks lower overall than WR/RB) still has a real list to show.
-    return render_template_string(RANKINGS_HTML, rows=rows[:300], fmt=fmt, mode=mode,
+    #
+    # Kickers and defences go on AFTER that cut, not into it: they are
+    # ranked on points rather than value, so they neither compete for a
+    # place on the value board nor belong in its overall order. The
+    # filter keeps them out of the overall view; choosing K or D/ST is
+    # what brings them up.
+    info = get_current_week_info()
+    points_rows = rankings_points_rows(int(stats_season), info["week"])
+    return render_template_string(RANKINGS_HTML, rows=rows[:300] + points_rows, fmt=fmt, mode=mode,
                                   pos_filter=pos_filter, view=view,
                                   stats_season=stats_season, stats_seasons=stats_seasons,
                                   since_days=movement["days"],
@@ -17525,8 +17560,7 @@ NAV_GROUPS = [
         # Free tools first, the myCalc+ ones (see PLUS_KEYS) last.
         ("league", "/league-manager", "League Manager", "Your synced leagues and rosters"),
         ("matchup", "/matchup", "Your Matchup", "Live score and win odds in your league"),
-        ("rankings", "/rankings", "Rankings", "Dynasty and redraft player values"),
-        ("kdst", "/kickers-dst", "Kickers &amp; D/ST", "The two positions ranked on points scored"),
+        ("rankings", "/rankings", "Rankings", "Values, and kickers and D/ST on points"),
         ("trade", "/trade-calculator", "Trade Calculator", "Weigh any trade both ways"),
         ("sbc", "/start-bench-cut", "Start/Bench/Cut", "Help keep the rankings sharp"),
         ("lineup", "/lineup", "Lineup", "Who to start this week, and why"),
@@ -23714,12 +23748,12 @@ RANKINGS_HTML = BASE_STYLE + make_header("rankings") + VOTE_MODAL_HTML + """
         <option value="WR">WR</option>
         <option value="TE">TE</option>
       </optgroup>
-      <!-- FantasyCalc prices four positions. Kickers and defences are
-           ranked on points scored instead, on their own board, so the
-           filter offers them rather than pretending they are missing. -->
-      <optgroup label="Points scored">
-        <option value="go:K">Kickers &#8594;</option>
-        <option value="go:DEF">D/ST &#8594;</option>
+      <!-- FantasyCalc prices four positions; these two are ranked on
+           points scored instead. Same control, same table, different
+           columns -- see POINTS_COLS. -->
+      <optgroup label="Ranked on points">
+        <option value="K">K</option>
+        <option value="DEF">D/ST</option>
       </optgroup>
       <optgroup label="Rookies">
         <option value="rookies">All Rookies</option>
@@ -23863,7 +23897,10 @@ const RK_DATA = [
    fpts_per_game:{{ r.fpts_per_game|tojson }}, snap_pct:{{ r.snap_pct|tojson }}, position_rank:{{ r.position_rank|tojson }}, value:{{ r.value|tojson }},
    overall_rank:{{ r.overall_rank|tojson }}, tier:{{ r.tier|tojson }},
    rank_delta:{{ r.get('rank_delta')|tojson }}, pos_rank_delta:{{ r.get('pos_rank_delta')|tojson }},
-   value_delta:{{ r.get('value_delta')|tojson }}, trend_30day:{{ r.get('trend_30day')|tojson }}},
+   value_delta:{{ r.get('value_delta')|tojson }}, trend_30day:{{ r.get('trend_30day')|tojson }},
+   // "points" for a kicker or a defence, absent for everyone else: which
+   // board the row belongs to, and so which columns it gets.
+   board:{{ r.get('board')|tojson }}, fpts_last4:{{ r.get('fpts_last4')|tojson }}, fpts_week:{{ r.get('fpts_week')|tojson }}},
   {% endfor %}
 ];
 // How old the comparison is, in days -- null while the record has
@@ -23933,13 +23970,22 @@ function trendMetric(r) {
 
 function getFiltered() {
   const want = posParts(state.pos);
+  const points = onPointsBoard();
   let rows = RK_DATA.filter(r => {
+    const isPoints = r.board === 'points';
+    // The two boards never mix. Kickers and defences are ranked on
+    // points, so they have no place in an overall order built on value
+    // -- and the value board has no kickers to show when K is picked.
+    if (isPoints !== points) return false;
     if (want.pos && r.position !== want.pos) return false;
     if (want.rookies && !r.is_rookie) return false;
     if (state.search && !r.name.toLowerCase().includes(state.search.toLowerCase())) return false;
     if (r.snap_pct !== null && r.snap_pct < state.minSnap) return false;
     if (r.games < state.minGames) return false;
-    if (r.value < state.minValue) return false;
+    // A points row has no value, so the value slider does not apply to
+    // it -- reading its null as a zero would hide every kicker the
+    // moment the slider moved.
+    if (!isPoints && r.value < state.minValue) return false;
     return true;
   });
   if (state.trend) {
@@ -23968,9 +24014,23 @@ const POSITION_COLS = [
   {key:'games', label:'GP'}, {key:'fpts', label:'FPTS'}, {key:'fpts_per_game', label:'FPTS/G'},
   {key:'overall_rank', label:'Ovr Rank'},
 ];
+// Kickers and defences have no dynasty value, no snap count and no
+// value movement, so none of those columns would say anything. What
+// they do have is points, over four ranges, every one of them sortable.
+const POINTS_COLS = [
+  {key:'overall_rank', label:'#'}, {key:'name', label:'Player'}, {key:'team', label:'TM'},
+  {key:'games', label:'GP'}, {key:'fpts', label:'FPTS'}, {key:'fpts_per_game', label:'FPTS/G'},
+  {key:'fpts_last4', label:'L4'}, {key:'fpts_week', label:'WK'},
+];
+const POINTS_POSITIONS = ['K', 'DEF'];
+function onPointsBoard() { return POINTS_POSITIONS.indexOf(state.pos) !== -1; }
+function colsFor() {
+  if (onPointsBoard()) return POINTS_COLS;
+  return state.pos === 'overall' ? OVERALL_COLS : POSITION_COLS;
+}
 
 function renderHeader() {
-  const cols = state.pos === 'overall' ? OVERALL_COLS : POSITION_COLS;
+  const cols = colsFor();
   const headerRow = document.getElementById('rkHeaderRow');
   headerRow.innerHTML = '';
   cols.forEach(c => {
@@ -24046,6 +24106,10 @@ function buildRowEl(r, cols, valArrays, place) {
       cells += `<td class="col-fpts">${statCell(r.fpts, percentileClass(fptsVals, r.fpts, true))}</td>`;
     } else if (c.key === 'fpts_per_game') {
       cells += `<td class="col-fpts_per_game">${statCell(r.fpts_per_game, percentileClass(fpgVals, r.fpts_per_game, true))}</td>`;
+    } else if (c.key === 'fpts_last4') {
+      cells += `<td class="col-fpts_last4">${statCell(r.fpts_last4, percentileClass(valArrays.last4Vals, r.fpts_last4, true))}</td>`;
+    } else if (c.key === 'fpts_week') {
+      cells += `<td class="col-fpts_week">${statCell(r.fpts_week, percentileClass(valArrays.weekVals, r.fpts_week, true))}</td>`;
     } else if (c.key === 'position_rank') {
       cells += `<td class="col-position_rank">${statCell(r.position_rank, percentileClass(posRankVals, r.position_rank, false))}</td>`;
     } else if (c.key === 'overall_rank') {
@@ -24075,7 +24139,7 @@ function appendWithTierDividers(target, rows, cols, valArrays, startTier, showDi
 }
 
 function renderList(rows) {
-  const cols = state.pos === 'overall' ? OVERALL_COLS : POSITION_COLS;
+  const cols = colsFor();
   const body = document.getElementById('rkBody');
   const gatedBody = document.getElementById('rkGatedBody');
   const gateWrap = document.getElementById('rkGateWrap');
@@ -24085,6 +24149,7 @@ function renderList(rows) {
     snapVals: rows.map(r => r.snap_pct), gamesVals: rows.map(r => r.games),
     fpgVals: rows.map(r => r.fpts_per_game), fptsVals: rows.map(r => r.fpts),
     posRankVals: rows.map(r => r.position_rank),
+    last4Vals: rows.map(r => r.fpts_last4), weekVals: rows.map(r => r.fpts_week),
   };
 
   const showTiers = !state.trend && state.sortKey === 'overall_rank' && state.sortDir === 1 && state.pos === 'overall';
@@ -24119,6 +24184,7 @@ function renderGrid(rows) {
   const grid = document.getElementById('rkGrid');
   grid.innerHTML = '';
   const valueVals = rows.map(r => r.value);
+  const fptsVals = rows.map(r => r.fpts);
   const fpgVals = rows.map(r => r.fpts_per_game);
   rows.forEach(r => {
     const card = document.createElement('div');
@@ -24129,7 +24195,9 @@ function renderGrid(rows) {
       <img class="rk-card-photo" src="${r.photo}" style="border-color:${color};" onerror="this.style.visibility='hidden'">
       <div class="rk-card-rank">#${r.overall_rank}${moveBadge(r)}</div>
       <div class="rk-card-stats">
-        ${statCell(r.value, percentileClass(valueVals, r.value, true))}
+        ${r.board === 'points'
+            ? statCell(r.fpts, percentileClass(fptsVals, r.fpts, true))
+            : statCell(r.value, percentileClass(valueVals, r.value, true))}
         ${statCell(r.fpts_per_game, percentileClass(fpgVals, r.fpts_per_game, true))}
       </div>
       <div class="rk-card-band">
@@ -24152,6 +24220,10 @@ function updateUrl() {
 }
 
 function render() {
+  // Trending is movement in dynasty value. Kickers and defences have no
+  // value to have moved, so the tabs would only ever show an empty list
+  // on their boards -- they go away instead.
+  document.getElementById('rkTrendTabs').style.display = onPointsBoard() ? 'none' : '';
   const rows = getFiltered();
   document.querySelectorAll('#rkTrendTabs button').forEach(b => b.classList.toggle('on', b.getAttribute('data-trend') === state.trend));
   const empty = document.getElementById('rkEmpty');
@@ -24174,12 +24246,15 @@ function render() {
 
 document.getElementById('posSelect').value = state.pos;
 document.getElementById('posSelect').addEventListener('change', e => {
-  // The two positions with no dynasty value have a board of their own,
-  // so choosing one goes there rather than filtering this table down to
-  // nothing.
-  const v = String(e.target.value || '');
-  if (v.indexOf('go:') === 0) { window.location.href = '/kickers-dst?pos=' + v.slice(3); return; }
-  state.pos = v; render();
+  state.pos = String(e.target.value || 'overall');
+  // Coming from a Trending tab to a board that has no movement would
+  // land on an empty list, so the tab is dropped with the change.
+  if (onPointsBoard()) state.trend = '';
+  // The points board sorts on its own rank, and its columns are not the
+  // value board's, so a sort left over from the other one would name a
+  // column that is no longer there.
+  state.sortKey = 'overall_rank'; state.sortDir = 1;
+  render();
 });
 document.getElementById('rkTrendTabs').addEventListener('click', e => {
   const b = e.target.closest('button[data-trend]');
@@ -25908,63 +25983,6 @@ LINEUP_HTML = BASE_STYLE + make_header("league") + MU_STYLE + """
     {% endif %}
     <p class="mu-foot">Projections are Sleeper's, scored with this league's own settings{% if not plan.projections_available %} (this week's feed isn't up yet, so starters' recent averages stand in){% endif %}; injury designations are the stricter of Sleeper's and ESPN's reports; grades are this site's matchup grades. A player already played counts at what he scored. A backup on the depth chart, or a player out or unprojected, is never recommended; a doubtful player counts for a quarter of his projection, a questionable one for 85%. Re-check after the final injury reports. <a href="{{ plan.sleeper_url }}" target="_blank" rel="noopener">Open in Sleeper</a></p>
   {% endif %}
-</div></main>
-"""
-
-
-KDST_STYLE = """
-<style>
-  .kd-page{ font-family:"Source Sans 3",system-ui,sans-serif; padding-bottom:70px; }
-  .kd-page h1{ font-family:"Big Shoulders Display"; font-size:30px; font-weight:800; text-transform:uppercase; margin:6px 0 2px; }
-  .kd-page h1 small{ font-family:"Source Sans 3"; font-size:13px; color:var(--ink-muted); text-transform:none; font-weight:600; margin-left:8px; }
-  .kd-sub{ font-size:13px; color:var(--ink-muted); margin:0 0 10px; }
-  .kd-chips{ display:flex; gap:6px; margin:8px 0; overflow-x:auto; scrollbar-width:none; }
-  .kd-chips::-webkit-scrollbar{ display:none; }
-  .kd-chip{ flex:none; padding:6px 12px; border-radius:99px; border:1px solid var(--line); font-size:12.5px; font-weight:700; color:var(--ink-muted); background:var(--paper-raised); text-decoration:none; white-space:nowrap; }
-  .kd-chip.on{ background:var(--ink); color:var(--paper); border-color:var(--ink); }
-  .kd-card{ background:var(--paper-raised); border:1px solid var(--line); border-radius:16px; padding:4px 14px; margin-top:12px; }
-  .kd-row{ display:grid; grid-template-columns:26px 36px 1fr auto; align-items:center; gap:10px; padding:9px 0; border-top:1px solid var(--line); text-decoration:none; color:inherit; }
-  .kd-row:first-child{ border-top:none; }
-  .kd-row .rk{ font-family:"IBM Plex Mono"; font-size:13px; font-weight:700; color:var(--ink-muted); text-align:right; }
-  .kd-row .rk.top{ color:var(--accent-ink); }
-  .kd-row img{ width:36px; height:36px; border-radius:50%; background:var(--paper-sunken); object-fit:contain; }
-  .kd-row .nm{ font-weight:700; font-size:14px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  .kd-row .mt{ font-size:11.5px; color:var(--ink-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  .kd-row .val{ text-align:right; }
-  .kd-row .val b{ font-family:"IBM Plex Mono"; font-size:17px; font-weight:700; display:block; line-height:1.1; }
-  .kd-row .val span{ font-size:11px; color:var(--ink-muted); font-family:"IBM Plex Mono"; }
-  .kd-spark{ display:inline-flex; gap:3px; margin-left:6px; vertical-align:middle; }
-  .kd-spark i{ display:inline-block; width:4px; border-radius:2px; background:var(--accent); opacity:.75; }
-  .kd-empty{ text-align:center; color:var(--ink-muted); padding:22px 10px; font-size:14px; }
-  .kd-foot{ margin-top:10px; font-size:12.5px; color:var(--ink-muted); } .kd-foot a{ color:var(--accent-ink); }
-</style>"""
-
-KDST_HTML = BASE_STYLE + make_header("kdst") + KDST_STYLE + """
-<main><div class="wrap kd-page" style="max-width:560px;">
-  <h1>Kickers &amp; D/ST <small>{{ season }}</small></h1>
-  <p class="kd-sub">Ranked on the fantasy points they have actually scored, in {{ scoring_name }} scoring. Nothing here is projected.</p>
-  <div class="kd-chips">{% for p in positions %}<a class="kd-chip {{ 'on' if p == position }}" href="/kickers-dst?pos={{ p }}&range={{ rng }}&season={{ season }}">{{ position_label[p] }}</a>{% endfor %}</div>
-  <div class="kd-chips">{% for key, label in ranges %}<a class="kd-chip {{ 'on' if key == rng }}" href="/kickers-dst?pos={{ position }}&range={{ key }}&season={{ season }}">{{ label }}</a>{% endfor %}</div>
-  {% if error %}
-  <div class="kd-card kd-empty">{{ error }}</div>
-  {% elif not rows %}
-  <div class="kd-card kd-empty">No {{ position_label[position]|lower }} games scored for {{ season }} yet. This board fills in as the season is played.</div>
-  {% else %}
-  <div class="kd-card">
-    {% for r in rows %}
-    <a class="kd-row" href="{{ ('/team?abbr=' + r.team) if r.is_team and r.team else ('/player?sid=' + r.sid) }}">
-      <span class="rk {{ 'top' if r.rank <= 3 }}">{{ r.rank }}</span>
-      <img src="{{ r.photo }}" alt="" onerror="this.style.visibility='hidden'">
-      <span style="min-width:0;">
-        <div class="nm">{{ r.name }}</div>
-        <div class="mt">{{ r.team or '&mdash;'|safe }} &middot; {{ r.games }} game{{ '' if r.games == 1 else 's' }}{% if rng != 'avg' %} &middot; {{ r.avg }} a game{% endif %}{% if r.spark %}<span class="kd-spark" title="Last {{ r.spark|length }} weeks: {{ r.recent|join(', ') }}">{% for h in r.spark %}<i style="height:{{ h }}px;"></i>{% endfor %}</span>{% endif %}</div>
-      </span>
-      <span class="val"><b>{{ r.value }}</b><span>{{ 'a game' if rng == 'avg' else 'pts' }}</span></span>
-    </a>
-    {% endfor %}
-  </div>
-  {% endif %}
-  <p class="kd-foot">Every number is the sum of real weeks from Sleeper's own box scores, so it can be checked against any of them. A defence is scored the way nearly every league scores one: a point a sack, two an interception, a fumble recovery, a safety or a blocked kick, six a touchdown, and the points-allowed tier from ten for a shutout down to minus four for 35 or more. Rankings prices <a href="/rankings">quarterbacks, runners, receivers and tight ends</a>; these two positions are ranked here instead, because no dynasty value exists for them.</p>
 </div></main>
 """
 
