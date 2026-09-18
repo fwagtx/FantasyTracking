@@ -19,6 +19,8 @@ Optional:
 
 import base64
 import bisect
+import ctypes
+import gc
 import gzip
 import hashlib
 import hmac
@@ -16383,16 +16385,15 @@ def process_rss_mb():
     return None
 
 
-def cache_report():
-    """Every in-memory cache, by name, with how many entries it holds and
-    the ceiling it is held to.
+def _named_caches():
+    """The big in-memory caches, by name, each with the ceiling it is
+    held to.
 
-    The 502s that prompted all of this were the process being killed for
-    memory, and from outside a kill looks the same as a crash. This makes
-    the difference visible: if a cache is sitting at its limit it is
-    doing its job, and if RSS is climbing while every cache is small the
-    leak is somewhere else entirely."""
-    named = {
+    One list, two readers: the report below prints it, and the guard
+    empties it when the process is running out of room. Deliberately
+    leaves out the player dump -- it is one entry, everything needs it,
+    and re-fetching it costs seconds."""
+    return {
         "season_stats": (get_season_stats.__defaults__[1], CACHE_LIMIT_SEASON_STATS),
         "matchup_grades": (_matchup_grade_cache, CACHE_LIMIT_GRADES),
         "game_summaries": (espn_game_summary.__defaults__[0], CACHE_LIMIT_GAME_SUMMARIES),
@@ -16409,13 +16410,95 @@ def cache_report():
         "moves_feed": (_moves_feed_cache, CACHE_LIMIT_BOARDS),
         "contracts": (_contracts_cache, 1),
     }
+
+
+def cache_report():
+    """Every in-memory cache, by name, with how many entries it holds and
+    the ceiling it is held to.
+
+    The 502s that prompted all of this were the process being killed for
+    memory, and from outside a kill looks the same as a crash. This makes
+    the difference visible: if a cache is sitting at its limit it is
+    doing its job, and if RSS is climbing while every cache is small the
+    leak is somewhere else entirely."""
     out = {}
-    for name, (cache, limit) in named.items():
+    for name, (cache, limit) in _named_caches().items():
         try:
             out[name] = {"entries": len(cache), "limit": limit}
         except Exception:
             out[name] = {"entries": None, "limit": limit}
     return out
+
+
+# The ceiling above which the process starts dropping what it is
+# holding rather than waiting to be killed for it. Render's smallest
+# paid instance is 512 MB and the caches are sized for ~272 MB, so 400
+# means something has gone wrong -- but "something has gone wrong" is
+# exactly when a site should shed weight instead of dying.
+MEMORY_SOFT_LIMIT_MB = _safe_int(os.environ.get("MEMORY_SOFT_LIMIT_MB"), 400)
+# Reading /proc costs about as much as a dict lookup, but there is no
+# reason to do it on every request either.
+MEMORY_CHECK_EVERY = 40
+_memory_state = {"requests": 0, "sheds": 0, "last_shed": None, "last_shed_rss": None}
+_memory_lock = threading.Lock()
+
+
+def shed_caches():
+    """Empty every big cache and hand the memory back to the OS.
+
+    Freeing a Python dict does not by itself shrink the process --
+    glibc keeps the arena for reuse -- so this asks for it back
+    explicitly. Whether or not RSS drops, the next thing the app does
+    is fill those caches again from a much lower floor, which is what
+    stops the climb.
+
+    Everything dropped here is recomputed on the next request that
+    wants it. Slower for that one visitor; better than 502 for all of
+    them."""
+    before = process_rss_mb()
+    for name, (cache, _limit) in _named_caches().items():
+        try:
+            cache.clear()
+        except Exception:
+            app.logger.warning("memory: could not clear cache %s", name, exc_info=True)
+    gc.collect()
+    try:
+        ctypes.CDLL("libc.so.6").malloc_trim(0)
+    except Exception:
+        # Not glibc, or no libc to load. The collect above still did the
+        # part that matters.
+        pass
+    after = process_rss_mb()
+    app.logger.warning("memory: shed caches at %s MB, now %s MB", before, after)
+    return {"before_mb": before, "after_mb": after}
+
+
+@app.before_request
+def _memory_guard():
+    """Every so often, check what the process weighs, and if it is close
+    to the instance's limit, let go of the caches.
+
+    The user's symptom was a 502 once memory ran out. Ceilings on each
+    cache are the fix for the cause; this is the floor under it, for
+    whatever is not a cache and has not been found yet."""
+    with _memory_lock:
+        _memory_state["requests"] += 1
+        due = _memory_state["requests"] % MEMORY_CHECK_EVERY == 0
+    if not due:
+        return None
+    rss = process_rss_mb()
+    if rss is None or rss < MEMORY_SOFT_LIMIT_MB:
+        return None
+    with _memory_lock:
+        # Another thread may have just done it. A second sweep one
+        # request later would only throw away a warm cache for nothing.
+        last = _memory_state["last_shed"] or 0
+        if time.time() - last < 60:
+            return None
+        _memory_state["last_shed"] = time.time()
+        _memory_state["sheds"] += 1
+    _memory_state["last_shed_rss"] = shed_caches()
+    return None
 
 
 @app.route("/api/memory")
@@ -16434,6 +16517,10 @@ def api_memory():
         # Render's smallest paid instance. Worth printing beside the
         # figure so the number means something without looking it up.
         "instance_mb": _safe_int(os.environ.get("INSTANCE_MB"), 512),
+        "soft_limit_mb": MEMORY_SOFT_LIMIT_MB,
+        "requests_served": _memory_state["requests"],
+        "sheds": _memory_state["sheds"],
+        "last_shed": _memory_state["last_shed_rss"],
         "players_cached": players,
         "caches": cache_report(),
     })

@@ -1,0 +1,145 @@
+name: Memory Soak
+
+# The memory check asks the server what it weighs right now. This one
+# makes it work first: it loads every page a visitor can reach, across
+# several weeks, positions and teams, enough times to fill every cache
+# the app keeps -- and only then asks. That is the state the 502s were
+# happening in, so that is the state worth measuring.
+on:
+  workflow_dispatch:
+    inputs:
+      rounds:
+        description: "How many times to walk the whole list"
+        default: "3"
+      parallel:
+        description: "How many requests at once"
+        default: "4"
+
+jobs:
+  memory-soak:
+    runs-on: ubuntu-latest
+    env:
+      SITE_PASSWORD: ${{ secrets.SITE_PASSWORD }}
+      HOST: https://fantasyfootballcalc.com
+      ROUNDS: ${{ github.event.inputs.rounds }}
+      PAR: ${{ github.event.inputs.parallel }}
+    steps:
+      - name: Weigh the server before
+        run: |
+          if [ -z "$SITE_PASSWORD" ]; then
+            echo "::error::SITE_PASSWORD repository secret is not set."
+            exit 1
+          fi
+          body=$(curl -sS --fail-with-body --max-time 60 \
+            -H "X-Sync-Secret: $SITE_PASSWORD" "$HOST/api/memory") || {
+              echo "::error::request failed: $body"; exit 1; }
+          case "$body" in *'"ok": false'*|*'"ok":false'*)
+            echo "::error::server rejected the request"; exit 1;; esac
+          echo "$body" | tee before.json
+
+      - name: Build the list of pages to load
+        run: |
+          : > urls.txt
+          for p in / /scores /rankings /performances /streaks /standings /injuries \
+                   /moves /birthdays /waivers /matchups /trade-calculator \
+                   /start-bench-cut /draft /mock-drafts /matchup /lineup; do
+            echo "$p" >> urls.txt
+          done
+          for w in 1 2 3; do
+            echo "/scores?week=$w" >> urls.txt
+            echo "/performances?scope=week&week=$w" >> urls.txt
+            echo "/streaks?week=$w&win=l5" >> urls.txt
+          done
+          for pos in QB RB WR TE K DEF; do
+            echo "/rankings?pos=$pos" >> urls.txt
+            echo "/performances?position=$pos" >> urls.txt
+          done
+          for f in 1qb 2qb; do
+            for m in dynasty redraft; do
+              echo "/rankings?format=$f&mode=$m" >> urls.txt
+            done
+          done
+          for v in AFC NFC playoffs draft rankings; do
+            echo "/standings?view=$v" >> urls.txt
+          done
+          for t in ARI ATL BAL BUF CAR CHI CIN CLE DAL DEN DET GB HOU IND JAX KC \
+                   LAC LAR LV MIA MIN NE NO NYG NYJ PHI PIT SEA SF TB TEN WAS; do
+            echo "/team?abbr=$t" >> urls.txt
+          done
+          # Real ids, off the live pages, so the game and player caches
+          # get exercised too rather than only the boards.
+          curl -sS --max-time 60 "$HOST/scores" \
+            | grep -o '/game?id=[0-9]\{6,12\}' | sort -u | head -20 >> urls.txt || true
+          curl -sS --max-time 60 "$HOST/rankings" \
+            | grep -o '/player?sid=[0-9]\{2,8\}' | sort -u | head -25 >> urls.txt || true
+          curl -sS --max-time 60 "$HOST/performances" \
+            | grep -o '/performance?sid=[0-9]\{2,8\}' | sort -u | head -15 >> urls.txt || true
+          sort -u urls.txt -o urls.txt
+          echo "$(wc -l < urls.txt) distinct pages per round"
+
+      - name: Load them
+        run: |
+          if [ -z "$SITE_PASSWORD" ]; then
+            echo "::error::SITE_PASSWORD repository secret is not set."
+            exit 1
+          fi
+          : > codes.txt
+          rounds="${ROUNDS:-3}"; par="${PAR:-4}"
+          for r in $(seq 1 "$rounds"); do
+            echo "--- round $r of $rounds ---"
+            xargs -P "$par" -I{} \
+              curl -sS -o /dev/null -w '%{http_code} %{time_total} {}\n' \
+              --max-time 90 "$HOST{}" < urls.txt >> codes.txt
+            body=$(curl -sS --fail-with-body --max-time 60 \
+              -H "X-Sync-Secret: $SITE_PASSWORD" "$HOST/api/memory") || {
+                echo "::error::request failed: $body"; exit 1; }
+            case "$body" in *'"ok": false'*|*'"ok":false'*)
+              echo "::error::server rejected the request"; exit 1;; esac
+            echo "$body" | python3 -c \
+              'import json,sys; d=json.load(sys.stdin); print("  rss", d["rss_mb"], "MB  sheds", d.get("sheds"))'
+          done
+          echo "--- anything that did not answer cleanly ---"
+          awk '$1 !~ /^[23]/ {print}' codes.txt | sort | uniq -c | sort -rn | head -20
+          echo "--- the slowest ten ---"
+          sort -k2 -rn codes.txt | head -10
+
+      - name: Weigh it again, and judge
+        run: |
+          if [ -z "$SITE_PASSWORD" ]; then
+            echo "::error::SITE_PASSWORD repository secret is not set."
+            exit 1
+          fi
+          body=$(curl -sS --fail-with-body --max-time 60 \
+            -H "X-Sync-Secret: $SITE_PASSWORD" "$HOST/api/memory") || {
+              echo "::error::request failed: $body"; exit 1; }
+          case "$body" in *'"ok": false'*|*'"ok":false'*)
+            echo "::error::server rejected the request"; exit 1;; esac
+          echo "$body" | tee after.json
+          python3 - <<'PY'
+          import json, sys
+          before = json.load(open("before.json"))
+          after = json.load(open("after.json"))
+          bad = [l.split() for l in open("codes.txt")
+                 if not l[:1].isdigit() or l[0] not in "23"]
+          rss, inst = after["rss_mb"], after["instance_mb"]
+          soft = after.get("soft_limit_mb")
+          print(f"rss {before['rss_mb']} MB -> {rss} MB of {inst} MB "
+                f"(soft limit {soft}, sheds {after.get('sheds')})")
+          over = {n: c for n, c in after["caches"].items()
+                  if c["entries"] is not None and c["entries"] > c["limit"]}
+          fail = False
+          if bad:
+              print(f"::error::{len(bad)} request(s) did not answer 2xx/3xx")
+              for row in bad[:20]:
+                  print("   ", " ".join(row))
+              fail = True
+          if over:
+              print(f"::error::cache over its ceiling: {over}")
+              fail = True
+          if rss is not None and soft and rss > soft:
+              print(f"::error::{rss} MB is past the {soft} MB soft limit")
+              fail = True
+          if rss is not None and rss > inst * 0.75:
+              print(f"::warning::{rss} MB is more than three quarters of the instance")
+          sys.exit(1 if fail else 0)
+          PY
