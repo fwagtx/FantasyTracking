@@ -1050,6 +1050,7 @@ def get_value_movement(num_qbs, dynasty, num_teams=VALUE_HISTORY_TEAMS,
         except Exception:
             out = {"since": None, "days": None, "rows": {}}
     cache[key] = {"data": out, "time": now}
+    _cache_trim(cache, CACHE_LIMIT_BOARDS)
     return out
 
 
@@ -1402,6 +1403,7 @@ def _espn_news(url_templates, key, cache, ttl=900):
             items, used = found, template
             break
     cache[key] = {"items": items, "time": now, "url": used}
+    _cache_trim(cache, CACHE_LIMIT_BOARDS)
     return items
 
 
@@ -1697,9 +1699,72 @@ def get_team_depth_chart(team, all_players):
         result.append({"slot": base, "base": base, "players": players})
     return result
 
+# ---------------- keeping the caches from eating the instance -------------
+#
+# THE BUG THIS EXISTS FOR: every cache in this file was an unbounded
+# dict. A time-to-live decides when an entry is STALE, not when it is
+# freed -- a stale entry sits there until the key is asked for again,
+# and a key that is never asked for again sits there forever. With a
+# key per (season, scoring), per (player, season, week), per game and
+# per user, the dicts only ever grew. The instance has 512 MB, the
+# process reached it, the kernel killed it, and gunicorn restarted --
+# which is what a 502 on Render looks like from outside.
+#
+# Measured on realistic data, worst case per cache:
+#   matchup grades   2.1 KB each, one per player per week   ~95 MB
+#   season stats     2.4 MB each, one per season+scoring     ~85 MB
+#   game summaries   193 KB each, one per game of a season   ~51 MB
+#   the player dump  28 MB, one entry, and unavoidable
+#
+# So every keyed cache now has a ceiling. The limits below are entry
+# counts chosen to keep the total comfortably under a couple of hundred
+# megabytes, leaving the player dump and Python itself room to breathe.
+# Eviction is oldest-inserted-first, which for caches that rewrite an
+# entry on refresh is near enough to least-recently-used, and costs
+# nothing to maintain.
+#
+# A cache with ONE key (the player dump, ADP, the current week) needs no
+# limit and does not get one.
+CACHE_LIMIT_DEFAULT = 256
+# The three that were actually eating the instance, sized deliberately:
+#   grades:   2.1 KB each, 4000 -> ~8 MB. A page grades a few hundred.
+#   seasons:  2.4 MB each, 8    -> ~19 MB. Current season plus history.
+#   summaries: 193 KB each, 24  -> ~5 MB. A week has sixteen games.
+CACHE_LIMIT_GRADES = 4000
+CACHE_LIMIT_SEASON_STATS = 8
+CACHE_LIMIT_GAME_SUMMARIES = 24
+# Per-user work: grows with the number of people using the site, not
+# with anything about football.
+CACHE_LIMIT_PER_USER = 24
+# Big per-key rows: boards, standings, play lists, scoreboards. There are
+# twenty-six of these, so the ceiling is per cache and the number that
+# matters is the product. Twelve each is every view anybody has open plus
+# room to spare -- a board is keyed by season and week, and nobody is
+# reading twelve weeks at once. Anything evicted is recomputed on the
+# next ask, which for a cache with a ten-minute life it was going to do
+# anyway.
+CACHE_LIMIT_BOARDS = 12
+
+
+def _cache_trim(cache, limit=CACHE_LIMIT_DEFAULT):
+    """Drop the oldest entries until `cache` holds at most `limit`.
+
+    Python dicts keep insertion order, so the first key is the oldest
+    written. Called right after a write, so a cache can only ever be one
+    entry over its ceiling."""
+    while len(cache) > limit:
+        try:
+            cache.pop(next(iter(cache)))
+        except (StopIteration, KeyError, RuntimeError):
+            # Another thread emptied or resized it mid-loop. Nothing to
+            # do: a cache is a cache, and losing this race costs a
+            # lookup rather than anything that matters.
+            return
+
+
 # ---------------- Sleeper helpers ----------------
 
-def _cached_get(url, cache, ttl=300):
+def _cached_get(url, cache, ttl=300, limit=CACHE_LIMIT_DEFAULT):
     """Small shared helper: cache any Sleeper GET for `ttl` seconds. 5 min
     is short enough that roster/lineup changes show up quickly, but long
     enough that clicking around the same league doesn't re-fetch the same
@@ -1712,6 +1777,7 @@ def _cached_get(url, cache, ttl=300):
     r.raise_for_status()
     data = r.json()
     cache[url] = {"data": data, "time": now}
+    _cache_trim(cache, limit)
     return data
 
 
@@ -1870,6 +1936,7 @@ def get_fantasycalc_values(num_qbs, is_dynasty=True, num_teams=12, cache={}):
 
     data = {"players": players, "picks": picks}
     cache[key] = {"data": data, "time": now}
+    _cache_trim(cache, CACHE_LIMIT_BOARDS)
     return data
 
 
@@ -2200,6 +2267,7 @@ def espn_week_scoreboard(season, week, season_type=2, cache={}):
             for ev in data.get("events", [])
         )
         cache[key] = {"data": data, "time": now, "any_live": any_live}
+        _cache_trim(cache, CACHE_LIMIT_BOARDS)
         return data
     except Exception:
         return entry["data"] if entry else {"events": []}
@@ -2223,6 +2291,7 @@ def espn_day_scoreboard(date_str, cache={}):
             for ev in data.get("events", [])
         )
         cache[date_str] = {"data": data, "time": now, "any_live": any_live}
+        _cache_trim(cache, CACHE_LIMIT_BOARDS)
         return data
     except Exception:
         return entry["data"] if entry else {"events": []}
@@ -2399,6 +2468,7 @@ def espn_game_summary(event_id, cache={}):
         data = r.json()
         state = (((data.get("header") or {}).get("competitions") or [{}])[0].get("status") or {}).get("type", {}).get("state")
         cache[event_id] = {"data": data, "time": now, "state": state}
+        _cache_trim(cache, CACHE_LIMIT_GAME_SUMMARIES)
         return data
     except Exception:
         return entry["data"] if entry else {}
@@ -3699,6 +3769,7 @@ def get_schedule_for_team_week(season, week, team_abbr, cache={}):
         conn.close()
     if not row:
         cache[key] = {"data": None, "time": now}
+        _cache_trim(cache, CACHE_LIMIT_DEFAULT)
         return None
     is_home = row["home_team"] == team_abbr
     data = {
@@ -3717,6 +3788,7 @@ def get_schedule_for_team_week(season, week, team_abbr, cache={}):
         "opp_score": _row_get(row, "away_score" if is_home else "home_score"),
     }
     cache[key] = {"data": data, "time": now}
+    _cache_trim(cache, CACHE_LIMIT_DEFAULT)
     return data
 
 
@@ -3913,6 +3985,7 @@ def get_defense_vs_position(season, cache=_defense_vs_position_cache):
             result[team][pos]["rank"] = i + 1
 
     cache[(season, _sc)] = {"data": result, "time": now}
+    _cache_trim(cache, CACHE_LIMIT_BOARDS)
     return result
 
 
@@ -4210,6 +4283,7 @@ def get_performance_distribution(season, scoring=None, cache=_perf_distribution_
         pools[pos].sort()
 
     cache[key] = {"data": pools, "time": now}
+    _cache_trim(cache, CACHE_LIMIT_BOARDS)
     return pools
 
 
@@ -4556,6 +4630,7 @@ def compute_matchup_grade(sid, season, week, cache=_matchup_grade_cache):
         "reasoning": _grade_reasoning(components), "components": components,
     }
     cache[key] = {"data": data, "time": now}
+    _cache_trim(cache, CACHE_LIMIT_GRADES)
     return data
 
 
@@ -5192,6 +5267,7 @@ def get_live_week_stats(season, week, cache=_live_week_stats_cache, allow_fetch=
                 continue
             out[pid] = {"pts": round(pts, 1), "stats": stats}
         cache[key] = {"data": out, "time": now}
+        _cache_trim(cache, CACHE_LIMIT_BOARDS)
         return _live_in_scoring(out, scoring)
     except Exception:
         return _live_in_scoring(entry["data"], scoring) if entry else {}
@@ -5646,6 +5722,7 @@ def get_season_stats(season, scoring=None, cache={}):
         p_entry["snap_pct"] = round(100 * p_entry["off_snp_total"] / tm_total, 1) if tm_total else None
 
     cache[key] = {"data": agg, "time": now}
+    _cache_trim(cache, CACHE_LIMIT_SEASON_STATS)
     return agg
 
 
@@ -5699,6 +5776,7 @@ def get_season_finish_ranks(season, cache={}):
             ranks = {}
 
     cache[(season, _sc)] = {"data": ranks, "time": now}
+    _cache_trim(cache, CACHE_LIMIT_BOARDS)
     return ranks
 
 
@@ -5877,6 +5955,7 @@ def build_leagues_for_user(username, league_ids=None, cache={}):
 
     data = {"display_name": display_name, "user_id": user_id, "leagues": result}
     cache[key] = {"data": data, "time": now}
+    _cache_trim(cache, CACHE_LIMIT_PER_USER)
     return data
 
 
@@ -8224,6 +8303,7 @@ def get_week_projections(season, week, cache={}):
         app.logger.warning("projections %s/%s: %s", season, week, e)
     if out or not entry:
         cache[key] = {"data": out, "time": now}
+        _cache_trim(cache, CACHE_LIMIT_BOARDS)
         return out
     return entry["data"]
 
@@ -9707,6 +9787,7 @@ def kdst_board(season, position="K", rng="season", week=None, scoring=None, cach
     for i, row in enumerate(rows, 1):
         row["rank"] = i
     cache[key] = {"data": rows, "time": now}
+    _cache_trim(cache, CACHE_LIMIT_BOARDS)
     return rows
 
 
@@ -9725,6 +9806,7 @@ def kdst_rank_map(season, position, rng="season", cache={}):
         board = []
     out = {r["sid"]: r["rank"] for r in board}
     cache[key] = {"data": out, "time": now}
+    _cache_trim(cache, CACHE_LIMIT_BOARDS)
     return out
 
 
@@ -10341,6 +10423,7 @@ def get_week_performers(season, week, cache=_week_performers_cache, allow_fetch=
     # performances has to say so. Raw points break exact ties.
     rows.sort(key=lambda r: (-r["grade"]["score"], -r["fpts"]))
     cache[key] = {"data": rows, "time": now}
+    _cache_trim(cache, CACHE_LIMIT_BOARDS)
     return rows
 
 
@@ -10739,6 +10822,7 @@ def get_player_espn_plays(sid, season, week, cache=_espn_player_plays_cache):
     event_id = (sched or {}).get("espn_event_id")
     if not event_id:
         cache[key] = {"data": [], "time": now}
+        _cache_trim(cache, CACHE_LIMIT_PER_USER)
         return []
 
     summary = espn_game_summary(event_id) or {}
@@ -10810,6 +10894,7 @@ def get_player_espn_plays(sid, season, week, cache=_espn_player_plays_cache):
 
     out.sort(key=lambda p: (p["value"], p.get("qtr") or 0), reverse=True)
     cache[key] = {"data": out, "time": now}
+    _cache_trim(cache, CACHE_LIMIT_PER_USER)
     return out
 
 
@@ -11138,6 +11223,7 @@ def get_performance_board(scope="week", position=None, season=None, week=None,
 
     rows = rows[:limit]
     cache[key] = {"data": rows, "time": now}
+    _cache_trim(cache, CACHE_LIMIT_BOARDS)
     return rows
 
 
@@ -11306,6 +11392,7 @@ def get_team_standings(season, season_type=2, cache=_standings_cache):
 
     _assign_playoff_seeds(rows)
     cache[key] = {"data": rows, "time": now}
+    _cache_trim(cache, CACHE_LIMIT_BOARDS)
     return rows
 
 
@@ -11410,6 +11497,7 @@ def _season_opponents(season, season_type=2, cache={}):
         finally:
             conn.close()
     cache[key] = {"data": out, "time": now}
+    _cache_trim(cache, CACHE_LIMIT_BOARDS)
     return out
 
 
@@ -12018,6 +12106,7 @@ def get_moves_report(limit=None, days=MOVE_NEWS_DAYS, cache=_moves_feed_cache):
             "changed_at": r.get("changed_at"),
         })
     cache[key] = {"rows": rows, "time": now}
+    _cache_trim(cache, CACHE_LIMIT_BOARDS)
     return rows[:limit] if limit else rows
 
 
@@ -12234,6 +12323,7 @@ def _streak_schedule_index(seasons, cache=_streak_sched_cache):
         except Exception:
             index = {}
     cache[key] = {"data": index, "time": now}
+    _cache_trim(cache, CACHE_LIMIT_BOARDS)
     return index
 
 
@@ -12272,6 +12362,7 @@ def _streak_logs(seasons, cache=_streak_logs_cache):
         except Exception:
             logs = {}
     cache[key] = {"data": logs, "time": now}
+    _cache_trim(cache, CACHE_LIMIT_PER_USER)
     return logs
 
 
@@ -12515,6 +12606,7 @@ def get_book_lines(season, week, cache=_book_lines_cache):
         except Exception:
             data = {}
     cache[key] = {"data": data, "time": now}
+    _cache_trim(cache, CACHE_LIMIT_BOARDS)
     return data
 
 
@@ -12712,6 +12804,7 @@ def get_streak_board(prop_key, season, week, cache=_streaks_cache):
     rows.sort(key=lambda r: (-(r["windows"]["l10"]["pct"] or 0), -r["edge"]))
     rows = rows[:STREAK_LIST_MAX]
     cache[key] = {"data": rows, "time": now}
+    _cache_trim(cache, CACHE_LIMIT_BOARDS)
     return rows
 
 
@@ -12760,6 +12853,7 @@ def get_streak_trends(season, week, cache=_streaks_cache):
                              -(abs(r["edge"]) / r["line"] if r["line"] else 0)))
     rows = rows[:STREAK_LIST_MAX]
     cache[key] = {"data": rows, "time": now}
+    _cache_trim(cache, CACHE_LIMIT_BOARDS)
     return rows
 
 
@@ -12996,6 +13090,7 @@ def get_injury_report(limit=None, cache=_injury_feed_cache):
                             r["severity"], r["name"]))
     data = out[:limit] if limit else out
     cache[limit] = {"data": data, "time": now}
+    _cache_trim(cache, CACHE_LIMIT_BOARDS)
     return data
 
 
@@ -13309,6 +13404,7 @@ def get_team_rankings(season, season_type=2, cache=_team_rank_cache):
     # While games are being played the ranking is worth recomputing often;
     # between rounds it cannot change, so it is cached the usual way.
     cache[key] = {"data": out, "time": now, "ttl": 45 if live else 300}
+    _cache_trim(cache, CACHE_LIMIT_BOARDS)
     return out
 
 
@@ -13414,6 +13510,7 @@ def get_player_window_ranks(season, cache=_player_rank_cache):
                 sorted(bucket.items(), key=lambda kv: -kv[1]), 1):
             out.setdefault(sid, {})[label] = i
     cache[(season, _sc)] = {"data": out, "time": now}
+    _cache_trim(cache, CACHE_LIMIT_BOARDS)
     return out
 
 
@@ -13519,6 +13616,7 @@ def get_season_game_days(season, season_type=2, cache={}):
     days = [{"week": r["week"], "kickoff": _utc_isoformat(r["first_kick"])}
             for r in rows if r.get("first_kick")]
     cache[key] = {"data": days, "time": now}
+    _cache_trim(cache, CACHE_LIMIT_BOARDS)
     return days
 
 
@@ -14356,6 +14454,7 @@ def draft_pool(season, week, day, games, cache=_draft_pool_cache):
         r["boost"] = boosts.get(r["sid"], DRAFT_BOOST_MAX)
     rows.sort(key=lambda r: (r["rank"], r["name"]))
     cache[key] = {"data": rows, "time": now}
+    _cache_trim(cache, CACHE_LIMIT_BOARDS)
     return rows
 
 
@@ -16266,6 +16365,78 @@ def healthz():
     keeps Render's free tier from spinning the worker down between real
     visitors."""
     return jsonify({"ok": True})
+
+
+def process_rss_mb():
+    """How much memory this process is actually using, in MB.
+
+    Read from /proc, which Linux gives for free, so this needs no
+    dependency. None anywhere without /proc, which is every environment
+    this does not run in."""
+    try:
+        with open("/proc/self/status") as fh:
+            for line in fh:
+                if line.startswith("VmRSS:"):
+                    return round(int(line.split()[1]) / 1024, 1)
+    except Exception:
+        pass
+    return None
+
+
+def cache_report():
+    """Every in-memory cache, by name, with how many entries it holds and
+    the ceiling it is held to.
+
+    The 502s that prompted all of this were the process being killed for
+    memory, and from outside a kill looks the same as a crash. This makes
+    the difference visible: if a cache is sitting at its limit it is
+    doing its job, and if RSS is climbing while every cache is small the
+    leak is somewhere else entirely."""
+    named = {
+        "season_stats": (get_season_stats.__defaults__[1], CACHE_LIMIT_SEASON_STATS),
+        "matchup_grades": (_matchup_grade_cache, CACHE_LIMIT_GRADES),
+        "game_summaries": (espn_game_summary.__defaults__[0], CACHE_LIMIT_GAME_SUMMARIES),
+        "defense_vs_position": (_defense_vs_position_cache, CACHE_LIMIT_BOARDS),
+        "week_performers": (_week_performers_cache, CACHE_LIMIT_BOARDS),
+        "perf_board": (_perf_board_cache, CACHE_LIMIT_BOARDS),
+        "live_week_stats": (_live_week_stats_cache, CACHE_LIMIT_BOARDS),
+        "standings": (_standings_cache, CACHE_LIMIT_BOARDS),
+        "kdst_board": (_kdst_board_cache, CACHE_LIMIT_BOARDS),
+        "scores_page": (_scores_page_cache, 1),
+        "rankings_page": (_rankings_page_cache, RANKINGS_PAGE_COPIES),
+        "player_plays": (_espn_player_plays_cache, CACHE_LIMIT_PER_USER),
+        "espn_injuries": (_espn_injuries_cache, 1),
+        "moves_feed": (_moves_feed_cache, CACHE_LIMIT_BOARDS),
+        "contracts": (_contracts_cache, 1),
+    }
+    out = {}
+    for name, (cache, limit) in named.items():
+        try:
+            out[name] = {"entries": len(cache), "limit": limit}
+        except Exception:
+            out[name] = {"entries": None, "limit": limit}
+    return out
+
+
+@app.route("/api/memory")
+def api_memory():
+    """What the process weighs and what the caches are holding."""
+    if not _secret_ok():
+        return jsonify({"ok": False, "error": "unauthorized"}), 401
+    players = 0
+    try:
+        players = len(get_all_players() or {})
+    except Exception:
+        pass
+    return jsonify({
+        "ok": True,
+        "rss_mb": process_rss_mb(),
+        # Render's smallest paid instance. Worth printing beside the
+        # figure so the number means something without looking it up.
+        "instance_mb": _safe_int(os.environ.get("INSTANCE_MB"), 512),
+        "players_cached": players,
+        "caches": cache_report(),
+    })
 
 
 @app.route("/api/warm", methods=["GET", "POST"])
