@@ -13602,12 +13602,25 @@ def _scores_shared_html(season, week, season_type, info, cache=_scores_page_cach
 def _scores_personal(shared_html, username):
     """The shared page made this reader's: their banner in place of the
     guest one, their players in place of the empty default. A guest gets
-    the page back with only the markers removed."""
-    has_synced = bool(current_user.is_authenticated and get_synced_league_ids(current_user.id))
+    the page back with only the markers removed.
+
+    This must never raise. It runs on the error path too -- the page the
+    route falls back to when something upstream broke -- so an exception
+    escaping here turns a page that was going to explain itself into a
+    bare 500. Reading the synced-league list is a database call, and a
+    database having a bad second is exactly when the error path runs.
+    The whole of it degrades to the guest version instead."""
+    league_ids = None
+    try:
+        if current_user.is_authenticated:
+            league_ids = get_synced_league_ids(current_user.id)
+    except Exception:
+        app.logger.warning("scores: could not read synced leagues", exc_info=True)
+    has_synced = bool(league_ids)
     by_team = {}
     if has_synced and username:
         try:
-            by_team = get_my_players_by_team(username, get_synced_league_ids(current_user.id)) or {}
+            by_team = get_my_players_by_team(username, league_ids) or {}
         except Exception:
             by_team = {}
     start = shared_html.find(_SCORES_BANNER_OPEN)
@@ -13656,7 +13669,14 @@ def scores_page():
             performers=[], power=[], perf_groups=PERFORMER_GROUPS,
             injuries=[], moves=[], birthdays=[],
         )
-        return _scores_personal(page, username)
+        # Belt as well as braces. _scores_personal is written not to
+        # raise; if it ever does, the reader still gets the page that
+        # says what went wrong rather than nothing at all.
+        try:
+            return _scores_personal(page, username)
+        except Exception:
+            app.logger.exception("scores: personalising the error page failed")
+            return page
 
 
 @app.route("/injuries")
