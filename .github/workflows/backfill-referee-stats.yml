@@ -8,6 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       SITE_PASSWORD: ${{ secrets.SITE_PASSWORD }}
+      HOST: ${{ vars.SITE_HOST || 'https://fantasyfootballcalc.com' }}
     steps:
       - name: Make sure the schedule is synced for the target seasons first
         run: |
@@ -23,7 +24,7 @@ jobs:
             echo "Syncing schedule for $year..."
             body=$(curl -sS --fail-with-body -X POST \
               -H "X-Sync-Secret: $SITE_PASSWORD" \
-              "https://fantasyfootballcalc.com/api/sync-schedule?season=$year") || {
+              "$HOST/api/sync-schedule?season=$year") || {
                 echo "::error::schedule sync for $year failed: $body"; exit 1; }
             echo "  $body"
             case "$body" in *'"ok": false'*|*'"ok":false'*)
@@ -49,7 +50,7 @@ jobs:
               echo "Fetching game ids for $year week $week..."
               week_body=$(curl -sS --fail-with-body \
                 -H "X-Sync-Secret: $SITE_PASSWORD" \
-                "https://fantasyfootballcalc.com/api/schedule-week-ids?season=$year&week=$week") || {
+                "$HOST/api/schedule-week-ids?season=$year&week=$week") || {
                   echo "::error::could not list games for $year wk$week: $week_body"; exit 1; }
               case "$week_body" in *'"ok": false'*|*'"ok":false'*)
                 echo "::error::server rejected the game-id lookup for $year wk$week: $week_body"; exit 1;; esac
@@ -57,7 +58,7 @@ jobs:
                 echo "  Syncing referee data for $year wk$week game $id"
                 body=$(curl -sS --fail-with-body -X POST \
                   -H "X-Sync-Secret: $SITE_PASSWORD" \
-                  "https://fantasyfootballcalc.com/api/sync-referee-game?id=$id&season=$year&week=$week") \
+                  "$HOST/api/sync-referee-game?id=$id&season=$year&week=$week") \
                   || body="request failed: $body"
                 echo "    $body"
                 # One bad game shouldn't abandon a 3-season backfill, but

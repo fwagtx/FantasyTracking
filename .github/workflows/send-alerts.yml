@@ -25,6 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       SITE_PASSWORD: ${{ secrets.SITE_PASSWORD }}
+      HOST: ${{ vars.SITE_HOST || 'https://fantasyfootballcalc.com' }}
       EVENT_NAME: ${{ github.event_name }}
       DRY_INPUT: ${{ github.event.inputs.dry }}
       WEEK_INPUT: ${{ github.event.inputs.week }}
@@ -44,7 +45,7 @@ jobs:
             echo "::error::SITE_PASSWORD repository secret is not set -- this job cannot authenticate."
             exit 1
           fi
-          url="https://fantasyfootballcalc.com/api/send-alerts"
+          url="$HOST/api/send-alerts"
           sep="?"
           if [ -n "$DRY_INPUT" ]; then url="$url${sep}dry=$DRY_INPUT"; sep="&"; fi
           if [ -n "$WEEK_INPUT" ]; then url="$url${sep}week=$WEEK_INPUT"; fi

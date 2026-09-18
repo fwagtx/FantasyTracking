@@ -13,6 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       SITE_PASSWORD: ${{ secrets.SITE_PASSWORD }}
+      HOST: ${{ vars.SITE_HOST || 'https://fantasyfootballcalc.com' }}
       SEASON_INPUT: ${{ github.event.inputs.season }}
     steps:
       - name: Sync every season, one at a time
@@ -34,7 +35,7 @@ jobs:
             echo "Syncing $year..."
             body=$(curl -sS --fail-with-body -X POST \
               -H "X-Sync-Secret: $SITE_PASSWORD" \
-              "https://fantasyfootballcalc.com/api/sync-stats?season=$year") || body="request failed: $body"
+              "$HOST/api/sync-stats?season=$year") || body="request failed: $body"
             echo "  $body"
             case "$body" in *'"ok": false'*|*'"ok":false'*|"request failed:"*)
               failed="$failed $year";; esac

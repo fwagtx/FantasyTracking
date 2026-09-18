@@ -12,6 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       SITE_PASSWORD: ${{ secrets.SITE_PASSWORD }}
+      HOST: ${{ vars.SITE_HOST || 'https://fantasyfootballcalc.com' }}
       SHED: ${{ github.event.inputs.shed }}
     steps:
       - name: Ask the live server what it weighs
@@ -25,7 +26,7 @@ jobs:
           echo "--- /api/memory$q ---"
           body=$(curl -sS --fail-with-body --max-time 60 \
             -H "X-Sync-Secret: $SITE_PASSWORD" \
-            "https://fantasyfootballcalc.com/api/memory$q") || {
+            "$HOST/api/memory$q") || {
               echo "::error::request failed: $body"; exit 1; }
           echo "$body"
           case "$body" in *'"ok": false'*|*'"ok":false'*)
@@ -33,6 +34,6 @@ jobs:
           echo "--- the pages a visitor actually loads ---"
           for path in / /scores /rankings "/rankings?pos=K" /matchup; do
             code=$(curl -sS -o /dev/null -w '%{http_code}' --max-time 45 \
-              "https://fantasyfootballcalc.com$path")
+              "$HOST$path")
             echo "$code  $path"
           done

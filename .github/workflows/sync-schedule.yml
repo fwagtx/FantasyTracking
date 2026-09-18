@@ -19,6 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       SITE_PASSWORD: ${{ secrets.SITE_PASSWORD }}
+      HOST: ${{ vars.SITE_HOST || 'https://fantasyfootballcalc.com' }}
       EVENT_NAME: ${{ github.event_name }}
       SEASON_INPUT: ${{ github.event.inputs.season }}
     steps:
@@ -54,7 +55,7 @@ jobs:
           # prior season (which matchup grading needs for its
           # defense-vs-position history) has no automatic path in here.
           # This input is how one gets backfilled on demand.
-          url="https://fantasyfootballcalc.com/api/sync-schedule"
+          url="$HOST/api/sync-schedule"
           if [ -n "$SEASON_INPUT" ]; then
             url="$url?season=$SEASON_INPUT"
           fi

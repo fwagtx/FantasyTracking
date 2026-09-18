@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       SITE_PASSWORD: ${{ secrets.SITE_PASSWORD }}
-      HOST: https://fantasyfootballcalc.com
+      HOST: ${{ vars.SITE_HOST || 'https://fantasyfootballcalc.com' }}
       ROUNDS: ${{ github.event.inputs.rounds }}
       PAR: ${{ github.event.inputs.parallel }}
     steps:

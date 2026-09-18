@@ -270,11 +270,11 @@ TABBAR_PATHS = (
     ("/performances", "scores"), ("/performance", "scores"), ("/team", "scores"), ("/play", "scores"),
     ("/injuries", "scores"), ("/moves", "scores"), ("/birthdays", "scores"), ("/draft", "scores"),
 )
-# Which sections are myCalc+ once the gate is on: the calculator, with a
+# Which sections are StreakPros+ once the gate is on: the calculator, with a
 # plus beside it, marks them in the menu and on the bar.
 PLUS_KEYS = ("lineup", "waivers", "matchups", "streaks", "plus")
 # The favicon's calculator (display bar, four keys) with a plus beside it.
-PLUS_MARK_SVG = ('<svg class="plus-mark" viewBox="0 0 30 26" aria-label="myCalc+" role="img">'
+PLUS_MARK_SVG = ('<svg class="plus-mark" viewBox="0 0 30 26" aria-label="StreakPros+" role="img">'
                  '<rect x="0" y="1" width="24" height="24" rx="5" fill="var(--accent)"/>'
                  '<rect x="4.9" y="5.1" width="14.2" height="4.9" rx="1.3" fill="#17140d"/>'
                  '<circle cx="8.3" cy="15.3" r="1.7" fill="#17140d"/>'
@@ -583,7 +583,7 @@ def init_db():
             cur.execute("ALTER TABLE users ADD COLUMN IF NOT EXISTS pref_scoring TEXT;")
             cur.execute("ALTER TABLE users ADD COLUMN IF NOT EXISTS pref_theme TEXT;")
             cur.execute("ALTER TABLE users ADD COLUMN IF NOT EXISTS pref_accent TEXT;")
-            # myCalc+ billing. The old is_member flag stays as a hand-set
+            # StreakPros+ billing. The old is_member flag stays as a hand-set
             # complimentary switch; everything Stripe reports lives here.
             for col in ("stripe_customer_id TEXT", "stripe_subscription_id TEXT", "plan TEXT",
                         "member_status TEXT", "access_until TIMESTAMP", "current_period_end TIMESTAMP",
@@ -6111,11 +6111,18 @@ SMTP_HOST = os.environ.get("SMTP_HOST")
 SMTP_PORT = _safe_int(os.environ.get("SMTP_PORT"), 587)
 SMTP_USER = os.environ.get("SMTP_USER")
 SMTP_PASSWORD = os.environ.get("SMTP_PASSWORD")
+# Still the old domain on purpose: this is only the fallback for an
+# unset variable, and sending from streakpros.com before Resend has
+# verified it means every password reset and alert bounces. Render's
+# MAIL_FROM is the switch, flipped once Resend says Verified.
 MAIL_FROM = os.environ.get("MAIL_FROM") or "no-reply@fantasyfootballcalc.com"
-MAIL_FROM_NAME = os.environ.get("MAIL_FROM_NAME") or "Fantasy Football Calc"
+MAIL_FROM_NAME = os.environ.get("MAIL_FROM_NAME") or "StreakPros"
 # Where links in an email point. Behind a proxy the request's own host is
 # whatever the proxy said it was, which is not something to build a
 # password-reset link out of.
+# Likewise: the fallback stays on the domain that is serving today, so
+# a missing variable cannot put a dead link in an email. Render's
+# SITE_URL moves to https://streakpros.com once DNS and TLS are live.
 SITE_URL = (os.environ.get("SITE_URL") or "https://fantasyfootballcalc.com").rstrip("/")
 
 
@@ -6269,13 +6276,13 @@ def _email_footer(user_id):
         return "", ""
     link = unsubscribe_link(user_id)
     text = ("\n\n--\n"
-            "Fantasy Football Calc\n"
+            "StreakPros\n"
             f"Stop receiving emails: {link}\n"
             f"Privacy policy: {SITE_URL}/privacy")
     body = (
         '<hr style="border:none;border-top:1px solid #ddd;margin:26px 0 14px;">'
         '<p style="color:#888;font-size:12px;line-height:1.6;margin:0;">'
-        'Fantasy Football Calc<br>'
+        'StreakPros<br>'
         f'<a href="{link}" style="color:#888;">Stop receiving emails</a> &middot; '
         f'<a href="{SITE_URL}/privacy" style="color:#888;">Privacy policy</a>'
         '</p>')
@@ -6287,7 +6294,7 @@ def send_password_reset_email(row, token):
     name = row.get("username") or "there"
     text = (
         f"Hi {name},\n\n"
-        f"Someone asked to reset the password for your Fantasy Football Calc "
+        f"Someone asked to reset the password for your StreakPros "
         f"account. Open this link to choose a new one:\n\n{link}\n\n"
         f"The link works once and expires in {PASSWORD_RESET_TTL_HOURS} hours.\n\n"
         f"If this wasn't you, ignore this email -- your password has not changed.\n\n"
@@ -6296,7 +6303,7 @@ def send_password_reset_email(row, token):
     )
     body = (
         f'<p>Hi {html.escape(str(name))},</p>'
-        f'<p>Someone asked to reset the password for your Fantasy Football Calc account. '
+        f'<p>Someone asked to reset the password for your StreakPros account. '
         f'Choose a new one here:</p>'
         f'<p><a href="{link}" style="background:#b97a1f;color:#fff8ec;padding:11px 22px;'
         f'border-radius:99px;text-decoration:none;font-weight:700;display:inline-block;">'
@@ -6309,7 +6316,7 @@ def send_password_reset_email(row, token):
         f'account\'s password.</p>'
     )
     foot_text, foot_html = _email_footer(row.get("id"))
-    sent = send_email(row.get("email"), "Reset your Fantasy Football Calc password",
+    sent = send_email(row.get("email"), "Reset your StreakPros password",
                       text + foot_text, body + foot_html)
     if not sent:
         # Recoverable rather than lost: without a mail provider the link
@@ -6525,7 +6532,7 @@ def avatar_image(user_id):
 
 # Which screens Settings is made of, in the order they are listed.
 # (key, label) -- the summary beside each is computed per reader below.
-# --- myCalc+ billing (Stripe) --------------------------------------------
+# --- StreakPros+ billing (Stripe) --------------------------------------------
 #
 # One paid tier, two ways to buy it: a monthly subscription, or a season
 # pass paid once. Stripe Checkout takes the card on Stripe's own page;
@@ -6553,8 +6560,8 @@ STRIPE_PRICES = {
     "trial": os.environ.get("STRIPE_PRICE_TRIAL", ""),
 }
 PLAN_MODES = {"monthly": "subscription", "season": "payment", "founding": "payment", "trial": "subscription"}
-PLAN_NAMES = {"monthly": "myCalc+ Monthly", "season": "myCalc+ Season Pass",
-              "founding": "myCalc+ Founding Season Pass", "trial": "myCalc+ Monthly"}
+PLAN_NAMES = {"monthly": "StreakPros+ Monthly", "season": "StreakPros+ Season Pass",
+              "founding": "StreakPros+ Founding Season Pass", "trial": "StreakPros+ Monthly"}
 # Display only. Stripe charges the price object; these just have to
 # agree with it on the pricing page.
 PLAN_PRICES = {"monthly": "$6.99", "season": "$29.99", "founding": "$19.99", "trial": "$1"}
@@ -6563,7 +6570,7 @@ PLAN_PRICES = {"monthly": "$6.99", "season": "$29.99", "founding": "$19.99", "tr
 TRIAL_DAYS = 3
 # The gate is a switch, off until the owner has watched a real purchase
 # land. Off, every page behaves exactly as before billing existed (the
-# sign-in gates only); on, the myCalc+ pages ask for the plan.
+# sign-in gates only); on, the StreakPros+ pages ask for the plan.
 PAYWALL = (os.environ.get("PAYWALL") or "").strip().lower() in ("1", "true", "yes", "on")
 # Last day the founding price is on sale, inclusive, Central time.
 FOUNDING_CUTOFF = os.environ.get("FOUNDING_CUTOFF") or "2026-10-04"
@@ -6610,7 +6617,7 @@ def trial_eligible(user):
 
 
 if billing_missing():
-    app.logger.warning("myCalc+ checkout is not open on this server: set %s in the environment",
+    app.logger.warning("StreakPros+ checkout is not open on this server: set %s in the environment",
                        ", ".join(billing_missing()))
 
 
@@ -6679,7 +6686,7 @@ def viewer_has_plus():
 
 
 def plus_unlocked(open_before=False):
-    """Whether the viewer gets a myCalc+ page in full. With the gate off,
+    """Whether the viewer gets a StreakPros+ page in full. With the gate off,
     a page keeps whatever it asked for before billing existed: sign-in
     (Rankings, Matchups, League Manager) or nothing at all (Streaks,
     open_before=True). With it on, the plan is the key."""
@@ -6736,7 +6743,7 @@ def plan_summary(user, now=None):
         else:
             out["detail"] = f"Season Pass ended {_central_date(until)}" if until else "Season Pass ended"
     if out["comped"] and out["label"] == "Free":
-        out["label"] = "myCalc+"
+        out["label"] = "StreakPros+"
         out["detail"] = "Complimentary"
     return out
 
@@ -6848,25 +6855,25 @@ def send_welcome_email(row, token):
     name = row.get("username") or "there"
     text = (
         f"Hi {name},\n\n"
-        f"Thanks for joining myCalc+. Your Fantasy Football Calc account was made "
+        f"Thanks for joining StreakPros+. Your StreakPros account was made "
         f"from this email address when you paid. Choose a password here so you can "
         f"sign in on any device:\n\n{link}\n\n"
         f"The link works once and expires in {PASSWORD_RESET_TTL_HOURS} hours; you can "
         f"ask for another from the sign-in page any time.\n\n"
-        f"Your username is {name}. Manage your plan under Settings > myCalc+.\n"
+        f"Your username is {name}. Manage your plan under Settings > StreakPros+.\n"
     )
     body = (
         f'<p>Hi {html.escape(str(name))},</p>'
-        f'<p>Thanks for joining myCalc+. Your Fantasy Football Calc account was made from '
+        f'<p>Thanks for joining StreakPros+. Your StreakPros account was made from '
         f'this email address when you paid. Choose a password so you can sign in on any device:</p>'
         f'<p><a href="{link}" style="background:#b97a1f;color:#fff8ec;padding:11px 22px;'
         f'border-radius:99px;text-decoration:none;font-weight:700;display:inline-block;">'
         f'Set your password</a></p>'
         f'<p style="color:#666;font-size:13px;">The link works once and expires in '
         f'{PASSWORD_RESET_TTL_HOURS} hours; you can ask for another from the sign-in page any time. '
-        f'Your username is <b>{html.escape(str(name))}</b>. Manage your plan under Settings &rsaquo; myCalc+.</p>'
+        f'Your username is <b>{html.escape(str(name))}</b>. Manage your plan under Settings &rsaquo; StreakPros+.</p>'
     )
-    return send_email(row["email"], "Welcome to myCalc+: set your password", text, body)
+    return send_email(row["email"], "Welcome to StreakPros+: set your password", text, body)
 
 
 def _grant_from_session(cur, sess):
@@ -7012,12 +7019,12 @@ def _on_payment_failed(cur, inv):
     if not to:
         return None
     link = SITE_URL + "/settings/plan"
-    text = (f"Hi {name},\n\nYour myCalc+ payment didn't go through. Stripe will retry the card "
+    text = (f"Hi {name},\n\nYour StreakPros+ payment didn't go through. Stripe will retry the card "
             f"over the next few days, and your access continues in the meantime.\n\n"
             f"To update your card now: {link}\n\nIf you meant to cancel, there is nothing to do.\n")
 
     def _later():
-        send_email(to, "Your myCalc+ payment didn't go through", text)
+        send_email(to, "Your StreakPros+ payment didn't go through", text)
     return _later
 
 
@@ -7244,7 +7251,7 @@ def billing_portal():
 PLUS_NOTICES = {
     "founding-closed": "The founding price has ended. The Season Pass is below at its regular price.",
     "not-open": "Checkout isn't open yet. Check back soon.",
-    "already": "You're already on myCalc+.",
+    "already": "You're already on StreakPros+.",
     "trial-used": "The $1 trial is for first-time members. Monthly and the Season Pass are below.",
     "error": "Stripe couldn't start checkout just now. Nothing was charged; please try again in a minute.",
 }
@@ -7278,7 +7285,7 @@ def plus_cards():
          "tagline": "The full toolkit, one month at a time.",
          "bullets": ["Streaks: every prop, every position, adjustable lines",
                      "Matchup grades, on the page and in League Manager", "Unlimited synced leagues",
-                     "Everything we add to myCalc+ next"],
+                     "Everything we add to StreakPros+ next"],
          "cta": "Start Monthly", "fine": "Billed monthly through Stripe. Cancel anytime from Settings."},
         season,
     ]
@@ -7350,7 +7357,7 @@ SETTINGS_SECTIONS = [
     ("scoring", "Scoring"),
     ("theme", "Theme"),
     ("leagues", "Leagues"),
-    ("plan", "myCalc+"),
+    ("plan", "StreakPros+"),
     ("alerts", "Alerts"),
     ("email", "Email"),
     ("account", "Account"),
@@ -7856,7 +7863,7 @@ def export_account():
     resp.headers["Content-Type"] = "application/json"
     stamp = datetime.utcnow().strftime("%Y-%m-%d")
     resp.headers["Content-Disposition"] = (
-        f'attachment; filename="fantasyfootballcalc-{current_user.username}-{stamp}.json"')
+        f'attachment; filename="streakpros-{current_user.username}-{stamp}.json"')
     # Never cached, never stored by a proxy: this is the whole account.
     resp.headers["Cache-Control"] = "no-store, private"
     return resp
@@ -8075,8 +8082,8 @@ def leagues_page():
                 if current_user.is_authenticated and not over_limit:
                     set_synced_league_ids(current_user.id, chosen_ids)
                 if over_limit:
-                    error = ("Free accounts sync one league. myCalc+ syncs all of them; "
-                             "the plans are under myCalc in the menu.")
+                    error = ("Free accounts sync one league. StreakPros+ syncs all of them; "
+                             "the plans are under StreakPros+ in the menu.")
                     picker = {"leagues": brief, "display_name": display_name,
                               "preselected": set(chosen_ids), "default_all": False}
                 elif not chosen_ids:
@@ -8863,7 +8870,7 @@ def api_matchup_live():
 
 @app.route("/lineup")
 def lineup_page():
-    """Who to start this week, and why. myCalc+ (sign-in while the gate is off)."""
+    """Who to start this week, and why. StreakPros+ (sign-in while the gate is off)."""
     username, user_id, leagues = _account_leagues_for_pages()
     info = get_current_week_info()
     week = request.args.get("week", default=info["week"], type=int)
@@ -9622,7 +9629,7 @@ def build_waiver_targets(league, user_id, season, week):
 
 @app.route("/waivers")
 def waivers_page():
-    """The best free agents in your league. myCalc+ (sign-in while the
+    """The best free agents in your league. StreakPros+ (sign-in while the
     gate is off), same as the Lineup."""
     username, user_id, leagues = _account_leagues_for_pages()
     info = get_current_week_info()
@@ -14995,7 +15002,7 @@ def api_matchup_compare():
     Matchups page's comparison tool. Gated like the rest of matchup
     grading: sign-in, and the plan once the gate is on."""
     if not plus_unlocked():
-        msg = ("Comparing players is a myCalc+ feature." if current_user.is_authenticated
+        msg = ("Comparing players is a StreakPros+ feature." if current_user.is_authenticated
                else "Sign in to compare players.")
         return jsonify({"ok": False, "error": msg}), 401
     sid_a = request.args.get("a", "")
@@ -15240,7 +15247,7 @@ def _rankings_render(fmt, mode, is_dynasty, pos_filter, view, num_qbs):
                                   since_days=movement["days"],
                                   scoring_name=scoring_label(current_scoring()),
                                   # Rankings are free: a free account opens every tier,
-                                  # with or without the myCalc+ gate.
+                                  # with or without the StreakPros+ gate.
                                   rk_unlocked=bool(current_user.is_authenticated), rk_gate="signup")
 
 
@@ -15498,7 +15505,7 @@ def api_mail_status():
     to = request.args.get("to")
     if to:
         sent, reason = send_email_reason(
-            to, "Fantasy Football Calc test email",
+            to, "StreakPros test email",
             "This is a test. If it arrived, password reset emails will too.",
             "<p>This is a test. If it arrived, password reset emails will too.</p>")
         status["test_send"] = {"to": to, "sent": sent, "reason": reason}
@@ -16972,7 +16979,7 @@ BASE_STYLE = THEME_BOOT + """
   nav.links a{ text-decoration:none; font-size:13.5px; font-weight:600; color:var(--ink-secondary); }
   nav.links a:hover, nav.links a.active{ color:var(--accent-ink); }
 
-  /* --- the Live / myCalc group menus ---------------------------------
+  /* --- the Live / Fantasy group menus ---------------------------------
      Same <details> machinery as the account menu below: opens, closes
      and takes keyboard focus with no script, so the header still works
      if the script never runs. */
@@ -17761,8 +17768,8 @@ def site_webmanifest():
     """What "Add to Home Screen" reads: the name, the icon and the
     colours to paint around the page."""
     return _icon_response(json.dumps({
-        "name": "Fantasy Football Calc",
-        "short_name": "FF Calc",
+        "name": "StreakPros",
+        "short_name": "StreakPros",
         "start_url": "/",
         "display": "standalone",
         "background_color": "#0d0f0d",
@@ -17817,11 +17824,11 @@ NAV_LIVE = ("live", "/scores", "Live")
 NAV_LIVE_KEYS = ("live", "scores", "standings", "performances",
                  "injuries", "moves", "birthdays")
 
-# myCalc stays a menu: its five destinations have no shared landing page
+# Fantasy stays a menu: its five destinations have no shared landing page
 # that lists them the way /scores lists the live ones.
 NAV_GROUPS = [
-    ("mycalc", "myCalc", [
-        # Free tools first, the myCalc+ ones (see PLUS_KEYS) last.
+    ("mycalc", "Fantasy", [
+        # Free tools first, the StreakPros+ ones (see PLUS_KEYS) last.
         ("league", "/league-manager", "League Manager", "Your synced leagues and rosters"),
         ("matchup", "/matchup", "Your Matchup", "Live score and win odds in your league"),
         ("rankings", "/rankings", "Rankings", "Values, and kickers and D/ST on points"),
@@ -17831,7 +17838,7 @@ NAV_GROUPS = [
         ("waivers", "/waivers", "Waiver Targets", "The best free agents in your league"),
         ("matchups", "/matchups", "Matchups", "Start-sit grades for the week"),
         ("streaks", "/streaks", "Streaks", "Prop lines and hit rates, game by game"),
-        ("plus", "/plus", "myCalc+", "Every tier, every list, every grade"),
+        ("plus", "/plus", "StreakPros+", "Every tier, every list, every grade"),
     ]),
 ]
 
@@ -17870,7 +17877,7 @@ def make_header(active=""):
 
     return f"""
 <header class="site"><div class="wrap nav-row">
-  <a class="wordmark" href="/">{LOGO_SVG}<span>Fantasy Football Calc</span></a>
+  <a class="wordmark" href="/">{LOGO_SVG}<span>StreakPros</span></a>
   <input type="checkbox" id="navToggle" class="nav-toggle-checkbox">
   <label for="navToggle" class="nav-toggle-btn" aria-label="Menu">&#9776;</label>
   <nav class="links">{live_link}{nav_groups}
@@ -18131,9 +18138,9 @@ TERMS_HTML = BASE_STYLE + make_header("") + LEGAL_STYLE + """
 
   <div class="panel lg-panel" style="margin-top:16px;">
     <h3>What this is</h3>
-    <p>Fantasy Football Calc is a free fantasy football tool: live NFL scores,
-      player rankings, trade valuations and matchup grades. By using it you
-      agree to what is on this page.</p>
+    <p>StreakPros is a free fantasy football tool: player streaks and hit
+      rates, live NFL scores, player rankings, trade valuations and matchup
+      grades. By using it you agree to what is on this page.</p>
 
     <h3>Your account</h3>
     <p>You are responsible for keeping your password to yourself and for what
@@ -18773,7 +18780,7 @@ LEAGUE_DETAIL_HTML = BASE_STYLE + make_header("league") + """
             <a class="pname" href="/player?sid={{ p.sleeper_id }}&numqbs={{ detail.num_qbs }}&u={{ username }}&ref={{ ('/league?league_id=' ~ league_id ~ '&roster_id=' ~ detail.roster_id ~ '&u=' ~ username)|urlencode }}">{{ p.name }}</a>
           </div>
           <span class="rank-pair">
-            {% if p.grade %}<span class="grade-badge grade-{{ p.grade_class }}">{{ p.grade }}</span>{% elif p.grade_locked %}<a class="grade-badge grade-lock" href="/plus" title="Matchup grades are a myCalc+ feature">+</a>{% endif %}
+            {% if p.grade %}<span class="grade-badge grade-{{ p.grade_class }}">{{ p.grade }}</span>{% elif p.grade_locked %}<a class="grade-badge grade-lock" href="/plus" title="Matchup grades are a StreakPros+ feature">+</a>{% endif %}
             <span class="rank-plain">{{ p.position_rank or '\u2014' }}</span>
             <span class="rank-badge {{ p.tier }}">{{ p.overall_rank or '\u2014' }}</span>
           </span>
@@ -21182,9 +21189,9 @@ STREAKS_HTML = BASE_STYLE + make_header("streaks") + """
     </div>
     <div class="gate-card">
       {% if gate == 'plus' %}
-      <h3>{{ sk_locked }} more with <span style="color:var(--accent-ink);">myCalc+</span></h3>
+      <h3>{{ sk_locked }} more with <span style="color:var(--accent-ink);">StreakPros+</span></h3>
       <p>Every starter on this prop, every window, and a line you can move on any of them.</p>
-      <a href="/plus" class="btn" style="margin-top:18px; width:100%;">See myCalc+ plans</a>
+      <a href="/plus" class="btn" style="margin-top:18px; width:100%;">See StreakPros+ plans</a>
       {% else %}
       <h3>{{ sk_locked }} more <span style="color:var(--accent-ink);">Streaks</span></h3>
       <p>Sign in to see the full list for this prop.</p>
@@ -21509,9 +21516,9 @@ STREAK_PLAYER_HTML = BASE_STYLE + make_header("streaks") + BIO_SHEET + """
   {% if not unlocked %}</div>
     <div class="gate-card">
       {% if gate == 'plus' %}
-      <h3>Move the line with <span style="color:var(--accent-ink);">myCalc+</span></h3>
+      <h3>Move the line with <span style="color:var(--accent-ink);">StreakPros+</span></h3>
       <p>Set your own number and watch the hit rate follow it, on every prop for every starter.</p>
-      <a href="/plus" class="btn" style="margin-top:18px; width:100%;">See myCalc+ plans</a>
+      <a href="/plus" class="btn" style="margin-top:18px; width:100%;">See StreakPros+ plans</a>
       {% else %}
       <h3>Sign in to <span style="color:var(--accent-ink);">move the line</span></h3>
       <p>Set your own number and watch the hit rate follow it.</p>
@@ -23678,14 +23685,14 @@ MATCHUPS_HTML = BASE_STYLE + make_header("matchups") + """
       </div>
       <div class="gate-card">
         {% if gate == 'plus' %}
-        <h3>Matchup Grades are <span style="color:var(--accent-ink);">myCalc+</span></h3>
+        <h3>Matchup Grades are <span style="color:var(--accent-ink);">StreakPros+</span></h3>
         <p>A start/sit grade for every player, every week, from the opponent's defense, the recent trend and the injury report.</p>
         <div class="gate-benefits">
           <span>A-F grade for every startable player, every week</span>
           <span>The same grades inside League Manager, on your roster</span>
           <span>Head-to-head calculator for any two players</span>
         </div>
-        <a href="/plus" class="btn" style="margin-top:22px; width:100%;">See myCalc+ plans</a>
+        <a href="/plus" class="btn" style="margin-top:22px; width:100%;">See StreakPros+ plans</a>
         {% else %}
         <h3>Unlock <span style="color:var(--accent-ink);">Matchup Grades</span></h3>
         <p>Create a free account to see every player's start/sit grade, based on their opponent's defense, recent trend, and injury status.</p>
@@ -24064,14 +24071,14 @@ RANKINGS_HTML = BASE_STYLE + make_header("rankings") + VOTE_MODAL_HTML + """
       </div>
       <div class="gate-card">
         {% if rk_gate is defined and rk_gate == 'plus' %}
-        <h3>The full Rankings are <span style="color:var(--accent-ink);">myCalc+</span></h3>
+        <h3>The full Rankings are <span style="color:var(--accent-ink);">StreakPros+</span></h3>
         <p>Every tier below the top one, with 7-day movement on every player.</p>
         <div class="gate-benefits">
           <span>Every player ranked, redraft and dynasty</span>
           <span>Rank and value movement over the last week</span>
           <span>Streaks and the whole toolkit included</span>
         </div>
-        <a href="/plus" class="btn" style="margin-top:22px; width:100%;">See myCalc+ plans</a>
+        <a href="/plus" class="btn" style="margin-top:22px; width:100%;">See StreakPros+ plans</a>
         {% else %}
         <h3>Unlock the Full <span style="color:var(--accent-ink);">Rankings</span></h3>
         <p>Create a free account to see every player, not just the top tier.</p>
@@ -24998,7 +25005,7 @@ AUTH_STYLE = THEME_BOOT + """
 """
 
 SIGNUP_HTML = AUTH_STYLE + """
-<div class="auth-top"><a class="auth-logo" href="/">Fantasy Football Calc</a></div>
+<div class="auth-top"><a class="auth-logo" href="/">StreakPros</a></div>
 <div class="auth-wrap">
   <h1>Create Account</h1>
   <p class="auth-sub">Already have an account? <a href="/login">Sign In</a></p>
@@ -25547,12 +25554,12 @@ document.addEventListener('change', function(e){
                                              'past_due': False, 'founding': False, 'has_customer': False} %}{% endif %}
   <div class="panel">
     <div class="set-group" style="margin-top:0;">
-      <h3>myCalc+</h3>
+      <h3>StreakPros+</h3>
       <div class="set-read"><b>Plan</b><span>{{ plan.label }}</span></div>
       {% if plan.detail %}<div class="set-read"><b>Status</b><span>{{ plan.detail }}</span></div>{% endif %}
       {% if plan.founding %}<div class="set-read"><b>Founding member</b><span>Founding price locked for next season</span></div>{% endif %}
       {% if plan.past_due %}
-      <div class="error" style="margin-top:12px;">Your last payment didn't go through. Update your card below to keep myCalc+.</div>
+      <div class="error" style="margin-top:12px;">Your last payment didn't go through. Update your card below to keep StreakPros+.</div>
       {% endif %}
       {% if request.args.get('error') == 'portal' %}<div class="error" style="margin-top:12px;">Stripe's billing page couldn't open just now. Try again in a minute.</div>{% endif %}
       <div class="set-actions" style="margin-top:16px; display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
@@ -25565,7 +25572,7 @@ document.addEventListener('change', function(e){
           {% endif %}
           <span class="muted" style="font-size:13px;">A season pass has nothing to cancel; it simply ends.</span>
         {% else %}
-        <a class="btn" href="/plus">See myCalc+ plans</a>
+        <a class="btn" href="/plus">See StreakPros+ plans</a>
         {% endif %}
       </div>
     </div>
@@ -25625,7 +25632,7 @@ document.addEventListener('change', function(e){
     <div class="set-group" style="margin-top:0;">
       <h3>Account</h3>
       <div class="set-read"><b>Email</b><span>{{ current_user.email or '&mdash;'|safe }}</span></div>
-      <div class="set-read"><b>Plan</b><span>{{ plan.label if plan is defined else ('myCalc+' if current_user.is_member else 'Free') }}</span></div>
+      <div class="set-read"><b>Plan</b><span>{{ plan.label if plan is defined else ('StreakPros+' if current_user.is_member else 'Free') }}</span></div>
       <div class="set-read"><b>Your data</b>
         <span><a href="/settings/export" style="color:var(--accent-ink);">Download everything</a></span></div>
       <div class="set-danger"><a href="/logout">Log out</a></div>
@@ -25687,7 +25694,7 @@ document.addEventListener('change', function(e){
 
 
 FORGOT_PASSWORD_HTML = AUTH_STYLE + """
-<div class="auth-top"><a class="auth-logo" href="/">Fantasy Football Calc</a></div>
+<div class="auth-top"><a class="auth-logo" href="/">StreakPros</a></div>
 <div class="auth-wrap">
   {% if sent %}
   <h1>Check your email</h1>
@@ -25720,7 +25727,7 @@ FORGOT_PASSWORD_HTML = AUTH_STYLE + """
 
 
 RESET_PASSWORD_HTML = AUTH_STYLE + """
-<div class="auth-top"><a class="auth-logo" href="/">Fantasy Football Calc</a></div>
+<div class="auth-top"><a class="auth-logo" href="/">StreakPros</a></div>
 <div class="auth-wrap">
   {% if done %}
   <h1>Password Changed</h1>
@@ -25750,7 +25757,7 @@ RESET_PASSWORD_HTML = AUTH_STYLE + """
 
 
 LOGIN_PAGE_HTML = AUTH_STYLE + """
-<div class="auth-top"><a class="auth-logo" href="/">Fantasy Football Calc</a></div>
+<div class="auth-top"><a class="auth-logo" href="/">StreakPros</a></div>
 <div class="auth-wrap">
   <h1>Welcome Back</h1>
   <p class="auth-sub">Don't have an account? <a href="/signup">Create one</a></p>
@@ -25815,7 +25822,7 @@ CHAT_HTML = BASE_STYLE + make_header() + """
 </div></main>
 """
 
-# --- myCalc+ pricing and thank-you pages ---------------------------------
+# --- StreakPros+ pricing and thank-you pages ---------------------------------
 PLUS_STYLE = """
 <style>
   .plus-wrap{ max-width:1040px; }
@@ -25866,9 +25873,9 @@ PLUS_STYLE = """
 PLUS_HTML = BASE_STYLE + make_header("plus") + PLUS_STYLE + """
 <main><div class="wrap plus-wrap">
   <div class="panel plus-hero">
-    <p class="eyebrow">myCalc+</p>
+    <p class="eyebrow">StreakPros+</p>
     <h2>Every tier. Every list. Every grade.</h2>
-    <p class="muted">Free covers game day and the rankings. myCalc+ opens the rest of the toolkit:
+    <p class="muted">Free covers game day and the rankings. StreakPros+ opens the rest of the toolkit:
       Streaks for every prop with a line you can move, and a start/sit grade on every player you own.</p>
     {% if summary and summary.active %}
     <div class="plus-current">You're on {{ summary.label }}{% if summary.detail %} &middot; {{ summary.detail }}{% endif %}
@@ -25907,7 +25914,7 @@ PLUS_HTML = BASE_STYLE + make_header("plus") + PLUS_STYLE + """
   {% if trial %}
   <div class="panel plus-trial" id="trial">
     <div class="plus-trial-text">
-      <h3>Try myCalc+ for {{ trial_fee }}</h3>
+      <h3>Try StreakPros+ for {{ trial_fee }}</h3>
       <p>{{ trial_days }} days of everything in Monthly for {{ trial_fee }}, then {{ monthly_price }} a month.
         Cancel from Settings before the trial ends and you owe nothing more.</p>
     </div>
@@ -25927,7 +25934,7 @@ PLUS_HTML = BASE_STYLE + make_header("plus") + PLUS_STYLE + """
       <li>Monthly renews until you cancel. Cancel from Settings and keep access to the end of the paid month.</li>
       <li>The Season Pass is a single payment with no auto-renew. Access runs through February 28.</li>
       <li>Lines on Streaks are this site's own computed lines, not sportsbook odds. Nothing here is betting advice.</li>
-      <li>Full refund within 7 days of purchase if you haven't used a myCalc+ feature. Email
+      <li>Full refund within 7 days of purchase if you haven't used a StreakPros+ feature. Email
           <a href="mailto:{{ support_email }}" style="color:var(--accent-ink);">{{ support_email }}</a>.</li>
     </ul>
   </div>
@@ -25937,7 +25944,7 @@ PLUS_HTML = BASE_STYLE + make_header("plus") + PLUS_STYLE + """
 BILLING_SUCCESS_HTML = BASE_STYLE + make_header("plus") + PLUS_STYLE + """
 <main><div class="wrap plus-wrap" style="max-width:620px;">
   <div class="panel plus-hero">
-    <p class="eyebrow">myCalc+</p>
+    <p class="eyebrow">StreakPros+</p>
     {% if guest == 'existing' %}
     <h2>Thanks. That email already has an account.</h2>
     <p class="muted">{{ email }} is signed up here already, so the plan went onto that account:
@@ -25963,8 +25970,8 @@ BILLING_SUCCESS_HTML = BASE_STYLE + make_header("plus") + PLUS_STYLE + """
     </div>
     {% else %}
     <h2>Thanks. Setting up your access.</h2>
-    <p class="muted">Stripe has your payment. Your account switches to myCalc+ within a minute; refresh this page
-      or check <a href="/settings/plan" style="color:var(--accent-ink);">Settings &rsaquo; myCalc+</a>.
+    <p class="muted">Stripe has your payment. Your account switches to StreakPros+ within a minute; refresh this page
+      or check <a href="/settings/plan" style="color:var(--accent-ink);">Settings &rsaquo; StreakPros+</a>.
       If it hasn't switched after a few minutes, email support with the time of your purchase.</p>
     {% endif %}
   </div>
@@ -26196,10 +26203,10 @@ LINEUP_HTML = BASE_STYLE + make_header("league") + MU_STYLE + """
     </div>
     <div class="gate-card">
       {% if gate == 'plus' %}
-      <h3>The Lineup is <span style="color:var(--accent-ink);">myCalc+</span></h3>
+      <h3>The Lineup is <span style="color:var(--accent-ink);">StreakPros+</span></h3>
       <p>Your optimal lineup for every synced league, every week: each change, with both players' grade and projection and the reason in plain words.</p>
       <div class="gate-benefits"><span>Start/sit calls from projections, matchup grades and the injury report</span><span>Refreshes with the reports through Sunday morning</span><span>Streaks and Matchups included</span></div>
-      <a href="/plus" class="btn" style="margin-top:22px; width:100%;">See myCalc+ plans</a>
+      <a href="/plus" class="btn" style="margin-top:22px; width:100%;">See StreakPros+ plans</a>
       {% else %}
       <h3>Unlock your <span style="color:var(--accent-ink);">Lineup</span></h3>
       <p>Create a free account and sync a league to see who to start this week, and why.</p>
@@ -26278,9 +26285,9 @@ WAIVERS_HTML = BASE_STYLE + make_header("league") + MU_STYLE + """
   {% if not unlocked %}
   <div class="mu-card mu-empty" style="text-align:left;">
     {% if gate == 'plus' %}
-    <h3 style="margin:0 0 6px;">Waiver targets are <span style="color:var(--accent-ink);">myCalc+</span></h3>
+    <h3 style="margin:0 0 6px;">Waiver targets are <span style="color:var(--accent-ink);">StreakPros+</span></h3>
     <p style="margin:0 0 14px; font-size:13.5px;">Every free agent in your league worth a claim, ranked on recent form and this week's projection.</p>
-    <a class="btn" href="/plus">See myCalc+ plans</a>
+    <a class="btn" href="/plus">See StreakPros+ plans</a>
     {% else %}
     <h3 style="margin:0 0 6px;">Unlock your <span style="color:var(--accent-ink);">waiver targets</span></h3>
     <p style="margin:0 0 14px; font-size:13.5px;">Create a free account, sync your Sleeper league, and the best free agents in it show up here.</p>

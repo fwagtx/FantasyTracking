@@ -13,6 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       SITE_PASSWORD: ${{ secrets.SITE_PASSWORD }}
+      HOST: ${{ vars.SITE_HOST || 'https://fantasyfootballcalc.com' }}
       EVENT_NAME: ${{ github.event_name }}
     steps:
       - uses: actions/checkout@v4
@@ -42,7 +43,7 @@ jobs:
             -H "Content-Type: application/json" \
             -H "Content-Encoding: gzip" \
             --data-binary @contracts.json.gz \
-            "https://fantasyfootballcalc.com/api/sync-contracts") || {
+            "$HOST/api/sync-contracts") || {
               echo "::error::sync-contracts request failed: $body"; exit 1; }
           echo "$body"
           case "$body" in *'"ok": false'*|*'"ok":false'*)

@@ -15,6 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       SITE_PASSWORD: ${{ secrets.SITE_PASSWORD }}
+      HOST: ${{ vars.SITE_HOST || 'https://fantasyfootballcalc.com' }}
       EVENT_NAME: ${{ github.event_name }}
     steps:
       - name: Sync the current season
@@ -50,7 +51,7 @@ jobs:
           fi
           body=$(curl -sS --fail-with-body -X POST \
             -H "X-Sync-Secret: $SITE_PASSWORD" \
-            "https://fantasyfootballcalc.com/api/sync-stats") || {
+            "$HOST/api/sync-stats") || {
               echo "::error::sync-stats request failed: $body"; exit 1; }
           echo "$body"
           case "$body" in *'"ok": false'*|*'"ok":false'*)
