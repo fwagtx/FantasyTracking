@@ -8161,8 +8161,13 @@ def _player_projection(sid, position, projections, scoring_settings, season, wee
         # scoring key set) still carries Sleeper's own PPR figure.
         if isinstance(proj.get("pts_ppr"), (int, float)) and proj["pts_ppr"]:
             return round(float(proj["pts_ppr"]), 1), "sleeper_ppr"
-    # No projection: the player's own recent average, in PPR terms, which
-    # is close enough to hold a place until the feed has them.
+    if projections:
+        # The feed is up and projects nothing for this player. That IS
+        # the projection: a backup's average from the weeks he started
+        # is not one, and it once put a QB2 ahead of a starter.
+        return 0.0, "none"
+    # The feed is down: the player's own recent average, in PPR terms,
+    # holds a place until it is up.
     recent = _player_recent_games(sid, season, 4)
     if recent and recent.get("avg") is not None:
         return round(float(recent["avg"]), 1), "recent"
@@ -8171,6 +8176,50 @@ def _player_projection(sid, position, projections, scoring_settings, season, wee
 
 def _slot_label(slot):
     return SLOT_LABEL.get(slot, slot)
+
+
+# How much a designation rules a player out, so the stricter of two
+# sources wins. Suspended and Not Active sit with Out for a lineup: the
+# player does not play, whatever the list is called.
+_INJURY_RANK = {"probable": 0, "questionable": 1, "doubtful": 2, "admin": 3, "out": 4}
+_BADGE_BY_TITLE = {title: (key, label, tier) for key, (label, title, tier) in INJURY_BADGE.items()}
+_espn_injury_sid_cache = {}
+
+
+def _espn_injury_by_sid(cache=_espn_injury_sid_cache):
+    """{sleeper_id: ESPN injury row} for the whole league, TTL 600s.
+    ESPN's report is updated through the week; Sleeper's designation
+    can lag it by a day -- a QB it still had Questionable on Friday was
+    Out on ESPN, and the lineup has to know."""
+    now = time.time()
+    entry = cache.get("all")
+    if entry and now - entry["time"] < 600:
+        return entry["data"]
+    try:
+        _, by_sid = build_injury_statuses()
+    except Exception:
+        by_sid = entry["data"] if entry else {}
+    cache["all"] = {"data": by_sid or {}, "time": now}
+    return by_sid or {}
+
+
+def _merged_injury(p, espn_row):
+    """The player's designation for the lineup: the stricter of Sleeper's
+    and ESPN's, with what is wrong when either source says."""
+    badge = _injury_badge(p)
+    row = espn_row if isinstance(espn_row, dict) else {}
+    hit = _BADGE_BY_TITLE.get(row.get("status") or "")
+    if not hit:
+        return badge
+    key, label, tier = hit
+    if badge and _INJURY_RANK.get(badge["tier"], 0) >= _INJURY_RANK.get(tier, 0):
+        return badge
+    title = row["status"]
+    detail = row.get("detail") or (p.get("injury_body_part") or "").strip()
+    if detail:
+        title = f"{title} \u2014 {detail}"
+    return {"label": label, "title": title, "tier": tier, "is_ir": key == "IR",
+            "color": INJURY_TIER_COLOR.get(tier, "var(--ink-muted)"), "source": "espn"}
 
 
 def _lineup_slots(league):
@@ -8194,6 +8243,14 @@ def _player_card(sid, all_players, live_games, projections, scoring_settings, se
                      "kickoff": sched["kickoff"].isoformat() + "Z" if hasattr(sched.get("kickoff"), "isoformat") else sched.get("kickoff"),
                      "event_id": sched.get("espn_event_id")}
     proj, proj_source = _player_projection(sid, p.get("position"), projections, scoring_settings, season, week, state, None)
+    # Where he sits on his club's depth chart. A backup (QB2, RB3, WR4,
+    # TE2) is never given a stand-in projection: his average comes from
+    # weeks he started, and he is not starting.
+    depth = _safe_int(p.get("depth_chart_order"), 0)
+    limit = STREAK_DEPTH.get(streak_position_group(p.get("position")))
+    backup = bool(limit and depth > limit)
+    if backup and proj_source == "recent":
+        proj, proj_source = 0.0, "none"
     pts = points if isinstance(points, (int, float)) else None
     frac = game_fraction_left(state) if team else 0.0
     if state is None and team:
@@ -8225,7 +8282,8 @@ def _player_card(sid, all_players, live_games, projections, scoring_settings, se
         "game": ({"status": state["status"], "period": state.get("period"), "clock": state.get("clock"),
                   "detail": state.get("detail"), "opp": state.get("opp"), "home": state.get("home"),
                   "kickoff": state.get("kickoff"), "event_id": state.get("event_id")} if state else None),
-        "injury": _injury_badge(p),
+        "injury": _merged_injury(p, _espn_injury_by_sid().get(sid)),
+        "depth": depth or None, "depth_label": f"{p.get('position')}{depth}" if depth and p.get("position") else None, "backup": backup,
         "fantasy_positions": p.get("fantasy_positions") or ([p.get("position")] if p.get("position") else []),
     }
 
@@ -8341,13 +8399,30 @@ def _lineup_value(card):
         return round(card["points"], 1), "played"
     if card["phase"] == "bye":
         return 0.0, "bye"
-    if tier == "out" or inj.get("is_ir"):
+    if tier in ("out", "admin") or inj.get("is_ir"):
         return round(card["points"], 1), "out"
+    if card["phase"] == "upcoming" and card["proj"] <= 0:
+        return 0.0, ("backup" if card.get("backup") else "no_proj")
     if tier == "doubtful":
         return round(card["points"] + 0.25 * card["proj"] * card["left"], 1), "doubtful"
     if tier == "questionable":
         return round(card["points"] + QUESTIONABLE_FACTOR * card["proj"] * card["left"], 1), "questionable"
     return round(card["points"] + card["proj"] * card["left"], 1), "ok"
+
+
+def _value_tag(card):
+    """The short tag next to a player in the lineup and on the bench."""
+    note = card.get("value_note")
+    inj = card.get("injury") or {}
+    if note == "out":
+        return (inj.get("title") or "Out").split(" \u2014 ")[0].replace("Injured Reserve", "IR")
+    if note in ("questionable", "doubtful", "bye"):
+        return note.capitalize()
+    if note == "backup":
+        return f"{card['depth_label']} on depth chart" if card.get("depth_label") else "Backup"
+    if note == "no_proj":
+        return "No projection"
+    return None
 
 
 def _why(card, other, slot, grade):
@@ -8396,6 +8471,7 @@ def build_lineup_plan(league, user_id, season, week):
             continue
         card = _player_card(sid, all_players, live_games, projections, scoring, season, week, ppts.get(sid))
         card["value"], card["value_note"] = _lineup_value(card)
+        card["tag"] = _value_tag(card)
         st = season_stats.get(sid) or {}
         card["snap_pct"] = st.get("snap_pct")
         rec = _player_recent_games(sid, season, 4)
@@ -8428,30 +8504,36 @@ def build_lineup_plan(league, user_id, season, week):
     # a change worth a card.
     cur_set = {s for s in current if s}
     best_set = set(best_sids.values())
+    # Each change is named for the slot the NEW player fills, and paired
+    # with the player leaving the lineup -- one of his own position when
+    # there is one, else the most valuable leaving. Starters who only
+    # change slots to make room (an RB sliding from RB to FLEX) are
+    # listed as moves, not changes. Naming a change for the slot the
+    # leaving player held once read "Start at WR" over a running back.
+    slot_of_best = {sid: i for i, sid in best_sids.items()}
+    slot_of_cur = {sid: i for i, sid in enumerate(current) if sid}
+    entering = sorted((cards[s] for s in best_set - cur_set), key=lambda c: -c["value"])
+    leaving = [cards[s] for s in cur_set - best_set]
+    moves = [{"sid": s, "short": cards[s]["short"], "from": _slot_label(slots[slot_of_cur[s]]), "to": _slot_label(slots[slot_of_best[s]])}
+             for s in sorted(best_set & cur_set, key=lambda s: slot_of_best[s]) if slots[slot_of_best[s]] != slots[slot_of_cur[s]]]
     changes = []
-    for i, slot in enumerate(slots):
-        new_sid = best_sids.get(i)
-        old_sid = current[i]
-        if not new_sid or new_sid in cur_set:
+    for new in entering:
+        slot = slots[slot_of_best[new["sid"]]]
+        if not any(fp in SLOT_ELIGIBLE.get(slot, (slot,)) for fp in new["fantasy_positions"]):
             continue
-        shown_slot = slot
-        if old_sid in best_set:
-            # The old starter still starts elsewhere; the one leaving is
-            # whoever in the current lineup is not in the best one, and
-            # the change is named for the slot that player held.
-            leaving = [s for s in current if s and s not in best_set and any(fp in SLOT_ELIGIBLE.get(slot, (slot,)) for fp in cards[s]["fantasy_positions"])]
-            old_sid = leaving[0] if leaving else None
-            if old_sid:
-                shown_slot = slots[current.index(old_sid)]
-        new, old = cards[new_sid], cards.get(old_sid) if old_sid else None
+        same = [c for c in leaving if set(c["fantasy_positions"]) & set(new["fantasy_positions"])]
+        old = max(same or leaving, key=lambda c: c["value"]) if leaving else None
+        if old:
+            leaving.remove(old)
         gain = round(new["value"] - (old["value"] if old else 0.0), 1)
         # A change has to be worth making: a real projected gain, from a
         # player who is actually expected to score.
         if new["value"] <= 0 or gain < 0.5:
             continue
         changes.append({
-            "slot": _slot_label(shown_slot), "start": _strip(new), "over": _strip(old) if old else None, "gain": gain,
-            "why": _why(new, old, shown_slot, new.get("_grade")),
+            "slot": _slot_label(slot), "start": _strip(new), "over": _strip(old) if old else None,
+            "over_slot": _slot_label(slots[slot_of_cur[old["sid"]]]) if old else None, "gain": gain,
+            "why": _why(new, old, slot, new.get("_grade")),
         })
     changes.sort(key=lambda c: -c["gain"])
     lineup = [{"slot": _slot_label(slot), "player": _strip(best[i]) if i in best else None} for i, slot in enumerate(slots)]
@@ -8460,7 +8542,7 @@ def build_lineup_plan(league, user_id, season, week):
     bench = sorted((_strip(c) for sid, c in cards.items() if sid not in best_set and not c["locked"]), key=lambda c: -c["value"])
     return {
         "league_id": league_id, "league_name": league.get("name") or "League", "season": season, "week": week,
-        "changes": changes, "gain": round(best_total - cur_total, 1),
+        "changes": changes, "moves": moves if changes else [], "gain": round(best_total - cur_total, 1),
         "current_total": round(cur_total, 1), "best_total": round(best_total, 1),
         "lineup": lineup, "bench": bench, "sleeper_url": f"https://sleeper.com/leagues/{league_id}/team",
         "projections_available": bool(projections),
@@ -24481,19 +24563,20 @@ LINEUP_HTML = BASE_STYLE + make_header("league") + MU_STYLE + """
       <div class="pair">
         <a class="lu-who" href="/player?sid={{ c.start.sid }}"><img src="{{ c.start.photo }}" alt="" onerror="this.style.visibility='hidden'"><span style="min-width:0;"><div class="nm">{{ c.start.short }}</div><div class="m">{% if c.start.grade %}<span class="lu-grade {{ c.start.grade_class }}">{{ c.start.grade }}</span> {% endif %}{{ c.start.value }} proj</div></span></a>
         <span class="lu-arrow">over</span>
-        {% if c.over %}<a class="lu-who" href="/player?sid={{ c.over.sid }}"><img src="{{ c.over.photo }}" alt="" onerror="this.style.visibility='hidden'"><span style="min-width:0;"><div class="nm">{{ c.over.short }}</div><div class="m">{% if c.over.grade %}<span class="lu-grade {{ c.over.grade_class }}">{{ c.over.grade }}</span> {% endif %}{{ c.over.value }} proj</div></span></a>{% else %}<span class="lu-who"><span><div class="nm">an empty slot</div></span></span>{% endif %}
+        {% if c.over %}<a class="lu-who" href="/player?sid={{ c.over.sid }}"><img src="{{ c.over.photo }}" alt="" onerror="this.style.visibility='hidden'"><span style="min-width:0;"><div class="nm">{{ c.over.short }}</div><div class="m">{% if c.over.grade %}<span class="lu-grade {{ c.over.grade_class }}">{{ c.over.grade }}</span> {% endif %}{{ c.over.value }} proj{% if c.over_slot and c.over_slot != c.slot %} &middot; at {{ c.over_slot }}{% endif %}{% if c.over.tag %} &middot; {{ c.over.tag }}{% endif %}</div></span></a>{% else %}<span class="lu-who"><span><div class="nm">an empty slot</div></span></span>{% endif %}
       </div>
       <div class="lu-why">{{ c.why }}</div>
       <a class="lu-btn" href="{{ plan.sleeper_url }}" target="_blank" rel="noopener">Make this change in Sleeper</a>
     </div>
     {% endfor %}
+    {% if plan.moves %}<div class="mu-card" style="font-size:13px;color:var(--ink-muted);"><b style="color:var(--ink);">To make room:</b> {% for m in plan.moves %}{{ m.short }} moves from {{ m.from }} to {{ m.to }}{{ '; ' if not loop.last }}{% endfor %}.</div>{% endif %}
     {% else %}
     <div class="mu-card lu-ok"><span class="tick">&#10003;</span><div><b>Your lineup is set</b><div class="muted" style="font-size:12.5px;">{% if plan.lineup_set %}Nothing to change: this is the best lineup on your roster for week {{ week }}, projected {{ plan.best_total }}.{% else %}Set a lineup in Sleeper and this page will check it.{% endif %}</div></div></div>
     {% endif %}
     <div class="lu-h3">{{ 'Your lineup after the changes' if plan.changes else 'Your lineup' }}</div>
     <div class="mu-card" style="padding-top:4px;">
       {% for r in plan.lineup %}
-      {% if r.player %}<a class="lu-row" href="/player?sid={{ r.player.sid }}"><span class="s">{{ r.slot }}</span><img src="{{ r.player.photo }}" alt="" onerror="this.style.visibility='hidden'"><span class="nm">{{ r.player.name }}</span>{% if r.player.locked %}<span class="tag" style="color:var(--ink-muted);">{{ 'Final' if r.player.phase == 'done' else 'Live' }} &middot; locked</span>{% elif r.player.value_note in ('questionable', 'doubtful', 'out', 'bye') %}<span class="tag">{{ r.player.value_note|capitalize }}</span>{% endif %}<span class="pr">{{ r.player.value }}</span>{% if r.player.grade %}<span class="lu-grade {{ r.player.grade_class }}">{{ r.player.grade }}</span>{% endif %}</a>
+      {% if r.player %}<a class="lu-row" href="/player?sid={{ r.player.sid }}"><span class="s">{{ r.slot }}</span><img src="{{ r.player.photo }}" alt="" onerror="this.style.visibility='hidden'"><span class="nm">{{ r.player.name }}</span>{% if r.player.locked %}<span class="tag" style="color:var(--ink-muted);">{{ 'Final' if r.player.phase == 'done' else 'Live' }} &middot; locked</span>{% elif r.player.tag %}<span class="tag" title="{{ r.player.tag }}">{{ r.player.depth_label if r.player.value_note == 'backup' and r.player.depth_label else r.player.tag }}</span>{% endif %}<span class="pr">{{ r.player.value }}</span>{% if r.player.grade %}<span class="lu-grade {{ r.player.grade_class }}">{{ r.player.grade }}</span>{% endif %}</a>
       {% else %}<div class="lu-row"><span class="s">{{ r.slot }}</span><span class="nm" style="color:var(--ink-muted);">Empty</span></div>{% endif %}
       {% endfor %}
     </div>
@@ -24501,11 +24584,11 @@ LINEUP_HTML = BASE_STYLE + make_header("league") + MU_STYLE + """
     <div class="lu-h3">Bench, best first</div>
     <div class="mu-card" style="padding-top:4px;">
       {% for p in plan.bench %}
-      <a class="lu-row" href="/player?sid={{ p.sid }}"><span class="s">{{ p.position }}</span><img src="{{ p.photo }}" alt="" onerror="this.style.visibility='hidden'"><span class="nm">{{ p.name }}</span>{% if p.value_note in ('questionable', 'doubtful', 'out', 'bye') %}<span class="tag">{{ p.value_note|capitalize }}</span>{% endif %}<span class="pr">{{ p.value }}</span>{% if p.grade %}<span class="lu-grade {{ p.grade_class }}">{{ p.grade }}</span>{% endif %}</a>
+      <a class="lu-row" href="/player?sid={{ p.sid }}"><span class="s">{{ p.position }}</span><img src="{{ p.photo }}" alt="" onerror="this.style.visibility='hidden'"><span class="nm">{{ p.name }}</span>{% if p.tag %}<span class="tag" title="{{ p.tag }}">{{ p.depth_label if p.value_note == 'backup' and p.depth_label else p.tag }}</span>{% endif %}<span class="pr">{{ p.value }}</span>{% if p.grade %}<span class="lu-grade {{ p.grade_class }}">{{ p.grade }}</span>{% endif %}</a>
       {% endfor %}
     </div>
     {% endif %}
-    <p class="mu-foot">Projections are Sleeper's, scored with this league's own settings{% if not plan.projections_available %} (this week's feed isn't up yet, so recent averages stand in){% endif %}; grades are this site's matchup grades. A player already played counts at what he scored. Re-check after the final injury reports. <a href="{{ plan.sleeper_url }}" target="_blank" rel="noopener">Open in Sleeper</a></p>
+    <p class="mu-foot">Projections are Sleeper's, scored with this league's own settings{% if not plan.projections_available %} (this week's feed isn't up yet, so starters' recent averages stand in){% endif %}; injury designations are the stricter of Sleeper's and ESPN's reports; grades are this site's matchup grades. A player already played counts at what he scored. A backup on the depth chart, or a player out or unprojected, is never recommended; a doubtful player counts for a quarter of his projection, a questionable one for 85%. Re-check after the final injury reports. <a href="{{ plan.sleeper_url }}" target="_blank" rel="noopener">Open in Sleeper</a></p>
   {% endif %}
 </div></main>
 """
