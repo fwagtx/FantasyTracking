@@ -260,7 +260,8 @@ TABBAR_SECTIONS = (
 # Where each path belongs. A prefix match, longest first.
 TABBAR_PATHS = (
     ("/rankings", "rankings"), ("/player", "rankings"), ("/trade-calculator", "rankings"),
-    ("/start-bench-cut", "rankings"), ("/streaks", "streaks"), ("/matchups", "matchups"),
+    ("/start-bench-cut", "rankings"), ("/streaks", "streaks"), ("/matchups", "matchups"), ("/lineup", "matchups"),
+    ("/matchup", "scores"),
     ("/settings", "you"), ("/league", "you"), ("/league-manager", "you"), ("/plus", "you"), ("/pricing", "you"),
     ("/billing", "you"), ("/login", "you"), ("/signup", "you"), ("/forgot-password", "you"),
     ("/reset-password", "you"), ("/scores", "scores"), ("/game", "scores"), ("/standings", "scores"),
@@ -269,7 +270,7 @@ TABBAR_PATHS = (
 )
 # Which sections are myCalc+ once the gate is on: the calculator, with a
 # plus beside it, marks them in the menu and on the bar.
-PLUS_KEYS = ("matchups", "streaks", "plus")
+PLUS_KEYS = ("lineup", "matchups", "streaks", "plus")
 # The favicon's calculator (display bar, four keys) with a plus beside it.
 PLUS_MARK_SVG = ('<svg class="plus-mark" viewBox="0 0 30 26" aria-label="myCalc+" role="img">'
                  '<rect x="0" y="1" width="24" height="24" rx="5" fill="var(--accent)"/>'
@@ -7998,6 +7999,552 @@ def player_detail():
     )
 
 
+# --- Your Matchup (live) and Lineup (optimizer) ---------------------------
+#
+# Both read the same three feeds: the league's rosters and users (already
+# cached), Sleeper's matchups for the week (their own live points, scored
+# by the league's own settings, so the numbers agree with the Sleeper
+# app to the decimal), and Sleeper's projections for the week, scored
+# here with the league's settings. Game state per NFL team comes from
+# the ESPN scoreboard the scores page already polls.
+
+MATCHUP_LIVE_TTL = 20            # Sleeper matchups while games are on
+PROJECTIONS_TTL = 1800           # projections move a few times a day
+MATCHUP_POLL_MS = 10000
+BENCH_SLOTS = ("BN", "IR", "TAXI")
+# What each lineup slot takes. Sleeper names the slots this way in
+# roster_positions and lists each player's eligible positions in
+# fantasy_positions.
+SLOT_ELIGIBLE = {
+    "QB": ("QB",), "RB": ("RB",), "WR": ("WR",), "TE": ("TE",), "K": ("K",), "DEF": ("DEF",),
+    "FLEX": ("RB", "WR", "TE"), "SUPER_FLEX": ("QB", "RB", "WR", "TE"), "REC_FLEX": ("WR", "TE"),
+    "WRRB_FLEX": ("RB", "WR"), "DL": ("DL", "DE", "DT"), "LB": ("LB",), "DB": ("DB", "CB", "S"),
+    "IDP_FLEX": ("DL", "DE", "DT", "LB", "DB", "CB", "S"),
+}
+SLOT_LABEL = {"SUPER_FLEX": "SFLEX", "REC_FLEX": "W/T", "WRRB_FLEX": "W/R", "IDP_FLEX": "IDP"}
+# Narrow slots fill first, then the flexes from narrow to wide, so the
+# best players land where only they fit and the flexes take the best of
+# what is left. With slots nested this way that order is optimal.
+SLOT_FILL_ORDER = ("QB", "K", "DEF", "TE", "RB", "WR", "DL", "LB", "DB", "REC_FLEX", "WRRB_FLEX", "FLEX", "IDP_FLEX", "SUPER_FLEX")
+QUESTIONABLE_FACTOR = 0.85
+
+
+def get_league_matchups(league_id, week, cache={}):
+    """Sleeper's matchups for one league-week: one entry per roster with
+    matchup_id, points, starters, starters_points, players_points."""
+    data = _cached_get(f"{SLEEPER_BASE}/league/{league_id}/matchups/{int(week)}", cache, ttl=MATCHUP_LIVE_TTL)
+    return [m for m in (data or []) if isinstance(m, dict)]
+
+
+def get_week_projections(season, week, cache={}):
+    """{player_id: projected stats} for a week, from Sleeper's projections
+    feed, the same host and shape as its stats feed. Empty when it cannot
+    be read; the lineup falls back to recent averages then."""
+    key = (int(season), int(week))
+    now = time.time()
+    entry = cache.get(key)
+    if entry and now - entry["time"] < PROJECTIONS_TTL:
+        return entry["data"]
+    out = {}
+    try:
+        r = requests.get(f"https://api.sleeper.com/projections/nfl/{int(season)}/{int(week)}",
+                         params={"season_type": "regular"}, timeout=15)
+        if r.status_code == 200:
+            data = r.json()
+            if isinstance(data, dict):
+                data = list(data.values())
+            for item in data if isinstance(data, list) else []:
+                if not isinstance(item, dict):
+                    continue
+                pid, stats = item.get("player_id"), item.get("stats")
+                if pid and isinstance(stats, dict):
+                    out[str(pid)] = stats
+    except Exception as e:
+        app.logger.warning("projections %s/%s: %s", season, week, e)
+    if out or not entry:
+        cache[key] = {"data": out, "time": now}
+        return out
+    return entry["data"]
+
+
+def score_with_settings(stats, scoring_settings):
+    """Fantasy points for a stat line under a league's own scoring
+    settings. Sleeper keys its scoring settings and its stat lines the
+    same way (pass_yd, rec, bonus_rec_te, ...), which is what makes this
+    a plain dot product and the same arithmetic the league runs."""
+    if not isinstance(stats, dict) or not isinstance(scoring_settings, dict):
+        return 0.0
+    total = 0.0
+    for key, weight in scoring_settings.items():
+        v = stats.get(key)
+        if isinstance(v, (int, float)) and isinstance(weight, (int, float)) and v and weight:
+            total += v * weight
+    return round(total, 2)
+
+
+def live_team_games(season, week):
+    """{team abbr: game state} for every game of the week: status,
+    period, clock, the opponent, both scores and kickoff."""
+    out = {}
+    try:
+        events = espn_week_scoreboard(season, week) or []
+    except Exception:
+        events = []
+    for ev in events:
+        card = espn_event_to_card(ev) if isinstance(ev, dict) and "competitions" in ev else None
+        if not card:
+            continue
+        for me, them, home in ((card["home"], card["away"], True), (card["away"], card["home"], False)):
+            if not me.get("abbr"):
+                continue
+            out[me["abbr"]] = {
+                "status": card["status"], "period": card.get("period"), "clock": card.get("clock"),
+                "detail": card.get("status_detail"), "opp": them.get("abbr"), "home": home,
+                "score": me.get("score"), "opp_score": them.get("score"), "kickoff": card.get("date"),
+                "event_id": card.get("id"),
+            }
+    return out
+
+
+def game_fraction_left(state):
+    """How much of a game is still to be played, 0..1, from its period
+    and clock. Nothing scheduled: 1. Final: 0. Overtime: a little."""
+    if not state:
+        return 1.0
+    status = state.get("status")
+    if status == "final":
+        return 0.0
+    if status != "in_progress":
+        return 1.0
+    period = _safe_int(state.get("period"), 1) or 1
+    clock = str(state.get("clock") or "15:00")
+    try:
+        m, s = clock.split(":")
+        secs = int(m) * 60 + int(s)
+    except (ValueError, AttributeError):
+        secs = 900
+    if period > 4:
+        return 0.08
+    return max(0.0, min(1.0, ((4 - period) * 900 + min(secs, 900)) / 3600.0))
+
+
+def _norm_cdf(x):
+    return 0.5 * (1.0 + math.erf(x / math.sqrt(2.0)))
+
+
+def win_probability(mine, theirs):
+    """P(my side finishes ahead) from each side's expected finish and how
+    much of each is still uncertain. A player's spread is proportional to
+    what they have left to play, plus a floor, and independent across
+    players. Both sides done: whoever leads."""
+    if mine["left_players"] == 0 and theirs["left_players"] == 0:
+        if mine["points"] == theirs["points"]:
+            return 0.5
+        return 1.0 if mine["points"] > theirs["points"] else 0.0
+    diff = mine["projected"] - theirs["projected"]
+    var = mine["variance"] + theirs["variance"]
+    if var <= 0:
+        return 1.0 if diff > 0 else (0.0 if diff < 0 else 0.5)
+    return round(_norm_cdf(diff / math.sqrt(var)), 3)
+
+
+def _player_projection(sid, position, projections, scoring_settings, season, week, sched_state, stat_line):
+    """Projected points for the week under the league's scoring, and
+    where the number came from."""
+    proj = projections.get(str(sid))
+    if isinstance(proj, dict):
+        pts = score_with_settings(proj, scoring_settings)
+        if pts or proj.get("pts_ppr") is not None:
+            return pts, "sleeper"
+    # No projection: the player's own recent average, in PPR terms, which
+    # is close enough to hold a place until the feed has them.
+    recent = _player_recent_games(sid, season, 4)
+    if recent and recent.get("avg") is not None:
+        return round(float(recent["avg"]), 1), "recent"
+    return 0.0, "none"
+
+
+def _slot_label(slot):
+    return SLOT_LABEL.get(slot, slot)
+
+
+def _lineup_slots(league):
+    return [s for s in (league.get("roster_positions") or []) if s not in BENCH_SLOTS]
+
+
+def _player_card(sid, all_players, live_games, projections, scoring_settings, season, week, points=None):
+    p = all_players.get(sid) or {}
+    team = p.get("team")
+    state = live_games.get(team) if team else None
+    proj, proj_source = _player_projection(sid, p.get("position"), projections, scoring_settings, season, week, state, None)
+    pts = points if isinstance(points, (int, float)) else None
+    frac = game_fraction_left(state) if team else 0.0
+    if state is None and team:
+        phase = "bye"
+        frac = 0.0
+    elif state is None:
+        phase = "none"
+    elif state["status"] == "final":
+        phase = "done"
+    elif state["status"] == "in_progress":
+        phase = "live"
+    else:
+        phase = "upcoming"
+    actual = pts if pts is not None else 0.0
+    if phase == "done":
+        expected = actual
+    elif phase == "live":
+        expected = actual + proj * frac
+    elif phase == "upcoming":
+        expected = proj
+    else:
+        expected = actual
+    return {
+        "sid": sid, "name": f"{p.get('first_name', '')} {p.get('last_name', '')}".strip() or sid,
+        "short": f"{(p.get('first_name') or ' ')[0]}. {p.get('last_name', '')}".strip(),
+        "position": p.get("position"), "team": team, "photo": player_photo_url(sid),
+        "points": round(actual, 2), "proj": round(proj, 1), "proj_source": proj_source,
+        "expected": round(expected, 2), "left": round(frac, 3), "phase": phase,
+        "game": ({"status": state["status"], "period": state.get("period"), "clock": state.get("clock"),
+                  "detail": state.get("detail"), "opp": state.get("opp"), "home": state.get("home"),
+                  "kickoff": state.get("kickoff"), "event_id": state.get("event_id")} if state else None),
+        "injury": _injury_badge(p),
+        "fantasy_positions": p.get("fantasy_positions") or ([p.get("position")] if p.get("position") else []),
+    }
+
+
+def _side(roster, entry, league, all_players, live_games, projections, scoring, season, week, users):
+    """One side of a matchup: the starters in slot order, the bench, the
+    totals and what is still to come."""
+    slots = _lineup_slots(league)
+    starters = list(entry.get("starters") or roster.get("starters") or [])
+    spts = entry.get("starters_points") or []
+    ppts = entry.get("players_points") or {}
+    rows = []
+    for i, slot in enumerate(slots):
+        sid = starters[i] if i < len(starters) else None
+        if not sid or sid in ("0", 0):
+            rows.append({"slot": _slot_label(slot), "player": None})
+            continue
+        pts = spts[i] if i < len(spts) and isinstance(spts[i], (int, float)) else ppts.get(sid)
+        rows.append({"slot": _slot_label(slot),
+                     "player": _player_card(sid, all_players, live_games, projections, scoring, season, week, pts)})
+    bench = []
+    for sid in (roster.get("players") or []):
+        if sid in starters:
+            continue
+        bench.append(_player_card(sid, all_players, live_games, projections, scoring, season, week, ppts.get(sid)))
+    bench.sort(key=lambda c: -c["points"])
+    played = [r["player"] for r in rows if r["player"]]
+    points = entry.get("points")
+    if not isinstance(points, (int, float)):
+        points = sum(c["points"] for c in played)
+    projected = sum(c["expected"] for c in played)
+    variance = sum((0.6 * c["proj"] * c["left"] + (1.5 if c["left"] > 0 else 0.0)) ** 2 for c in played)
+    owner = users.get(roster.get("owner_id"), {})
+    return {
+        "roster_id": roster.get("roster_id"), "name": owner.get("name") or "Unknown",
+        "avatar_url": owner.get("avatar_url"), "points": round(float(points), 2),
+        "projected": round(projected, 1), "variance": variance,
+        "left_players": sum(1 for c in played if c["left"] > 0),
+        "live_players": sum(1 for c in played if c["phase"] == "live"),
+        "rows": rows, "bench": bench,
+        "record": f"{(roster.get('settings') or {}).get('wins', 0)}-{(roster.get('settings') or {}).get('losses', 0)}",
+    }
+
+
+def build_live_matchup(league, user_id, season, week):
+    """The reader's matchup in one league for one week, live: both
+    lineups slot by slot with each player's points and game state, the
+    totals, the projected finish and the win probability. None when the
+    reader has no roster in the league; a side of None when the roster
+    has no opponent this week (a bye or the playoffs)."""
+    league_id = league["league_id"]
+    all_players = get_all_players()
+    rosters = get_rosters(league_id) or []
+    users = {u["user_id"]: {"name": u.get("display_name", "?"), "avatar_url": sleeper_avatar_url(u.get("avatar"))}
+             for u in (get_league_users(league_id) or [])}
+    mine = next((r for r in rosters if r.get("owner_id") == user_id), None)
+    if mine is None:
+        return None
+    matchups = get_league_matchups(league_id, week)
+    by_roster = {m.get("roster_id"): m for m in matchups}
+    my_entry = by_roster.get(mine["roster_id"]) or {"roster_id": mine["roster_id"], "starters": mine.get("starters"), "points": 0}
+    opp_entry = None
+    if my_entry.get("matchup_id") is not None:
+        opp_entry = next((m for m in matchups if m.get("matchup_id") == my_entry["matchup_id"]
+                          and m.get("roster_id") != mine["roster_id"]), None)
+    opp_roster = next((r for r in rosters if opp_entry and r.get("roster_id") == opp_entry.get("roster_id")), None)
+    scoring = league.get("scoring_settings") or {}
+    projections = get_week_projections(season, week)
+    live_games = live_team_games(season, week)
+    me = _side(mine, my_entry, league, all_players, live_games, projections, scoring, season, week, users)
+    them = _side(opp_roster, opp_entry, league, all_players, live_games, projections, scoring, season, week, users) if opp_roster else None
+    wp = win_probability(me, them) if them else None
+    for s in (me, them):
+        if s:
+            s.pop("variance", None)
+    return {
+        "league_id": league_id, "league_name": league.get("name") or "League", "season": season, "week": week,
+        "me": me, "opp": them, "win_probability": wp,
+        "any_live": any(r["player"] and r["player"]["phase"] == "live" for s in (me, them) if s for r in s["rows"]),
+        "all_done": all(r["player"] is None or r["player"]["left"] == 0 for s in (me, them) if s for r in s["rows"]),
+        "sleeper_url": f"https://sleeper.com/leagues/{league_id}/matchup",
+        "updated": datetime.utcnow().isoformat() + "Z",
+    }
+
+
+def optimal_lineup(slots, players):
+    """{slot index: player} maximizing projected points, players given
+    as cards with 'fantasy_positions' and 'value'. Narrow slots first,
+    then the flexes from narrow to wide (see SLOT_FILL_ORDER)."""
+    order = sorted(range(len(slots)), key=lambda i: (SLOT_FILL_ORDER.index(slots[i]) if slots[i] in SLOT_FILL_ORDER else 99, i))
+    used, out = set(), {}
+    for i in order:
+        elig = SLOT_ELIGIBLE.get(slots[i], (slots[i],))
+        best = None
+        for p in players:
+            if p["sid"] in used or not any(fp in elig for fp in p["fantasy_positions"]):
+                continue
+            if best is None or p["value"] > best["value"]:
+                best = p
+        if best:
+            used.add(best["sid"])
+            out[i] = best
+    return out
+
+
+def _lineup_value(card):
+    """What a player is worth in the lineup this week: what they have
+    scored plus what is projected for what is left, less for a
+    questionable tag, nothing for out, bye or done-and-empty."""
+    inj = card.get("injury") or {}
+    tier = inj.get("tier")
+    if card["phase"] in ("done",):
+        return round(card["points"], 1), "played"
+    if card["phase"] == "bye":
+        return 0.0, "bye"
+    if tier == "out" or inj.get("is_ir"):
+        return round(card["points"], 1), "out"
+    if tier == "doubtful":
+        return round(card["points"] + 0.25 * card["proj"] * card["left"], 1), "doubtful"
+    if tier == "questionable":
+        return round(card["points"] + QUESTIONABLE_FACTOR * card["proj"] * card["left"], 1), "questionable"
+    return round(card["points"] + card["proj"] * card["left"], 1), "ok"
+
+
+def _why(card, other, slot, grade):
+    """One plain sentence for a change: the matchup, the usage, the tag."""
+    bits = []
+    c = (grade or {}).get("components") or {}
+    if c.get("opponent") and c.get("def_rank_most_pts_used"):
+        pool = c.get("def_pool_size") or 32
+        bits.append(f"{card['team']} face the defence allowing the {ordinal(c['def_rank_most_pts_used'])}-most points to {card['position']}s of {pool}")
+    if card.get("snap_pct"):
+        bits.append(f"{card['short']} has {card['snap_pct']}% of snaps")
+    if card.get("recent_avg") is not None:
+        bits.append(f"{card['recent_avg']:.1f} a game over the last {card.get('recent_n', 4)}")
+    inj = (other or {}).get("injury") or {}
+    if other and inj.get("title"):
+        bits.append(f"{other['short']} is {inj['title'].lower()}")
+    elif other and other.get("phase") == "bye":
+        bits.append(f"{other['short']} is on bye")
+    if not bits:
+        bits.append(f"{card['short']} projects {card['proj']} to {other['proj'] if other else 0}")
+    s = "; ".join(bits)
+    return s[0].upper() + s[1:] + "."
+
+
+def build_lineup_plan(league, user_id, season, week):
+    """The reader's best lineup in one league this week against the
+    one they have set: the changes to make, each with both players'
+    grade, projection and a reason; the lineup after the changes; the
+    bench ranked. None without a roster in the league."""
+    league_id = league["league_id"]
+    all_players = get_all_players()
+    rosters = get_rosters(league_id) or []
+    mine = next((r for r in rosters if r.get("owner_id") == user_id), None)
+    if mine is None:
+        return None
+    scoring = league.get("scoring_settings") or {}
+    projections = get_week_projections(season, week)
+    live_games = live_team_games(season, week)
+    matchups = get_league_matchups(league_id, week)
+    entry = next((m for m in matchups if m.get("roster_id") == mine["roster_id"]), {}) or {}
+    ppts = entry.get("players_points") or {}
+    season_stats = get_season_stats(season)
+    cards = {}
+    for sid in (mine.get("players") or []):
+        if sid in (mine.get("reserve") or []) or sid in (mine.get("taxi") or []):
+            continue
+        card = _player_card(sid, all_players, live_games, projections, scoring, season, week, ppts.get(sid))
+        card["value"], card["value_note"] = _lineup_value(card)
+        st = season_stats.get(sid) or {}
+        card["snap_pct"] = st.get("snap_pct")
+        rec = _player_recent_games(sid, season, 4)
+        card["recent_avg"] = rec.get("avg") if rec else None
+        card["recent_n"] = rec.get("games") if rec else None
+        g = compute_matchup_grade(sid, season, week) if card["position"] in POSITIONS else None
+        card["grade"] = g["grade"] if g else None
+        card["grade_class"] = g["grade_class"] if g else None
+        card["_grade"] = g
+        cards[sid] = card
+    slots = _lineup_slots(league)
+    current = list(entry.get("starters") or mine.get("starters") or [])
+    current = [s if s in cards else None for s in current[:len(slots)]] + [None] * max(0, len(slots) - len(current))
+    best = optimal_lineup(slots, list(cards.values()))
+    best_sids = {i: p["sid"] for i, p in best.items()}
+    cur_total = sum(cards[s]["value"] for s in current if s)
+    best_total = sum(p["value"] for p in best.values())
+    # Changes: a player who should start but does not, paired with the
+    # one they replace at that slot. Same players in other slots is not
+    # a change worth a card.
+    cur_set = {s for s in current if s}
+    best_set = set(best_sids.values())
+    changes = []
+    for i, slot in enumerate(slots):
+        new_sid = best_sids.get(i)
+        old_sid = current[i]
+        if not new_sid or new_sid in cur_set:
+            continue
+        shown_slot = slot
+        if old_sid in best_set:
+            # The old starter still starts elsewhere; the one leaving is
+            # whoever in the current lineup is not in the best one, and
+            # the change is named for the slot that player held.
+            leaving = [s for s in current if s and s not in best_set and any(fp in SLOT_ELIGIBLE.get(slot, (slot,)) for fp in cards[s]["fantasy_positions"])]
+            old_sid = leaving[0] if leaving else None
+            if old_sid:
+                shown_slot = slots[current.index(old_sid)]
+        new, old = cards[new_sid], cards.get(old_sid) if old_sid else None
+        gain = round(new["value"] - (old["value"] if old else 0.0), 1)
+        changes.append({
+            "slot": _slot_label(shown_slot), "start": _strip(new), "over": _strip(old) if old else None, "gain": gain,
+            "why": _why(new, old, shown_slot, new.get("_grade")),
+        })
+    changes.sort(key=lambda c: -c["gain"])
+    lineup = [{"slot": _slot_label(slot), "player": _strip(best[i]) if i in best else None} for i, slot in enumerate(slots)]
+    bench = sorted((_strip(c) for sid, c in cards.items() if sid not in best_set), key=lambda c: -c["value"])
+    return {
+        "league_id": league_id, "league_name": league.get("name") or "League", "season": season, "week": week,
+        "changes": changes, "gain": round(best_total - cur_total, 1),
+        "current_total": round(cur_total, 1), "best_total": round(best_total, 1),
+        "lineup": lineup, "bench": bench, "sleeper_url": f"https://sleeper.com/leagues/{league_id}/team",
+        "projections_available": bool(projections),
+        "lineup_set": bool(cur_set),
+    }
+
+
+def _strip(card):
+    if not card:
+        return None
+    return {k: v for k, v in card.items() if not k.startswith("_") and k != "fantasy_positions"}
+
+
+def _account_leagues_for_pages():
+    """(username, sleeper user id, [synced leagues]) for the signed-in
+    reader, or (None, None, []) when there is nothing to show."""
+    if not current_user.is_authenticated or not current_user.sleeper_username:
+        return None, None, []
+    username = current_user.sleeper_username
+    try:
+        user_id, _name = get_user_id(username)
+        leagues = get_leagues(user_id, SEASON) or []
+    except Exception:
+        return username, None, []
+    synced = get_synced_league_ids(current_user.id) or set()
+    leagues = [lg for lg in leagues if lg.get("league_id") in synced] or []
+    return username, user_id, leagues
+
+
+def _pick_league(leagues):
+    want = (request.args.get("league") or "").strip()
+    return next((lg for lg in leagues if lg.get("league_id") == want), leagues[0] if leagues else None)
+
+
+@app.route("/matchup")
+def matchup_page():
+    """Your matchup, live, in the league you pick."""
+    username, user_id, leagues = _account_leagues_for_pages()
+    info = get_current_week_info()
+    week = request.args.get("week", default=info["week"], type=int)
+    season = info["season"]
+    league = _pick_league(leagues)
+    data, error = None, None
+    if league and user_id:
+        try:
+            data = build_live_matchup(league, user_id, season, week)
+            if data is None:
+                error = "You don't have a team in that league."
+        except Exception as e:
+            app.logger.warning("matchup page: %s", e)
+            error = "Sleeper didn't answer just now. Try again in a moment."
+    return render_template_string(
+        MATCHUP_HTML, data=data, error=error, leagues=leagues, league=league, week=week, season=season,
+        username=username, poll_ms=MATCHUP_POLL_MS)
+
+
+@app.route("/api/matchup-live")
+def api_matchup_live():
+    username, user_id, leagues = _account_leagues_for_pages()
+    if not user_id:
+        return jsonify({"ok": False, "error": "sign in and sync a league"}), 401
+    info = get_current_week_info()
+    week = request.args.get("week", default=info["week"], type=int)
+    league = _pick_league(leagues)
+    if not league:
+        return jsonify({"ok": False, "error": "no league"}), 404
+    try:
+        data = build_live_matchup(league, user_id, info["season"], week)
+    except Exception as e:
+        return jsonify({"ok": False, "error": str(e)}), 502
+    if data is None:
+        return jsonify({"ok": False, "error": "no team"}), 404
+    return jsonify({"ok": True, "matchup": data})
+
+
+@app.route("/lineup")
+def lineup_page():
+    """Who to start this week, and why. myCalc+ (sign-in while the gate is off)."""
+    username, user_id, leagues = _account_leagues_for_pages()
+    info = get_current_week_info()
+    week = request.args.get("week", default=info["week"], type=int)
+    season = info["season"]
+    league = _pick_league(leagues)
+    unlocked = plus_unlocked()
+    plan, error = None, None
+    if unlocked and league and user_id:
+        try:
+            ensure_schedule_synced(season)
+            plan = build_lineup_plan(league, user_id, season, week)
+            if plan is None:
+                error = "You don't have a team in that league."
+        except Exception as e:
+            app.logger.warning("lineup page: %s", e)
+            error = "Sleeper didn't answer just now. Try again in a moment."
+    return render_template_string(
+        LINEUP_HTML, plan=plan, error=error, leagues=leagues, league=league, week=week, season=season,
+        username=username, unlocked=unlocked, gate=gate_kind())
+
+
+@app.route("/api/debug-projections")
+def api_debug_projections():
+    """The raw projections feed, for checking its shape on the live server."""
+    if not _secret_ok():
+        return jsonify({"ok": False, "error": "unauthorized"}), 401
+    info = get_current_week_info()
+    season = request.args.get("season", default=info["season"], type=int)
+    week = request.args.get("week", default=info["week"], type=int)
+    try:
+        r = requests.get(f"https://api.sleeper.com/projections/nfl/{season}/{week}", params={"season_type": "regular"}, timeout=10)
+        parsed = get_week_projections(season, week)
+        sample = next(iter(parsed.items()), None)
+        return jsonify({"status_code": r.status_code, "body_preview": r.text[:600], "parsed_players": len(parsed),
+                        "sample": sample})
+    except Exception as e:
+        return jsonify({"ok": False, "error": str(e)}), 502
+
+
 # --- Player bio and contract sheet ----------------------------------------
 #
 # "View bio" on a player page opens a sheet with the facts the site
@@ -15591,9 +16138,11 @@ NAV_GROUPS = [
     ("mycalc", "myCalc", [
         # Free tools first, the myCalc+ ones (see PLUS_KEYS) last.
         ("league", "/league-manager", "League Manager", "Your synced leagues and rosters"),
+        ("matchup", "/matchup", "Your Matchup", "Live score and win odds in your league"),
         ("rankings", "/rankings", "Rankings", "Dynasty and redraft player values"),
         ("trade", "/trade-calculator", "Trade Calculator", "Weigh any trade both ways"),
         ("sbc", "/start-bench-cut", "Start/Bench/Cut", "Help keep the rankings sharp"),
+        ("lineup", "/lineup", "Lineup", "Who to start this week, and why"),
         ("matchups", "/matchups", "Matchups", "Start-sit grades for the week"),
         ("streaks", "/streaks", "Streaks", "Prop lines and hit rates, game by game"),
         ("plus", "/plus", "myCalc+", "Every tier, every list, every grade"),
@@ -17283,7 +17832,7 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + FEED_DAYS_JS + """
   {% if has_synced_leagues %}
   <div class="sc-sync-banner">
     <span>Showing how many of <strong style="color:var(--sc-text);">{{ username }}</strong>'s players are in each game.</span>
-    <a href="/league-manager">Manage synced leagues</a>
+    <span style="display:flex; gap:14px;"><a href="/matchup">Your matchup &rsaquo;</a><a href="/league-manager">Manage synced leagues</a></span>
   </div>
   {% else %}
   <div class="sc-sync-banner">
@@ -23724,3 +24273,206 @@ const DR = {{ {"day": day, "season": season, "week": week, "season_type": season
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
+
+# --- Your Matchup and Lineup pages -----------------------------------------
+MU_STYLE = """
+<style>
+  .mu-page{ font-family:"Source Sans 3",system-ui,sans-serif; padding-bottom:70px; }
+  .mu-page h1{ font-family:"Big Shoulders Display"; font-size:30px; font-weight:800; text-transform:uppercase; margin:6px 0 2px; }
+  .mu-page h1 small{ font-family:"Source Sans 3"; font-size:13px; color:var(--ink-muted); text-transform:none; font-weight:600; margin-left:8px; }
+  .mu-chips{ display:flex; gap:6px; margin:8px 0 12px; overflow-x:auto; scrollbar-width:none; }
+  .mu-chips::-webkit-scrollbar{ display:none; }
+  .mu-chip{ flex:none; padding:6px 12px; border-radius:99px; border:1px solid var(--line); font-size:12.5px; font-weight:700; color:var(--ink-muted); background:var(--paper-raised); text-decoration:none; white-space:nowrap; }
+  .mu-chip.on{ background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .mu-card{ background:var(--paper-raised); border:1px solid var(--line); border-radius:16px; padding:14px; margin-top:12px; }
+  .mu-vs{ display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:8px; }
+  .mu-team{ text-align:center; min-width:0; } .mu-team img{ width:44px; height:44px; border-radius:50%; background:var(--paper-sunken); object-fit:cover; }
+  .mu-team .n{ font-weight:800; font-size:14px; margin-top:4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .mu-team .pts{ font-family:"IBM Plex Mono"; font-size:34px; font-weight:700; line-height:1; margin-top:4px; }
+  .mu-team .proj{ font-size:12px; color:var(--ink-muted); font-family:"IBM Plex Mono"; margin-top:4px; } .mu-team .left{ font-size:12px; color:var(--ink-secondary); margin-top:2px; }
+  .mu-mid{ font-size:11px; color:var(--ink-muted); text-align:center; letter-spacing:.06em; }
+  .mu-wp{ margin-top:12px; } .mu-wp .lab{ display:flex; justify-content:space-between; font-size:12px; color:var(--ink-muted); font-family:"IBM Plex Mono"; }
+  .mu-wp .bar{ height:10px; border-radius:5px; background:var(--paper-sunken); overflow:hidden; margin-top:4px; } .mu-wp .bar i{ display:block; height:100%; background:var(--accent); transition:width .6s; }
+  .mu-rows{ padding-top:6px; } .mu-row{ display:grid; grid-template-columns:1fr 44px 1fr; align-items:center; gap:6px; padding:8px 0; border-top:1px solid var(--line); }
+  .mu-pl{ display:flex; align-items:center; gap:8px; min-width:0; text-decoration:none; color:inherit; } .mu-pl.r{ flex-direction:row-reverse; text-align:right; }
+  .mu-pl img{ width:34px; height:34px; border-radius:50%; background:var(--paper-sunken); flex:none; object-fit:cover; }
+  .mu-pl .nm{ font-weight:700; font-size:13px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; } .mu-pl .st{ font-size:11px; color:var(--ink-muted); }
+  .mu-pl .st.live{ color:var(--good); font-weight:700; } .mu-pl .st.inj{ color:var(--warning); }
+  .mu-pl.done{ opacity:.6; } .mu-pl.empty .nm{ color:var(--ink-muted); font-weight:600; }
+  .mu-slot{ text-align:center; font-size:11px; font-weight:800; color:var(--ink-muted); }
+  .mu-bench summary{ cursor:pointer; font-size:13px; font-weight:700; color:var(--ink-secondary); padding:6px 0; }
+  .mu-empty{ text-align:center; color:var(--ink-muted); padding:22px 10px; font-size:14px; }
+  .mu-foot{ margin-top:10px; font-size:12.5px; color:var(--ink-muted); } .mu-foot a{ color:var(--accent-ink); }
+  .mu-final{ display:inline-block; margin-left:8px; padding:2px 8px; border-radius:99px; font-size:11px; font-weight:800; background:var(--paper-sunken); color:var(--ink-secondary); vertical-align:middle; }
+  .mu-final.live{ background:var(--good-wash); color:var(--good); }
+</style>"""
+
+MATCHUP_HTML = BASE_STYLE + make_header("league") + MU_STYLE + """
+<main><div class="wrap mu-page" style="max-width:560px;">
+  <h1>Your matchup <small>Week {{ week }}</small>{% if data %}<span class="mu-final{{ ' live' if data.any_live }}" id="muState">{{ 'Live' if data.any_live else ('Final' if data.all_done else 'Upcoming') }}</span>{% endif %}</h1>
+  {% if leagues|length > 1 %}
+  <div class="mu-chips">{% for lg in leagues %}<a class="mu-chip {{ 'on' if league and lg.league_id == league.league_id }}" href="/matchup?league={{ lg.league_id }}&week={{ week }}">{{ lg.name }}</a>{% endfor %}</div>
+  {% endif %}
+  {% if not current_user.is_authenticated %}
+  <div class="mu-card mu-empty"><a href="/login?next=/matchup" style="color:var(--accent-ink);">Sign in</a> or <a href="/signup" style="color:var(--accent-ink);">create a free account</a>, sync a league, and your matchup shows here live on game day.</div>
+  {% elif not leagues %}
+  <div class="mu-card mu-empty">No synced league yet. <a href="/league-manager" style="color:var(--accent-ink);">Sync your Sleeper league</a> and your matchup shows here.</div>
+  {% elif error %}
+  <div class="mu-card mu-empty">{{ error }}</div>
+  {% elif data and not data.opp %}
+  <div class="mu-card mu-empty">No opponent this week in {{ data.league_name }}: a bye, or the playoffs haven't paired you yet.</div>
+  {% else %}
+  <div id="muRoot"></div>
+  <p class="mu-foot">Points follow your league's own scoring, straight from Sleeper. Updates every {{ poll_ms // 1000 }} seconds while games are on. Projections and win odds are this site's estimates. <a href="{{ data.sleeper_url }}" target="_blank" rel="noopener">Open in Sleeper</a></p>
+  {% endif %}
+</div></main>
+<script>
+const MU = {{ data|tojson }};
+const MU_URL = '/api/matchup-live?league={{ league.league_id if league else '' }}&week={{ week }}';
+const MU_POLL = {{ poll_ms }};
+(function(){
+  const root = document.getElementById('muRoot');
+  if (!root || !MU) return;
+  function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+  function ko(iso){ try { const d = new Date(iso); return d.toLocaleDateString(undefined, {weekday:'short'}) + ' ' + d.toLocaleTimeString(undefined, {hour:'numeric', minute:'2-digit'}); } catch(e){ return ''; } }
+  function stat(p){
+    if (!p) return '';
+    const g = p.game;
+    if (p.phase === 'live') return '<span class="st live">Q' + esc(g.period) + ' ' + esc(g.clock) + ' \\u00b7 ' + p.points.toFixed(1) + '</span>';
+    if (p.phase === 'done') return '<span class="st">Final \\u00b7 ' + p.points.toFixed(1) + '</span>';
+    if (p.phase === 'bye') return '<span class="st inj">Bye</span>';
+    if (p.injury && (p.injury.tier === 'out' || p.injury.is_ir)) return '<span class="st inj">' + esc(p.injury.title) + '</span>';
+    const when = g && g.kickoff ? ko(g.kickoff) : '';
+    const tag = p.injury && p.injury.tier === 'questionable' ? ' \\u00b7 Q' : '';
+    return '<span class="st">' + esc(when) + (p.proj ? ' \\u00b7 proj ' + p.proj.toFixed(1) : '') + tag + '</span>';
+  }
+  function pl(p, right){
+    if (!p) return '<span class="mu-pl' + (right ? ' r' : '') + ' empty"><span class="nm">Empty</span></span>';
+    return '<a class="mu-pl' + (right ? ' r' : '') + (p.phase === 'done' ? ' done' : '') + '" href="/player?sid=' + encodeURIComponent(p.sid) + '">' +
+      '<img src="' + esc(p.photo) + '" alt="" loading="lazy" onerror="this.style.visibility=\\'hidden\\'">' +
+      '<span style="min-width:0;"><div class="nm">' + esc(p.short || p.name) + '</div>' + stat(p) + '</span></a>';
+  }
+  function team(s, right){
+    return '<div class="mu-team">' + (s.avatar_url ? '<img src="' + esc(s.avatar_url) + '" alt="" onerror="this.style.visibility=\\'hidden\\'">' : '<span style="display:inline-block;width:44px;height:44px;border-radius:50%;background:var(--paper-sunken);"></span>') +
+      '<div class="n">' + esc(s.name) + '</div><div class="pts">' + s.points.toFixed(1) + '</div>' +
+      '<div class="proj">proj ' + s.projected.toFixed(1) + '</div><div class="left">' + (s.left_players ? s.left_players + ' yet to play' : 'All done') + '</div></div>';
+  }
+  function render(d){
+    const me = d.me, op = d.opp;
+    let h = '<div class="mu-card"><div class="mu-vs">' + team(me, false) + '<div class="mu-mid">VS<br><span style="font-size:10px;">' + esc(me.record) + ' \\u00b7 ' + esc(op.record) + '</span></div>' + team(op, true) + '</div>';
+    if (d.win_probability !== null && d.win_probability !== undefined){
+      const pct = Math.round(d.win_probability * 100);
+      h += '<div class="mu-wp"><div class="lab"><span>WIN PROBABILITY</span><span>' + pct + '%</span></div><div class="bar"><i style="width:' + pct + '%"></i></div></div>';
+    }
+    h += '</div><div class="mu-card mu-rows">';
+    const n = Math.max(me.rows.length, op.rows.length);
+    for (let i = 0; i < n; i++){
+      const a = me.rows[i] || {}, b = op.rows[i] || {};
+      h += '<div class="mu-row">' + pl(a.player, false) + '<div class="mu-slot">' + esc(a.slot || b.slot || '') + '</div>' + pl(b.player, true) + '</div>';
+    }
+    h += '</div>';
+    if (me.bench.length || op.bench.length){
+      h += '<details class="mu-card mu-bench"><summary>Benches</summary>';
+      const m = Math.max(me.bench.length, op.bench.length);
+      for (let i = 0; i < m; i++) h += '<div class="mu-row">' + pl(me.bench[i], false) + '<div class="mu-slot">BN</div>' + pl(op.bench[i], true) + '</div>';
+      h += '</details>';
+    }
+    root.innerHTML = h;
+    const st = document.getElementById('muState');
+    if (st){ st.textContent = d.any_live ? 'Live' : (d.all_done ? 'Final' : 'Upcoming'); st.classList.toggle('live', !!d.any_live); }
+  }
+  render(MU);
+  let cur = MU;
+  function tick(){
+    fetch(MU_URL, {credentials: 'same-origin'}).then(r => r.json()).then(j => { if (j.ok && j.matchup){ cur = j.matchup; render(cur); } }).catch(() => {}).finally(arm);
+  }
+  function arm(){ if (cur.all_done) return; setTimeout(tick, cur.any_live ? MU_POLL : 60000); }
+  arm();
+})();
+</script>
+"""
+
+LINEUP_HTML = BASE_STYLE + make_header("league") + MU_STYLE + """
+<style>
+  .lu-sum{ display:flex; justify-content:space-between; align-items:center; gap:10px; } .lu-sum b{ font-size:18px; } .lu-sum .d{ font-family:"IBM Plex Mono"; color:var(--good); font-weight:700; font-size:22px; }
+  .lu-swap{ border-color:var(--accent); } .lu-swap .hd{ font-size:12px; letter-spacing:.06em; color:var(--ink-muted); text-transform:uppercase; font-weight:700; }
+  .lu-swap .pair{ display:grid; grid-template-columns:1fr auto 1fr; gap:8px; align-items:center; margin-top:8px; }
+  .lu-who{ display:flex; gap:8px; align-items:center; min-width:0; text-decoration:none; color:inherit; } .lu-who img{ width:38px; height:38px; border-radius:50%; background:var(--paper-sunken); flex:none; object-fit:cover; }
+  .lu-who .nm{ font-weight:800; font-size:14px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; } .lu-who .m{ font-size:12px; color:var(--ink-muted); font-family:"IBM Plex Mono"; }
+  .lu-arrow{ color:var(--ink-muted); font-size:13px; font-weight:700; } .lu-why{ font-size:13px; color:var(--ink-secondary); margin-top:8px; line-height:1.45; }
+  .lu-btn{ display:block; margin-top:10px; text-align:center; padding:10px; border-radius:10px; background:var(--accent); color:var(--accent-on); font-weight:800; text-decoration:none; }
+  .lu-row{ display:flex; align-items:center; gap:8px; padding:8px 0; border-top:1px solid var(--line); text-decoration:none; color:inherit; } .lu-row img{ width:32px; height:32px; border-radius:50%; background:var(--paper-sunken); object-fit:cover; }
+  .lu-row .s{ width:40px; font-size:11px; font-weight:800; color:var(--ink-muted); } .lu-row .nm{ flex:1; font-weight:700; font-size:13.5px; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .lu-row .pr{ font-family:"IBM Plex Mono"; font-size:12px; color:var(--ink-muted); margin-right:6px; } .lu-row .tag{ font-size:11px; color:var(--warning); margin-right:6px; }
+  .lu-grade{ display:inline-block; min-width:26px; text-align:center; padding:1px 6px; border-radius:6px; font-family:"IBM Plex Mono"; font-size:12px; font-weight:700; background:var(--paper-sunken); color:var(--ink-secondary); }
+  .lu-grade.ap, .lu-grade.a, .lu-grade.am{ background:var(--good-wash); color:var(--good); } .lu-grade.bp, .lu-grade.b, .lu-grade.bm, .lu-grade.cp{ background:var(--warning-wash); color:var(--warning); }
+  .lu-grade.c, .lu-grade.cm, .lu-grade.dp, .lu-grade.d, .lu-grade.dm, .lu-grade.f{ background:var(--critical-wash); color:var(--critical); }
+  .lu-h3{ font-family:"Big Shoulders Display"; font-size:16px; text-transform:uppercase; font-weight:800; margin:16px 0 4px; color:var(--ink-secondary); }
+  .lu-ok{ display:flex; align-items:center; gap:10px; } .lu-ok .tick{ width:34px; height:34px; border-radius:50%; background:var(--good-wash); color:var(--good); display:flex; align-items:center; justify-content:center; font-weight:900; }
+</style>
+<main><div class="wrap mu-page" style="max-width:560px;">
+  <h1>Lineup <small>Week {{ week }}{% if league %} &middot; {{ league.name }}{% endif %}</small></h1>
+  {% if leagues|length > 1 %}
+  <div class="mu-chips">{% for lg in leagues %}<a class="mu-chip {{ 'on' if league and lg.league_id == league.league_id }}" href="/lineup?league={{ lg.league_id }}&week={{ week }}">{{ lg.name }}</a>{% endfor %}</div>
+  {% endif %}
+  {% if not unlocked %}
+  <div class="mu-card"><div class="lu-sum"><div><b>Your best lineup, every week</b><div class="muted" style="font-size:12.5px;">Who to start, who to sit, and why.</div></div><div class="d">+?</div></div></div>
+  <div class="gate-wrap">
+    <div class="gate-blur">
+      <div class="mu-card lu-swap"><div class="hd">Start at WR2</div><div class="pair"><span class="lu-who"><img src=""><span><div class="nm">Sample Player</div><div class="m"><span class="lu-grade a">A-</span> 17.4 proj</div></span></span><span class="lu-arrow">over</span><span class="lu-who"><img src=""><span><div class="nm">Sample Player</div><div class="m"><span class="lu-grade cp">C+</span> 11.9 proj</div></span></span></div><div class="lu-why">The matchup, the usage and the injury report, in one sentence.</div></div>
+      <div class="mu-card lu-swap"><div class="hd">Start at FLEX</div><div class="pair"><span class="lu-who"><img src=""><span><div class="nm">Sample Player</div><div class="m"><span class="lu-grade bp">B+</span> 14.2 proj</div></span></span><span class="lu-arrow">over</span><span class="lu-who"><img src=""><span><div class="nm">Sample Player</div><div class="m"><span class="lu-grade bm">B-</span> 12.9 proj</div></span></span></div><div class="lu-why">The matchup, the usage and the injury report, in one sentence.</div></div>
+    </div>
+    <div class="gate-card">
+      {% if gate == 'plus' %}
+      <h3>The Lineup is <span style="color:var(--accent-ink);">myCalc+</span></h3>
+      <p>Your optimal lineup for every synced league, every week: each change, with both players' grade and projection and the reason in plain words.</p>
+      <div class="gate-benefits"><span>Start/sit calls from projections, matchup grades and the injury report</span><span>Refreshes with the reports through Sunday morning</span><span>Streaks and Matchups included</span></div>
+      <a href="/plus" class="btn" style="margin-top:22px; width:100%;">See myCalc+ plans</a>
+      {% else %}
+      <h3>Unlock your <span style="color:var(--accent-ink);">Lineup</span></h3>
+      <p>Create a free account and sync a league to see who to start this week, and why.</p>
+      <div class="gate-benefits"><span>Start/sit calls from projections, matchup grades and the injury report</span><span>Refreshes with the reports through Sunday morning</span></div>
+      <a href="/signup" class="btn" style="margin-top:22px; width:100%;">Create Account</a>
+      {% endif %}
+    </div>
+  </div>
+  {% elif not leagues %}
+  <div class="mu-card mu-empty">No synced league yet. <a href="/league-manager" style="color:var(--accent-ink);">Sync your Sleeper league</a> and your lineup shows here.</div>
+  {% elif error %}
+  <div class="mu-card mu-empty">{{ error }}</div>
+  {% elif plan %}
+    {% if plan.changes %}
+    <div class="mu-card"><div class="lu-sum"><div><b>{{ plan.changes|length }} change{{ '' if plan.changes|length == 1 else 's' }} to make</b><div class="muted" style="font-size:12.5px;">Projected lineup {{ plan.current_total }} &rarr; {{ plan.best_total }}</div></div><div class="d">+{{ plan.gain }}</div></div></div>
+    {% for c in plan.changes %}
+    <div class="mu-card lu-swap"><div class="hd">Start at {{ c.slot }}</div>
+      <div class="pair">
+        <a class="lu-who" href="/player?sid={{ c.start.sid }}"><img src="{{ c.start.photo }}" alt="" onerror="this.style.visibility='hidden'"><span style="min-width:0;"><div class="nm">{{ c.start.short }}</div><div class="m">{% if c.start.grade %}<span class="lu-grade {{ c.start.grade_class }}">{{ c.start.grade }}</span> {% endif %}{{ c.start.value }} proj</div></span></a>
+        <span class="lu-arrow">over</span>
+        {% if c.over %}<a class="lu-who" href="/player?sid={{ c.over.sid }}"><img src="{{ c.over.photo }}" alt="" onerror="this.style.visibility='hidden'"><span style="min-width:0;"><div class="nm">{{ c.over.short }}</div><div class="m">{% if c.over.grade %}<span class="lu-grade {{ c.over.grade_class }}">{{ c.over.grade }}</span> {% endif %}{{ c.over.value }} proj</div></span></a>{% else %}<span class="lu-who"><span><div class="nm">an empty slot</div></span></span>{% endif %}
+      </div>
+      <div class="lu-why">{{ c.why }}</div>
+      <a class="lu-btn" href="{{ plan.sleeper_url }}" target="_blank" rel="noopener">Make this change in Sleeper</a>
+    </div>
+    {% endfor %}
+    {% else %}
+    <div class="mu-card lu-ok"><span class="tick">&#10003;</span><div><b>Your lineup is set</b><div class="muted" style="font-size:12.5px;">{% if plan.lineup_set %}Nothing to change: this is the best lineup on your roster for week {{ week }}, projected {{ plan.best_total }}.{% else %}Set a lineup in Sleeper and this page will check it.{% endif %}</div></div></div>
+    {% endif %}
+    <div class="lu-h3">{{ 'Your lineup after the changes' if plan.changes else 'Your lineup' }}</div>
+    <div class="mu-card" style="padding-top:4px;">
+      {% for r in plan.lineup %}
+      {% if r.player %}<a class="lu-row" href="/player?sid={{ r.player.sid }}"><span class="s">{{ r.slot }}</span><img src="{{ r.player.photo }}" alt="" onerror="this.style.visibility='hidden'"><span class="nm">{{ r.player.name }}</span>{% if r.player.value_note in ('questionable', 'doubtful', 'out', 'bye') %}<span class="tag">{{ r.player.value_note|capitalize }}</span>{% endif %}<span class="pr">{{ r.player.value }}</span>{% if r.player.grade %}<span class="lu-grade {{ r.player.grade_class }}">{{ r.player.grade }}</span>{% endif %}</a>
+      {% else %}<div class="lu-row"><span class="s">{{ r.slot }}</span><span class="nm" style="color:var(--ink-muted);">Empty</span></div>{% endif %}
+      {% endfor %}
+    </div>
+    {% if plan.bench %}
+    <div class="lu-h3">Bench, best first</div>
+    <div class="mu-card" style="padding-top:4px;">
+      {% for p in plan.bench %}
+      <a class="lu-row" href="/player?sid={{ p.sid }}"><span class="s">{{ p.position }}</span><img src="{{ p.photo }}" alt="" onerror="this.style.visibility='hidden'"><span class="nm">{{ p.name }}</span>{% if p.value_note in ('questionable', 'doubtful', 'out', 'bye') %}<span class="tag">{{ p.value_note|capitalize }}</span>{% endif %}<span class="pr">{{ p.value }}</span>{% if p.grade %}<span class="lu-grade {{ p.grade_class }}">{{ p.grade }}</span>{% endif %}</a>
+      {% endfor %}
+    </div>
+    {% endif %}
+    <p class="mu-foot">Projections are Sleeper's, scored with this league's own settings{% if not plan.projections_available %} (this week's feed isn't up yet, so recent averages stand in){% endif %}; grades are this site's matchup grades. A player already played counts at what he scored. Re-check after the final injury reports. <a href="{{ plan.sleeper_url }}" target="_blank" rel="noopener">Open in Sleeper</a></p>
+  {% endif %}
+</div></main>
+"""
