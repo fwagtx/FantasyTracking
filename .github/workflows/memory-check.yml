@@ -1,0 +1,31 @@
+name: Memory Check
+
+on:
+  workflow_dispatch:
+
+jobs:
+  memory-check:
+    runs-on: ubuntu-latest
+    env:
+      SITE_PASSWORD: ${{ secrets.SITE_PASSWORD }}
+    steps:
+      - name: Ask the live server what it weighs
+        run: |
+          if [ -z "$SITE_PASSWORD" ]; then
+            echo "::error::SITE_PASSWORD repository secret is not set."
+            exit 1
+          fi
+          echo "--- /api/memory ---"
+          body=$(curl -sS --fail-with-body --max-time 60 \
+            -H "X-Sync-Secret: $SITE_PASSWORD" \
+            "https://fantasyfootballcalc.com/api/memory") || {
+              echo "::error::request failed: $body"; exit 1; }
+          echo "$body"
+          case "$body" in *'"ok": false'*|*'"ok":false'*)
+            echo "::error::server rejected the request"; exit 1;; esac
+          echo "--- the pages a visitor actually loads ---"
+          for path in / /scores /rankings "/rankings?pos=K" /matchup; do
+            code=$(curl -sS -o /dev/null -w '%{http_code}' --max-time 45 \
+              "https://fantasyfootballcalc.com$path")
+            echo "$code  $path"
+          done
