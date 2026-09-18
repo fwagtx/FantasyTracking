@@ -8962,23 +8962,31 @@ def lineup_problems(plan):
     return problems
 
 
-def build_lineup_alert(league, user_id, season, week, now=None):
-    """The lineup email for one league, or None when there is nothing to
-    send: no problems, no deadline near, or no lineup at all."""
+def _lineup_alert(league, user_id, season, week, now=None):
+    """(alert, reason). The alert, or None and the reason there is none.
+
+    Every decision about sending lives here and nowhere else, so the dry
+    run's explanation cannot drift from what the real run does: it is
+    reading the same answer."""
     plan = build_lineup_plan(league, user_id, season, week)
-    if not plan or not plan.get("lineup_set"):
-        return None
+    if not plan:
+        return None, "no team in this league"
+    if not plan.get("lineup_set"):
+        return None, "no lineup set in Sleeper yet"
     problems = lineup_problems(plan)
     if not problems:
-        return None
+        return None, "nothing wrong with the lineup"
     kickoff = next_kickoff(plan)
     if not kickoff:
-        return None
+        return None, "no unplayed game to count down to"
     now = now or datetime.utcnow()
     hours = (kickoff - now).total_seconds() / 3600.0
     # Already started, or still days away: not a deadline to email about.
-    if hours <= 0 or hours > LINEUP_ALERT_LEAD_HOURS:
-        return None
+    if hours <= 0:
+        return None, "every game has already kicked off"
+    if hours > LINEUP_ALERT_LEAD_HOURS:
+        return None, (f"{len(problems)} problem(s), but kickoff is {round(hours)}h away "
+                      f"(waits until {LINEUP_ALERT_LEAD_HOURS}h)")
     codes = sorted(code for code, _ in problems)
     return {
         "kind": "lineup",
@@ -8987,20 +8995,26 @@ def build_lineup_alert(league, user_id, season, week, now=None):
         "problems": problems, "hours": round(hours, 1), "kickoff": kickoff,
         "gain": plan.get("gain"), "plan": plan,
         "dedupe": _alert_dedupe("lineup", plan["league_id"], season, week, *codes),
-    }
+    }, "sending"
 
 
-def build_waiver_alert(league, user_id, season, week):
-    """The waiver email for one league, or None.
+def build_lineup_alert(league, user_id, season, week, now=None):
+    """The lineup email for one league, or None when there is nothing to
+    send: no problems, no deadline near, or no lineup at all."""
+    return _lineup_alert(league, user_id, season, week, now=now)[0]
 
-    Sent once a week, when the week's football is over and a claim can
-    actually be made -- which is what waiver_target_week already knows."""
+
+def _waiver_alert(league, user_id, season, week):
+    """(alert, reason), for the same reason the lineup one comes in
+    pairs: the dry run explains itself by reading the real answer."""
     plan = build_waiver_targets(league, user_id, season, week)
-    if not plan or not plan.get("next_week"):
-        return None
+    if not plan:
+        return None, "no team in this league"
+    if not plan.get("next_week"):
+        return None, f"week {plan['asked_week']} is still being played, so waivers are not open"
     targets = [t for t in plan.get("targets") or [] if not t.get("stash")][:5]
     if not targets:
-        return None
+        return None, "no free agent worth a claim"
     return {
         "kind": "waivers",
         "league_id": plan["league_id"], "league_name": plan["league_name"],
@@ -9008,7 +9022,15 @@ def build_waiver_alert(league, user_id, season, week):
         "targets": targets, "drop": plan.get("drop"), "plan": plan,
         # One per league per week, however many times the job runs.
         "dedupe": _alert_dedupe("waivers", plan["league_id"], season, plan["week"]),
-    }
+    }, "sending"
+
+
+def build_waiver_alert(league, user_id, season, week):
+    """The waiver email for one league, or None.
+
+    Sent once a week, when the week's football is over and a claim can
+    actually be made -- which is what waiver_target_week already knows."""
+    return _waiver_alert(league, user_id, season, week)[0]
 
 
 def _alert_button(href, label):
@@ -9125,28 +9147,42 @@ def _leagues_for_user(row):
     return user_id, [lg for lg in leagues if lg.get("league_id") in synced]
 
 
-def alerts_for_user(row, season, week, now=None):
+def alerts_for_user(row, season, week, now=None, notes=None):
     """Every alert this account should get right now, across its
-    leagues. Reads only; sends nothing."""
+    leagues. Reads only; sends nothing.
+
+    `notes`, when a list is passed in, collects one line per league per
+    kind saying what was decided and why. That is what makes a dry run
+    answerable: "nothing was sent" and "nothing could be found" look
+    identical from outside, and only one of them is working."""
     sleeper_id, leagues = _leagues_for_user(row)
-    if not sleeper_id or not leagues:
+    if not sleeper_id:
+        if notes is not None:
+            notes.append({"user_id": row["id"], "note": "no Sleeper account found for that username"})
+        return []
+    if not leagues:
+        if notes is not None:
+            notes.append({"user_id": row["id"], "note": "no synced league for this season"})
         return []
     out = []
     for league in leagues:
-        if row.get("alert_lineup"):
+        name = league.get("name") or league.get("league_id")
+        for kind, want, builder in (
+                ("lineup", row.get("alert_lineup"),
+                 lambda lg: _lineup_alert(lg, sleeper_id, season, week, now=now)),
+                ("waivers", row.get("alert_waivers"),
+                 lambda lg: _waiver_alert(lg, sleeper_id, season, week))):
+            if not want:
+                if notes is not None:
+                    notes.append({"user_id": row["id"], "league": name, "kind": kind, "note": "turned off"})
+                continue
             try:
-                alert = build_lineup_alert(league, sleeper_id, season, week, now=now)
-            except Exception:
-                app.logger.exception("lineup alert failed for %s", row["id"])
-                alert = None
-            if alert:
-                out.append(alert)
-        if row.get("alert_waivers"):
-            try:
-                alert = build_waiver_alert(league, sleeper_id, season, week)
-            except Exception:
-                app.logger.exception("waiver alert failed for %s", row["id"])
-                alert = None
+                alert, reason = builder(league)
+            except Exception as e:
+                app.logger.exception("%s alert failed for %s", kind, row["id"])
+                alert, reason = None, f"failed: {type(e).__name__}"
+            if notes is not None:
+                notes.append({"user_id": row["id"], "league": name, "kind": kind, "note": reason})
             if alert:
                 out.append(alert)
     return out
@@ -9184,6 +9220,12 @@ def run_alerts(season=None, week=None, limit=None, dry=False, now=None):
     now = now or datetime.utcnow()
     summary = {"season": season, "week": week, "checked": 0, "sent": 0, "duplicates": 0,
                "failed": 0, "dry": bool(dry), "stopped_early": False, "alerts": []}
+    # A dry run is for answering "why did nobody get anything?", so it
+    # carries the reasons. A real run does not: the answer there is the
+    # alerts themselves.
+    notes = [] if dry else None
+    if dry:
+        summary["notes"] = notes
     deadline = time.time() + ALERT_RUN_SECONDS
     for row in alert_recipients(limit):
         if time.time() > deadline:
@@ -9193,7 +9235,7 @@ def run_alerts(season=None, week=None, limit=None, dry=False, now=None):
             summary["stopped_early"] = True
             break
         summary["checked"] += 1
-        for alert in alerts_for_user(row, season, week, now=now):
+        for alert in alerts_for_user(row, season, week, now=now, notes=notes):
             result = send_alert(row, alert, dry=dry)
             if result == "sent":
                 summary["sent"] += 1
