@@ -4559,15 +4559,21 @@ def compute_matchup_grade(sid, season, week, cache=_matchup_grade_cache):
     return data
 
 
-def _player_recent_games(sid, season, n=5):
+def _player_recent_games(sid, season, n=5, allow_prior_season=True):
     """Average fantasy points over a player's last N games played,
     walking back into last season if the current one doesn't have N
     games yet -- so early-season "recent form" isn't computed off just
     1-2 data points. Returns None if the player has no logged games at
-    all in either season."""
+    all in either season.
+
+    `allow_prior_season=False` keeps it to this year and returns None
+    for a player who has not played this year at all. That is what the
+    waiver board runs on: last October says nothing about whether a man
+    is worth a claim today, and a free agent's whole case is what he has
+    done since the season started."""
     cur_weeks = sorted((get_season_stats(season).get(sid, {}).get("weeks") or {}).items())
     tagged = [(season, wk, pts) for wk, pts in cur_weeks]
-    if len(tagged) < n:
+    if len(tagged) < n and allow_prior_season:
         last_weeks = sorted((get_season_stats(season - 1).get(sid, {}).get("weeks") or {}).items())
         tagged = [(season - 1, wk, pts) for wk, pts in last_weeks] + tagged
     last_n = tagged[-n:]
@@ -9012,14 +9018,19 @@ def _waiver_alert(league, user_id, season, week):
         return None, "no team in this league"
     if not plan.get("next_week"):
         return None, f"week {plan['asked_week']} is still being played, so waivers are not open"
-    targets = [t for t in plan.get("targets") or [] if not t.get("stash")][:5]
-    if not targets:
+    groups = []
+    for group in plan.get("groups") or []:
+        healthy = [t for t in group["targets"] if not t.get("stash")]
+        if healthy:
+            groups.append({"label": group["label"], "targets": healthy})
+    if not groups:
         return None, "no free agent worth a claim"
+    targets = [t for g in groups for t in g["targets"]]
     return {
         "kind": "waivers",
         "league_id": plan["league_id"], "league_name": plan["league_name"],
         "season": season, "week": plan["week"],
-        "targets": targets, "drop": plan.get("drop"), "plan": plan,
+        "groups": groups, "targets": targets, "drop": plan.get("drop"), "plan": plan,
         # One per league per week, however many times the job runs.
         "dedupe": _alert_dedupe("waivers", plan["league_id"], season, plan["week"]),
     }, "sending"
@@ -9063,32 +9074,40 @@ def render_lineup_alert(alert, username):
 
 
 def render_waiver_alert(alert, username):
-    """(subject, text, html) for a waiver alert."""
+    """(subject, text, html) for a waiver alert: the top three of each
+    group, ranked, and nothing else."""
     league = alert["league_name"]
     best = alert["targets"][0]
-    subject = f"Waivers are open in {league}: {best['name']} leads {len(alert['targets'])} targets"
+    subject = f"Waivers are open in {league}: {best['name']} tops the board"
     link = f"{SITE_URL}/waivers?league={alert['league_id']}"
-    rows = [f"{t['position']} {t['name']} ({t['team']}) - score {t['score']}. {t['why']}"
-            for t in alert["targets"]]
     drop = alert.get("drop")
     drop_line = (f"\n\nRoom for one: {drop['name']} is the weakest player on your bench."
                  if drop else "")
+    text_groups = []
+    html_groups = []
+    for group in alert["groups"]:
+        rows = [f"  {t['rank']}. {t['position']} {t['name']} ({t['team']}) - score {t['score']}. {t['why']}"
+                for t in group["targets"]]
+        text_groups.append(group["label"] + "\n" + "\n".join(rows))
+        items = "".join(
+            f'<li style="margin-bottom:8px;"><b>{html.escape(t["name"])}</b> '
+            f'<span style="color:#666;">{html.escape(str(t["position"]))} &middot; '
+            f'{html.escape(str(t["team"] or ""))} &middot; score {t["score"]}</span><br>'
+            f'<span style="color:#666;font-size:13px;">{html.escape(t["why"])}</span></li>'
+            for t in group["targets"])
+        html_groups.append(
+            f'<p style="margin:16px 0 4px;font-weight:700;">{html.escape(group["label"])}</p>'
+            f'<ol style="line-height:1.6;margin-top:4px;">{items}</ol>')
     text = (f"Hi {username},\n\n"
-            f"Week {alert['season']} week {alert['week']} waivers in {league}. "
-            f"The best free agents on the board:\n\n"
-            + "\n".join(f"  {i}. {row}" for i, row in enumerate(rows, 1))
+            f"Waivers for week {alert['week']} in {league}. The top "
+            f"{WAIVER_GROUP_SIZE} of each group, on this season's form:\n\n"
+            + "\n\n".join(text_groups)
             + drop_line
-            + f"\n\nSee the full list:\n{link}\n")
-    items = "".join(
-        f'<li style="margin-bottom:8px;"><b>{html.escape(t["name"])}</b> '
-        f'<span style="color:#666;">{html.escape(str(t["position"]))} &middot; {html.escape(str(t["team"] or ""))} '
-        f'&middot; score {t["score"]}</span><br>'
-        f'<span style="color:#666;font-size:13px;">{html.escape(t["why"])}</span></li>'
-        for t in alert["targets"])
+            + f"\n\nSee the board:\n{link}\n")
     body = (f'<p>Hi {html.escape(str(username))},</p>'
             f'<p>Waivers for week {alert["week"]} in <b>{html.escape(league)}</b>. '
-            f'The best free agents on the board:</p>'
-            f'<ol style="line-height:1.6;">{items}</ol>'
+            f'The top {WAIVER_GROUP_SIZE} of each group, on this season\'s form:</p>'
+            + "".join(html_groups)
             + (f'<p style="color:#666;font-size:13px;">Room for one: '
                f'<b>{html.escape(drop["name"])}</b> is the weakest player on your bench.</p>' if drop else "")
             + _alert_button(link, "See your waiver targets"))
@@ -9289,12 +9308,24 @@ WAIVER_FORM_GAMES = 3
 # because it is the only part that knows about this week's opponent.
 WAIVER_FORM_WEIGHT = 0.6
 WAIVER_PROJ_WEIGHT = 0.4
-WAIVER_LIST_SIZE = 12
+# Three per group, ranked. A waiver claim is one decision, usually with
+# one spot to make room in: a list of a dozen names is a list nobody
+# reads to the bottom. Three is short enough to act on.
+WAIVER_GROUP_SIZE = 3
 # A target has to be worth the claim. Below this, a week's points are
 # inside the noise of any bench player already on the roster.
 WAIVER_MIN_SCORE = 4.0
-# Positions worth listing, in the order the page groups them.
-WAIVER_POSITIONS = ("QB", "RB", "WR", "TE", "K", "DEF")
+# The three lists the page shows, in order. Kickers and defences are
+# kept apart from the skill players rather than mixed in with them,
+# because they are never competing for the same roster spot -- a kicker
+# ranked above a running back would be a comparison nobody is making.
+WAIVER_GROUPS = (
+    ("skill", "Best available", ("QB", "RB", "WR", "TE")),
+    ("K", "Kickers", ("K",)),
+    ("DEF", "D/ST", ("DEF",)),
+)
+WAIVER_GROUP_OF = {pos: key for key, _label, positions in WAIVER_GROUPS for pos in positions}
+WAIVER_POSITIONS = tuple(WAIVER_GROUP_OF)
 
 
 def waiver_target_week(season, week):
@@ -9351,7 +9382,9 @@ def _waiver_reason(row):
     """One plain sentence for why this player is on the list."""
     bits = []
     if row["form"] and row["form_games"]:
-        bits.append(f"{row['form']} a game over his last {row['form_games']}")
+        games = row["form_games"]
+        bits.append(f"{row['form']} a game over his last {games} this season"
+                    if games > 1 else f"{row['form']} in his only game this season")
     # Snap share is a fact about a player on the field. A defence is the
     # whole unit and a kicker is never on a snap count, so neither gets a
     # percentage that would read as one.
@@ -9419,7 +9452,10 @@ def build_waiver_targets(league, user_id, season, week):
         if projections:
             proj, _source = _player_projection(sid, position, projections, scoring,
                                                season, target_week, None, None)
-        recent = _player_recent_games(sid, season, WAIVER_FORM_GAMES)
+        # This season only. Last year's form is not a reason to claim
+        # anybody: a player who has not played this year has not shown
+        # anything a waiver claim can be made on.
+        recent = _player_recent_games(sid, season, WAIVER_FORM_GAMES, allow_prior_season=False)
         form = (recent or {}).get("avg") or 0.0
         # Nothing to show and nothing expected: not a target, and never a
         # row of zeroes on the page.
@@ -9450,10 +9486,20 @@ def build_waiver_targets(league, user_id, season, week):
         row["why"] = _waiver_reason(row)
         rows.append(row)
 
-    # The healthy ones first, best score first; a stash is worth listing
-    # but never above a player who can help this week.
+    # Three lists of three, each ranked. Within a list the healthy come
+    # first, best score first; a stash is worth a place only when there
+    # are not three players who can actually help this week.
     rows.sort(key=lambda r: (r["stash"], -r["score"], -(r["snap_pct"] or 0)))
-    targets = rows[:WAIVER_LIST_SIZE]
+    groups = []
+    for key, label, group_positions in WAIVER_GROUPS:
+        if not (set(group_positions) & positions):
+            continue
+        picked = [r for r in rows if WAIVER_GROUP_OF.get(r["position"]) == key][:WAIVER_GROUP_SIZE]
+        for i, row in enumerate(picked, 1):
+            row["rank"] = i
+        if picked:
+            groups.append({"key": key, "label": label, "targets": picked})
+    targets = [r for g in groups for r in g["targets"]]
 
     # Who to drop for them: the weakest player on the roster who is not
     # in the lineup, by the same score the targets are ranked on, so the
@@ -9468,7 +9514,7 @@ def build_waiver_targets(league, user_id, season, week):
         if projections:
             proj, _source = _player_projection(sid, p.get("position"), projections, scoring,
                                                season, target_week, None, None)
-        recent = _player_recent_games(sid, season, WAIVER_FORM_GAMES)
+        recent = _player_recent_games(sid, season, WAIVER_FORM_GAMES, allow_prior_season=False)
         form = (recent or {}).get("avg") or 0.0
         bench.append({
             "sid": sid, "name": f"{p.get('first_name', '')} {p.get('last_name', '')}".strip() or sid,
@@ -9484,8 +9530,9 @@ def build_waiver_targets(league, user_id, season, week):
         "league_id": league_id, "league_name": league.get("name") or "League",
         "season": season, "week": target_week, "asked_week": week,
         "next_week": target_week != week,
-        "targets": targets, "drop": drop,
-        "free_agents": len(rows), "positions": sorted(positions),
+        "groups": groups, "targets": targets, "drop": drop,
+        "free_agents": len(rows), "shown": len(targets), "positions": sorted(positions),
+        "group_size": WAIVER_GROUP_SIZE,
         "projections_available": bool(projections),
         "sleeper_url": f"https://sleeper.com/leagues/{league_id}/players",
     }
@@ -25761,7 +25808,9 @@ WAIVERS_HTML = BASE_STYLE + make_header("league") + MU_STYLE + """
 <style>
   .wv-row{ display:grid; grid-template-columns:34px 38px 1fr auto; align-items:center; gap:10px; padding:10px 0; border-top:1px solid var(--line); text-decoration:none; color:inherit; }
   .wv-row:first-child{ border-top:none; }
-  .wv-row .pos{ font-size:11px; font-weight:800; color:var(--ink-muted); text-align:center; }
+  .wv-rk{ font-family:"IBM Plex Mono"; font-size:15px; font-weight:700; color:var(--ink-muted); text-align:center; }
+  .wv-row:first-child .wv-rk{ color:var(--accent-ink); }
+  .wv-pos{ font-size:10.5px; font-weight:800; color:var(--ink-muted); letter-spacing:.04em; }
   .wv-row img{ width:38px; height:38px; border-radius:50%; background:var(--paper-sunken); object-fit:contain; }
   .wv-row .nm{ font-weight:700; font-size:14px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   .wv-row .why{ font-size:11.5px; color:var(--ink-muted); line-height:1.45; }
@@ -25799,20 +25848,23 @@ WAIVERS_HTML = BASE_STYLE + make_header("league") + MU_STYLE + """
     {% if plan.next_week %}
     <p class="mu-foot" style="margin:0 0 4px;">Every game of week {{ plan.asked_week }} is final, so these are targets for week {{ plan.week }}.</p>
     {% endif %}
-    {% if plan.targets %}
+    {% if plan.groups %}
+    {% for g in plan.groups %}
+    <div class="wv-h3"{% if loop.first %} style="margin-top:6px;"{% endif %}>{{ g.label }}</div>
     <div class="mu-card" style="padding-top:4px;">
-      {% for t in plan.targets %}
+      {% for t in g.targets %}
       <a class="wv-row" href="{{ ('/team?abbr=' + t.team) if t.is_team and t.team else ('/player?sid=' + t.sid) }}">
-        <span class="pos">{{ t.position }}</span>
+        <span class="wv-rk">{{ t.rank }}</span>
         <img src="{{ t.photo }}" alt="" onerror="this.style.visibility='hidden'">
         <span style="min-width:0;">
-          <div class="nm">{{ t.name }}{% if t.stash %}<span class="wv-tag">Stash</span>{% elif t.rank_label %}<span class="wv-tag">{{ t.rank_label }}</span>{% endif %}</div>
+          <div class="nm">{{ t.name }}{% if g.key == 'skill' %} <span class="wv-pos">{{ t.position }}</span>{% endif %}{% if t.stash %}<span class="wv-tag">Stash</span>{% elif t.rank_label %}<span class="wv-tag">{{ t.rank_label }}</span>{% endif %}</div>
           <div class="why">{{ t.why }}</div>
         </span>
         <span class="sc"><b>{{ t.score }}</b><span>SCORE</span></span>
       </a>
       {% endfor %}
     </div>
+    {% endfor %}
     {% if plan.drop %}
     <div class="wv-h3">Room for one</div>
     <div class="mu-card">
@@ -25829,7 +25881,7 @@ WAIVERS_HTML = BASE_STYLE + make_header("league") + MU_STYLE + """
     {% else %}
     <div class="mu-card mu-empty">Nobody free in {{ plan.league_name }} is worth a claim for week {{ plan.week }}. Every available player is either buried on his depth chart or scoring too little to beat what is already on your bench.</div>
     {% endif %}
-    <p class="mu-foot">{{ plan.free_agents }} free agent{{ '' if plan.free_agents == 1 else 's' }} in {{ plan.league_name }} clear the bar. Score is {{ (100 * 0.6)|int }}% recent form over a player's last three games and {{ (100 * 0.4)|int }}% Sleeper's projection for week {{ plan.week }}, scored with this league's own settings{% if not plan.projections_available %} (that week's projections aren't published yet, so these are ranked on form alone){% endif %}. Players already on a roster, injured reserve or taxi squad anywhere in the league are not listed, and neither is anyone buried on his club's depth chart. <a href="{{ plan.sleeper_url }}" target="_blank" rel="noopener">Open in Sleeper</a></p>
+    <p class="mu-foot">The top {{ plan.group_size }} of each group, out of {{ plan.free_agents }} free agent{{ '' if plan.free_agents == 1 else 's' }} in {{ plan.league_name }} worth a claim at all. Score is {{ (100 * 0.6)|int }}% form over a player's last three games <b>this season</b> and {{ (100 * 0.4)|int }}% Sleeper's projection for week {{ plan.week }}, scored with this league's own settings{% if not plan.projections_available %} (that week's projections aren't published yet, so these are ranked on form alone){% endif %}. Last season counts for nothing here: a claim is made on what a player is doing now. Players already on a roster, injured reserve or taxi squad anywhere in the league are not listed, and neither is anyone buried on his club's depth chart. <a href="{{ plan.sleeper_url }}" target="_blank" rel="noopener">Open in Sleeper</a></p>
   {% endif %}
 </div></main>
 """
