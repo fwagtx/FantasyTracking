@@ -8087,10 +8087,11 @@ def live_team_games(season, week):
     period, clock, the opponent, both scores and kickoff."""
     out = {}
     try:
-        events = espn_week_scoreboard(season, week) or []
+        data = espn_week_scoreboard(season, week) or {}
     except Exception:
-        events = []
-    for ev in events:
+        data = {}
+    events = data.get("events") if isinstance(data, dict) else data
+    for ev in (events or []):
         card = espn_event_to_card(ev) if isinstance(ev, dict) and "competitions" in ev else None
         if not card:
             continue
@@ -8154,8 +8155,12 @@ def _player_projection(sid, position, projections, scoring_settings, season, wee
     proj = projections.get(str(sid))
     if isinstance(proj, dict):
         pts = score_with_settings(proj, scoring_settings)
-        if pts or proj.get("pts_ppr") is not None:
+        if pts:
             return pts, "sleeper"
+        # A feed whose keys do not meet this league's settings (an odd
+        # scoring key set) still carries Sleeper's own PPR figure.
+        if isinstance(proj.get("pts_ppr"), (int, float)) and proj["pts_ppr"]:
+            return round(float(proj["pts_ppr"]), 1), "sleeper_ppr"
     # No projection: the player's own recent average, in PPR terms, which
     # is close enough to hold a place until the feed has them.
     recent = _player_recent_games(sid, season, 4)
@@ -8176,6 +8181,18 @@ def _player_card(sid, all_players, live_games, projections, scoring_settings, se
     p = all_players.get(sid) or {}
     team = p.get("team")
     state = live_games.get(team) if team else None
+    if state is None and team:
+        # Not on the live scoreboard: the schedule table says whether
+        # that is a bye or a game the feed did not carry.
+        try:
+            sched = get_schedule_for_team_week(season, week, team)
+        except Exception:
+            sched = None
+        if sched:
+            state = {"status": sched.get("status") or "scheduled", "period": None, "clock": None, "detail": None,
+                     "opp": sched.get("opponent"), "home": sched.get("home"),
+                     "kickoff": sched["kickoff"].isoformat() + "Z" if hasattr(sched.get("kickoff"), "isoformat") else sched.get("kickoff"),
+                     "event_id": sched.get("espn_event_id")}
     proj, proj_source = _player_projection(sid, p.get("position"), projections, scoring_settings, season, week, state, None)
     pts = points if isinstance(points, (int, float)) else None
     frac = game_fraction_left(state) if team else 0.0
@@ -8392,7 +8409,17 @@ def build_lineup_plan(league, user_id, season, week):
     slots = _lineup_slots(league)
     current = list(entry.get("starters") or mine.get("starters") or [])
     current = [s if s in cards else None for s in current[:len(slots)]] + [None] * max(0, len(slots) - len(current))
-    best = optimal_lineup(slots, list(cards.values()))
+    # Sleeper locks a player at his kickoff: a starter whose game has
+    # begun stays where he is, and a bench player whose game has begun
+    # cannot come in. Only the open slots and the unlocked players are
+    # optimized.
+    for c in cards.values():
+        c["locked"] = c["phase"] in ("live", "done")
+    open_idx = [i for i, sid in enumerate(current) if not (sid and cards[sid]["locked"])]
+    pool = [c for sid, c in cards.items() if not c["locked"] and sid not in {current[i] for i in range(len(current)) if i not in open_idx}]
+    sub = optimal_lineup([slots[i] for i in open_idx], pool)
+    best = {i: cards[current[i]] for i in range(len(current)) if i not in open_idx and current[i]}
+    best.update({open_idx[j]: p for j, p in sub.items()})
     best_sids = {i: p["sid"] for i, p in best.items()}
     cur_total = sum(cards[s]["value"] for s in current if s)
     best_total = sum(p["value"] for p in best.values())
@@ -8418,13 +8445,19 @@ def build_lineup_plan(league, user_id, season, week):
                 shown_slot = slots[current.index(old_sid)]
         new, old = cards[new_sid], cards.get(old_sid) if old_sid else None
         gain = round(new["value"] - (old["value"] if old else 0.0), 1)
+        # A change has to be worth making: a real projected gain, from a
+        # player who is actually expected to score.
+        if new["value"] <= 0 or gain < 0.5:
+            continue
         changes.append({
             "slot": _slot_label(shown_slot), "start": _strip(new), "over": _strip(old) if old else None, "gain": gain,
             "why": _why(new, old, shown_slot, new.get("_grade")),
         })
     changes.sort(key=lambda c: -c["gain"])
     lineup = [{"slot": _slot_label(slot), "player": _strip(best[i]) if i in best else None} for i, slot in enumerate(slots)]
-    bench = sorted((_strip(c) for sid, c in cards.items() if sid not in best_set), key=lambda c: -c["value"])
+    # The bench lists who could still come in: a bench player whose game
+    # has started or finished is not a choice any more.
+    bench = sorted((_strip(c) for sid, c in cards.items() if sid not in best_set and not c["locked"]), key=lambda c: -c["value"])
     return {
         "league_id": league_id, "league_name": league.get("name") or "League", "season": season, "week": week,
         "changes": changes, "gain": round(best_total - cur_total, 1),
@@ -24460,7 +24493,7 @@ LINEUP_HTML = BASE_STYLE + make_header("league") + MU_STYLE + """
     <div class="lu-h3">{{ 'Your lineup after the changes' if plan.changes else 'Your lineup' }}</div>
     <div class="mu-card" style="padding-top:4px;">
       {% for r in plan.lineup %}
-      {% if r.player %}<a class="lu-row" href="/player?sid={{ r.player.sid }}"><span class="s">{{ r.slot }}</span><img src="{{ r.player.photo }}" alt="" onerror="this.style.visibility='hidden'"><span class="nm">{{ r.player.name }}</span>{% if r.player.value_note in ('questionable', 'doubtful', 'out', 'bye') %}<span class="tag">{{ r.player.value_note|capitalize }}</span>{% endif %}<span class="pr">{{ r.player.value }}</span>{% if r.player.grade %}<span class="lu-grade {{ r.player.grade_class }}">{{ r.player.grade }}</span>{% endif %}</a>
+      {% if r.player %}<a class="lu-row" href="/player?sid={{ r.player.sid }}"><span class="s">{{ r.slot }}</span><img src="{{ r.player.photo }}" alt="" onerror="this.style.visibility='hidden'"><span class="nm">{{ r.player.name }}</span>{% if r.player.locked %}<span class="tag" style="color:var(--ink-muted);">{{ 'Final' if r.player.phase == 'done' else 'Live' }} &middot; locked</span>{% elif r.player.value_note in ('questionable', 'doubtful', 'out', 'bye') %}<span class="tag">{{ r.player.value_note|capitalize }}</span>{% endif %}<span class="pr">{{ r.player.value }}</span>{% if r.player.grade %}<span class="lu-grade {{ r.player.grade_class }}">{{ r.player.grade }}</span>{% endif %}</a>
       {% else %}<div class="lu-row"><span class="s">{{ r.slot }}</span><span class="nm" style="color:var(--ink-muted);">Empty</span></div>{% endif %}
       {% endfor %}
     </div>
