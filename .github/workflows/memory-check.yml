@@ -2,12 +2,17 @@ name: Memory Check
 
 on:
   workflow_dispatch:
+    inputs:
+      shed:
+        description: "Also drop every cache (type yes) -- the lever to pull if the site is struggling"
+        default: "no"
 
 jobs:
   memory-check:
     runs-on: ubuntu-latest
     env:
       SITE_PASSWORD: ${{ secrets.SITE_PASSWORD }}
+      SHED: ${{ github.event.inputs.shed }}
     steps:
       - name: Ask the live server what it weighs
         run: |
@@ -15,10 +20,12 @@ jobs:
             echo "::error::SITE_PASSWORD repository secret is not set."
             exit 1
           fi
-          echo "--- /api/memory ---"
+          q=""
+          if [ "$SHED" = "yes" ]; then q="?shed=1"; fi
+          echo "--- /api/memory$q ---"
           body=$(curl -sS --fail-with-body --max-time 60 \
             -H "X-Sync-Secret: $SITE_PASSWORD" \
-            "https://fantasyfootballcalc.com/api/memory") || {
+            "https://fantasyfootballcalc.com/api/memory$q") || {
               echo "::error::request failed: $body"; exit 1; }
           echo "$body"
           case "$body" in *'"ok": false'*|*'"ok":false'*)

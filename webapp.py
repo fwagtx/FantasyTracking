@@ -16506,6 +16506,11 @@ def api_memory():
     """What the process weighs and what the caches are holding."""
     if not _secret_ok():
         return jsonify({"ok": False, "error": "unauthorized"}), 401
+    # ?shed=1 runs the guard's sweep by hand. Two reasons it exists:
+    # it proves the valve works on the live instance rather than only
+    # in a test, and it is the lever to pull if the site is ever
+    # struggling and nobody wants to wait for the fortieth request.
+    shed_now = shed_caches() if request.args.get("shed") == "1" else None
     players = 0
     try:
         players = len(get_all_players() or {})
@@ -16513,6 +16518,7 @@ def api_memory():
         pass
     return jsonify({
         "ok": True,
+        "shed_now": shed_now,
         "rss_mb": process_rss_mb(),
         # Render's smallest paid instance. Worth printing beside the
         # figure so the number means something without looking it up.
