@@ -1,0 +1,59 @@
+name: Send Alerts
+
+on:
+  schedule:
+    # Hourly. The app decides who gets what and when (see run_alerts in
+    # webapp.py): this job only asks it to look. That split is on purpose
+    # -- the send window, the deduplication and the opt-outs are all
+    # rules about football and consent, and neither belongs in a cron
+    # expression. A missed run costs an hour, never an alert, because
+    # nothing here is stateful.
+    - cron: "5 * * * *"
+  workflow_dispatch:
+    inputs:
+      dry:
+        description: "Build every alert and send none (1 to preview)."
+        required: false
+        type: string
+      week:
+        description: "Week to check. Blank for the current week."
+        required: false
+        type: string
+
+jobs:
+  send-alerts:
+    runs-on: ubuntu-latest
+    env:
+      SITE_PASSWORD: ${{ secrets.SITE_PASSWORD }}
+      EVENT_NAME: ${{ github.event_name }}
+      DRY_INPUT: ${{ github.event.inputs.dry }}
+      WEEK_INPUT: ${{ github.event.inputs.week }}
+    steps:
+      - name: Send the alerts that are due
+        run: |
+          # Same secret handling as every other scheduled job here: a
+          # scheduled run with no secret exits green with a notice
+          # rather than mailing a failure every hour for a condition
+          # only the repository owner can fix. A manual run says so
+          # loudly, because somebody is waiting on it.
+          if [ -z "$SITE_PASSWORD" ]; then
+            if [ "$EVENT_NAME" = "schedule" ]; then
+              echo "::notice::SITE_PASSWORD is not set, so this scheduled run has nothing to authenticate with -- skipping. Set the repository secret to turn alerts on."
+              exit 0
+            fi
+            echo "::error::SITE_PASSWORD repository secret is not set -- this job cannot authenticate."
+            exit 1
+          fi
+          url="https://fantasyfootballcalc.com/api/send-alerts"
+          sep="?"
+          if [ -n "$DRY_INPUT" ]; then url="$url${sep}dry=$DRY_INPUT"; sep="&"; fi
+          if [ -n "$WEEK_INPUT" ]; then url="$url${sep}week=$WEEK_INPUT"; fi
+          body=$(curl -sS --fail-with-body --max-time 240 -X POST \
+            -H "X-Sync-Secret: $SITE_PASSWORD" "$url") || {
+              echo "::error::send-alerts request failed: $body"; exit 1; }
+          echo "$body"
+          # The endpoint answers 200 with ok:false when it refused the
+          # request (a bad secret reads exactly like a good one to curl),
+          # so the body is what decides whether this run passed.
+          case "$body" in *'"ok": false'*|*'"ok":false'*)
+            echo "::error::server rejected the alert run: $body"; exit 1;; esac

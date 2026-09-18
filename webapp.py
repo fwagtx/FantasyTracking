@@ -260,7 +260,7 @@ TABBAR_SECTIONS = (
 # Where each path belongs. A prefix match, longest first.
 TABBAR_PATHS = (
     ("/rankings", "rankings"), ("/player", "rankings"), ("/trade-calculator", "rankings"),
-    ("/start-bench-cut", "rankings"), ("/streaks", "streaks"), ("/matchups", "matchups"), ("/lineup", "matchups"),
+    ("/start-bench-cut", "rankings"), ("/kickers-dst", "rankings"), ("/streaks", "streaks"), ("/matchups", "matchups"), ("/lineup", "matchups"), ("/waivers", "matchups"),
     ("/matchup", "scores"),
     ("/settings", "you"), ("/league", "you"), ("/league-manager", "you"), ("/plus", "you"), ("/pricing", "you"),
     ("/billing", "you"), ("/login", "you"), ("/signup", "you"), ("/forgot-password", "you"),
@@ -270,7 +270,7 @@ TABBAR_PATHS = (
 )
 # Which sections are myCalc+ once the gate is on: the calculator, with a
 # plus beside it, marks them in the menu and on the bar.
-PLUS_KEYS = ("lineup", "matchups", "streaks", "plus")
+PLUS_KEYS = ("lineup", "waivers", "matchups", "streaks", "plus")
 # The favicon's calculator (display bar, four keys) with a plus beside it.
 PLUS_MARK_SVG = ('<svg class="plus-mark" viewBox="0 0 30 26" aria-label="myCalc+" role="img">'
                  '<rect x="0" y="1" width="24" height="24" rx="5" fill="var(--accent)"/>'
@@ -647,6 +647,27 @@ def init_db():
             # When the username was last changed, so the cooldown has
             # something to measure from. NULL means never changed.
             cur.execute("ALTER TABLE users ADD COLUMN IF NOT EXISTS username_changed_at TIMESTAMP;")
+            # Which alerts an account wants. NULL means never chosen,
+            # which reads as on (see User.__init__) -- newsletter_opt_in
+            # remains the master switch the unsubscribe link throws.
+            cur.execute("ALTER TABLE users ADD COLUMN IF NOT EXISTS alert_lineup BOOLEAN;")
+            cur.execute("ALTER TABLE users ADD COLUMN IF NOT EXISTS alert_waivers BOOLEAN;")
+            # One row per alert actually sent. This is what stops the
+            # hourly job emailing the same reader the same warning
+            # twenty times before kickoff: the row is claimed BEFORE the
+            # message goes out, so two runs overlapping cannot both
+            # send, and it is released again if the send fails so a
+            # provider outage costs a delay rather than the alert.
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS sent_alerts (
+                    user_id    INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+                    kind       TEXT NOT NULL,
+                    dedupe_key TEXT NOT NULL,
+                    sent_at    TIMESTAMP DEFAULT NOW(),
+                    PRIMARY KEY (user_id, kind, dedupe_key)
+                );
+            """)
+            cur.execute("CREATE INDEX IF NOT EXISTS idx_sent_alerts_when ON sent_alerts (sent_at);")
             # Reset tokens are stored HASHED. A raw token in the table is
             # a password-equivalent secret sitting in plain text, and a
             # leaked backup would hand over every account with one open.
@@ -816,6 +837,12 @@ class User(UserMixin):
         self.avatar_version = row.get("avatar_version") or 0
         self.username_changed_at = row.get("username_changed_at")
         self.newsletter_opt_in = bool(row.get("newsletter_opt_in"))
+        # Alerts default ON for an account that has never chosen: an
+        # account made before these existed has NULL in both columns,
+        # and a reader who synced a league wants to be told his starter
+        # is out. The unsubscribe link still turns everything off.
+        self.alert_lineup = row.get("alert_lineup") is not False
+        self.alert_waivers = row.get("alert_waivers") is not False
 
 
 @login_manager.user_loader
@@ -4868,6 +4895,101 @@ def compute_idp_points(stats):
     return round(points, 1)
 
 
+# A team defence is the one fantasy player whose Sleeper id is not a
+# number: it is the club's own abbreviation. That is what makes one
+# identifiable in a stat feed which carries no position at all.
+#
+# Built from NFL_DIVISIONS on first use rather than written out again --
+# that map is defined further down the file, and one list of the 32
+# clubs that cannot drift out of step with another is worth the
+# indirection.
+_dst_ids_cache = set()
+
+
+def is_dst_id(player_id):
+    """True for "DET", false for "6794"."""
+    if not _dst_ids_cache:
+        _dst_ids_cache.update(NFL_DIVISIONS)
+    return str(player_id or "").upper() in _dst_ids_cache
+
+
+# Points allowed, and what a defence scores for them: the tiers nearly
+# every league runs, and Sleeper's own defaults. A shutout is worth ten;
+# a defence that gives up 35 costs you four.
+DST_PTS_ALLOWED_TIERS = ((0, 10), (6, 7), (13, 4), (20, 1), (27, 0), (34, -1))
+DST_PTS_ALLOWED_WORST = -4
+# Sleeper also publishes the tier as a flag -- one of these keys set to
+# 1. Read only when the plain number is missing, so a feed that changes
+# shape costs a decimal place rather than the whole row.
+DST_TIER_KEYS = (("pts_allow_0", 10), ("pts_allow_1_6", 7), ("pts_allow_7_13", 4),
+                 ("pts_allow_14_20", 1), ("pts_allow_21_27", 0), ("pts_allow_28_34", -1),
+                 ("pts_allow_35p", -4))
+# Each line is (the keys to try, points each). Several spellings per
+# stat because Sleeper writes a defence's sack as "sack" and a
+# defender's as "def_sack", and neither is documented.
+DST_WEIGHTS = (
+    (("sack", "def_sack"), 1.0),
+    (("int", "def_int"), 2.0),
+    (("fum_rec", "def_fr"), 2.0),
+    (("def_td",), 6.0),
+    (("st_td", "def_st_td"), 6.0),
+    (("safe", "def_safe", "def_safety"), 2.0),
+    (("blk_kick", "def_st_blk_kick"), 2.0),
+    (("def_2pt", "def_st_2pt"), 2.0),
+)
+
+
+def _stat_of(stats, keys):
+    """The first of these keys the stat line actually carries a number
+    for. Zero when it carries none."""
+    for key in keys:
+        value = stats.get(key)
+        if isinstance(value, (int, float)) and value:
+            return float(value)
+    return 0.0
+
+
+def dst_points_allowed_score(stats):
+    """What a defence scores for what it gave up: from the plain number
+    when the feed carries one, from Sleeper's tier flag when it does not.
+
+    None when neither is present, which is emphatically not zero -- zero
+    points allowed is a shutout, and worth ten."""
+    allowed = stats.get("pts_allow")
+    if isinstance(allowed, (int, float)):
+        for ceiling, points in DST_PTS_ALLOWED_TIERS:
+            if allowed <= ceiling:
+                return float(points)
+        return float(DST_PTS_ALLOWED_WORST)
+    for key, points in DST_TIER_KEYS:
+        if stats.get(key):
+            return float(points)
+    return None
+
+
+def compute_dst_points(stats):
+    """Fantasy points for a team defence and special teams, from its raw
+    Sleeper stat line.
+
+    Scored here rather than taken from the feed's own total because a
+    defence is the one position whose points are mostly a function of
+    what it ALLOWED, and that is exactly the part a partial in-progress
+    line leaves out. Returns None when the line carries no defensive
+    signal at all, so an offensive player missing his points total is
+    never mistaken for a defence that scored nothing."""
+    if not isinstance(stats, dict):
+        return None
+    allowed = dst_points_allowed_score(stats)
+    total = 0.0 if allowed is None else allowed
+    signal = allowed is not None
+    for keys, weight in DST_WEIGHTS:
+        value = _stat_of(stats, keys)
+        if value:
+            signal = True
+            total += value * weight
+    return round(total, 2) if signal else None
+
+
 def fetch_week_stats_from_sleeper(season, week):
     """{pid: {pts, rec, off_snp, tm_off_snp, stats}} for one week, from
     Sleeper. Empty on any failure -- a week that could not be read is a
@@ -4900,6 +5022,11 @@ def fetch_week_stats_from_sleeper(season, week):
         if not pid or not isinstance(stats, dict):
             continue
         pts = stats.get("pts_ppr")
+        if pts is None and is_dst_id(pid):
+            # A team defence first: its id is its club, and its scoring
+            # is nothing like a defender's. Read as one, a shutout came
+            # out as a handful of tackles.
+            pts = compute_dst_points(stats)
         if pts is None:
             pts = compute_idp_points(stats)
             if pts is None:
@@ -7137,6 +7264,7 @@ SETTINGS_SECTIONS = [
     ("theme", "Theme"),
     ("leagues", "Leagues"),
     ("plan", "myCalc+"),
+    ("alerts", "Alerts"),
     ("email", "Email"),
     ("account", "Account"),
 ]
@@ -7161,9 +7289,23 @@ def settings_summaries(league_count):
         "leagues": ("No leagues synced yet" if not league_count
                     else f"{league_count} league{'s' if league_count != 1 else ''} synced"),
         "plan": _plan_summary_line(current_user),
+        "alerts": _alerts_summary_line(current_user),
         "email": ("Updates on" if current_user.newsletter_opt_in else "Updates off"),
         "account": current_user.email or "Signed in",
     }
+
+
+def _alerts_summary_line(user):
+    """What the Alerts row says without being opened."""
+    # getattr with a default, like every other preference read on this
+    # screen: a user object is not always the full row (a fake one in a
+    # test, a stale session), and a settings page that raises over a
+    # missing checkbox is a 500 where a default would do.
+    if not getattr(user, "newsletter_opt_in", True):
+        return "Off \u2014 you are unsubscribed"
+    on = [label for label, want in (("Lineup", getattr(user, "alert_lineup", True)),
+                                    ("Waivers", getattr(user, "alert_waivers", True))) if want]
+    return " \u00b7 ".join(on) if on else "Both off"
 
 
 def _label_for(pairs, key):
@@ -7322,6 +7464,12 @@ def settings_page(section=None):
         # itself then means ticked or not.
         if "newsletter_present" in request.form:
             updates["newsletter_opt_in"] = bool(request.form.get("newsletter_opt_in"))
+        # Same marker trick as the newsletter box, for the same reason:
+        # an unticked checkbox submits nothing, so the screen has to say
+        # it owns the setting.
+        if "alerts_present" in request.form:
+            updates["alert_lineup"] = bool(request.form.get("alert_lineup"))
+            updates["alert_waivers"] = bool(request.form.get("alert_waivers"))
 
         if updates and not error:
             try:
@@ -7365,7 +7513,7 @@ def export_account_data(user_id):
     and "your data" does not mean "the thing that protects your data"."""
     out = {
         "exported_at": datetime.utcnow().isoformat() + "Z",
-        "account": {}, "synced_leagues": [], "votes": [], "avatar": None,
+        "account": {}, "synced_leagues": [], "votes": [], "alerts_sent": [], "avatar": None,
     }
     conn = get_db()
     try:
@@ -7373,7 +7521,8 @@ def export_account_data(user_id):
             cur.execute(
                 "SELECT id, email, username, oauth_provider, referral_code, "
                 "newsletter_opt_in, is_member, created_at, username_changed_at, "
-                "pref_format, pref_mode, pref_scoring, pref_theme, pref_accent "
+                "pref_format, pref_mode, pref_scoring, pref_theme, pref_accent, "
+                "alert_lineup, alert_waivers "
                 "FROM users WHERE id = %s", (user_id,))
             row = cur.fetchone() or {}
             out["account"] = {k: (v.isoformat() if hasattr(v, "isoformat") else v)
@@ -7381,6 +7530,11 @@ def export_account_data(user_id):
             cur.execute("SELECT league_id FROM synced_leagues WHERE user_id = %s",
                         (user_id,))
             out["synced_leagues"] = [r["league_id"] for r in cur.fetchall()]
+            cur.execute("SELECT kind, sent_at FROM sent_alerts WHERE user_id = %s "
+                        "ORDER BY sent_at", (user_id,))
+            out["alerts_sent"] = [{"kind": r["kind"],
+                                   "sent_at": r["sent_at"].isoformat() if r["sent_at"] else None}
+                                  for r in cur.fetchall()]
             cur.execute("SELECT sleeper_id, player_name, position, label, created_at "
                         "FROM votes WHERE user_id = %s ORDER BY created_at", (user_id,))
             out["votes"] = [
@@ -7425,6 +7579,7 @@ def delete_account(user_id):
             cur.execute("DELETE FROM synced_leagues WHERE user_id = %s", (user_id,))
             cur.execute("DELETE FROM user_avatars WHERE user_id = %s", (user_id,))
             cur.execute("DELETE FROM draft_entries WHERE user_id = %s", (user_id,))
+            cur.execute("DELETE FROM sent_alerts WHERE user_id = %s", (user_id,))
             cur.execute("DELETE FROM users WHERE id = %s", (user_id,))
             removed = cur.rowcount
         conn.commit()
@@ -8658,6 +8813,865 @@ def api_debug_projections():
                         "sample": sample})
     except Exception as e:
         return jsonify({"ok": False, "error": str(e)}), 502
+
+
+# --- Alerts by email --------------------------------------------------------
+#
+# Two messages, both about a decision with a deadline: your lineup has a
+# problem and kickoff is close, and waivers are open with somebody worth
+# claiming. Nothing else is ever emailed from here.
+#
+# The whole thing is driven by one scheduled job hitting /api/send-alerts
+# every hour (see .github/workflows/send-alerts.yml). That job holds no
+# state and decides nothing: every rule about who gets what, and when,
+# lives in this file, so the schedule can be changed without changing
+# behaviour and a missed run costs an hour rather than an alert.
+#
+# Three rules, and every one of them is enforced here rather than trusted
+# to a caller:
+#   1. A reader who has unsubscribed gets nothing, whatever the switches
+#      below say. newsletter_opt_in is the master.
+#   2. The same alert is never sent twice. The sent_alerts row is claimed
+#      before the message goes out and released if it fails to send.
+#   3. An alert with nothing to say is not sent. No "your lineup is fine"
+#      email exists.
+ALERT_KINDS = ("lineup", "waivers")
+# How close to kickoff a lineup problem is worth an email. Wide enough to
+# catch a Friday-evening injury ruling for a Sunday game, narrow enough
+# that a problem found on Tuesday does not mail every hour until then.
+LINEUP_ALERT_LEAD_HOURS = 36
+# A swap the optimizer likes by less than this is not worth an email. The
+# Lineup page still shows it.
+LINEUP_ALERT_MIN_GAIN = 2.0
+# How many accounts one run will work through. A ceiling, not a target:
+# each account costs a few cached Sleeper reads.
+ALERT_RUN_LIMIT = 200
+# And how long the whole pass may take. The scheduled job waits four
+# minutes for an answer, so the pass stops itself before that rather
+# than being cut off mid-send with nobody to report it. Whatever it did
+# not reach this hour it reaches the next one: nothing here is stateful,
+# and an alert already sent is claimed, so a repeat pass re-sends
+# nothing.
+ALERT_RUN_SECONDS = 180
+
+
+def _alert_dedupe(*parts):
+    """A short, stable key for one alert. Built from what the alert
+    actually SAYS, so a new problem sends a new email and an unchanged
+    one never sends a second."""
+    raw = "|".join(str(p) for p in parts)
+    return hashlib.sha256(raw.encode()).hexdigest()[:24]
+
+
+def claim_alert(user_id, kind, dedupe_key):
+    """True the first time this exact alert is claimed for this reader.
+
+    The row goes in before the email goes out, so two runs overlapping
+    cannot both send it."""
+    if not DATABASE_URL:
+        return False
+    conn = get_db()
+    try:
+        with conn.cursor() as cur:
+            cur.execute(
+                "INSERT INTO sent_alerts (user_id, kind, dedupe_key) VALUES (%s, %s, %s) "
+                "ON CONFLICT DO NOTHING", (int(user_id), kind, dedupe_key))
+            claimed = cur.rowcount == 1
+        conn.commit()
+        return claimed
+    except Exception:
+        app.logger.exception("could not claim %s alert for %s", kind, user_id)
+        return False
+    finally:
+        conn.close()
+
+
+def release_alert(user_id, kind, dedupe_key):
+    """Give the claim back, so a send that failed is retried on the next
+    run instead of being remembered as delivered."""
+    if not DATABASE_URL:
+        return
+    conn = get_db()
+    try:
+        with conn.cursor() as cur:
+            cur.execute("DELETE FROM sent_alerts WHERE user_id = %s AND kind = %s AND dedupe_key = %s",
+                        (int(user_id), kind, dedupe_key))
+        conn.commit()
+    except Exception:
+        app.logger.exception("could not release %s alert for %s", kind, user_id)
+    finally:
+        conn.close()
+
+
+def _kickoff_dt(value):
+    """A card's kickoff string as a naive UTC datetime, or None."""
+    if not value:
+        return None
+    try:
+        return _as_naive_utc(datetime.fromisoformat(str(value).strip().replace("Z", "+00:00")))
+    except (ValueError, TypeError):
+        return None
+
+
+def next_kickoff(plan):
+    """When the first game a reader can still do something about starts.
+
+    Only players who are not already locked count: a starter whose game
+    has kicked off cannot be changed, so his kickoff is not a deadline
+    any more."""
+    soonest = None
+    for row in (plan or {}).get("lineup") or []:
+        player = row.get("player")
+        if not player or player.get("locked"):
+            continue
+        when = _kickoff_dt(((player.get("game") or {}).get("kickoff")))
+        if when and (soonest is None or when < soonest):
+            soonest = when
+    return soonest
+
+
+def lineup_problems(plan):
+    """What is wrong with this lineup, worst first.
+
+    Each problem is (code, sentence). The code identifies the problem for
+    deduplication -- it is what decides whether an email is new -- and the
+    sentence is what the reader reads."""
+    problems = []
+    for row in (plan or {}).get("lineup") or []:
+        slot, player = row.get("slot"), row.get("player")
+        if not player:
+            problems.append((f"empty:{slot}", f"Your {slot} slot is empty."))
+            continue
+        if player.get("locked"):
+            continue
+        note = player.get("value_note")
+        if note == "out":
+            title = ((player.get("injury") or {}).get("title") or "out").lower()
+            problems.append((f"out:{player['sid']}", f"{player['name']} is starting at {slot} and is {title}."))
+        elif note == "bye":
+            problems.append((f"bye:{player['sid']}", f"{player['name']} is starting at {slot} and is on bye."))
+        elif note in ("backup", "no_proj"):
+            problems.append((f"noproj:{player['sid']}",
+                             f"{player['name']} is starting at {slot} and nobody projects him to score."))
+    for change in (plan or {}).get("changes") or []:
+        if change.get("gain", 0) < LINEUP_ALERT_MIN_GAIN:
+            continue
+        over = (change.get("over") or {}).get("short") or "an empty slot"
+        problems.append((f"swap:{change['start']['sid']}:{over}",
+                         f"{change['start']['short']} projects {change['gain']} more than {over} at {change['slot']}."))
+    return problems
+
+
+def build_lineup_alert(league, user_id, season, week, now=None):
+    """The lineup email for one league, or None when there is nothing to
+    send: no problems, no deadline near, or no lineup at all."""
+    plan = build_lineup_plan(league, user_id, season, week)
+    if not plan or not plan.get("lineup_set"):
+        return None
+    problems = lineup_problems(plan)
+    if not problems:
+        return None
+    kickoff = next_kickoff(plan)
+    if not kickoff:
+        return None
+    now = now or datetime.utcnow()
+    hours = (kickoff - now).total_seconds() / 3600.0
+    # Already started, or still days away: not a deadline to email about.
+    if hours <= 0 or hours > LINEUP_ALERT_LEAD_HOURS:
+        return None
+    codes = sorted(code for code, _ in problems)
+    return {
+        "kind": "lineup",
+        "league_id": plan["league_id"], "league_name": plan["league_name"],
+        "season": season, "week": week,
+        "problems": problems, "hours": round(hours, 1), "kickoff": kickoff,
+        "gain": plan.get("gain"), "plan": plan,
+        "dedupe": _alert_dedupe("lineup", plan["league_id"], season, week, *codes),
+    }
+
+
+def build_waiver_alert(league, user_id, season, week):
+    """The waiver email for one league, or None.
+
+    Sent once a week, when the week's football is over and a claim can
+    actually be made -- which is what waiver_target_week already knows."""
+    plan = build_waiver_targets(league, user_id, season, week)
+    if not plan or not plan.get("next_week"):
+        return None
+    targets = [t for t in plan.get("targets") or [] if not t.get("stash")][:5]
+    if not targets:
+        return None
+    return {
+        "kind": "waivers",
+        "league_id": plan["league_id"], "league_name": plan["league_name"],
+        "season": season, "week": plan["week"],
+        "targets": targets, "drop": plan.get("drop"), "plan": plan,
+        # One per league per week, however many times the job runs.
+        "dedupe": _alert_dedupe("waivers", plan["league_id"], season, plan["week"]),
+    }
+
+
+def _alert_button(href, label):
+    return (f'<p><a href="{href}" style="background:#b97a1f;color:#fff8ec;padding:11px 22px;'
+            f'border-radius:99px;text-decoration:none;font-weight:700;display:inline-block;">'
+            f'{html.escape(label)}</a></p>')
+
+
+def render_lineup_alert(alert, username):
+    """(subject, text, html) for a lineup alert."""
+    league = alert["league_name"]
+    count = len(alert["problems"])
+    subject = (f"Lineup alert: {count} thing{'' if count == 1 else 's'} to fix in {league}"
+               f" before kickoff")
+    lines = [f"{sentence}" for _code, sentence in alert["problems"]]
+    link = f"{SITE_URL}/lineup?league={alert['league_id']}"
+    text = (f"Hi {username},\n\n"
+            f"Week {alert['week']} in {league} kicks off in about {int(round(alert['hours']))} hours, "
+            f"and your lineup has {count} thing{'' if count == 1 else 's'} worth a look:\n\n"
+            + "\n".join(f"  - {line}" for line in lines)
+            + f"\n\nSee the whole lineup, and what to do about it:\n{link}\n")
+    body = (f'<p>Hi {html.escape(str(username))},</p>'
+            f'<p>Week {alert["week"]} in <b>{html.escape(league)}</b> kicks off in about '
+            f'{int(round(alert["hours"]))} hours, and your lineup has '
+            f'{count} thing{"" if count == 1 else "s"} worth a look:</p>'
+            '<ul style="line-height:1.7;">'
+            + "".join(f"<li>{html.escape(line)}</li>" for line in lines)
+            + "</ul>" + _alert_button(link, "Open your lineup"))
+    return subject, text, body
+
+
+def render_waiver_alert(alert, username):
+    """(subject, text, html) for a waiver alert."""
+    league = alert["league_name"]
+    best = alert["targets"][0]
+    subject = f"Waivers are open in {league}: {best['name']} leads {len(alert['targets'])} targets"
+    link = f"{SITE_URL}/waivers?league={alert['league_id']}"
+    rows = [f"{t['position']} {t['name']} ({t['team']}) - score {t['score']}. {t['why']}"
+            for t in alert["targets"]]
+    drop = alert.get("drop")
+    drop_line = (f"\n\nRoom for one: {drop['name']} is the weakest player on your bench."
+                 if drop else "")
+    text = (f"Hi {username},\n\n"
+            f"Week {alert['season']} week {alert['week']} waivers in {league}. "
+            f"The best free agents on the board:\n\n"
+            + "\n".join(f"  {i}. {row}" for i, row in enumerate(rows, 1))
+            + drop_line
+            + f"\n\nSee the full list:\n{link}\n")
+    items = "".join(
+        f'<li style="margin-bottom:8px;"><b>{html.escape(t["name"])}</b> '
+        f'<span style="color:#666;">{html.escape(str(t["position"]))} &middot; {html.escape(str(t["team"] or ""))} '
+        f'&middot; score {t["score"]}</span><br>'
+        f'<span style="color:#666;font-size:13px;">{html.escape(t["why"])}</span></li>'
+        for t in alert["targets"])
+    body = (f'<p>Hi {html.escape(str(username))},</p>'
+            f'<p>Waivers for week {alert["week"]} in <b>{html.escape(league)}</b>. '
+            f'The best free agents on the board:</p>'
+            f'<ol style="line-height:1.6;">{items}</ol>'
+            + (f'<p style="color:#666;font-size:13px;">Room for one: '
+               f'<b>{html.escape(drop["name"])}</b> is the weakest player on your bench.</p>' if drop else "")
+            + _alert_button(link, "See your waiver targets"))
+    return subject, text, body
+
+
+ALERT_RENDERERS = {"lineup": render_lineup_alert, "waivers": render_waiver_alert}
+
+
+def alert_recipients(limit=None):
+    """Every account that could get an alert: has an email, has not
+    unsubscribed, has a Sleeper username, and wants at least one kind.
+
+    The switches are filtered here rather than per-alert so an account
+    that wants nothing costs no Sleeper calls at all."""
+    if not DATABASE_URL:
+        return []
+    conn = get_db()
+    try:
+        with conn.cursor() as cur:
+            cur.execute(
+                """SELECT id, email, username, sleeper_username,
+                          COALESCE(alert_lineup, TRUE) AS alert_lineup,
+                          COALESCE(alert_waivers, TRUE) AS alert_waivers
+                     FROM users
+                    WHERE email IS NOT NULL AND email <> ''
+                      AND COALESCE(newsletter_opt_in, TRUE)
+                      AND sleeper_username IS NOT NULL AND sleeper_username <> ''
+                      AND (COALESCE(alert_lineup, TRUE) OR COALESCE(alert_waivers, TRUE))
+                 ORDER BY id
+                    LIMIT %s""",
+                (int(limit or ALERT_RUN_LIMIT),))
+            return [dict(r) for r in cur.fetchall()]
+    except Exception:
+        app.logger.exception("could not read alert recipients")
+        return []
+    finally:
+        conn.close()
+
+
+def _leagues_for_user(row):
+    """The synced leagues of one account, by its stored Sleeper username."""
+    try:
+        user_id, _name = get_user_id(row["sleeper_username"])
+    except Exception:
+        return None, []
+    if not user_id:
+        return None, []
+    synced = get_synced_league_ids(row["id"]) or set()
+    if not synced:
+        return user_id, []
+    try:
+        leagues = get_leagues(user_id, SEASON) or []
+    except Exception:
+        return user_id, []
+    return user_id, [lg for lg in leagues if lg.get("league_id") in synced]
+
+
+def alerts_for_user(row, season, week, now=None):
+    """Every alert this account should get right now, across its
+    leagues. Reads only; sends nothing."""
+    sleeper_id, leagues = _leagues_for_user(row)
+    if not sleeper_id or not leagues:
+        return []
+    out = []
+    for league in leagues:
+        if row.get("alert_lineup"):
+            try:
+                alert = build_lineup_alert(league, sleeper_id, season, week, now=now)
+            except Exception:
+                app.logger.exception("lineup alert failed for %s", row["id"])
+                alert = None
+            if alert:
+                out.append(alert)
+        if row.get("alert_waivers"):
+            try:
+                alert = build_waiver_alert(league, sleeper_id, season, week)
+            except Exception:
+                app.logger.exception("waiver alert failed for %s", row["id"])
+                alert = None
+            if alert:
+                out.append(alert)
+    return out
+
+
+def send_alert(row, alert, dry=False):
+    """One alert to one reader. Returns what happened: "sent",
+    "duplicate", "dry", or a failure reason.
+
+    The claim comes first and is given back when the send fails, so the
+    only thing a mail outage costs is an hour."""
+    username = row.get("username") or "there"
+    render = ALERT_RENDERERS.get(alert["kind"])
+    if not render:
+        return "unknown kind"
+    subject, text, body = render(alert, username)
+    footer_text, footer_html = _email_footer(row["id"])
+    if dry:
+        return "dry"
+    if not claim_alert(row["id"], alert["kind"], alert["dedupe"]):
+        return "duplicate"
+    sent, reason = send_email_reason(row["email"], subject, text + footer_text, body + footer_html)
+    if not sent:
+        release_alert(row["id"], alert["kind"], alert["dedupe"])
+        return reason or "not sent"
+    return "sent"
+
+
+def run_alerts(season=None, week=None, limit=None, dry=False, now=None):
+    """One pass over every account that could get an alert. Returns a
+    summary the scheduled job can read at a glance."""
+    info = get_current_week_info()
+    season = _safe_int(season if season is not None else info["season"], int(SEASON))
+    week = _safe_int(week if week is not None else info["week"], 1)
+    now = now or datetime.utcnow()
+    summary = {"season": season, "week": week, "checked": 0, "sent": 0, "duplicates": 0,
+               "failed": 0, "dry": bool(dry), "stopped_early": False, "alerts": []}
+    deadline = time.time() + ALERT_RUN_SECONDS
+    for row in alert_recipients(limit):
+        if time.time() > deadline:
+            # Out of time, not out of readers. Said plainly, because a
+            # run that quietly did half its work looks exactly like one
+            # that had half as much to do.
+            summary["stopped_early"] = True
+            break
+        summary["checked"] += 1
+        for alert in alerts_for_user(row, season, week, now=now):
+            result = send_alert(row, alert, dry=dry)
+            if result == "sent":
+                summary["sent"] += 1
+            elif result == "duplicate":
+                summary["duplicates"] += 1
+            elif result != "dry":
+                summary["failed"] += 1
+            summary["alerts"].append({
+                "user_id": row["id"], "kind": alert["kind"],
+                "league": alert["league_name"], "result": result,
+                "detail": (len(alert.get("problems") or []) if alert["kind"] == "lineup"
+                           else len(alert.get("targets") or [])),
+            })
+    return summary
+
+
+@app.route("/api/send-alerts", methods=["GET", "POST"])
+def api_send_alerts():
+    """The scheduled job's one entry point. Runs the whole pass and
+    reports it; `dry=1` builds every alert and sends none, which is how
+    this is checked on the live server without mailing anybody."""
+    if not _secret_ok():
+        return jsonify({"ok": False, "error": "unauthorized"}), 401
+    dry = request.args.get("dry") in ("1", "true", "yes")
+    try:
+        summary = run_alerts(
+            season=request.args.get("season", type=int),
+            week=request.args.get("week", type=int),
+            limit=request.args.get("limit", type=int),
+            dry=dry)
+    except Exception as e:
+        app.logger.exception("alert run failed")
+        return jsonify({"ok": False, "error": str(e)}), 500
+    return jsonify({"ok": True, **summary})
+
+
+# --- Waiver targets ---------------------------------------------------------
+#
+# Who is free in your league and worth adding. Everything here is read
+# from data the site already holds: the league's rosters say who is
+# taken, the stat table says what a player has been doing lately, and
+# Sleeper's projections say what he is expected to do next.
+#
+# Two rules decide the whole page, and both come from what went wrong on
+# the Lineup before it: a player is only a target if he is actually
+# available and actually playing, and no number on the row is invented.
+# A player nobody projects and who has not played is not ranked at all.
+WAIVER_FORM_GAMES = 3
+# What the two halves of a target's score weigh. Recent form leads
+# because it is what has actually happened; the projection follows
+# because it is the only part that knows about this week's opponent.
+WAIVER_FORM_WEIGHT = 0.6
+WAIVER_PROJ_WEIGHT = 0.4
+WAIVER_LIST_SIZE = 12
+# A target has to be worth the claim. Below this, a week's points are
+# inside the noise of any bench player already on the roster.
+WAIVER_MIN_SCORE = 4.0
+# Positions worth listing, in the order the page groups them.
+WAIVER_POSITIONS = ("QB", "RB", "WR", "TE", "K", "DEF")
+
+
+def waiver_target_week(season, week):
+    """The week a claim made now would actually be for.
+
+    Waivers clear in midweek, so once every game of the current week is
+    final the useful question is already about the next one. Asking the
+    scoreboard rather than the calendar means this is right in a week
+    moved for weather as well as an ordinary one."""
+    try:
+        games = live_team_games(season, week) or {}
+    except Exception:
+        return week
+    if not games:
+        return week
+    if all((g or {}).get("status") == "final" for g in games.values()):
+        return week + 1
+    return week
+
+
+def _rostered_ids(rosters):
+    """Every player id held by anyone in the league, bench, injured
+    reserve and taxi squad included. A player stashed on someone's IR is
+    not a free agent, and listing him as one sends the reader to a claim
+    that cannot be made."""
+    taken = set()
+    for roster in rosters or []:
+        for key in ("players", "starters", "reserve", "taxi"):
+            for sid in (roster.get(key) or []):
+                if sid and sid not in ("0", 0):
+                    taken.add(sid)
+    return taken
+
+
+def _league_positions(league):
+    """Which positions this league can actually start, so a two-quarterback
+    league sees quarterbacks and a league with no kicker slot never sees a
+    kicker."""
+    wanted = set()
+    for slot in _lineup_slots(league):
+        for pos in SLOT_ELIGIBLE.get(slot, (slot,)):
+            wanted.add(pos)
+    return {p for p in WAIVER_POSITIONS if p in wanted} or set(WAIVER_POSITIONS)
+
+
+def _waiver_score(form, proj):
+    """What a free agent is worth adding, from what he has been doing and
+    what he is projected to do. Both halves are printed on the row, so
+    this number can always be checked against them."""
+    return round(WAIVER_FORM_WEIGHT * (form or 0.0) + WAIVER_PROJ_WEIGHT * (proj or 0.0), 1)
+
+
+def _waiver_reason(row):
+    """One plain sentence for why this player is on the list."""
+    bits = []
+    if row["form"] and row["form_games"]:
+        bits.append(f"{row['form']} a game over his last {row['form_games']}")
+    # Snap share is a fact about a player on the field. A defence is the
+    # whole unit and a kicker is never on a snap count, so neither gets a
+    # percentage that would read as one.
+    if row["snap_pct"] and row["position"] not in ("K", "DEF"):
+        bits.append(f"{row['snap_pct']}% of his team's snaps")
+    if row["rank_label"]:
+        bits.append(f"{row['rank_label']} on the season")
+    if row["proj"]:
+        opponent = f" against {row['opponent']}" if row.get("opponent") else ""
+        bits.append(f"projected {row['proj']}{opponent}")
+    if row["injury"] and row["injury"].get("title"):
+        bits.append(row["injury"]["title"].lower())
+    if not bits:
+        return ""
+    sentence = "; ".join(bits)
+    return sentence[0].upper() + sentence[1:] + "."
+
+
+def build_waiver_targets(league, user_id, season, week):
+    """The best free agents in one league, and the weakest player on the
+    reader's own roster to make room with.
+
+    None when the reader has no team in the league."""
+    league_id = league["league_id"]
+    rosters = get_rosters(league_id) or []
+    mine = next((r for r in rosters if r.get("owner_id") == user_id), None)
+    if mine is None:
+        return None
+    all_players = get_all_players() or {}
+    scoring = league.get("scoring_settings") or {}
+    target_week = waiver_target_week(season, week)
+    projections = get_week_projections(season, target_week)
+    season_stats = get_season_stats(season) or {}
+    taken = _rostered_ids(rosters)
+    positions = _league_positions(league)
+    try:
+        live = live_team_games(season, target_week) or {}
+    except Exception:
+        live = {}
+    espn_injuries_by_sid = _espn_injury_by_sid()
+
+    rows = []
+    for sid, p in all_players.items():
+        if sid in taken or not isinstance(p, dict):
+            continue
+        position = p.get("position")
+        if position not in positions:
+            continue
+        # No club means nobody's free agent -- he is out of the league.
+        team = p.get("team")
+        if not team:
+            continue
+        # A player his own club is not playing is not an add. The one
+        # exception is a defence, which has no depth chart at all.
+        if position != "DEF" and not streak_is_starter(p) and position != "K":
+            depth = _safe_int(p.get("depth_chart_order"), 0)
+            limit = STREAK_DEPTH.get(streak_position_group(position)) or 0
+            if depth and limit and depth > limit + 1:
+                continue
+        injury = _merged_injury(p, espn_injuries_by_sid.get(sid))
+        # No feed for the target week means no projection, not a stand-in
+        # recent average: that is the very number the form column already
+        # carries, and counting it twice would dress one fact up as two.
+        proj = 0.0
+        if projections:
+            proj, _source = _player_projection(sid, position, projections, scoring,
+                                               season, target_week, None, None)
+        recent = _player_recent_games(sid, season, WAIVER_FORM_GAMES)
+        form = (recent or {}).get("avg") or 0.0
+        # Nothing to show and nothing expected: not a target, and never a
+        # row of zeroes on the page.
+        if not form and not proj:
+            continue
+        score = _waiver_score(form, proj)
+        if score < WAIVER_MIN_SCORE:
+            continue
+        stat_line = season_stats.get(sid) or {}
+        game = live.get(team) or {}
+        row = {
+            "sid": sid, "position": position, "team": team,
+            "name": f"{p.get('first_name', '')} {p.get('last_name', '')}".strip() or sid,
+            "short": f"{(p.get('first_name') or ' ')[0]}. {p.get('last_name', '')}".strip(),
+            "photo": team_logo_url(team) if position == "DEF" else player_photo_url(sid),
+            "is_team": position == "DEF",
+            "form": round(form, 1), "form_games": (recent or {}).get("games") or 0,
+            "proj": round(proj, 1), "score": score,
+            "snap_pct": stat_line.get("snap_pct"),
+            "games": stat_line.get("games") or 0,
+            "rank_label": kdst_rank_label(sid, position, season),
+            "opponent": game.get("opp"),
+            "injury": injury,
+            # An injured player can still be the right claim -- as a
+            # stash, which is a different decision, and labelled as one.
+            "stash": bool(injury and injury.get("tier") in ("out", "doubtful", "admin")),
+        }
+        row["why"] = _waiver_reason(row)
+        rows.append(row)
+
+    # The healthy ones first, best score first; a stash is worth listing
+    # but never above a player who can help this week.
+    rows.sort(key=lambda r: (r["stash"], -r["score"], -(r["snap_pct"] or 0)))
+    targets = rows[:WAIVER_LIST_SIZE]
+
+    # Who to drop for them: the weakest player on the roster who is not
+    # in the lineup, by the same score the targets are ranked on, so the
+    # two numbers are comparable.
+    starters = {s for s in (mine.get("starters") or []) if s and s not in ("0", 0)}
+    bench = []
+    for sid in (mine.get("players") or []):
+        if sid in starters:
+            continue
+        p = all_players.get(sid) or {}
+        proj = 0.0
+        if projections:
+            proj, _source = _player_projection(sid, p.get("position"), projections, scoring,
+                                               season, target_week, None, None)
+        recent = _player_recent_games(sid, season, WAIVER_FORM_GAMES)
+        form = (recent or {}).get("avg") or 0.0
+        bench.append({
+            "sid": sid, "name": f"{p.get('first_name', '')} {p.get('last_name', '')}".strip() or sid,
+            "short": f"{(p.get('first_name') or ' ')[0]}. {p.get('last_name', '')}".strip(),
+            "position": p.get("position"), "team": p.get("team"),
+            "photo": team_logo_url(p.get("team")) if p.get("position") == "DEF" else player_photo_url(sid),
+            "form": round(form, 1), "proj": round(proj, 1), "score": _waiver_score(form, proj),
+        })
+    bench.sort(key=lambda b: b["score"])
+    drop = bench[0] if bench else None
+
+    return {
+        "league_id": league_id, "league_name": league.get("name") or "League",
+        "season": season, "week": target_week, "asked_week": week,
+        "next_week": target_week != week,
+        "targets": targets, "drop": drop,
+        "free_agents": len(rows), "positions": sorted(positions),
+        "projections_available": bool(projections),
+        "sleeper_url": f"https://sleeper.com/leagues/{league_id}/players",
+    }
+
+
+@app.route("/waivers")
+def waivers_page():
+    """The best free agents in your league. myCalc+ (sign-in while the
+    gate is off), same as the Lineup."""
+    username, user_id, leagues = _account_leagues_for_pages()
+    info = get_current_week_info()
+    week = request.args.get("week", default=info["week"], type=int)
+    season = info["season"]
+    league = _pick_league(leagues)
+    unlocked = plus_unlocked()
+    plan, error = None, None
+    if unlocked and league and user_id:
+        try:
+            ensure_schedule_synced(season)
+            plan = build_waiver_targets(league, user_id, season, week)
+            if plan is None:
+                error = "You don't have a team in that league."
+        except Exception as e:
+            app.logger.warning("waivers page: %s", e)
+            error = "Sleeper didn't answer just now. Try again in a moment."
+    return render_template_string(
+        WAIVERS_HTML, plan=plan, error=error, leagues=leagues, league=league, week=week, season=season,
+        username=username, unlocked=unlocked, gate=gate_kind())
+
+
+# --- Kickers and D/ST: the fantasy points board -----------------------------
+#
+# FantasyCalc prices quarterbacks, runners, receivers and tight ends and
+# nothing else, which is why Rankings has never listed a kicker or a
+# defence: there is no value to rank them by. What there IS, for both, is
+# the thing that actually decides a fantasy week -- points scored -- and
+# this site already stores every one of them, week by week, for every
+# player Sleeper reports.
+#
+# So these two positions get ranked on what they have actually done.
+# Nothing is projected, modelled or weighted here: a row is the sum of
+# real weeks, and the order is that sum. That is what makes it checkable
+# against any box score, and it is the only honest way to rank a position
+# whose week-to-week scoring is as noisy as these two.
+KDST_POSITIONS = ("K", "DEF")
+KDST_POSITION_LABEL = {"K": "Kickers", "DEF": "D/ST"}
+# The ranges the board offers, and how each one scores a player.
+KDST_RANGES = (("season", "Season"), ("avg", "Per game"), ("last4", "Last 4"), ("week", "This week"))
+KDST_RANGE_LABEL = dict(KDST_RANGES)
+KDST_LAST_N = 4
+_kdst_board_cache = {}
+
+
+# The little bar chart beside a row: four weeks at a glance. Heights are
+# scaled against a good week rather than the player's own best, so two
+# rows can be compared to each other -- a kicker's flat four and a
+# defence's one big week look different, which is the point of it.
+KDST_SPARK_FULL = 20.0
+KDST_SPARK_MIN, KDST_SPARK_MAX = 3, 15
+
+
+def _kdst_spark(recent):
+    """Bar heights in pixels for the last few weeks' scores."""
+    out = []
+    for value in recent or []:
+        share = max(0.0, min(1.0, float(value) / KDST_SPARK_FULL))
+        out.append(int(round(KDST_SPARK_MIN + share * (KDST_SPARK_MAX - KDST_SPARK_MIN))))
+    return out
+
+
+def _kdst_weeks(stat_line):
+    """{week: points} for one player, with the weeks in order."""
+    weeks = (stat_line or {}).get("weeks") or {}
+    return {int(w): float(p) for w, p in weeks.items() if isinstance(p, (int, float))}
+
+
+def kdst_measure(weeks, total, games, rng, week=None, latest_week=None):
+    """What this player is worth under the range being shown, and the
+    weeks that number came out of. One place, so the board, the ranks and
+    anything that quotes a rank can never disagree about what "best"
+    meant.
+
+    "Last 4" is the season's last four weeks, not the player's last four
+    games. For a kicker who played twice in September and was cut, those
+    are not the same thing, and the second reading would rank him on
+    football played a month ago."""
+    if rng == "avg":
+        return (round(total / games, 2) if games else 0.0), sorted(weeks)
+    if rng == "last4":
+        end = int(latest_week or (max(weeks) if weeks else 0))
+        recent = [w for w in sorted(weeks) if w > end - KDST_LAST_N]
+        return round(sum(weeks[w] for w in recent), 2), recent
+    if rng == "week":
+        wk = int(week or 0)
+        return (round(weeks[wk], 2) if wk in weeks else 0.0), ([wk] if wk in weeks else [])
+    return round(total, 2), sorted(weeks)
+
+
+def kdst_board(season, position="K", rng="season", week=None, scoring=None, cache=_kdst_board_cache):
+    """Every kicker, or every defence, ranked by the points they have
+    actually scored.
+
+    A row carries the total, the per-game average, the last four weeks
+    and this week's game, so the same board answers "who is best" and
+    "who is hot" without a second query."""
+    season = _safe_int(season, int(SEASON))
+    position = position if position in KDST_POSITIONS else "K"
+    rng = rng if rng in KDST_RANGE_LABEL else "season"
+    scoring = normalize_scoring(scoring or current_scoring())
+    week = _safe_int(week, 0)
+    key = (season, position, rng, week, scoring)
+    now = time.time()
+    entry = cache.get(key)
+    if entry and now - entry["time"] < 600:
+        return entry["data"]
+
+    stats = get_season_stats(season, scoring) or {}
+    players = get_all_players() or {}
+    try:
+        live = live_team_games(season, week) if week else {}
+    except Exception:
+        live = {}
+    # The last week anyone has actually played, which is what "the last
+    # four weeks" is counted back from -- not today's date, and not the
+    # week this player last appeared in.
+    latest_week = 0
+    for line in stats.values():
+        for w in (line or {}).get("weeks") or {}:
+            latest_week = max(latest_week, _safe_int(w, 0))
+    rows = []
+    for sid, p in players.items():
+        if not isinstance(p, dict) or p.get("position") != position:
+            continue
+        line = stats.get(sid)
+        if not line:
+            continue
+        weeks = _kdst_weeks(line)
+        games = len(weeks)
+        if not games:
+            continue
+        total = round(sum(weeks.values()), 2)
+        recent = [round(weeks[w], 1) for w in sorted(weeks)[-KDST_LAST_N:]]
+        value, counted = kdst_measure(weeks, total, games, rng, week, latest_week)
+        # A range nobody played in is not a zero, it is an absence. A
+        # kicker who did not play this week does not belong on a board
+        # of this week's kickers at all.
+        if rng in ("week", "last4") and not counted:
+            continue
+        team = p.get("team")
+        game = live.get(team) if team else None
+        name = (f"{p.get('first_name', '')} {p.get('last_name', '')}".strip()
+                or (TEAM_NAMES.get(sid) if position == "DEF" else None) or sid)
+        rows.append({
+            "sid": sid, "name": name, "team": team, "position": position,
+            # A defence is its club, so it wears the club's badge; a
+            # kicker is a person and wears his own face.
+            "photo": team_logo_url(team) if position == "DEF" else player_photo_url(sid),
+            "is_team": position == "DEF",
+            "games": games, "total": total,
+            "avg": round(total / games, 2) if games else 0.0,
+            "best": round(max(weeks.values()), 2),
+            "last": round(weeks[max(weeks)], 2) if weeks else 0.0,
+            "recent": recent, "spark": _kdst_spark(recent),
+            "value": value, "counted": len(counted), "counted_weeks": counted,
+            "opponent": (game or {}).get("opp"),
+            "game_status": (game or {}).get("status"),
+        })
+    # Most points first; a tie goes to whoever needed fewer games for
+    # them, which is the honest tiebreak on a points total.
+    rows.sort(key=lambda r: (-r["value"], r["games"], r["name"]))
+    for i, row in enumerate(rows, 1):
+        row["rank"] = i
+    cache[key] = {"data": rows, "time": now}
+    return rows
+
+
+def kdst_rank_map(season, position, rng="season", cache={}):
+    """{sleeper_id: rank} for one position, so a kicker or a defence can
+    carry "K4" or "DST7" anywhere else on the site without every page
+    rebuilding the board."""
+    key = (int(season), position, rng, normalize_scoring(current_scoring()))
+    now = time.time()
+    entry = cache.get(key)
+    if entry and now - entry["time"] < 600:
+        return entry["data"]
+    try:
+        board = kdst_board(season, position, rng)
+    except Exception:
+        board = []
+    out = {r["sid"]: r["rank"] for r in board}
+    cache[key] = {"data": out, "time": now}
+    return out
+
+
+def kdst_rank_label(sid, position, season=None):
+    """"K4" or "DST7" for a player, or None when the position is neither
+    or the season has no games for them yet."""
+    if position not in KDST_POSITIONS:
+        return None
+    rank = kdst_rank_map(int(season or SEASON), position).get(sid)
+    if not rank:
+        return None
+    return f"{'DST' if position == 'DEF' else 'K'}{rank}"
+
+
+@app.route("/kickers-dst")
+def kdst_page():
+    """The two positions Rankings cannot price, ranked on what they have
+    actually scored. Free: it is a stats board, not a projection."""
+    info = get_current_week_info()
+    season = request.args.get("season", default=info["season"], type=int)
+    week = request.args.get("week", default=info["week"], type=int)
+    position = (request.args.get("pos") or "K").strip().upper()
+    if position not in KDST_POSITIONS:
+        position = "K"
+    rng = (request.args.get("range") or "season").strip()
+    if rng not in KDST_RANGE_LABEL:
+        rng = "season"
+    rows, error = [], None
+    try:
+        rows = kdst_board(season, position, rng, week)
+    except Exception as e:
+        app.logger.warning("kickers/dst board: %s", e)
+        error = "That board could not be built just now. Try again in a moment."
+    return render_template_string(
+        KDST_HTML, rows=rows, error=error, position=position, rng=rng, season=season, week=week,
+        positions=KDST_POSITIONS, position_label=KDST_POSITION_LABEL, ranges=KDST_RANGES,
+        scoring_name=scoring_label(current_scoring()))
 
 
 # --- Player bio and contract sheet ----------------------------------------
@@ -15055,6 +16069,12 @@ def api_warm():
             # ODDS_REFRESH_HOURS with one.
             refresh_book_lines(info["season"], info["week"])
             get_streak_trends(info["season"], info["week"])
+            # The two positions ranked on points scored. Cheap (one
+            # cached season read each), and warming them means the
+            # first visitor to the board never waits for one.
+            for pos in KDST_POSITIONS:
+                kdst_board(info["season"], pos, "season")
+                kdst_rank_map(info["season"], pos)
             # Today's values, written down so next week's Rankings can
             # say who rose and who fell. Once a day; the rest are no-ops.
             _record_value_snapshots_background()
@@ -16255,9 +17275,11 @@ NAV_GROUPS = [
         ("league", "/league-manager", "League Manager", "Your synced leagues and rosters"),
         ("matchup", "/matchup", "Your Matchup", "Live score and win odds in your league"),
         ("rankings", "/rankings", "Rankings", "Dynasty and redraft player values"),
+        ("kdst", "/kickers-dst", "Kickers &amp; D/ST", "The two positions ranked on points scored"),
         ("trade", "/trade-calculator", "Trade Calculator", "Weigh any trade both ways"),
         ("sbc", "/start-bench-cut", "Start/Bench/Cut", "Help keep the rankings sharp"),
         ("lineup", "/lineup", "Lineup", "Who to start this week, and why"),
+        ("waivers", "/waivers", "Waiver Targets", "The best free agents in your league"),
         ("matchups", "/matchups", "Matchups", "Start-sit grades for the week"),
         ("streaks", "/streaks", "Streaks", "Prop lines and hit rates, game by game"),
         ("plus", "/plus", "myCalc+", "Every tier, every list, every grade"),
@@ -22438,6 +23460,13 @@ RANKINGS_HTML = BASE_STYLE + make_header("rankings") + VOTE_MODAL_HTML + """
         <option value="WR">WR</option>
         <option value="TE">TE</option>
       </optgroup>
+      <!-- FantasyCalc prices four positions. Kickers and defences are
+           ranked on points scored instead, on their own board, so the
+           filter offers them rather than pretending they are missing. -->
+      <optgroup label="Points scored">
+        <option value="go:K">Kickers &#8594;</option>
+        <option value="go:DEF">D/ST &#8594;</option>
+      </optgroup>
       <optgroup label="Rookies">
         <option value="rookies">All Rookies</option>
         <option value="rookies:QB">Rookie QB</option>
@@ -22890,7 +23919,14 @@ function render() {
 }
 
 document.getElementById('posSelect').value = state.pos;
-document.getElementById('posSelect').addEventListener('change', e => { state.pos = e.target.value; render(); });
+document.getElementById('posSelect').addEventListener('change', e => {
+  // The two positions with no dynasty value have a board of their own,
+  // so choosing one goes there rather than filtering this table down to
+  // nothing.
+  const v = String(e.target.value || '');
+  if (v.indexOf('go:') === 0) { window.location.href = '/kickers-dst?pos=' + v.slice(3); return; }
+  state.pos = v; render();
+});
 document.getElementById('rkTrendTabs').addEventListener('click', e => {
   const b = e.target.closest('button[data-trend]');
   if (!b) return;
@@ -23942,6 +24978,34 @@ document.addEventListener('change', function(e){
     </div>
   </div>
 
+  {% elif section == 'alerts' %}
+  <form method="post">
+    <div class="panel">
+      <div class="set-group">
+        <h3>Alerts</h3>
+        <p class="muted" style="font-size:13px; margin:0 0 10px;">Emails about a decision with a deadline, for the Sleeper leagues you have synced. Nothing else is ever sent from here, and an alert with nothing to say is not sent at all.</p>
+        <input type="hidden" name="alerts_present" value="1">
+        <label class="set-check">
+          <input type="checkbox" name="alert_lineup" {{ 'checked' if current_user.alert_lineup is not defined or current_user.alert_lineup }}>
+          <span style="font-size:13.5px;"><b>Lineup alerts.</b> When kickoff is close and a starter is out, on bye, unprojected, or clearly beaten by someone on your bench.</span>
+        </label>
+        <label class="set-check">
+          <input type="checkbox" name="alert_waivers" {{ 'checked' if current_user.alert_waivers is not defined or current_user.alert_waivers }}>
+          <span style="font-size:13.5px;"><b>Waiver targets.</b> Once a week, when the games are done and waivers open, the best free agents in your league.</span>
+        </label>
+        {% if not current_user.newsletter_opt_in %}
+        <p class="muted" style="font-size:13px; margin:10px 0 0; color:var(--warning);">You are unsubscribed from all email, so nothing is sent whatever is ticked here. Turn updates back on under <a href="/settings/email" style="color:var(--accent-ink);">Email</a>.</p>
+        {% elif not current_user.sleeper_username %}
+        <p class="muted" style="font-size:13px; margin:10px 0 0;">Alerts need a synced league. <a href="/league-manager" style="color:var(--accent-ink);">Sync your Sleeper league</a> and they start.</p>
+        {% endif %}
+      </div>
+      <div class="set-save">
+        <button type="submit">Save changes</button>
+        {% if saved %}<span class="set-saved">Saved.</span>{% endif %}
+      </div>
+    </div>
+  </form>
+
   {% elif section == 'email' %}
   <form method="post">
     <div class="panel">
@@ -24589,6 +25653,141 @@ LINEUP_HTML = BASE_STYLE + make_header("league") + MU_STYLE + """
     </div>
     {% endif %}
     <p class="mu-foot">Projections are Sleeper's, scored with this league's own settings{% if not plan.projections_available %} (this week's feed isn't up yet, so starters' recent averages stand in){% endif %}; injury designations are the stricter of Sleeper's and ESPN's reports; grades are this site's matchup grades. A player already played counts at what he scored. A backup on the depth chart, or a player out or unprojected, is never recommended; a doubtful player counts for a quarter of his projection, a questionable one for 85%. Re-check after the final injury reports. <a href="{{ plan.sleeper_url }}" target="_blank" rel="noopener">Open in Sleeper</a></p>
+  {% endif %}
+</div></main>
+"""
+
+
+KDST_STYLE = """
+<style>
+  .kd-page{ font-family:"Source Sans 3",system-ui,sans-serif; padding-bottom:70px; }
+  .kd-page h1{ font-family:"Big Shoulders Display"; font-size:30px; font-weight:800; text-transform:uppercase; margin:6px 0 2px; }
+  .kd-page h1 small{ font-family:"Source Sans 3"; font-size:13px; color:var(--ink-muted); text-transform:none; font-weight:600; margin-left:8px; }
+  .kd-sub{ font-size:13px; color:var(--ink-muted); margin:0 0 10px; }
+  .kd-chips{ display:flex; gap:6px; margin:8px 0; overflow-x:auto; scrollbar-width:none; }
+  .kd-chips::-webkit-scrollbar{ display:none; }
+  .kd-chip{ flex:none; padding:6px 12px; border-radius:99px; border:1px solid var(--line); font-size:12.5px; font-weight:700; color:var(--ink-muted); background:var(--paper-raised); text-decoration:none; white-space:nowrap; }
+  .kd-chip.on{ background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .kd-card{ background:var(--paper-raised); border:1px solid var(--line); border-radius:16px; padding:4px 14px; margin-top:12px; }
+  .kd-row{ display:grid; grid-template-columns:26px 36px 1fr auto; align-items:center; gap:10px; padding:9px 0; border-top:1px solid var(--line); text-decoration:none; color:inherit; }
+  .kd-row:first-child{ border-top:none; }
+  .kd-row .rk{ font-family:"IBM Plex Mono"; font-size:13px; font-weight:700; color:var(--ink-muted); text-align:right; }
+  .kd-row .rk.top{ color:var(--accent-ink); }
+  .kd-row img{ width:36px; height:36px; border-radius:50%; background:var(--paper-sunken); object-fit:contain; }
+  .kd-row .nm{ font-weight:700; font-size:14px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .kd-row .mt{ font-size:11.5px; color:var(--ink-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .kd-row .val{ text-align:right; }
+  .kd-row .val b{ font-family:"IBM Plex Mono"; font-size:17px; font-weight:700; display:block; line-height:1.1; }
+  .kd-row .val span{ font-size:11px; color:var(--ink-muted); font-family:"IBM Plex Mono"; }
+  .kd-spark{ display:inline-flex; gap:3px; margin-left:6px; vertical-align:middle; }
+  .kd-spark i{ display:inline-block; width:4px; border-radius:2px; background:var(--accent); opacity:.75; }
+  .kd-empty{ text-align:center; color:var(--ink-muted); padding:22px 10px; font-size:14px; }
+  .kd-foot{ margin-top:10px; font-size:12.5px; color:var(--ink-muted); } .kd-foot a{ color:var(--accent-ink); }
+</style>"""
+
+KDST_HTML = BASE_STYLE + make_header("kdst") + KDST_STYLE + """
+<main><div class="wrap kd-page" style="max-width:560px;">
+  <h1>Kickers &amp; D/ST <small>{{ season }}</small></h1>
+  <p class="kd-sub">Ranked on the fantasy points they have actually scored, in {{ scoring_name }} scoring. Nothing here is projected.</p>
+  <div class="kd-chips">{% for p in positions %}<a class="kd-chip {{ 'on' if p == position }}" href="/kickers-dst?pos={{ p }}&range={{ rng }}&season={{ season }}">{{ position_label[p] }}</a>{% endfor %}</div>
+  <div class="kd-chips">{% for key, label in ranges %}<a class="kd-chip {{ 'on' if key == rng }}" href="/kickers-dst?pos={{ position }}&range={{ key }}&season={{ season }}">{{ label }}</a>{% endfor %}</div>
+  {% if error %}
+  <div class="kd-card kd-empty">{{ error }}</div>
+  {% elif not rows %}
+  <div class="kd-card kd-empty">No {{ position_label[position]|lower }} games scored for {{ season }} yet. This board fills in as the season is played.</div>
+  {% else %}
+  <div class="kd-card">
+    {% for r in rows %}
+    <a class="kd-row" href="{{ ('/team?abbr=' + r.team) if r.is_team and r.team else ('/player?sid=' + r.sid) }}">
+      <span class="rk {{ 'top' if r.rank <= 3 }}">{{ r.rank }}</span>
+      <img src="{{ r.photo }}" alt="" onerror="this.style.visibility='hidden'">
+      <span style="min-width:0;">
+        <div class="nm">{{ r.name }}</div>
+        <div class="mt">{{ r.team or '&mdash;'|safe }} &middot; {{ r.games }} game{{ '' if r.games == 1 else 's' }}{% if rng != 'avg' %} &middot; {{ r.avg }} a game{% endif %}{% if r.spark %}<span class="kd-spark" title="Last {{ r.spark|length }} weeks: {{ r.recent|join(', ') }}">{% for h in r.spark %}<i style="height:{{ h }}px;"></i>{% endfor %}</span>{% endif %}</div>
+      </span>
+      <span class="val"><b>{{ r.value }}</b><span>{{ 'a game' if rng == 'avg' else 'pts' }}</span></span>
+    </a>
+    {% endfor %}
+  </div>
+  {% endif %}
+  <p class="kd-foot">Every number is the sum of real weeks from Sleeper's own box scores, so it can be checked against any of them. A defence is scored the way nearly every league scores one: a point a sack, two an interception, a fumble recovery, a safety or a blocked kick, six a touchdown, and the points-allowed tier from ten for a shutout down to minus four for 35 or more. Rankings prices <a href="/rankings">quarterbacks, runners, receivers and tight ends</a>; these two positions are ranked here instead, because no dynasty value exists for them.</p>
+</div></main>
+"""
+
+
+WAIVERS_HTML = BASE_STYLE + make_header("league") + MU_STYLE + """
+<style>
+  .wv-row{ display:grid; grid-template-columns:34px 38px 1fr auto; align-items:center; gap:10px; padding:10px 0; border-top:1px solid var(--line); text-decoration:none; color:inherit; }
+  .wv-row:first-child{ border-top:none; }
+  .wv-row .pos{ font-size:11px; font-weight:800; color:var(--ink-muted); text-align:center; }
+  .wv-row img{ width:38px; height:38px; border-radius:50%; background:var(--paper-sunken); object-fit:contain; }
+  .wv-row .nm{ font-weight:700; font-size:14px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .wv-row .why{ font-size:11.5px; color:var(--ink-muted); line-height:1.45; }
+  .wv-row .sc{ text-align:right; } .wv-row .sc b{ font-family:"IBM Plex Mono"; font-size:17px; font-weight:700; display:block; line-height:1.1; }
+  .wv-row .sc span{ font-size:10.5px; color:var(--ink-muted); letter-spacing:.04em; }
+  .wv-tag{ display:inline-block; margin-left:6px; padding:1px 7px; border-radius:99px; font-size:10.5px; font-weight:800; background:var(--paper-sunken); color:var(--ink-secondary); vertical-align:middle; }
+  .wv-drop{ display:flex; align-items:center; gap:10px; }
+  .wv-drop img{ width:34px; height:34px; border-radius:50%; background:var(--paper-sunken); object-fit:contain; }
+  .wv-h3{ font-family:"Big Shoulders Display"; font-size:17px; font-weight:800; text-transform:uppercase; margin:18px 0 0; }
+  /* The Lineup's button, which lives in that page's own style block. */
+  .lu-btn{ display:block; margin-top:10px; text-align:center; padding:10px; border-radius:10px; background:var(--accent); color:var(--accent-on); font-weight:800; text-decoration:none; }
+</style>
+<main><div class="wrap mu-page" style="max-width:560px;">
+  <h1>Waiver targets <small>Week {{ plan.week if plan else week }}</small></h1>
+  {% if leagues|length > 1 %}
+  <div class="mu-chips">{% for lg in leagues %}<a class="mu-chip {{ 'on' if league and lg.league_id == league.league_id }}" href="/waivers?league={{ lg.league_id }}">{{ lg.name }}</a>{% endfor %}</div>
+  {% endif %}
+  {% if not unlocked %}
+  <div class="mu-card mu-empty" style="text-align:left;">
+    {% if gate == 'plus' %}
+    <h3 style="margin:0 0 6px;">Waiver targets are <span style="color:var(--accent-ink);">myCalc+</span></h3>
+    <p style="margin:0 0 14px; font-size:13.5px;">Every free agent in your league worth a claim, ranked on recent form and this week's projection.</p>
+    <a class="btn" href="/plus">See myCalc+ plans</a>
+    {% else %}
+    <h3 style="margin:0 0 6px;">Unlock your <span style="color:var(--accent-ink);">waiver targets</span></h3>
+    <p style="margin:0 0 14px; font-size:13.5px;">Create a free account, sync your Sleeper league, and the best free agents in it show up here.</p>
+    <a class="btn" href="/signup">Create Account</a>
+    {% endif %}
+  </div>
+  {% elif not leagues %}
+  <div class="mu-card mu-empty">No synced league yet. <a href="/league-manager" style="color:var(--accent-ink);">Sync your Sleeper league</a> and your waiver targets show here.</div>
+  {% elif error %}
+  <div class="mu-card mu-empty">{{ error }}</div>
+  {% elif plan %}
+    {% if plan.next_week %}
+    <p class="mu-foot" style="margin:0 0 4px;">Every game of week {{ plan.asked_week }} is final, so these are targets for week {{ plan.week }}.</p>
+    {% endif %}
+    {% if plan.targets %}
+    <div class="mu-card" style="padding-top:4px;">
+      {% for t in plan.targets %}
+      <a class="wv-row" href="{{ ('/team?abbr=' + t.team) if t.is_team and t.team else ('/player?sid=' + t.sid) }}">
+        <span class="pos">{{ t.position }}</span>
+        <img src="{{ t.photo }}" alt="" onerror="this.style.visibility='hidden'">
+        <span style="min-width:0;">
+          <div class="nm">{{ t.name }}{% if t.stash %}<span class="wv-tag">Stash</span>{% elif t.rank_label %}<span class="wv-tag">{{ t.rank_label }}</span>{% endif %}</div>
+          <div class="why">{{ t.why }}</div>
+        </span>
+        <span class="sc"><b>{{ t.score }}</b><span>SCORE</span></span>
+      </a>
+      {% endfor %}
+    </div>
+    {% if plan.drop %}
+    <div class="wv-h3">Room for one</div>
+    <div class="mu-card">
+      <div class="wv-drop">
+        <img src="{{ plan.drop.photo }}" alt="" onerror="this.style.visibility='hidden'">
+        <span style="min-width:0;">
+          <div class="nm" style="font-weight:700;">{{ plan.drop.name }}</div>
+          <div class="why" style="font-size:11.5px; color:var(--ink-muted);">The weakest player on your bench: {{ plan.drop.form }} a game lately, {{ plan.drop.proj }} projected, score {{ plan.drop.score }}.</div>
+        </span>
+      </div>
+      <a class="lu-btn" href="{{ plan.sleeper_url }}" target="_blank" rel="noopener" style="margin-top:12px; display:block;">Open your league in Sleeper</a>
+    </div>
+    {% endif %}
+    {% else %}
+    <div class="mu-card mu-empty">Nobody free in {{ plan.league_name }} is worth a claim for week {{ plan.week }}. Every available player is either buried on his depth chart or scoring too little to beat what is already on your bench.</div>
+    {% endif %}
+    <p class="mu-foot">{{ plan.free_agents }} free agent{{ '' if plan.free_agents == 1 else 's' }} in {{ plan.league_name }} clear the bar. Score is {{ (100 * 0.6)|int }}% recent form over a player's last three games and {{ (100 * 0.4)|int }}% Sleeper's projection for week {{ plan.week }}, scored with this league's own settings{% if not plan.projections_available %} (that week's projections aren't published yet, so these are ranked on form alone){% endif %}. Players already on a roster, injured reserve or taxi squad anywhere in the league are not listed, and neither is anyone buried on his club's depth chart. <a href="{{ plan.sleeper_url }}" target="_blank" rel="noopener">Open in Sleeper</a></p>
   {% endif %}
 </div></main>
 """
