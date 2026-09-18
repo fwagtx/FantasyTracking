@@ -13522,6 +13522,105 @@ def _safe_feed(fn):
         return []
 
 
+# The Scores page, rendered once and shared.
+#
+# On a Sunday at one o'clock everybody opens this page in the same two
+# minutes, and until now every one of them got their own render. The
+# data behind it was already cached; the render itself, some thirty
+# milliseconds of template work, was not -- and five hundred of those
+# arriving together is more than half a core can do in the time
+# people are willing to wait.
+#
+# The page is the same for everyone except two things: the banner that
+# names the reader and the list of which of the reader's own players
+# are on each club. Both are rendered per request and substituted into
+# the shared HTML at two markers. Everything else -- the games, the
+# performers, the power board, the feeds, the theme -- is rendered once
+# every SCORES_PAGE_TTL_S seconds per (week, theme, signed-in) and handed
+# to everyone. Nothing about one reader can reach another because
+# nothing about any reader is in the shared copy.
+#
+# One lock, so a burst of arrivals on an expired copy does one render
+# and waits for it, not five hundred renders at once.
+SCORES_PAGE_TTL_S = 5
+_scores_page_cache = {}
+_scores_page_lock = threading.Lock()
+
+_SCORES_BANNER_SYNCED = """<div class="sc-sync-banner">
+    <span>Showing how many of <strong style="color:var(--sc-text);">{{ username }}</strong>'s players are in each game.</span>
+    <span style="display:flex; gap:14px;"><a href="/matchup">Your matchup &rsaquo;</a><a href="/league-manager">Manage synced leagues</a></span>
+  </div>"""
+_SCORES_BANNER_OPEN = "<!--__SCORES_BANNER__-->"
+_SCORES_BANNER_CLOSE = "<!--/__SCORES_BANNER__-->"
+_MY_PLAYERS_TOKEN = "/*__MY_PLAYERS__*/{}"
+
+
+def _scores_shared_html(season, week, season_type, info, cache=_scores_page_cache):
+    """The Scores page with the two personal markers still in it, from
+    the cache when it is fresh, rendered once otherwise. Returns
+    (html, hit)."""
+    ctx = _theme_context()
+    key = (season, week, season_type, date.today().isoformat(),
+           ctx["site_theme"], ctx["site_accent"], ctx["site_signed_in"])
+    now = time.time()
+    entry = cache.get(key)
+    if entry and now - entry["time"] < SCORES_PAGE_TTL_S:
+        return entry["html"], True
+    with _scores_page_lock:
+        # Whoever held the lock may have rendered it while we waited.
+        entry = cache.get(key)
+        if entry and time.time() - entry["time"] < SCORES_PAGE_TTL_S:
+            return entry["html"], True
+        games = _nearby_weeks_games(season, week, season_type)
+        # The whole week's board is baked in, and the client filters it
+        # to the teams that played on the selected date -- see
+        # get_week_performers for why the date split has to happen there.
+        performers = get_week_performers(season, week, allow_fetch=False)
+        # Every game day in the season, so the strip scrolls straight
+        # through to any week instead of dead-ending at the fetched
+        # window. Games for a day outside that window load on demand.
+        season_days = get_season_game_days(season, season_type)
+        html_out = render_template_string(
+            SCORES_HTML, games=games, season=season, week=week, season_type=season_type,
+            score_mark=SCORE_MARK_SVG, season_days=season_days,
+            current_season=info["season"], current_week=info["week"],
+            today_key=date.today().isoformat(), load_error=None,
+            performers=performers, power=get_power_board(season, season_type),
+            perf_groups=PERFORMER_GROUPS,
+            injuries=_safe_feed(get_injury_changes),
+            moves=_safe_feed(get_moves_today),
+            birthdays=_safe_feed(get_birthdays_today),
+        )
+        # One week of the page at a time. A week nobody is looking at
+        # any more is not worth the memory, and the key already carries
+        # everything a copy depends on.
+        cache.clear()
+        cache[key] = {"html": html_out, "time": time.time()}
+        return html_out, False
+
+
+def _scores_personal(shared_html, username):
+    """The shared page made this reader's: their banner in place of the
+    guest one, their players in place of the empty default. A guest gets
+    the page back with only the markers removed."""
+    has_synced = bool(current_user.is_authenticated and get_synced_league_ids(current_user.id))
+    by_team = {}
+    if has_synced and username:
+        try:
+            by_team = get_my_players_by_team(username, get_synced_league_ids(current_user.id)) or {}
+        except Exception:
+            by_team = {}
+    start = shared_html.find(_SCORES_BANNER_OPEN)
+    end = shared_html.find(_SCORES_BANNER_CLOSE)
+    if start != -1 and end != -1:
+        if has_synced:
+            banner = render_template_string(_SCORES_BANNER_SYNCED, username=username)
+        else:
+            banner = shared_html[start + len(_SCORES_BANNER_OPEN):end]
+        shared_html = shared_html[:start] + banner + shared_html[end + len(_SCORES_BANNER_CLOSE):]
+    return shared_html.replace(_MY_PLAYERS_TOKEN, json.dumps(by_team, sort_keys=True), 1)
+
+
 @app.route("/scores")
 def scores_page():
     username = _resolve_scores_username()
@@ -13536,42 +13635,28 @@ def scores_page():
         season = request.args.get("season", default=info["season"], type=int)
         week = request.args.get("week", default=info["week"], type=int)
         season_type = request.args.get("seasontype", default=info["season_type"], type=int)
-        games = _nearby_weeks_games(season, week, season_type)
-        _annotate_my_players(games, username)
-        has_synced_leagues = bool(current_user.is_authenticated and get_synced_league_ids(current_user.id))
-        # The whole week's board is baked in, and the client filters it to
-        # the teams that played on the selected date -- see
-        # get_week_performers for why the date split has to happen there.
-        performers = get_week_performers(season, week, allow_fetch=False)
-        # Every game day in the season, so the strip scrolls straight
-        # through to any week instead of dead-ending at the fetched
-        # window. Games for a day outside that window load on demand.
-        season_days = get_season_game_days(season, season_type)
-        return render_template_string(
-            SCORES_HTML, games=games, season=season, week=week, season_type=season_type,
-            score_mark=SCORE_MARK_SVG, season_days=season_days,
-            current_season=info["season"], current_week=info["week"],
-            today_key=date.today().isoformat(), load_error=None,
-            username=username, has_synced_leagues=has_synced_leagues,
-            performers=performers, power=get_power_board(season, season_type),
-            perf_groups=PERFORMER_GROUPS,
-            injuries=_safe_feed(get_injury_changes),
-            moves=_safe_feed(get_moves_today),
-            birthdays=_safe_feed(get_birthdays_today),
-        )
+        shared, hit = _scores_shared_html(season, week, season_type, info)
+        resp = make_response(_scores_personal(shared, username))
+        # Says whether this copy was rendered for this request or shared
+        # from an earlier one, so a wrong-looking number can be traced.
+        resp.headers["X-Scores-Cache"] = "hit" if hit else "miss"
+        return resp
     except Exception as e:
         # ESPN's API is unofficial and unverified against a live response
         # from this environment -- surface the real error on the page
         # instead of a bare 500, so a shape mismatch is diagnosable from
         # a screenshot alone rather than looking like the page is dead.
-        return render_template_string(
+        # Never cached: an error page is not a page anyone else should
+        # be handed.
+        page = render_template_string(
             SCORES_HTML, games=[], season=int(SEASON), week=1, season_type=2,
             score_mark=SCORE_MARK_SVG, season_days=[],
             current_season=int(SEASON), current_week=1, today_key=date.today().isoformat(),
-            load_error=str(e), username=username, has_synced_leagues=False,
+            load_error=str(e),
             performers=[], power=[], perf_groups=PERFORMER_GROUPS,
             injuries=[], moves=[], birthdays=[],
         )
+        return _scores_personal(page, username)
 
 
 @app.route("/injuries")
@@ -14797,6 +14882,48 @@ def api_matchup_compare():
         return jsonify({"ok": False, "error": str(e)}), 500
 
 
+# The Rankings page, rendered once and shared -- the same idea as the
+# Scores page (see _scores_shared_html), for the same reason: the data
+# behind it is cached and cheap, the render is not, and everyone who
+# opens it in the same half-minute is asking for the same page.
+#
+# What can differ between two readers is exactly what the key holds:
+# the format and mode, the position and view they asked for, the stats
+# season, THEIR scoring format (every points column follows it), whether
+# they are signed in (which tier the free gate covers), and the theme.
+# Two readers alike in all of those are handed one copy. Nothing about
+# either reader is in it, because nothing about any reader is rendered
+# into this page beyond those settings.
+#
+# Several combinations are live at once (1QB and superflex, dynasty
+# and redraft), so unlike Scores this holds a handful of copies, oldest
+# out first, rather than one.
+RANKINGS_PAGE_TTL_S = 30
+RANKINGS_PAGE_COPIES = 24
+_rankings_page_cache = {}
+_rankings_page_lock = threading.Lock()
+
+
+def _rankings_shared_html(key, build):
+    """The Rankings page for `key`, from the cache when fresh, from
+    `build()` once otherwise. Returns (html, hit). One lock, so a burst
+    on an expired copy renders it once."""
+    now = time.time()
+    entry = _rankings_page_cache.get(key)
+    if entry and now - entry["time"] < RANKINGS_PAGE_TTL_S:
+        return entry["html"], True
+    with _rankings_page_lock:
+        entry = _rankings_page_cache.get(key)
+        if entry and time.time() - entry["time"] < RANKINGS_PAGE_TTL_S:
+            return entry["html"], True
+        html_out = build()
+        while len(_rankings_page_cache) >= RANKINGS_PAGE_COPIES:
+            oldest = min(_rankings_page_cache, key=lambda k: _rankings_page_cache[k]["time"])
+            del _rankings_page_cache[oldest]
+        _rankings_page_cache[key] = {"html": html_out, "time": time.time()}
+        return html_out, False
+
+
 @app.route("/")
 @app.route("/rankings")
 def rankings():
@@ -14822,6 +14949,22 @@ def rankings():
     pos_filter = request.args.get("pos", "overall")
     view = request.args.get("view", "list")
     num_qbs = 2 if fmt == "superflex" else 1
+    # Today's values get written down for next week's movement whether
+    # or not this page is served from a shared copy.
+    _record_value_snapshots_background()
+    ctx = _theme_context()
+    key = (fmt, mode, pos_filter, view, request.args.get("stats"), current_scoring(),
+           ctx["site_signed_in"], ctx["site_theme"], ctx["site_accent"])
+    html_out, hit = _rankings_shared_html(
+        key, lambda: _rankings_render(fmt, mode, is_dynasty, pos_filter, view, num_qbs))
+    resp = make_response(html_out)
+    resp.headers["X-Rankings-Cache"] = "hit" if hit else "miss"
+    return resp
+
+
+def _rankings_render(fmt, mode, is_dynasty, pos_filter, view, num_qbs):
+    """The Rankings page, rendered. Everything below is as it was when
+    it lived inside the route; only the cache in front of it is new."""
     # Which season's games and points sit beside the values. The default
     # is the last completed one: early in the year the current season has
     # 0 games for everyone, which says nothing. The dropdown lets anyone
@@ -14847,7 +14990,6 @@ def rankings():
     # superflex rise is measured against superflex, redraft against
     # redraft. And make sure today gets written down for next week.
     movement = get_value_movement(num_qbs, is_dynasty)
-    _record_value_snapshots_background()
 
     prelim = []
     board_season = int(stats_season)
@@ -19055,17 +19197,16 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + FEED_DAYS_JS + """
     <a class="sc-viewall" href="/standings" style="margin-left:10px;">Standings &rsaquo;</a>
   </div>
 
-  {% if has_synced_leagues %}
-  <div class="sc-sync-banner">
-    <span>Showing how many of <strong style="color:var(--sc-text);">{{ username }}</strong>'s players are in each game.</span>
-    <span style="display:flex; gap:14px;"><a href="/matchup">Your matchup &rsaquo;</a><a href="/league-manager">Manage synced leagues</a></span>
-  </div>
-  {% else %}
+  <!-- The one block on this page that is about the reader rather than
+       the league. What sits between the markers is the guest version,
+       so a page rendered without the route is still a whole page; the
+       route swaps in the reader's own banner -- see _scores_personal. -->
+  <!--__SCORES_BANNER__-->
   <div class="sc-sync-banner">
     <span>Sync your leagues to see which of your players are playing in each game.</span>
     <a href="/league-manager">Sync your leagues &rarr;</a>
   </div>
-  {% endif %}
+  <!--/__SCORES_BANNER__-->
 
   <div class="sc-day-tabs" id="scDayTabs"></div>
 
@@ -19263,6 +19404,10 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + FEED_DAYS_JS + """
 
 <script>
 const SCORES_WEEK = {{ games|tojson }};
+// Which of the reader's own players are on each club, keyed by club.
+// Kept out of SCORES_WEEK on purpose: the game cards are the same for
+// everyone and are built once, this is the only part that is yours.
+const MY_PLAYERS = /*__MY_PLAYERS__*/{};
 const SCORES_PERFORMERS = {{ performers|tojson }};
 const SCORE_MARK = {{ score_mark|tojson }};
 const SEASON_DAYS = {{ season_days|tojson }};
@@ -19519,8 +19664,8 @@ const scServerTodayKey = {{ today_key|tojson }};
       const topRow =
         '<div class="sc-game-top">' +
           '<div class="sc-game-teams">' +
-            teamRow(away, aScore, awayLeads, (g.my_away_players || []).length) +
-            teamRow(home, hScore, homeLeads, (g.my_home_players || []).length) +
+            teamRow(away, aScore, awayLeads, (MY_PLAYERS[g.away.abbr] || []).length) +
+            teamRow(home, hScore, homeLeads, (MY_PLAYERS[g.home.abbr] || []).length) +
           '</div>' +
           '<div class="sc-game-meta">' + meta + '</div>' +
         '</div>';
@@ -19533,8 +19678,8 @@ const scServerTodayKey = {{ today_key|tojson }};
       // The per-team counts are now on the rows themselves, so all that's
       // left here is the total -- one number that answers "is this game
       // worth watching for me at all" without re-reading both rows.
-      const awayMine = g.my_away_players || [];
-      const homeMine = g.my_home_players || [];
+      const awayMine = MY_PLAYERS[g.away.abbr] || [];
+      const homeMine = MY_PLAYERS[g.home.abbr] || [];
       const totalMine = awayMine.length + homeMine.length;
       const myRow = totalMine
         ? '<div class="sc-my-players">' + totalMine +
