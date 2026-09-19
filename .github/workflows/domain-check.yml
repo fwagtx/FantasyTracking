@@ -1,0 +1,113 @@
+name: Domain Check
+
+# Every line of the migration checklist, run from a machine with real
+# internet. This sandbox has none, and refreshing a Cloudflare page by
+# hand tells you less than this does. Informational on purpose: it
+# never fails the job, because "not propagated yet" is not a fault.
+on:
+  workflow_dispatch:
+    inputs:
+      new_domain:
+        description: "The domain being moved to"
+        default: "streakpros.com"
+      old_domain:
+        description: "The domain being moved from"
+        default: "fantasyfootballcalc.com"
+
+jobs:
+  domain-check:
+    runs-on: ubuntu-latest
+    env:
+      NEW: ${{ github.event.inputs.new_domain || 'streakpros.com' }}
+      OLD: ${{ github.event.inputs.old_domain || 'fantasyfootballcalc.com' }}
+    steps:
+      - name: Phase 1 - nameservers
+        run: |
+          echo "## Phase 1: nameservers" >> $GITHUB_STEP_SUMMARY
+          ns=$(dig NS "$NEW" +short | sort | tr '\n' ' ')
+          echo "NS: ${ns:-<none>}"
+          if echo "$ns" | grep -q "ns.cloudflare.com"; then
+            echo "DONE - Cloudflare is authoritative: $ns" | tee -a $GITHUB_STEP_SUMMARY
+          else
+            echo "WAITING - registrar has not propagated yet (still: ${ns:-nothing})" | tee -a $GITHUB_STEP_SUMMARY
+          fi
+          ds=$(dig DS "$NEW" +short | head -3)
+          if [ -n "$ds" ]; then
+            echo "NOTE - a DNSSEC DS record is still published at the registry;"
+            echo "       resolution can be flaky until it clears: $ds" | tee -a $GITHUB_STEP_SUMMARY
+          else
+            echo "DONE - no stale DNSSEC DS record"
+          fi
+
+      - name: Phase 2 - the new domain answers
+        run: |
+          echo "## Phase 2: domain and TLS" >> $GITHUB_STEP_SUMMARY
+          for host in "$NEW" "www.$NEW"; do
+            ip=$(dig "$host" +short | tr '\n' ' ')
+            echo "--- $host -> ${ip:-<unresolved>}"
+            out=$(curl -sSI --max-time 25 "https://$host" 2>&1 | head -12) || true
+            code=$(printf '%s' "$out" | awk 'NR==1{print $2}')
+            loc=$(printf '%s' "$out" | grep -i '^location:' || true)
+            srv=$(printf '%s' "$out" | grep -i '^server:' || true)
+            echo "    status: ${code:-none}  ${srv}  ${loc}"
+            if [ -n "$code" ]; then
+              echo "DONE - https://$host answered $code ${loc}" | tee -a $GITHUB_STEP_SUMMARY
+            else
+              echo "WAITING - https://$host did not answer yet" | tee -a $GITHUB_STEP_SUMMARY
+            fi
+          done
+          echo "--- control: the Render host itself"
+          curl -sS -o /dev/null -w '    fantasytracking.onrender.com -> %{http_code}\n' \
+            --max-time 25 https://fantasytracking.onrender.com/healthz || true
+
+      - name: Phase 3 - mail records
+        run: |
+          echo "## Phase 3: mail" >> $GITHUB_STEP_SUMMARY
+          spf=$(dig TXT "send.$NEW" +short)
+          mx=$(dig MX "send.$NEW" +short)
+          dkim=$(dig TXT "resend._domainkey.$NEW" +short | head -c 120)
+          dmarc=$(dig TXT "_dmarc.$NEW" +short)
+          apex=$(dig TXT "$NEW" +short | head -5)
+          echo "send SPF : ${spf:-<none>}"
+          echo "send MX  : ${mx:-<none>}"
+          echo "DKIM     : ${dkim:-<none>}"
+          echo "DMARC    : ${dmarc:-<none>}"
+          echo "apex TXT : ${apex:-<none>}"
+          if [ -n "$spf" ] && [ -n "$dkim" ]; then
+            echo "DONE - Resend's SPF and DKIM are published" | tee -a $GITHUB_STEP_SUMMARY
+          else
+            echo "WAITING - Resend records not added yet (do not set MAIL_FROM until they are)" \
+              | tee -a $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Phase 4 - which domain the app thinks it is
+        run: |
+          echo "## Phase 4: app configuration" >> $GITHUB_STEP_SUMMARY
+          # /api/mail-status is public-safe: it reports whether mail is
+          # configured, never the credentials.
+          for host in "$NEW" "$OLD"; do
+            body=$(curl -sS --max-time 25 "https://$host/api/mail-status" 2>/dev/null) || continue
+            echo "--- $host: $body"
+          done
+          echo "(SITE_URL and MAIL_FROM are set in Render; this shows what took effect)" \
+            >> $GITHUB_STEP_SUMMARY
+
+      - name: Phase 7 - the old domain still works, and redirects
+        run: |
+          echo "## Phase 7: old domain" >> $GITHUB_STEP_SUMMARY
+          for path in / /rankings /streaks; do
+            out=$(curl -sSI --max-time 25 "https://$OLD$path" 2>&1 | head -8) || true
+            code=$(printf '%s' "$out" | awk 'NR==1{print $2}')
+            loc=$(printf '%s' "$out" | grep -i '^location:' | tr -d '\r' || true)
+            echo "$code  $OLD$path  ${loc}"
+            case "$code" in
+              301|308) echo "DONE - $path redirects: ${loc}" | tee -a $GITHUB_STEP_SUMMARY ;;
+              200) echo "SERVING - $path still served directly (redirect not set up yet)" \
+                     | tee -a $GITHUB_STEP_SUMMARY ;;
+              *) echo "CHECK - $path answered ${code:-nothing}" | tee -a $GITHUB_STEP_SUMMARY ;;
+            esac
+          done
+          echo
+          echo "REMINDER: once the old domain 301s, the sync jobs must move too."
+          echo "curl does not follow redirects, so they would report green while doing"
+          echo "nothing. Set the SITE_HOST repository variable to https://$NEW."
