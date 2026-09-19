@@ -287,7 +287,9 @@ PLUS_MARK_SVG = ('<svg class="plus-mark" viewBox="0 0 30 26" aria-label="StreakP
 def tabbar_section(path):
     path = path or "/"
     if path == "/":
-        return "rankings"
+        # "/" renders Streaks now, and only ever for a guest: anyone
+        # signed in is redirected to their own home before this runs.
+        return "streaks"
     for prefix, key in sorted(TABBAR_PATHS, key=lambda t: -len(t[0])):
         if path == prefix or path.startswith(prefix + "/") or path.startswith(prefix + "?"):
             return key
@@ -15084,8 +15086,14 @@ def rankings():
     # Home for someone signed in is game day. A guest's home stays the
     # rankings, with the free-account card; /rankings itself is always
     # the rankings.
-    if request.path == "/" and current_user.is_authenticated:
-        return redirect(SIGNED_IN_HOME)
+    if request.path == "/":
+        if current_user.is_authenticated:
+            # Someone signed in wants their own week, not an introduction.
+            return redirect(SIGNED_IN_HOME)
+        # A stranger arriving at the domain gets Streaks. Rankings has
+        # not moved -- it is still /rankings, and still what the Fantasy
+        # menu points at.
+        return streaks_page()
     # No parameter means "whatever this person plays" -- their saved
     # default from Settings, or the site's if they have not set one or
     # are not signed in.
@@ -17743,6 +17751,11 @@ LOGO_SVG = """<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria
 # (see NAV_LIVE_KEYS), so a standings or performance page reads as
 # current without being listed.
 NAV_LIVE = ("live", "/scores", "Live")
+# Streaks sits beside Live rather than ninth inside a dropdown. It is
+# what the site is named for, and a menu is where a feature goes to
+# stay undiscovered.
+NAV_STREAKS = ("streaks", "/streaks", "Streaks")
+NAV_STREAKS_KEYS = ("streaks",)
 NAV_LIVE_KEYS = ("live", "scores", "standings", "performances",
                  "injuries", "moves", "birthdays")
 
@@ -17759,7 +17772,6 @@ NAV_GROUPS = [
         ("lineup", "/lineup", "Lineup", "Who to start this week, and why"),
         ("waivers", "/waivers", "Waiver Targets", "The best free agents in your league"),
         ("matchups", "/matchups", "Matchups", "Start-sit grades for the week"),
-        ("streaks", "/streaks", "Streaks", "Prop lines and hit rates, game by game"),
         ("plus", "/plus", "StreakPros+", "Every tier, every list, every grade"),
     ]),
 ]
@@ -17796,13 +17808,16 @@ def make_header(active=""):
     _lk, _lhref, _llabel = NAV_LIVE
     live_link = (f'<a class="navtop {"active" if active in NAV_LIVE_KEYS else ""}" '
                  f'href="{_lhref}">{_llabel}</a>')
+    _sk, _shref, _slabel = NAV_STREAKS
+    streaks_link = (f'<a class="navtop {"active" if active in NAV_STREAKS_KEYS else ""}" '
+                    f'href="{_shref}">{_slabel}</a>')
 
     return f"""
 <header class="site"><div class="wrap nav-row">
   <a class="wordmark" href="/">{LOGO_SVG}<span>StreakPros</span></a>
   <input type="checkbox" id="navToggle" class="nav-toggle-checkbox">
   <label for="navToggle" class="nav-toggle-btn" aria-label="Menu">&#9776;</label>
-  <nav class="links">{live_link}{nav_groups}
+  <nav class="links">{streaks_link}{live_link}{nav_groups}
     {{% if current_user.is_authenticated %}}
       <details class="acct">
         <summary aria-label="Account menu">
@@ -20997,6 +21012,19 @@ STREAKS_HTML = BASE_STYLE + make_header("streaks") + """
   .sk-sub{ font-size:12px; color:var(--sk-muted); margin-bottom:12px; line-height:1.5; max-width:70ch; }
   .sk-week{ font-size:13px; color:var(--sk-muted); text-transform:none; font-family:"Source Sans 3",system-ui,sans-serif; font-weight:600; }
 
+  /* Shown to a signed-out reader only. Slim on purpose: the board is
+     what they came for, and a wall in front of it would be the fastest
+     way to lose them. */
+  .sk-join{ display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+            margin:0 0 14px; padding:10px 14px; border-radius:10px;
+            border:1px solid var(--sk-line); background:var(--sk-surface);
+            text-decoration:none; color:var(--sk-text); font-size:13px; }
+  .sk-join b{ color:var(--accent-ink); }
+  .sk-join span{ color:var(--sk-muted); }
+  .sk-join .sk-join-go{ margin-left:auto; color:var(--accent-ink); font-weight:700; white-space:nowrap; }
+  .sk-join:hover{ border-color:var(--accent); }
+  @media (max-width:560px){ .sk-join .sk-join-go{ margin-left:0; } }
+
   /* Three rows of controls, sticky under the header: the window the
      numbers are read over; who; then which of that position's props.
      Position and prop are links (each board is its own build); the
@@ -21068,6 +21096,14 @@ STREAKS_HTML = BASE_STYLE + make_header("streaks") + """
   <div class="sk-title">Streaks <span class="sk-week">&middot; Week {{ week }}</span></div>
   <div class="sk-sub">Every starter with a game this week, game by game, against the line. Green cleared it,
     red didn't. Tap a player to move the line yourself.</div>
+
+  {% if not current_user.is_authenticated %}
+  <a class="sk-join" href="/signup">
+    <b>Free account</b>
+    <span>Sync your Sleeper leagues for lineup and waiver alerts by email.</span>
+    <span class="sk-join-go">Create account &rsaquo;</span>
+  </a>
+  {% endif %}
 
   <div class="sk-bars">
     <div class="sk-pills" id="skWindows">
