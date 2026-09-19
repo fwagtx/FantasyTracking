@@ -17238,9 +17238,16 @@ BASE_STYLE = THEME_BOOT + """
   .wordmark{ display:flex; align-items:center; gap:9px; text-decoration:none; }
   .wordmark svg{ width:22px; height:22px; }
   .wordmark span{ font-family:"Big Shoulders Display"; font-weight:800; font-size:18px; letter-spacing:0.03em; text-transform:uppercase; }
-  nav.links{ display:flex; align-items:center; gap:20px; flex-wrap:wrap; }
+  nav.links{ display:flex; align-items:center; gap:4px; flex-wrap:wrap; }
   nav.links a{ text-decoration:none; font-size:13.5px; font-weight:600; color:var(--ink-secondary); }
   nav.links a:hover, nav.links a.active{ color:var(--accent-ink); }
+  /* The same four destinations as the phone's bottom bar, with the same
+     icons, so the site is one place whichever way you arrive at it. */
+  .navtop{ display:inline-flex; align-items:center; gap:7px; padding:7px 11px; border-radius:8px; }
+  .navtop svg{ width:16px; height:16px; flex:none; }
+  .navtop:hover{ background:var(--paper-sunken); }
+  .navtop.active{ background:var(--paper-sunken); }
+  .navtop .plus-mark{ width:13px; height:11px; }
 
   /* --- the Live / Fantasy group menus ---------------------------------
      Same <details> machinery as the account menu below: opens, closes
@@ -18012,22 +18019,44 @@ NAV_LIVE = ("live", "/scores", "Live")
 # stay undiscovered.
 NAV_STREAKS = ("streaks", "/streaks", "Streaks")
 NAV_STREAKS_KEYS = ("streaks",)
+
 NAV_LIVE_KEYS = ("live", "scores", "standings", "performances",
                  "injuries", "moves", "birthdays")
 
-# Fantasy stays a menu: its five destinations have no shared landing page
-# that lists them the way /scores lists the live ones.
+# The top bar and the phone's bottom bar are now the same four
+# destinations, in the same order, drawn with the same icons -- read
+# out of TABBAR_SECTIONS rather than written twice, which is how the
+# two drifted into calling one page "Live" and "Scores" at once.
+#
+# "You" is not here: on desktop it is the account menu at the end of
+# the row, which holds more than a tab ever could.
+NAV_TOP_KEYS = ("streaks", "scores", "rankings", "matchups")
+NAV_ACTIVE_FOR = {
+    "scores": NAV_LIVE_KEYS,
+    "streaks": NAV_STREAKS_KEYS,
+    "rankings": ("rankings", "player", "trade", "sbc", "kickers"),
+    "matchups": ("matchups", "lineup", "waivers"),
+}
+
+
+def nav_top_sections():
+    """(key, label, href, icon) for each primary destination, in the
+    order the bar shows them."""
+    by_key = {k: (k, label, href, icon) for k, label, href, icon in TABBAR_SECTIONS}
+    return [by_key[k] for k in NAV_TOP_KEYS if k in by_key]
+
+# Fantasy stays a menu, and now holds only what the top row does not:
+# Rankings and Matchups moved up to be destinations in their own right,
+# so listing them twice would just be two doors into one room.
 NAV_GROUPS = [
     ("mycalc", "Fantasy", [
         # Free tools first, the StreakPros+ ones (see PLUS_KEYS) last.
         ("league", "/league-manager", "League Manager", "Your synced leagues and rosters"),
         ("matchup", "/matchup", "Your Matchup", "Live score and win odds in your league"),
-        ("rankings", "/rankings", "Rankings", "Values, and kickers and D/ST on points"),
         ("trade", "/trade-calculator", "Trade Calculator", "Weigh any trade both ways"),
         ("sbc", "/start-bench-cut", "Start/Bench/Cut", "Help keep the rankings sharp"),
         ("lineup", "/lineup", "Lineup", "Who to start this week, and why"),
         ("waivers", "/waivers", "Waiver Targets", "The best free agents in your league"),
-        ("matchups", "/matchups", "Matchups", "Start-sit grades for the week"),
         ("plus", "/plus", "StreakPros+", "Every tier, every list, every grade"),
     ]),
 ]
@@ -18061,19 +18090,18 @@ def make_header(active=""):
 
     # Live is a plain link, and reads as current on any of the live-side
     # pages -- including the ones it no longer lists.
-    _lk, _lhref, _llabel = NAV_LIVE
-    live_link = (f'<a class="navtop {"active" if active in NAV_LIVE_KEYS else ""}" '
-                 f'href="{_lhref}">{_llabel}</a>')
-    _sk, _shref, _slabel = NAV_STREAKS
-    streaks_link = (f'<a class="navtop {"active" if active in NAV_STREAKS_KEYS else ""}" '
-                    f'href="{_shref}">{_slabel}</a>')
+    top_links = "".join(
+        f'<a class="navtop {"active" if active in NAV_ACTIVE_FOR.get(key, (key,)) else ""}" '
+        f'href="{href}">{icon}<span>{label}</span>'
+        f'{PLUS_MARK_SVG if key in PLUS_KEYS else ""}</a>'
+        for key, label, href, icon in nav_top_sections())
 
     return f"""
 <header class="site"><div class="wrap nav-row">
   <a class="wordmark" href="/">{LOGO_SVG}<span>StreakPros</span></a>
   <input type="checkbox" id="navToggle" class="nav-toggle-checkbox">
   <label for="navToggle" class="nav-toggle-btn" aria-label="Menu">&#9776;</label>
-  <nav class="links">{streaks_link}{live_link}{nav_groups}
+  <nav class="links">{top_links}{nav_groups}
     {{% if current_user.is_authenticated %}}
       <details class="acct">
         <summary aria-label="Account menu">
@@ -23141,13 +23169,20 @@ GAME_DETAIL_HTML = BASE_STYLE + make_header("live") + """
     {% endif %}
   </div>
 
-  <!-- Feed / per-team tabs. Plain buttons toggling panels rather than
-       separate pages, so switching between the play feed and either
-       team's box score never costs a round trip mid-drive. -->
+  {# Feed / per-team tabs. Plain buttons toggling panels rather than
+     separate pages, so switching between the play feed and either
+     team's box score never costs a round trip mid-drive.
+
+     Which one opens follows the game. Feed was hardcoded, so every
+     visit before kickoff landed on "plays appear here once the game
+     kicks off" with four full tabs beside it -- the emptiest panel on
+     the page, chosen for you. Before kickoff the odds are the thing
+     worth reading; once it starts, the feed is. #}
+  {% set open_tab = 'feed' if detail.status != 'scheduled' else ('bets' if detail.odds else 'game') %}
   <div class="gd-tabs" id="gdTabs">
-    <button class="gd-tab on" data-panel="feed">Feed</button>
-    <button class="gd-tab" data-panel="bets">Bets</button>
-    <button class="gd-tab" data-panel="game">Game</button>
+    <button class="gd-tab {{ 'on' if open_tab == 'feed' }}" data-panel="feed">Feed</button>
+    <button class="gd-tab {{ 'on' if open_tab == 'bets' }}" data-panel="bets">Odds</button>
+    <button class="gd-tab {{ 'on' if open_tab == 'game' }}" data-panel="game">Box Score</button>
     {% if detail.away.abbr %}<button class="gd-tab" data-panel="away">{{ detail.away.abbr }}</button>{% endif %}
     {% if detail.home.abbr %}<button class="gd-tab" data-panel="home">{{ detail.home.abbr }}</button>{% endif %}
   </div>
@@ -23156,12 +23191,12 @@ GAME_DETAIL_HTML = BASE_STYLE + make_header("live") + """
        this every few seconds, and having the initial paint come from a
        separate server-side template is how the two silently drift apart.
        One renderer, used by both. -->
-  <div class="gd-panel on" data-panel="feed" id="gdFeedPanel"></div>
+  <div class="gd-panel {{ 'on' if open_tab == 'feed' }}" data-panel="feed" id="gdFeedPanel"></div>
 
   <!-- Bets: what the market says about this game. Reported, never
        offered -- there is nothing to click, no book linked, no wager
        placed. The same posture as showing the score. -->
-  <div class="gd-panel" data-panel="bets">
+  <div class="gd-panel {{ 'on' if open_tab == 'bets' }}" data-panel="bets">
     {% if detail.betting.lines %}
     {% set head = detail.betting.lines[0] %}
     <div class="gd-bet-head">
@@ -23216,7 +23251,7 @@ GAME_DETAIL_HTML = BASE_STYLE + make_header("live") + """
     <p class="gd-bet-note">Lines are shown for information only. Nothing here is a wager or an offer to place one.</p>
   </div>
 
-  <div class="gd-panel" data-panel="game" id="gdGamePanel">
+  <div class="gd-panel {{ 'on' if open_tab == 'game' }}" data-panel="game" id="gdGamePanel">
     {# News lives on this tab, not the Feed one: the Feed panel is
        repainted wholesale by the live poll, so anything rendered into it
        server-side is wiped on the first refresh. #}
