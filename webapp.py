@@ -9395,8 +9395,9 @@ def _email_shell(eyebrow, headline, sub, inner, cta_href, cta_label):
         f'<td style="vertical-align:middle;">'
         f'<img src="{SITE_URL}/icon-192.png" width="26" height="26" alt="" '
         f'style="border-radius:6px;vertical-align:middle;display:inline-block;">'
-        f'<span style="color:#ffffff;font-weight:800;font-size:14px;letter-spacing:.1em;'
-        f'vertical-align:middle;">&nbsp;&nbsp;STREAKPROS</span></td>'
+        f'<span style="color:#ffffff;font-weight:800;font-size:16px;letter-spacing:0;'
+        f'vertical-align:middle;">&nbsp;&nbsp;Streak'
+        f'<span style="color:{EMAIL_FLAME};">Pros</span></span></td>'
         f'<td align="right" style="vertical-align:middle;color:#93a4bd;font-size:12px;">'
         f'{html.escape(eyebrow)}</td></tr></table></td></tr>'
         # Headline.
@@ -17376,7 +17377,13 @@ BASE_STYLE = THEME_BOOT + """
   .nav-toggle-btn{ display:none; cursor:pointer; font-size:24px; line-height:1; color:var(--ink); padding:4px 6px; }
   .wordmark{ display:flex; align-items:center; gap:9px; text-decoration:none; }
   .wordmark svg{ width:22px; height:22px; }
-  .wordmark span{ font-family:"Big Shoulders Display"; font-weight:800; font-size:18px; letter-spacing:0.03em; text-transform:uppercase; }
+  .wordmark span{ font-family:"Big Shoulders Display"; font-weight:800; font-size:21px;
+                  letter-spacing:0.002em; line-height:1; }
+  /* Two-tone, so the halves separate at a glance and the name picks up
+     the flame the mark beside it is drawn in. Fixed brand colour, like
+     the mark: a logo that changed with the reader's accent would not be
+     one. */
+  .wordmark span b{ color:#F2542D; font-weight:800; }
   nav.links{ display:flex; align-items:center; gap:4px; flex-wrap:wrap; }
   nav.links a{ text-decoration:none; font-size:13.5px; font-weight:600; color:var(--ink-secondary); }
   nav.links a:hover, nav.links a.active{ color:var(--accent-ink); }
@@ -18237,7 +18244,7 @@ def make_header(active=""):
 
     return f"""
 <header class="site"><div class="wrap nav-row">
-  <a class="wordmark" href="/">{LOGO_SVG}<span>StreakPros</span></a>
+  <a class="wordmark" href="/">{LOGO_SVG}<span>Streak<b>Pros</b></span></a>
   <input type="checkbox" id="navToggle" class="nav-toggle-checkbox">
   <label for="navToggle" class="nav-toggle-btn" aria-label="Menu">&#9776;</label>
   <nav class="links">{top_links}{nav_groups}
@@ -25388,7 +25395,8 @@ AUTH_STYLE = THEME_BOOT + """
 """ + THEME_TOKENS + """
   body{ margin:0; background:var(--paper); color:var(--ink); font-family:"Source Sans 3",system-ui,sans-serif; min-height:100vh; }
   .auth-top{ display:flex; justify-content:flex-end; padding:24px 32px; }
-  .auth-logo{ font-family:"Big Shoulders Display"; font-weight:800; font-size:18px; text-transform:uppercase; color:var(--ink); text-decoration:none; }
+  .auth-logo{ font-family:"Big Shoulders Display"; font-weight:800; font-size:21px; color:var(--ink); text-decoration:none; }
+  .auth-logo b{ color:#F2542D; font-weight:800; }
   .auth-wrap{ max-width:400px; margin:20px auto 80px; padding:0 24px; }
   .auth-wrap h1{ font-family:"Big Shoulders Display"; font-size:32px; font-weight:800; text-transform:uppercase; margin:0; }
   .auth-sub{ color:var(--ink-muted); font-size:14px; margin-top:8px; }
@@ -25426,7 +25434,7 @@ AUTH_STYLE = THEME_BOOT + """
 """
 
 SIGNUP_HTML = AUTH_STYLE + """
-<div class="auth-top"><a class="auth-logo" href="/">StreakPros</a></div>
+<div class="auth-top"><a class="auth-logo" href="/">Streak<b>Pros</b></a></div>
 <div class="auth-wrap">
   <h1>Create Account</h1>
   <p class="auth-sub">Already have an account? <a href="/login">Sign In</a></p>
@@ -26115,7 +26123,7 @@ document.addEventListener('change', function(e){
 
 
 FORGOT_PASSWORD_HTML = AUTH_STYLE + """
-<div class="auth-top"><a class="auth-logo" href="/">StreakPros</a></div>
+<div class="auth-top"><a class="auth-logo" href="/">Streak<b>Pros</b></a></div>
 <div class="auth-wrap">
   {% if sent %}
   <h1>Check your email</h1>
@@ -26148,7 +26156,7 @@ FORGOT_PASSWORD_HTML = AUTH_STYLE + """
 
 
 RESET_PASSWORD_HTML = AUTH_STYLE + """
-<div class="auth-top"><a class="auth-logo" href="/">StreakPros</a></div>
+<div class="auth-top"><a class="auth-logo" href="/">Streak<b>Pros</b></a></div>
 <div class="auth-wrap">
   {% if done %}
   <h1>Password Changed</h1>
@@ -26178,7 +26186,7 @@ RESET_PASSWORD_HTML = AUTH_STYLE + """
 
 
 LOGIN_PAGE_HTML = AUTH_STYLE + """
-<div class="auth-top"><a class="auth-logo" href="/">StreakPros</a></div>
+<div class="auth-top"><a class="auth-logo" href="/">Streak<b>Pros</b></a></div>
 <div class="auth-wrap">
   <h1>Welcome Back</h1>
   <p class="auth-sub">Don't have an account? <a href="/signup">Create one</a></p>
