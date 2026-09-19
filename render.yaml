@@ -34,5 +34,9 @@ services:
         sync: false
       - key: MAIL_FROM
         sync: false
+      # Set in the Render dashboard, not here. A value in this file wins
+      # over the dashboard whenever a blueprint sync runs, which during a
+      # domain move would quietly put the old hostname back into every
+      # link the app emails out.
       - key: SITE_URL
-        value: https://fantasyfootballcalc.com
+        sync: false

@@ -1,15 +1,14 @@
 """
-Dynasty League Explorer
---------------------------
-Public site: type any Sleeper username, see every dynasty league, full
-standings, and a Flock-Fantasy-style positional value breakdown for every
-team using real dynasty trade values.
-Includes Rankings, a photo-based live-search Trade Calculator (Dynasty/
-Redraft + 1QB/Superflex, with real draft-pick pricing and optional league
-linking so you can click straight from a roster instead of typing), real
-ADP on player pages via Fantasy Football Calculator's public API, and
-clickable player profiles. Player photos come from Sleeper's official
-headshot CDN.
+StreakPros
+----------
+Player streaks and hit rates game by game, live NFL scores and box
+scores, rankings and trade values, and per-league lineup and waiver
+help for anyone who syncs a Sleeper username.
+
+Data comes from Sleeper (players, rosters, stats, projections), ESPN's
+site API (schedule, scores, box scores, officials), FantasyCalc (trade
+values) and Fantasy Football Calculator (ADP). Player photos come from
+Sleeper's official headshot CDN.
 
 Required environment variables:
   GEMINI_API_KEY, SITE_PASSWORD

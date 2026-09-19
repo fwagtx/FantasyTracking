@@ -1,9 +1,12 @@
-# Dynasty League Explorer
+# StreakPros
 
-Flask app: type a Sleeper username, see every dynasty league, standings, and
-positional value breakdowns using dynasty trade values from FantasyCalc's
-public API. Includes rankings, a photo-based trade calculator, ADP data,
-player profiles, and Gemini-powered chat.
+Flask app at [streakpros.com](https://streakpros.com): player streaks and
+hit rates game by game, live NFL scores and box scores, rankings and trade
+values, and per-league lineup and waiver help for anyone who syncs a
+Sleeper username.
+
+Data comes from Sleeper, ESPN's site API, FantasyCalc and Fantasy Football
+Calculator. Everything lives in a single `webapp.py`.
 
 ## Required environment variables
 
@@ -23,7 +26,8 @@ player profiles, and Gemini-powered chat.
 `render.yaml` is included as a Render Blueprint. Create a new Blueprint
 instance from this repo, then fill in the env vars above in the Render
 dashboard (they're intentionally left unset in `render.yaml` since they're
-secrets). The service starts via `gunicorn webapp:app`.
+secrets). The service starts via the `startCommand` in `render.yaml`. Note that a
+start command set in the Render dashboard **overrides** this file.
 
 Postgres isn't provisioned by the blueprint — point `DATABASE_URL` at your
 own instance (e.g. a free Neon database).
@@ -39,8 +43,10 @@ the deployed site's `/api/sync-stats` endpoint:
   every season from 2015 to present. Run this once after first deploying,
   then let `sync-stats.yml` handle the rest.
 
-Both call `https://fantasyfootballcalc.com/api/sync-stats` — update that
-hostname in both workflow files if the app is deployed elsewhere.
+Every workflow reads its hostname from a **`SITE_HOST` repository
+variable** (Settings → Secrets and variables → Actions → Variables),
+falling back to the current domain when it is unset. Moving the app to a
+new domain is that one variable, not an edit per file.
 
 - **`keep-warm.yml`** — runs every 12 minutes, pinging `/healthz` (keeps
   Render's free-tier worker from spinning down after ~15 min idle) and
