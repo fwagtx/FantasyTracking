@@ -83,14 +83,19 @@ jobs:
       - name: Phase 4 - which domain the app thinks it is
         run: |
           echo "## Phase 4: app configuration" >> $GITHUB_STEP_SUMMARY
-          # /api/mail-status is public-safe: it reports whether mail is
-          # configured, never the credentials.
+          # No secret is sent on purpose. A guarded endpoint answering
+          # "unauthorized" is the proof worth having: the request reached
+          # the real app, and the app turned it away. Silence or a
+          # Cloudflare error page would mean the host is not wired up.
           for host in "$NEW" "$OLD"; do
             body=$(curl -sS --max-time 25 "https://$host/api/mail-status" 2>/dev/null) || continue
-            echo "--- $host: $body"
+            case "$body" in
+              *unauthorized*)
+                echo "DONE - https://$host reaches the app, and it is guarding /api" \
+                  | tee -a $GITHUB_STEP_SUMMARY ;;
+              *) echo "CHECK - https://$host answered: $body" | tee -a $GITHUB_STEP_SUMMARY ;;
+            esac
           done
-          echo "(SITE_URL and MAIL_FROM are set in Render; this shows what took effect)" \
-            >> $GITHUB_STEP_SUMMARY
 
       - name: Phase 7 - the old domain still works, and redirects
         run: |
