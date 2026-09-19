@@ -45,7 +45,7 @@ import stripe
 import psycopg2
 import psycopg2.extras
 import psycopg2.pool
-from flask import Flask, request, session, redirect, render_template_string, jsonify, url_for, make_response
+from flask import Flask, request, session, redirect, render_template_string, jsonify, url_for, make_response, g
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from authlib.integrations.flask_client import OAuth
@@ -348,6 +348,122 @@ def tabbar_html(path, signed_in):
                      f'{icon}{mark}<span>{label}</span></a>')
     return (TABBAR_STYLE + f'<nav class="tabbar" data-here="{here or ""}" aria-label="Sections">' + "".join(links)
             + '</nav>' + TABBAR_SCRIPT)
+
+
+# What a page calls itself.
+#
+# None of these pages had a <title>, a description or an Open Graph tag
+# -- not one, anywhere. A browser tab showed the URL, Google had no
+# headline to print and invented one from the body text, and a link
+# pasted into a group chat arrived as a bare address with no card. For
+# a site whose whole organic plan is a page per player, that is the
+# plan not working.
+#
+# Longest matching prefix wins, so /streaks/player beats /streaks.
+SITE_TAGLINE = "Player streaks, live scores and fantasy tools"
+PAGE_META = (
+    ("/streaks/player", "Player Streaks", "Every prop for one player, game by game, against a line you can move."),
+    ("/streaks", "Streaks", "Every starter against the line, game by game. Who is clearing it and who is not."),
+    ("/scores", "NFL Scores", "Live NFL scores, box scores and the players on your roster in every game."),
+    ("/game", "Game", "Live score, drives, box score and odds, with your own players called out."),
+    ("/play", "Play", "One play, and what it did to the game."),
+    ("/rankings", "Fantasy Rankings", "Dynasty and redraft values, weekly movement, and kickers and defences on points."),
+    ("/player", "Player", "Value, rankings, ADP, stats and this week's matchup for one player."),
+    ("/performances", "Performances", "Every scored game this week, ranked, filterable by position."),
+    ("/performance", "Performance", "One game: the score, how it was measured, and the whole stat line."),
+    ("/matchups", "Matchup Grades", "Start-sit grades for the week, with the reason behind each one."),
+    ("/matchup", "Your Matchup", "Your league matchup, live, with win odds."),
+    ("/lineup", "Your Lineup", "Who to start this week, and why."),
+    ("/waivers", "Waiver Targets", "The best free agents in your league, ranked on this season's form."),
+    ("/standings", "NFL Standings", "Divisions, the playoff field and the draft order."),
+    ("/team", "Team", "One team: record, power rank, recent results and the roster."),
+    ("/injuries", "NFL Injuries", "This week's injury report across the league."),
+    ("/moves", "Roster Moves", "Signings, releases and practice-squad moves across the league."),
+    ("/birthdays", "Birthdays", "Who is having one."),
+    ("/streaks", "Streaks", "Every starter against the line, game by game."),
+    ("/trade-calculator", "Trade Calculator", "Weigh any trade both ways, with real draft-pick pricing."),
+    ("/start-bench-cut", "Start, Bench, Cut", "Three players, one call, and the crowd's answer."),
+    ("/draft", "Mock Draft", "Draft a board and see how it grades."),
+    ("/league-manager", "Your Leagues", "Every synced league, roster and standing in one place."),
+    ("/league", "League", "One league: rosters, standings and values."),
+    ("/plus", "StreakPros+", "Every tier, every list, every grade."),
+    ("/pricing", "Pricing", "What StreakPros+ costs and what it covers."),
+    ("/settings", "Settings", "Your account, your leagues, your alerts."),
+    ("/login", "Sign In", "Sign in to StreakPros."),
+    ("/signup", "Create Account", "Create a free StreakPros account."),
+    ("/privacy", "Privacy", "What StreakPros collects and why."),
+    ("/terms", "Terms", "The terms of using StreakPros."),
+    ("/support", "Support", "How to get help."),
+)
+
+
+def set_page_meta(title, description=None):
+    """A route naming itself, for the pages where a generic title would
+    be a waste -- a player, a game, a team. Falls back to the table
+    above when a route says nothing."""
+    g.page_title = title
+    if description:
+        g.page_description = description
+
+
+def _page_meta_for(path):
+    """(title, description) for a path: whatever the route set, else the
+    longest matching prefix, else the site's own."""
+    title = getattr(g, "page_title", None)
+    desc = getattr(g, "page_description", None)
+    if not title:
+        best = ""
+        for prefix, name, text in PAGE_META:
+            if (path == prefix or path.startswith(prefix + "/")) and len(prefix) > len(best):
+                best, title, desc = prefix, name, desc or text
+    if not title:
+        # The front door names the site and says what it is, rather than
+        # saying the name twice.
+        return f"StreakPros | {SITE_TAGLINE}", desc or SITE_TAGLINE
+    # "StreakPros+ | StreakPros" reads like a stutter.
+    if title.startswith("StreakPros"):
+        return title, desc or SITE_TAGLINE
+    return f"{title} | StreakPros", desc or SITE_TAGLINE
+
+
+@app.after_request
+def _prepend_head(response):
+    """Gives every page a title, a description and a link-preview card.
+
+    Prepended rather than written into forty templates, for the same
+    reason the footer is appended there: a tag that exists on three
+    pages is a tag that is missing from thirty-seven."""
+    try:
+        if (response.direct_passthrough
+                or response.status_code >= 300
+                or response.mimetype != "text/html"
+                or "Content-Encoding" in response.headers):
+            return response
+        body = response.get_data(as_text=True)
+        if "<title>" in body:
+            return response
+        title, desc = _page_meta_for(request.path)
+        url = SITE_URL + request.path
+        e = html.escape
+        head = (
+            f'<title>{e(title)}</title>'
+            f'<meta name="description" content="{e(desc)}">'
+            f'<link rel="canonical" href="{e(url)}">'
+            f'<meta property="og:site_name" content="StreakPros">'
+            f'<meta property="og:type" content="website">'
+            f'<meta property="og:title" content="{e(title)}">'
+            f'<meta property="og:description" content="{e(desc)}">'
+            f'<meta property="og:url" content="{e(url)}">'
+            f'<meta property="og:image" content="{SITE_URL}/icon-512.png">'
+            f'<meta name="twitter:card" content="summary">'
+            f'<meta name="twitter:title" content="{e(title)}">'
+            f'<meta name="twitter:description" content="{e(desc)}">'
+            f'<meta name="twitter:image" content="{SITE_URL}/icon-512.png">')
+        response.set_data(head + body)
+        return response
+    except Exception:
+        app.logger.warning("could not add the page's head tags", exc_info=True)
+        return response
 
 
 # Registered AFTER the compressor on purpose. Flask runs after_request
@@ -8160,6 +8276,12 @@ def player_detail():
     fc_players = get_fantasycalc_values(num_qbs)["players"]
     v = fc_players.get(sid, {})
     full_name = f"{p.get('first_name','')} {p.get('last_name','')}".strip()
+    # The long-tail pages are the whole organic plan, so they name
+    # themselves rather than inheriting "Player | StreakPros".
+    set_page_meta(
+        f"{full_name} Fantasy Value, Stats and Rankings",
+        f"{full_name}: dynasty and redraft value, rankings, ADP, season stats "
+        f"and this week's matchup.")
     adp_data = get_adp_data()
 
     current_season = int(SEASON)
@@ -14199,6 +14321,9 @@ def team_page():
             return render_template_string(
                 TEAM_HTML, team=None, season=season, load_error=None,
                 all_teams=sorted(NFL_DIVISIONS))
+        set_page_meta(f"{abbr} Schedule, Roster and Standings",
+                      f"{abbr}: record, power rank, recent results and the roster, "
+                      f"with each player's rankings.")
         standings = get_team_standings(season)
         # Before a team's first game there is nothing this season to rank
         # on. Rather than three dashes, fall back to the most recent
@@ -14291,6 +14416,10 @@ def performance_page():
         season = request.args.get("season", default=info["season"], type=int)
         week = request.args.get("week", default=info["week"], type=int)
         detail = get_performance_detail(sid, season, week) if sid else None
+        if detail and detail.get("name"):
+            set_page_meta(f"{detail['name']} Week {week} Stats",
+                          f"{detail['name']} in week {week}: the score, how it was "
+                          f"measured, and the whole stat line.")
         log = get_player_season_log(sid, season, detail["position"], through_week=week) if detail else []
         quarters = (get_player_quarter_breakdown(
             sid, season, week, score=(detail["score"] or {}).get("score")) if detail else [])
@@ -14528,6 +14657,11 @@ def streak_player_page():
     try:
         side = "under" if (request.args.get("side") or "").lower() == "under" else "over"
         d = get_streak_detail(sid, season, week) if sid else None
+        if d and d.get("name"):
+            set_page_meta(
+                f"{d['name']} Streaks and Hit Rates",
+                f"{d['name']}: every prop game by game against the line, with "
+                f"hit rates over his last five and ten.")
         if d and prop not in d["per_prop"]:
             prop = d["props"][0]["key"] if d["props"] else prop
         return render_template_string(
@@ -15054,6 +15188,11 @@ def game_detail_page():
         # today.
         detail["my_players"] = _my_players_for_game(
             detail, username, season=gw["season"], week=gw["week"])
+        _away = (detail.get("away") or {}).get("abbr") or "Away"
+        _home = (detail.get("home") or {}).get("abbr") or "Home"
+        set_page_meta(f"{_away} vs {_home} Live Score and Box Score",
+                      f"{_away} vs {_home}, week {gw['week']}: live score, drives, "
+                      f"box score and odds.")
         detail["plays"] = enrich_plays(extract_drive_plays(summary), gw["season"], gw["week"])
         detail["field"] = extract_field_position(summary)
         detail["box"] = attach_box_photos(extract_box_score(summary))
