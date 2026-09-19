@@ -6280,13 +6280,17 @@ def _email_footer(user_id):
             "StreakPros\n"
             f"Stop receiving emails: {link}\n"
             f"Privacy policy: {SITE_URL}/privacy")
+    # Centred on the same 600px as the card above it, so it reads as the
+    # bottom of one message rather than a loose paragraph stuck on after.
     body = (
-        '<hr style="border:none;border-top:1px solid #ddd;margin:26px 0 14px;">'
-        '<p style="color:#888;font-size:12px;line-height:1.6;margin:0;">'
-        'StreakPros<br>'
-        f'<a href="{link}" style="color:#888;">Stop receiving emails</a> &middot; '
-        f'<a href="{SITE_URL}/privacy" style="color:#888;">Privacy policy</a>'
-        '</p>')
+        f'<div style="background:{EMAIL_BG};padding:0 10px 26px;font-family:{EMAIL_FONT};">'
+        f'<table role="presentation" align="center" width="{EMAIL_WIDTH}" cellpadding="0" '
+        f'cellspacing="0" border="0" style="width:{EMAIL_WIDTH}px;max-width:100%;margin:0 auto;">'
+        f'<tr><td style="padding:14px 20px 0;color:{EMAIL_MUTED};font-size:12px;line-height:1.7;">'
+        f'StreakPros<br>'
+        f'<a href="{link}" style="color:{EMAIL_MUTED};">Stop receiving emails</a> &middot; '
+        f'<a href="{SITE_URL}/privacy" style="color:{EMAIL_MUTED};">Privacy policy</a>'
+        f'</td></tr></table></div>')
     return text, body
 
 
@@ -9134,32 +9138,229 @@ def build_waiver_alert(league, user_id, season, week):
     return _waiver_alert(league, user_id, season, week)[0]
 
 
+# --- how an email looks ----------------------------------------------
+#
+# Mail clients are a decade behind browsers: no flexbox, no grid, style
+# blocks stripped by some, images blocked by default until a reader
+# trusts the sender. So this is tables and inline styles, and every
+# number is text -- an email with images turned off still reads as the
+# whole message, with only the logo missing.
+EMAIL_NAVY = "#10233F"
+EMAIL_FLAME = "#F2542D"
+EMAIL_BG = "#eef1f5"
+EMAIL_PAPER = "#ffffff"
+EMAIL_INK = "#16202c"
+EMAIL_MUTED = "#6b7683"
+EMAIL_LINE = "#e4e8ee"
+EMAIL_SOFT = "#f6f8fa"
+EMAIL_GOOD = "#1e7a4a"
+EMAIL_BAD = "#b23b2e"
+EMAIL_WIDTH = 600
+EMAIL_FONT = ("-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,"
+              "Helvetica,Arial,sans-serif")
+
+
 def _alert_button(href, label):
-    return (f'<p><a href="{href}" style="background:#b97a1f;color:#fff8ec;padding:11px 22px;'
-            f'border-radius:99px;text-decoration:none;font-weight:700;display:inline-block;">'
-            f'{html.escape(label)}</a></p>')
+    return (f'<table role="presentation" cellpadding="0" cellspacing="0" border="0" '
+            f'style="margin:18px 0 4px;"><tr><td style="background:{EMAIL_FLAME};'
+            f'border-radius:8px;"><a href="{href}" style="display:inline-block;'
+            f'padding:12px 26px;color:#ffffff;text-decoration:none;font-weight:700;'
+            f'font-size:15px;font-family:{EMAIL_FONT};">{html.escape(label)}</a>'
+            f'</td></tr></table>')
+
+
+def _email_who(card):
+    """What to call a player. A card built from a thin source may carry
+    only the short form, and an email that says "start  instead of" is
+    worse than no email."""
+    return (card or {}).get("name") or (card or {}).get("short") or ""
+
+
+def _email_matchup(player):
+    """"vs BUF" / "@ BUF", or the team alone when the week has no game
+    attached to read."""
+    game = (player or {}).get("game") or {}
+    opp = game.get("opp")
+    team = (player or {}).get("team") or ""
+    if not opp:
+        return html.escape(str(team))
+    return f'{html.escape(str(team))} {"vs" if game.get("home") else "@"} {html.escape(str(opp))}'
+
+
+def _email_player_cell(player, label, label_colour, slot=None):
+    """One side of a swap: who, where he plays, and what he is worth."""
+    if not player:
+        return (f'<div style="font-size:11px;font-weight:700;letter-spacing:.06em;'
+                f'color:{label_colour};">{label}</div>'
+                f'<div style="font-size:15px;font-weight:700;color:{EMAIL_INK};">An empty slot</div>')
+    bits = [_email_matchup(player)]
+    if player.get("proj") is not None:
+        bits.append(f'{player["proj"]} proj')
+    if player.get("grade"):
+        bits.append(f'grade {html.escape(str(player["grade"]))}')
+    if player.get("recent_avg") is not None and player.get("recent_n"):
+        bits.append(f'{player["recent_avg"]} avg last {player["recent_n"]}')
+    pos = html.escape(str(player.get("position") or ""))
+    where = f' &middot; {html.escape(str(slot))}' if slot else ""
+    return (f'<div style="font-size:11px;font-weight:700;letter-spacing:.06em;'
+            f'color:{label_colour};">{label}</div>'
+            f'<div style="font-size:15px;font-weight:700;color:{EMAIL_INK};padding:1px 0;">'
+            f'{html.escape(_email_who(player))}</div>'
+            f'<div style="font-size:12px;color:{EMAIL_MUTED};line-height:1.55;">'
+            f'{pos}{where}<br>{" &middot; ".join(bits)}</div>')
+
+
+def _email_swap_card(change):
+    """A change to make, as a card: the slot, what it is worth, both
+    players side by side, and the reason underneath."""
+    start, over = change.get("start"), change.get("over")
+    return (
+        f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" '
+        f'style="border:1px solid {EMAIL_LINE};border-radius:10px;margin:0 0 10px;'
+        f'background:{EMAIL_PAPER};"><tr><td style="padding:11px 14px 0;">'
+        f'<span style="background:{EMAIL_NAVY};color:#ffffff;font-size:11px;font-weight:700;'
+        f'letter-spacing:.06em;padding:3px 8px;border-radius:5px;">'
+        f'{html.escape(str(change.get("slot") or ""))}</span>'
+        f'<span style="color:{EMAIL_FLAME};font-weight:800;font-size:14px;">'
+        f'&nbsp;&nbsp;+{change.get("gain")} projected</span>'
+        f'</td></tr><tr><td style="padding:8px 14px 12px;">'
+        f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>'
+        f'<td width="50%" style="vertical-align:top;padding-right:8px;">'
+        + _email_player_cell(start, "START", EMAIL_GOOD) +
+        f'</td><td width="50%" style="vertical-align:top;padding-left:8px;'
+        f'border-left:1px solid {EMAIL_LINE};">'
+        + _email_player_cell(over, "INSTEAD OF", EMAIL_BAD,
+                             change.get("over_slot") if change.get("over_slot") != change.get("slot") else None) +
+        f'</td></tr></table>'
+        + (f'<div style="font-size:12px;color:{EMAIL_MUTED};line-height:1.6;padding-top:9px;">'
+           f'{html.escape(str(change.get("why")))}</div>' if change.get("why") else "")
+        + '</td></tr></table>')
+
+
+def _email_flag_row(sentence):
+    """Something wrong that is not a swap -- out, on bye, nobody
+    projecting him, an empty slot."""
+    return (f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" '
+            f'style="margin:0 0 8px;background:#fff5f2;border-left:3px solid {EMAIL_FLAME};'
+            f'border-radius:0 8px 8px 0;"><tr><td style="padding:10px 13px;font-size:13px;'
+            f'color:{EMAIL_INK};line-height:1.5;">{html.escape(sentence)}</td></tr></table>')
+
+
+def _email_hero(big, caption):
+    """The one number the message is about, given room to be read."""
+    return (f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" '
+            f'style="background:{EMAIL_SOFT};border:1px solid {EMAIL_LINE};border-radius:10px;'
+            f'margin:0 0 14px;"><tr><td style="padding:13px 15px;">'
+            f'<span style="font-size:27px;font-weight:800;color:{EMAIL_FLAME};'
+            f'letter-spacing:-.01em;">{html.escape(str(big))}</span>'
+            f'<span style="font-size:13px;color:{EMAIL_MUTED};">&nbsp;{html.escape(caption)}</span>'
+            f'</td></tr></table>')
+
+
+def _email_shell(eyebrow, headline, sub, inner, cta_href, cta_label):
+    """The branded frame every alert arrives in.
+
+    Self-contained: it opens and closes its own centred table, so the
+    unsubscribe block that gets appended after it lines up underneath
+    rather than having to be threaded through."""
+    return (
+        f'<div style="background:{EMAIL_BG};padding:22px 10px;font-family:{EMAIL_FONT};">'
+        f'<table role="presentation" align="center" width="{EMAIL_WIDTH}" cellpadding="0" '
+        f'cellspacing="0" border="0" style="width:{EMAIL_WIDTH}px;max-width:100%;margin:0 auto;">'
+        # Header: the mark, the name, and what this message is.
+        f'<tr><td style="background:{EMAIL_NAVY};padding:15px 20px;border-radius:12px 12px 0 0;">'
+        f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>'
+        f'<td style="vertical-align:middle;">'
+        f'<img src="{SITE_URL}/icon-192.png" width="26" height="26" alt="" '
+        f'style="border-radius:6px;vertical-align:middle;display:inline-block;">'
+        f'<span style="color:#ffffff;font-weight:800;font-size:14px;letter-spacing:.1em;'
+        f'vertical-align:middle;">&nbsp;&nbsp;STREAKPROS</span></td>'
+        f'<td align="right" style="vertical-align:middle;color:#93a4bd;font-size:12px;">'
+        f'{html.escape(eyebrow)}</td></tr></table></td></tr>'
+        # Headline.
+        f'<tr><td style="background:{EMAIL_PAPER};padding:22px 20px 0;">'
+        f'<div style="font-size:20px;font-weight:800;color:{EMAIL_INK};line-height:1.3;">'
+        f'{html.escape(headline)}</div>'
+        f'<div style="font-size:13px;color:{EMAIL_MUTED};padding-top:5px;line-height:1.55;">'
+        f'{sub}</div></td></tr>'
+        # Body.
+        f'<tr><td style="background:{EMAIL_PAPER};padding:16px 20px 0;">{inner}</td></tr>'
+        # Call to action.
+        f'<tr><td style="background:{EMAIL_PAPER};padding:0 20px 24px;'
+        f'border-radius:0 0 12px 12px;">{_alert_button(cta_href, cta_label)}</td></tr>'
+        f'</table></div>')
 
 
 def render_lineup_alert(alert, username):
-    """(subject, text, html) for a lineup alert."""
+    """(subject, text, html) for a lineup alert.
+
+    The swaps come from the plan rather than the problem sentences, so
+    the email can show both players, what each is projected for, the
+    grade and the recent form -- the sentence alone was one line with a
+    single number in it, which is a poor use of the one email a week
+    somebody actually opens."""
     league = alert["league_name"]
     count = len(alert["problems"])
+    hours = int(round(alert["hours"]))
     subject = (f"Lineup alert: {count} thing{'' if count == 1 else 's'} to fix in {league}"
                f" before kickoff")
-    lines = [f"{sentence}" for _code, sentence in alert["problems"]]
     link = f"{SITE_URL}/lineup?league={alert['league_id']}"
+    plan = alert.get("plan") or {}
+    # Swaps have both players behind them; everything else (out, bye,
+    # empty slot, nobody projecting him) only ever had a sentence.
+    swaps = [c for c in (plan.get("changes") or [])
+             if (c.get("gain") or 0) >= LINEUP_ALERT_MIN_GAIN]
+    flags = [line for code, line in alert["problems"] if not code.startswith("swap:")]
+    gain = plan.get("gain")
+
+    lines = [line for _code, line in alert["problems"]]
+    def _bits(card):
+        """The parenthesised detail after a name, with nothing invented:
+        a card that does not carry a projection says so by leaving it
+        out, not by printing "None proj"."""
+        out = []
+        if card.get("position"):
+            out.append(str(card["position"]))
+        if card.get("proj") is not None:
+            out.append(f"{card['proj']} proj")
+        if card.get("grade"):
+            out.append(f"grade {card['grade']}")
+        return f" ({', '.join(out)})" if out else ""
+
+    text_rows = []
+    for c in swaps:
+        start, over = c.get("start") or {}, c.get("over") or {}
+        row = f"  {c.get('slot')}: start {_email_who(start)}{_bits(start)}\n"
+        row += (f"      instead of {_email_who(over)}{_bits(over)}"
+                if over else "      into an empty slot")
+        text_rows.append(row + f"  -> +{c.get('gain')}")
     text = (f"Hi {username},\n\n"
-            f"Week {alert['week']} in {league} kicks off in about {int(round(alert['hours']))} hours, "
-            f"and your lineup has {count} thing{'' if count == 1 else 's'} worth a look:\n\n"
-            + "\n".join(f"  - {line}" for line in lines)
+            f"Week {alert['week']} in {league} kicks off in about {hours} hours, "
+            f"and your lineup has {count} thing{'' if count == 1 else 's'} worth a look."
+            + (f"\n\nThere are {gain} projected points on the table." if gain else "")
+            + ("\n\nChanges to make:\n" + "\n".join(text_rows) if text_rows else "")
+            + ("\n\nAlso worth knowing:\n" + "\n".join(f"  - {f}" for f in flags) if flags else "")
             + f"\n\nSee the whole lineup, and what to do about it:\n{link}\n")
-    body = (f'<p>Hi {html.escape(str(username))},</p>'
-            f'<p>Week {alert["week"]} in <b>{html.escape(league)}</b> kicks off in about '
-            f'{int(round(alert["hours"]))} hours, and your lineup has '
-            f'{count} thing{"" if count == 1 else "s"} worth a look:</p>'
-            '<ul style="line-height:1.7;">'
-            + "".join(f"<li>{html.escape(line)}</li>" for line in lines)
-            + "</ul>" + _alert_button(link, "Open your lineup"))
+
+    inner = ""
+    if gain:
+        inner += _email_hero(f"+{gain}", "projected points on the table")
+    if swaps:
+        inner += (f'<div style="font-size:11px;font-weight:700;letter-spacing:.08em;'
+                  f'color:{EMAIL_MUTED};padding:2px 0 8px;">CHANGES TO MAKE</div>')
+        inner += "".join(_email_swap_card(c) for c in swaps)
+    if flags:
+        inner += (f'<div style="font-size:11px;font-weight:700;letter-spacing:.08em;'
+                  f'color:{EMAIL_MUTED};padding:12px 0 8px;">ALSO WORTH KNOWING</div>')
+        inner += "".join(_email_flag_row(f) for f in flags)
+    if not inner:
+        inner = "".join(_email_flag_row(line) for line in lines)
+    body = _email_shell(
+        eyebrow=f"Week {alert['week']}",
+        headline=f"{count} thing{'' if count == 1 else 's'} to fix before kickoff",
+        sub=(f'Hi {html.escape(str(username))} &mdash; <b>{html.escape(league)}</b> '
+             f'kicks off in about {hours} hours.'),
+        inner=inner, cta_href=link, cta_label="Open your lineup")
     return subject, text, body
 
 
@@ -9180,27 +9381,39 @@ def render_waiver_alert(alert, username):
                 for t in group["targets"]]
         text_groups.append(group["label"] + "\n" + "\n".join(rows))
         items = "".join(
-            f'<li style="margin-bottom:8px;"><b>{html.escape(t["name"])}</b> '
-            f'<span style="color:#666;">{html.escape(str(t["position"]))} &middot; '
-            f'{html.escape(str(t["team"] or ""))} &middot; score {t["score"]}</span><br>'
-            f'<span style="color:#666;font-size:13px;">{html.escape(t["why"])}</span></li>'
+            f'<tr><td width="30" style="vertical-align:top;padding:9px 0 9px 12px;'
+            f'font-size:16px;font-weight:800;color:{EMAIL_FLAME};">{t["rank"]}</td>'
+            f'<td style="padding:9px 12px 9px 4px;border-bottom:1px solid {EMAIL_LINE};">'
+            f'<div style="font-size:15px;font-weight:700;color:{EMAIL_INK};">'
+            f'{html.escape(str(t["name"]))}</div>'
+            f'<div style="font-size:12px;color:{EMAIL_MUTED};line-height:1.55;">'
+            f'{html.escape(str(t["position"]))} &middot; {html.escape(str(t["team"] or ""))} '
+            f'&middot; score {t["score"]}<br>{html.escape(str(t["why"]))}</div></td></tr>'
             for t in group["targets"])
         html_groups.append(
-            f'<p style="margin:16px 0 4px;font-weight:700;">{html.escape(group["label"])}</p>'
-            f'<ol style="line-height:1.6;margin-top:4px;">{items}</ol>')
+            f'<div style="font-size:11px;font-weight:700;letter-spacing:.08em;'
+            f'color:{EMAIL_MUTED};text-transform:uppercase;padding:12px 0 6px;">{html.escape(group["label"])}</div>'
+            f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" '
+            f'style="border:1px solid {EMAIL_LINE};border-radius:10px;">{items}</table>')
     text = (f"Hi {username},\n\n"
             f"Waivers for week {alert['week']} in {league}. The top "
             f"{WAIVER_GROUP_SIZE} of each group, on this season's form:\n\n"
             + "\n\n".join(text_groups)
             + drop_line
             + f"\n\nSee the board:\n{link}\n")
-    body = (f'<p>Hi {html.escape(str(username))},</p>'
-            f'<p>Waivers for week {alert["week"]} in <b>{html.escape(league)}</b>. '
-            f'The top {WAIVER_GROUP_SIZE} of each group, on this season\'s form:</p>'
-            + "".join(html_groups)
-            + (f'<p style="color:#666;font-size:13px;">Room for one: '
-               f'<b>{html.escape(drop["name"])}</b> is the weakest player on your bench.</p>' if drop else "")
-            + _alert_button(link, "See your waiver targets"))
+    inner = (_email_hero(html.escape(str(best["name"])), "tops the board this week")
+             + "".join(html_groups)
+             + (f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" '
+                f'border="0" style="margin:12px 0 0;background:{EMAIL_SOFT};border-radius:8px;">'
+                f'<tr><td style="padding:10px 13px;font-size:12px;color:{EMAIL_MUTED};">'
+                f'Room for one: <b style="color:{EMAIL_INK};">{html.escape(drop["name"])}</b> '
+                f'is the weakest player on your bench.</td></tr></table>' if drop else ""))
+    body = _email_shell(
+        eyebrow=f"Week {alert['week']}",
+        headline="Waivers are open",
+        sub=(f'Hi {html.escape(str(username))} &mdash; the top {WAIVER_GROUP_SIZE} of each '
+             f'group in <b>{html.escape(league)}</b>, on this season\'s form.'),
+        inner=inner, cta_href=link, cta_label="See your waiver targets")
     return subject, text, body
 
 
@@ -10309,7 +10522,42 @@ def _annotate_my_players(games, username):
         g["my_away_players"] = by_team.get(g["away"]["abbr"], [])
 
 
-def _my_players_for_game(detail, username):
+# Position order for a roster list, so it reads the way a lineup card
+# does rather than the order leagues happened to be synced in.
+MY_PLAYER_POS_ORDER = ("QB", "RB", "WR", "TE", "K", "DEF",
+                       "DL", "LB", "DB", "IDP")
+
+
+def _my_players_projection(players, season, week):
+    """Attach this week's PPR projection to each entry, in place.
+
+    PPR rather than each league's own scoring on purpose: this panel
+    spans every league the reader syncs, and they do not agree. One
+    honest common yardstick beats a number that is right for whichever
+    league happened to be listed first."""
+    if not players or not season or not week:
+        return
+    try:
+        projections = get_week_projections(season, week)
+    except Exception:
+        return
+    for p in players:
+        raw = projections.get(str(p.get("sid"))) or {}
+        pts = raw.get("pts_ppr") if isinstance(raw, dict) else None
+        p["proj"] = round(float(pts), 1) if isinstance(pts, (int, float)) else None
+
+
+def _my_players_sorted(players):
+    """Best first, then by position, then by name -- a stable order that
+    puts the players worth knowing about at the top."""
+    def key(p):
+        pos = (p.get("position") or "").upper()
+        order = MY_PLAYER_POS_ORDER.index(pos) if pos in MY_PLAYER_POS_ORDER else 99
+        return (-(p.get("proj") or 0.0), order, p.get("name") or "")
+    return sorted(players or [], key=key)
+
+
+def _my_players_for_game(detail, username, season=None, week=None):
     """Same lookup as _annotate_my_players but shaped for a single game's
     detail dict ({"home": [...], "away": [...]} or None) -- used by the
     /game page's "Your Players In This Game" panel."""
@@ -10328,6 +10576,10 @@ def _my_players_for_game(detail, username):
     away_players = by_team.get(away_abbr, []) if away_abbr else []
     if not home_players and not away_players:
         return None
+    for side in (home_players, away_players):
+        _my_players_projection(side, season, week)
+    home_players = _my_players_sorted(home_players)
+    away_players = _my_players_sorted(away_players)
     return {"home": home_players, "away": away_players}
 
 
@@ -14792,12 +15044,16 @@ def game_detail_page():
         summary = espn_game_summary(event_id)
         detail = extract_game_detail(summary)
         username = _resolve_scores_username()
-        detail["my_players"] = _my_players_for_game(detail, username)
         _wk = get_current_week_info()
         # The game's own season and week, not today's -- opening a game
         # from week 3 should link its players to week 3.
         gw = summary_season_week(summary, _wk)
         detail["season"], detail["week"] = gw["season"], gw["week"]
+        # After the week is known, so the panel can show what each player
+        # is projected for in THIS game rather than whatever week it is
+        # today.
+        detail["my_players"] = _my_players_for_game(
+            detail, username, season=gw["season"], week=gw["week"])
         detail["plays"] = enrich_plays(extract_drive_plays(summary), gw["season"], gw["week"])
         detail["field"] = extract_field_position(summary)
         detail["box"] = attach_box_photos(extract_box_score(summary))
@@ -22748,14 +23004,36 @@ GAME_DETAIL_HTML = BASE_STYLE + make_header("live") + """
   .gd-stat-val.home{ text-align:right; }
   .gd-pregame{ display:flex; gap:18px; flex-wrap:wrap; margin-top:10px; font-size:13px; color:var(--ink-secondary); }
   .gd-wp-bar{ display:flex; height:22px; border-radius:6px; overflow:hidden; margin-top:8px; }
+  /* Two columns, one per team, mirroring the scoreboard above it --
+     rather than one long wrap of identical pills, where thirteen names
+     all carry the same weight and none of them stands out. Best
+     projection first, so the top of each column is the reason to care. */
   .gd-my-players{ margin-top:14px; padding-top:12px; border-top:1px solid var(--line); }
-  .gd-my-players-group{ display:flex; align-items:baseline; gap:10px; margin-top:8px; flex-wrap:wrap; }
-  .gd-my-players-group:first-of-type{ margin-top:2px; }
-  .gd-my-players-team{ font-family:"IBM Plex Mono"; font-weight:700; font-size:11.5px; color:var(--ink-muted); flex:none; width:32px; }
-  .gd-my-players-chips{ display:flex; flex-wrap:wrap; gap:6px; flex:1; min-width:0; }
-  .gd-player-chip{ display:inline-flex; align-items:center; gap:6px; background:var(--paper-sunken); border-radius:99px; padding:4px 10px 4px 5px; font-size:12.5px; white-space:nowrap; color:inherit; text-decoration:none; }
-  .gd-player-chip:hover{ background:var(--line); }
-  .gd-player-chip-n{ color:var(--ink-muted); font-size:11px; }
+  .gd-my-players-head{ display:flex; align-items:baseline; gap:8px; }
+  .gd-my-players-count{ font-family:"IBM Plex Mono"; font-size:11px; color:var(--ink-muted); }
+  .gd-my-players-cols{ display:grid; grid-template-columns:1fr 1fr; gap:10px 18px; margin-top:8px; }
+  .gd-my-players-group{ min-width:0; }
+  .gd-my-players-team{ display:flex; align-items:center; gap:6px; font-family:"IBM Plex Mono";
+                       font-weight:700; font-size:11.5px; color:var(--ink-muted);
+                       padding-bottom:5px; border-bottom:1px solid var(--line); }
+  .gd-my-players-team img{ width:15px; height:15px; object-fit:contain; }
+  .gd-my-players-list{ display:flex; flex-direction:column; }
+  .gd-player-row{ display:flex; align-items:center; gap:8px; padding:6px 4px; border-radius:7px;
+                  font-size:13px; color:inherit; text-decoration:none; min-width:0; }
+  .gd-player-row:hover{ background:var(--paper-sunken); }
+  .gd-player-row .pos-chip{ flex:none; }
+  .gd-player-name{ flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .gd-player-proj{ flex:none; font-family:"IBM Plex Mono"; font-size:12px; font-weight:700;
+                   color:var(--ink); }
+  .gd-player-proj span{ font-weight:400; font-size:10px; color:var(--ink-muted); }
+  .gd-player-lg{ flex:none; font-size:10px; color:var(--ink-muted); background:var(--paper-sunken);
+                 border-radius:4px; padding:1px 5px; }
+  @media (max-width:620px){
+    .gd-my-players-cols{ grid-template-columns:1fr; gap:14px; }
+    /* Title and caption side by side wraps the title mid-phrase on a
+       narrow screen. Stacked, each gets its own line. */
+    .gd-my-players-head{ flex-direction:column; gap:2px; }
+  }
   @media (max-width: 480px) {
     .gd-my-players-group{ flex-direction:column; gap:4px; }
     .gd-my-players-team{ width:auto; }
@@ -22832,22 +23110,33 @@ GAME_DETAIL_HTML = BASE_STYLE + make_header("live") + """
     {% endif %}
     {% if detail.my_players and (detail.my_players.away or detail.my_players.home) %}
     <div class="gd-my-players">
-      <p class="eyebrow">Your Players In This Game</p>
-      {% for side_label, players in [(detail.away.abbr, detail.my_players.away), (detail.home.abbr, detail.my_players.home)] %}
+      <div class="gd-my-players-head">
+        <p class="eyebrow" style="margin:0;">Your Players In This Game</p>
+        <span class="gd-my-players-count">{{ (detail.my_players.away|length) + (detail.my_players.home|length) }} across your leagues &middot; projections are PPR</span>
+      </div>
+      <div class="gd-my-players-cols">
+      {% for side, players in [(detail.away, detail.my_players.away), (detail.home, detail.my_players.home)] %}
         {% if players %}
         <div class="gd-my-players-group">
-          <span class="gd-my-players-team">{{ side_label }}</span>
-          <div class="gd-my-players-chips">
+          <div class="gd-my-players-team">
+            {% if side.logo %}<img src="{{ side.logo }}" alt="">{% endif %}{{ side.abbr }}
+            <span style="margin-left:auto;font-weight:400;">{{ players|length }}</span>
+          </div>
+          <div class="gd-my-players-list">
             {% for p in players %}
-            <a class="gd-player-chip" title="{{ p.leagues|join(', ') if p.leagues else '' }}"
+            <a class="gd-player-row" title="{{ p.leagues|join(', ') if p.leagues else '' }}"
                href="/performance?sid={{ p.sid }}&amp;season={{ detail.season }}&amp;week={{ detail.week }}">
-              <span class="pos-chip" style="background:var(--pos-{{ p.position|lower }}, var(--ink-muted));">{{ p.position }}</span>{{ p.name }}{% if p.leagues and p.leagues|length > 1 %}<span class="gd-player-chip-n">&times;{{ p.leagues|length }}</span>{% endif %}
+              <span class="pos-chip" style="background:var(--pos-{{ p.position|lower }}, var(--ink-muted));">{{ p.position }}</span>
+              <span class="gd-player-name">{{ p.name }}</span>
+              {% if p.leagues and p.leagues|length > 1 %}<span class="gd-player-lg">{{ p.leagues|length }} lg</span>{% endif %}
+              {% if p.proj is not none %}<span class="gd-player-proj">{{ p.proj }}<span> proj</span></span>{% endif %}
             </a>
             {% endfor %}
           </div>
         </div>
         {% endif %}
       {% endfor %}
+      </div>
     </div>
     {% endif %}
   </div>
