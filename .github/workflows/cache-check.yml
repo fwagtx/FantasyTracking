@@ -23,6 +23,23 @@ jobs:
       HOST: ${{ vars.SITE_HOST || 'https://streakpros.com' }}
       ROUNDS: ${{ github.event.inputs.rounds }}
     steps:
+      - name: Control -- does Cloudflare cache ANYTHING on this zone
+        run: |
+          # A .png is cached by Cloudflare's own defaults, with no rule
+          # needed. If this one misses too, the problem is the zone or
+          # the proxy, not the Cache Rules. If it HITs while the pages
+          # stay DYNAMIC, the rules are simply not matching them.
+          echo "=============== /favicon-32.png (no rule needed)"
+          for i in 1 2 3; do
+            hdrs=$(curl -sS -o /dev/null -D - --max-time 45 "$HOST/favicon-32.png")
+            printf '%s' "$hdrs" | tr -d '\r' | awk -F': ' '
+              tolower($1)=="cf-cache-status"{s=$2}
+              tolower($1)=="cache-control"{c=$2}
+              tolower($1)=="cf-ray"{r=$2}
+              END{printf "  try %s: cf-cache-status=%s  cache-control=%s  ray=%s\n", "'$i'", (s?s:"<none>"), (c?c:"<none>"), (r?r:"<none>")}'
+            sleep 2
+          done
+
       - name: Ask for the public pages, anonymously, several times
         run: |
           rounds="${ROUNDS:-4}"
@@ -40,7 +57,12 @@ jobs:
                 | awk -F': ' 'tolower($1)=="cache-control"{print $2}')
               age=$(printf '%s' "$hdrs" | tr -d '\r' \
                 | awk -F': ' 'tolower($1)=="age"{print $2}')
-              echo "  try $i: cf-cache-status=${status:-<none>}  age=${age:-0}  cache-control=${cc:-<none>}"
+              vary=$(printf '%s' "$hdrs" | tr -d '\r' \
+                | awk -F': ' 'tolower($1)=="vary"{print $2}')
+              ray=$(printf '%s' "$hdrs" | tr -d '\r' \
+                | awk -F': ' 'tolower($1)=="cf-ray"{print $2}')
+              echo "  try $i: cf-cache-status=${status:-<none>}  age=${age:-0}  vary=${vary:-<none>}  ray=${ray:-<none>}"
+              echo "          cache-control=${cc:-<none>}"
               case "$status" in HIT|STALE|UPDATING|REVALIDATED) seen_hit=1 ;; esac
               sleep 2
             done
