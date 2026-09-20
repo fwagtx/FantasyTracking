@@ -478,6 +478,71 @@ def _prepend_head(response):
         return response
 
 
+# Pages that are byte-identical for every signed-out visitor, and how
+# many seconds Cloudflare may hand one copy to all of them.
+#
+# This is the cheapest capacity on the site by a wide margin. A thousand
+# signed-out readers opening Scores during a slate is a thousand renders
+# today; with an edge copy it is one render every EDGE_CACHE_PATHS
+# seconds and the origin never hears about the other nine hundred and
+# ninety-nine. No instance size competes with that.
+#
+# Times are set by how fast each page actually goes stale: Scores
+# carries live scores, Rankings moves once a day, the policy pages
+# essentially never.
+EDGE_CACHE_PATHS = {
+    "/": 60, "/scores": 30, "/standings": 120, "/performances": 120,
+    "/rankings": 120, "/kickers-dst": 300, "/streaks": 120,
+    "/injuries": 120, "/moves": 120, "/birthdays": 300,
+    "/privacy": 3600, "/terms": 3600, "/support": 3600,
+}
+# Any of these in the request means a person, not an anonymous reader,
+# and a person's page is never shared with anybody.
+_SESSION_COOKIES = ("session", "remember_token")
+
+
+@app.after_request
+def _edge_cache_public_pages(response):
+    """Let the edge share one copy of a public page with everyone.
+
+    Deliberately paranoid, because the failure mode is serving one
+    reader's page to another. Every one of these must hold: a GET, a
+    200, HTML, a path on the list above, nobody signed in, no session
+    cookie in the REQUEST at all, and nothing setting a cookie on the
+    way out. Anything else is left to _no_stale_pages, which marks it
+    no-cache.
+
+    Vary: Cookie on top, so a cache that ignored the rest above still
+    cannot hand an anonymous copy to somebody carrying a session."""
+    try:
+        if (request.method != "GET" or response.status_code != 200
+                or response.direct_passthrough
+                or not (response.mimetype or "").startswith("text/html")
+                or "Set-Cookie" in response.headers
+                or "Cache-Control" in response.headers):
+            return response
+        ttl = EDGE_CACHE_PATHS.get(request.path)
+        if not ttl:
+            return response
+        if any(c in request.cookies for c in _SESSION_COOKIES):
+            return response
+        try:
+            if current_user.is_authenticated:
+                return response
+        except Exception:
+            # No login context to ask. Assume a person and do not share.
+            return response
+        # max-age=0 keeps the BROWSER revalidating -- a reader who
+        # refreshes wants the current score -- while s-maxage lets the
+        # edge answer everyone else from one copy.
+        response.headers["Cache-Control"] = (
+            f"public, max-age=0, s-maxage={ttl}, stale-while-revalidate={ttl}")
+        response.headers["Vary"] = "Cookie"
+    except Exception:
+        pass
+    return response
+
+
 # Registered AFTER the compressor on purpose. Flask runs after_request
 # handlers in reverse registration order, so this one runs first and the
 # footer is part of the body by the time it is gzipped -- the other way
@@ -5025,6 +5090,29 @@ def _player_history_vs_opponent(sid, season, team, opponent, max_meetings=3,
     return out[-max_meetings:]
 
 
+def _scored_player_name(sid, p):
+    """What to call this one on screen.
+
+    A team defence has no first or last name in Sleeper's dump -- the
+    id IS the club -- so anything that renders a player's name has to
+    fall back to the club's, or show an empty string where a name
+    should be."""
+    full = f"{(p or {}).get('first_name','')} {(p or {}).get('last_name','')}".strip()
+    if full:
+        return full
+    if (p or {}).get("position") == "DEF":
+        return TEAM_NAMES.get(sid) or f"{sid} D/ST"
+    return sid
+
+
+def _scored_player_photo(sid, p):
+    """A defence is a club, so it wears the club's badge; everyone else
+    is a person and wears their own face."""
+    if (p or {}).get("position") == "DEF":
+        return team_logo_url((p or {}).get("team") or sid)
+    return player_photo_url(sid)
+
+
 def compare_matchups(sid_a, sid_b, season, week):
     """Head-to-head start/sit call between two players: reuses
     compute_matchup_grade for each (same cache, so this is free once
@@ -5050,9 +5138,9 @@ def compare_matchups(sid_a, sid_b, season, week):
         history_vs_opp = _player_history_vs_opponent(sid, season, p.get("team"), c["opponent"])
         return {
             "sid": sid,
-            "name": f"{p.get('first_name','')} {p.get('last_name','')}".strip(),
+            "name": _scored_player_name(sid, p),
             "position": p.get("position"), "team": p.get("team") or "FA",
-            "photo": player_photo_url(sid),
+            "photo": _scored_player_photo(sid, p),
             "opponent": c["opponent"], "def_rank": c["def_rank"],
             "def_fpts_allowed_pg": c["def_fpts_allowed_pg"],
             "def_rank_used": c["def_rank_used"], "def_rank_most_pts_used": c["def_rank_most_pts_used"],
@@ -11375,6 +11463,14 @@ def api_player_search():
     teams = request.args.get("teams", default=12, type=int)
     if teams not in (8, 10, 12, 14):
         teams = 12
+    # Opt-in, and deliberately NOT the default: this endpoint also backs
+    # the Trade Calculator, and FantasyCalc publishes no dynasty value
+    # for a kicker or a defence. Listing them there would offer trades
+    # priced at zero on one side. Start/Sit asks for them because a
+    # start-sit call between two kickers is a real question; a trade
+    # between them is not.
+    want_kdst = request.args.get("kdst") in ("1", "true", "yes")
+    searchable = list(POSITIONS) + (list(KDST_POSITIONS) if want_kdst else [])
     if not q:
         return jsonify({"results": []})
 
@@ -11395,13 +11491,15 @@ def api_player_search():
 
     results = []
     for sid, p in all_players.items():
-        if p.get("position") not in POSITIONS:
+        pos = p.get("position")
+        if pos not in searchable:
             continue
-        full = f"{p.get('first_name','')} {p.get('last_name','')}".strip()
+        full = _scored_player_name(sid, p)
         if q_low in full.lower():
             results.append({
-                "sid": sid, "name": full, "position": p.get("position"), "team": p.get("team") or "FA",
-                "photo": player_photo_url(sid), "value": fc["players"].get(sid, {}).get("value", 0),
+                "sid": sid, "name": full, "position": pos, "team": p.get("team") or "FA",
+                "photo": _scored_player_photo(sid, p),
+                "value": fc["players"].get(sid, {}).get("value", 0),
             })
 
     if is_dynasty:
@@ -15130,6 +15228,28 @@ def standings_page():
             conferences=CONFERENCES, divisions=DIVISIONS, load_error=str(e))
 
 
+# The rendered team page, keyed by everything a copy depends on.
+#
+# THE PROBLEM THIS FIXES: /team was the slowest thing on the site by a
+# distance -- 12 to 18 seconds a page in a live soak, against well under
+# a second for Scores and Rankings. Those two have cached their rendered
+# HTML for a while; this one never did, so every single visit rebuilt
+# the standings, the power rankings, the full schedule and the roster,
+# and then made a live outbound ESPN news call on top.
+#
+# At 18 seconds a render, one visitor costs as much CPU as a couple of
+# hundred visitors on a cached page. No instance size fixes that; a
+# bigger box just reaches the same wall later.
+_team_page_cache = {}
+_team_page_lock = threading.Lock()
+# Short, because a team page carries live scores during a slate. Long
+# enough that a crowd all opening the same team share one render.
+TEAM_PAGE_TTL_S = _safe_int(os.environ.get("TEAM_PAGE_TTL_S"), 90)
+# 32 teams, and a reader's theme and accent are part of the key. A hard
+# ceiling so a season of browsing cannot grow this without bound.
+CACHE_LIMIT_TEAM_PAGES = 24
+
+
 @app.route("/team")
 def team_page():
     """One team: record and standing, power rank over three windows,
@@ -15137,64 +15257,90 @@ def team_page():
     abbr = normalize_team_abbr((request.args.get("abbr") or "").upper())
     try:
         info = get_current_week_info()
-        refresh_open_schedule_weeks(info["season"])
         season = request.args.get("season", default=info["season"], type=int)
         if abbr not in NFL_DIVISIONS:
             return render_template_string(
                 TEAM_HTML, team=None, season=season, load_error=None,
                 all_teams=sorted(NFL_DIVISIONS))
+        # Outside the cache: the page meta is prepended to the response
+        # by _prepend_head after this returns, so it has to be set on a
+        # hit as well as a miss or a cached page would lose its title.
         set_page_meta(f"{abbr} Schedule, Roster and Standings",
                       f"{abbr}: record, power rank, recent results and the roster, "
                       f"with each player's rankings.")
-        standings = get_team_standings(season)
-        # Before a team's first game there is nothing this season to rank
-        # on. Rather than three dashes, fall back to the most recent
-        # season that WAS played and say so underneath -- which is how a
-        # preseason ranking works anywhere else.
-        rank = (get_team_rankings(season) or {}).get(abbr, {})
-        rank_season = season
-        if not rank:
-            for back in range(1, RANK_FALLBACK_SEASONS_BACK + 1):
-                prior = (get_team_rankings(season - back) or {}).get(abbr, {})
-                if prior:
-                    rank, rank_season = prior, season - back
-                    break
-        sched = get_team_schedule(abbr, season)
-        row = standings.get(abbr, {})
-        # Where they sit in their own division, which is what a team page
-        # leads with rather than the conference seed.
-        division_members = sorted(
-            (r for r in standings.values()
-             if r["conference"] == row.get("conference") and r["division"] == row.get("division")),
-            key=lambda r: (-r["pct"], -r["diff"], -r["pf"]))
-        div_rank = next((i for i, r in enumerate(division_members, 1)
-                         if r["team"] == abbr), None)
-        played = [g for g in sched["games"] if g["result"]]
-        team = {
-            "abbr": abbr, "logo": team_logo_url(abbr),
-            "name": TEAM_NAMES.get(abbr, abbr),
-            "conference": row.get("conference"), "division": row.get("division"),
-            "record": row.get("record", "0-0"), "div_rank": div_rank,
-            "bye_week": sched["bye_week"], "rank": rank, "standing": row,
-            "rank_season": rank_season,
-            # Played games only -- the form strip measures point
-            # differentials, which an unplayed game does not have.
-            "games": played,
-            # The whole season, week 1 through the last, for the Games
-            # tab: results where there are results, fixtures elsewhere.
-            "schedule": sched["games"],
-            "upcoming": [g for g in sched["games"] if not g["result"]][:3],
-            "roster": get_team_roster(abbr, season),
-        }
-        team_news = espn_team_news(abbr)
-        return render_template_string(TEAM_HTML, team=team, season=season,
-                                      news=team_news,
-                                      news_sources=news_sources_used(team_news),
-                                      load_error=None, all_teams=sorted(NFL_DIVISIONS))
+        ctx = _theme_context()
+        key = (abbr, season, ctx["site_theme"], ctx["site_accent"], ctx["site_signed_in"])
+        entry = _team_page_cache.get(key)
+        if entry and time.time() - entry["time"] < TEAM_PAGE_TTL_S:
+            return entry["html"]
+        with _team_page_lock:
+            # Whoever held the lock may have rendered it while we waited
+            # -- which is the whole point during a slate, when thirty
+            # people open the same team at once.
+            entry = _team_page_cache.get(key)
+            if entry and time.time() - entry["time"] < TEAM_PAGE_TTL_S:
+                return entry["html"]
+            return _render_team_page(abbr, season, info, key)
     except Exception as e:
         return render_template_string(TEAM_HTML, team=None, season=int(SEASON),
                                       news=[], news_sources=[],
                                       load_error=str(e), all_teams=sorted(NFL_DIVISIONS))
+
+
+def _render_team_page(abbr, season, info, key):
+    """The expensive half, run only on a cache miss."""
+    # Only on a miss: this writes live scores back to the schedule
+    # table, and a page that is at most TEAM_PAGE_TTL_S old has
+    # already had it done recently enough.
+    refresh_open_schedule_weeks(info["season"])
+    standings = get_team_standings(season)
+    # Before a team's first game there is nothing this season to rank
+    # on. Rather than three dashes, fall back to the most recent
+    # season that WAS played and say so underneath -- which is how a
+    # preseason ranking works anywhere else.
+    rank = (get_team_rankings(season) or {}).get(abbr, {})
+    rank_season = season
+    if not rank:
+        for back in range(1, RANK_FALLBACK_SEASONS_BACK + 1):
+            prior = (get_team_rankings(season - back) or {}).get(abbr, {})
+            if prior:
+                rank, rank_season = prior, season - back
+                break
+    sched = get_team_schedule(abbr, season)
+    row = standings.get(abbr, {})
+    # Where they sit in their own division, which is what a team page
+    # leads with rather than the conference seed.
+    division_members = sorted(
+        (r for r in standings.values()
+         if r["conference"] == row.get("conference") and r["division"] == row.get("division")),
+        key=lambda r: (-r["pct"], -r["diff"], -r["pf"]))
+    div_rank = next((i for i, r in enumerate(division_members, 1)
+                     if r["team"] == abbr), None)
+    played = [g for g in sched["games"] if g["result"]]
+    team = {
+        "abbr": abbr, "logo": team_logo_url(abbr),
+        "name": TEAM_NAMES.get(abbr, abbr),
+        "conference": row.get("conference"), "division": row.get("division"),
+        "record": row.get("record", "0-0"), "div_rank": div_rank,
+        "bye_week": sched["bye_week"], "rank": rank, "standing": row,
+        "rank_season": rank_season,
+        # Played games only -- the form strip measures point
+        # differentials, which an unplayed game does not have.
+        "games": played,
+        # The whole season, week 1 through the last, for the Games
+        # tab: results where there are results, fixtures elsewhere.
+        "schedule": sched["games"],
+        "upcoming": [g for g in sched["games"] if not g["result"]][:3],
+        "roster": get_team_roster(abbr, season),
+    }
+    team_news = espn_team_news(abbr)
+    html_out = render_template_string(TEAM_HTML, team=team, season=season,
+                                      news=team_news,
+                                      news_sources=news_sources_used(team_news),
+                                      load_error=None, all_teams=sorted(NFL_DIVISIONS))
+    _team_page_cache[key] = {"html": html_out, "time": time.time()}
+    _cache_trim(_team_page_cache, CACHE_LIMIT_TEAM_PAGES)
+    return html_out
 
 
 @app.route("/performances")
@@ -16273,7 +16419,7 @@ def api_matchup_compare():
         result = compare_matchups(sid_a, sid_b, season, week)
         t2 = time.monotonic()
         if not result:
-            return jsonify({"ok": False, "error": "Couldn't grade one of those players -- try a different skill-position player."}), 400
+            return jsonify({"ok": False, "error": "Couldn't grade one of those -- try another player, kicker or defence."}), 400
         # Real per-phase timing, invisible to the UI (the JS never reads
         # this field) but visible in a browser's DevTools Network tab
         # under this request's Response, so "comparing players is slow"
@@ -17674,6 +17820,7 @@ def _named_caches():
         "standings": (_standings_cache, CACHE_LIMIT_BOARDS),
         "kdst_board": (_kdst_board_cache, CACHE_LIMIT_BOARDS),
         "scores_page": (_scores_page_cache, 1),
+        "team_page": (_team_page_cache, CACHE_LIMIT_TEAM_PAGES),
         "rankings_page": (_rankings_page_cache, RANKINGS_PAGE_COPIES),
         "player_plays": (_espn_player_plays_cache, CACHE_LIMIT_PER_USER),
         "espn_injuries": (_espn_injuries_cache, 1),
@@ -25403,7 +25550,7 @@ MATCHUPS_HTML = BASE_STYLE + make_header("matchups") + """
       const q = input.value.trim();
       if (!q){ dropdown.classList.remove('open'); return; }
       debounceTimer = setTimeout(function(){
-        fetch('/api/player-search?q=' + encodeURIComponent(q))
+        fetch('/api/player-search?kdst=1&q=' + encodeURIComponent(q))
           .then(function(r){ return r.json(); })
           .then(function(data){
             dropdown.innerHTML = '';
