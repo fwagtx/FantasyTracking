@@ -4838,7 +4838,17 @@ def compute_matchup_grade(sid, season, week, cache=_matchup_grade_cache):
     # that allows the MOST (the single easiest matchup at the position)
     # -- "#1 most points allowed" reads correctly without needing any
     # convention explained alongside it.
-    def_rank_most_pts_used = (def_pool_size - def_rank_used + 1) if def_rank_used is not None else None
+    # A pool can come back smaller than the rank inside it -- a season
+    # with only a couple of teams' data resolves to a pool of one while
+    # still carrying a rank of five. That used to be invisible; now the
+    # rank is PRINTED, and "-3th most of 1" is the result. Widen the
+    # pool to at least hold the rank rather than emit a negative
+    # ordinal.
+    if def_rank_used is not None:
+        def_pool_size = max(def_pool_size or 32, def_rank_used)
+        def_rank_most_pts_used = max(1, def_pool_size - def_rank_used + 1)
+    else:
+        def_rank_most_pts_used = None
 
     season_stats = get_season_stats(season)
     stat = season_stats.get(sid, {})
@@ -16148,8 +16158,8 @@ def matchups_page():
                     "grade": grade["grade"], "grade_class": grade["grade_class"], "stars": grade["stars"], "star_pct": grade["star_pct"],
                     "composite": grade["components"].get("composite", 0),
                     "reasoning": grade["reasoning"],
-                    "reason_head": grade["reason_parts"][0],
-                    "reason_tail": grade["reason_parts"][1],
+                    "reason_head": (grade.get("reason_parts") or (grade.get("reasoning", ""), ""))[0],
+                    "reason_tail": (grade.get("reason_parts") or ("", ""))[1],
                     "value": v.get("value", 0),
                     # A game that's already final (or live, or a bye) isn't
                     # a start/sit decision at all -- those sort below every
@@ -16184,8 +16194,8 @@ def matchups_page():
                         "stars": grade["stars"], "star_pct": grade["star_pct"],
                         "composite": comp.get("composite", 0),
                         "reasoning": grade["reasoning"],
-                        "reason_head": grade["reason_parts"][0],
-                        "reason_tail": grade["reason_parts"][1],
+                        "reason_head": (grade.get("reason_parts") or (grade.get("reasoning", ""), ""))[0],
+                        "reason_tail": (grade.get("reason_parts") or ("", ""))[1],
                         # No dynasty value exists for these, so the last
                         # tiebreak is what they have actually scored.
                         "value": b.get("total", 0),
