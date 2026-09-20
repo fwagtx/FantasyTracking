@@ -10252,8 +10252,11 @@ def run_alerts(season=None, week=None, limit=None, dry=False, now=None):
             summary["alerts"].append({
                 "user_id": row["id"], "kind": alert["kind"],
                 "league": alert["league_name"], "result": result,
-                "detail": (len(alert.get("problems") or []) if alert["kind"] == "lineup"
-                           else len(alert.get("targets") or [])),
+                # How much this digest is carrying. A lineup one counts
+                # the calls; a waiver one counts the players.
+                "detail": (len(alert.get("decisions") or []) + len(alert.get("flags") or [])
+                           or len(alert.get("targets") or [])
+                           or len((alert.get("lineup") or {}).get("decisions") or [])),
             })
     return summary
 
