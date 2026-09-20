@@ -2,10 +2,13 @@ services:
   - type: web
     name: dynasty-league-explorer
     runtime: python
-    # NOTE: if the instance has been upgraded in the dashboard, this
-    # line will pull it back to Free the next time a blueprint sync
-    # runs. Change it here to match whatever the dashboard says.
-    plan: free
+    # MUST match whatever the dashboard actually has selected. A
+    # blueprint sync applies this line, so leaving it on a smaller plan
+    # than the one being paid for silently downgrades the service --
+    # this said "free" while the dashboard was on the 0.5 CPU / 512 MB
+    # starter, which is one sync away from taking the instance down a
+    # tier without anybody asking for it. Update it on every upgrade.
+    plan: starter
     # How Render knows the new instance is actually serving before it
     # sends anyone to it. Without this, a deploy stops the old process
     # and hopes -- which is the gap a visitor sees as Render's own 502
