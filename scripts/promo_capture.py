@@ -161,6 +161,23 @@ class Stage:
         await self.hold(settle)
         return el
 
+    async def gated(self):
+        """Whether this page is showing a sign-in or plan gate.
+
+        A gated panel still has its buttons in the DOM, behind an
+        aria-hidden blur that swallows clicks. Playwright then waits the
+        full actionability timeout on every press -- the first live run
+        spent forty seconds of a ninety-second clip doing exactly that,
+        on a blurred panel, which is the worst footage imaginable.
+        """
+        found = await self._eval(
+            "() => { const g = document.querySelector('.gate-wrap, .gate-card, #spGate');"
+            "        return g ? (g.id || g.className) : ''; }")
+        if found:
+            print(f"  note: page is gated ({found}) -- skipping the locked beats",
+                  file=sys.stderr)
+        return bool(found)
+
     async def tap(self, selector, index=0, after=1500):
         el = await self.point(selector, index)
         if el is None:
@@ -169,7 +186,7 @@ class Stage:
         await self.hold(180)
         clicked = True
         try:
-            await el.click(timeout=6000)
+            await el.click(timeout=4000)
         except Exception:
             # A click that starts a navigation can report a timeout
             # while the next document is already loading, so this is
@@ -205,7 +222,14 @@ async def scene_streaks(s):
     await s.tap(".sk-item", index=0, after=2200)
     await s.glide(300, 1400)
     await s.hold(800)
-    # And the thing nobody else does: move the line yourself.
+    # And the thing nobody else does: move the line yourself -- when
+    # the viewer is allowed to. Signed out that panel is blurred, so
+    # hold on the game-by-game bars instead, which are the part that
+    # reads on a phone anyway.
+    if await s.gated():
+        await s.glide(560, 1500)
+        await s.hold(2400)
+        return
     for _ in range(3):
         await s.tap("#spPlus", after=700)
     await s.hold(1200)
@@ -253,6 +277,12 @@ async def scene_tour(s):
     await scene_scores(s)
     await scene_matchups(s)
 
+
+# Where each scene lands first, so the cold load can be taken before
+# the camera is rolling.
+SCENE_FIRST_PATH = {"streaks": "/streaks", "scores": "/scores",
+                    "matchups": "/matchups", "rankings": "/rankings",
+                    "tour": "/streaks"}
 
 SCENES = {
     "streaks": scene_streaks,
@@ -304,6 +334,21 @@ async def record(base, scene, shape, out_dir, email=None, password=None):
         await ctx.add_init_script(CURSOR_JS)
         page = await ctx.new_page()
         stage = Stage(page, base)
+
+        # Recording starts the moment the context does, so a cold
+        # instance waking up is the opening shot of the clip. Pull that
+        # first load through a throwaway context instead, and let the
+        # real one land on a warm origin.
+        warm = SCENE_FIRST_PATH.get(scene)
+        if warm:
+            try:
+                scout = await browser.new_context()
+                sp = await scout.new_page()
+                await sp.goto(base.rstrip("/") + warm,
+                              wait_until="domcontentloaded", timeout=45000)
+                await scout.close()
+            except Exception as e:
+                print(f"  note: warm-up skipped ({e})", file=sys.stderr)
 
         if email and password:
             await sign_in(stage, email, password)
