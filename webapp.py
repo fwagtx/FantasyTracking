@@ -6832,6 +6832,13 @@ def gate_kind():
     return "plus" if current_user.is_authenticated else "signup"
 
 
+# The account menu prints the reader's plan, so the header template needs
+# this one. Deliberately viewer_has_plus and not plus_unlocked: with the
+# gate off the latter calls every signed-in reader unlocked, which would
+# put a "Plus" chip on free accounts.
+app.jinja_env.globals["viewer_has_plus"] = viewer_has_plus
+
+
 def _central_date(dt):
     """A stored naive-UTC timestamp, as the date a reader in the US would
     call it."""
@@ -18074,7 +18081,17 @@ BASE_STYLE = THEME_BOOT + """
   .mono{ font-family:"IBM Plex Mono",monospace; font-variant-numeric:tabular-nums; }
   .wrap{ max-width:1060px; margin:0 auto; padding:0 24px; }
   header.site{ position:sticky; top:0; z-index:50; background:color-mix(in srgb, var(--paper-raised) 92%, transparent); backdrop-filter:blur(10px); border-bottom:1px solid var(--line); }
-  .nav-row{ display:flex; align-items:center; justify-content:space-between; height:64px; flex-wrap:wrap; gap:8px; position:relative; }
+  /* Three columns, so the rail is centred against the PAGE rather than
+     against whatever space the wordmark happens to leave. space-between
+     put the wordmark alone on the left and everything else jammed
+     right, with a few hundred pixels of nothing between them -- which
+     is what made the bar read as two unrelated clusters.
+
+     nav.links is display:contents here so the rail and the account
+     become grid items directly; the nav is still a real box on a phone
+     (see the media query), where it is the collapsing panel. */
+  .nav-row{ display:grid; grid-template-columns:1fr auto 1fr; align-items:center;
+            height:66px; gap:14px; position:relative; }
   .nav-toggle-checkbox{ display:none; }
   .nav-toggle-btn{ display:none; cursor:pointer; font-size:24px; line-height:1; color:var(--ink); padding:4px 6px; }
   .wordmark{ display:flex; align-items:center; gap:9px; text-decoration:none; }
@@ -18086,46 +18103,91 @@ BASE_STYLE = THEME_BOOT + """
      the mark: a logo that changed with the reader's accent would not be
      one. */
   .wordmark span b{ color:#F2542D; font-weight:800; }
-  nav.links{ display:flex; align-items:center; gap:4px; flex-wrap:wrap; }
+  nav.links{ display:contents; }
   nav.links a{ text-decoration:none; font-size:13.5px; font-weight:600; color:var(--ink-secondary); }
   nav.links a:hover, nav.links a.active{ color:var(--accent-ink); }
-  /* The same four destinations as the phone's bottom bar, with the same
-     icons, so the site is one place whichever way you arrive at it. */
-  .navtop{ display:inline-flex; align-items:center; gap:7px; padding:7px 11px; border-radius:8px; }
-  .navtop svg{ width:16px; height:16px; flex:none; }
-  .navtop:hover{ background:var(--paper-sunken); }
-  .navtop.active{ background:var(--paper-sunken); }
-  .navtop .plus-mark{ width:13px; height:11px; }
+  .wordmark{ grid-column:1; justify-self:start; }
+
+  /* --- the rail ------------------------------------------------------
+     One enclosed control holding the NFL-wide destinations and, behind
+     a rule, the one menu. Enclosing them is the point: four loose pills
+     and a bare word read as three different kinds of thing, which is
+     what "not seamless" meant. */
+  .nav-rail{ grid-column:2; justify-self:center; display:flex; align-items:center; gap:2px;
+             background:var(--paper-sunken); border:1px solid var(--line);
+             border-radius:11px; padding:3px; }
+  .rail-rule{ width:1px; height:18px; background:var(--line-strong); margin:0 3px; flex:none; }
+  .navtop{ display:inline-flex; align-items:center; gap:7px; padding:7px 13px;
+           border-radius:8px; font-size:13px; white-space:nowrap; }
+  .navtop svg{ width:15px; height:15px; flex:none; opacity:0.85; }
+  .navtop:hover{ background:var(--paper-raised); }
+  /* Filled, not tinted: inside a sunken rail a faint wash is invisible,
+     and "which page am I on" is the one question the bar exists for. */
+  .navtop.active{ background:var(--accent); color:var(--accent-on); box-shadow:var(--shadow); }
+  .navtop.active svg{ opacity:1; }
+  .navtop.active:hover{ background:var(--accent); color:var(--accent-on); }
+  .navtop.active .plus-chip{ background:rgba(255,255,255,0.22); color:#fff; }
+
+  /* The + on a StreakPros+ section, at the one size it is ever drawn. */
+  .plus-chip{ display:inline-flex; align-items:center; justify-content:center; flex:none;
+              min-width:15px; height:15px; padding:0 4px; border-radius:4px; line-height:1;
+              background:color-mix(in srgb, var(--accent-ink) 16%, transparent);
+              color:var(--accent-ink); font-size:10px; font-weight:800; }
+
+  /* Guests get the same right-hand cell the account disc occupies. */
+  .nav-auth{ grid-column:3; justify-self:end; display:flex; align-items:center; gap:10px; }
+  .nav-auth .nav-cta{ padding:7px 13px; border-radius:9px; border:1px solid var(--line-strong);
+                      color:var(--ink); }
+  .nav-auth .nav-cta:hover{ background:var(--paper-sunken); color:var(--ink); }
 
   /* --- the Live / Fantasy group menus ---------------------------------
      Same <details> machinery as the account menu below: opens, closes
      and takes keyboard focus with no script, so the header still works
      if the script never runs. */
   .navgrp{ position:relative; }
+  /* Shaped like the links beside it, because it sits in the same rail. */
   .navgrp > summary{ list-style:none; cursor:pointer; display:flex; align-items:center;
-                     gap:6px; font-size:13.5px; font-weight:600; color:var(--ink-secondary);
+                     gap:7px; padding:7px 13px; border-radius:8px; white-space:nowrap;
+                     font-size:13px; font-weight:600; color:var(--ink-secondary);
                      -webkit-tap-highlight-color:transparent; }
   .navgrp > summary::-webkit-details-marker{ display:none; }
-  .navgrp > summary:hover, .navgrp > summary.on{ color:var(--accent-ink); }
-  .navgrp[open] > summary{ color:var(--accent-ink); }
+  .navgrp > summary > svg{ width:15px; height:15px; flex:none; opacity:0.85; }
+  .navgrp > summary:hover, .navgrp > summary.on{ color:var(--ink); background:var(--paper-raised); }
+  .navgrp[open] > summary{ color:var(--ink); background:var(--paper-raised);
+                           box-shadow:inset 0 0 0 1px var(--line-strong); }
   .navgrp-caret{ font-size:8px; opacity:0.7; transition:transform 0.15s ease; }
   .navgrp[open] .navgrp-caret{ transform:rotate(180deg); }
   .navgrp-menu{
-    position:absolute; left:0; top:calc(100% + 8px); min-width:264px;
+    position:absolute; right:0; top:calc(100% + 9px); min-width:312px;
     background:var(--paper-raised); border:1px solid var(--line-strong);
-    border-radius:12px; box-shadow:var(--shadow); padding:6px; z-index:70;
+    border-radius:13px; box-shadow:var(--shadow); padding:7px; z-index:70;
   }
+  /* What the panel is FOR: "needs my league" against "works on any
+     player". Seven lines at one weight made that impossible to see. */
+  .navgrp-sec{ font-size:9.5px; font-weight:800; letter-spacing:0.1em; text-transform:uppercase;
+               color:var(--ink-muted); padding:9px 11px 5px; }
+  .navgrp-rule{ height:1px; background:var(--line); margin:6px 4px; }
   /* Beats nav.links a, which these sit inside. */
   nav.links .navgrp-menu a{
-    display:block; padding:9px 11px; border-radius:8px; border-top:none; margin:0;
-    color:var(--ink-secondary);
+    display:flex; align-items:center; gap:10px; padding:8px 11px; border-radius:9px;
+    border-top:none; margin:0; color:var(--ink-secondary);
   }
   nav.links .navgrp-menu a:hover{ background:var(--paper-sunken); }
-  .navgrp-lab{ display:block; font-size:13.5px; font-weight:700; color:var(--ink); }
+  .navgrp-ico{ width:17px; height:17px; flex:none; opacity:0.7; }
+  nav.links .navgrp-menu a:hover .navgrp-ico{ opacity:1; }
+  .navgrp-txt{ min-width:0; }
+  .navgrp-lab{ display:flex; align-items:center; gap:6px; font-size:13px; font-weight:700;
+               color:var(--ink); line-height:1.25; }
   nav.links .navgrp-menu a:hover .navgrp-lab,
   nav.links .navgrp-menu a.active .navgrp-lab{ color:var(--accent-ink); }
-  .navgrp-desc{ display:block; font-size:11.5px; font-weight:500; color:var(--ink-muted);
-                margin-top:2px; line-height:1.35; }
+  .navgrp-desc{ display:block; font-size:11px; font-weight:500; color:var(--ink-muted);
+                margin-top:1px; line-height:1.3; }
+  /* An upgrade is not a seventh destination at the same weight. */
+  nav.links .navgrp-menu a.navgrp-foot{
+    background:color-mix(in srgb, var(--accent-ink) 12%, transparent); margin-top:3px;
+  }
+  .navgrp-foot .navgrp-ico{ opacity:1; color:var(--accent-ink); }
+  .navgrp-foot .navgrp-lab{ color:var(--accent-ink); font-weight:800; }
 
   /* --- the account menu ---------------------------------------------
      Username and Log Out used to sit in the link row at the same weight
@@ -18136,7 +18198,7 @@ BASE_STYLE = THEME_BOOT + """
      Built on <details>, so it opens, closes and takes keyboard focus
      with no script at all; the script below only adds closing it by
      clicking elsewhere or pressing Escape. */
-  .acct{ position:relative; }
+  .acct{ position:relative; grid-column:3; justify-self:end; }
   .acct > summary{ list-style:none; cursor:pointer; display:flex; align-items:center; gap:6px; }
   .acct > summary::-webkit-details-marker{ display:none; }
   .acct-disc{
@@ -18155,15 +18217,23 @@ BASE_STYLE = THEME_BOOT + """
     background:var(--paper-raised); border:1px solid var(--line-strong);
     border-radius:12px; box-shadow:var(--shadow); padding:6px; z-index:70;
   }
-  .acct-who{ padding:9px 10px 10px; border-bottom:1px solid var(--line); margin-bottom:5px; }
-  .acct-who b{ display:block; font-size:13.5px; }
-  .acct-who span{ display:block; font-size:11.5px; color:var(--ink-muted);
-                  white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:190px; }
+  .acct-who{ padding:10px 10px 11px; border-bottom:1px solid var(--line); margin-bottom:5px;
+             display:flex; align-items:center; gap:10px; }
+  .acct-name{ min-width:0; }
+  .acct-who b{ display:block; font-size:13px; line-height:1.3; }
+  .acct-who .acct-name span{ display:block; font-size:11px; color:var(--ink-muted);
+                  white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:140px; }
+  /* Which plan you are on, where you look when you wonder. */
+  .acct-plan{ margin-left:auto; flex:none; font-size:9.5px; font-weight:800; letter-spacing:0.06em;
+              text-transform:uppercase; padding:3px 7px; border-radius:5px;
+              background:var(--paper-sunken); color:var(--ink-muted); }
   /* Beats nav.links a, which these sit inside. */
   nav.links .acct-menu a{
-    display:flex; align-items:center; gap:9px; padding:9px 10px; border-radius:8px;
+    display:flex; align-items:center; gap:10px; padding:9px 10px; border-radius:8px;
     font-size:13px; font-weight:600; color:var(--ink-secondary); border-top:none; margin:0;
   }
+  nav.links .acct-menu a .navgrp-ico{ width:16px; height:16px; opacity:0.75; }
+  nav.links .acct-menu a:hover .navgrp-ico{ opacity:1; }
   nav.links .acct-menu a:hover{ background:var(--paper-sunken); color:var(--ink); }
   .acct-menu .sep{ height:1px; background:var(--line); margin:5px 2px; }
   /* Log out is the one thing in here you cannot undo by tapping again. */
@@ -18426,6 +18496,10 @@ BASE_STYLE = THEME_BOOT + """
   @media (max-width: 760px) {
     .wrap{ padding:0 16px; }
     .nav-toggle-btn{ display:block; }
+    /* Back to a flex row here: the three-column grid is a desktop
+       arrangement, and the nav below is a collapsing panel rather than
+       a cell in the row. */
+    .nav-row{ display:flex; justify-content:space-between; flex-wrap:wrap; height:64px; gap:8px; }
     nav.links{
       display:none; position:absolute; top:100%; left:0; right:0;
       flex-direction:column; align-items:stretch; gap:0;
@@ -18434,11 +18508,23 @@ BASE_STYLE = THEME_BOOT + """
     }
     .nav-toggle-checkbox:checked ~ nav.links{ display:flex; }
     nav.links a{ padding:13px 4px; border-top:1px solid var(--line); margin:0; }
+    /* The rail is an enclosure for a centred row. Stacked, there is
+       nothing to enclose, so it hands its children straight to the
+       panel rather than drawing a box inside a box. */
+    .nav-rail{ display:contents; }
+    .rail-rule{ display:none; }
+    .navtop{ border-radius:0; padding:13px 4px; }
+    .navtop:hover{ background:none; }
+    .navtop.active{ background:none; color:var(--accent-ink); box-shadow:none; }
+    .navtop.active svg{ color:var(--accent-ink); }
+    .nav-auth{ display:contents; }
+    .nav-auth .nav-cta{ border:none; border-radius:0; padding:13px 4px; }
     /* The nav is a stacked panel here, so the group menus and the
        account menu open inline within it instead of floating over the
        page. */
     .navgrp{ border-top:1px solid var(--line); }
-    .navgrp > summary{ padding:13px 4px; }
+    .navgrp > summary{ padding:13px 4px; border-radius:0; background:none; box-shadow:none; }
+    .navgrp[open] > summary{ background:none; box-shadow:none; }
     .navgrp-menu{ position:static; border:none; box-shadow:none; background:none;
                   padding:0 0 6px; min-width:0; }
     nav.links .navgrp-menu a{ padding:10px 4px 10px 14px; border-radius:0; }
@@ -18446,12 +18532,17 @@ BASE_STYLE = THEME_BOOT + """
        desktop hover affordance, not something to scroll past on a
        phone. */
     .navgrp-desc{ display:none; }
+    .navgrp-ico{ display:none; }
+    .navgrp-sec{ padding:10px 4px 2px; }
+    .navgrp-rule{ display:none; }
+    nav.links .navgrp-menu a.navgrp-foot{ background:none; margin-top:0; }
     .acct{ border-top:1px solid var(--line); }
     .acct > summary{ padding:11px 4px; }
     .acct-menu{ position:static; border:none; box-shadow:none; background:none;
                 padding:0 0 4px; min-width:0; }
     .acct-who{ display:none; }
     nav.links .acct-menu a{ padding:11px 4px 11px 14px; border-radius:0; }
+    nav.links .acct-menu a .navgrp-ico{ display:none; }
     .panel{ padding:18px 16px; }
     .trade-cols{ grid-template-columns:1fr; }
     .vote-cards{ flex-direction:column; }
@@ -18871,19 +18962,30 @@ NAV_STREAKS_KEYS = ("streaks",)
 NAV_LIVE_KEYS = ("live", "scores", "standings", "performances",
                  "injuries", "moves", "birthdays")
 
-# The top bar and the phone's bottom bar are now the same four
-# destinations, in the same order, drawn with the same icons -- read
-# out of TABBAR_SECTIONS rather than written twice, which is how the
-# two drifted into calling one page "Live" and "Scores" at once.
+# What the desktop rail holds: the three destinations that are about
+# the NFL rather than about your team. Icons and labels are read out of
+# TABBAR_SECTIONS rather than written twice, which is how the top bar
+# and the phone's bottom bar once drifted into calling one page "Live"
+# and "Scores" at the same time.
 #
-# "You" is not here: on desktop it is the account menu at the end of
-# the row, which holds more than a tab ever could.
-NAV_TOP_KEYS = ("streaks", "scores", "rankings", "matchups")
+# Matchups is deliberately NOT here any more. It grades YOUR players
+# against this week's defences, so it only means anything once a league
+# is linked -- which makes it a fantasy tool sitting in a row of public
+# pages. It lives in the Fantasy menu now, beside Lineup and Waivers.
+# Rankings stays: dynasty and redraft values need no league, and it is
+# the page a stranger arriving from a search is most often after.
+#
+# The phone keeps Matchups as a bottom tab (TABBAR_SECTIONS, unchanged).
+# A tab bar has no hover and no dropdown, so burying a section behind a
+# menu there costs a tap that the desktop rail does not.
+#
+# "You" is not here either: on desktop it is the account menu at the end
+# of the row, which holds more than a tab ever could.
+NAV_TOP_KEYS = ("streaks", "scores", "rankings")
 NAV_ACTIVE_FOR = {
     "scores": NAV_LIVE_KEYS,
     "streaks": NAV_STREAKS_KEYS,
-    "rankings": ("rankings", "player", "trade", "sbc", "kickers"),
-    "matchups": ("matchups", "lineup", "waivers"),
+    "rankings": ("rankings", "player", "kickers"),
 }
 
 
@@ -18893,21 +18995,83 @@ def nav_top_sections():
     by_key = {k: (k, label, href, icon) for k, label, href, icon in TABBAR_SECTIONS}
     return [by_key[k] for k in NAV_TOP_KEYS if k in by_key]
 
-# Fantasy stays a menu, and now holds only what the top row does not:
-# Rankings and Matchups moved up to be destinations in their own right,
-# so listing them twice would just be two doors into one room.
+# Fantasy is the one menu, and it is now sectioned rather than a flat
+# list of seven things at one weight.
+#
+# The split is "what needs my league" against "what works on any
+# player", because that is the question a reader actually has in front
+# of this menu. Each entry is (active-key, href, label, one line).
+#
+# Matchup Grades is /matchups, renamed. It could not keep the name
+# "Matchups" once it moved in here: "Your Matchup" (your own league's
+# live score, /matchup) would have sat directly above it, one letter
+# apart, in the same panel.
+# The rail glyph for the menu itself.
+NAV_GROUP_ICON = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" '
+                  'aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="3"/>'
+                  '<path d="M3 9h18M9 9v11"/></svg>')
+
 NAV_GROUPS = [
     ("mycalc", "Fantasy", [
-        # Free tools first, the StreakPros+ ones (see PLUS_KEYS) last.
-        ("league", "/league-manager", "League Manager", "Your synced leagues and rosters"),
-        ("matchup", "/matchup", "Your Matchup", "Live score and win odds in your league"),
-        ("trade", "/trade-calculator", "Trade Calculator", "Weigh any trade both ways"),
-        ("sbc", "/start-bench-cut", "Start/Bench/Cut", "Help keep the rankings sharp"),
-        ("lineup", "/lineup", "Lineup", "Who to start this week, and why"),
-        ("waivers", "/waivers", "Waiver Targets", "The best free agents in your league"),
-        ("plus", "/plus", "StreakPros+", "Every tier, every list, every grade"),
+        ("My Team", [
+            ("league", "/league-manager", "League Manager", "Your synced leagues and rosters"),
+            ("matchup", "/matchup", "Your Matchup", "Live score and win odds this week"),
+            ("lineup", "/lineup", "Lineup", "Who to start, and why"),
+            ("waivers", "/waivers", "Waiver Targets", "Best free agents in your league"),
+        ]),
+        ("Tools", [
+            ("matchups", "/matchups", "Matchup Grades", "Who is worth starting this week"),
+            ("trade", "/trade-calculator", "Trade Calculator", "Weigh any trade both ways"),
+            ("sbc", "/start-bench-cut", "Start / Bench / Cut", "Help keep the rankings sharp"),
+        ]),
     ]),
 ]
+# Pulled out of the list and given its own tinted row at the foot of the
+# menu: an upgrade is not a seventh destination at the same weight as
+# the six above it.
+NAV_GROUP_FOOTER = ("plus", "/plus", "StreakPros+", "Every tier, every list, every grade")
+
+# One glyph per menu row. A panel of seven identical text lines is a
+# wall to scan; an icon column gives the eye somewhere to land.
+NAV_ITEM_ICONS = {
+    "league": '<path d="M3 4h18v16H3z"/><path d="M3 9h18M8 13h8M8 16h5"/>',
+    "matchup": '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2" stroke-linecap="round"/>',
+    "lineup": '<path d="M4 7h16M4 12h16M4 17h9" stroke-linecap="round"/>',
+    "waivers": '<path d="M12 5v14M5 12h14" stroke-linecap="round"/>',
+    "matchups": ('<circle cx="8" cy="9" r="3"/><circle cx="16" cy="9" r="3"/>'
+                 '<path d="M3 19c0-3 2.5-5 5-5s5 2 5 5M11 19c0-3 2.5-5 5-5s5 2 5 5" stroke-linecap="round"/>'),
+    "trade": '<path d="M4 8h13l-3-3M20 16H7l3 3" stroke-linecap="round" stroke-linejoin="round"/>',
+    "sbc": ('<rect x="3" y="7" width="11" height="13" rx="2"/>'
+            '<path d="M8 4h11a2 2 0 012 2v11" stroke-linecap="round"/>'),
+    "plus": '<path d="M12 3.5l2.6 5.6 6.1.8-4.5 4.2 1.2 6L12 17.2 6.6 20.1l1.2-6L3.3 9.9l6.1-.8z" stroke-linejoin="round"/>',
+    "settings": ('<circle cx="12" cy="12" r="3.2"/><path d="M12 2.8v2.4M12 18.8v2.4M21.2 12h-2.4M5.2 12H2.8'
+                 'M18.5 5.5l-1.7 1.7M7.2 16.8l-1.7 1.7M18.5 18.5l-1.7-1.7M7.2 7.2L5.5 5.5" stroke-linecap="round"/>'),
+    "alerts": ('<path d="M18 9a6 6 0 10-12 0c0 6-2 7-2 7h16s-2-1-2-7M10.5 20a2 2 0 003 0" '
+               'stroke-linecap="round" stroke-linejoin="round"/>'),
+    "theme": '<circle cx="12" cy="12" r="8.5"/><path d="M12 3.5a8.5 8.5 0 010 17z" fill="currentColor" stroke="none"/>',
+    "logout": '<path d="M15 17l5-5-5-5M20 12H9M11 4H5v16h6" stroke-linecap="round" stroke-linejoin="round"/>',
+}
+
+
+def nav_icon(key):
+    """The menu glyph for an item, or nothing for one without."""
+    body = NAV_ITEM_ICONS.get(key)
+    if not body:
+        return ""
+    return (f'<svg class="navgrp-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" '
+            f'stroke-width="2" aria-hidden="true">{body}</svg>')
+
+
+def nav_group_items(sections):
+    """Every item in a group, flattened out of its sections."""
+    return [item for _label, items in sections for item in items]
+
+
+# The + beside a StreakPros+ section. This WAS the favicon's calculator
+# redrawn at 13x11, which at that size is not a calculator -- it is
+# three grey smudges. A chip with a plus in it says the same thing and
+# survives being small, which is the only size it is ever drawn at.
+PLUS_CHIP = '<span class="plus-chip" aria-label="StreakPros+">+</span>' 
 
 
 def make_header(active=""):
@@ -18918,30 +19082,46 @@ def make_header(active=""):
     # own, so the header still answers "where am I" at a glance now that
     # the links themselves are a tap away.
     groups = []
-    for key, label, items in NAV_GROUPS:
-        here = active == key or any(item[0] == active for item in items)
-        links = "".join(
-            f'''<a class="{cls(k)}" href="{href}">
-               <span class="navgrp-lab">{text}{PLUS_MARK_SVG if k in PLUS_KEYS else ""}</span>
-               <span class="navgrp-desc">{desc}</span>
+    for key, label, sections in NAV_GROUPS:
+        here = active == key or any(item[0] == active
+                                    for item in nav_group_items(sections))
+        blocks = []
+        for sec_label, items in sections:
+            links = "".join(
+                f'''<a class="{cls(k)}" href="{href}">{nav_icon(k)}
+               <span class="navgrp-txt">
+                 <span class="navgrp-lab">{text}{PLUS_CHIP if k in PLUS_KEYS else ""}</span>
+                 <span class="navgrp-desc">{desc}</span>
+               </span>
              </a>'''
-            for k, href, text, desc in items
-        )
+                for k, href, text, desc in items
+            )
+            blocks.append(f'<div class="navgrp-sec">{sec_label}</div>{links}')
+        fk, fhref, ftext, fdesc = NAV_GROUP_FOOTER
+        foot = (f'''<a class="navgrp-foot {cls(fk)}" href="{fhref}">{nav_icon(fk)}
+             <span class="navgrp-txt">
+               <span class="navgrp-lab">{ftext}</span>
+               <span class="navgrp-desc">{fdesc}</span>
+             </span>
+           </a>''')
+        rule = '<div class="navgrp-rule"></div>'
+        body = rule.join(blocks)
         groups.append(f'''
     <details class="navgrp" data-nav="{key}">
       <summary class="{"on" if here else ""}">
-        <span>{label}</span><span class="navgrp-caret">&#9660;</span>
+        {NAV_GROUP_ICON}<span>{label}</span><span class="navgrp-caret">&#9660;</span>
       </summary>
-      <div class="navgrp-menu">{links}</div>
+      <div class="navgrp-menu">{body}{foot}</div>
     </details>''')
     nav_groups = "".join(groups)
 
-    # Live is a plain link, and reads as current on any of the live-side
-    # pages -- including the ones it no longer lists.
+    # The rail: the NFL-wide destinations, then a rule, then the one
+    # menu. Enclosed together so the row reads as a single control
+    # rather than four pills and a loose word.
     top_links = "".join(
         f'<a class="navtop {"active" if active in NAV_ACTIVE_FOR.get(key, (key,)) else ""}" '
         f'href="{href}">{icon}<span>{label}</span>'
-        f'{PLUS_MARK_SVG if key in PLUS_KEYS else ""}</a>'
+        f'{PLUS_CHIP if key in PLUS_KEYS else ""}</a>'
         for key, label, href, icon in nav_top_sections())
 
     return f"""
@@ -18949,7 +19129,8 @@ def make_header(active=""):
   <a class="wordmark" href="/">{LOGO_SVG}<span>Streak<b>Pros</b></span></a>
   <input type="checkbox" id="navToggle" class="nav-toggle-checkbox">
   <label for="navToggle" class="nav-toggle-btn" aria-label="Menu">&#9776;</label>
-  <nav class="links">{top_links}{nav_groups}
+  <nav class="links">
+    <div class="nav-rail">{top_links}<span class="rail-rule"></span>{nav_groups}</div>
     {{% if current_user.is_authenticated %}}
       <details class="acct">
         <summary aria-label="Account menu">
@@ -18963,21 +19144,36 @@ def make_header(active=""):
         </summary>
         <div class="acct-menu">
           <div class="acct-who">
-            <b>{{{{ current_user.username }}}}</b>
-            <span>{{{{ current_user.email or 'Signed in' }}}}</span>
+            {{% if current_user.avatar_version %}}
+            <img class="acct-disc acct-photo"
+                 src="/avatar/{{{{ current_user.id }}}}?v={{{{ current_user.avatar_version }}}}" alt="">
+            {{% else %}}
+            <span class="acct-disc">{{{{ (current_user.username or '?')[:2] }}}}</span>
+            {{% endif %}}
+            <span class="acct-name">
+              <b>{{{{ current_user.username }}}}</b>
+              <span>{{{{ current_user.email or 'Signed in' }}}}</span>
+            </span>
+            <span class="acct-plan">{{% if viewer_has_plus() %}}Plus{{% else %}}Free{{% endif %}}</span>
           </div>
-          <a href="/settings"><span class="ico">&#9881;</span>Settings</a>
-          <a href="/league-manager"><span class="ico">&#9776;</span>My Leagues</a>
+          <a href="/settings">{nav_icon("settings")}Settings</a>
+          <a href="/league-manager">{nav_icon("league")}My Leagues</a>
+          <a href="/settings/alerts">{nav_icon("alerts")}Alerts</a>
+          <a href="/settings/theme">{nav_icon("theme")}Theme</a>
+          <a href="/plus">{nav_icon("plus")}StreakPros+</a>
           <div class="sep"></div>
-          <a class="out" href="/logout"><span class="ico">&#8677;</span>Log Out</a>
+          <a class="out" href="/logout">{nav_icon("logout")}Log Out</a>
         </div>
       </details>
     {{% else %}}
-      <a href="/login">Sign In</a><a href="/signup">Create Account</a>
+      <span class="nav-auth">
+        <a href="/login">Sign In</a><a class="nav-cta" href="/signup">Create Account</a>
+      </span>
     {{% endif %}}
   </nav>
 </div></header>
 """
+
 
 # A feed's day rules, drawn in the browser. Each row carries the
 # instant it happened (data-ts) or, for a birthday, its calendar day
