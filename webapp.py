@@ -281,19 +281,14 @@ TABBAR_PATHS = (
     ("/performances", "scores"), ("/performance", "scores"), ("/team", "scores"), ("/play", "scores"),
     ("/injuries", "scores"), ("/moves", "scores"), ("/birthdays", "scores"), ("/draft", "scores"),
 )
-# Which sections are StreakPros+ once the gate is on: the calculator, with a
-# plus beside it, marks them in the menu and on the bar.
+# Which sections are StreakPros+ once the gate is on: a Pro badge marks
+# them in the menu and on the bar.
 PLUS_KEYS = ("lineup", "waivers", "matchups", "streaks", "plus")
-# The favicon's calculator (display bar, four keys) with a plus beside it.
-PLUS_MARK_SVG = ('<svg class="plus-mark" viewBox="0 0 30 26" aria-label="StreakPros+" role="img">'
-                 '<rect x="0" y="1" width="24" height="24" rx="5" fill="var(--accent)"/>'
-                 '<rect x="4.9" y="5.1" width="14.2" height="4.9" rx="1.3" fill="#17140d"/>'
-                 '<circle cx="8.3" cy="15.3" r="1.7" fill="#17140d"/>'
-                 '<circle cx="15.7" cy="15.3" r="1.7" fill="#17140d"/>'
-                 '<circle cx="8.3" cy="20.1" r="1.7" fill="#17140d"/>'
-                 '<circle cx="15.7" cy="20.1" r="1.7" fill="#17140d"/>'
-                 '<circle cx="24" cy="20" r="5.5" fill="var(--ink)"/>'
-                 '<path d="M24 17v6M21 20h6" stroke="var(--paper)" stroke-width="1.8" stroke-linecap="round"/></svg>')
+# The bar's copy of the same badge. This was the favicon's calculator with
+# a plus beside it, drawn at 12x10 in the corner of a tab -- at that size
+# the drawing read as a smudge and the plus read as nothing at all. The
+# word says which sections are paid without needing a legend.
+PLUS_MARK = '<span class="plus-mark" aria-label="StreakPros+">Pro</span>' 
 
 
 def tabbar_section(path):
@@ -311,7 +306,11 @@ def tabbar_section(path):
 TABBAR_STYLE = """<style>
   @view-transition { navigation: auto; }
   ::view-transition-old(root), ::view-transition-new(root){ animation-duration:.16s; }
-  .plus-mark{ width:15px; height:13px; vertical-align:-2px; margin-left:5px; flex:none; }
+  .plus-mark{ display:inline-flex; align-items:center; justify-content:center; flex:none;
+              height:13px; padding:0 4px; margin-left:5px; border-radius:4px; line-height:1;
+              background:var(--accent, #b97a1f); color:var(--accent-on, #fff8ec);
+              font-family:"Source Sans 3",system-ui,sans-serif;
+              font-size:9px; font-weight:800; letter-spacing:0.03em; vertical-align:-2px; }
   .tabbar{ display:none; }
   @media (max-width: 760px){
     body{ padding-bottom:calc(66px + env(safe-area-inset-bottom, 0px)); }
@@ -325,7 +324,10 @@ TABBAR_STYLE = """<style>
     .tabbar a svg{ width:24px; height:24px; }
     .tabbar a.on{ color:var(--accent-ink, #e0a63c); }
     .tabbar a.on::before{ content:""; position:absolute; top:0; left:22%; right:22%; height:2px; border-radius:0 0 2px 2px; background:var(--accent, #b97a1f); }
-    .tabbar .plus-mark{ position:absolute; top:6px; right:calc(50% - 22px); width:12px; height:10px; margin:0; }
+    /* A corner badge, tucked clear of the 24px icon rather than sitting on
+       it: the icon is what a thumb aims at, the badge only labels it. */
+    .tabbar .plus-mark{ position:absolute; top:3px; right:calc(50% - 29px); height:11px;
+                        padding:0 3px; font-size:7.5px; letter-spacing:0.02em; margin:0; }
   }
 </style>"""
 
@@ -355,7 +357,7 @@ def tabbar_html(path, signed_in):
     for key, label, href, icon in TABBAR_SECTIONS:
         if key == "you" and not signed_in:
             href = "/login"
-        mark = PLUS_MARK_SVG if key in PLUS_KEYS else ""
+        mark = PLUS_MARK if key in PLUS_KEYS else ""
         links.append(f'<a href="{href}" data-tab="{key}" class="{"on" if key == here else ""}" aria-label="{label}">'
                      f'{icon}{mark}<span>{label}</span></a>')
     return (TABBAR_STYLE + f'<nav class="tabbar" data-here="{here or ""}" aria-label="Sections">' + "".join(links)
@@ -18641,11 +18643,14 @@ BASE_STYLE = THEME_BOOT + """
   .navtop.active:hover{ background:var(--accent); color:var(--accent-on); }
   .navtop.active .plus-chip{ background:rgba(255,255,255,0.22); color:#fff; }
 
-  /* The + on a StreakPros+ section, at the one size it is ever drawn. */
+  /* The Pro badge on a StreakPros+ section, at the one size it is ever
+     drawn. Wider than the "+" it replaced, so the padding and tracking
+     are set for a three-letter word rather than a single glyph. */
   .plus-chip{ display:inline-flex; align-items:center; justify-content:center; flex:none;
-              min-width:15px; height:15px; padding:0 4px; border-radius:4px; line-height:1;
+              height:15px; padding:0 5px; border-radius:4px; line-height:1;
               background:color-mix(in srgb, var(--accent-ink) 16%, transparent);
-              color:var(--accent-ink); font-size:10px; font-weight:800; }
+              color:var(--accent-ink); font-size:9.5px; font-weight:800;
+              letter-spacing:0.03em; }
 
   /* Guests get the same right-hand cell the account disc occupies. */
   .nav-auth{ grid-column:3; justify-self:end; display:flex; align-items:center; gap:10px; }
@@ -18853,7 +18858,10 @@ BASE_STYLE = THEME_BOOT + """
   .grade-badge.grade-bp, .grade-badge.grade-b, .grade-badge.grade-bm{ background:var(--good-wash); color:var(--good); }
   .grade-badge.grade-cp, .grade-badge.grade-c, .grade-badge.grade-cm{ background:var(--warning-wash); color:var(--warning); }
   .grade-badge.grade-dp, .grade-badge.grade-d, .grade-badge.grade-dm, .grade-badge.grade-f{ background:var(--critical-wash); color:var(--critical); }
-  .grade-badge.grade-lock{ background:var(--paper-sunken); color:var(--ink-muted); text-decoration:none; }
+  /* "Pro" is three characters where a grade is one or two, so it drops a
+     size to keep the column of badges the same visual weight. */
+  .grade-badge.grade-lock{ background:var(--paper-sunken); color:var(--ink-muted);
+                           text-decoration:none; font-size:0.85em; letter-spacing:0.03em; }
   /* The roster legend. Three groups side by side on a wide screen,
      stacked on a phone -- each with its own heading, so an item's
      meaning comes from the group it sits in rather than from its
@@ -19580,11 +19588,11 @@ def nav_group_items(sections):
     return [item for _label, items in sections for item in items]
 
 
-# The + beside a StreakPros+ section. This WAS the favicon's calculator
-# redrawn at 13x11, which at that size is not a calculator -- it is
-# three grey smudges. A chip with a plus in it says the same thing and
-# survives being small, which is the only size it is ever drawn at.
-PLUS_CHIP = '<span class="plus-chip" aria-label="StreakPros+">+</span>' 
+# The badge beside a StreakPros+ section. This WAS the favicon's
+# calculator redrawn at 13x11, which at that size is not a calculator --
+# it is three grey smudges. Then it was a bare "+", which is a glyph a
+# reader has to be told the meaning of. "Pro" needs no key.
+PLUS_CHIP = '<span class="plus-chip" aria-label="StreakPros+">Pro</span>' 
 
 
 def make_header(active=""):
@@ -20558,7 +20566,7 @@ LEAGUE_DETAIL_HTML = BASE_STYLE + make_header("league") + """
             <a class="pname" href="/player?sid={{ p.sleeper_id }}&numqbs={{ detail.num_qbs }}&u={{ username }}&ref={{ ('/league?league_id=' ~ league_id ~ '&roster_id=' ~ detail.roster_id ~ '&u=' ~ username)|urlencode }}">{{ p.name }}</a>
           </div>
           <span class="rank-pair">
-            {% if p.grade %}<span class="grade-badge grade-{{ p.grade_class }}">{{ p.grade }}</span>{% elif p.grade_locked %}<a class="grade-badge grade-lock" href="/plus" title="Matchup grades are a StreakPros+ feature">+</a>{% endif %}
+            {% if p.grade %}<span class="grade-badge grade-{{ p.grade_class }}">{{ p.grade }}</span>{% elif p.grade_locked %}<a class="grade-badge grade-lock" href="/plus" title="Matchup grades are a StreakPros+ feature">Pro</a>{% endif %}
             <span class="rank-plain">{{ p.position_rank or '\u2014' }}</span>
             <span class="rank-badge {{ p.tier }}">{{ p.overall_rank or '\u2014' }}</span>
           </span>
