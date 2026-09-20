@@ -1,0 +1,96 @@
+name: Cache Check
+
+# Is Cloudflare actually sharing one copy of a public page with
+# everybody, or is every visitor still reaching the origin?
+#
+# This exists because the obvious way to check it -- open the site and
+# look at the response headers -- is hard to do honestly from a browser
+# that is already signed in: a session cookie is exactly what the first
+# Cache Rule bypasses on, so a signed-in tab will always say BYPASS and
+# tell you nothing about what a real visitor gets. A runner carries no
+# cookies at all, which is the state that matters.
+on:
+  workflow_dispatch:
+    inputs:
+      rounds:
+        description: "How many times to ask for each page"
+        default: "4"
+
+jobs:
+  cache-check:
+    runs-on: ubuntu-latest
+    env:
+      HOST: ${{ vars.SITE_HOST || 'https://streakpros.com' }}
+      ROUNDS: ${{ github.event.inputs.rounds }}
+    steps:
+      - name: Ask for the public pages, anonymously, several times
+        run: |
+          rounds="${ROUNDS:-4}"
+          fail=0
+          # A MISS then a HIT is the whole point: the first ask renders
+          # at the origin, the rest are served by the edge.
+          for path in / /scores /rankings /streaks /standings /privacy; do
+            echo "=============== $path"
+            seen_hit=0
+            for i in $(seq 1 "$rounds"); do
+              hdrs=$(curl -sS -o /dev/null -D - --max-time 45 "$HOST$path")
+              status=$(printf '%s' "$hdrs" | tr -d '\r' \
+                | awk -F': ' 'tolower($1)=="cf-cache-status"{print $2}')
+              cc=$(printf '%s' "$hdrs" | tr -d '\r' \
+                | awk -F': ' 'tolower($1)=="cache-control"{print $2}')
+              age=$(printf '%s' "$hdrs" | tr -d '\r' \
+                | awk -F': ' 'tolower($1)=="age"{print $2}')
+              echo "  try $i: cf-cache-status=${status:-<none>}  age=${age:-0}  cache-control=${cc:-<none>}"
+              case "$status" in HIT|STALE|UPDATING|REVALIDATED) seen_hit=1 ;; esac
+              sleep 2
+            done
+            if [ "$seen_hit" = "1" ]; then
+              echo "  -> SHARED: the edge is answering this one"
+            else
+              echo "::warning::$path never came back HIT -- the edge is not sharing it"
+              fail=1
+            fi
+          done
+
+          echo "=============== the live poll"
+          # The one that decides whether thousands of viewers is
+          # affordable. Needs a real game id, so take one off /scores.
+          eid=$(curl -sS --max-time 45 "$HOST/scores" \
+                | grep -o '/game?id=[0-9]\{6,12\}' | head -1 | cut -d= -f2)
+          if [ -z "$eid" ]; then
+            echo "::warning::no game id on /scores right now, so the poll could not be checked"
+          else
+            echo "  using game $eid"
+            for i in $(seq 1 "$rounds"); do
+              hdrs=$(curl -sS -o /dev/null -D - --max-time 45 "$HOST/api/game-live?id=$eid")
+              status=$(printf '%s' "$hdrs" | tr -d '\r' \
+                | awk -F': ' 'tolower($1)=="cf-cache-status"{print $2}')
+              cc=$(printf '%s' "$hdrs" | tr -d '\r' \
+                | awk -F': ' 'tolower($1)=="cache-control"{print $2}')
+              echo "  try $i: cf-cache-status=${status:-<none>}  cache-control=${cc:-<none>}"
+              sleep 2
+            done
+          fi
+
+          echo "=============== THE SAFETY CHECK"
+          # A signed-in reader must never be handed a shared copy. Rule
+          # 1 in Cloudflare bypasses on the session cookie; the app
+          # refuses to mark such a response public in the first place.
+          # Both are checked here, because either one alone is a single
+          # point of failure on the one bug that actually hurts people.
+          hdrs=$(curl -sS -o /dev/null -D - --max-time 45 \
+                 -H "Cookie: session=not-a-real-session" "$HOST/scores")
+          status=$(printf '%s' "$hdrs" | tr -d '\r' \
+            | awk -F': ' 'tolower($1)=="cf-cache-status"{print $2}')
+          cc=$(printf '%s' "$hdrs" | tr -d '\r' \
+            | awk -F': ' 'tolower($1)=="cache-control"{print $2}')
+          echo "  with a session cookie: cf-cache-status=${status:-<none>}  cache-control=${cc:-<none>}"
+          case "$status" in
+            HIT|STALE|UPDATING) echo "::error::a request WITH a session cookie was served from the edge"; fail=1 ;;
+            *) echo "  -> not served from the shared copy, which is correct" ;;
+          esac
+          case "$cc" in
+            *public*) echo "::error::origin marked a cookie-carrying response public"; fail=1 ;;
+            *) echo "  -> and the origin did not mark it public either" ;;
+          esac
+          exit $fail
