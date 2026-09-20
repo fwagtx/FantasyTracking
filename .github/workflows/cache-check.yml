@@ -36,7 +36,14 @@ jobs:
               tolower($1)=="cf-cache-status"{s=$2}
               tolower($1)=="cache-control"{c=$2}
               tolower($1)=="cf-ray"{r=$2}
-              END{printf "  try %s: cf-cache-status=%s  cache-control=%s  ray=%s\n", "'$i'", (s?s:"<none>"), (c?c:"<none>"), (r?r:"<none>")}'
+              # Cloudflare will not cache ANY response that carries a
+              # Set-Cookie, whatever its Cache-Control says and whatever
+              # the Cache Rules say. Flask adds one whenever the session
+              # is touched, and it does so in save_session -- after every
+              # after_request handler -- so the app cannot see it either.
+              # This is the one header that was never being printed.
+              tolower($1)=="set-cookie"{k=k" ["$2"]"}
+              END{printf "  try %s: cf-cache-status=%s  cache-control=%s  ray=%s\n          set-cookie:%s\n", "'$i'", (s?s:"<none>"), (c?c:"<none>"), (r?r:"<none>"), (k?k:" <none>")}'
             sleep 2
           done
 
@@ -61,8 +68,11 @@ jobs:
                 | awk -F': ' 'tolower($1)=="vary"{print $2}')
               ray=$(printf '%s' "$hdrs" | tr -d '\r' \
                 | awk -F': ' 'tolower($1)=="cf-ray"{print $2}')
+              sc=$(printf '%s' "$hdrs" | tr -d '\r' \
+                | awk -F': ' 'tolower($1)=="set-cookie"{print $2}' | tr '\n' ' ')
               echo "  try $i: cf-cache-status=${status:-<none>}  age=${age:-0}  vary=${vary:-<none>}  ray=${ray:-<none>}"
               echo "          cache-control=${cc:-<none>}"
+              echo "          set-cookie=${sc:-<none>}"
               case "$status" in HIT|STALE|UPDATING|REVALIDATED) seen_hit=1 ;; esac
               sleep 2
             done
