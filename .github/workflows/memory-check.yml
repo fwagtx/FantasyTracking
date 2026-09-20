@@ -3,8 +3,11 @@ name: Memory Check
 on:
   workflow_dispatch:
     inputs:
+      trim:
+        description: "Hand the heap back first (type yes) -- costs nothing, keeps every cache"
+        default: "no"
       shed:
-        description: "Also drop every cache (type yes) -- the lever to pull if the site is struggling"
+        description: "Also drop every cache (type yes) -- the heavier lever, makes the next visitor wait for a rebuild"
         default: "no"
 
 jobs:
@@ -14,6 +17,7 @@ jobs:
       SITE_PASSWORD: ${{ secrets.SITE_PASSWORD }}
       HOST: ${{ vars.SITE_HOST || 'https://fantasyfootballcalc.com' }}
       SHED: ${{ github.event.inputs.shed }}
+      TRIM: ${{ github.event.inputs.trim }}
     steps:
       - name: Ask the live server what it weighs
         run: |
@@ -22,7 +26,9 @@ jobs:
             exit 1
           fi
           q=""
-          if [ "$SHED" = "yes" ]; then q="?shed=1"; fi
+          sep="?"
+          if [ "$TRIM" = "yes" ]; then q="${sep}trim=1"; sep="&"; fi
+          if [ "$SHED" = "yes" ]; then q="${q}${sep}shed=1"; fi
           echo "--- /api/memory$q ---"
           body=$(curl -sS --fail-with-body --max-time 60 \
             -H "X-Sync-Secret: $SITE_PASSWORD" \

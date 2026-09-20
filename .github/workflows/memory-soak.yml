@@ -96,7 +96,7 @@ jobs:
             case "$body" in *'"ok": false'*|*'"ok":false'*)
               echo "::error::server rejected the request"; exit 1;; esac
             echo "$body" | python3 -c \
-              'import json,sys; d=json.load(sys.stdin); print("  rss", d["rss_mb"], "MB  sheds", d.get("sheds"))'
+              'import json,sys; d=json.load(sys.stdin); print("  rss", d["rss_mb"], "MB  trims", d.get("trims"), "sheds", d.get("sheds"))'
           done
           echo "--- anything that did not answer cleanly ---"
           awk '$1 !~ /^[23]/ {print}' codes.txt | sort | uniq -c | sort -rn | head -20
@@ -123,8 +123,14 @@ jobs:
                  if not l[:1].isdigit() or l[0] not in "23"]
           rss, inst = after["rss_mb"], after["instance_mb"]
           soft = after.get("soft_limit_mb")
+          # Trims climbing while sheds stay put is the whole design
+          # working: the process handed back memory it had already
+          # freed, and never had to throw a warm cache away for it.
           print(f"rss {before['rss_mb']} MB -> {rss} MB of {inst} MB "
-                f"(soft limit {soft}, sheds {after.get('sheds')})")
+                f"(trim at {after.get('trim_limit_mb')}, shed at {soft}; "
+                f"trims {after.get('trims')}, sheds {after.get('sheds')})")
+          if after.get("last_trim"):
+              print("last trim:", after["last_trim"])
           over = {n: c for n, c in after["caches"].items()
                   if c["entries"] is not None and c["entries"] > c["limit"]}
           fail = False
