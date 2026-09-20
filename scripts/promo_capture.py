@@ -50,8 +50,12 @@ CURSOR_JS = """
     d.style.cssText = [
       'position:fixed', 'z-index:2147483647', 'left:-60px', 'top:-60px',
       'width:20px', 'height:20px', 'margin:-10px 0 0 -10px',
-      'border-radius:50%', 'background:rgba(255,255,255,.92)',
-      'box-shadow:0 0 0 2px rgba(0,0,0,.4), 0 2px 12px rgba(0,0,0,.55)',
+      // A ring, not a disc. A filled dot sits on top of whatever it is
+      // pressing, and on a pill the size of "L5" that hides the very
+      // label the clip is there to show changing.
+      'border-radius:50%', 'background:rgba(255,255,255,.16)',
+      'border:2px solid rgba(255,255,255,.95)', 'box-sizing:border-box',
+      'box-shadow:0 0 0 1px rgba(0,0,0,.45), 0 2px 12px rgba(0,0,0,.55)',
       'pointer-events:none', 'transition:left .28s ease, top .28s ease, transform .12s ease'
     ].join(';');
     document.body.appendChild(d);
