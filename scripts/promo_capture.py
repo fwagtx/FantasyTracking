@@ -123,8 +123,21 @@ class Stage:
     async def hold(self, ms):
         await self.page.wait_for_timeout(ms)
 
+    async def _eval(self, script, arg=None):
+        """Every evaluate runs against a document that a click may have
+        just replaced. Losing the context is a missed beat, not a
+        failed render."""
+        try:
+            if arg is None:
+                return await self.page.evaluate(script)
+            return await self.page.evaluate(script, arg)
+        except Exception as e:
+            if "Execution context was destroyed" not in str(e):
+                print(f"  note: {e}", file=sys.stderr)
+            return None
+
     async def glide(self, to_y, ms=1500):
-        await self.page.evaluate(GLIDE_JS, [to_y, ms])
+        await self._eval(GLIDE_JS, [to_y, ms])
         await self.hold(250)
 
     async def point(self, selector, index=0, settle=420):
@@ -140,8 +153,11 @@ class Stage:
             return None
         x = box["x"] + box["width"] / 2
         y = box["y"] + box["height"] / 2
-        await self.page.evaluate("([x, y]) => window.__promoMove(x, y)", [x, y])
-        await self.page.mouse.move(x, y)
+        await self._eval("([x, y]) => window.__promoMove(x, y)", [x, y])
+        try:
+            await self.page.mouse.move(x, y)
+        except Exception:
+            pass
         await self.hold(settle)
         return el
 
@@ -149,15 +165,24 @@ class Stage:
         el = await self.point(selector, index)
         if el is None:
             return False
-        await self.page.evaluate("() => window.__promoTap()")
+        await self._eval("() => window.__promoTap()")
         await self.hold(180)
+        clicked = True
         try:
-            await el.click(timeout=3000)
+            await el.click(timeout=6000)
         except Exception:
-            print(f"  note: could not click {selector}[{index}]", file=sys.stderr)
-            return False
+            # A click that starts a navigation can report a timeout
+            # while the next document is already loading, so this is
+            # not proof that nothing happened.
+            print(f"  note: click on {selector}[{index}] did not confirm",
+                  file=sys.stderr)
+            clicked = False
+        try:
+            await self.page.wait_for_load_state("domcontentloaded", timeout=8000)
+        except Exception:
+            pass
         await self.hold(after)
-        return True
+        return clicked
 
 
 # --- the scenes ---------------------------------------------------------

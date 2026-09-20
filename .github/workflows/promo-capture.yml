@@ -33,10 +33,16 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Install Playwright
+      - name: Install Playwright and ffmpeg
         run: |
           pip install --quiet playwright
           python -m playwright install --with-deps chromium
+          # The runner image does not ship ffmpeg, and the conversion
+          # step below is useless without it: Playwright records VP8 in
+          # a .webm and no social platform takes that.
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends ffmpeg
+          ffmpeg -version | head -1
 
       - name: Record
         env:
@@ -99,6 +105,7 @@ jobs:
           ls -la promo
 
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: promo-clips
           path: promo/
