@@ -10040,7 +10040,14 @@ def _lineup_digest(row, sleeper_id, leagues, season, week, now=None, notes=None)
                       f"(waits until {LINEUP_ALERT_LEAD_HOURS}h)")
         else:
             say(name, f"{len(problems)} problem(s), inside the window")
-        per_league.append((name, plan, problems))
+        # Only the two fields the grouping reads are kept. A plan also
+        # carries the full starting lineup and the whole ranked bench,
+        # and a reader with ten leagues would otherwise have ten of
+        # those alive at once for the sake of a gain figure and a list
+        # of swaps.
+        per_league.append((name, {"gain": plan.get("gain"),
+                                  "changes": plan.get("changes")}, problems))
+        plan = None
         if soonest is None or hours < soonest:
             soonest = hours
     if not per_league:
@@ -10258,6 +10265,14 @@ def run_alerts(season=None, week=None, limit=None, dry=False, now=None):
                            or len(alert.get("targets") or [])
                            or len((alert.get("lineup") or {}).get("decisions") or [])),
             })
+    # Same reason as the warm pass: a run builds a full lineup plan per
+    # league per reader and keeps none of it. Hand the heap back before
+    # returning rather than carrying the peak until something else
+    # happens to notice.
+    try:
+        trim_heap()
+    except Exception:
+        pass
     return summary
 
 
@@ -17452,17 +17467,54 @@ def cache_report():
     return out
 
 
-# The ceiling above which the process starts dropping what it is
-# holding rather than waiting to be killed for it. Render's smallest
-# paid instance is 512 MB and the caches are sized for ~272 MB, so 400
-# means something has gone wrong -- but "something has gone wrong" is
-# exactly when a site should shed weight instead of dying.
+# Two ceilings, because there are two different things to do about a
+# heavy process, and they cost wildly different amounts.
+#
+# Most of what a busy instance is carrying is not cache contents at
+# all: it is memory Python has already freed and glibc kept for reuse
+# rather than handing back. A live shed on this app reclaimed 98 MB
+# with the caches nearly empty, which is the proof. Giving that back
+# costs nobody anything, so the FIRST ceiling only trims. The second
+# one -- which throws away real work and makes some visitor pay to
+# rebuild it -- is only reached if trimming was not enough.
+MEMORY_TRIM_LIMIT_MB = _safe_int(os.environ.get("MEMORY_TRIM_LIMIT_MB"), 300)
 MEMORY_SOFT_LIMIT_MB = _safe_int(os.environ.get("MEMORY_SOFT_LIMIT_MB"), 400)
-# Reading /proc costs about as much as a dict lookup, but there is no
-# reason to do it on every request either.
-MEMORY_CHECK_EVERY = 40
-_memory_state = {"requests": 0, "sheds": 0, "last_shed": None, "last_shed_rss": None}
+# Reading /proc costs about as much as a dict lookup. Every fortieth
+# request, an instance could climb for an hour between two looks; the
+# whole point of having a cheap response is being able to look often.
+MEMORY_CHECK_EVERY = _safe_int(os.environ.get("MEMORY_CHECK_EVERY"), 10)
+# Two trims back to back reclaim nothing the first one missed, so the
+# guard does not bother.
+MEMORY_TRIM_EVERY_SECONDS = 30
+_memory_state = {"requests": 0, "sheds": 0, "last_shed": None, "last_shed_rss": None,
+                 "trims": 0, "last_trim": None, "last_trim_at": None}
 _memory_lock = threading.Lock()
+
+
+def trim_heap():
+    """Hand freed memory back to the operating system, keeping every
+    cache.
+
+    This is the half of shedding that costs nothing. Python frees an
+    object and glibc keeps the block for reuse rather than returning
+    it, so a process that peaked at 450 MB an hour ago still looks like
+    450 MB to Render even though most of it is idle. malloc_trim gives
+    it back. Nothing is lost: no cache is cleared, no visitor pays for
+    a rebuild -- which is why this runs on the way DOWN from a heavy
+    job rather than waiting for a limit to be crossed."""
+    before = process_rss_mb()
+    gc.collect()
+    try:
+        ctypes.CDLL("libc.so.6").malloc_trim(0)
+    except Exception:
+        # Not glibc, or no libc to load. The collect above still did
+        # the part that matters.
+        pass
+    after = process_rss_mb()
+    _memory_state["trims"] = _memory_state.get("trims", 0) + 1
+    _memory_state["last_trim"] = {"before_mb": before, "after_mb": after}
+    _memory_state["last_trim_at"] = time.time()
+    return {"before_mb": before, "after_mb": after}
 
 
 def shed_caches():
@@ -17483,13 +17535,7 @@ def shed_caches():
             cache.clear()
         except Exception:
             app.logger.warning("memory: could not clear cache %s", name, exc_info=True)
-    gc.collect()
-    try:
-        ctypes.CDLL("libc.so.6").malloc_trim(0)
-    except Exception:
-        # Not glibc, or no libc to load. The collect above still did the
-        # part that matters.
-        pass
+    trim_heap()
     after = process_rss_mb()
     app.logger.warning("memory: shed caches at %s MB, now %s MB", before, after)
     return {"before_mb": before, "after_mb": after}
@@ -17497,8 +17543,15 @@ def shed_caches():
 
 @app.before_request
 def _memory_guard():
-    """Every so often, check what the process weighs, and if it is close
-    to the instance's limit, let go of the caches.
+    """Every so often, check what the process weighs, and answer it in
+    the cheapest way that works.
+
+    Two tiers. Past the trim ceiling the process only hands back memory
+    it had already finished with -- nothing is dropped, nobody waits
+    for a rebuild -- so this can run early and often, which is what
+    keeps the climb from ever reaching the hard ceiling. Only if the
+    process is STILL over the hard limit after trimming does it start
+    emptying caches, because that one has a real cost.
 
     The user's symptom was a 502 once memory ran out. Ceilings on each
     cache are the fix for the cause; this is the floor under it, for
@@ -17509,7 +17562,20 @@ def _memory_guard():
     if not due:
         return None
     rss = process_rss_mb()
-    if rss is None or rss < MEMORY_SOFT_LIMIT_MB:
+    if rss is None or rss < MEMORY_TRIM_LIMIT_MB:
+        return None
+    with _memory_lock:
+        # Claimed before the work, not after, so two threads arriving
+        # together do not both pay for the same collection.
+        last_trim = _memory_state["last_trim_at"] or 0
+        if time.time() - last_trim < MEMORY_TRIM_EVERY_SECONDS:
+            return None
+        _memory_state["last_trim_at"] = time.time()
+    trimmed = trim_heap() or {}
+    rss = trimmed.get("after_mb") or rss
+    # Giving the heap back was enough, which is the usual case and the
+    # whole reason this tier exists: no cache was touched.
+    if rss < MEMORY_SOFT_LIMIT_MB:
         return None
     with _memory_lock:
         # Another thread may have just done it. A second sweep one
@@ -17531,8 +17597,13 @@ def api_memory():
     # ?shed=1 runs the guard's sweep by hand. Two reasons it exists:
     # it proves the valve works on the live instance rather than only
     # in a test, and it is the lever to pull if the site is ever
-    # struggling and nobody wants to wait for the fortieth request.
+    # struggling and nobody wants to wait for the next check.
     shed_now = shed_caches() if request.args.get("shed") == "1" else None
+    # ?trim=1 is the same lever without the cost: hand the heap back,
+    # keep every cache. Worth having separately because it answers the
+    # question a shed cannot -- how much of the process is memory that
+    # was already free.
+    trim_now = trim_heap() if request.args.get("trim") == "1" else None
     players = 0
     try:
         players = len(get_all_players() or {})
@@ -17545,8 +17616,14 @@ def api_memory():
         # Render's smallest paid instance. Worth printing beside the
         # figure so the number means something without looking it up.
         "instance_mb": _safe_int(os.environ.get("INSTANCE_MB"), 512),
+        "trim_limit_mb": MEMORY_TRIM_LIMIT_MB,
         "soft_limit_mb": MEMORY_SOFT_LIMIT_MB,
         "requests_served": _memory_state["requests"],
+        "trim_now": trim_now,
+        # Trims are the cheap tier and should be the common one. Sheds
+        # staying at zero while trims climb is this working.
+        "trims": _memory_state["trims"],
+        "last_trim": _memory_state["last_trim"],
         "sheds": _memory_state["sheds"],
         "last_shed": _memory_state["last_shed_rss"],
         "players_cached": players,
@@ -17652,6 +17729,19 @@ def api_warm():
             _record_value_snapshots_background()
         except Exception:
             pass
+        finally:
+            # The warm pass is the heaviest thing this process does: it
+            # reads whole seasons of stat lines, builds aggregates from
+            # them, and drops nearly all of it again. Freed, that memory
+            # stays with the process unless somebody asks for it back --
+            # which is how an instance that only ever serves small pages
+            # still ends up at 450 MB. This is the ask, every twelve
+            # minutes, at the one moment it is guaranteed to be worth
+            # something and cost nothing.
+            try:
+                trim_heap()
+            except Exception:
+                pass
 
     threading.Thread(target=_run, daemon=True).start()
     return jsonify({"ok": True, "started": True})
