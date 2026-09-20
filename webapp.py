@@ -771,6 +771,10 @@ def init_db():
             # remains the master switch the unsubscribe link throws.
             cur.execute("ALTER TABLE users ADD COLUMN IF NOT EXISTS alert_lineup BOOLEAN;")
             cur.execute("ALTER TABLE users ADD COLUMN IF NOT EXISTS alert_waivers BOOLEAN;")
+            # Off by default: lineup help is time-critical and a waiver
+            # board is not, so merging them sends one of the two at the
+            # wrong moment. Offered, not assumed.
+            cur.execute("ALTER TABLE users ADD COLUMN IF NOT EXISTS alert_combined BOOLEAN;")
             # One row per alert actually sent. This is what stops the
             # hourly job emailing the same reader the same warning
             # twenty times before kickoff: the row is claimed BEFORE the
@@ -787,6 +791,11 @@ def init_db():
                 );
             """)
             cur.execute("CREATE INDEX IF NOT EXISTS idx_sent_alerts_when ON sent_alerts (sent_at);")
+            # What the last digest was ABOUT, so the next one can say
+            # which parts are new -- a player ruled out since the email
+            # you read this morning is the whole point of sending
+            # another one.
+            cur.execute("ALTER TABLE sent_alerts ADD COLUMN IF NOT EXISTS codes TEXT;")
             # Reset tokens are stored HASHED. A raw token in the table is
             # a password-equivalent secret sitting in plain text, and a
             # leaked backup would hand over every account with one open.
@@ -962,6 +971,7 @@ class User(UserMixin):
         # is out. The unsubscribe link still turns everything off.
         self.alert_lineup = row.get("alert_lineup") is not False
         self.alert_waivers = row.get("alert_waivers") is not False
+        self.alert_combined = bool(row.get("alert_combined"))
 
 
 @login_manager.user_loader
@@ -7519,7 +7529,8 @@ def _alerts_summary_line(user):
     if not getattr(user, "newsletter_opt_in", True):
         return "Off \u2014 you are unsubscribed"
     on = [label for label, want in (("Lineup", getattr(user, "alert_lineup", True)),
-                                    ("Waivers", getattr(user, "alert_waivers", True))) if want]
+                                    ("Waivers", getattr(user, "alert_waivers", True)),
+                                    ("One email", getattr(user, "alert_combined", False))) if want]
     return " \u00b7 ".join(on) if on else "Both off"
 
 
@@ -7685,6 +7696,7 @@ def settings_page(section=None):
         if "alerts_present" in request.form:
             updates["alert_lineup"] = bool(request.form.get("alert_lineup"))
             updates["alert_waivers"] = bool(request.form.get("alert_waivers"))
+            updates["alert_combined"] = bool(request.form.get("alert_combined"))
 
         if updates and not error:
             try:
@@ -7737,7 +7749,7 @@ def export_account_data(user_id):
                 "SELECT id, email, username, oauth_provider, referral_code, "
                 "newsletter_opt_in, is_member, created_at, username_changed_at, "
                 "pref_format, pref_mode, pref_scoring, pref_theme, pref_accent, "
-                "alert_lineup, alert_waivers "
+                "alert_lineup, alert_waivers, alert_combined "
                 "FROM users WHERE id = %s", (user_id,))
             row = cur.fetchone() or {}
             out["account"] = {k: (v.isoformat() if hasattr(v, "isoformat") else v)
@@ -9077,6 +9089,30 @@ ALERT_RUN_LIMIT = 200
 ALERT_RUN_SECONDS = 180
 
 
+def last_alert_codes(user_id, kind):
+    """What the most recent digest of this kind was about, as a set.
+
+    Empty when there is nothing to compare against, which reads the
+    right way: the first digest of a week has nothing "new" in it,
+    because all of it is."""
+    if not DATABASE_URL:
+        return set()
+    conn = get_db()
+    try:
+        with conn.cursor() as cur:
+            cur.execute("SELECT codes FROM sent_alerts WHERE user_id = %s AND kind = %s "
+                        "ORDER BY sent_at DESC LIMIT 1", (int(user_id), kind))
+            row = cur.fetchone()
+        if not row or not row[0]:
+            return set()
+        return set(json.loads(row[0]) or [])
+    except Exception:
+        app.logger.warning("could not read the last %s digest for %s", kind, user_id, exc_info=True)
+        return set()
+    finally:
+        conn.close()
+
+
 def _alert_dedupe(*parts):
     """A short, stable key for one alert. Built from what the alert
     actually SAYS, so a new problem sends a new email and an unchanged
@@ -9085,7 +9121,7 @@ def _alert_dedupe(*parts):
     return hashlib.sha256(raw.encode()).hexdigest()[:24]
 
 
-def claim_alert(user_id, kind, dedupe_key):
+def claim_alert(user_id, kind, dedupe_key, codes=None):
     """True the first time this exact alert is claimed for this reader.
 
     The row goes in before the email goes out, so two runs overlapping
@@ -9096,8 +9132,9 @@ def claim_alert(user_id, kind, dedupe_key):
     try:
         with conn.cursor() as cur:
             cur.execute(
-                "INSERT INTO sent_alerts (user_id, kind, dedupe_key) VALUES (%s, %s, %s) "
-                "ON CONFLICT DO NOTHING", (int(user_id), kind, dedupe_key))
+                "INSERT INTO sent_alerts (user_id, kind, dedupe_key, codes) "
+                "VALUES (%s, %s, %s, %s) ON CONFLICT DO NOTHING",
+                (int(user_id), kind, dedupe_key, json.dumps(codes) if codes else None))
             claimed = cur.rowcount == 1
         conn.commit()
         return claimed
@@ -9332,6 +9369,173 @@ def _email_player_cell(player, label, label_colour, slot=None):
             f'{pos}{where}<br>{" &middot; ".join(bits)}</div>')
 
 
+def _email_bars(values, colour, height=26, width=9, gap=3):
+    """Last four games, as a bar chart made of table cells.
+
+    Heights on a <td> are the one charting technique every mail client
+    renders -- no SVG, no image, nothing to block."""
+    values = [v for v in (values or []) if isinstance(v, (int, float))]
+    if not values:
+        return ""
+    top = max(values + [1.0])
+    cells = []
+    for i, v in enumerate(values):
+        px = max(2, int(round(height * (max(v, 0) / top))))
+        pad = ("" if i == 0 else
+               f'<td width="{gap}" style="font-size:1px;line-height:1px;">&nbsp;</td>')
+        cells.append(
+            pad + f'<td valign="bottom" width="{width}">'
+            f'<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="{width}">'
+            f'<tr><td height="{height - px}" style="font-size:1px;line-height:1px;">&nbsp;</td></tr>'
+            f'<tr><td height="{px}" bgcolor="{colour}" '
+            f'style="font-size:1px;line-height:1px;border-radius:2px;">&nbsp;</td></tr>'
+            f'</table></td>')
+    return ('<table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>'
+            + "".join(cells) + '</tr></table>')
+
+
+def _ordinal(n):
+    n = int(n)
+    if 10 <= n % 100 <= 20:
+        return f"{n}th"
+    return f"{n}{ {1: 'st', 2: 'nd', 3: 'rd'}.get(n % 10, 'th') }"
+
+
+def _email_opp(p):
+    game = (p or {}).get("game") or {}
+    opp = game.get("opp")
+    if not opp:
+        return ""
+    return f'{"vs" if game.get("home") else "@"} {html.escape(str(opp))}'
+
+
+def _email_player_note(p):
+    """The one extra fact worth a line: how the opponent ranks against
+    his position, else his snap share, else nothing."""
+    rank = (p or {}).get("opp_rank")
+    pos = (p or {}).get("position")
+    if rank and pos:
+        opp = html.escape(str(((p.get("game") or {}).get("opp")) or ""))
+        return f"{opp} {_ordinal(rank)} vs {html.escape(str(pos))}"
+    if (p or {}).get("snap_pct"):
+        return f'{int(p["snap_pct"])}% snap share'
+    return "&nbsp;"
+
+
+def _email_leagues_line(leagues, limit=3):
+    shown = " &middot; ".join(html.escape(str(x)) for x in leagues[:limit])
+    more = f" &nbsp;+{len(leagues) - limit} more" if len(leagues) > limit else ""
+    return shown + more
+
+
+def _email_player_block(p, label, colour, dim=False):
+    """One player: face, name, where he plays, what he is worth, and the
+    shape of his last four games."""
+    if not p:
+        return (f'<div style="font-size:10px;font-weight:700;letter-spacing:.07em;color:{colour};">'
+                f'{label}</div><div style="font-size:16px;font-weight:700;color:{EMAIL_INK};">'
+                f'An empty slot</div>')
+    name = _email_who(p)
+    logo = team_logo_url(p.get("team")) or ""
+    face = player_photo_url(p.get("sid")) if p.get("sid") else ""
+    fade = ";opacity:0.75" if dim else ""
+    meta = [f'{html.escape(str(p.get("team") or ""))} {_email_opp(p)}']
+    if p.get("proj") is not None:
+        meta.append(f'<b style="color:{EMAIL_INK};">{p["proj"]}</b> proj')
+    side = []
+    if p.get("recent_avg") is not None:
+        side.append(f'L4 <b style="color:{EMAIL_INK};">{p["recent_avg"]}</b>')
+    if p.get("grade"):
+        side.append(html.escape(str(p["grade"])))
+    bars = _email_bars(p.get("last4"), colour if not dim else EMAIL_MUTED)
+    return (
+        '<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%"><tr>'
+        f'<td width="52" valign="top" style="padding-right:10px;">'
+        f'<img src="{face}" width="46" height="46" alt="{html.escape(name)}" '
+        f'style="border-radius:8px;background:{EMAIL_SOFT};display:block{fade};"></td>'
+        '<td valign="top">'
+        f'<div style="font-size:10px;font-weight:700;letter-spacing:.07em;color:{colour};">{label}</div>'
+        f'<div style="font-size:16px;font-weight:700;color:{EMAIL_INK};line-height:1.25;'
+        f'padding:1px 0 2px;">{html.escape(name)}</div>'
+        f'<div style="font-size:12px;color:{EMAIL_MUTED};line-height:1.6;">'
+        f'<img src="{logo}" width="13" height="13" alt="" style="vertical-align:-2px;"> '
+        + " &middot; ".join(meta) + '</div>'
+        '<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin-top:7px;">'
+        f'<tr><td>{bars}</td>'
+        f'<td style="padding-left:9px;font-size:11px;color:{EMAIL_MUTED};line-height:1.4;'
+        f'white-space:nowrap;">' + (" &middot; ".join(side) or "&nbsp;")
+        + f'<br>{_email_player_note(p)}</td></tr></table>'
+        '</td></tr></table>')
+
+
+def _email_new_tag(small=False):
+    pad = "2px 6px" if small else "2px 6px"
+    return (f'<span style="background:{EMAIL_FLAME};color:#ffffff;font-size:9px;font-weight:700;'
+            f'letter-spacing:.06em;padding:{pad};border-radius:4px;">NEW</span>')
+
+
+def _email_decision_card(d, is_new=False):
+    """One call to make, with every league it applies to."""
+    n = len(d["leagues"])
+    tag = (_email_new_tag() + "&nbsp;&nbsp;") if is_new else ""
+    why = ""
+    if d.get("why"):
+        why = (f'<div style="font-size:12px;color:{EMAIL_MUTED};line-height:1.6;">'
+               f'{html.escape(str(d["why"]))}</div>')
+    return (
+        '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" '
+        f'style="border:1px solid {EMAIL_LINE};border-radius:12px;margin:0 0 12px;'
+        f'background:{EMAIL_PAPER};">'
+        f'<tr><td style="padding:12px 15px 0;">{tag}'
+        f'<span style="background:{EMAIL_NAVY};color:#ffffff;font-size:10px;font-weight:700;'
+        f'letter-spacing:.07em;padding:3px 8px;border-radius:5px;">'
+        f'{html.escape(str(d.get("slot") or ""))}</span>'
+        f'<span style="color:{EMAIL_FLAME};font-weight:800;font-size:14px;">'
+        f'&nbsp;&nbsp;+{d["each"]} each</span>'
+        f'<span style="color:{EMAIL_MUTED};font-size:12px;">&nbsp;&middot;&nbsp;{n} league'
+        + ("" if n == 1 else "s")
+        + f'&nbsp;&middot;&nbsp;<b style="color:{EMAIL_INK};">+{d["total"]} total</b></span>'
+        '</td></tr>'
+        '<tr><td style="padding:10px 15px 0;"><div style="font-size:0;">'
+        '<div style="display:inline-block;width:100%;max-width:262px;vertical-align:top;'
+        f'padding:0 0 12px;">{_email_player_block(d.get("start"), "START", EMAIL_GOOD)}</div>'
+        '<div style="display:inline-block;width:100%;max-width:262px;vertical-align:top;'
+        f'padding:0 0 12px;">{_email_player_block(d.get("over"), "INSTEAD OF", EMAIL_BAD, dim=True)}</div>'
+        '</div></td></tr>'
+        f'<tr><td style="padding:2px 15px 13px;">{why}'
+        f'<div style="font-size:11px;color:{EMAIL_MUTED};padding-top:8px;'
+        f'border-top:1px solid {EMAIL_LINE};margin-top:9px;">'
+        f'In {_email_leagues_line(d["leagues"])}</div></td></tr></table>')
+
+
+def _email_flag_card(f, is_new=False):
+    """A player who will score nothing, and everywhere he is starting."""
+    n = len(f["leagues"])
+    face = player_photo_url(f["sid"]) if f.get("sid") else ""
+    tag = (_email_new_tag(small=True) + " ") if is_new else ""
+    photo_cell = ""
+    if face:
+        photo_cell = (f'<td width="46" valign="top" style="padding:10px 0 10px 12px;">'
+                      f'<img src="{face}" width="34" height="34" alt="" '
+                      f'style="border-radius:7px;display:block;opacity:.85;"></td>')
+    return (
+        '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" '
+        f'style="margin:0 0 9px;background:#fff5f2;border-left:3px solid {EMAIL_FLAME};'
+        'border-radius:0 9px 9px 0;">'
+        f'<tr>{photo_cell}'
+        '<td style="padding:10px 13px 10px 10px;">'
+        f'<div style="font-size:13px;color:{EMAIL_INK};line-height:1.45;">{tag}'
+        f'{html.escape(f["text"])}</div>'
+        f'<div style="font-size:11px;color:{EMAIL_MUTED};padding-top:3px;">Starting in {n} league'
+        + ("" if n == 1 else "s") + f' &middot; {_email_leagues_line(f["leagues"], 4)}</div>'
+        '</td></tr></table>')
+
+
+def _email_eyebrow(text, pad_top=2):
+    return (f'<div style="font-size:10px;font-weight:700;letter-spacing:.09em;'
+            f'color:{EMAIL_MUTED};padding:{pad_top}px 0 9px;">{html.escape(text)}</div>')
+
+
 def _email_swap_card(change):
     """A change to make, as a card: the slot, what it is worth, both
     players side by side, and the reason underneath."""
@@ -9379,14 +9583,29 @@ def _email_hero(big, caption):
             f'</td></tr></table>')
 
 
-def _email_shell(eyebrow, headline, sub, inner, cta_href, cta_label):
+def _email_preheader(text):
+    """The grey line an inbox shows beside the subject.
+
+    It was whatever the message happened to start with -- "Hi fwagtx,
+    Week 2 in..." -- which is the most-read text in any email spent on
+    a greeting. Hidden in the body, read by the client, and padded so
+    the client does not pull the next sentence in after it."""
+    if not text:
+        return ""
+    return (f'<div style="display:none;font-size:1px;line-height:1px;max-height:0;'
+            f'max-width:0;opacity:0;overflow:hidden;mso-hide:all;">{text}'
+            + "&#847;&zwnj;&nbsp;" * 60 + '</div>')
+
+
+def _email_shell(eyebrow, headline, sub, inner, cta_href, cta_label, preheader=None):
     """The branded frame every alert arrives in.
 
     Self-contained: it opens and closes its own centred table, so the
     unsubscribe block that gets appended after it lines up underneath
     rather than having to be threaded through."""
     return (
-        f'<div style="background:{EMAIL_BG};padding:22px 10px;font-family:{EMAIL_FONT};">'
+        _email_preheader(preheader)
+        + f'<div style="background:{EMAIL_BG};padding:22px 10px;font-family:{EMAIL_FONT};">'
         f'<table role="presentation" align="center" width="{EMAIL_WIDTH}" cellpadding="0" '
         f'cellspacing="0" border="0" style="width:{EMAIL_WIDTH}px;max-width:100%;margin:0 auto;">'
         # Header: the mark, the name, and what this message is.
@@ -9407,140 +9626,248 @@ def _email_shell(eyebrow, headline, sub, inner, cta_href, cta_label):
         f'<div style="font-size:13px;color:{EMAIL_MUTED};padding-top:5px;line-height:1.55;">'
         f'{sub}</div></td></tr>'
         # Body.
-        f'<tr><td style="background:{EMAIL_PAPER};padding:16px 20px 0;">{inner}</td></tr>'
+        f'<tr><td style="background:{EMAIL_PAPER};padding:16px 20px 0;">'
+        f'<!--BODY-->{inner}<!--/BODY--></td></tr>'
         # Call to action.
         f'<tr><td style="background:{EMAIL_PAPER};padding:0 20px 24px;'
         f'border-radius:0 0 12px 12px;">{_alert_button(cta_href, cta_label)}</td></tr>'
         f'</table></div>')
 
 
-def render_lineup_alert(alert, username):
-    """(subject, text, html) for a lineup alert.
+def _email_enrich(p, season, week):
+    """Fill in the two facts the email shows that a lineup card does not
+    already carry: the shape of his last four games, and how the
+    opponent ranks against his position.
 
-    The swaps come from the plan rather than the problem sentences, so
-    the email can show both players, what each is projected for, the
-    grade and the recent form -- the sentence alone was one line with a
-    single number in it, which is a poor use of the one email a week
-    somebody actually opens."""
-    league = alert["league_name"]
-    count = len(alert["problems"])
-    hours = int(round(alert["hours"]))
-    subject = (f"Lineup alert: {count} thing{'' if count == 1 else 's'} to fix in {league}"
-               f" before kickoff")
-    link = f"{SITE_URL}/lineup?league={alert['league_id']}"
-    plan = alert.get("plan") or {}
-    # Swaps have both players behind them; everything else (out, bye,
-    # empty slot, nobody projecting him) only ever had a sentence.
-    swaps = [c for c in (plan.get("changes") or [])
-             if (c.get("gain") or 0) >= LINEUP_ALERT_MIN_GAIN]
-    flags = [line for code, line in alert["problems"] if not code.startswith("swap:")]
-    gain = plan.get("gain")
+    Done here, for the handful of players who actually appear in a
+    message, rather than for every player on every roster."""
+    if not p or not p.get("sid"):
+        return p
+    sid = str(p["sid"])
+    try:
+        weeks = (get_season_stats(season).get(sid) or {}).get("weeks") or {}
+        p["last4"] = [pts for _wk, pts in sorted(weeks.items())[-4:]]
+    except Exception:
+        p["last4"] = []
+    opp = (p.get("game") or {}).get("opp")
+    pos = p.get("position")
+    if opp and pos:
+        try:
+            entry = ((get_defense_vs_position(season).get(opp) or {}).get(pos) or {})
+            p["opp_rank"] = entry.get("rank")
+        except Exception:
+            p["opp_rank"] = None
+    return p
 
-    lines = [line for _code, line in alert["problems"]]
-    def _bits(card):
-        """The parenthesised detail after a name, with nothing invented:
-        a card that does not carry a projection says so by leaving it
-        out, not by printing "None proj"."""
-        out = []
-        if card.get("position"):
-            out.append(str(card["position"]))
-        if card.get("proj") is not None:
-            out.append(f"{card['proj']} proj")
-        if card.get("grade"):
-            out.append(f"grade {card['grade']}")
-        return f" ({', '.join(out)})" if out else ""
 
-    text_rows = []
-    for c in swaps:
-        start, over = c.get("start") or {}, c.get("over") or {}
-        row = f"  {c.get('slot')}: start {_email_who(start)}{_bits(start)}\n"
-        row += (f"      instead of {_email_who(over)}{_bits(over)}"
-                if over else "      into an empty slot")
-        text_rows.append(row + f"  -> +{c.get('gain')}")
+def _email_enrich_digest(alert):
+    season, week = alert.get("season"), alert.get("week")
+    for d in alert.get("decisions") or []:
+        _email_enrich(d.get("start"), season, week)
+        _email_enrich(d.get("over"), season, week)
+    return alert
+
+
+def _digest_subject_bits(alert):
+    """(count of calls, count of leagues) -- what a subject line is for."""
+    calls = len(alert.get("decisions") or []) + len(alert.get("flags") or [])
+    return calls, alert.get("league_count") or len(alert.get("leagues") or [])
+
+
+def render_lineup_digest(alert, username):
+    """The heads-up: everything worth changing, with time to think."""
+    _email_enrich_digest(alert)
+    calls, leagues = _digest_subject_bits(alert)
+    gain, hours = alert.get("gain"), int(round(alert.get("hours") or 0))
+    link = f"{SITE_URL}/lineup"
+    new = alert.get("new_codes") or set()
+    subject = (f"{calls} lineup change{'' if calls == 1 else 's'} across "
+               f"{leagues} league{'' if leagues == 1 else 's'}")
+    if gain:
+        subject += f" (+{gain})"
+    lines = []
+    for d in alert.get("decisions") or []:
+        lines.append(f"  {d['slot']}: start {_email_who(d.get('start'))} over "
+                     f"{_email_who(d.get('over')) or 'an empty slot'} "
+                     f"-> +{d['each']} each in {len(d['leagues'])} league(s): "
+                     + ", ".join(d["leagues"]))
+    for f in alert.get("flags") or []:
+        lines.append(f"  {f['text']} ({len(f['leagues'])} league(s): " + ", ".join(f["leagues"]) + ")")
     text = (f"Hi {username},\n\n"
-            f"Week {alert['week']} in {league} kicks off in about {hours} hours, "
-            f"and your lineup has {count} thing{'' if count == 1 else 's'} worth a look."
-            + (f"\n\nThere are {gain} projected points on the table." if gain else "")
-            + ("\n\nChanges to make:\n" + "\n".join(text_rows) if text_rows else "")
-            + ("\n\nAlso worth knowing:\n" + "\n".join(f"  - {f}" for f in flags) if flags else "")
-            + f"\n\nSee the whole lineup, and what to do about it:\n{link}\n")
+            f"One email for every league you sync, grouped by the call.\n"
+            + (f"There are {gain} projected points on the table across "
+               f"{leagues} league(s); the earliest kickoff is in about {hours} hours.\n\n"
+               if gain else "\n")
+            + "\n".join(lines)
+            + f"\n\nOpen your lineups:\n{link}\n")
 
     inner = ""
     if gain:
-        inner += _email_hero(f"+{gain}", "projected points on the table")
-    if swaps:
-        inner += (f'<div style="font-size:11px;font-weight:700;letter-spacing:.08em;'
-                  f'color:{EMAIL_MUTED};padding:2px 0 8px;">CHANGES TO MAKE</div>')
-        inner += "".join(_email_swap_card(c) for c in swaps)
-    if flags:
-        inner += (f'<div style="font-size:11px;font-weight:700;letter-spacing:.08em;'
-                  f'color:{EMAIL_MUTED};padding:12px 0 8px;">ALSO WORTH KNOWING</div>')
-        inner += "".join(_email_flag_row(f) for f in flags)
-    if not inner:
-        inner = "".join(_email_flag_row(line) for line in lines)
+        inner += (
+            f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" '
+            f'style="background:{EMAIL_SOFT};border:1px solid {EMAIL_LINE};border-radius:11px;'
+            f'margin:0 0 16px;"><tr><td style="padding:14px 16px;">'
+            f'<span style="font-size:30px;font-weight:800;color:{EMAIL_FLAME};'
+            f'letter-spacing:-.02em;">+{gain}</span>'
+            f'<span style="font-size:13px;color:{EMAIL_MUTED};">&nbsp;projected points on the table</span>'
+            f'<div style="font-size:12px;color:{EMAIL_MUTED};padding-top:4px;">across {leagues} '
+            f'league{"" if leagues == 1 else "s"} &middot; earliest kickoff in {hours} hours</div>'
+            f'</td></tr></table>')
+    if alert.get("decisions"):
+        inner += _email_eyebrow("CHANGES TO MAKE")
+        for d in alert["decisions"]:
+            code = f"d:{'|'.join(_decision_key(d))}:{','.join(sorted(d['leagues']))}"
+            inner += _email_decision_card(d, is_new=code in new)
+    if alert.get("flags"):
+        inner += _email_eyebrow("ALSO WORTH KNOWING", pad_top=14)
+        for f in alert["flags"]:
+            code = f"f:{f['code']}:{','.join(sorted(f['leagues']))}"
+            inner += _email_flag_card(f, is_new=code in new)
     body = _email_shell(
         eyebrow=f"Week {alert['week']}",
-        headline=f"{count} thing{'' if count == 1 else 's'} to fix before kickoff",
-        sub=(f'Hi {html.escape(str(username))} &mdash; <b>{html.escape(league)}</b> '
-             f'kicks off in about {hours} hours.'),
-        inner=inner, cta_href=link, cta_label="Open your lineup")
+        headline=f"{calls} change{'' if calls == 1 else 's'} across {leagues} league{'' if leagues == 1 else 's'}",
+        sub=(f'Hi {html.escape(str(username))} &mdash; one email for every league you sync, '
+             f'grouped by the call rather than by the league.'),
+        inner=inner, cta_href=link, cta_label="Open your lineups",
+        preheader=(f"+{gain} projected points on the table &middot; earliest kickoff in {hours} hours"
+                   if gain else f"{calls} to look at before kickoff"))
     return subject, text, body
 
 
-def render_waiver_alert(alert, username):
-    """(subject, text, html) for a waiver alert: the top three of each
-    group, ranked, and nothing else."""
-    league = alert["league_name"]
+def render_lineup_lastcall(alert, username):
+    """The final hours. Only what scores nothing if it is left alone."""
+    _email_enrich_digest(alert)
+    flags = alert.get("flags") or []
+    leagues = alert.get("league_count") or len(alert.get("leagues") or [])
+    hours = alert.get("hours") or 0
+    when = "under an hour" if hours <= 1 else f"about {int(round(hours))} hours"
+    link = f"{SITE_URL}/lineup"
+    subject = (f"Last call: {len(flags)} starter{'' if len(flags) == 1 else 's'} "
+               f"will score nothing")
+    text = (f"Hi {username},\n\n"
+            f"Kickoff is in {when}. These are starting and will not score:\n\n"
+            + "\n".join(f"  {f['text']} ({len(f['leagues'])} league(s): "
+                        + ", ".join(f["leagues"]) + ")" for f in flags)
+            + f"\n\nFix them:\n{link}\n")
+    inner = (
+        f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" '
+        f'style="background:#fff2ee;border:1px solid {EMAIL_FLAME};border-radius:11px;'
+        f'margin:0 0 16px;"><tr><td style="padding:14px 16px;">'
+        f'<div style="font-size:19px;font-weight:800;color:{EMAIL_FLAME};">Kickoff is in {when}</div>'
+        f'<div style="font-size:13px;color:{EMAIL_INK};padding-top:3px;">'
+        f'{len(flags)} starter{"" if len(flags) == 1 else "s"} will score nothing if nobody '
+        f'moves {"him" if len(flags) == 1 else "them"}.</div></td></tr></table>')
+    inner += _email_eyebrow("CHANGE THESE NOW")
+    inner += "".join(_email_flag_card(f) for f in flags)
+    if alert.get("decisions"):
+        inner += _email_eyebrow("STILL WORTH IT, IF THERE IS TIME", pad_top=14)
+        inner += "".join(_email_decision_card(d) for d in alert["decisions"][:2])
+    body = _email_shell(
+        eyebrow=f"Week {alert['week']}", headline="Last call before kickoff",
+        sub=(f'Hi {html.escape(str(username))} &mdash; across {leagues} '
+             f'league{"" if leagues == 1 else "s"}.'),
+        inner=inner, cta_href=link, cta_label="Fix your lineups",
+        preheader=(flags[0]["text"] if flags else "Kickoff is close."))
+    return subject, text, body
+
+
+def render_waiver_digest(alert, username):
+    """The waiver board across every league, a player at a time."""
+    leagues = alert.get("league_count") or len(alert.get("leagues") or [])
     best = alert["targets"][0]
-    subject = f"Waivers are open in {league}: {best['name']} tops the board"
-    link = f"{SITE_URL}/waivers?league={alert['league_id']}"
-    drop = alert.get("drop")
-    drop_line = (f"\n\nRoom for one: {drop['name']} is the weakest player on your bench."
-                 if drop else "")
-    text_groups = []
-    html_groups = []
+    link = f"{SITE_URL}/waivers"
+    subject = f"Waivers: {best['name']} tops the board"
+    if len(best["leagues"]) > 1:
+        subject += f" in {len(best['leagues'])} of your leagues"
+    text_groups, html_groups = [], []
     for group in alert["groups"]:
-        rows = [f"  {t['rank']}. {t['position']} {t['name']} ({t['team']}) - score {t['score']}. {t['why']}"
+        rows = [f"  {t['rank']}. {t['position']} {t['name']} ({t['team']}) - score {t['score']}, "
+                f"free in {len(t['leagues'])} league(s): " + ", ".join(t["leagues"]) + f". {t['why']}"
                 for t in group["targets"]]
         text_groups.append(group["label"] + "\n" + "\n".join(rows))
-        items = "".join(
-            f'<tr><td width="30" style="vertical-align:top;padding:9px 0 9px 12px;'
-            f'font-size:16px;font-weight:800;color:{EMAIL_FLAME};">{t["rank"]}</td>'
-            f'<td style="padding:9px 12px 9px 4px;border-bottom:1px solid {EMAIL_LINE};">'
-            f'<div style="font-size:15px;font-weight:700;color:{EMAIL_INK};">'
-            f'{html.escape(str(t["name"]))}</div>'
-            f'<div style="font-size:12px;color:{EMAIL_MUTED};line-height:1.55;">'
-            f'{html.escape(str(t["position"]))} &middot; {html.escape(str(t["team"] or ""))} '
-            f'&middot; score {t["score"]}<br>{html.escape(str(t["why"]))}</div></td></tr>'
-            for t in group["targets"])
+        items = ""
+        for t in group["targets"]:
+            face = player_photo_url(t["sid"]) if t.get("sid") else ""
+            logo = team_logo_url(t.get("team")) or ""
+            photo = (f'<img src="{face}" width="38" height="38" alt="" '
+                     f'style="border-radius:8px;background:{EMAIL_SOFT};display:block;">' if face else "")
+            items += (
+                f'<tr><td width="26" valign="top" style="padding:11px 0 11px 13px;'
+                f'font-size:16px;font-weight:800;color:{EMAIL_FLAME};">{t["rank"]}</td>'
+                f'<td width="48" valign="top" style="padding:11px 0 11px 8px;">{photo}</td>'
+                f'<td style="padding:11px 13px 11px 10px;border-bottom:1px solid {EMAIL_LINE};">'
+                f'<div style="font-size:15px;font-weight:700;color:{EMAIL_INK};">'
+                f'{html.escape(str(t["name"]))}</div>'
+                f'<div style="font-size:12px;color:{EMAIL_MUTED};line-height:1.55;">'
+                f'<img src="{logo}" width="12" height="12" alt="" style="vertical-align:-2px;"> '
+                f'{html.escape(str(t["position"]))} &middot; {html.escape(str(t["team"] or ""))} '
+                f'&middot; score <b style="color:{EMAIL_INK};">{t["score"]}</b><br>'
+                f'{html.escape(str(t["why"]))}</div>'
+                f'<div style="font-size:11px;color:{EMAIL_MUTED};padding-top:4px;">'
+                f'Free in {len(t["leagues"])} league'
+                + ("" if len(t["leagues"]) == 1 else "s") + f': {_email_leagues_line(t["leagues"])}'
+                f'</div></td></tr>')
         html_groups.append(
-            f'<div style="font-size:11px;font-weight:700;letter-spacing:.08em;'
-            f'color:{EMAIL_MUTED};text-transform:uppercase;padding:12px 0 6px;">{html.escape(group["label"])}</div>'
-            f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" '
-            f'style="border:1px solid {EMAIL_LINE};border-radius:10px;">{items}</table>')
+            _email_eyebrow(group["label"].upper(), pad_top=12)
+            + f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" '
+              f'border="0" style="border:1px solid {EMAIL_LINE};border-radius:11px;">{items}</table>')
+    drops = alert.get("drops") or []
     text = (f"Hi {username},\n\n"
-            f"Waivers for week {alert['week']} in {league}. The top "
+            f"Waivers for week {alert['week']}, across {leagues} league(s). The top "
             f"{WAIVER_GROUP_SIZE} of each group, on this season's form:\n\n"
             + "\n\n".join(text_groups)
-            + drop_line
+            + ("\n\nRoom for one: " + "; ".join(f"{d['name']} in {d['league']}" for d in drops)
+               if drops else "")
             + f"\n\nSee the board:\n{link}\n")
-    inner = (_email_hero(html.escape(str(best["name"])), "tops the board this week")
-             + "".join(html_groups)
-             + (f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" '
-                f'border="0" style="margin:12px 0 0;background:{EMAIL_SOFT};border-radius:8px;">'
-                f'<tr><td style="padding:10px 13px;font-size:12px;color:{EMAIL_MUTED};">'
-                f'Room for one: <b style="color:{EMAIL_INK};">{html.escape(drop["name"])}</b> '
-                f'is the weakest player on your bench.</td></tr></table>' if drop else ""))
+    inner = "".join(html_groups)
+    if drops:
+        inner += (
+            f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" '
+            f'style="margin:14px 0 0;background:{EMAIL_SOFT};border-radius:9px;">'
+            f'<tr><td style="padding:11px 14px;font-size:12px;color:{EMAIL_MUTED};line-height:1.6;">'
+            f'<b style="color:{EMAIL_INK};">Room for one:</b> '
+            + "; ".join(f'{html.escape(d["name"])} in {html.escape(d["league"])}' for d in drops[:4])
+            + '</td></tr></table>')
     body = _email_shell(
-        eyebrow=f"Week {alert['week']}",
-        headline="Waivers are open",
-        sub=(f'Hi {html.escape(str(username))} &mdash; the top {WAIVER_GROUP_SIZE} of each '
-             f'group in <b>{html.escape(league)}</b>, on this season\'s form.'),
-        inner=inner, cta_href=link, cta_label="See your waiver targets")
+        eyebrow=f"Week {alert['week']}", headline="Waivers are open",
+        sub=(f'Hi {html.escape(str(username))} &mdash; the best free agents across your '
+             f'{leagues} league{"" if leagues == 1 else "s"}, on this season\'s form.'),
+        inner=inner, cta_href=link, cta_label="See your waiver targets",
+        preheader=f'{best["name"]} tops the board &middot; '
+                  f'free in {len(best["leagues"])} of your leagues')
     return subject, text, body
 
 
-ALERT_RENDERERS = {"lineup": render_lineup_alert, "waivers": render_waiver_alert}
+def render_combined_digest(alert, username):
+    """Both halves in one message, for a reader who asked for that."""
+    lsub, ltext, lbody = render_lineup_digest(alert["lineup"], username)
+    wsub, wtext, wbody = render_waiver_digest(alert["waivers"], username)
+    calls, leagues = _digest_subject_bits(alert["lineup"])
+    subject = f"Your week: {calls} lineup change{'' if calls == 1 else 's'} and the waiver board"
+    text = ltext.rstrip() + "\n\n" + ("-" * 40) + "\n\n" + wtext
+    # Two shells would mean two headers and two footers, so the halves
+    # are lifted out of theirs and set under one.
+    def guts(body):
+        start = body.index("<!--BODY-->") + len("<!--BODY-->")
+        return body[start:body.index("<!--/BODY-->")]
+    inner = (guts(lbody)
+             + f'<div style="border-top:1px solid {EMAIL_LINE};margin:22px 0 4px;"></div>'
+             + guts(wbody))
+    body = _email_shell(
+        eyebrow=f"Week {alert['week']}", headline="Your week in one email",
+        sub=(f'Hi {html.escape(str(username))} &mdash; lineups first, then the waiver board, '
+             f'across every league you sync.'),
+        inner=inner, cta_href=f"{SITE_URL}/lineup", cta_label="Open your lineups",
+        preheader=f"{calls} lineup change{'' if calls == 1 else 's'} and this week's waiver targets")
+    return subject, text, body
+
+
+ALERT_RENDERERS = {
+    "lineup": render_lineup_digest,
+    "lineup_lastcall": render_lineup_lastcall,
+    "waivers": render_waiver_digest,
+    "combined": render_combined_digest,
+}
 
 
 def alert_recipients(limit=None):
@@ -9557,7 +9884,8 @@ def alert_recipients(limit=None):
             cur.execute(
                 """SELECT id, email, username, sleeper_username,
                           COALESCE(alert_lineup, TRUE) AS alert_lineup,
-                          COALESCE(alert_waivers, TRUE) AS alert_waivers
+                          COALESCE(alert_waivers, TRUE) AS alert_waivers,
+                          COALESCE(alert_combined, FALSE) AS alert_combined
                      FROM users
                     WHERE email IS NOT NULL AND email <> ''
                       AND COALESCE(newsletter_opt_in, TRUE)
@@ -9592,45 +9920,278 @@ def _leagues_for_user(row):
     return user_id, [lg for lg in leagues if lg.get("league_id") in synced]
 
 
-def alerts_for_user(row, season, week, now=None, notes=None):
-    """Every alert this account should get right now, across its
-    leagues. Reads only; sends nothing.
+# One email, however many leagues.
+#
+# Sending one per league meant ten leagues could mean ten lineup emails
+# and ten waiver emails in a week, which is how an alert stops being
+# read. And in dynasty leagues that share a player pool it was often
+# the SAME advice ten times: "start Reed over Doubs" is one decision
+# that happens to apply in three leagues, not three problems.
+#
+# So the digest groups by the decision and carries the leagues it
+# applies to. Two moments, deliberately:
+#   heads-up  -- inside the lead window, everything worth changing,
+#                with time to think about it.
+#   last call -- the final hours before kickoff, and only what will
+#                score zero if it is left alone.
+LINEUP_LAST_CALL_HOURS = 2.0
 
-    `notes`, when a list is passed in, collects one line per league per
-    kind saying what was decided and why. That is what makes a dry run
-    answerable: "nothing was sent" and "nothing could be found" look
-    identical from outside, and only one of them is working."""
-    sleeper_id, leagues = _leagues_for_user(row)
-    if not sleeper_id:
+
+def _decision_key(change):
+    """What makes two changes in different leagues the same decision:
+    the same player coming in, for the same player, at the same slot."""
+    start = (change.get("start") or {}).get("sid")
+    over = (change.get("over") or {}).get("sid")
+    return (str(start), str(over), str(change.get("slot")))
+
+
+def group_lineup_across_leagues(per_league):
+    """[(league_name, plan, problems)] -> the same advice, said once.
+
+    Returns (decisions, flags, gain). A decision is a swap with every
+    league it applies to; a flag is a player who will score nothing,
+    with every league he is starting in. Both are sorted by what they
+    are worth, so the top of the email is the part worth reading."""
+    decisions, flags = {}, {}
+    gain = 0.0
+    for league_name, plan, problems in per_league:
+        gain += float((plan or {}).get("gain") or 0.0)
+        for change in (plan or {}).get("changes") or []:
+            if (change.get("gain") or 0) < LINEUP_ALERT_MIN_GAIN:
+                continue
+            key = _decision_key(change)
+            entry = decisions.setdefault(key, {
+                "slot": change.get("slot"), "start": change.get("start"),
+                "over": change.get("over"), "why": change.get("why"),
+                "each": change.get("gain"), "leagues": [], "total": 0.0,
+            })
+            if league_name not in entry["leagues"]:
+                entry["leagues"].append(league_name)
+                entry["total"] = round(entry["total"] + float(change.get("gain") or 0), 1)
+        for code, sentence in problems or []:
+            if code.startswith("swap:"):
+                continue
+            entry = flags.setdefault(code, {"code": code, "text": sentence, "leagues": []})
+            if league_name not in entry["leagues"]:
+                entry["leagues"].append(league_name)
+    ordered_d = sorted(decisions.values(), key=lambda d: -d["total"])
+    ordered_f = sorted(flags.values(), key=lambda f: -len(f["leagues"]))
+    return ordered_d, ordered_f, round(gain, 1)
+
+
+def _digest_codes(decisions, flags):
+    """What this digest is ABOUT, as a stable sorted list.
+
+    The dedupe key is built from it, so a player being ruled out --
+    a code that was not there an hour ago -- is a new digest, and an
+    unchanged week is never sent twice."""
+    codes = [f"d:{'|'.join(_decision_key(d))}:{','.join(sorted(d['leagues']))}" for d in decisions]
+    codes += [f"f:{f['code']}:{','.join(sorted(f['leagues']))}" for f in flags]
+    return sorted(codes)
+
+
+def _lineup_digest(row, sleeper_id, leagues, season, week, now=None, notes=None):
+    """(alert, reason). One lineup email covering every league.
+
+    Each league still decides for itself whether it has anything wrong
+    and when its next kickoff is -- that logic is untouched. What is new
+    is that the answers are pooled, grouped by the decision, and sent
+    once, at the moment the SOONEST deadline calls for it."""
+    now = now or datetime.utcnow()
+    per_league, soonest = [], None
+
+    def say(league_name, reason):
+        # Grouping ten leagues into one email must not cost the answer
+        # to "why did nobody get anything?" -- so every league still
+        # says what it decided, exactly as it did when each sent its own.
         if notes is not None:
-            notes.append({"user_id": row["id"], "note": "no Sleeper account found for that username"})
-        return []
-    if not leagues:
-        if notes is not None:
-            notes.append({"user_id": row["id"], "note": "no synced league for this season"})
-        return []
-    out = []
+            notes.append({"user_id": row.get("id"), "league": league_name,
+                          "kind": "lineup", "note": reason})
+
     for league in leagues:
         name = league.get("name") or league.get("league_id")
-        for kind, want, builder in (
-                ("lineup", row.get("alert_lineup"),
-                 lambda lg: _lineup_alert(lg, sleeper_id, season, week, now=now)),
-                ("waivers", row.get("alert_waivers"),
-                 lambda lg: _waiver_alert(lg, sleeper_id, season, week))):
-            if not want:
-                if notes is not None:
-                    notes.append({"user_id": row["id"], "league": name, "kind": kind, "note": "turned off"})
-                continue
-            try:
-                alert, reason = builder(league)
-            except Exception as e:
-                app.logger.exception("%s alert failed for %s", kind, row["id"])
-                alert, reason = None, f"failed: {type(e).__name__}"
-            if notes is not None:
-                notes.append({"user_id": row["id"], "league": name, "kind": kind, "note": reason})
-            if alert:
-                out.append(alert)
-    return out
+        try:
+            plan = build_lineup_plan(league, sleeper_id, season, week)
+        except Exception as e:
+            app.logger.exception("lineup plan failed for %s", name)
+            say(name, f"failed: {type(e).__name__}")
+            continue
+        if not plan:
+            say(name, "no team in this league")
+            continue
+        if not plan.get("lineup_set"):
+            say(name, "no lineup set in Sleeper yet")
+            continue
+        problems = lineup_problems(plan)
+        if not problems:
+            say(name, "nothing wrong with the lineup")
+            continue
+        kickoff = next_kickoff(plan)
+        if not kickoff:
+            say(name, "no unplayed game to count down to")
+            continue
+        hours = (kickoff - now).total_seconds() / 3600.0
+        # Already under way: nothing can be moved, so nothing to say.
+        if hours <= 0:
+            say(name, "every game has already kicked off")
+            continue
+        if hours > LINEUP_ALERT_LEAD_HOURS:
+            say(name, f"{len(problems)} problem(s), but kickoff is {round(hours)}h away "
+                      f"(waits until {LINEUP_ALERT_LEAD_HOURS}h)")
+        else:
+            say(name, f"{len(problems)} problem(s), inside the window")
+        per_league.append((name, plan, problems))
+        if soonest is None or hours < soonest:
+            soonest = hours
+    if not per_league:
+        return None, "no league has a lineup problem before its kickoff"
+    if soonest > LINEUP_ALERT_LEAD_HOURS:
+        return None, (f"{len(per_league)} league(s) with problems, but the soonest kickoff is "
+                      f"{round(soonest)}h away (waits until {LINEUP_ALERT_LEAD_HOURS}h)")
+
+    decisions, flags, gain = group_lineup_across_leagues(per_league)
+    # The last hours before kickoff are not for a nine-item list. They
+    # are for the players who will score nothing if nobody touches
+    # them -- out, on a bye, or with no projection at all.
+    last_call = soonest <= LINEUP_LAST_CALL_HOURS
+    if last_call and not flags:
+        return None, "nothing left that must change before kickoff"
+    codes = _digest_codes(decisions, flags)
+    kind = "lineup_lastcall" if last_call else "lineup"
+    # What is new since the digest this reader already read. On a last
+    # call everything is urgent, so nothing is singled out.
+    seen = set() if last_call else last_alert_codes(row["id"], kind)
+    fresh = {c for c in codes if c not in seen} if seen else set()
+    return {
+        "kind": kind, "tier": "lastcall" if last_call else "headsup",
+        "season": season, "week": week,
+        "decisions": decisions, "flags": flags, "gain": gain,
+        "leagues": sorted({n for n, _p, _pr in per_league}),
+        "league_count": len(per_league),
+        "hours": round(soonest, 1), "new_codes": fresh, "codes": codes,
+        "league_name": f"{len(per_league)} leagues",
+        "dedupe": _alert_dedupe(kind, season, week, *codes),
+    }, "sending"
+
+
+def _waiver_digest(row, sleeper_id, leagues, season, week, notes=None):
+    """(alert, reason). One waiver email covering every league.
+
+    A free agent is league-specific -- he is only a target where he is
+    actually free -- so the leagues he is available in are the whole
+    point of the row, not an afterthought."""
+    by_player, groups_seen, weeks = {}, {}, set()
+    drops = []
+    for league in leagues:
+        name = league.get("name") or league.get("league_id")
+        try:
+            alert, reason = _waiver_alert(league, sleeper_id, season, week)
+        except Exception as e:
+            app.logger.exception("waiver board failed for %s", name)
+            reason, alert = f"failed: {type(e).__name__}", None
+        if notes is not None:
+            notes.append({"user_id": row.get("id"), "league": name,
+                          "kind": "waivers", "note": reason})
+        if not alert:
+            continue
+        weeks.add(alert["week"])
+        if alert.get("drop"):
+            drops.append({"league": name, "name": alert["drop"]["name"]})
+        for group in alert["groups"]:
+            groups_seen.setdefault(group["label"], [])
+            for t in group["targets"]:
+                key = (group["label"], str(t.get("sid") or t["name"]))
+                entry = by_player.setdefault(key, {
+                    "label": group["label"], "name": t["name"], "sid": t.get("sid"),
+                    "position": t["position"], "team": t.get("team"),
+                    "score": t["score"], "why": t["why"], "best_rank": t["rank"],
+                    "leagues": [],
+                })
+                if name not in entry["leagues"]:
+                    entry["leagues"].append(name)
+                entry["best_rank"] = min(entry["best_rank"], t["rank"])
+                entry["score"] = max(entry["score"], t["score"])
+    if not by_player:
+        return None, "no free agent worth a claim in any league"
+    groups = []
+    for label in groups_seen:
+        rows = sorted((e for e in by_player.values() if e["label"] == label),
+                      key=lambda e: (-len(e["leagues"]), -e["score"]))
+        for i, e in enumerate(rows, 1):
+            e["rank"] = i
+        if rows:
+            groups.append({"label": label, "targets": rows[:WAIVER_GROUP_SIZE]})
+    targets = [t for g in groups for t in g["targets"]]
+    wk = max(weeks) if weeks else week
+    codes = sorted(f"w:{t['label']}:{t['name']}:{','.join(sorted(t['leagues']))}" for t in targets)
+    return {
+        "kind": "waivers", "season": season, "week": wk,
+        "groups": groups, "targets": targets, "drops": drops,
+        "leagues": sorted({lg for t in targets for lg in t["leagues"]}),
+        "league_count": len({lg for t in targets for lg in t["leagues"]}),
+        "league_name": f"{len({lg for t in targets for lg in t['leagues']})} leagues",
+        "codes": codes,
+        "dedupe": _alert_dedupe("waivers", season, wk, *codes),
+    }, "sending"
+
+
+def alerts_for_user(row, season, week, now=None, notes=None):
+    """Every alert this account should get right now. Reads only; sends
+    nothing.
+
+    One digest per kind rather than one email per league. `notes`, when
+    a list is passed in, collects why each kind decided what it did --
+    that is what makes a dry run answerable, since "nothing was sent"
+    and "nothing could be found" look identical from outside and only
+    one of them is working."""
+    def note(kind, text):
+        if notes is not None:
+            notes.append({"user_id": row["id"], "kind": kind, "note": text})
+
+    sleeper_id, leagues = _leagues_for_user(row)
+    if not sleeper_id:
+        note("all", "no Sleeper account found for that username")
+        return []
+    if not leagues:
+        note("all", "no synced league for this season")
+        return []
+
+    lineup = waivers = None
+    if row.get("alert_lineup"):
+        try:
+            lineup, reason = _lineup_digest(row, sleeper_id, leagues, season, week,
+                                            now=now, notes=notes)
+        except Exception as e:
+            app.logger.exception("lineup digest failed for %s", row["id"])
+            lineup, reason = None, f"failed: {type(e).__name__}"
+        note("lineup", reason)
+    else:
+        note("lineup", "turned off")
+    if row.get("alert_waivers"):
+        try:
+            waivers, reason = _waiver_digest(row, sleeper_id, leagues, season, week,
+                                             notes=notes)
+        except Exception as e:
+            app.logger.exception("waiver digest failed for %s", row["id"])
+            waivers, reason = None, f"failed: {type(e).__name__}"
+        note("waivers", reason)
+    else:
+        note("waivers", "turned off")
+
+    # One message with both halves, when the reader asked for that. Not
+    # for a last call: that one is minutes from kickoff and has no
+    # business carrying next week's waiver board underneath it.
+    if (row.get("alert_combined") and lineup and waivers
+            and lineup.get("kind") == "lineup"):
+        return [{
+            "kind": "combined", "season": season, "week": lineup["week"],
+            "lineup": lineup, "waivers": waivers,
+            "league_name": lineup["league_name"],
+            "codes": lineup["codes"] + waivers["codes"],
+            "dedupe": _alert_dedupe("combined", season, week,
+                                    *(lineup["codes"] + waivers["codes"])),
+        }]
+    return [a for a in (lineup, waivers) if a]
 
 
 def send_alert(row, alert, dry=False):
@@ -9695,6 +10256,54 @@ def run_alerts(season=None, week=None, limit=None, dry=False, now=None):
                            else len(alert.get("targets") or [])),
             })
     return summary
+
+
+@app.route("/settings/alerts/preview")
+@login_required
+def alerts_preview():
+    """What your next digest would look like, built from your real
+    leagues, and sent to nobody.
+
+    An alert is only honest if you can see it without waiting for one
+    to fire -- and because a digest dedupes, the one you are curious
+    about may already have been claimed and will never arrive again."""
+    kind = (request.args.get("kind") or "lineup").strip()
+    row = {"id": current_user.id, "username": current_user.username,
+           "email": current_user.email, "sleeper_username": current_user.sleeper_username,
+           "alert_lineup": True, "alert_waivers": True,
+           "alert_combined": kind == "combined"}
+    info = get_current_week_info()
+    season, week = info["season"], info["week"]
+    notes = []
+    try:
+        alerts = alerts_for_user(row, season, week, notes=notes)
+    except Exception as e:
+        app.logger.exception("alert preview failed for %s", current_user.id)
+        alerts = []
+        notes.append({"kind": "preview", "note": f"failed: {type(e).__name__}: {e}"})
+    wanted = [a for a in alerts
+              if kind == "combined" or a["kind"].startswith(kind)] or alerts
+    if not wanted:
+        reasons = "".join(
+            f'<li><b>{html.escape(str(n.get("league") or n.get("kind") or ""))}</b> &mdash; '
+            f'{html.escape(str(n.get("note")))}</li>' for n in notes)
+        return (f'<div style="font-family:{EMAIL_FONT};max-width:640px;margin:40px auto;'
+                f'padding:0 20px;color:#16202c;">'
+                f'<h2 style="margin:0 0 6px;">Nothing to send right now</h2>'
+                f'<p style="color:#6b7683;">That is the honest answer, and here is why, '
+                f'league by league:</p><ul style="color:#6b7683;line-height:1.8;">{reasons}</ul>'
+                f'<p><a href="/settings/alerts">Back to Alerts</a></p></div>')
+    alert = wanted[0]
+    render = ALERT_RENDERERS.get(alert["kind"])
+    subject, _text, body = render(alert, current_user.username or "there")
+    banner = (f'<div style="font-family:{EMAIL_FONT};background:{EMAIL_NAVY};color:#fff;'
+              f'padding:12px 18px;font-size:13px;">Preview &mdash; not sent. Subject: '
+              f'<b>{html.escape(subject)}</b> &nbsp;&middot;&nbsp; '
+              f'<a href="/settings/alerts/preview?kind=lineup" style="color:#FFC53D;">lineup</a> &middot; '
+              f'<a href="/settings/alerts/preview?kind=waivers" style="color:#FFC53D;">waivers</a> &middot; '
+              f'<a href="/settings/alerts/preview?kind=combined" style="color:#FFC53D;">combined</a> &middot; '
+              f'<a href="/settings/alerts" style="color:#FFC53D;">back</a></div>')
+    return banner + body + _email_footer(current_user.id)[1]
 
 
 @app.route("/api/send-alerts", methods=["GET", "POST"])
@@ -26020,8 +26629,13 @@ document.addEventListener('change', function(e){
         </label>
         <label class="set-check">
           <input type="checkbox" name="alert_waivers" {{ 'checked' if current_user.alert_waivers is not defined or current_user.alert_waivers }}>
-          <span style="font-size:13.5px;"><b>Waiver targets.</b> Once a week, when the games are done and waivers open, the best free agents in your league.</span>
+          <span style="font-size:13.5px;"><b>Waiver targets.</b> Once a week, when the games are done and waivers open, the best free agents in your leagues.</span>
         </label>
+        <label class="set-check">
+          <input type="checkbox" name="alert_combined" {{ 'checked' if current_user.alert_combined is defined and current_user.alert_combined }}>
+          <span style="font-size:13.5px;"><b>Put both in one email.</b> Off by default: lineup help has a deadline and a waiver board does not, so combining them means one of the two arrives at the wrong moment. A last call before kickoff is never combined.</span>
+        </label>
+        <p class="muted" style="font-size:13px; margin:10px 0 0;">However many leagues you sync, this is one email &mdash; grouped by the decision, so a change that applies in four leagues is said once. <a href="/settings/alerts/preview" style="color:var(--accent-ink);">See what your next one looks like</a>.</p>
         {% if not current_user.newsletter_opt_in %}
         <p class="muted" style="font-size:13px; margin:10px 0 0; color:var(--warning);">You are unsubscribed from all email, so nothing is sent whatever is ticked here. Turn updates back on under <a href="/settings/email" style="color:var(--accent-ink);">Email</a>.</p>
         {% elif not current_user.sleeper_username %}
