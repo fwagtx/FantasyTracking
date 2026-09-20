@@ -2,7 +2,19 @@ services:
   - type: web
     name: dynasty-league-explorer
     runtime: python
+    # NOTE: if the instance has been upgraded in the dashboard, this
+    # line will pull it back to Free the next time a blueprint sync
+    # runs. Change it here to match whatever the dashboard says.
     plan: free
+    # How Render knows the new instance is actually serving before it
+    # sends anyone to it. Without this, a deploy stops the old process
+    # and hopes -- which is the gap a visitor sees as Render's own 502
+    # page. /healthz is deliberately the cheapest route in the app.
+    #
+    # On Free this shortens the gap but cannot close it: zero-downtime
+    # deploys need a paid instance, where Render boots the new process,
+    # waits for this path to pass, and only then moves traffic over.
+    healthCheckPath: /healthz
     buildCommand: pip install -r requirements.txt
     startCommand: gunicorn --worker-class=gthread --workers=1 --threads=8 --timeout=60 webapp:app
     envVars:

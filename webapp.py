@@ -69,6 +69,18 @@ SLEEPER_BASE = "https://api.sleeper.app/v1"
 FANTASYCALC_BASE = "https://api.fantasycalc.com/values/current"
 ADP_BASE = "https://fantasyfootballcalculator.com/api/v1/adp/ppr"
 POSITIONS = ["QB", "RB", "WR", "TE"]
+# What Matchup Grades grades. Wider than POSITIONS, because a start-sit
+# call is a start-sit call whether the slot is a flex or a kicker, and
+# the weekly points for both K and D/ST are already in get_season_stats
+# -- they were only ever filtered out on the way in.
+#
+# The two are not the same kind of matchup, and the grading says so: a
+# kicker faces the opposing DEFENCE, while a D/ST faces the opposing
+# OFFENCE -- its points come from sacking, intercepting and shutting out
+# whoever it lines up against. Both fall out of the same join (a
+# player's weekly points, attributed to who he played), so the numbers
+# are real either way; only the wording has to know the difference.
+GRADED_POSITIONS = POSITIONS + ["K", "DEF"]
 IDP_POSITIONS = ["DL", "LB", "DB"]
 # Every position the performance board scores. Deliberately WIDER than
 # POSITIONS, and deliberately not used anywhere that needs a dynasty
@@ -4084,7 +4096,7 @@ def get_defense_vs_position(season, cache=_defense_vs_position_cache):
     allowed = {}
     for sid, stat in season_stats.items():
         p = all_players.get(sid)
-        if not p or p.get("position") not in POSITIONS:
+        if not p or p.get("position") not in GRADED_POSITIONS:
             continue
         team = p.get("team")
         if not team:
@@ -4105,7 +4117,7 @@ def get_defense_vs_position(season, cache=_defense_vs_position_cache):
         }
         for team, by_pos in allowed.items()
     }
-    for pos in POSITIONS:
+    for pos in GRADED_POSITIONS:
         ranked = sorted(
             ((team, result[team][pos]["fpts_allowed_per_game"]) for team in result if pos in result[team]),
             key=lambda x: x[1],
@@ -4118,81 +4130,140 @@ def get_defense_vs_position(season, cache=_defense_vs_position_cache):
     return result
 
 
-def _grade_reasoning(c):
-    """One short, plain-English sentence explaining a matchup grade's
-    components -- shown on the Matchups list and folded into the
-    head-to-head comparison's reasons, so the grade never reads as a
-    bare, unexplained letter.
+def _ordinal_rank(n):
+    """1 -> 1st, 2 -> 2nd, 22 -> 22nd."""
+    n = int(n)
+    if 10 <= n % 100 <= 20:
+        suffix = "th"
+    else:
+        suffix = {1: "st", 2: "nd", 3: "rd"}.get(n % 10, "th")
+    return f"{n}{suffix}"
 
-    A player whose game for the week is already final gets a distinct,
-    unambiguous callout instead of a pregame-style projection -- grading
-    someone "start" or "sit" for a game that's already been played reads
-    as broken, so this takes priority over everything else. "opponent not
-    set yet" is reserved for an actual bye (no game on the schedule at
-    all); a known opponent with no defense-vs-position data yet (typical
-    in the first weeks of a season, before any team has faced that
-    position enough) instead falls back to last year's number, flagged as
-    such -- see def_source in compute_matchup_grade."""
-    if c["game_status"] == "final":
-        if c["actual_week_pts"] is not None:
-            return f"Already played this week -- scored {c['actual_week_pts']:.1f} pts."
-        return "Already played this week."
-    if c["game_status"] == "in_progress":
-        return "This game is live right now."
 
-    if c["injury_tier"] in ("out", "admin"):
-        return "Not expected to play this week."
-    if c["injury_tier"] == "doubtful":
-        return "Doubtful to play -- check the injury report before kickoff."
+def _grade_matchup_clause(c):
+    """The opponent half of the sentence, with the actual number in it.
 
-    if c["opponent"] is None:
-        return "No game scheduled this week (bye)."
+    "A great matchup" says nothing a reader can check. "CAR allows 24.8
+    to RBs, 3rd most" is the same judgement with its evidence attached,
+    and it is the difference between a grade somebody trusts and a
+    grade somebody has to take on faith."""
+    opp = c["opponent"]
+    pos = c.get("position") or ""
+    # A D/ST scores off the OFFENCE it faces -- sacks, turnovers, points
+    # kept off the board. Calling that a defensive matchup would be
+    # plainly wrong to anyone who plays.
+    side = "offense" if c.get("vs_offense") else "defense"
+    what = {"K": "to kickers", "DEF": "to opposing D/ST"}.get(pos) or (f"to {pos}s" if pos else "")
+    pg = c.get("def_fpts_allowed_pg_used")
+    rank = c.get("def_rank_most_pts_used")
+    pool = c.get("def_pool_size") or 32
 
     if c["def_rank_used"] is None:
-        # A genuine data void -- every season _league_average_defense
-        # checked had zero teams with any data at all for this position.
-        # Extremely rare (would require a season with no games played by
-        # anyone at that position), unlike the old, common "no data yet
-        # for this specific opponent" gap that used to land here.
-        matchup_desc = "not enough defensive data yet to grade the matchup"
-    else:
-        if c["def_source"] == "current":
-            source_note = ""
-        elif c["def_source"] == "last_year":
-            source_note = " (based on last year)"
-        elif c["def_source"] == "historical":
-            source_note = f" (based on {c['def_season_used']})"
-        elif c["def_source"] == "league_average":
-            source_note = " (league average -- no specific history for this opponent yet)"
-        else:
-            games = c["def_games_sampled"]
-            source_note = f" (small sample -- {games} game{'s' if games != 1 else ''} this year)"
-        # Percentile-based, not a hardcoded rank cutoff -- def_pool_size
-        # varies (a league-average fallback may be built from fewer
-        # teams than a full 32-team season), so a fixed "rank >= 24"
-        # boundary would misclassify a matchup once the pool isn't a
-        # full 32.
-        pct = c["def_percentile"]
-        if pct >= 0.7:
-            matchup_desc = f"a great matchup{source_note}"
-        elif pct >= 0.5:
-            matchup_desc = f"a favorable matchup{source_note}"
-        elif pct <= 0.25:
-            matchup_desc = f"a tough matchup{source_note}"
-        else:
-            matchup_desc = f"an average matchup{source_note}"
+        return f"No usable history for the {opp} {side} yet"
 
-    if c["trend_score"] >= 0.65:
-        trend_desc = "trending up"
-    elif c["trend_score"] <= 0.35:
-        trend_desc = "trending down"
+    if c["def_source"] == "current":
+        when = "this year"
+    elif c["def_source"] == "last_year":
+        when = "last year"
+    elif c["def_source"] == "historical":
+        when = f"in {c['def_season_used']}"
+    elif c["def_source"] == "league_average":
+        # No specific read on this opponent, so say so rather than
+        # dressing a league average up as a scouting report.
+        avg = f" ({pg} pts/g)" if pg is not None else ""
+        return f"No {opp} history yet, so this is graded off the league average{avg}"
     else:
-        trend_desc = "steady lately"
+        games = c["def_games_sampled"]
+        when = f"over {games} game{'s' if games != 1 else ''} this year"
 
-    sentence = f"{matchup_desc[0].upper()}{matchup_desc[1:]}, {trend_desc}"
+    if pg is None or rank is None:
+        return f"{opp} {side}, {when}"
+    # Rank 1 = allows the most, which is the EASIEST matchup. Said as
+    # "most in the league" or "3rd most", it needs no convention
+    # explained alongside it.
+    where = "most in the league" if rank == 1 else f"{_ordinal_rank(rank)} most of {pool}"
+    return f"{opp} allows {pg} pts/g {what} {when} \u2014 {where}"
+
+
+def _grade_form_clause(c):
+    """The player half: what they have actually been scoring lately.
+
+    A whole sentence, and deliberately a pronoun-free one. The old
+    phrasing read "He is averaging...", which is wrong for half of what
+    this now grades -- a D/ST is a club, not a he. Numbers alone dodge
+    the problem entirely and are shorter, which matters on a row that
+    ellipsises past about a hundred characters."""
+    trend = c.get("trend")
+    if not trend:
+        # Honest, and specific about WHY there is nothing to say --
+        # which "steady lately" was not, since it printed that for a
+        # man who had played one game in his life.
+        return "Not enough games played yet to read form"
+    recent, base = trend["recent_avg"], trend["baseline_avg"]
+    n = trend["recent_games"]
+    delta = abs(round(recent - base, 1))
+    window = f"Last {n}" if n > 1 else "Last game"
+    # A parenthetical delta, which is how every box score in the sport
+    # writes this. Spelling out "vs baseline 13.4" pushed the row past
+    # the width it has and got the last number ellipsised away, which
+    # looks like a rendering fault rather than a design.
+    if trend["score"] >= 0.65:
+        return f"{window}: {recent} avg (+{delta})"
+    if trend["score"] <= 0.35:
+        return f"{window}: {recent} avg (-{delta})"
+    return f"{window}: {recent} avg (level)"
+
+
+def _grade_reason_parts(c):
+    """(head, tail) for a matchup grade.
+
+    Two pieces rather than one string, because the board sets the head
+    -- the opponent and the number it gives up -- in a heavier ink than
+    the rest. Doing that with <b> inside the sentence would mean
+    rendering it unescaped, and the opponent abbreviation in it comes
+    from ESPN; a template that joins two escaped values cannot be made
+    to inject anything. The tail is empty for the cases that are a
+    single flat statement.
+
+    Everything _grade_reasoning says is built from these, so the board,
+    the head-to-head panel and the alert emails can never drift into
+    describing the same grade differently."""
+    if c["game_status"] == "final":
+        if c["actual_week_pts"] is not None:
+            return f"Already played this week \u2014 scored {c['actual_week_pts']:.1f}", ""
+        return "Already played this week", ""
+    if c["game_status"] == "in_progress":
+        return "This game is live right now", ""
+    if c["injury_tier"] in ("out", "admin"):
+        return "Ruled out this week \u2014 not a start", ""
+    if c["injury_tier"] == "doubtful":
+        return "Doubtful \u2014 check the injury report before kickoff", ""
+    if c["opponent"] is None:
+        return "On bye this week", ""
+
+    tail = _grade_form_clause(c)
     if c["injury_tier"] == "questionable":
-        sentence += ", questionable to play"
-    return sentence + "."
+        tail += " \u2014 and questionable to play"
+    return _grade_matchup_clause(c), tail
+
+
+def _grade_reasoning(c):
+    """One sentence explaining a matchup grade, built out of the numbers
+    the grade was actually computed from -- shown on the Matchups list
+    and folded into the head-to-head comparison's reasons.
+
+    THE ASK: "make it more statistical and personable to the actual
+    matchup data". The old sentence was two adjectives glued together
+    ("A great matchup (based on last year), steady lately.") and, worse,
+    the second half was a constant -- see _trend_reading -- so every row
+    on the board printed the identical string.
+
+    A player whose game for the week is already final gets a distinct,
+    unambiguous callout instead of a pregame-style projection: grading
+    someone start-or-sit for a game already played reads as broken, so
+    it takes priority over everything else."""
+    head, tail = _grade_reason_parts(c)
+    return ". ".join(part for part in (head, tail) if part) + "."
 
 
 MIN_DEF_GAMES_FOR_CURRENT_YEAR = 4
@@ -4601,6 +4672,86 @@ _GRADE_RANK = {g: len(_GRADE_ORDER) - i for i, g in enumerate(_GRADE_ORDER)}
 _matchup_grade_cache = {}
 
 
+# What "lately" means, and what it is measured against.
+TREND_RECENT_GAMES = 3
+TREND_BASELINE_GAMES = 8
+
+
+def _trend_games(sid, season, week):
+    """(year, week, points) for every game this player has logged,
+    oldest first, reaching back into last season.
+
+    The week being graded is left out on purpose: it is the thing being
+    predicted, not evidence for the prediction."""
+    out = []
+    for yr in (season - 1, season):
+        weeks = (get_season_stats(yr).get(sid, {}).get("weeks") or {})
+        for wk, pts in sorted(weeks.items(), key=lambda kv: _safe_int(kv[0], 0)):
+            wk = _safe_int(wk, 0)
+            if yr == season and wk >= _safe_int(week, 0):
+                continue
+            out.append((yr, wk, float(pts or 0)))
+    return out
+
+
+def _trend_reading(sid, season, week):
+    """How a player is scoring LATELY, against his own recent baseline.
+    None when there is not enough football played to say anything.
+
+    THE BUG THIS EXISTS FOR: the old reading averaged the last four
+    weeks and compared that against the season average. Through week
+    four those are the SAME GAMES, so recent_avg == season_avg exactly
+    and the term returned 0.5 for everyone alive -- a 41-point opener
+    and a 0-point opener both read as "steady lately". A quarter of the
+    composite grade sat pinned at neutral for the first month of every
+    season, and every row on the board printed the same sentence.
+
+    The fix is to measure the last few games against a LONGER window
+    that reaches into last season while this one is short, so there is
+    something to contrast with from week one -- and to return None,
+    rather than a confident 0.5, when even that is not available."""
+    games = _trend_games(sid, season, week)
+    if len(games) < TREND_RECENT_GAMES + 1:
+        return None
+    recent = games[-TREND_RECENT_GAMES:]
+    baseline = games[:-TREND_RECENT_GAMES][-TREND_BASELINE_GAMES:]
+    if not baseline:
+        return None
+    recent_avg = sum(pts for _y, _w, pts in recent) / len(recent)
+    baseline_avg = sum(pts for _y, _w, pts in baseline) / len(baseline)
+    if baseline_avg > 0:
+        score = max(0.0, min(1.0, 0.5 + (recent_avg - baseline_avg) / (baseline_avg * 2)))
+    else:
+        # He was scoring nothing and now he is scoring something. That
+        # is the strongest "trending up" the data can express.
+        score = 1.0 if recent_avg > 0 else 0.5
+    return {
+        "score": round(score, 2),
+        "recent_avg": round(recent_avg, 1),
+        "baseline_avg": round(baseline_avg, 1),
+        "recent_games": len(recent),
+        "baseline_games": len(baseline),
+        # Whether "lately" had to borrow from last season to exist.
+        "crossed_season": any(yr != season for yr, _w, _p in recent),
+    }
+
+
+def _consistency_reading(sid, season, week, games=None):
+    """How much a player's last few weeks swing about, 0 (wild) to 1
+    (metronomic). Same cross-season window as the trend, for the same
+    reason: one game this year is not a spread."""
+    games = _trend_games(sid, season, week) if games is None else games
+    recent = [pts for _y, _w, pts in games[-5:]]
+    if len(recent) < 2:
+        return None
+    mean_r = sum(recent) / len(recent)
+    if mean_r <= 0:
+        return None
+    stdev = (sum((x - mean_r) ** 2 for x in recent) / len(recent)) ** 0.5
+    return {"score": round(max(0.0, min(1.0, 1 - stdev / mean_r)), 2),
+            "games": len(recent)}
+
+
 def compute_matchup_grade(sid, season, week, cache=_matchup_grade_cache):
     """Composite 'should you start them' grade for one player in one
     week: opponent defense strength at their position, recent scoring
@@ -4620,7 +4771,7 @@ def compute_matchup_grade(sid, season, week, cache=_matchup_grade_cache):
 
     all_players = get_all_players()
     p = all_players.get(sid)
-    if not p or p.get("position") not in POSITIONS:
+    if not p or p.get("position") not in GRADED_POSITIONS:
         return None
     position = p["position"]
     team = p.get("team")
@@ -4691,28 +4842,35 @@ def compute_matchup_grade(sid, season, week, cache=_matchup_grade_cache):
 
     season_stats = get_season_stats(season)
     stat = season_stats.get(sid, {})
-    weeks_sorted = sorted((stat.get("weeks") or {}).items())
     actual_week_pts = (stat.get("weeks") or {}).get(week)
-    recent = [fpts for _, fpts in weeks_sorted[-4:]]
     season_avg = (stat["fpts"] / stat["games"]) if stat.get("games") else 0
-    recent_avg = sum(recent) / len(recent) if recent else season_avg
-    if season_avg > 0:
-        trend_score = max(0.0, min(1.0, 0.5 + (recent_avg - season_avg) / (season_avg * 2)))
-    else:
-        trend_score = 1.0 if recent_avg > 0 else 0.5
 
-    fc_players = get_fantasycalc_values(1)["players"]
-    position_rank = (fc_players.get(sid) or {}).get("position_rank")
-    # Rough percentile against a ~60-deep starter pool per position -- good
-    # enough as a "is this even a startable-tier player" talent floor.
-    talent_score = max(0.0, min(1.0, 1 - (position_rank - 1) / 60)) if position_rank else 0.3
+    # Both readings come back None when the player has not played enough
+    # football to support them. A neutral 0.5 still goes into the
+    # composite in that case -- there is nothing better to put there --
+    # but the sentence says "no form to read yet" rather than inventing
+    # "steady lately", which is what the old code did for everybody
+    # through week four.
+    trend = _trend_reading(sid, season, week)
+    trend_score = trend["score"] if trend else 0.5
+    consistency = _consistency_reading(sid, season, week)
+    consistency_score = consistency["score"] if consistency else 0.5
 
-    if len(recent) >= 2:
-        mean_r = sum(recent) / len(recent)
-        stdev = (sum((x - mean_r) ** 2 for x in recent) / len(recent)) ** 0.5
-        consistency_score = max(0.0, min(1.0, 1 - stdev / mean_r)) if mean_r > 0 else 0.5
+    if position in KDST_POSITIONS:
+        # FantasyCalc publishes no dynasty value for kickers or defences,
+        # so the talent floor comes from the board that already ranks
+        # them on points actually scored. Last season stands in while
+        # this one is too thin to rank anybody meaningfully.
+        kdst_rank = kdst_rank_map(season, position).get(sid) or \
+            kdst_rank_map(season - 1, position).get(sid)
+        talent_score = max(0.0, min(1.0, 1 - (kdst_rank - 1) / 32)) if kdst_rank else 0.3
+        position_rank = kdst_rank
     else:
-        consistency_score = 0.5
+        fc_players = get_fantasycalc_values(1)["players"]
+        position_rank = (fc_players.get(sid) or {}).get("position_rank")
+        # Rough percentile against a ~60-deep starter pool per position -- good
+        # enough as a "is this even a startable-tier player" talent floor.
+        talent_score = max(0.0, min(1.0, 1 - (position_rank - 1) / 60)) if position_rank else 0.3
 
     composite = 0.40 * def_percentile + 0.25 * trend_score + 0.20 * talent_score + 0.15 * consistency_score
 
@@ -4747,8 +4905,19 @@ def compute_matchup_grade(sid, season, week, cache=_matchup_grade_cache):
         "def_games_sampled": def_games_sampled,
         "def_percentile": round(def_percentile, 2),
         "trend_score": round(trend_score, 2),
+        # The reading behind the score, so the sentence can quote real
+        # numbers instead of a vague adverb. None when the player has
+        # not played enough for "lately" to mean anything.
+        "trend": trend,
         "talent_score": round(talent_score, 2),
         "consistency_score": round(consistency_score, 2),
+        "consistency": consistency,
+        "position": position,
+        # A kicker faces the opposing DEFENCE; a D/ST faces the opposing
+        # OFFENCE. Same join either way, but the sentence must not call
+        # one the other.
+        "vs_offense": position == "DEF",
+        "season_avg": round(season_avg, 1) if season_avg else None,
         "composite": round(composite, 2),
         "injury_tier": tier,
         "game_status": sched["status"] if sched else None,
@@ -4756,7 +4925,11 @@ def compute_matchup_grade(sid, season, week, cache=_matchup_grade_cache):
     }
     data = {
         "grade": grade, "grade_class": _grade_css_class(grade), "stars": stars, "star_pct": star_pct,
-        "reasoning": _grade_reasoning(components), "components": components,
+        "reasoning": _grade_reasoning(components),
+        # The same sentence, in the two pieces the board sets
+        # differently. See _grade_reason_parts.
+        "reason_parts": _grade_reason_parts(components),
+        "components": components,
     }
     cache[key] = {"data": data, "time": now}
     _cache_trim(cache, CACHE_LIMIT_GRADES)
@@ -10638,6 +10811,10 @@ def waivers_page():
 # against any box score, and it is the only honest way to rank a position
 # whose week-to-week scoring is as noisy as these two.
 KDST_POSITIONS = ("K", "DEF")
+# How many kickers and how many defences Matchup Grades lists. There are
+# only ~32 of each that matter, and without a cap a full defence list
+# would crowd the flex players it sits beside on a 300-row board.
+KDST_MATCHUP_ROWS = 32
 # The ranges a board can be scored over. Rankings shows all four at once
 # as its own sortable columns (see rankings_points_rows), so these are
 # the keys kdst_board validates against rather than tabs anybody clicks.
@@ -15971,6 +16148,8 @@ def matchups_page():
                     "grade": grade["grade"], "grade_class": grade["grade_class"], "stars": grade["stars"], "star_pct": grade["star_pct"],
                     "composite": grade["components"].get("composite", 0),
                     "reasoning": grade["reasoning"],
+                    "reason_head": grade["reason_parts"][0],
+                    "reason_tail": grade["reason_parts"][1],
                     "value": v.get("value", 0),
                     # A game that's already final (or live, or a bye) isn't
                     # a start/sit decision at all -- those sort below every
@@ -15982,6 +16161,38 @@ def matchups_page():
                     "decidable": 0 if (grade["components"].get("game_status") in ("final", "in_progress")
                                        or grade["components"].get("opponent") is None) else 1,
                 })
+            # Kickers and defences have no dynasty value to sort on --
+            # FantasyCalc publishes none for either -- so they come off
+            # the board that already ranks them on points actually
+            # scored. Last season stands in for candidate discovery
+            # while this one is too young to have a board at all, which
+            # is what keeps the K and D/ST tabs populated in week one
+            # instead of empty until somebody has kicked.
+            for pos in KDST_POSITIONS:
+                board = kdst_board(season, pos, "season") or kdst_board(season - 1, pos, "season")
+                for b in board[:KDST_MATCHUP_ROWS]:
+                    grade = compute_matchup_grade(b["sid"], season, week)
+                    if not grade:
+                        continue
+                    comp = grade["components"]
+                    rows.append({
+                        "sid": b["sid"], "name": b.get("name") or b["sid"],
+                        "position": pos, "team": b.get("team") or "FA",
+                        "photo": b.get("photo") or "",
+                        "opponent": comp.get("opponent"),
+                        "grade": grade["grade"], "grade_class": grade["grade_class"],
+                        "stars": grade["stars"], "star_pct": grade["star_pct"],
+                        "composite": comp.get("composite", 0),
+                        "reasoning": grade["reasoning"],
+                        "reason_head": grade["reason_parts"][0],
+                        "reason_tail": grade["reason_parts"][1],
+                        # No dynasty value exists for these, so the last
+                        # tiebreak is what they have actually scored.
+                        "value": b.get("total", 0),
+                        "decidable": 0 if (comp.get("game_status") in ("final", "in_progress")
+                                           or comp.get("opponent") is None) else 1,
+                    })
+
             # Most startable first: best grade down to worst.
             #
             # Ranked on _GRADE_RANK (the 13-tier order of the grade
@@ -16799,7 +17010,12 @@ def api_sync_stats():
 # still returns instantly -- queued syncs simply wait their turn in the
 # background. The per-season busy flag stays set for the whole wait, so
 # queueing never lets a duplicate of the same season slip past.
-_BACKGROUND_SYNC_SLOTS = threading.BoundedSemaphore(2)
+# Was 2. On a 512 MB instance two 18-week syncs running together is a
+# doubled peak for no gain -- the work is not urgent and the second one
+# simply waits its turn instead of racing the first one to the memory
+# limit. Lowering this cost nothing but wall-clock time on a background
+# job nobody is watching.
+_BACKGROUND_SYNC_SLOTS = threading.BoundedSemaphore(1)
 
 
 _schedule_sync_lock = threading.Lock()
@@ -17494,7 +17710,8 @@ MEMORY_CHECK_EVERY = _safe_int(os.environ.get("MEMORY_CHECK_EVERY"), 10)
 # guard does not bother.
 MEMORY_TRIM_EVERY_SECONDS = 30
 _memory_state = {"requests": 0, "sheds": 0, "last_shed": None, "last_shed_rss": None,
-                 "trims": 0, "last_trim": None, "last_trim_at": None}
+                 "trims": 0, "last_trim": None, "last_trim_at": None,
+                 "stops": 0, "last_stop": None}
 _memory_lock = threading.Lock()
 
 
@@ -17596,6 +17813,50 @@ def _memory_guard():
     return None
 
 
+# The ceiling past which a background job puts its work down rather
+# than finishing it.
+#
+# THE HOLE THE RESTARTS CAME THROUGH: _memory_guard is a before_request
+# hook, so it only ever runs when a web request arrives. The heaviest
+# thing this process does -- the warm pass, seeding whole seasons of
+# stat lines and building aggregates out of them -- happens on a
+# background thread BETWEEN requests. A spike there takes the instance
+# past its limit and the kernel kills it without the guard ever being
+# consulted, which is exactly what an "exceeded its memory limit" mail
+# describes. Trimming after the job, which is what the first pass at
+# this did, is too late: the peak has already happened.
+#
+# Everything the warm pass does is idempotent and runs again twelve
+# minutes later, so abandoning the rest of a pass costs a delay and
+# nothing else -- and it is strictly better than being killed in the
+# middle of one.
+MEMORY_STOP_LIMIT_MB = _safe_int(os.environ.get("MEMORY_STOP_LIMIT_MB"), 430)
+
+
+def memory_ok(label=""):
+    """Whether a background job should carry on, trimming or shedding
+    on the way past if it needs to.
+
+    The same two tiers as the request guard, plus the third answer the
+    request path never needs: stop."""
+    rss = process_rss_mb()
+    if rss is None:
+        return True
+    if rss >= MEMORY_TRIM_LIMIT_MB:
+        rss = (trim_heap() or {}).get("after_mb") or rss
+    if rss >= MEMORY_SOFT_LIMIT_MB:
+        _memory_state["last_shed"] = time.time()
+        _memory_state["sheds"] += 1
+        _memory_state["last_shed_rss"] = shed_caches()
+        rss = _memory_state["last_shed_rss"].get("after_mb") or rss
+    if rss >= MEMORY_STOP_LIMIT_MB:
+        _memory_state["stops"] = _memory_state.get("stops", 0) + 1
+        _memory_state["last_stop"] = {"at": label, "rss_mb": rss}
+        app.logger.warning("memory: stopping background work at %s MB (%s)", rss, label)
+        return False
+    return True
+
+
 @app.route("/api/memory")
 def api_memory():
     """What the process weighs and what the caches are holding."""
@@ -17631,6 +17892,12 @@ def api_memory():
         # staying at zero while trims climb is this working.
         "trims": _memory_state["trims"],
         "last_trim": _memory_state["last_trim"],
+        "stop_limit_mb": MEMORY_STOP_LIMIT_MB,
+        # How often a background pass put its work down rather than
+        # pushing the process over the instance limit. Every one of
+        # these is a restart that did not happen.
+        "stops": _memory_state.get("stops", 0),
+        "last_stop": _memory_state.get("last_stop"),
         "sheds": _memory_state["sheds"],
         "last_shed": _memory_state["last_shed_rss"],
         "players_cached": players,
@@ -17691,6 +17958,13 @@ def api_warm():
             # time regardless.
             warm_depth = max(DEF_HISTORY_SEASONS_BACK, H2H_SEASONS_BACK)
             for offset in range(0, warm_depth + 1):
+                # Checked BEFORE each season rather than after the loop:
+                # seeding one season of stat lines is the single biggest
+                # allocation this process makes, and the point is to not
+                # start the seventh one when the sixth has already taken
+                # the instance to the edge.
+                if not memory_ok(f"warm: seeding {int(SEASON) - offset}"):
+                    return
                 yr = int(SEASON) - offset
                 ensure_schedule_synced(yr)
                 ensure_season_stats_synced(yr)
@@ -17698,11 +17972,15 @@ def api_warm():
             # per-team aggregate computed and cached; the deeper H2H
             # seasons just need their raw rows present, seeded above.
             for offset in range(0, DEF_HISTORY_SEASONS_BACK + 1):
+                if not memory_ok(f"warm: defense {int(SEASON) - offset}"):
+                    return
                 get_defense_vs_position(int(SEASON) - offset)
             # History fills itself from here: a dozen finished games'
             # officiating data, and one older season's stats, per ping.
             # Referee games before the tendencies, so the aggregate
             # counts what was just written.
+            if not memory_ok("warm: referee history"):
+                return
             ensure_referee_history()
             ensure_history_backfilled()
             get_referee_tendencies()
@@ -17714,6 +17992,8 @@ def api_warm():
             # taken and a move made overnight would never be seen at all.
             # This job already runs every twelve minutes, so taking the
             # snapshot here is what actually makes the feed automatic.
+            if not memory_ok("warm: team assignments"):
+                return
             record_team_changes(build_team_assignments())
             # Streaks reads two seasons of stat lines in one pass and
             # builds a board per prop from them. Cached ten minutes, so
@@ -17723,11 +18003,15 @@ def api_warm():
             # Book lines first, so the boards below are built on them.
             # No-op without ODDS_API_KEY, and never more often than
             # ODDS_REFRESH_HOURS with one.
+            if not memory_ok("warm: streaks"):
+                return
             refresh_book_lines(info["season"], info["week"])
             get_streak_trends(info["season"], info["week"])
             # The two positions ranked on points scored. Cheap (one
             # cached season read each), and warming them means the
             # first visitor to the board never waits for one.
+            if not memory_ok("warm: kickers and defences"):
+                return
             for pos in KDST_POSITIONS:
                 kdst_board(info["season"], pos, "season")
                 kdst_rank_map(info["season"], pos)
@@ -17982,6 +18266,10 @@ THEME_TOKENS = """
     /* Special teams. Kickers are in SCORED_POSITIONS and the depth chart
        has always built the column, so it needed a colour like the rest. */
     --pos-k:#b03a48;
+    /* Team defences. Matchup Grades now grades them, so the chip beside
+       one needs a ground like every other position; slate, clear of the
+       eight hues above. */
+    --pos-def:#5c6b7a;
     --shadow: 0 1px 2px rgba(0,0,0,0.2), 0 8px 24px -12px rgba(0,0,0,0.5);
     /* Which of the two accent inks below is legible on this ground. */
     --accent-ink: var(--accent-ink-dark);
@@ -24892,9 +25180,28 @@ MATCHUPS_HTML = BASE_STYLE + make_header("matchups") + """
             width:26px; flex:none; text-align:right; }
   .mu-divider{ margin-top:14px; padding:6px 4px; border-top:1px solid var(--line); font-size:11px;
                letter-spacing:0.04em; text-transform:uppercase; color:var(--ink-muted); }
-  .mu-name-col{ flex:1; min-width:0; display:flex; flex-direction:column; gap:2px; }
-  .mu-name-line{ font-weight:700; font-size:13.5px; }
-  .mu-reason{ font-size:11.5px; color:var(--ink-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .mu-name-col{ flex:1; min-width:0; display:flex; flex-direction:column; gap:3px; }
+  .mu-name-line{ font-weight:700; font-size:13.5px; letter-spacing:-0.005em; }
+  /* The reasoning line is mostly NUMBERS now -- "24.8 pts/g", "3rd most
+     of 32", "up 5.8". At 11.5px in the body face those set at wildly
+     different widths and the eye cannot compare one row to the next,
+     which is most of why this line looked cheap. The mono face the
+     grade badge and the rank column already use fixes the widths; a
+     touch more size and line-height, and a colour a step up from muted,
+     make it read as evidence rather than as a caption nobody wrote on
+     purpose. */
+  .mu-reason{ font-family:"IBM Plex Mono",ui-monospace,monospace;
+              font-size:11px; line-height:1.45; letter-spacing:-0.012em;
+              color:var(--ink-secondary); font-variant-numeric:tabular-nums;
+              /* Wraps to a second line rather than ellipsising. It used
+                 to be nowrap, which cut the sentence mid-number --
+                 "+5.8 vs baseline 13..." reads as a rendering fault,
+                 not as a design. Two lines is the ceiling; past that it
+                 clips, which only a very narrow window reaches. */
+              display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical;
+              overflow:hidden; }
+  /* The opponent and the number it allows: the part worth stopping on. */
+  .mu-reason b{ font-weight:600; color:var(--ink); }
   .mu-opp{ color:var(--ink-secondary); font-size:12.5px; width:70px; flex:none; }
   .mu-grade{ font-family:"IBM Plex Mono"; font-weight:700; font-size:12.5px; padding:3px 8px; border-radius:6px; flex:none; width:38px; text-align:center; }
   .mu-grade.ap, .mu-grade.a, .mu-grade.am,
@@ -24975,6 +25282,11 @@ MATCHUPS_HTML = BASE_STYLE + make_header("matchups") + """
         <a data-pos="RB" href="#">RB</a>
         <a data-pos="WR" href="#">WR</a>
         <a data-pos="TE" href="#">TE</a>
+        <a data-pos="K" href="#">K</a>
+        <!-- Sleeper's position code is DEF; everyone who plays calls it
+             D/ST, so the tab says that and the filter matches on the
+             code underneath. -->
+        <a data-pos="DEF" href="#">D/ST</a>
       </div>
       <div class="mu-week-nav">
         <a class="team-chip" href="/matchups?season={{ season }}&week={{ week-1 if week > 1 else week }}">&larr;</a>
@@ -24993,7 +25305,7 @@ MATCHUPS_HTML = BASE_STYLE + make_header("matchups") + """
         <span class="pos-chip" style="background:var(--pos-{{ r.position.lower() }});">{{ r.position }}</span>
         <div class="mu-name-col">
           <span class="mu-name-line">{{ r.name }} <span class="muted">{{ r.team }}</span></span>
-          <span class="mu-reason">{{ r.reasoning }}</span>
+          <span class="mu-reason"><b>{{ r.reason_head }}.</b>{% if r.reason_tail %} {{ r.reason_tail }}.{% endif %}</span>
         </div>
         <span class="mu-opp">{% if r.opponent %}vs {{ r.opponent }}{% else %}BYE{% endif %}</span>
         <span class="mu-stars"><span class="star-rating"><span class="star-bg">★★★★★</span><span class="star-fg" style="width:{{ r.star_pct }}%;">★★★★★</span></span></span>
