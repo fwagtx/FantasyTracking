@@ -512,8 +512,22 @@ def _edge_cache_public_pages(response):
     way out. Anything else is left to _no_stale_pages, which marks it
     no-cache.
 
-    Vary: Cookie on top, so a cache that ignored the rest above still
-    cannot hand an anonymous copy to somebody carrying a session."""
+    NO Vary: Cookie, despite it looking like the obvious belt and
+    braces. Cloudflare honours only Vary: Accept-Encoding; a response
+    carrying any other Vary is treated as uncacheable and comes back
+    DYNAMIC -- which is to say the header meant to make sharing safe
+    silently switched sharing off altogether. Measured, not guessed:
+    every public page read DYNAMIC with it, with correct Cache-Control
+    and an active Cache Rule.
+
+    It costs nothing to drop, because the protection never rested on
+    it. A personal page is never marked public in the first place (the
+    conditions above), so the copy sitting in the edge is always the
+    ANONYMOUS page -- there is no private body in there to leak. The
+    worst a failure upstream could do is show a signed-in reader the
+    signed-out version of a public page, which is untidy rather than
+    harmful, and the Cloudflare rule that bypasses on the session
+    cookie stops even that."""
     try:
         if (request.method != "GET" or response.status_code != 200
                 or response.direct_passthrough
@@ -544,10 +558,57 @@ def _edge_cache_public_pages(response):
         # keep that promise.
         response.headers["Cache-Control"] = (
             f"public, max-age=0, must-revalidate, s-maxage={ttl}")
-        response.headers["Vary"] = "Cookie"
     except Exception:
         pass
     return response
+
+
+class _EdgeVaryFix:
+    """Strip Vary: Cookie from the responses the app marked shareable.
+
+    Flask adds Vary: Cookie to any response whose session was touched,
+    and flask_login touches it on essentially every request. It does so
+    in save_session, which runs AFTER every after_request handler --
+    so the header cannot be removed from inside the app at all.
+
+    That matters because Cloudflare honours only Vary: Accept-Encoding
+    and treats a response carrying any other Vary as uncacheable. The
+    effect was that every public page came back cf-cache-status DYNAMIC
+    with perfect Cache-Control and an active Cache Rule: edge caching
+    was switched off by a header nobody set on purpose.
+
+    Touches ONLY responses that already say public with an s-maxage --
+    which, by construction, are the anonymous ones: a page belonging to
+    a signed-in reader never gets that far (see
+    _edge_cache_public_pages). Everything else passes through untouched,
+    Vary and all. Accept-Encoding is preserved, so gzip stays correct.
+    """
+
+    def __init__(self, wsgi_app):
+        self.wsgi_app = wsgi_app
+
+    def __call__(self, environ, start_response):
+        def _start(status, headers, exc_info=None):
+            try:
+                cc = next((v for k, v in headers if k.lower() == "cache-control"), "")
+                if "public" in cc and "s-maxage=" in cc:
+                    kept = []
+                    for k, v in headers:
+                        if k.lower() == "vary":
+                            parts = [p.strip() for p in v.split(",")
+                                     if p.strip() and p.strip().lower() != "cookie"]
+                            if not parts:
+                                continue
+                            v = ", ".join(parts)
+                        kept.append((k, v))
+                    headers = kept
+            except Exception:
+                pass
+            return start_response(status, headers, exc_info)
+        return self.wsgi_app(environ, _start)
+
+
+app.wsgi_app = _EdgeVaryFix(app.wsgi_app)
 
 
 # Registered AFTER the compressor on purpose. Flask runs after_request

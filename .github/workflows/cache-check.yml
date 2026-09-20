@@ -58,7 +58,19 @@ jobs:
           eid=$(curl -sS --max-time 45 "$HOST/scores" \
                 | grep -o '/game?id=[0-9]\{6,12\}' | head -1 | cut -d= -f2)
           if [ -z "$eid" ]; then
-            echo "::warning::no game id on /scores right now, so the poll could not be checked"
+            # Out of season, or between slates, /scores lists no games
+            # at all. The scoreboard feed is public on the same terms
+            # and always answers, so the poll path is still checked.
+            echo "  no game id on /scores, falling back to the scoreboard feed"
+            for i in $(seq 1 "$rounds"); do
+              hdrs=$(curl -sS -o /dev/null -D - --max-time 45 "$HOST/api/scoreboard")
+              status=$(printf '%s' "$hdrs" | tr -d '\r' \
+                | awk -F': ' 'tolower($1)=="cf-cache-status"{print $2}')
+              cc=$(printf '%s' "$hdrs" | tr -d '\r' \
+                | awk -F': ' 'tolower($1)=="cache-control"{print $2}')
+              echo "  try $i: cf-cache-status=${status:-<none>}  cache-control=${cc:-<none>}"
+              sleep 2
+            done
           else
             echo "  using game $eid"
             for i in $(seq 1 "$rounds"); do
