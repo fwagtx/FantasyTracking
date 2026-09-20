@@ -1,0 +1,105 @@
+name: Promo Capture
+
+# Record the live site as video, for posting.
+#
+# This runs here rather than anywhere else for one reason: a runner has
+# real internet. The development sandbox cannot reach streakpros.com, and
+# screen-recording a laptop by hand gives you a wobbly clip with a
+# notification bar in it. A runner drives production headlessly, at an
+# exact size, the same way every time.
+#
+# Nothing is published. Each run drops .mp4 files into the run's
+# artifacts for you to download and post yourself.
+on:
+  workflow_dispatch:
+    inputs:
+      scenes:
+        description: "Comma-separated: streaks, scores, matchups, rankings, tour"
+        default: "streaks,scores,matchups"
+      shape:
+        description: "wide (X/Reddit/YouTube), tall (TikTok/Reels/Shorts), or both"
+        default: "both"
+      site:
+        description: "Which site to record"
+        default: "https://streakpros.com"
+
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Playwright
+        run: |
+          pip install --quiet playwright
+          python -m playwright install --with-deps chromium
+
+      - name: Record
+        env:
+          # Optional. Set these as repository secrets to record the
+          # signed-in experience; without them the members-only panels
+          # record as their locked card, which is honest but dull.
+          # The password belongs in the secret and nowhere else.
+          PROMO_EMAIL: ${{ secrets.PROMO_EMAIL }}
+          PROMO_PASSWORD: ${{ secrets.PROMO_PASSWORD }}
+          SITE: ${{ github.event.inputs.site || 'https://streakpros.com' }}
+          SCENES: ${{ github.event.inputs.scenes || 'streaks,scores,matchups' }}
+          SHAPE: ${{ github.event.inputs.shape || 'both' }}
+        run: |
+          set -u
+          mkdir -p promo
+          case "$SHAPE" in
+            both) shapes="wide tall" ;;
+            *)    shapes="$SHAPE" ;;
+          esac
+          echo "## Clips" >> $GITHUB_STEP_SUMMARY
+          for scene in $(echo "$SCENES" | tr ',' ' '); do
+            for shape in $shapes; do
+              echo "--- recording $scene ($shape)"
+              # One bad scene must not cost you the others in the run.
+              if python3 scripts/promo_capture.py \
+                   --base "$SITE" --scene "$scene" --shape "$shape" --out promo; then
+                echo "RECORDED - $scene ($shape)" >> $GITHUB_STEP_SUMMARY
+              else
+                echo "FAILED - $scene ($shape)" >> $GITHUB_STEP_SUMMARY
+              fi
+            done
+          done
+          ls -la promo
+
+      - name: Convert to mp4
+        run: |
+          set -u
+          # Playwright writes VP8 in a .webm. Every platform wants H.264
+          # in an .mp4, yuv420p, with the index at the front so it starts
+          # playing before it has finished downloading.
+          for f in promo/*.webm; do
+            [ -e "$f" ] || continue
+            name=$(basename "$f" .webm)
+            case "$name" in
+              # Recorded at 540x960 so the page renders its real phone
+              # layout; doubled here, which is exactly 1080x1920.
+              *-tall) scale="1080:1920" ;;
+              *)      scale="1280:720"  ;;
+            esac
+            ffmpeg -y -loglevel error -i "$f" \
+              -vf "fps=30,scale=$scale:flags=lanczos" \
+              -c:v libx264 -preset slow -crf 20 -pix_fmt yuv420p \
+              -movflags +faststart "promo/$name.mp4"
+            # A still from a second in, for a thumbnail or a post image.
+            ffmpeg -y -loglevel error -ss 1 -i "promo/$name.mp4" \
+              -frames:v 1 -q:v 2 "promo/$name.jpg"
+            rm -f "$f"
+            printf '  %-22s %s\n' "$name.mp4" "$(du -h "promo/$name.mp4" | cut -f1)"
+          done
+          ls -la promo
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: promo-clips
+          path: promo/
+          retention-days: 30
