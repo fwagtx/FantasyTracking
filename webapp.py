@@ -532,11 +532,18 @@ def _edge_cache_public_pages(response):
         except Exception:
             # No login context to ask. Assume a person and do not share.
             return response
-        # max-age=0 keeps the BROWSER revalidating -- a reader who
-        # refreshes wants the current score -- while s-maxage lets the
-        # edge answer everyone else from one copy.
+        # max-age=0, must-revalidate keeps the BROWSER asking every
+        # time -- exactly the guarantee _no_stale_pages was written for,
+        # after mobile Safari served a page from before a deploy -- while
+        # s-maxage lets the edge answer everyone else from one copy.
+        #
+        # Deliberately NO stale-while-revalidate here, unlike the JSON
+        # poll: SWR is not s-prefixed, so it would licence the BROWSER
+        # to serve a stale page too, which is the thing being prevented.
+        # The edge revalidating once per ttl is a cost worth paying to
+        # keep that promise.
         response.headers["Cache-Control"] = (
-            f"public, max-age=0, s-maxage={ttl}, stale-while-revalidate={ttl}")
+            f"public, max-age=0, must-revalidate, s-maxage={ttl}")
         response.headers["Vary"] = "Cookie"
     except Exception:
         pass
