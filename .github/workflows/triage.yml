@@ -1,17 +1,27 @@
 name: Triage
 
-# What is actually broken, right now, from a machine that can reach the
-# site. The development sandbox cannot, and a browser tells you less
-# than this does because a browser is signed in: a session cookie sends
-# the request down a different code path, so "it is down for me" and
-# "it is down" are different claims until something anonymous checks.
+# Is the whole site actually working, right now, from a machine that can
+# reach it.
+#
+# The development sandbox cannot reach the site, and the owner's browser
+# is signed in -- which sends a request down a different code path
+# entirely, so "it works for me" and "it works" are not the same claim
+# until something anonymous checks. This is that something.
+#
+# Three questions:
+#   1. Does every public page answer, and answer with a page rather than
+#      the error card?
+#   2. Is the database there, and does it hold the seasons the site
+#      needs?
+#   3. Are the icons and manifest -- the things a phone and a link
+#      preview ask for -- being served?
 #
 # Read-only. Nothing here changes a thing on the server.
 on:
   workflow_dispatch:
     inputs:
       site:
-        description: "Which site to triage"
+        description: "Which site to check"
         default: "https://streakpros.com"
 
 jobs:
@@ -21,78 +31,116 @@ jobs:
       SITE_PASSWORD: ${{ secrets.SITE_PASSWORD }}
       HOST: ${{ github.event.inputs.site || 'https://streakpros.com' }}
     steps:
-      - name: Anonymous pages
+      - name: Every public page
         run: |
-          echo "## Anonymous" >> $GITHUB_STEP_SUMMARY
-          for p in /healthz / /streaks /scores /rankings /privacy; do
-            code=$(curl -sS -o /tmp/body -w '%{http_code}' --max-time 30 "$HOST$p" || echo "000")
-            size=$(wc -c < /tmp/body | tr -d ' ')
+          echo "## Pages" >> $GITHUB_STEP_SUMMARY
+          bad=0
+          # Pages that take a query string are listed bare on purpose:
+          # landing on one with no argument is what a stray link does,
+          # and it has to answer rather than crash.
+          for p in / /scores /standings /performances /rankings /kickers-dst \
+                   /streaks "/streaks/player" /matchups /injuries /moves \
+                   /birthdays /draft /mock-drafts /trade-calculator \
+                   /start-bench-cut /player /team /game /performance /play \
+                   /plus /pricing /privacy /terms /support /contact \
+                   /login /signup /forgot-password /healthz; do
+            code=$(curl -sS -o /tmp/b -w '%{http_code}' --max-time 40 "$HOST$p" || echo "000")
+            size=$(wc -c < /tmp/b | tr -d ' ')
             note=""
-            grep -qi "Something went wrong" /tmp/body 2>/dev/null && note=" <- ERROR PAGE"
-            printf '%-12s %s  %sB%s\n' "$p" "$code" "$size" "$note" | tee -a $GITHUB_STEP_SUMMARY
+            if grep -qi "Something went wrong" /tmp/b 2>/dev/null; then
+              note="  <- ERROR CARD"; bad=$((bad+1))
+            fi
+            case "$code" in
+              200|302|301) ;;
+              *) note="$note  <- BAD STATUS"; bad=$((bad+1)) ;;
+            esac
+            printf '%-20s %s  %8sB%s\n' "$p" "$code" "$size" "$note" \
+              | tee -a $GITHUB_STEP_SUMMARY
+          done
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ "$bad" -gt 0 ]; then
+            echo "**$bad page(s) need attention**" | tee -a $GITHUB_STEP_SUMMARY
+          else
+            echo "**every page answered**" | tee -a $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Icons, manifest and robots
+        run: |
+          echo "## Assets" >> $GITHUB_STEP_SUMMARY
+          for p in /favicon.ico /favicon.svg /favicon-32.png /icon-192.png \
+                   /icon-512.png /apple-touch-icon.png /site.webmanifest; do
+            code=$(curl -sS -o /tmp/a -w '%{http_code}' --max-time 20 "$HOST$p" || echo "000")
+            size=$(wc -c < /tmp/a | tr -d ' ')
+            printf '%-26s %s  %7sB\n' "$p" "$code" "$size" | tee -a $GITHUB_STEP_SUMMARY
           done
 
-      - name: Is the database answering
+      - name: The database, and what is in it
         run: |
           echo "## Database" >> $GITHUB_STEP_SUMMARY
           if [ -z "$SITE_PASSWORD" ]; then
             echo "::error::SITE_PASSWORD repository secret is not set."
             exit 1
           fi
-          # This endpoint does a real query against player_stats. If the
-          # database is unreachable the app says so in the payload
-          # rather than throwing, so the answer is readable either way.
-          #
           # The secret rides in a header: a query string ends up in
           # access logs, proxy logs and referrers, and a header does
           # not. --fail-with-body keeps the payload on an error status
           # instead of swallowing the one thing worth reading.
-          body=$(curl -sS --fail-with-body --max-time 40 \
+          body=$(curl -sS --fail-with-body --max-time 60 \
                    -H "X-Sync-Secret: $SITE_PASSWORD" \
                    "$HOST/api/streaks-status") || true
-          [ -n "$body" ] || body='{}' 
-          echo "$body" | head -c 1200
+          [ -n "$body" ] || body='{}'
+          echo "$body" | head -c 1500
           echo
           if ! echo "$body" | jq -e . >/dev/null 2>&1; then
             echo "UNREADABLE - that was not JSON, so the app itself is failing" \
               | tee -a $GITHUB_STEP_SUMMARY
             exit 0
           fi
-          ok=$(echo "$body" | jq -r '.ok // false')
           if echo "$body" | tr -d ' ' | grep -q '"ok":false'; then
             echo "SERVER SAID NO - $(echo "$body" | jq -r '.error // "no reason given"')" \
               | tee -a $GITHUB_STEP_SUMMARY
             exit 0
           fi
-          if [ "$ok" != "true" ]; then
-            echo "REFUSED - $(echo "$body" | jq -r '.error // "no reason given"')" \
-              | tee -a $GITHUB_STEP_SUMMARY
-            exit 0
-          fi
-          echo "DATABASE CONFIGURED: $(echo "$body" | jq -r '.database')" \
-            | tee -a $GITHUB_STEP_SUMMARY
           err=$(echo "$body" | jq -r '.db_error // empty')
           if [ -n "$err" ]; then
             echo "DATABASE REFUSED THE CONNECTION:" | tee -a $GITHUB_STEP_SUMMARY
             echo "  $err" | tee -a $GITHUB_STEP_SUMMARY
+            exit 0
           fi
-          seasons=$(echo "$body" | jq -c '.seasons // {}')
-          if [ "$seasons" = "{}" ]; then
-            echo "NO ROWS CAME BACK - the query returned nothing, or it threw" \
+          echo "connected: $(echo "$body" | jq -r '.database')" | tee -a $GITHUB_STEP_SUMMARY
+          echo "season/week: $(echo "$body" | jq -r '.season')/$(echo "$body" | jq -r '.week')" \
+            | tee -a $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| season | rows | with stats |" >> $GITHUB_STEP_SUMMARY
+          echo "|---|---|---|" >> $GITHUB_STEP_SUMMARY
+          echo "$body" | jq -r '.seasons | to_entries[]
+            | "| \(.key) | \(.value.rows) | \(.value.with_stats) |"' \
+            | tee -a $GITHUB_STEP_SUMMARY
+          n=$(echo "$body" | jq -r '.seasons | length')
+          [ "$n" = "0" ] && echo "NO SEASONS STORED - the site has no history to work from" \
+            | tee -a $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "starters listed: $(echo "$body" | jq -c '.starters')" \
+            | tee -a $GITHUB_STEP_SUMMARY
+
+      - name: Is the schedule loaded
+        run: |
+          echo "## Schedule" >> $GITHUB_STEP_SUMMARY
+          if [ -z "$SITE_PASSWORD" ]; then
+            echo "::error::SITE_PASSWORD repository secret is not set."
+            exit 1
+          fi
+          body=$(curl -sS --fail-with-body --max-time 60 \
+                   -H "X-Sync-Secret: $SITE_PASSWORD" \
+                   "$HOST/api/schedule-sync-status") || true
+          [ -n "$body" ] || body='{}'
+          echo "$body" | head -c 1200
+          echo
+          if echo "$body" | tr -d ' ' | grep -q '"ok":false'; then
+            echo "SERVER SAID NO - $(echo "$body" | jq -r '.error // "no reason"')" \
               | tee -a $GITHUB_STEP_SUMMARY
           else
-            echo "DATABASE ANSWERING - rows per season: $seasons" \
-              | tee -a $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            echo "$body" | jq -r '.' 2>/dev/null | head -40 >> $GITHUB_STEP_SUMMARY || true
+            echo '```' >> $GITHUB_STEP_SUMMARY
           fi
-
-      - name: Does a session cookie change the answer
-        run: |
-          echo "## With a session cookie" >> $GITHUB_STEP_SUMMARY
-          # A forged cookie cannot log anyone in -- it fails its
-          # signature check. The point is only to prove that carrying
-          # one does not by itself break the page.
-          code=$(curl -sS -o /tmp/c -w '%{http_code}' --max-time 30 \
-                   -H 'Cookie: session=not-a-real-session' "$HOST/" || echo "000")
-          note=""
-          grep -qi "Something went wrong" /tmp/c 2>/dev/null && note=" <- ERROR PAGE"
-          echo "/ with a cookie: $code$note" | tee -a $GITHUB_STEP_SUMMARY
