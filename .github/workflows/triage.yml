@@ -47,11 +47,22 @@ jobs:
             code=$(curl -sS -o /tmp/b -w '%{http_code}' --max-time 40 "$HOST$p" || echo "000")
             size=$(wc -c < /tmp/b | tr -d ' ')
             note=""
-            if grep -qi "Something went wrong" /tmp/b 2>/dev/null; then
+            # Match the error card's own heading, not the words
+            # anywhere on the page: /matchups ships a JavaScript string
+            # reading "Something went wrong comparing these players.",
+            # and a loose grep calls that a broken page forever.
+            if grep -q "Something went wrong</h1>" /tmp/b 2>/dev/null \
+               || [ "$(cat /tmp/b)" = "Something went wrong. Please try again." ]; then
               note="  <- ERROR CARD"; bad=$((bad+1))
             fi
             case "$code" in
               200|302|301) ;;
+              # These two need a valid argument and answer 404 without
+              # one, which is correct behaviour rather than a fault.
+              404) case "$p" in
+                     /player|/play) note="$note  (404 without an argument -- expected)" ;;
+                     *) note="$note  <- BAD STATUS"; bad=$((bad+1)) ;;
+                   esac ;;
               *) note="$note  <- BAD STATUS"; bad=$((bad+1)) ;;
             esac
             printf '%-20s %s  %8sB%s\n' "$p" "$code" "$size" "$note" \
@@ -132,7 +143,7 @@ jobs:
           fi
           body=$(curl -sS --fail-with-body --max-time 60 \
                    -H "X-Sync-Secret: $SITE_PASSWORD" \
-                   "$HOST/api/schedule-sync-status") || true
+                   "$HOST/api/schedule-status") || true
           [ -n "$body" ] || body='{}'
           echo "$body" | head -c 1200
           echo
