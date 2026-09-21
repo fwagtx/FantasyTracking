@@ -1123,14 +1123,40 @@ class User(UserMixin):
 
 @login_manager.user_loader
 def load_user(user_id):
-    conn = get_db()
+    """Who is signed in, or nobody when the database cannot say.
+
+    The fallback matters more than it looks. Flask-Login calls this on
+    every request that carries a session cookie, and the site's own
+    header asks `current_user.is_authenticated` -- including the header
+    on the error page. So when this raised, a database outage took out
+    the page AND the page meant to explain it, and a signed-in reader
+    got the bare last-resort string while anonymous readers saw a
+    working site. That is the worst of both: broken for the owner,
+    fine for everyone else, and therefore very hard to believe.
+
+    Answering "nobody" degrades a signed-in reader to a signed-out one,
+    which is the safe direction -- it grants nothing it should not --
+    and leaves every public page working. The exception still goes to
+    the logs, where the real cause can be read.
+    """
+    try:
+        conn = get_db()
+    except Exception:
+        app.logger.exception("could not reach the database to load a session")
+        return None
     try:
         with conn.cursor() as cur:
             cur.execute("SELECT * FROM users WHERE id = %s", (user_id,))
             row = cur.fetchone()
             return User(row) if row else None
+    except Exception:
+        app.logger.exception("could not load the signed-in user")
+        return None
     finally:
-        conn.close()
+        try:
+            conn.close()
+        except Exception:
+            pass
 
 
 def username_valid(u):

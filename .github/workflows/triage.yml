@@ -36,14 +36,21 @@ jobs:
         run: |
           echo "## Database" >> $GITHUB_STEP_SUMMARY
           if [ -z "$SITE_PASSWORD" ]; then
-            echo "SITE_PASSWORD secret is not set -- skipping" | tee -a $GITHUB_STEP_SUMMARY
-            exit 0
+            echo "::error::SITE_PASSWORD repository secret is not set."
+            exit 1
           fi
           # This endpoint does a real query against player_stats. If the
           # database is unreachable the app says so in the payload
           # rather than throwing, so the answer is readable either way.
-          body=$(curl -sS --max-time 40 \
-                   "$HOST/api/streaks-status?secret=$SITE_PASSWORD" || echo '{}')
+          #
+          # The secret rides in a header: a query string ends up in
+          # access logs, proxy logs and referrers, and a header does
+          # not. --fail-with-body keeps the payload on an error status
+          # instead of swallowing the one thing worth reading.
+          body=$(curl -sS --fail-with-body --max-time 40 \
+                   -H "X-Sync-Secret: $SITE_PASSWORD" \
+                   "$HOST/api/streaks-status") || true
+          [ -n "$body" ] || body='{}' 
           echo "$body" | head -c 1200
           echo
           if ! echo "$body" | jq -e . >/dev/null 2>&1; then
@@ -52,6 +59,11 @@ jobs:
             exit 0
           fi
           ok=$(echo "$body" | jq -r '.ok // false')
+          if echo "$body" | tr -d ' ' | grep -q '"ok":false'; then
+            echo "SERVER SAID NO - $(echo "$body" | jq -r '.error // "no reason given"')" \
+              | tee -a $GITHUB_STEP_SUMMARY
+            exit 0
+          fi
           if [ "$ok" != "true" ]; then
             echo "REFUSED - $(echo "$body" | jq -r '.error // "no reason given"')" \
               | tee -a $GITHUB_STEP_SUMMARY
@@ -59,6 +71,11 @@ jobs:
           fi
           echo "DATABASE CONFIGURED: $(echo "$body" | jq -r '.database')" \
             | tee -a $GITHUB_STEP_SUMMARY
+          err=$(echo "$body" | jq -r '.db_error // empty')
+          if [ -n "$err" ]; then
+            echo "DATABASE REFUSED THE CONNECTION:" | tee -a $GITHUB_STEP_SUMMARY
+            echo "  $err" | tee -a $GITHUB_STEP_SUMMARY
+          fi
           seasons=$(echo "$body" | jq -c '.seasons // {}')
           if [ "$seasons" = "{}" ]; then
             echo "NO ROWS CAME BACK - the query returned nothing, or it threw" \
