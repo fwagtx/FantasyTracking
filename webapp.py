@@ -25845,8 +25845,9 @@ RANKINGS_HTML = BASE_STYLE + make_header("rankings") + VOTE_MODAL_HTML + """
   .rk-stat.warn{ background:var(--rk-warn-wash); color:var(--rk-warn); }
   .rk-stat.bad{ background:var(--rk-bad-wash); color:var(--rk-bad); }
   .rk-stat.flat{ color:var(--rk-muted); background:transparent; }
-  /* Movement: the arrow and the places moved lead, the value change
-     follows smaller. One cell, so the eye reads "up three" first. */
+  /* Movement: one figure per row. Places moved when a player moved,
+     the value change when they held station, and colour carrying the
+     direction either way so the column reads without reading units. */
   .rk-move{ white-space:nowrap; }
   /* A rank that held gets a pill like a rise or a fall does -- grey,
      so the column reads as three states rather than two and a gap.
@@ -26173,12 +26174,12 @@ function getFiltered() {
 }
 
 const OVERALL_COLS = [
-  {key:'overall_rank', label:'#'}, {key:'rank_delta', label:'Trend'}, {key:'name', label:'Player'}, {key:'position', label:'Pos'},
+  {key:'overall_rank', label:'#'}, {key:'rank_delta', label:'Trend &middot; 30d'}, {key:'name', label:'Player'}, {key:'position', label:'Pos'},
   {key:'team', label:'TM'}, {key:'snap_pct', label:'Snap%'}, {key:'games', label:'GP'},
   {key:'fpts_per_game', label:'FPTS/G'}, {key:'position_rank', label:'Pos Rank'}, {key:'overall_rank', label:'Ovr Rank'},
 ];
 const POSITION_COLS = [
-  {key:'overall_rank', label:'#'}, {key:'rank_delta', label:'Trend'}, {key:'name', label:'Player'}, {key:'snap_pct', label:'Snap%'},
+  {key:'overall_rank', label:'#'}, {key:'rank_delta', label:'Trend &middot; 30d'}, {key:'name', label:'Player'}, {key:'snap_pct', label:'Snap%'},
   {key:'games', label:'GP'}, {key:'fpts', label:'FPTS'}, {key:'fpts_per_game', label:'FPTS/G'},
   {key:'overall_rank', label:'Ovr Rank'},
 ];
@@ -26226,21 +26227,37 @@ function statCell(val, cls, suffix) {
 
 function signed(v) { return (v > 0 ? '+' : '') + v; }
 
-// Up three places and +120 in value, from the site's own record; or,
-// while that record is too young to say, FantasyCalc's 30-day value
-// trend on its own.
+// One number per row, and it is always the most interesting true thing
+// available: how many places they moved, or -- when they held station
+// -- how hard the value underneath was pushing anyway.
+//
+// Stacking both was the old behaviour and it read as clutter three
+// hundred rows deep. Showing places alone was the obvious fix and is
+// the wrong one: the top of the board barely moves, so tier S would
+// sit at a grey dash every week while Chase quietly shed five hundred
+// in value. The rank is the headline when there is one; the value
+// speaks when the rank has nothing to say.
+//
+// Colour always means direction -- green better, red worse -- so a row
+// is readable at a glance without reading the unit. The arrow is what
+// distinguishes the two: places carry one, a value change never does.
+// The grey dash is reserved for a player who genuinely did not move at
+// all, by either measure.
 function trendCell(r) {
-  if (r.rank_delta !== null && r.rank_delta !== undefined) {
-    const d = r.rank_delta, v = r.value_delta;
-    const cls = d > 0 ? 'good' : (d < 0 ? 'bad' : 'flat');
-    const arrow = d > 0 ? '&#9650;' : (d < 0 ? '&#9660;' : '&ndash;');
-    return `<span class="rk-stat rk-move ${cls}"><b>${arrow}${d ? Math.abs(d) : ''}</b>` +
-           (v !== null && v !== undefined && v !== 0 ? `<small>${signed(v)}</small>` : '') + `</span>`;
+  const d = r.rank_delta;
+  const v = (r.value_delta !== null && r.value_delta !== undefined)
+    ? r.value_delta : r.trend_30day;
+
+  if (d !== null && d !== undefined && d !== 0) {
+    const cls = d > 0 ? 'good' : 'bad';
+    const arrow = d > 0 ? '&#9650;' : '&#9660;';
+    return `<span class="rk-stat rk-move ${cls}"><b>${arrow}${Math.abs(d)}</b></span>`;
   }
-  const t = r.trend_30day;
-  if (t === null || t === undefined) return statCell(null);
-  const cls = t > 0 ? 'good' : (t < 0 ? 'bad' : 'flat');
-  return `<span class="rk-stat rk-move ${cls}"><b>${signed(t)}</b><small>30d</small></span>`;
+  if (v !== null && v !== undefined && v !== 0) {
+    const cls = v > 0 ? 'good' : 'bad';
+    return `<span class="rk-stat rk-move ${cls}"><b>${signed(v)}</b></span>`;
+  }
+  return '<span class="rk-stat rk-move flat"><b>&ndash;</b></span>';
 }
 
 function moveBadge(r) {
