@@ -34,8 +34,11 @@ Usage:
 """
 import argparse
 import asyncio
+import html
 import os
 import sys
+
+from promo_overlay import OVERLAY_JS, TOP_ROW_JS
 
 
 # A pointer, drawn. Playwright's recorder captures the page, not the
@@ -202,6 +205,57 @@ class Stage:
         return clicked
 
 
+class Film(Stage):
+    """A Stage that can also put titles and callouts over the page.
+
+    The methods are deliberately shaped like shot instructions rather
+    than DOM calls, because a scene written with them should read as a
+    storyboard that someone can argue with.
+    """
+
+    async def card(self, ms=2200, **fields):
+        safe = {k: (html.escape(str(v)) if k not in ("big",) else v)
+                for k, v in fields.items() if v}
+        await self._eval("o => window.__promo.card(o)", safe)
+        await self.hold(ms)
+
+    async def uncard(self, ms=420):
+        await self._eval("() => window.__promo.hideCard()")
+        await self.hold(ms)
+
+    async def spotlight(self, selector, tag=None, ms=1500, pad=6):
+        ok = await self._eval("a => window.__promo.ring(a[0], a[1], a[2])",
+                              [selector, tag, pad])
+        if not ok:
+            print(f"  note: nothing to spotlight at {selector}", file=sys.stderr)
+        await self.hold(ms)
+        return bool(ok)
+
+    async def unspotlight(self, ms=360):
+        await self._eval("() => window.__promo.hideRing()")
+        await self.hold(ms)
+
+    async def mark(self, on=True):
+        await self._eval("v => window.__promo.mark(v)", on)
+
+    async def clock(self, ms):
+        """Start the progress sliver, given the clip's remaining length."""
+        await self._eval("m => window.__promo.progress(m)", ms)
+
+    async def push(self, scale, selector=None, ms=700, hold=900):
+        await self._eval("a => window.__promo.zoom(a[0], a[1], a[2])",
+                         [scale, selector, ms])
+        await self.hold(ms + hold)
+
+    async def pull(self, ms=600, hold=500):
+        await self._eval("m => window.__promo.unzoom(m)", ms)
+        await self.hold(ms + hold)
+
+    async def headline(self):
+        """This week's top row, read off the board it is about to show."""
+        return await self._eval(TOP_ROW_JS)
+
+
 # --- the scenes ---------------------------------------------------------
 #
 # One feature each. Keep them boring to read and obvious to watch: land,
@@ -278,14 +332,73 @@ async def scene_tour(s):
     await scene_matchups(s)
 
 
+async def scene_streaks_story(s):
+    """The Streaks clip, cut as a piece rather than recorded as a demo.
+
+    Hook, proof, payoff, sign-off. The hook is built from the board's
+    own top row, so every week's run writes its own title card instead
+    of repeating a fixed line -- and the run log prints those numbers,
+    which is the caption to type into the app on upload.
+    """
+    await s.visit("/streaks", wait_for=".sk-item", ms=700)
+    top = await s.headline() or {}
+    if top.get("name"):
+        print(f"  CAPTION: {top.get('name')} ({top.get('team')}) "
+              f"{top.get('side')}{top.get('line')} {top.get('prop')} "
+              f"-- {top.get('streak') or top.get('rate')}", file=sys.stderr)
+
+    # 0:00 the hook. A number first, a name second: the number is what
+    # stops a thumb, and there is about a second and a half to do it.
+    streak = top.get("streak") or top.get("rate") or "EVERY STREAK"
+    who = top.get("name") or "Every starter"
+    line = (f"{top.get('side','')}{top.get('line','')} {top.get('prop','')}").strip()
+    await s.card(kicker="NFL streaks, week by week",
+                 big=streak.upper().replace(" ", "<em>", 1) + ("</em>" if " " in streak else ""),
+                 sub=f"{who} — {line}" if line else who,
+                 ms=2100)
+    await s.clock(21000)
+    await s.uncard()
+    await s.mark(True)
+
+    # 0:02 the proof: that row, on the real board, ringed.
+    await s.spotlight(".sk-item", tag="Every game, against the line", ms=1900)
+    await s.push(1.35, ".sk-item", ms=650, hold=1100)
+    await s.unspotlight()
+    await s.pull()
+
+    # 0:07 it is not one player -- the whole board reads this way.
+    await s.glide(430, 1500)
+    await s.hold(900)
+    await s.tap("#skWindows button", index=2, after=1500)
+    await s.spotlight("#skWindows", tag="Last 5 games, not the season", ms=1700)
+    await s.unspotlight()
+
+    # 0:12 the payoff: one player, game by game.
+    await s.glide(0, 700)
+    await s.tap(".sk-item", index=0, after=2100)
+    await s.glide(300, 1200)
+    if await s.gated():
+        await s.glide(560, 1200)
+        await s.hold(1500)
+    else:
+        for _ in range(3):
+            await s.tap("#spPlus", after=650)
+        await s.hold(1300)
+
+    # 0:21 the sign-off.
+    await s.card(logo=True, url="streakpros.com", free="Free to use", ms=2600)
+
+
 # Where each scene lands first, so the cold load can be taken before
 # the camera is rolling.
-SCENE_FIRST_PATH = {"streaks": "/streaks", "scores": "/scores",
+SCENE_FIRST_PATH = {"streaks": "/streaks", "streaks_story": "/streaks",
+                    "scores": "/scores",
                     "matchups": "/matchups", "rankings": "/rankings",
                     "tour": "/streaks"}
 
 SCENES = {
     "streaks": scene_streaks,
+    "streaks_story": scene_streaks_story,
     "scores": scene_scores,
     "matchups": scene_matchups,
     "rankings": scene_rankings,
@@ -332,8 +445,9 @@ async def record(base, scene, shape, out_dir, email=None, password=None):
             device_scale_factor=1,
         )
         await ctx.add_init_script(CURSOR_JS)
+        await ctx.add_init_script(OVERLAY_JS)
         page = await ctx.new_page()
-        stage = Stage(page, base)
+        stage = Film(page, base)
 
         # Recording starts the moment the context does, so a cold
         # instance waking up is the opening shot of the clip. Pull that
