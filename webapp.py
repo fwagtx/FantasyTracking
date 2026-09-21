@@ -16731,6 +16731,31 @@ def _rankings_render(fmt, mode, is_dynasty, pos_filter, view, num_qbs):
             "trend_30day": v.get("trend_30day"),
         })
     rows.sort(key=lambda r: r["overall_rank"])
+
+    # Places moved, for a board whose own record is too young to say.
+    #
+    # The snapshot table starts empty -- on a fresh database, or in the
+    # first week after one -- and a movement column that shows nothing
+    # for a week is a movement column nobody trusts. But FantasyCalc
+    # publishes each player's 30-day value change, so the board as it
+    # stood a month ago is recoverable: take today's value, subtract
+    # the change, and rank that. It is the same set of players ranked
+    # twice, which is precisely what a movement column compares.
+    #
+    # Reconstructed, not measured, so a real snapshot always wins --
+    # this only fills rows the record cannot speak for, and stops
+    # filling them the moment it can.
+    unseen = [r for r in rows if r.get("rank_delta") is None
+              and r.get("trend_30day") is not None]
+    if unseen:
+        then = sorted(rows, key=lambda r: -((r.get("value") or 0)
+                                            - (r.get("trend_30day") or 0)))
+        was = {r["sid"]: i + 1 for i, r in enumerate(then)}
+        for r in unseen:
+            # Positive is up, the same way the measured one counts:
+            # twentieth a month ago and eighth today is plus twelve.
+            r["rank_delta"] = was[r["sid"]] - r["overall_rank"]
+
     # 300 instead of 100 so filtering down to a single position (e.g. TE,
     # which ranks lower overall than WR/RB) still has a real list to show.
     #
