@@ -1,0 +1,81 @@
+name: Triage
+
+# What is actually broken, right now, from a machine that can reach the
+# site. The development sandbox cannot, and a browser tells you less
+# than this does because a browser is signed in: a session cookie sends
+# the request down a different code path, so "it is down for me" and
+# "it is down" are different claims until something anonymous checks.
+#
+# Read-only. Nothing here changes a thing on the server.
+on:
+  workflow_dispatch:
+    inputs:
+      site:
+        description: "Which site to triage"
+        default: "https://streakpros.com"
+
+jobs:
+  triage:
+    runs-on: ubuntu-latest
+    env:
+      SITE_PASSWORD: ${{ secrets.SITE_PASSWORD }}
+      HOST: ${{ github.event.inputs.site || 'https://streakpros.com' }}
+    steps:
+      - name: Anonymous pages
+        run: |
+          echo "## Anonymous" >> $GITHUB_STEP_SUMMARY
+          for p in /healthz / /streaks /scores /rankings /privacy; do
+            code=$(curl -sS -o /tmp/body -w '%{http_code}' --max-time 30 "$HOST$p" || echo "000")
+            size=$(wc -c < /tmp/body | tr -d ' ')
+            note=""
+            grep -qi "Something went wrong" /tmp/body 2>/dev/null && note=" <- ERROR PAGE"
+            printf '%-12s %s  %sB%s\n' "$p" "$code" "$size" "$note" | tee -a $GITHUB_STEP_SUMMARY
+          done
+
+      - name: Is the database answering
+        run: |
+          echo "## Database" >> $GITHUB_STEP_SUMMARY
+          if [ -z "$SITE_PASSWORD" ]; then
+            echo "SITE_PASSWORD secret is not set -- skipping" | tee -a $GITHUB_STEP_SUMMARY
+            exit 0
+          fi
+          # This endpoint does a real query against player_stats. If the
+          # database is unreachable the app says so in the payload
+          # rather than throwing, so the answer is readable either way.
+          body=$(curl -sS --max-time 40 \
+                   "$HOST/api/streaks-status?secret=$SITE_PASSWORD" || echo '{}')
+          echo "$body" | head -c 1200
+          echo
+          if ! echo "$body" | jq -e . >/dev/null 2>&1; then
+            echo "UNREADABLE - that was not JSON, so the app itself is failing" \
+              | tee -a $GITHUB_STEP_SUMMARY
+            exit 0
+          fi
+          ok=$(echo "$body" | jq -r '.ok // false')
+          if [ "$ok" != "true" ]; then
+            echo "REFUSED - $(echo "$body" | jq -r '.error // "no reason given"')" \
+              | tee -a $GITHUB_STEP_SUMMARY
+            exit 0
+          fi
+          echo "DATABASE CONFIGURED: $(echo "$body" | jq -r '.database')" \
+            | tee -a $GITHUB_STEP_SUMMARY
+          seasons=$(echo "$body" | jq -c '.seasons // {}')
+          if [ "$seasons" = "{}" ]; then
+            echo "NO ROWS CAME BACK - the query returned nothing, or it threw" \
+              | tee -a $GITHUB_STEP_SUMMARY
+          else
+            echo "DATABASE ANSWERING - rows per season: $seasons" \
+              | tee -a $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Does a session cookie change the answer
+        run: |
+          echo "## With a session cookie" >> $GITHUB_STEP_SUMMARY
+          # A forged cookie cannot log anyone in -- it fails its
+          # signature check. The point is only to prove that carrying
+          # one does not by itself break the page.
+          code=$(curl -sS -o /tmp/c -w '%{http_code}' --max-time 30 \
+                   -H 'Cookie: session=not-a-real-session' "$HOST/" || echo "000")
+          note=""
+          grep -qi "Something went wrong" /tmp/c 2>/dev/null && note=" <- ERROR PAGE"
+          echo "/ with a cookie: $code$note" | tee -a $GITHUB_STEP_SUMMARY
