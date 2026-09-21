@@ -16766,7 +16766,20 @@ def _rankings_render(fmt, mode, is_dynasty, pos_filter, view, num_qbs):
     # what brings them up.
     info = get_current_week_info()
     points_rows = rankings_points_rows(int(stats_season), info["week"])
+    # Games played per team, for colouring the GP column. Not the week
+    # number: byes mean two teams can sit a game apart for most of the
+    # season, so "has this player been available" is only answerable
+    # against his own team's completed games. Comes from our own
+    # schedule, so it needs no second source to stay in step.
+    try:
+        team_games = {t: r.get("games") or 0
+                      for t, r in get_team_standings(int(stats_season)).items()}
+    except Exception:
+        app.logger.exception("could not count games played per team")
+        team_games = {}
+
     return render_template_string(RANKINGS_HTML, rows=rows[:300] + points_rows, fmt=fmt, mode=mode,
+                                  team_games=team_games,
                                   pos_filter=pos_filter, view=view,
                                   stats_season=stats_season, stats_seasons=stats_seasons,
                                   since_days=movement["days"],
@@ -26143,6 +26156,24 @@ function playerUrl(sid) {
   return `/player?sid=${sid}&numqbs=${numqbs}&ref=${ref}`;
 }
 
+// How many games each team has actually played, so availability is
+// judged against the player's own schedule rather than the week
+// number. A bye leaves two teams a game apart for the rest of the
+// season, and a 17-game denominator calls everybody a miss in week 2.
+const TEAM_GP = {{ team_games|default({}, true)|tojson }};
+
+// Availability: played every game his team has, missed one, or missed
+// more. Green means he has been there for all of it, which in week 2
+// is two games and in week 12 is twelve.
+function gamesClass(r) {
+  const played = TEAM_GP[r.team];
+  if (!played || r.games === null || r.games === undefined) return 'flat';
+  const missed = played - r.games;
+  if (missed <= 0) return 'good';   // traded mid-season can exceed it
+  if (missed === 1) return 'warn';
+  return 'bad';
+}
+
 function percentileClass(values, val, higherIsBetter) {
   if (val === null || val === undefined || values.length < 3) return 'flat';
   const sorted = [...values].filter(v => v !== null && v !== undefined).sort((a,b) => a-b);
@@ -26295,7 +26326,7 @@ function moveBadge(r) {
 }
 
 function buildRowEl(r, cols, valArrays, place) {
-  const { snapVals, gamesVals, fpgVals, fptsVals, posRankVals } = valArrays;
+  const { snapVals, fpgVals, fptsVals, posRankVals } = valArrays;
   const tr = document.createElement('tr');
   tr.className = 'rk-row';
   tr.onclick = () => window.location.href = playerUrl(r.sid);
@@ -26314,7 +26345,7 @@ function buildRowEl(r, cols, valArrays, place) {
     } else if (c.key === 'snap_pct') {
       cells += `<td class="col-snap_pct">${statCell(r.snap_pct !== null ? r.snap_pct + '%' : null, percentileClass(snapVals, r.snap_pct, true))}</td>`;
     } else if (c.key === 'games') {
-      cells += `<td class="col-games">${statCell(r.games, percentileClass(gamesVals, r.games, true))}</td>`;
+      cells += `<td class="col-games">${statCell(r.games, gamesClass(r))}</td>`;
     } else if (c.key === 'fpts') {
       cells += `<td class="col-fpts">${statCell(r.fpts, percentileClass(fptsVals, r.fpts, true))}</td>`;
     } else if (c.key === 'fpts_per_game') {
@@ -26359,7 +26390,7 @@ function renderList(rows) {
   body.innerHTML = '';
   gatedBody.innerHTML = '';
   const valArrays = {
-    snapVals: rows.map(r => r.snap_pct), gamesVals: rows.map(r => r.games),
+    snapVals: rows.map(r => r.snap_pct),
     fpgVals: rows.map(r => r.fpts_per_game), fptsVals: rows.map(r => r.fpts),
     posRankVals: rows.map(r => r.position_rank),
     last4Vals: rows.map(r => r.fpts_last4), weekVals: rows.map(r => r.fpts_week),
