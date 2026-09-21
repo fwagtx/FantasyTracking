@@ -25870,9 +25870,10 @@ RANKINGS_HTML = BASE_STYLE + make_header("rankings") + VOTE_MODAL_HTML + """
   .rk-stat.warn{ background:var(--rk-warn-wash); color:var(--rk-warn); }
   .rk-stat.bad{ background:var(--rk-bad-wash); color:var(--rk-bad); }
   .rk-stat.flat{ color:var(--rk-muted); background:transparent; }
-  /* Movement: one figure per row. Places moved when a player moved,
-     the value change when they held station, and colour carrying the
-     direction either way so the column reads without reading units. */
+  /* Movement: colour answers "did they move" -- green up, red down,
+     grey for held. A held row keeps its value change alongside the
+     dash, so the top of the board still says what is building under a
+     rank that has not broken yet. */
   .rk-move{ white-space:nowrap; }
   /* A rank that held gets a pill like a rise or a fall does -- grey,
      so the column reads as three states rather than two and a gap.
@@ -26278,11 +26279,13 @@ function trendCell(r) {
     const arrow = d > 0 ? '&#9650;' : '&#9660;';
     return `<span class="rk-stat rk-move ${cls}"><b>${arrow}${Math.abs(d)}</b></span>`;
   }
-  if (v !== null && v !== undefined && v !== 0) {
-    const cls = v > 0 ? 'good' : 'bad';
-    return `<span class="rk-stat rk-move ${cls}"><b>${signed(v)}</b></span>`;
-  }
-  return '<span class="rk-stat rk-move flat"><b>&ndash;</b></span>';
+  // Held station: grey, because the colour answers "did they move"
+  // and the honest answer is no. The value change rides alongside so
+  // the row still says what is building underneath a rank that has
+  // not broken yet -- which is most of tier S, most weeks.
+  const val = (v !== null && v !== undefined && v !== 0)
+    ? `<small>${signed(v)}</small>` : '';
+  return `<span class="rk-stat rk-move flat"><b>&ndash;</b>${val}</span>`;
 }
 
 function moveBadge(r) {
