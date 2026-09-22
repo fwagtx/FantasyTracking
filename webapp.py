@@ -17290,6 +17290,79 @@ def api_debug_sleeper():
         return jsonify({"requested_url": url, "error": str(e)})
 
 
+@app.route("/api/debug-league")
+def api_debug_league():
+    """What Sleeper actually returns for one league, so the standings
+    maths gets built on verified fields rather than remembered ones.
+
+    Three questions, none of which this sandbox can ask -- Sleeper is
+    unreachable from development, and a league is real data that only
+    exists in production:
+
+      1. What is really in a roster's `settings`? Points-for drives the
+         luck figure and the scoring distribution a playoff simulation
+         samples from, and guessing `fpts` / `fpts_decimal` wrong gives
+         a number that looks right and is not.
+      2. Does the league say how many teams make the playoffs, and when
+         they start? Without both, "playoff odds" has no target.
+      3. Do future weeks return pairings? A simulation needs the
+         remaining schedule. If Sleeper only publishes matchups for
+         weeks already played, the honest answer is a different model,
+         not a fabricated one.
+
+    ?league=<league_id>. Remove once the standings work is confirmed.
+    """
+    if not _secret_ok():
+        return jsonify({"ok": False, "error": "unauthorized"}), 401
+    league_id = (request.args.get("league") or "").strip()
+    if not league_id:
+        return jsonify({"ok": False, "error": "pass ?league=<league_id>"}), 400
+    out = {"ok": True, "league_id": league_id}
+    try:
+        lg = _cached_get(f"{SLEEPER_BASE}/league/{league_id}", {}, ttl=60) or {}
+        settings = lg.get("settings") or {}
+        out["league"] = {
+            "name": lg.get("name"), "status": lg.get("status"),
+            "total_rosters": lg.get("total_rosters"),
+            "playoff_teams": settings.get("playoff_teams"),
+            "playoff_week_start": settings.get("playoff_week_start"),
+            "leg": settings.get("leg"), "last_scored_leg": settings.get("last_scored_leg"),
+            "settings_keys": sorted(settings.keys()),
+        }
+    except Exception as e:
+        out["league_error"] = str(e)
+    try:
+        rosters = get_rosters(league_id) or []
+        first = (rosters[0] if rosters else {}) or {}
+        out["roster"] = {
+            "count": len(rosters),
+            "top_level_keys": sorted(first.keys()),
+            "settings": first.get("settings") or {},
+        }
+    except Exception as e:
+        out["roster_error"] = str(e)
+    # The one that decides whether a simulation is possible at all.
+    weeks = {}
+    for wk in range(1, 19):
+        try:
+            rows = get_league_matchups(league_id, wk) or []
+        except Exception as e:
+            weeks[wk] = {"error": str(e)}
+            continue
+        pairs = {r.get("matchup_id") for r in rows if r.get("matchup_id") is not None}
+        scored = [r for r in rows if (r.get("points") or 0) > 0]
+        weeks[wk] = {"rows": len(rows), "pairings": len(pairs), "rosters_with_points": len(scored)}
+    out["weeks"] = weeks
+    played = [w for w, d in weeks.items() if d.get("rosters_with_points")]
+    ahead = [w for w, d in weeks.items() if d.get("pairings") and not d.get("rosters_with_points")]
+    out["verdict"] = {
+        "weeks_played": played,
+        "future_weeks_with_pairings": ahead,
+        "schedule_is_published_ahead": bool(ahead),
+    }
+    return jsonify(out)
+
+
 @app.route("/api/debug-espn")
 def api_debug_espn():
     """Temporary diagnostic endpoint -- ESPN's live-scores API is

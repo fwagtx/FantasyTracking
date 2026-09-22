@@ -1,0 +1,63 @@
+name: Probe League Shapes
+
+# What does Sleeper really return for one league?
+#
+# The development sandbox cannot reach Sleeper, and a league is real data
+# that only exists once someone has synced it. So the fields the
+# standings maths will be built on -- points for, playoff team count,
+# and whether the remaining schedule is published at all -- get confirmed
+# here, against a real league, before any of that maths is written.
+#
+# Read-only. Nothing is changed on the server.
+on:
+  workflow_dispatch:
+    inputs:
+      league:
+        description: "Sleeper league_id to inspect"
+        required: true
+      site:
+        description: "Which site to ask"
+        default: "https://streakpros.com"
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    env:
+      SITE_PASSWORD: ${{ secrets.SITE_PASSWORD }}
+      HOST: ${{ github.event.inputs.site || 'https://streakpros.com' }}
+      LEAGUE: ${{ github.event.inputs.league }}
+    steps:
+      - name: Ask production
+        run: |
+          if [ -z "$SITE_PASSWORD" ]; then
+            echo "::error::SITE_PASSWORD repository secret is not set."
+            exit 1
+          fi
+          body=$(curl -sS --fail-with-body --max-time 120 \
+                   -H "X-Sync-Secret: $SITE_PASSWORD" \
+                   "$HOST/api/debug-league?league=$LEAGUE") || true
+          [ -n "$body" ] || body='{}'
+          if echo "$body" | tr -d ' ' | grep -q '"ok":false'; then
+            echo "SERVER SAID NO - $(echo "$body" | jq -r '.error // "no reason given"')" \
+              | tee -a $GITHUB_STEP_SUMMARY
+            exit 0
+          fi
+          echo "## League" >> $GITHUB_STEP_SUMMARY
+          echo '```json' >> $GITHUB_STEP_SUMMARY
+          echo "$body" | jq '.league' >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          echo "## A roster's settings -- the fields the maths reads" >> $GITHUB_STEP_SUMMARY
+          echo '```json' >> $GITHUB_STEP_SUMMARY
+          echo "$body" | jq '.roster' >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          echo "## Is the remaining schedule published" >> $GITHUB_STEP_SUMMARY
+          echo '```json' >> $GITHUB_STEP_SUMMARY
+          echo "$body" | jq '.verdict' >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          echo "## Week by week" >> $GITHUB_STEP_SUMMARY
+          echo "| week | rows | pairings | scored |" >> $GITHUB_STEP_SUMMARY
+          echo "|---|---|---|---|" >> $GITHUB_STEP_SUMMARY
+          echo "$body" | jq -r '.weeks | to_entries[]
+            | "| \(.key) | \(.value.rows // "-") | \(.value.pairings // "-") | \(.value.rosters_with_points // "-") |"' \
+            >> $GITHUB_STEP_SUMMARY
+          echo "$body" | jq -c '.verdict'
