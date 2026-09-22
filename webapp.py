@@ -15873,9 +15873,18 @@ def draft_open_day(season, season_type=2, now=None):
 
     Only ever one, by construction -- every earlier day has already
     started, and nothing past the next slate can have opened before it
-    did. That is what lets the day strip point at it."""
+    did. That is what lets the day strip point at it.
+
+    Never raises. This is decoration on a payload the page needs for
+    other reasons, so a database that cannot answer costs the marker on
+    one tab, not the whole draft panel."""
     now = now or _draft_now()
-    for day, kick in draft_game_days(season, season_type):
+    try:
+        days = draft_game_days(season, season_type)
+    except Exception:
+        app.logger.exception("could not work out which draft is open")
+        return None, None
+    for day, kick in days:
         kick = _as_naive_utc(kick)
         if not kick or kick <= now:
             continue

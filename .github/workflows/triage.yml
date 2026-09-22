@@ -134,6 +134,80 @@ jobs:
           echo "starters listed: $(echo "$body" | jq -c '.starters')" \
             | tee -a $GITHUB_STEP_SUMMARY
 
+      - name: Rating Draft -- is one open right now
+        run: |
+          echo "## Rating Draft" >> $GITHUB_STEP_SUMMARY
+          # The whole opening rule reads nfl_schedule, so this is the
+          # only check that proves it end to end: ask production which
+          # draft it thinks is open, and then ask that day about itself.
+          if [ -z "$SITE_PASSWORD" ]; then
+            echo "::error::SITE_PASSWORD repository secret is not set."
+            exit 1
+          fi
+          info=$(curl -sS --fail-with-body --max-time 60 \
+                   -H "X-Sync-Secret: $SITE_PASSWORD" \
+                   "$HOST/api/streaks-status") || info='{}'
+          if echo "$info" | tr -d ' ' | grep -q '"ok":false'; then
+            echo "SERVER SAID NO - $(echo "$info" | jq -r '.error // "no reason given"')" \
+              | tee -a $GITHUB_STEP_SUMMARY
+            exit 0
+          fi
+          season=$(echo "$info" | jq -r '.season // empty')
+          week=$(echo "$info" | jq -r '.week // empty')
+          today=$(TZ=America/New_York date +%F)
+          echo "season $season, week $week, Eastern today $today" | tee -a $GITHUB_STEP_SUMMARY
+          if [ -z "$season" ] || [ -z "$week" ]; then
+            echo "could not read the season -- see the Database step above" | tee -a $GITHUB_STEP_SUMMARY
+            exit 0
+          fi
+          probe=$(curl -sS --max-time 60 "$HOST/api/draft?pool=0&day=$today&season=$season&week=$week") || probe='{}'
+          # open_day only exists in the build that carries the new rule,
+          # so its absence means the deploy has not landed rather than
+          # that nothing is open.
+          if ! echo "$probe" | jq -e 'has("open_day")' >/dev/null 2>&1; then
+            echo "OLD BUILD -- the opening rule is not deployed yet" | tee -a $GITHUB_STEP_SUMMARY
+            echo "$probe" | head -c 400; exit 0
+          fi
+          open=$(echo "$probe" | jq -r '.open_day // empty')
+          kick=$(echo "$probe" | jq -r '.open_kickoff // empty')
+          if [ -z "$open" ]; then
+            echo "NOTHING OPEN -- a slate is being played, or the schedule has no next day" \
+              | tee -a $GITHUB_STEP_SUMMARY
+            exit 0
+          fi
+          echo "open day: **$open**, first kickoff $kick" | tee -a $GITHUB_STEP_SUMMARY
+          # That day's own payload. Its week may not be this week near a
+          # boundary, so try the neighbours before believing "none".
+          for wk in "$week" "$((week+1))" "$((week-1))"; do
+            [ "$wk" -ge 1 ] || continue
+            day=$(curl -sS --max-time 90 "$HOST/api/draft?day=$open&season=$season&week=$wk") || day='{}'
+            st=$(echo "$day" | jq -r '.state // "none"')
+            [ "$st" = "none" ] || break
+          done
+          opens=$(echo "$day" | jq -r '.opens_at // empty')
+          pool=$(echo "$day" | jq -r '(.pool // []) | length')
+          local_open=$(TZ=America/New_York date -d "$opens" '+%A %b %-d, %H:%M' 2>/dev/null || echo "$opens")
+          echo "state: **$st**, pool: $pool players" | tee -a $GITHUB_STEP_SUMMARY
+          echo "opened: $local_open Eastern" | tee -a $GITHUB_STEP_SUMMARY
+          hhmm=$(TZ=America/New_York date -d "$opens" +%H:%M 2>/dev/null || echo "??")
+          [ "$hhmm" = "00:00" ] \
+            && echo "OPENS AT MIDNIGHT EASTERN - as intended" | tee -a $GITHUB_STEP_SUMMARY \
+            || echo "NOT MIDNIGHT EASTERN - it opens at $hhmm" | tee -a $GITHUB_STEP_SUMMARY
+          [ "$st" = "open" ] && [ "$pool" -gt 0 ] \
+            && echo "ENTERABLE NOW - $pool players to pick from" | tee -a $GITHUB_STEP_SUMMARY \
+            || echo "NOT ENTERABLE - state $st with $pool players" | tee -a $GITHUB_STEP_SUMMARY
+          # And the other half: the panel must render nothing on a day
+          # whose draft has not opened.
+          html=$(curl -sS --max-time 60 "$HOST/scores") || html=""
+          case "$html" in
+            *".sc-draft:empty"*) echo "the panel collapses on days with no draft" | tee -a $GITHUB_STEP_SUMMARY ;;
+            *) echo "MISSING - the empty-panel rule is not in the served page" | tee -a $GITHUB_STEP_SUMMARY ;;
+          esac
+          case "$html" in
+            *"dot draft"*) echo "the strip can mark the open day" | tee -a $GITHUB_STEP_SUMMARY ;;
+            *) echo "MISSING - the open-day marker is not in the served page" | tee -a $GITHUB_STEP_SUMMARY ;;
+          esac
+
       - name: Is the schedule loaded
         run: |
           echo "## Schedule" >> $GITHUB_STEP_SUMMARY
