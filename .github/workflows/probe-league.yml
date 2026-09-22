@@ -70,6 +70,13 @@ jobs:
           echo "--- league ---";  echo "$body" | jq -c '.league'
           echo "--- roster ---";  echo "$body" | jq -c '.roster'
           echo "--- verdict ---"; echo "$body" | jq -c '.verdict'
+          echo "--- standings, end to end ---"
+          echo "$body" | jq -c '.standings_error // {teams: .standings.teams,
+                                 playoff_total: .standings.playoff_pct_total,
+                                 title_total: .standings.title_pct_total}'
+          echo "--- every team, as the card would print it ---"
+          echo "$body" | jq -r '.standings.rows // [] | .[]
+            | "  \(.value_rank)  \(.owner // "?" | .[0:16])\t\(.record)\tpf \(.pf)\tcoach \(.coach_pct)%\tluck \(.luck)\tplayoff \((.odds.playoff_pct // "-"))%\ttitle \((.odds.title_pct // "-"))%"'
 
       - name: Why the depth chart is short
         run: |

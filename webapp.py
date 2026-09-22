@@ -17843,6 +17843,30 @@ def api_debug_league():
         "future_weeks_with_pairings": ahead,
         "schedule_is_published_ahead": bool(ahead),
     }
+    # End to end: the numbers the card actually prints, for a real
+    # league. Shapes being right is not the same as the maths being
+    # right, and this is the only place both can be checked at once.
+    try:
+        players = _players_or_empty()
+        users = {u["user_id"]: {"name": u.get("display_name", "?"), "avatar_url": None}
+                 for u in get_league_users(league_id)}
+        teams = build_league_teams(league_id, lg, players, users, None)
+        out["standings"] = {
+            "teams": len(teams),
+            "playoff_pct_total": round(sum((t.get("odds") or {}).get("playoff_pct", 0) for t in teams), 1),
+            "title_pct_total": round(sum((t.get("odds") or {}).get("title_pct", 0) for t in teams), 1),
+            "rows": [{
+                "owner": t.get("owner_name"), "record": f"{t.get('wins')}-{t.get('losses')}",
+                "pf": t.get("points_for"), "ppts": t.get("potential_points"),
+                "coach_pct": t.get("coach_pct"), "value_rank": t.get("value_rank"),
+                "value_vs_avg": t.get("value_vs_avg"), "points_rank": t.get("points_rank"),
+                "expected_wins": t.get("expected_wins"), "luck": t.get("luck"),
+                "age": t.get("avg_age"), "odds": t.get("odds"),
+            } for t in sorted(teams, key=lambda x: x.get("value_rank") or 99)],
+        }
+    except Exception as e:
+        app.logger.exception("standings probe failed")
+        out["standings_error"] = f"{type(e).__name__}: {e}"
     return jsonify(out)
 
 
