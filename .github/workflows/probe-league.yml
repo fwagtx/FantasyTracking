@@ -60,4 +60,9 @@ jobs:
           echo "$body" | jq -r '.weeks | to_entries[]
             | "| \(.key) | \(.value.rows // "-") | \(.value.pairings // "-") | \(.value.rosters_with_points // "-") |"' \
             >> $GITHUB_STEP_SUMMARY
-          echo "$body" | jq -c '.verdict'
+          # Also to stdout: the step summary is not readable from a
+          # tool that only gets the job log, and these two answers are
+          # the ones the maths is written against.
+          echo "--- league ---";  echo "$body" | jq -c '.league'
+          echo "--- roster ---";  echo "$body" | jq -c '.roster'
+          echo "--- verdict ---"; echo "$body" | jq -c '.verdict'
