@@ -15,6 +15,9 @@ on:
       league:
         description: "Sleeper league_id to inspect"
         required: true
+      team:
+        description: "NFL team abbreviation to check the depth chart of"
+        default: "NYG"
       site:
         description: "Which site to ask"
         default: "https://streakpros.com"
@@ -26,6 +29,7 @@ jobs:
       SITE_PASSWORD: ${{ secrets.SITE_PASSWORD }}
       HOST: ${{ github.event.inputs.site || 'https://streakpros.com' }}
       LEAGUE: ${{ github.event.inputs.league }}
+      TEAM: ${{ github.event.inputs.team || 'NYG' }}
     steps:
       - name: Ask production
         run: |
@@ -66,3 +70,29 @@ jobs:
           echo "--- league ---";  echo "$body" | jq -c '.league'
           echo "--- roster ---";  echo "$body" | jq -c '.roster'
           echo "--- verdict ---"; echo "$body" | jq -c '.verdict'
+
+      - name: Why the depth chart is short
+        run: |
+          if [ -z "$SITE_PASSWORD" ]; then
+            echo "::error::SITE_PASSWORD repository secret is not set."
+            exit 1
+          fi
+          body=$(curl -sS --fail-with-body --max-time 90 \
+                   -H "X-Sync-Secret: $SITE_PASSWORD" \
+                   "$HOST/api/debug-depth?team=$TEAM") || true
+          [ -n "$body" ] || body='{}'
+          if echo "$body" | tr -d ' ' | grep -q '"ok":false'; then
+            echo "SERVER SAID NO - $(echo "$body" | jq -r '.error // "no reason given"')" \
+              | tee -a $GITHUB_STEP_SUMMARY
+            exit 0
+          fi
+          echo "## $TEAM depth chart" >> $GITHUB_STEP_SUMMARY
+          echo '```json' >> $GITHUB_STEP_SUMMARY
+          echo "$body" | jq '{team, roster_size, with_slot, columns}' >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          echo "--- coverage ---"; echo "$body" | jq -c '{roster_size, with_slot}'
+          echo "--- by position (players / with a depth slot) ---"
+          echo "$body" | jq -r '.by_position | to_entries[]
+            | "  \(.key)\t\(.value.players)\t\(.value.with_slot)\tgroup=\(.value.group // "-")"'
+          echo "--- columns the chart produces ---"
+          echo "$body" | jq -c '.columns'

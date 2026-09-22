@@ -1869,6 +1869,20 @@ DEF_SLOT_GROUPS = {
 WR_VARIANTS = {"LWR", "RWR", "SWR"}
 
 
+def position_group(position):
+    """The depth-chart group a player's own position belongs to.
+
+    Sleeper labels a player DE, DT, CB or SS; the site groups them DL,
+    DL, DB, DB. This is that map in one direction, and it is what lets a
+    defender be placed when Sleeper has not given them a depth slot."""
+    pos = (position or "").strip().upper()
+    if not pos:
+        return None
+    if pos in SCORED_POSITIONS:
+        return pos
+    return IDP_POSITION_MAP.get(pos)
+
+
 def _depth_slot_base(slot):
     base = re.sub(r"\d+$", "", slot)
     if base in WR_VARIANTS:
@@ -1976,9 +1990,14 @@ def get_team_depth_chart(team, all_players):
         if pl.get("team") != team:
             continue
         slot = pl.get("depth_chart_position")
-        if not slot:
-            continue
-        base = _depth_slot_base(slot)
+        # THE BUG THIS EXISTS FOR: a missing depth slot dropped the
+        # player entirely, and Sleeper does not give one to every
+        # defender -- so a team could field a whole defensive line and
+        # the chart would show three offensive columns and nothing else.
+        # A player's own position places them perfectly well; all the
+        # slot adds is the order within the column, and not knowing the
+        # order is no reason to pretend they are not on the team.
+        base = _depth_slot_base(slot) if slot else position_group(pl.get("position"))
         # SCORED_POSITIONS, not POSITIONS: depth charts run on Sleeper's
         # own roster data, which covers defenders perfectly well. It's the
         # dynasty-value pages that can't include them.
@@ -1991,11 +2010,15 @@ def get_team_depth_chart(team, all_players):
             "photo": player_photo_url(sid),
             "base": base,
             "order": order if order is not None else 999,
+            # Sleeper's own idea of who matters, as the tiebreak. Without
+            # it a column of players who share the fallback order comes
+            # out in whatever order the dictionary happened to hold.
+            "rank": _safe_int(pl.get("search_rank"), 999999),
             "injury": _injury_badge(pl),
         })
     result = []
     for base in sorted(groups.keys(), key=depth_group_rank):
-        players = sorted(groups[base], key=lambda x: x["order"])
+        players = sorted(groups[base], key=lambda x: (x["order"], x["rank"], x["name"]))
         for i, pl in enumerate(players, start=1):
             pl["rank_label"] = f"{base}{i}"
         result.append({"slot": base, "base": base, "players": players})
@@ -6340,6 +6363,345 @@ def sleeper_avatar_url(avatar_id):
     return f"https://sleepercdn.com/avatars/thumbs/{avatar_id}" if avatar_id else None
 
 
+# --- Where each team actually stands, and where it finishes ------------
+#
+# Every number on a League Manager card comes from here. Three sources,
+# all of them real and all of them confirmed against a live league
+# before any of this was written (see /api/debug-league):
+#
+#   Sleeper's roster settings   points for, points against, and ppts --
+#                               the best score the roster COULD have put
+#                               up, which is what makes a coaching
+#                               figure possible at all.
+#   Sleeper's matchups          every week of the season, including the
+#                               weeks not yet played: the pairings are
+#                               published in advance, which is the only
+#                               reason a playoff simulation can be an
+#                               actual simulation rather than a formula
+#                               with a percent sign on it.
+#   FantasyCalc values          what the roster is worth, which is the
+#                               only read on a team that does not need
+#                               games to have happened yet.
+#
+# The odds are a Monte Carlo: play the rest of the real schedule a few
+# thousand times, seed the field, run the real bracket, count. Not a
+# closed form, because a fantasy season is not one -- the schedule is
+# unbalanced and the bracket has byes.
+
+SIM_RUNS = 2000
+# How many games before a team's own scoring outweighs what its roster
+# says it should score. Four is roughly where a fantasy team's average
+# starts beating its projection as a predictor.
+SIM_PRIOR_GAMES = 4
+# How far a roster's value moves its expected weekly score, as a share of
+# the league's weekly spread. The best roster in a league does not score
+# two standard deviations above the field every week -- football is
+# noisier than that -- so this is deliberately well under 1.
+SIM_VALUE_WEIGHT = 0.45
+SIM_MAX_Z = 2.5
+SIM_MIN_SD = 8.0                 # a freakishly tight fortnight is not certainty
+STANDINGS_TTL_S = 1800
+
+
+def sleeper_points(settings, key):
+    """A Sleeper score, which arrives as two integers.
+
+    `fpts: 209, fpts_decimal: 10` is 209.10 -- the fraction is in
+    hundredths, which the live data settles rather than convention: the
+    same league came back with a `_decimal` of 24, and a tenths reading
+    would make that 2.4 points."""
+    st = settings or {}
+    return round(_safe_int(st.get(key), 0) + _safe_int(st.get(key + "_decimal"), 0) / 100.0, 2)
+
+
+def league_season_matchups(league_id, through_week=18, cache={}):
+    """{week: [matchup rows]} for a whole season, played and not.
+
+    get_league_matchups caches for twenty seconds, which is right for a
+    board refreshing during games and useless for reading eighteen weeks
+    at once. Fetched in parallel and held for half an hour: a schedule
+    published in August does not move, and the week in progress is not
+    what any of this reads."""
+    key = (str(league_id), int(through_week))
+    now = time.time()
+    entry = cache.get(key)
+    if entry and now - entry["time"] < STANDINGS_TTL_S:
+        return entry["data"]
+
+    def one(wk):
+        try:
+            return wk, get_league_matchups(league_id, wk)
+        except Exception:
+            return wk, []
+    out = {}
+    weeks = list(range(1, int(through_week) + 1))
+    try:
+        with ThreadPoolExecutor(max_workers=6) as ex:
+            for wk, rows in ex.map(one, weeks):
+                out[wk] = rows
+    except Exception:
+        app.logger.exception("could not read the league's season")
+        return entry["data"] if entry else {}
+    cache[key] = {"data": out, "time": now}
+    _cache_trim(cache, CACHE_LIMIT_BOARDS)
+    return out
+
+
+def split_season(by_week, last_scored_week):
+    """(played, upcoming) from a season of matchup rows.
+
+    The boundary is the league's own last_scored_leg, not "does this week
+    have points on it". On a Sunday afternoon the week in progress has
+    points on it and is not over: counting it as played would feed half a
+    scoreline into the form estimate and delete a real week from the
+    schedule still to be simulated."""
+    last = _safe_int(last_scored_week, 0)
+    played, upcoming = {}, {}
+    for wk in sorted(by_week):
+        rows = by_week.get(wk) or []
+        if not rows:
+            continue
+        if wk <= last:
+            scored = {r["roster_id"]: float(r.get("points") or 0.0)
+                      for r in rows if r.get("roster_id") is not None}
+            if any(v > 0 for v in scored.values()):
+                played[wk] = scored
+            continue
+        pairs = {}
+        for r in rows:
+            mid, rid = r.get("matchup_id"), r.get("roster_id")
+            if mid is None or rid is None:
+                continue
+            pairs.setdefault(mid, []).append(rid)
+        got = [tuple(v) for v in pairs.values() if len(v) == 2]
+        if got:
+            upcoming[wk] = got
+    return played, upcoming
+
+
+def all_play_wins(played, roster_ids):
+    """{roster_id: wins against the whole league}.
+
+    The honest version of "have they been lucky". A team's record depends
+    on who the schedule handed them; how many of the other teams they
+    outscored each week does not. The gap between the two is the luck."""
+    n = len(roster_ids)
+    out = {r: 0.0 for r in roster_ids}
+    if n < 2:
+        return out
+    for _, by_rid in played.items():
+        vals = [(r, by_rid.get(r)) for r in roster_ids if by_rid.get(r) is not None]
+        if len(vals) < 2:
+            continue
+        for rid, pts in vals:
+            beaten = sum(1 for other, o in vals if other != rid and pts > o)
+            out[rid] += beaten / (len(vals) - 1)
+    return out
+
+
+def scoring_profile(played, roster_ids, value_z):
+    """{roster_id: (mean, sd)} for the weeks still to come, or None.
+
+    Two weeks of football is not a scoring average, so a team's own games
+    are blended with what its roster says it should score, weighted by
+    how many games there actually are. In week 2 the roster carries most
+    of it; by week 10 the results do. Everyone is given the league's
+    pooled weekly spread rather than their own -- a two-game standard
+    deviation is noise pretending to be a trait."""
+    scores = {r: [] for r in roster_ids}
+    for _, by_rid in played.items():
+        for rid, pts in by_rid.items():
+            if rid in scores and pts is not None:
+                scores[rid].append(float(pts))
+    flat = [p for v in scores.values() for p in v]
+    if len(flat) < 4:
+        return None
+    league_mean = sum(flat) / len(flat)
+    var = sum((p - league_mean) ** 2 for p in flat) / len(flat)
+    league_sd = max(var ** 0.5, SIM_MIN_SD)
+    means = {}
+    for rid in roster_ids:
+        got = scores.get(rid) or []
+        z = max(-SIM_MAX_Z, min(SIM_MAX_Z, value_z.get(rid, 0.0)))
+        prior = league_mean + SIM_VALUE_WEIGHT * league_sd * z
+        if got:
+            w = len(got) / (len(got) + SIM_PRIOR_GAMES)
+            mean = w * (sum(got) / len(got)) + (1 - w) * prior
+        else:
+            mean = prior
+        means[rid] = (mean, league_sd)
+    return {"means": means, "league_mean": round(league_mean, 2),
+            "league_sd": round(league_sd, 2),
+            "games": max((len(v) for v in scores.values()), default=0)}
+
+
+def _seed_order(size):
+    """Standard bracket order: 1 plays the lowest seed, 2 is kept apart."""
+    order = [1]
+    while len(order) < size:
+        m = len(order) * 2
+        order = [s for x in order for s in (x, m + 1 - x)]
+    return order
+
+
+def _run_bracket(seeds, draw):
+    """The champion, from seeds best-first. A field that is not a power of
+    two gives the top seeds byes, which is how every league does it."""
+    if not seeds:
+        return None
+    size = 1
+    while size < len(seeds):
+        size *= 2
+    slots = [seeds[i - 1] if i <= len(seeds) else None for i in _seed_order(size)]
+    while len(slots) > 1:
+        # One score per team per round, drawn before the round is played
+        # -- not once per comparison, which would let the same team turn
+        # up with two different scores in the same game.
+        scores = {r: draw(r) for r in slots if r is not None}
+        nxt = []
+        for i in range(0, len(slots), 2):
+            a, b = slots[i], slots[i + 1]
+            if a is None or b is None:
+                nxt.append(a if b is None else b)
+            else:
+                nxt.append(a if scores[a] >= scores[b] else b)
+        slots = nxt
+    return slots[0]
+
+
+def simulate_rest_of_season(teams, upcoming, profile, playoff_teams, runs=SIM_RUNS):
+    """{roster_id: {playoff_pct, title_pct, proj_wins, proj_seed}} or None.
+
+    Seeded from a fixed number on purpose. The same standings have to
+    give the same odds twice: a reader who refreshes and watches 88% turn
+    into 86% learns that the number is made up, whatever the maths behind
+    it was."""
+    if not profile or not teams:
+        return None
+    rids = [t["roster_id"] for t in teams]
+    means = profile["means"]
+    if any(r not in means for r in rids):
+        return None
+    rng = random.Random(0x5714)
+    gauss = rng.gauss
+    base_w = {t["roster_id"]: (t.get("wins") or 0) + 0.5 * (t.get("ties") or 0) for t in teams}
+    base_p = {t["roster_id"]: float(t.get("points_for") or 0.0) for t in teams}
+    weeks = sorted(upcoming)
+    n_field = int(playoff_teams or 0) or max(2, len(rids) // 2)
+    n_field = max(2, min(n_field, len(rids)))
+    made = {r: 0 for r in rids}
+    won = {r: 0 for r in rids}
+    wins_sum = {r: 0.0 for r in rids}
+    seed_sum = {r: 0 for r in rids}
+    for _ in range(runs):
+        w, p = dict(base_w), dict(base_p)
+        for wk in weeks:
+            s = {r: gauss(*means[r]) for r in rids}
+            for a, b in upcoming[wk]:
+                if a not in s or b not in s:
+                    continue
+                p[a] += s[a]; p[b] += s[b]
+                if s[a] >= s[b]:
+                    w[a] += 1
+                else:
+                    w[b] += 1
+        # Record first, points as the tiebreak: Sleeper's own default.
+        order = sorted(rids, key=lambda r: (-w[r], -p[r]))
+        for i, r in enumerate(order, 1):
+            seed_sum[r] += i
+            wins_sum[r] += w[r]
+        field = order[:n_field]
+        for r in field:
+            made[r] += 1
+        champ = _run_bracket(field, lambda r: gauss(*means[r]))
+        if champ is not None:
+            won[champ] += 1
+    return {r: {"playoff_pct": round(100.0 * made[r] / runs, 1),
+                "title_pct": round(100.0 * won[r] / runs, 1),
+                "proj_wins": round(wins_sum[r] / runs, 1),
+                "proj_seed": round(seed_sum[r] / runs, 1)} for r in rids}
+
+
+def value_weighted_age(positions, all_players, fc_players):
+    """The roster's age where the value is. A plain average counts the
+    28-year-old handcuff at the end of the bench the same as the franchise
+    quarterback, which is how a contending roster reads as old."""
+    num = den = 0.0
+    for pos in POSITIONS:
+        for sid, _ in (positions.get(pos) or []):
+            p = all_players.get(sid) or {}
+            age = compute_age_decimal(p.get("birth_date")) or p.get("age")
+            val = (fc_players.get(sid) or {}).get("value", 0) or 0
+            if age and val > 0:
+                num += float(age) * val
+                den += val
+    return round(num / den, 1) if den else None
+
+
+def attach_league_standings(league_id, league, teams):
+    """Hang every derived number off the teams already built.
+
+    Nothing here raises. These are the numbers that make the page
+    interesting, not the ones that make it work, and a league whose
+    history Sleeper will not hand over should still render its rosters."""
+    for t in teams:
+        t.setdefault("value_rank", None)
+        t.setdefault("odds", None)
+        t.setdefault("luck", None)
+    if not teams:
+        return teams
+    settings = (league or {}).get("settings") or {}
+    rids = [t["roster_id"] for t in teams]
+
+    totals = [t["total_value"] for t in teams]
+    mean_v = sum(totals) / len(totals) if totals else 0.0
+    sd_v = (sum((v - mean_v) ** 2 for v in totals) / len(totals)) ** 0.5 if totals else 0.0
+    for i, t in enumerate(sorted(teams, key=lambda x: -x["total_value"]), 1):
+        t["value_rank"] = i
+    for t in teams:
+        t["value_vs_avg"] = round(100.0 * (t["total_value"] - mean_v) / mean_v, 1) if mean_v else 0.0
+        t["value_z"] = round((t["total_value"] - mean_v) / sd_v, 3) if sd_v else 0.0
+        got, could = t.get("points_for") or 0.0, t.get("potential_points") or 0.0
+        t["coach_pct"] = round(100.0 * got / could, 1) if could > 0 else None
+        t["points_left"] = round(could - got, 2) if could > 0 else None
+
+    try:
+        by_week = league_season_matchups(league_id, 18)
+        played, upcoming = split_season(by_week, settings.get("last_scored_leg"))
+    except Exception:
+        app.logger.exception("could not read the season for league %s", league_id)
+        return teams
+
+    expected = all_play_wins(played, rids)
+    for t in teams:
+        ew = expected.get(t["roster_id"])
+        if played:
+            t["expected_wins"] = round(ew, 2)
+            t["luck"] = round((t.get("wins") or 0) - ew, 2)
+
+    for i, t in enumerate(sorted(teams, key=lambda x: -(x.get("points_for") or 0.0)), 1):
+        t["points_rank"] = i
+
+    try:
+        profile = scoring_profile(played, rids, {t["roster_id"]: t["value_z"] for t in teams})
+        odds = simulate_rest_of_season(teams, upcoming, profile, settings.get("playoff_teams"))
+    except Exception:
+        app.logger.exception("could not simulate league %s", league_id)
+        odds = None
+    if odds:
+        for t in teams:
+            t["odds"] = odds.get(t["roster_id"])
+        # How much of this is football that has happened, and how much is
+        # the roster standing in for it. The page says so rather than
+        # printing a week-2 number as if it were a week-12 one.
+        t0 = teams[0]
+        for t in teams:
+            t["odds_games"] = profile["games"]
+            t["odds_confidence"] = round(profile["games"] / (profile["games"] + SIM_PRIOR_GAMES), 2)
+        del t0
+    return teams
+
+
 def build_league_teams(league_id, league, all_players, league_users, user_id):
     with ThreadPoolExecutor(max_workers=2) as executor:
         fc_future = executor.submit(get_fantasycalc_values, league_num_qbs(league))
@@ -8637,12 +8999,16 @@ def league_detail():
             info = get_current_week_info()
             if unlocked:
                 ensure_schedule_synced(info["season"])
+            # A locked roster shows no badge at all. It used to keep the
+            # badge's place with a link to the plan, which is defensible
+            # once and absurd twenty-five times: a roster is a column of
+            # players, and a column of upsells down the side of it reads
+            # as broken rather than as an offer. Nothing is sold here.
+            if not unlocked:
+                return render_template_string(LEAGUE_DETAIL_HTML, detail=detail,
+                                              username=username, league_id=league_id)
             for col in detail["columns"].values():
                 for p in col["players"]:
-                    if not unlocked:
-                        # The badge's place is kept, as a link to the plan.
-                        p["grade"], p["grade_class"], p["grade_locked"] = None, None, True
-                        continue
                     grade = compute_matchup_grade(p["sleeper_id"], info["season"], info["week"])
                     p["grade"] = grade["grade"] if grade else None
                     p["grade_class"] = grade["grade_class"] if grade else None
@@ -17290,6 +17656,43 @@ def api_debug_sleeper():
         return jsonify({"requested_url": url, "error": str(e)})
 
 
+@app.route("/api/debug-depth")
+def api_debug_depth():
+    """Why a team's depth chart is missing columns.
+
+    The chart is built from Sleeper's depth_chart_position, and this
+    sandbox cannot ask Sleeper whether that field is actually populated
+    for defenders. This counts, per position, how many of a team's
+    players have one -- and then prints the columns the chart really
+    produces, so a fix can be confirmed rather than assumed.
+
+    ?team=NYG. Temporary.
+    """
+    if not _secret_ok():
+        return jsonify({"ok": False, "error": "unauthorized"}), 401
+    team = (request.args.get("team") or "").strip().upper()
+    if not team:
+        return jsonify({"ok": False, "error": "pass ?team=NYG"}), 400
+    players = _players_or_empty()
+    roster = {sid: p for sid, p in players.items()
+              if isinstance(p, dict) and p.get("team") == team}
+    by_pos = {}
+    for sid, p in roster.items():
+        pos = (p.get("position") or "?").upper()
+        row = by_pos.setdefault(pos, {"players": 0, "with_slot": 0, "group": position_group(pos)})
+        row["players"] += 1
+        if p.get("depth_chart_position"):
+            row["with_slot"] += 1
+    cols = get_team_depth_chart(team, players)
+    return jsonify({
+        "ok": True, "team": team, "roster_size": len(roster),
+        "with_slot": sum(v["with_slot"] for v in by_pos.values()),
+        "by_position": dict(sorted(by_pos.items())),
+        "columns": [{"slot": c["slot"], "players": len(c["players"]),
+                     "first": [pl["name"] for pl in c["players"][:3]]} for c in cols],
+    })
+
+
 @app.route("/api/debug-league")
 def api_debug_league():
     """What Sleeper actually returns for one league, so the standings
@@ -18778,6 +19181,36 @@ THEME_TOKENS = """
        one needs a ground like every other position; slate, clear of the
        eight hues above. */
     --pos-def:#5c6b7a;
+    /* Every position Sleeper actually labels a player with, aliased onto
+       the group colour above.
+
+       THE BUG THIS EXISTS FOR: these were named for the eight GROUPS a
+       roster is built from, while chips across the site build the
+       property name from the player's REAL position, lowercased. (Not
+       written out here: this stylesheet is rendered through Jinja, and
+       a pair of braces in a comment is still a pair of braces.)
+       Sleeper calls Brian Burns a DE, not a DL, so
+       `--pos-de` was asked for, did not exist, and the chip rendered
+       with no ground at all -- the same for every tackle, edge,
+       linebacker alignment, corner and safety in the league. Aliases
+       rather than new hues on purpose: a DE and a DT are one group
+       everywhere else on the site, and they should not become two
+       colours here. Defined once; each resolves through to whatever the
+       active theme set its group to. */
+    --pos-de:var(--pos-dl); --pos-dt:var(--pos-dl); --pos-nt:var(--pos-dl);
+    --pos-edge:var(--pos-dl);
+    --pos-olb:var(--pos-lb); --pos-ilb:var(--pos-lb); --pos-mlb:var(--pos-lb);
+    --pos-cb:var(--pos-db); --pos-s:var(--pos-db);
+    --pos-fs:var(--pos-db); --pos-ss:var(--pos-db);
+    --pos-dst:var(--pos-def); --pos-pk:var(--pos-k);
+    /* The rest of a roster. They score nothing and rank nowhere, but
+       they turn up on the injury board and on a player's own page, and
+       an unstyled chip is a bug wherever it appears. A fullback is a
+       back; the line gets a ground of its own rather than borrowing a
+       skill position's. */
+    --pos-fb:var(--pos-rb); --pos-ol:#6b7280; --pos-t:var(--pos-ol);
+    --pos-ot:var(--pos-ol); --pos-g:var(--pos-ol); --pos-og:var(--pos-ol);
+    --pos-c:var(--pos-ol); --pos-p:var(--pos-k); --pos-ls:var(--pos-ol);
     --shadow: 0 1px 2px rgba(0,0,0,0.2), 0 8px 24px -12px rgba(0,0,0,0.5);
     /* Which of the two accent inks below is legible on this ground. */
     --accent-ink: var(--accent-ink-dark);
@@ -19139,10 +19572,6 @@ BASE_STYLE = THEME_BOOT + """
   .grade-badge.grade-bp, .grade-badge.grade-b, .grade-badge.grade-bm{ background:var(--good-wash); color:var(--good); }
   .grade-badge.grade-cp, .grade-badge.grade-c, .grade-badge.grade-cm{ background:var(--warning-wash); color:var(--warning); }
   .grade-badge.grade-dp, .grade-badge.grade-d, .grade-badge.grade-dm, .grade-badge.grade-f{ background:var(--critical-wash); color:var(--critical); }
-  /* "Pro" is three characters where a grade is one or two, so it drops a
-     size to keep the column of badges the same visual weight. */
-  .grade-badge.grade-lock{ background:var(--paper-sunken); color:var(--ink-muted);
-                           text-decoration:none; font-size:0.85em; letter-spacing:0.03em; }
   /* The roster legend. Three groups side by side on a wide screen,
      stacked on a phone -- each with its own heading, so an item's
      meaning comes from the group it sits in rather than from its
@@ -20850,7 +21279,7 @@ LEAGUE_DETAIL_HTML = BASE_STYLE + make_header("league") + """
             <a class="pname" href="/player?sid={{ p.sleeper_id }}&numqbs={{ detail.num_qbs }}&u={{ username }}&ref={{ ('/league?league_id=' ~ league_id ~ '&roster_id=' ~ detail.roster_id ~ '&u=' ~ username)|urlencode }}">{{ p.name }}</a>
           </div>
           <span class="rank-pair">
-            {% if p.grade %}<span class="grade-badge grade-{{ p.grade_class }}">{{ p.grade }}</span>{% elif p.grade_locked %}<a class="grade-badge grade-lock" href="/plus" title="Matchup grades are a StreakPros+ feature">Pro</a>{% endif %}
+            {% if p.grade %}<span class="grade-badge grade-{{ p.grade_class }}">{{ p.grade }}</span>{% endif %}
             <span class="rank-plain">{{ p.position_rank or '\u2014' }}</span>
             <span class="rank-badge {{ p.tier }}">{{ p.overall_rank or '\u2014' }}</span>
           </span>
