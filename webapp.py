@@ -15970,6 +15970,23 @@ def draft_boosts(expected):
     return out
 
 
+def _draft_injury(p, espn_row):
+    """What the sheet prints beside a name: {label, tier, title}.
+
+    Healthy is a status too, and the one most of the pool has. Sleeper
+    leaves the field empty for a fit player, so it is spelled out here
+    rather than left blank -- a blank reads as "we do not know", which
+    is the one thing it never means.
+
+    IR carries the glyph label the depth chart draws; the sheet has room
+    for two letters and they are clearer than a cross."""
+    badge = _merged_injury(p, espn_row)
+    if not badge:
+        return {"label": "Healthy", "tier": "healthy", "title": "No designation"}
+    return {"label": "IR" if badge.get("is_ir") else badge["label"],
+            "tier": badge["tier"], "title": badge["title"]}
+
+
 def draft_pool(season, week, day, games, cache=_draft_pool_cache):
     """Every active player on a team playing that day, with their boost.
     Locks and live ratings are added by the caller; this part changes
@@ -15992,6 +16009,15 @@ def draft_pool(season, week, day, games, cache=_draft_pool_cache):
             stats[yr] = get_season_stats(yr)
         except Exception:
             stats[yr] = {}
+    # Designations for the sheet. ESPN's report leads and Sleeper's dump
+    # fills the rest in, exactly as the lineup does it -- Sleeper can be
+    # a day behind on a Friday downgrade, and a draft that is open all
+    # week has to show the call that is current, not the one that was.
+    try:
+        espn_inj = _espn_injury_by_sid()
+    except Exception:
+        app.logger.exception("could not read the injury report for the draft pool")
+        espn_inj = {}
     rows, expected = [], {}
     for sid, p in players.items():
         if not isinstance(p, dict):
@@ -16008,6 +16034,7 @@ def draft_pool(season, week, day, games, cache=_draft_pool_cache):
             "position": pos, "team": team, "opponent": opp, "event_id": g.get("id"),
             "photo": player_photo_url(sid), "logo": team_logo_url(team),
             "expected": expected[sid], "rank": _safe_int(p.get("search_rank"), 999999),
+            "injury": _draft_injury(p, espn_inj.get(sid)),
         })
     boosts = draft_boosts(expected)
     for r in rows:
@@ -21377,8 +21404,21 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + FEED_DAYS_JS + """
   .sc-draft-p:hover{ background:var(--sc-surface2); }
   .sc-draft-p img{ width:34px; height:34px; border-radius:50%; object-fit:cover; object-position:top; background:var(--sc-surface2); }
   .sc-draft-p .pn{ flex:1; min-width:0; }
-  .sc-draft-p .pn b{ font-size:14px; display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  .sc-draft-p .pn span{ font-size:12px; color:var(--sc-muted); }
+  .sc-draft-p .pn .nm{ display:flex; align-items:center; gap:6px; min-width:0; }
+  .sc-draft-p .pn b{ font-size:14px; display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; min-width:0; }
+  .sc-draft-p .pn .meta{ font-size:12px; color:var(--sc-muted); }
+  /* The designation, beside the name. Colour carries it before the
+     letters are read: green fit, amber a game-time call, orange leaning
+     out, red not playing, grey an administrative status. Same tiers and
+     the same tokens as the depth chart and the injury board, so one
+     designation never reads two ways on two pages. */
+  .sc-draft-p .inj{ flex:none; font-family:"IBM Plex Mono"; font-size:9.5px; font-weight:800;
+                    letter-spacing:0.02em; border-radius:5px; padding:1px 5px; line-height:1.6; }
+  .sc-draft-p .inj.healthy, .sc-draft-p .inj.probable{ background:var(--good-wash); color:var(--good); }
+  .sc-draft-p .inj.questionable{ background:var(--warning-wash); color:var(--warning); }
+  .sc-draft-p .inj.doubtful{ background:rgba(226,120,52,0.18); color:#e27834; }
+  .sc-draft-p .inj.out{ background:var(--critical-wash); color:var(--critical); }
+  .sc-draft-p .inj.admin{ background:var(--sc-surface2); color:var(--sc-muted); }
   .sc-draft-p .bst{ font-family:"IBM Plex Mono"; font-weight:700; color:var(--good); font-size:13px; }
   .sc-draft-p .ck{ width:22px; height:22px; border-radius:50%; border:2px solid var(--accent); flex:none; }
   .sc-draft-p.picked .ck{ background:var(--accent); }
@@ -22277,6 +22317,13 @@ const scServerTodayKey = {{ today_key|tojson }};
   let draft = null, draftDay = null, draftPicks = [], draftTimer = null, draftQ = '', draftBusy = false;
   function fmt2(v){ return v == null ? '' : (Math.round(v * 100) / 100).toFixed(2).replace(/\.?0+$/, ''); }
   function boostTxt(b){ return b ? '+' + (Math.round(b * 10) / 10).toFixed(1) + 'x' : ''; }
+  // The server decides what a designation is called and which tier it
+  // belongs to; this only paints it.
+  function injHtml(inj){
+    if (!inj || !inj.label) return '';
+    return '<span class="inj ' + esc(inj.tier || 'admin') + '" title="' + esc(inj.title || inj.label) + '">' +
+      esc(inj.label) + '</span>';
+  }
   function draftQuery(){
     const games = daysIndex[selectedDay] || [];
     if (!games.length) return null;
@@ -22380,7 +22427,8 @@ const scServerTodayKey = {{ today_key|tojson }};
     document.getElementById('scDraftList').innerHTML = rows.slice(0, 400).map(function(p){
       return '<div class="sc-draft-p' + (picked[p.sid] ? ' picked' : '') + (p.locked ? ' locked' : '') + '" data-sid="' + esc(p.sid) + '">' +
         '<img src="' + esc(p.photo || '') + '" alt="" loading="lazy" onerror="this.style.visibility=\\'hidden\\'">' +
-        '<span class="pn"><b>' + esc(p.name) + '</b><span>' + esc(p.team) + ' &middot; ' + esc(p.position) + (p.opponent ? ' &middot; vs ' + esc(p.opponent) : '') + (p.locked ? ' &middot; started' : '') + '</span></span>' +
+        '<span class="pn"><span class="nm"><b>' + esc(p.name) + '</b>' + injHtml(p.injury) + '</span>' +
+        '<span class="meta">' + esc(p.team) + ' &middot; ' + esc(p.position) + (p.opponent ? ' &middot; vs ' + esc(p.opponent) : '') + (p.locked ? ' &middot; started' : '') + '</span></span>' +
         '<span class="bst">' + boostTxt(p.boost) + '</span><span class="ck"></span></div>';
     }).join('') || '<div class="sc-feed-quiet">No players match.</div>';
     const n = draftPicks.filter(Boolean).length;
