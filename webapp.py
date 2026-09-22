@@ -15973,17 +15973,24 @@ def draft_boosts(expected):
 def _draft_injury(p, espn_row):
     """What the sheet prints beside a name: {label, tier, title}.
 
-    Healthy is a status too, and the one most of the pool has. Sleeper
+    The word, not the code. A badge reading "Q" belongs on a depth chart
+    where forty names share a column and every character costs; this
+    list has one player per row and room to say "Questionable", which
+    nobody has to have learned to read.
+
+    Active is a status too, and the one most of the pool has. Sleeper
     leaves the field empty for a fit player, so it is spelled out here
     rather than left blank -- a blank reads as "we do not know", which
     is the one thing it never means.
 
-    IR carries the glyph label the depth chart draws; the sheet has room
-    for two letters and they are clearer than a cross."""
+    The body part stays out of the line and goes on hover, so a row
+    stays one line whatever is wrong with the player."""
     badge = _merged_injury(p, espn_row)
     if not badge:
-        return {"label": "Healthy", "tier": "healthy", "title": "No designation"}
-    return {"label": "IR" if badge.get("is_ir") else badge["label"],
+        return {"label": "Active", "tier": "healthy", "title": "No designation"}
+    # _merged_injury folds the body part into the title with an em dash.
+    word = display_status(badge["title"].split(" \u2014 ")[0])
+    return {"label": "IR" if badge.get("is_ir") else word,
             "tier": badge["tier"], "title": badge["title"]}
 
 
@@ -21404,21 +21411,25 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + FEED_DAYS_JS + """
   .sc-draft-p:hover{ background:var(--sc-surface2); }
   .sc-draft-p img{ width:34px; height:34px; border-radius:50%; object-fit:cover; object-position:top; background:var(--sc-surface2); }
   .sc-draft-p .pn{ flex:1; min-width:0; }
-  .sc-draft-p .pn .nm{ display:flex; align-items:center; gap:6px; min-width:0; }
+  .sc-draft-p .pn .nm{ display:flex; align-items:baseline; gap:5px; min-width:0; }
   .sc-draft-p .pn b{ font-size:14px; display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; min-width:0; }
   .sc-draft-p .pn .meta{ font-size:12px; color:var(--sc-muted); }
-  /* The designation, beside the name. Colour carries it before the
-     letters are read: green fit, amber a game-time call, orange leaning
-     out, red not playing, grey an administrative status. Same tiers and
-     the same tokens as the depth chart and the injury board, so one
-     designation never reads two ways on two pages. */
-  .sc-draft-p .inj{ flex:none; font-family:"IBM Plex Mono"; font-size:9.5px; font-weight:800;
-                    letter-spacing:0.02em; border-radius:5px; padding:1px 5px; line-height:1.6; }
-  .sc-draft-p .inj.healthy, .sc-draft-p .inj.probable{ background:var(--good-wash); color:var(--good); }
-  .sc-draft-p .inj.questionable{ background:var(--warning-wash); color:var(--warning); }
-  .sc-draft-p .inj.doubtful{ background:rgba(226,120,52,0.18); color:#e27834; }
-  .sc-draft-p .inj.out{ background:var(--critical-wash); color:var(--critical); }
-  .sc-draft-p .inj.admin{ background:var(--sc-surface2); color:var(--sc-muted); }
+  /* The designation reads as part of the name line -- "Bijan Robinson .
+     Active" -- rather than as a badge pinned beside it. Colour carries
+     it before the word is read: green playing, amber a game-time call,
+     orange leaning out, red not playing, grey an administrative status.
+     Same tiers and the same tokens as the depth chart and the injury
+     board, so one designation never reads two ways on two pages.
+     flex:none, so a long name truncates before the status does: which
+     player it is you can usually guess, whether they are playing you
+     cannot. */
+  .sc-draft-p .pn .sep{ flex:none; color:var(--sc-muted); font-size:13px; }
+  .sc-draft-p .inj{ flex:none; font-size:13.5px; font-weight:600; white-space:nowrap; }
+  .sc-draft-p .inj.healthy, .sc-draft-p .inj.probable{ color:var(--good); }
+  .sc-draft-p .inj.questionable{ color:var(--warning); }
+  .sc-draft-p .inj.doubtful{ color:#e27834; }
+  .sc-draft-p .inj.out{ color:var(--critical); }
+  .sc-draft-p .inj.admin{ color:var(--sc-muted); }
   .sc-draft-p .bst{ font-family:"IBM Plex Mono"; font-weight:700; color:var(--good); font-size:13px; }
   .sc-draft-p .ck{ width:22px; height:22px; border-radius:50%; border:2px solid var(--accent); flex:none; }
   .sc-draft-p.picked .ck{ background:var(--accent); }
@@ -22321,8 +22332,8 @@ const scServerTodayKey = {{ today_key|tojson }};
   // belongs to; this only paints it.
   function injHtml(inj){
     if (!inj || !inj.label) return '';
-    return '<span class="inj ' + esc(inj.tier || 'admin') + '" title="' + esc(inj.title || inj.label) + '">' +
-      esc(inj.label) + '</span>';
+    return '<span class="sep">&middot;</span><span class="inj ' + esc(inj.tier || 'admin') +
+      '" title="' + esc(inj.title || inj.label) + '">' + esc(inj.label) + '</span>';
   }
   function draftQuery(){
     const games = daysIndex[selectedDay] || [];
