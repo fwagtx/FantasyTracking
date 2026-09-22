@@ -7080,7 +7080,12 @@ CENTRAL_TZ = ZoneInfo("America/Chicago")
 # gives up, and customer.subscription.deleted is the real end signal.
 MEMBER_STATUSES_WITH_ACCESS = ("active", "trialing", "past_due")
 STREAK_FREE_ROWS = 3
-FREE_LEAGUE_LIMIT = 1
+# There is no cap on synced leagues. Syncing costs an account and
+# nothing else: a reader with four leagues who can only track one has
+# no reason to sign up, and the leagues they sync are what makes every
+# other page theirs rather than generic. Signing up is the conversion
+# worth having here; the plan is sold on Streaks, grades and the
+# start/sit calls instead.
 
 
 def billing_missing():
@@ -7783,13 +7788,15 @@ def plus_cards():
         {"key": "free", "name": "Free", "featured": False, "price": "$0", "was": "", "per": "",
          "plan": None, "tagline": "Everything you need on game day.",
          "bullets": ["Live scores, game pages and standings", "Injuries, moves and birthdays",
-                     "Full rankings and Rating Draft with a free account", "Basic trade calculator", "One synced league"],
+                     "Full rankings and Rating Draft with a free account", "Basic trade calculator",
+                     "Sync every league you're in \u2014 no limit"],
          "cta": "", "fine": "No card required."},
         {"key": "monthly", "name": "Monthly", "featured": False, "price": PLAN_PRICES["monthly"],
          "was": "", "per": "per month", "plan": "monthly",
          "tagline": "The full toolkit, one month at a time.",
          "bullets": ["Streaks: every prop, every position, adjustable lines",
-                     "Matchup grades, on the page and in League Manager", "Unlimited synced leagues",
+                     "Matchup grades, on the page and in League Manager",
+                     "Start/sit and waiver calls for every league you sync",
                      "Everything we add to StreakPros+ next"],
          "cta": "Start Monthly", "fine": "Billed monthly through Stripe. Cancel anytime from Settings."},
         season,
@@ -8584,16 +8591,12 @@ def leagues_page():
             elif chosen_param:
                 valid_ids = {lg["league_id"] for lg in brief}
                 chosen_ids = [lid for lid in chosen_param if lid in valid_ids]
-                over_limit = (current_user.is_authenticated and not plus_unlocked()
-                              and len(chosen_ids) > FREE_LEAGUE_LIMIT)
-                if current_user.is_authenticated and not over_limit:
+                # However many they picked. The only thing that decides
+                # whether a selection survives the visit is whether there
+                # is an account to hang it on.
+                if current_user.is_authenticated:
                     set_synced_league_ids(current_user.id, chosen_ids)
-                if over_limit:
-                    error = ("Free accounts sync one league. StreakPros+ syncs all of them; "
-                             "the plans are under StreakPros+ in the menu.")
-                    picker = {"leagues": brief, "display_name": display_name,
-                              "preselected": set(chosen_ids), "default_all": False}
-                elif not chosen_ids:
+                if not chosen_ids:
                     error = "Pick at least one league to sync."
                     picker = {"leagues": brief, "display_name": display_name, "preselected": set(), "default_all": False}
                 else:
@@ -20633,7 +20636,10 @@ HOME_HTML = BASE_STYLE + make_header("league") + VOTE_MODAL_HTML + """
 <div class="panel">
   <p class="eyebrow">Choose leagues to sync</p>
   <h2>{{ picker.display_name }}'s leagues on Sleeper</h2>
-  <p class="muted" style="margin-top:6px;">We found {{ picker.leagues|length }} league{{ 's' if picker.leagues|length != 1 else '' }}. Pick the ones you want tracked here &mdash; you can add or remove leagues anytime.</p>
+  <p class="muted" style="margin-top:6px;">We found {{ picker.leagues|length }} league{{ 's' if picker.leagues|length != 1 else '' }}. Pick as many as you want &mdash; there is no limit, and you can add or remove leagues anytime.</p>
+  {% if not current_user.is_authenticated %}
+  <p class="muted" style="margin-top:6px;">Syncing is free, but it needs somewhere to live: <a href="/signup" style="color:var(--accent-ink);">create a free account</a> or <a href="/login" style="color:var(--accent-ink);">sign in</a> and your leagues are waiting next time. Without one you can look, but nothing is kept.</p>
+  {% endif %}
   <form method="get" action="/league-manager" id="leaguePickForm">
     <input type="hidden" name="u" value="{{ username }}">
     <input type="hidden" name="fmt" value="{{ fmt }}">
