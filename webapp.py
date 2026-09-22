@@ -15750,15 +15750,19 @@ def streak_player_page():
 # everyone who entered that day is ranked on it.
 #
 # A day is the NFL's calendar day (Eastern), so the same draft means the
-# same thing in Texas and in London. It opens the day before its first
-# kickoff. A game locks its players at kickoff; the other slots stay
-# open until their own games start. When every game is final the day
-# is a past result and its leaderboard stands.
+# same thing in Texas and in London. It opens at midnight Eastern on the
+# morning after the previous slate finished -- Monday night's game ends,
+# and Tuesday starts with Thursday's draft already open -- so there is
+# never an evening with nothing to enter. A game locks its players at
+# kickoff; the other slots stay open until their own games start. When
+# every game is final the day is a past result and its leaderboard
+# stands.
 
 DRAFT_SLOTS = (2.0, 1.8, 1.6, 1.4, 1.2)
 DRAFT_BOOST_MAX = 1.6
 DRAFT_BOOST_GAMES = 5            # games behind a player's expected rating
-DRAFT_OPENS_DAYS_BEFORE = 1
+DRAFT_OPENS_DAYS_BEFORE = 1      # fallback lead when the schedule cannot be read
+DRAFT_MAX_LEAD_DAYS = 4          # and never further ahead than this, whatever the gap
 DRAFT_LEADERBOARD_MAX = 200
 DRAFT_NAME = "Rating Draft"
 
@@ -15788,10 +15792,97 @@ def draft_day_of(card):
     return when.replace(tzinfo=timezone.utc).astimezone(NFL_TZ).date()
 
 
-def draft_opens_at(day):
-    """Midnight Eastern, the day before, as naive UTC."""
-    local = datetime(day.year, day.month, day.day, tzinfo=NFL_TZ) - timedelta(days=DRAFT_OPENS_DAYS_BEFORE)
+def draft_game_days(season, season_type=2, cache={}):
+    """[(Eastern date, first kickoff as naive UTC)] for a whole season.
+
+    Eastern, not UTC, because a draft is an NFL day: Sunday Night
+    Football kicks off at 00:20 UTC on the Monday and still belongs to
+    Sunday's slate. get_season_game_days() groups by the UTC date and so
+    cannot answer this -- a Saturday night game and the Sunday games
+    after it share one UTC date and would come back as a single day."""
+    season, season_type = _safe_int(season, int(SEASON)), _safe_int(season_type, 2)
+    key = (season, season_type)
+    now = time.time()
+    entry = cache.get(key)
+    if entry and now - entry["time"] < 3600:
+        return entry["data"]
+    if not DATABASE_URL:
+        return []
+    rows = []
+    conn = get_db()
+    try:
+        with conn.cursor() as cur:
+            cur.execute(
+                """SELECT (kickoff AT TIME ZONE 'UTC' AT TIME ZONE 'America/New_York')::date AS day,
+                          MIN(kickoff) AS first_kick
+                   FROM nfl_schedule
+                   WHERE season = %s AND season_type = %s AND kickoff IS NOT NULL
+                   GROUP BY 1 ORDER BY 1""",
+                (season, season_type),
+            )
+            rows = cur.fetchall()
+    except Exception:
+        app.logger.exception("could not read the season's game days")
+        rows = []
+    finally:
+        conn.close()
+    days = [(r["day"], r["first_kick"]) for r in rows if r.get("day") and r.get("first_kick")]
+    cache[key] = {"data": days, "time": now}
+    _cache_trim(cache, CACHE_LIMIT_BOARDS)
+    return days
+
+
+def draft_prev_game_day(day, season=None, season_type=2):
+    """The last NFL day with games before `day`, or None when the
+    schedule cannot say."""
+    if season is None:
+        return None
+    try:
+        earlier = [d for d, _ in draft_game_days(season, season_type) if d < day]
+    except Exception:
+        return None
+    return earlier[-1] if earlier else None
+
+
+def draft_opens_at(day, season=None, season_type=2):
+    """Midnight Eastern on the morning after the previous slate, as
+    naive UTC.
+
+    The point is that engagement never lapses: the moment Monday night
+    is over, Tuesday opens with Thursday's draft already live, and there
+    is exactly one draft to enter at any hour of the week.
+
+    Two guards. A gap longer than DRAFT_MAX_LEAD_DAYS -- the fortnight
+    before the Super Bowl, or an off-season -- would otherwise leave a
+    draft sitting open for weeks, so the lead is capped. And with no
+    schedule to read it falls back to the day before, which is what this
+    always used to do."""
+    prev = draft_prev_game_day(day, season, season_type)
+    if prev is None:
+        lead = DRAFT_OPENS_DAYS_BEFORE
+    else:
+        lead = min(DRAFT_MAX_LEAD_DAYS, max(0, (day - prev).days - 1))
+    local = datetime(day.year, day.month, day.day, tzinfo=NFL_TZ) - timedelta(days=lead)
     return _as_naive_utc(local)
+
+
+def draft_open_day(season, season_type=2, now=None):
+    """The one day whose draft is open to pick right now, with its first
+    kickoff: the next slate, if it has opened yet. None in the hours
+    between a kickoff and the next opening.
+
+    Only ever one, by construction -- every earlier day has already
+    started, and nothing past the next slate can have opened before it
+    did. That is what lets the day strip point at it."""
+    now = now or _draft_now()
+    for day, kick in draft_game_days(season, season_type):
+        kick = _as_naive_utc(kick)
+        if not kick or kick <= now:
+            continue
+        if draft_opens_at(day, season, season_type) <= now:
+            return day, kick
+        return None, None
+    return None, None
 
 
 def draft_game_locked(card, now=None):
@@ -15803,12 +15894,12 @@ def draft_game_locked(card, now=None):
     return bool(kick and kick <= (now or _draft_now()))
 
 
-def draft_state(day, games, now=None):
+def draft_state(day, games, now=None, season=None, season_type=2):
     """none / upcoming / open / live / final."""
     if not games:
         return "none"
     now = now or _draft_now()
-    if now < draft_opens_at(day):
+    if now < draft_opens_at(day, season, season_type):
         return "upcoming"
     if all(g.get("status") == "final" for g in games):
         return "final"
@@ -16027,9 +16118,15 @@ def build_draft_day(season, week, day, season_type=2, user_id=None, now=None, wi
     (with locks and live ratings), the reader's own picks, the board."""
     now = now or _draft_now()
     games = draft_day_games(season, week, day, season_type)
-    state = draft_state(day, games, now)
+    state = draft_state(day, games, now, season, season_type)
+    # Which day is open to pick right now, whichever day is being read.
+    # The scores page hangs a marker on that tab, so the draft you can
+    # still enter is findable from a slate that is already over.
+    open_day, open_kick = draft_open_day(season, season_type, now)
     out = {"name": DRAFT_NAME, "day": day.isoformat(), "season": season, "week": week,
-           "state": state, "opens_at": draft_opens_at(day).isoformat() + "Z",
+           "state": state, "opens_at": draft_opens_at(day, season, season_type).isoformat() + "Z",
+           "open_day": open_day.isoformat() if open_day else None,
+           "open_kickoff": _utc_isoformat(open_kick) if open_kick else None,
            "slots": list(DRAFT_SLOTS), "games": [_draft_card(g, now) for g in games],
            "pool": [], "mine": [None] * len(DRAFT_SLOTS), "board": [], "entries": 0, "my_rank": None}
     if state in ("none", "upcoming"):
@@ -16135,9 +16232,10 @@ def api_draft_save():
     season_type = _safe_int(body.get("seasontype"), info["season_type"])
     now = _draft_now()
     games = draft_day_games(season, week, day, season_type)
-    state = draft_state(day, games, now)
+    state = draft_state(day, games, now, season, season_type)
     if state not in ("open", "live"):
-        return jsonify({"ok": False, "error": {"none": "No games that day.", "upcoming": "This draft opens the day before the games.",
+        return jsonify({"ok": False, "error": {"none": "No games that day.",
+                                               "upcoming": "This draft has not opened yet.",
                                                "final": "This day is finished."}.get(state, "Closed.")}), 400
     pool = {r["sid"]: r for r in draft_pool(season, week, day, games)}
     locked_events = {g.get("id") for g in games if draft_game_locked(g, now)}
@@ -21029,6 +21127,10 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + FEED_DAYS_JS + """
     width:6px; height:6px; border-radius:50%; background:var(--sc-live);
   }
   .sc-day-tab .dot.done{ background:var(--sc-muted); opacity:0.55; }
+  /* The day whose Rating Draft is open. Only ever one tab at a time,
+     and never a tab that already carries a live or finished dot -- an
+     open draft is by definition a slate that has not kicked off. */
+  .sc-day-tab .dot.draft{ background:var(--accent); }
 
   .sc-month{ display:none; margin-top:16px; background:var(--sc-surface); border:1px solid var(--sc-line); border-radius:14px; padding:16px; }
   .sc-month.open{ display:block; }
@@ -21215,6 +21317,10 @@ SCORES_HTML = BASE_STYLE + make_header("scores") + FEED_DAYS_JS + """
   .sc-day:first-child{ border-top:none; }
   /* ---- Rating Draft ---- */
   .sc-draft{ margin-top:18px; }
+  /* Nothing to enter on this day means no heading, no card and no gap
+     where they would have been -- browse three weeks ahead and the
+     strip stays a strip. */
+  .sc-draft:empty{ display:none; margin-top:0; }
   .sc-draft-card{ border:1px solid var(--sc-line); border-radius:12px; background:var(--sc-surface); padding:14px 14px 12px; }
   .sc-draft-sub{ font-size:12.5px; color:var(--sc-muted); line-height:1.5; margin:0 0 12px; }
   .sc-draft-slots{ display:grid; grid-template-columns:repeat(5, 1fr); gap:8px; }
@@ -21723,6 +21829,15 @@ const scServerTodayKey = {{ today_key|tojson }};
     }
   }
 
+  // The local day key of whatever slate's Rating Draft is open, set by
+  // the draft loader below. Declared here because renderDayTabs draws it.
+  let draftTabKey = null;
+  function markDraftTab(key){
+    if (key === draftTabKey) return;
+    draftTabKey = key;
+    renderDayTabs();
+  }
+
   function renderDayTabs(){
     dayTabsEl.innerHTML = '';
     const keys = allDayKeys();
@@ -21744,7 +21859,8 @@ const scServerTodayKey = {{ today_key|tojson }};
       const wk = wkNum ? 'W' + wkNum + ' \u00b7 ' : '';
       const anyDone = games.some(function(g){ return g.status === 'final'; });
       btn.innerHTML =
-        (anyLive || anyDone ? '<span class="dot' + (anyLive ? '' : ' done') + '"></span>' : '') +
+        (anyLive || anyDone ? '<span class="dot' + (anyLive ? '' : ' done') + '"></span>'
+          : (key === draftTabKey ? '<span class="dot draft"></span>' : '')) +
         '<span class="wk">' + wk + d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) + '</span>' +
         '<span class="dow">' + d.toLocaleDateString(undefined, { weekday: 'short' }) + '</span>';
       btn.addEventListener('click', function(){ selectDay(key); });
@@ -22168,8 +22284,16 @@ const scServerTodayKey = {{ today_key|tojson }};
       draft = d; draftDay = d.day;
       if (!draftModalOpen()) draftPicks = (d.mine || []).map(function(x){ return x ? x.sid : null; });
       renderDraft();
+      markDraftTab(d.open_kickoff ? localDateKey(d.open_kickoff) : null);
       if (d.state === 'live') draftTimer = setTimeout(loadDraft, 30000);
       else if (d.state === 'open') draftTimer = setTimeout(loadDraft, 120000);
+      else if (d.state === 'upcoming'){
+        // Midnight is when these open, and a page left open on a Monday
+        // night should have Thursday's draft in it by morning without a
+        // reload. Only worth a timer when that moment is close.
+        const wait = new Date(d.opens_at).getTime() - Date.now();
+        if (wait > 0 && wait < 1800000) draftTimer = setTimeout(loadDraft, wait + 2000);
+      }
     }).catch(function(){});
   }
   function slotHtml(i, pick, opts){
@@ -22182,17 +22306,18 @@ const scServerTodayKey = {{ today_key|tojson }};
     return html + '</div>';
   }
   function draftStateLine(d){
-    if (d.state === 'upcoming'){
-      let when = ''; try { when = new Date(d.opens_at).toLocaleDateString(undefined, {weekday: 'long', month: 'short', day: 'numeric'}); } catch (e) {}
-      return 'Opens ' + when + '. Five picks from this day’s games, scored on their ratings.';
-    }
     if (d.state === 'open') return 'Pick five players from this day’s games. Lower-rated players carry bigger boosts. Locks game by game at kickoff.';
     if (d.state === 'live') return 'Live. Slots lock as their games kick off; the board moves with the ratings.';
     return 'Final. Past result for this day.';
   }
   function renderDraft(){
     const d = draft;
-    if (!d || d.state === 'none'){ draftEl.innerHTML = ''; return; }
+    // A draft that has not opened yet says nothing worth a whole card.
+    // It used to print "Opens Tuesday, Sep 22" on every future day in
+    // the strip, which cost a heading and a panel on each of them to
+    // tell you about something you could not do yet. The open one is
+    // always one tab away instead -- see markDraftTab.
+    if (!d || d.state === 'none' || d.state === 'upcoming'){ draftEl.innerHTML = ''; return; }
     const mine = d.mine || [];
     const scored = d.state === 'live' || d.state === 'final';
     let h = '<div class="sc-section-head"><h2>' + esc(d.name) + '</h2>' +
