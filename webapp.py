@@ -3739,16 +3739,24 @@ def extract_box_score(summary_json):
 def _full_name_index(all_players):
     """{(team, "baker mayfield"): sleeper_id} -- ESPN's box score gives
     full display names, unlike play text which gives "B.Mayfield", so
-    this is a separate index from _player_name_index."""
+    this is a separate index from _player_name_index.
+
+    There were two of these, written months apart for the same job and
+    both named this. Only the later one ever ran, and it dropped anyone
+    without a team -- so the (None, name) lookups the earlier one exists
+    to serve quietly missed every free agent. This is the union: keyed
+    by team where there is one, and always by name alone."""
     index = {}
     for sid, p in (all_players or {}).items():
-        first, last, team = p.get("first_name"), p.get("last_name"), p.get("team")
-        if not first or not last:
+        if not isinstance(p, dict):
             continue
-        key = f"{first} {last}".lower()
+        name = f"{p.get('first_name', '')} {p.get('last_name', '')}".strip().lower()
+        if not name:
+            continue
+        team = p.get("team")
         if team:
-            index.setdefault((team, key), sid)
-        index.setdefault((None, key), sid)
+            index.setdefault((team, name), sid)
+        index.setdefault((None, name), sid)
     return index
 
 
@@ -6535,8 +6543,15 @@ def scoring_profile(played, roster_ids, value_z):
             "games": max((len(v) for v in scores.values()), default=0)}
 
 
-def _seed_order(size):
-    """Standard bracket order: 1 plays the lowest seed, 2 is kept apart."""
+def _bracket_seed_order(size):
+    """Standard bracket order: 1 plays the lowest seed, 2 is kept apart.
+
+    Named for the bracket, not just "seed order": this file already has
+    a _seed_order, for NFL divisional seeding, defined further down. The
+    first draft of this collided with it -- and because the collision
+    only bit inside a try/except, every playoff number in the league
+    came back None instead of raising. Silence is the worst failure
+    mode there is."""
     order = [1]
     while len(order) < size:
         m = len(order) * 2
@@ -6552,7 +6567,7 @@ def _run_bracket(seeds, draw):
     size = 1
     while size < len(seeds):
         size *= 2
-    slots = [seeds[i - 1] if i <= len(seeds) else None for i in _seed_order(size)]
+    slots = [seeds[i - 1] if i <= len(seeds) else None for i in _bracket_seed_order(size)]
     while len(slots) > 1:
         # One score per team per round, drawn before the round is played
         # -- not once per comparison, which would let the same team turn
@@ -6723,6 +6738,16 @@ def build_league_teams(league_id, league, all_players, league_users, user_id):
             "owner_name": owner.get("name", "Unknown"),
             "avatar_url": owner.get("avatar_url"),
             "wins": settings.get("wins", 0), "losses": settings.get("losses", 0),
+            "ties": settings.get("ties", 0),
+            # Sleeper's own season totals. points_for is what the luck
+            # figure and the scoring model are built on; potential_points
+            # is the best score the roster COULD have put up, which is
+            # the only honest way to say how well it has been managed.
+            "points_for": sleeper_points(settings, "fpts"),
+            "points_against": sleeper_points(settings, "fpts_against"),
+            "potential_points": sleeper_points(settings, "ppts"),
+            "total_value": sum(pos_value.values()),
+            "avg_age": value_weighted_age(positions, all_players, fc_players),
             "is_you": r.get("owner_id") == user_id,
             "positions": positions,
             "pos_value": pos_value,
@@ -6751,7 +6776,7 @@ def build_league_teams(league_id, league, all_players, league_users, user_id):
     stdev_value = (sum((v - mean_value) ** 2 for v in totals) / len(totals)) ** 0.5 if totals else 0
     for t in team_infos:
         t["power_tier"], t["power_tier_class"] = team_power_tier(sum(t["pos_value"].values()), mean_value, stdev_value)
-    return team_infos
+    return attach_league_standings(league_id, league, team_infos)
 
 
 def get_leagues_brief(username):
@@ -6811,10 +6836,79 @@ def build_leagues_for_user(username, league_ids=None, cache={}):
             futures = [executor.submit(_build_one_league, league, all_players, user_id) for league in leagues]
             result = [f.result() for f in futures]
 
-    data = {"display_name": display_name, "user_id": user_id, "leagues": result}
+    rank_leagues_by_strength(result)
+    data = {"display_name": display_name, "user_id": user_id, "leagues": result,
+            "standings": portfolio_standings(result)}
     cache[key] = {"data": data, "time": now}
     _cache_trim(cache, CACHE_LIMIT_PER_USER)
     return data
+
+
+def rank_leagues_by_strength(leagues):
+    """Order the cards best team first, and number them.
+
+    Ranked on where the roster sits IN ITS OWN LEAGUE, not on what it is
+    worth. Raw value does not travel: a twelve-team superflex league and
+    a ten-team one-quarterback league price the same player differently,
+    and the team with the bigger number is often the one in the richer
+    league rather than the better team.
+
+    Deliberately not ranked on playoff odds. Those fold in the schedule
+    and two weeks of results -- they answer "how is it going", which is
+    worth showing and is a different question from "which of these teams
+    is best"."""
+    for lg in leagues:
+        me = lg.get("my_team") or {}
+        n = len(lg.get("teams") or [])
+        rank = me.get("value_rank")
+        lg["my_strength"] = (1.0 - (rank - 1) / (n - 1)) if (rank and n > 1) else 0.0
+        lg["my_value_rank"] = rank
+        lg["league_size"] = n
+    leagues.sort(key=lambda lg: (-lg["my_strength"], lg["league_name"].lower()))
+    for i, lg in enumerate(leagues, 1):
+        lg["my_league_rank"] = i
+    return leagues
+
+
+def portfolio_standings(leagues):
+    """The line across the top: every team you manage, added up.
+
+    Expected berths and titles are sums of probabilities, which is what
+    an expected count is -- 4.9 of 8 is not a prediction that you make
+    four, it is the average across every way the rest of the season
+    could go."""
+    wins = losses = ties = 0
+    berths = titles = 0.0
+    have_odds = False
+    best = None
+    for lg in leagues:
+        me = lg.get("my_team")
+        if not me:
+            continue
+        wins += me.get("wins") or 0
+        losses += me.get("losses") or 0
+        ties += me.get("ties") or 0
+        odds = me.get("odds") or {}
+        if odds:
+            have_odds = True
+            berths += (odds.get("playoff_pct") or 0) / 100.0
+            titles += (odds.get("title_pct") or 0) / 100.0
+        if best is None:
+            best = lg
+    decided = wins + losses + ties
+    return {
+        "leagues": sum(1 for lg in leagues if lg.get("my_team")),
+        "record": f"{wins}-{losses}" + (f"-{ties}" if ties else ""),
+        "win_pct": round((wins + 0.5 * ties) / decided, 3) if decided else None,
+        "above_500": sum(1 for lg in leagues
+                         if (lg.get("my_team") or {}).get("wins", 0) > (lg.get("my_team") or {}).get("losses", 0)),
+        "value": sum((lg.get("my_team") or {}).get("total_value", 0) for lg in leagues),
+        "berths": round(berths, 1) if have_odds else None,
+        "titles": round(titles, 2) if have_odds else None,
+        "best_league": best["league_name"] if best else None,
+        "best_rank": (best.get("my_value_rank") if best else None),
+        "best_size": (best.get("league_size") if best else None),
+    }
 
 
 def get_my_players_by_team(username, league_ids):
@@ -13633,20 +13727,6 @@ def record_injury_changes(statuses):
     return changed
 
 
-def _full_name_index(all_players):
-    """{(team, "gabriel rubio"): sleeper_id} -- ESPN writes full display
-    names, Sleeper keys by id, and this is the join between them."""
-    index = {}
-    for sid, p in (all_players or {}).items():
-        if not isinstance(p, dict) or not p.get("team"):
-            continue
-        name = f"{p.get('first_name','')} {p.get('last_name','')}".strip().lower()
-        if name:
-            index.setdefault((p["team"], name), sid)
-            index.setdefault((None, name), sid)
-    return index
-
-
 def build_injury_statuses():
     """{sleeper_id: designation} for every rostered player.
 
@@ -19502,6 +19582,41 @@ BASE_STYLE = THEME_BOOT + """
   .legend-box{ background:var(--paper-sunken); border-radius:10px; padding:12px 14px; font-size:12.5px; color:var(--ink-secondary); margin-top:14px; line-height:1.6; }
   .legend-box b{ color:var(--ink); }
 
+  /* ---- League Manager: where each team stands ---- */
+  /* The card's place in the reader's own list, best team first. */
+  .lg-rank{ font-family:"IBM Plex Mono"; font-size:13px; font-weight:700; color:var(--ink-muted);
+            background:var(--paper-sunken); border-radius:6px; padding:1px 8px; margin-right:9px;
+            vertical-align:2px; }
+  .lg-rank.top{ color:var(--accent-ink); }
+  /* Four numbers, in the order the questions get asked: how good is the
+     roster, does it make the playoffs, does it win, and has the
+     schedule been fair to it. */
+  .lg-stats{ display:grid; grid-template-columns:repeat(4, 1fr); gap:9px; margin-top:14px; }
+  .lg-st{ background:var(--paper-sunken); border-radius:10px; padding:9px 12px; min-width:0; }
+  .lg-st .k{ font-size:10px; letter-spacing:0.08em; text-transform:uppercase; color:var(--ink-muted); font-weight:700; }
+  .lg-st .v{ font-family:"Big Shoulders Display"; font-size:25px; font-weight:800; line-height:1; margin-top:2px; }
+  .lg-st .v small{ font-family:"Source Sans 3"; font-size:13px; font-weight:600; color:var(--ink-muted); }
+  .lg-st .v.good{ color:var(--good); } .lg-st .v.warn{ color:var(--warning); } .lg-st .v.bad{ color:var(--critical); }
+  .lg-st .n{ font-size:11px; color:var(--ink-secondary); margin-top:3px; line-height:1.35; }
+  .lg-st .meter{ height:5px; border-radius:99px; background:var(--paper); overflow:hidden; margin-top:6px; }
+  .lg-st .meter i{ display:block; height:100%; border-radius:99px; }
+  /* The value bar above says how the roster is SPLIT; this says where
+     each part of it ranks. The bar alone never answered "is my running
+     back room any good", only "how much of me is running backs". */
+  .lg-pos{ display:grid; grid-template-columns:repeat(4, 1fr); gap:9px; margin-top:11px; }
+  .lg-p{ background:var(--paper-sunken); border-radius:10px; padding:8px 11px; border-left:3px solid var(--ink-muted); }
+  .lg-p .p{ font-size:11px; font-weight:800; letter-spacing:0.06em; color:var(--ink-muted); }
+  .lg-p .r{ font-family:"Big Shoulders Display"; font-size:20px; font-weight:800; line-height:1; margin-top:1px; }
+  .lg-p .w{ font-size:10.5px; color:var(--ink-muted); }
+  .lg-p.p-qb{ border-left-color:var(--pos-qb); } .lg-p.p-qb .p{ color:var(--pos-qb); }
+  .lg-p.p-rb{ border-left-color:var(--pos-rb); } .lg-p.p-rb .p{ color:var(--pos-rb); }
+  .lg-p.p-wr{ border-left-color:var(--pos-wr); } .lg-p.p-wr .p{ color:var(--pos-wr); }
+  .lg-p.p-te{ border-left-color:var(--pos-te); } .lg-p.p-te .p{ color:var(--pos-te); }
+  @media (max-width:620px){
+    .lg-stats{ grid-template-columns:repeat(2, 1fr); }
+    .lg-pos{ grid-template-columns:repeat(4, 1fr); gap:6px; }
+    .lg-p{ padding:7px 8px; }
+  }
   .team-row{ display:flex; align-items:center; gap:12px; padding:12px 4px; border-top:1px solid var(--line); }
   .team-row:first-of-type{ border-top:none; }
   .team-avatar{ width:28px; height:28px; border-radius:50%; object-fit:cover; flex:none; background:var(--paper-sunken); }
@@ -20996,11 +21111,45 @@ HOME_HTML = BASE_STYLE + make_header("league") + VOTE_MODAL_HTML + """
   {% for lg in leagues %}
   {% set t = lg.my_team %}
   <div class="panel">
-    <div style="display:flex; justify-content:space-between; align-items:baseline;">
-      <h2>{{ lg.league_name }}</h2>
+    <div style="display:flex; justify-content:space-between; align-items:baseline; gap:12px;">
+      <h2><span class="lg-rank{{ ' top' if lg.my_league_rank == 1 else '' }}">{{ lg.my_league_rank }}</span>{{ lg.league_name }}</h2>
       <span class="sample-tag">Live data</span>
     </div>
     {% if t %}
+    {% if t.value_rank %}
+    <div class="lg-stats">
+      <div class="lg-st">
+        <div class="k">Roster value</div>
+        <div class="v">{{ t.value_rank|ordinal }}<small> of {{ lg.league_size }}</small></div>
+        <div class="meter"><i style="width:{{ (100 * (1 - (t.value_rank - 1) / (lg.league_size - 1)))|round|int if lg.league_size > 1 else 100 }}%;
+             background:{{ 'var(--good)' if t.value_rank * 2 <= lg.league_size else 'var(--critical)' }};"></i></div>
+        <div class="n">{{ '%+.0f'|format(t.value_vs_avg) }}% against the league average</div>
+      </div>
+      {% if t.odds %}
+      <div class="lg-st">
+        <div class="k">Playoff odds</div>
+        <div class="v {{ 'good' if t.odds.playoff_pct >= 70 else ('warn' if t.odds.playoff_pct >= 35 else 'bad') }}">{{ t.odds.playoff_pct|round|int }}%</div>
+        <div class="meter"><i style="width:{{ t.odds.playoff_pct|round|int }}%;
+             background:{{ 'var(--good)' if t.odds.playoff_pct >= 70 else ('var(--warning)' if t.odds.playoff_pct >= 35 else 'var(--critical)') }};"></i></div>
+        <div class="n">projected {{ t.odds.proj_wins }} wins, {{ t.odds.proj_seed|round|int|ordinal }} seed</div>
+      </div>
+      <div class="lg-st">
+        <div class="k">Title odds</div>
+        <div class="v">{{ t.odds.title_pct|round(1) }}%</div>
+        <div class="meter"><i style="width:{{ [t.odds.title_pct * 3, 100]|min|round|int }}%; background:var(--accent-ink);"></i></div>
+        <div class="n">{{ lg.league_size }} teams in the running</div>
+      </div>
+      {% endif %}
+      {% if t.luck is not none %}
+      <div class="lg-st">
+        <div class="k">Luck</div>
+        <div class="v {{ 'good' if t.luck > 0.5 else ('bad' if t.luck < -0.5 else '') }}">{{ '%+.1f'|format(t.luck) }}</div>
+        <div class="n">{{ t.points_rank|ordinal }} in points, {{ t.wins }}&ndash;{{ t.losses }} on the field</div>
+        {% if t.coach_pct %}<div class="n">{{ t.coach_pct|round|int }}% of your ceiling started</div>{% endif %}
+      </div>
+      {% endif %}
+    </div>
+    {% endif %}
     <div class="team-row">
       <img class="team-avatar" src="{{ t.avatar_url or 'data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2232%22 height=%2232%22><rect width=%2232%22 height=%2232%22 rx=%2216%22 fill=%22%23444841%22/></svg>' }}" alt="" onerror="this.style.visibility='hidden'">
       <span class="team-name">{{ t.owner_name }}</span>
@@ -21010,18 +21159,61 @@ HOME_HTML = BASE_STYLE + make_header("league") + VOTE_MODAL_HTML + """
         {% for pos, pct, rank, intensity in t.bar %}<span class="seg seg-{{ pos.lower() }}" style="width:{{ pct }}%"><span class="rank-bubble" style="background:rgba(0,0,0,{{ (0.15 + intensity*0.45)|round(2) }});">{{ rank }}</span></span>{% endfor %}
       </div>
     </div>
-    <div class="legend-row">
-      <span class="legend-item"><i style="background:var(--pos-qb)"></i>QB</span>
-      <span class="legend-item"><i style="background:var(--pos-rb)"></i>RB</span>
-      <span class="legend-item"><i style="background:var(--pos-wr)"></i>WR</span>
-      <span class="legend-item"><i style="background:var(--pos-te)"></i>TE</span>
+    <div class="lg-pos">
+      {% for pos, pct, rank, intensity in t.bar %}
+      <div class="lg-p p-{{ pos.lower() }}">
+        <div class="p">{{ pos }}</div>
+        <div class="r">{{ rank|ordinal }}</div>
+        <div class="w">of {{ lg.league_size }}</div>
+      </div>
+      {% endfor %}
     </div>
+    {% if t.avg_age %}
+    <p class="muted" style="margin-top:10px; font-size:12.5px;">Average age {{ t.avg_age }}, weighted by value.
+      {% if t.odds_games is defined and t.odds_games is not none and t.odds_games < 4 %}
+      Odds are still leaning on the roster rather than results &mdash; {{ t.odds_games }} week{{ 's' if t.odds_games != 1 else '' }} played.
+      {% endif %}</p>
+    {% endif %}
     {% else %}
     <p class="muted" style="margin-top:14px;">Your roster wasn't found in this league.</p>
     {% endif %}
     <a class="btn view-league-btn" href="/league?league_id={{ lg.league_id }}&u={{ username }}">View League &rarr;</a>
   </div>
   {% endfor %}
+{% endmacro %}
+
+{% macro standings_panel(st) %}
+<div class="panel">
+  <div style="display:flex; justify-content:space-between; align-items:baseline; gap:12px; flex-wrap:wrap;">
+    <div>
+      <p class="eyebrow">Every team you manage</p>
+      <h2 style="font-size:20px;">Best to worst</h2>
+    </div>
+    <span class="muted" style="font-size:12.5px;">Ranked on each roster&rsquo;s place in its own league &mdash; not on what it is worth</span>
+  </div>
+  <div class="lg-stats" style="margin-top:14px;">
+    <div class="lg-st">
+      <div class="k">Combined</div>
+      <div class="v">{{ st.record }}</div>
+      <div class="n">{% if st.win_pct is not none %}{{ '%.3f'|format(st.win_pct)|replace('0.', '.') }} &middot; {% endif %}{{ st.above_500 }} above .500</div>
+    </div>
+    <div class="lg-st">
+      <div class="k">Best team</div>
+      <div class="v" style="font-size:17px; line-height:1.15;">{{ st.best_league|truncate(22, true, '&hellip;'|safe) }}</div>
+      <div class="n">{% if st.best_rank %}{{ st.best_rank|ordinal }} of {{ st.best_size }} by roster value{% endif %}</div>
+    </div>
+    <div class="lg-st">
+      <div class="k">Playoff berths</div>
+      <div class="v">{% if st.berths is not none %}{{ st.berths }}{% else %}&ndash;{% endif %}</div>
+      <div class="n">expected, of {{ st.leagues }}</div>
+    </div>
+    <div class="lg-st">
+      <div class="k">Titles</div>
+      <div class="v">{% if st.titles is not none %}{{ st.titles }}{% else %}&ndash;{% endif %}</div>
+      <div class="n">expected, of {{ st.leagues }}</div>
+    </div>
+  </div>
+</div>
 {% endmacro %}
 
 {% macro portfolio_panel(portfolio, fmt, username) %}
@@ -21204,6 +21396,7 @@ HOME_HTML = BASE_STYLE + make_header("league") + VOTE_MODAL_HTML + """
 
   {% if current_user.is_authenticated %}
     {% if portfolio %}{{ portfolio_panel(portfolio, fmt, username) }}{% endif %}
+    {% if data.standings and data.standings.leagues %}{{ standings_panel(data.standings) }}{% endif %}
     {{ league_panels(data.leagues, username) }}
   {% else %}
   <div class="gate-wrap">
