@@ -1,7 +1,8 @@
 name: Promo Intro
 
-# Rebuild a promo Release's clips so each opens on its own cover
-# (scripts/promo_intro.py), and publish them, with the covers, as a new
+# Rebuild a promo Release's clips: each plays on a device -- vertical on a
+# phone, desktop on a laptop (scripts/promo_device.py) -- and opens on its
+# own cover (scripts/promo_intro.py). Published, with the covers, as a new
 # Release. A new tag, not the same one: a post already scheduled keeps
 # pointing at the clip it was given until it is updated to the new URL.
 # The weekly workflow does this itself; this is for Releases made before.
@@ -37,10 +38,11 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -eu
-          mkdir -p src out
+          mkdir -p src dev out
           gh release download "${{ github.event.inputs.src }}" --repo "$GITHUB_REPOSITORY" \
             --pattern '*.mp4' --pattern '*.jpg' --dir src
-          python3 scripts/promo_intro.py src src out | tee -a $GITHUB_STEP_SUMMARY
+          python3 scripts/promo_device.py src dev | tee -a $GITHUB_STEP_SUMMARY
+          python3 scripts/promo_intro.py dev src out | tee -a $GITHUB_STEP_SUMMARY
           cp src/*.jpg out/
       - name: Publish
         env:
