@@ -2,7 +2,8 @@ name: Promo Intro
 
 # Rebuild a promo Release's clips: each plays on a device -- vertical on a
 # phone, desktop on a laptop (scripts/promo_device.py) -- and opens on its
-# own cover (scripts/promo_intro.py). Published, with the covers, as a new
+# own cover (scripts/promo_intro.py), with a soundtrack
+# (scripts/promo_audio.py). Published, with the covers, as a new
 # Release. A new tag, not the same one: a post already scheduled keeps
 # pointing at the clip it was given until it is updated to the new URL.
 # The weekly workflow does this itself; this is for Releases made before.
@@ -43,6 +44,7 @@ jobs:
             --pattern '*.mp4' --pattern '*.jpg' --dir src
           python3 scripts/promo_device.py src dev | tee -a $GITHUB_STEP_SUMMARY
           python3 scripts/promo_intro.py dev src out | tee -a $GITHUB_STEP_SUMMARY
+          python3 scripts/promo_audio.py out | tee -a $GITHUB_STEP_SUMMARY
           cp src/*.jpg out/
       - name: Publish
         env:

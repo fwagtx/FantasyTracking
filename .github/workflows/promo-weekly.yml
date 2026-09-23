@@ -131,12 +131,14 @@ jobs:
       # After the checks, which judge the recording itself: each clip is
       # put on a phone (scripts/promo_device.py), then opens on its cover,
       # so an account that ignores custom covers (personal TikTok,
-      # unverified YouTube) still shows it.
-      - name: Put each clip on a phone, opening on its cover
+      # unverified YouTube) still shows it, then gets its soundtrack
+      # (scripts/promo_audio.py: made here, so nothing can be claimed or muted).
+      - name: Put each clip on a phone, opening on its cover, with music
         if: env.SKIP != '1'
         run: |
           python3 scripts/promo_device.py out out | tee -a $GITHUB_STEP_SUMMARY
           python3 scripts/promo_intro.py out covers out | tee -a $GITHUB_STEP_SUMMARY
+          python3 scripts/promo_audio.py out | tee -a $GITHUB_STEP_SUMMARY
 
       - name: Publish as a release
         if: env.SKIP != '1'
