@@ -95,6 +95,8 @@ jobs:
           v_player_cin bengals-player-profile
           v_player_bal ravens-player-profile
           v_player_sf 49ers-player-profile
+          v_team_min minnesota-vikings-team-page
+          v_st_nfc_playoffs nfc-playoff-picture
           MAP
           ls -la out
           test "$(ls out/*.mp4 | wc -l)" -ge 3

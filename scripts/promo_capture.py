@@ -1478,8 +1478,43 @@ async def scene_v_player_sf(s):
     await s.hold(1100)
     await s.card(logo=True, url="streakpros.com", ms=2200)
 
+async def scene_v_team_min(s):
+    """Vikings team page. Replaces the redraft calculator, whose mode has
+    no quick-add picks to build a trade from."""
+    await s.mark(True)
+    await s.clock(15000)
+    await s.visit("/team?abbr=MIN", wait_for=".tm-head", ms=900)
+    await s.card(kicker="Minnesota", big="THE VIKINGS<em>on one page</em>",
+                 sub="Results, roster, dynasty values", ms=1700)
+    await s.uncard(300)
+    await s.spotlight(".tm-panel", ms=1800)
+    await s.unspotlight()
+    await s.tap(".tm-tab[data-panel='players']", index=0, after=1600)
+    await s.glide(480, 1200)
+    await s.hold(1100)
+    await s.card(logo=True, url="streakpros.com", ms=2200)
+
+
+async def scene_v_st_nfc_playoffs(s):
+    """NFC playoff picture. Replaces birthdays, which is empty on any day
+    nobody has one."""
+    await s.mark(True)
+    await s.clock(15000)
+    await s.visit("/standings?view=playoffs&conf=NFC", wait_for=".st-row", ms=900)
+    await s.card(kicker="NFC playoff picture", big="WHO'S IN<em>in the NFC</em>",
+                 sub="Seeds, byes and the bubble", ms=1700)
+    await s.uncard(300)
+    await s.spotlight(".st-row", "The one seed", ms=1800)
+    await s.unspotlight()
+    await s.glide(420, 1200)
+    await s.hold(1100)
+    await s.card(logo=True, url="streakpros.com", ms=2200)
+
+
 SCENES = {
     "montage": scene_montage,
+    "v_team_min": scene_v_team_min,
+    "v_st_nfc_playoffs": scene_v_st_nfc_playoffs,
     "v_perf_qb": scene_v_perf_qb,
     "v_perf_rb": scene_v_perf_rb,
     "v_perf_wr": scene_v_perf_wr,
