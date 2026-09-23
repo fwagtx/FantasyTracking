@@ -34,6 +34,16 @@ from promo_plan import catalog  # noqa: E402
 # scene: (kicker, headline, payoff) -- headline + payoff read as one line of thought.
 HOOKS = {
     "montage": ("Fantasy football", "Every number", "that matters"),
+    "f_streak_player": ("Player streaks", "One player", "every prop"),
+    "f_perf_detail": ("Performance breakdown", "One game", "taken apart"),
+    "f_kdst": ("Kickers & D/ST", "The spots", "you stream"),
+    "f_play": ("Play by play", "Every play", "its own page"),
+    "v_feed_bdays": ("Birthdays", "Who's a year", "older?"),
+    "v_trade_redraft": ("Redraft trades", "Win now", "values"),
+    "v_perf_worst": ("Performances", "The rough", "ones"),
+    "matchups": ("Matchup grades", "Every starter", "graded"),
+    "waivers": ("Waiver targets", "Who to grab", "in your league"),
+    "suggested": ("Trade ideas", "What it takes", "to get him"),
     "tour": ("Full walkthrough", "Every tool.", "One free site."),
     "streaks": ("Prop hit rates", "Who keeps", "hitting?"),
     "tradecalc": ("Trade calculator", "Is your trade", "fair?"),

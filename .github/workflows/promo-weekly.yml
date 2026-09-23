@@ -35,6 +35,10 @@ jobs:
           python-version: "3.12"
 
       - name: Plan the week
+        env:
+          # Members-only features join the rotation once there is a
+          # promo account to film them signed in (see promo_plan.catalog).
+          PROMO_LOGIN: ${{ secrets.PROMO_EMAIL != '' && '1' || '' }}
         run: |
           set -eu
           if [ -n "${{ github.event.inputs.start }}" ]; then

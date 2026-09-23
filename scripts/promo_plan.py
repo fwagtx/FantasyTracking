@@ -74,7 +74,14 @@ def catalog():
     p = [x for x in teams if x["scene"].startswith("p_")]
     p = p[16:] + p[:16]
     order = [x for pair in zip(t, p) for x in pair]
-    return {"feature": c["features"], "variant": c["variants"], "team": order}
+    # Members-only features (matchups, waivers, trade ideas) join the
+    # feature rotation only when the recorder can sign in -- PROMO_LOGIN
+    # is set by the workflow when the PROMO_EMAIL secret exists.
+    features = list(c["features"])
+    if os.environ.get("PROMO_LOGIN"):
+        features += c.get("members", [])
+    return {"feature": features, "variant": c["variants"], "team": order,
+            "members": c.get("members", [])}
 
 
 def media_url(tag, slug):

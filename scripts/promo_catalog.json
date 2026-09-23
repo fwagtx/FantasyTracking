@@ -1,6 +1,111 @@
 {
  "features": [
   {
+   "scene": "f_streak_player",
+   "slug": "nfl-player-prop-streaks",
+   "caption": "One player. Every prop. Every game. 🔥\n\nPick any player and see every prop he's had this season — each game plotted against the line, with his hit rate and how he ranks.\n\nstreakpros.com",
+   "yt": "Every Prop for One NFL Player, Game by Game #shorts",
+   "tt": "One player, every prop",
+   "tags": [
+    "player props",
+    "nfl props",
+    "prop bets",
+    "hit rate",
+    "fantasy football"
+   ],
+   "hashtags": "#streakpros #playerprops #nflprops #nfl #fantasyfootball"
+  },
+  {
+   "scene": "tradecalc",
+   "slug": "dynasty-trade-calculator",
+   "caption": "Is your trade actually fair? ⚖️\n\nPut both sides in and StreakPros prices them on real market value — for your league's format: superflex or 1QB, PPR or not, dynasty or redraft.\n\nTry it free at streakpros.com",
+   "yt": "Is Your Dynasty Trade Fair? Free Trade Calculator #shorts",
+   "tt": "Is your trade actually fair?",
+   "tags": [
+    "dynasty trade calculator",
+    "fantasy football trade",
+    "superflex",
+    "dynasty fantasy football",
+    "trade value"
+   ],
+   "hashtags": "#streakpros #dynastyfantasyfootball #fantasyfootball #tradecalculator #superflex #nfl"
+  },
+  {
+   "scene": "f_perf_detail",
+   "slug": "nfl-performance-breakdown",
+   "caption": "Any NFL performance, taken apart. 📊\n\nThe rating, how it was measured, quarter by quarter, and every play that built it.\n\nstreakpros.com",
+   "yt": "Any NFL Game Broken Down, Quarter by Quarter #shorts",
+   "tt": "One game, taken apart",
+   "tags": [
+    "nfl player ratings",
+    "nfl stats",
+    "fantasy football",
+    "player grades",
+    "nfl"
+   ],
+   "hashtags": "#streakpros #nfl #fantasyfootball #nflstats #nflfantasy"
+  },
+  {
+   "scene": "rankings",
+   "slug": "dynasty-fantasy-football-rankings",
+   "caption": "Who gained dynasty value this week — and who lost it? 📈\n\nStreakPros dynasty rankings show the 7-day movement on every player, so you spot the risers before your leaguemates do.\n\nstreakpros.com",
+   "yt": "Who Moved in Dynasty Rankings This Week? #shorts",
+   "tt": "Who moved in dynasty this week?",
+   "tags": [
+    "dynasty rankings",
+    "dynasty fantasy football",
+    "fantasy football rankings",
+    "trade value",
+    "nfl"
+   ],
+   "hashtags": "#streakpros #dynastyfantasyfootball #dynastyrankings #fantasyfootball #nfl #dynastyleague"
+  },
+  {
+   "scene": "f_kdst",
+   "slug": "kicker-and-defense-rankings",
+   "caption": "Kickers and defenses matter too. 🦵🛡️\n\nEvery kicker and every D/ST, scored and ranked — the two spots everyone streams.\n\nstreakpros.com",
+   "yt": "Kicker and D/ST Rankings for Fantasy Football #shorts",
+   "tt": "Every kicker and defense, ranked",
+   "tags": [
+    "kicker rankings",
+    "defense rankings",
+    "dst rankings",
+    "fantasy football",
+    "streaming"
+   ],
+   "hashtags": "#streakpros #fantasyfootball #kickers #dst #nfl"
+  },
+  {
+   "scene": "sbc",
+   "slug": "start-bench-cut-fantasy-football",
+   "caption": "Start, bench or cut? 🤔\n\nThree players. One of each. Every vote on StreakPros feeds the community rankings — so the values come from managers, not one writer's opinion.\n\nDrop your pick in the comments, then cast yours at streakpros.com 👇",
+   "yt": "Start, Bench or Cut? You Decide #shorts",
+   "tt": "Start, bench or cut?",
+   "tags": [
+    "start bench cut",
+    "fantasy football",
+    "dynasty fantasy football",
+    "fantasy football rankings",
+    "nfl"
+   ],
+   "hashtags": "#streakpros #fantasyfootball #startbenchcut #dynastyfantasyfootball #nfl #fantasyfootballcommunity"
+  },
+  {
+   "scene": "f_play",
+   "slug": "nfl-play-by-play",
+   "caption": "Every play gets its own page. 🏈\n\nDown, distance, where it happened on the field, and how much it swung the game.\n\nstreakpros.com",
+   "yt": "Every NFL Play on Its Own Page #shorts",
+   "tt": "Every play, on its own page",
+   "tags": [
+    "nfl play by play",
+    "nfl",
+    "win probability",
+    "nfl stats",
+    "football"
+   ],
+   "hashtags": "#streakpros #nfl #football #nflstats #fantasyfootball"
+  },
+  {
    "scene": "montage",
    "slug": "streakpros-fantasy-football-tools",
    "caption": "Every fantasy football number that matters, in one site. 🏈\n\n📺 Live NFL scores, every game\n🔥 Prop hit rates — who keeps clearing the line\n📈 Dynasty rankings with weekly value movement\n⚖️ A trade calculator priced to your league's real settings\n\nFree to start at streakpros.com",
@@ -31,21 +136,6 @@
    "hashtags": "#streakpros #fantasyfootball #playerprops #nfl #nflprops #fantasyfootballtips"
   },
   {
-   "scene": "tradecalc",
-   "slug": "dynasty-trade-calculator",
-   "caption": "Is your trade actually fair? ⚖️\n\nPut both sides in and StreakPros prices them on real market value — for your league's format: superflex or 1QB, PPR or not, dynasty or redraft.\n\nTry it free at streakpros.com",
-   "yt": "Is Your Dynasty Trade Fair? Free Trade Calculator #shorts",
-   "tt": "Is your trade actually fair?",
-   "tags": [
-    "dynasty trade calculator",
-    "fantasy football trade",
-    "superflex",
-    "dynasty fantasy football",
-    "trade value"
-   ],
-   "hashtags": "#streakpros #dynastyfantasyfootball #fantasyfootball #tradecalculator #superflex #nfl"
-  },
-  {
    "scene": "newsfeed",
    "slug": "nfl-injury-report",
    "caption": "Before you lock your lineup 🚑\n\nEvery NFL injury designation and roster move in one feed, updated all day. Tap any player for his full profile.\n\nstreakpros.com",
@@ -74,36 +164,6 @@
     "player grades"
    ],
    "hashtags": "#streakpros #nfl #fantasyfootball #nflstats #fantasyfootballtips #nflfantasy"
-  },
-  {
-   "scene": "rankings",
-   "slug": "dynasty-fantasy-football-rankings",
-   "caption": "Who gained dynasty value this week — and who lost it? 📈\n\nStreakPros dynasty rankings show the 7-day movement on every player, so you spot the risers before your leaguemates do.\n\nstreakpros.com",
-   "yt": "Who Moved in Dynasty Rankings This Week? #shorts",
-   "tt": "Who moved in dynasty this week?",
-   "tags": [
-    "dynasty rankings",
-    "dynasty fantasy football",
-    "fantasy football rankings",
-    "trade value",
-    "nfl"
-   ],
-   "hashtags": "#streakpros #dynastyfantasyfootball #dynastyrankings #fantasyfootball #nfl #dynastyleague"
-  },
-  {
-   "scene": "sbc",
-   "slug": "start-bench-cut-fantasy-football",
-   "caption": "Start, bench or cut? 🤔\n\nThree players. One of each. Every vote on StreakPros feeds the community rankings — so the values come from managers, not one writer's opinion.\n\nDrop your pick in the comments, then cast yours at streakpros.com 👇",
-   "yt": "Start, Bench or Cut? You Decide #shorts",
-   "tt": "Start, bench or cut?",
-   "tags": [
-    "start bench cut",
-    "fantasy football",
-    "dynasty fantasy football",
-    "fantasy football rankings",
-    "nfl"
-   ],
-   "hashtags": "#streakpros #fantasyfootball #startbenchcut #dynastyfantasyfootball #nfl #fantasyfootballcommunity"
   },
   {
    "scene": "gameday",
@@ -436,6 +496,98 @@
     "football"
    ],
    "hashtags": "#streakpros #nfl #nfldraft #football #nflstandings"
+  },
+  {
+   "scene": "v_feed_bdays",
+   "slug": "nfl-player-birthdays",
+   "caption": "Who's a year older this week? 🎂\n\nEvery NFL player birthday since the season opened — yes, we track that too.\n\nstreakpros.com",
+   "yt": "NFL Player Birthdays This Week #shorts",
+   "tt": "Who's a year older?",
+   "tags": [
+    "nfl birthdays",
+    "nfl players",
+    "nfl",
+    "football",
+    "fantasy football"
+   ],
+   "hashtags": "#streakpros #nfl #football #nflbirthdays #fantasyfootball"
+  },
+  {
+   "scene": "v_trade_redraft",
+   "slug": "redraft-trade-calculator",
+   "caption": "Not in dynasty? The trade calculator does redraft too. ⚖️\n\nThis-season values only — who helps you win now.\n\nstreakpros.com",
+   "yt": "Redraft Trade Calculator, Free #shorts",
+   "tt": "Redraft trade values",
+   "tags": [
+    "redraft trade calculator",
+    "fantasy football trade",
+    "trade value",
+    "fantasy football",
+    "nfl"
+   ],
+   "hashtags": "#streakpros #fantasyfootball #tradecalculator #redraft #nfl"
+  },
+  {
+   "scene": "v_perf_worst",
+   "slug": "nfl-worst-games-of-the-season",
+   "caption": "The rough ones. 😬\n\nThe lowest-rated games of the season, scored against the position — the flip side of the leaderboard.\n\nstreakpros.com",
+   "yt": "The Worst NFL Games of the Season, Rated #shorts",
+   "tt": "The rough ones",
+   "tags": [
+    "nfl stats",
+    "worst games",
+    "player ratings",
+    "fantasy football",
+    "nfl"
+   ],
+   "hashtags": "#streakpros #nfl #fantasyfootball #nflstats #football"
+  }
+ ],
+ "members": [
+  {
+   "scene": "matchups",
+   "slug": "fantasy-matchup-grades",
+   "caption": "Every starter in your lineup, graded. ✅\n\nMatchup, form, injuries and value — with the one sentence that explains each grade.\n\nstreakpros.com",
+   "yt": "Every Starter in Your Lineup, Graded #shorts",
+   "tt": "Every starter, graded",
+   "tags": [
+    "start sit",
+    "fantasy football matchups",
+    "lineup help",
+    "fantasy football",
+    "nfl"
+   ],
+   "hashtags": "#streakpros #fantasyfootball #startorsit #nfl #fantasyfootballadvice"
+  },
+  {
+   "scene": "waivers",
+   "slug": "fantasy-waiver-targets",
+   "caption": "Who to grab off waivers — in YOUR league. 📈\n\nThe best free agents your leaguemates left on the wire, ranked.\n\nstreakpros.com",
+   "yt": "Waiver Targets for Your Fantasy League #shorts",
+   "tt": "Waiver targets, your league",
+   "tags": [
+    "waiver wire",
+    "fantasy football waivers",
+    "pickups",
+    "fantasy football",
+    "nfl"
+   ],
+   "hashtags": "#streakpros #waiverwire #fantasyfootball #nfl #fantasyfootballadvice"
+  },
+  {
+   "scene": "suggested",
+   "slug": "fantasy-trade-suggestions",
+   "caption": "Want a player? Here's what it'll take. 🤝\n\nTrade offers built from your actual roster and league settings.\n\nstreakpros.com",
+   "yt": "What It Takes to Trade for Any Player #shorts",
+   "tt": "What it takes to get him",
+   "tags": [
+    "fantasy football trades",
+    "trade suggestions",
+    "dynasty fantasy football",
+    "fantasy football",
+    "nfl"
+   ],
+   "hashtags": "#streakpros #fantasyfootball #dynastyfantasyfootball #fantasytrades #nfl"
   }
  ]
 }

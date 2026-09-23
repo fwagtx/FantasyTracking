@@ -1572,7 +1572,104 @@ async def scene_v_st_nfc_playoffs(s):
     await s.card(logo=True, url="streakpros.com", ms=2200)
 
 
+# One feature per clip, for the pages the other scenes only pass through
+# (or not at all). Each is reached the way a visitor reaches it -- from
+# the board it belongs to -- so the clip never opens on a hand-picked id
+# that could be stale by the time it records.
+
+async def open_one_performance(s):
+    """From the season board into its top performance."""
+    await s.visit("/performances?scope=season", wait_for=".pl-row-item", ms=700)
+    await s.tap("a[href^='/performance?']", index=0, after=1900)
+
+
+async def scene_f_perf_detail(s):
+    """One game, taken apart: the score, what made it, every play."""
+    await s.mark(True)
+    await s.clock(18000)
+    await open_one_performance(s)
+    await s.card(kicker="Performance breakdown", big="ONE GAME<em>taken apart</em>",
+                 sub="The score, and exactly what made it", ms=1700)
+    await s.uncard(300)
+    if await s.has(".pf-scores", timeout=800):
+        await s.spotlight(".pf-scores", "Rated against the position", ms=1600)
+        await s.unspotlight()
+    if await s.has("#pfQtrs", timeout=800):
+        await s.point("#pfQtrs")
+        await s.spotlight("#pfQtrs", "Quarter by quarter", ms=1700)
+        await s.unspotlight()
+    if await s.has("#pfFeed", timeout=800):
+        await s.point("#pfFeed")
+        await s.spotlight(".pf-feed-row", "Every play he was in", ms=1600)
+        await s.unspotlight()
+    await s.hold(900)
+    await s.card(logo=True, url="streakpros.com", ms=2200)
+
+
+async def scene_f_play(s):
+    """Any play, on its own page: the situation, the field, the swing."""
+    await s.mark(True)
+    await s.clock(17000)
+    await open_one_performance(s)
+    await s.point("#pfFeed")
+    await s.card(kicker="Play by play", big="EVERY PLAY<em>on its own page</em>",
+                 sub="Down, distance, field and the swing", ms=1700)
+    await s.uncard(300)
+    await s.tap(".pf-feed-row[data-href]", index=0, after=1900, force=True)
+    if await s.has(".pd-field", timeout=1500):
+        await s.spotlight(".pd-field", "Where it happened", ms=1700)
+        await s.unspotlight()
+    await s.glide(360, 1200)
+    await s.hold(1200)
+    await s.card(logo=True, url="streakpros.com", ms=2200)
+
+
+async def scene_f_kdst(s):
+    """Kickers and defences, scored and ranked like everyone else."""
+    await s.mark(True)
+    await s.clock(16000)
+    await s.visit("/rankings?pos=K", wait_for=".rk-page", ms=900)
+    await s.card(kicker="Kickers & D/ST", big="EVERY KICKER<em>and defense</em>",
+                 sub="Scored and ranked, week by week", ms=1700)
+    await s.uncard(300)
+    await s.glide(300, 1100)
+    await s.hold(900)
+    await s.visit("/rankings?pos=DEF", wait_for=".rk-page", ms=900)
+    await s.glide(300, 1100)
+    await s.hold(1100)
+    await s.card(logo=True, url="streakpros.com", ms=2200)
+
+
+async def scene_f_streak_player(s):
+    """One player, every prop, every game against the line."""
+    await s.mark(True)
+    await s.clock(17000)
+    await s.visit("/streaks", wait_for=".sk-item", ms=700)
+    await s.tap("a.sk-item", index=0, after=1900)
+    await s.card(kicker="Player streaks", big="ONE PLAYER<em>every prop</em>",
+                 sub="Every game, against the line", ms=1700)
+    await s.uncard(300)
+    if await s.has("#spPlot", timeout=1200):
+        await s.spotlight("#spPlot", "Every game, hit or miss", ms=1800)
+        await s.unspotlight()
+    if await s.has(".sp-facts", timeout=600):
+        await s.spotlight(".sp-facts", ms=1400)
+        await s.unspotlight()
+    await s.glide(380, 1200)
+    await s.hold(1100)
+    await s.card(logo=True, url="streakpros.com", ms=2200)
+
+
+# Members-only pages. Signed out, their scenes go around the gate to a
+# public page -- fine for a demo, wrong for a clip named after the
+# feature -- so for these a diversion fails the recording instead.
+MEMBERS_ONLY = {"matchups", "waivers", "suggested"}
+
 SCENES = {
+    "f_perf_detail": scene_f_perf_detail,
+    "f_play": scene_f_play,
+    "f_kdst": scene_f_kdst,
+    "f_streak_player": scene_f_streak_player,
     "montage": scene_montage,
     "v_team_min": scene_v_team_min,
     "v_team_gb": scene_v_team_gb,
@@ -1832,6 +1929,8 @@ def main():
             print(f"  - {d}", file=sys.stderr)
         print("  the clip is clean, but it does not show that feature.",
               file=sys.stderr)
+        if a.scene in MEMBERS_ONLY:
+            MISSED.append(f"{a.scene} is members-only and was not filmed signed in")
     if MISSED:
         print(f"\n{len(MISSED)} beat(s) did not land:", file=sys.stderr)
         for m in MISSED:
