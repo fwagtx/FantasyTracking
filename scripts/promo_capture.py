@@ -1746,6 +1746,69 @@ async def record(base, scene, shape, out_dir, email=None, password=None):
     return final
 
 
+# Every team, and a starter from every team, as its own clip -- the
+# weekly promo run rotates through these so three posts a day do not
+# repeat a video for weeks. Same beats as the hand-written team and
+# player clips above, one factory each instead of 64 copies.
+TEAMS = {
+    "ARI": "Arizona Cardinals", "ATL": "Atlanta Falcons", "BAL": "Baltimore Ravens",
+    "BUF": "Buffalo Bills", "CAR": "Carolina Panthers", "CHI": "Chicago Bears",
+    "CIN": "Cincinnati Bengals", "CLE": "Cleveland Browns", "DAL": "Dallas Cowboys",
+    "DEN": "Denver Broncos", "DET": "Detroit Lions", "GB": "Green Bay Packers",
+    "HOU": "Houston Texans", "IND": "Indianapolis Colts", "JAX": "Jacksonville Jaguars",
+    "KC": "Kansas City Chiefs", "LAC": "Los Angeles Chargers", "LAR": "Los Angeles Rams",
+    "LV": "Las Vegas Raiders", "MIA": "Miami Dolphins", "MIN": "Minnesota Vikings",
+    "NE": "New England Patriots", "NO": "New Orleans Saints", "NYG": "New York Giants",
+    "NYJ": "New York Jets", "PHI": "Philadelphia Eagles", "PIT": "Pittsburgh Steelers",
+    "SEA": "Seattle Seahawks", "SF": "San Francisco 49ers", "TB": "Tampa Bay Buccaneers",
+    "TEN": "Tennessee Titans", "WAS": "Washington Commanders",
+}
+
+
+def team_scene(abbr):
+    city, nick = TEAMS[abbr].rsplit(" ", 1)
+
+    async def scene(s):
+        await s.mark(True)
+        await s.clock(15000)
+        await s.visit(f"/team?abbr={abbr}", wait_for=".tm-head", ms=900)
+        await s.card(kicker=city, big=f"THE {nick.upper()}<em>on one page</em>",
+                     sub="Results, roster, dynasty values", ms=1700)
+        await s.uncard(300)
+        await s.spotlight(".tm-panel", ms=1800)
+        await s.unspotlight()
+        await s.tap(".tm-tab[data-panel='players']", index=0, after=1600)
+        await s.glide(480, 1200)
+        await s.hold(1100)
+        await s.card(logo=True, url="streakpros.com", ms=2200)
+    scene.__doc__ = f"{TEAMS[abbr]} team page."
+    return scene
+
+
+def player_scene(abbr):
+    async def scene(s):
+        await s.mark(True)
+        await s.clock(15000)
+        await s.visit(f"/team?abbr={abbr}", wait_for=".tm-head", ms=900)
+        await s.tap(".tm-tab[data-panel='players']", index=0, after=1500)
+        await s.tap(".tm-player-name", index=0, after=1500)
+        await s.card(kicker="Player profiles", big="EVERY<em>player, in full</em>",
+                     sub="Stats, value, depth chart", ms=1700)
+        await s.uncard(300)
+        await s.spotlight(".player-hero", ms=1500)
+        await s.unspotlight()
+        await s.glide(520, 1200)
+        await s.hold(1100)
+        await s.card(logo=True, url="streakpros.com", ms=2200)
+    scene.__doc__ = f"A {TEAMS[abbr]} starter's full profile."
+    return scene
+
+
+for _abbr in TEAMS:
+    SCENES[f"t_{_abbr.lower()}"] = team_scene(_abbr)
+    SCENES[f"p_{_abbr.lower()}"] = player_scene(_abbr)
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--base", default=os.environ.get("SITE_HOST", "https://streakpros.com"))

@@ -31,6 +31,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
+      - uses: actions/checkout@v4
+
       - uses: actions/download-artifact@v4
         with:
           name: promo-clips
@@ -99,6 +101,19 @@ jobs:
           v_st_nfc_playoffs nfc-playoff-picture
           v_team_gb green-bay-packers-team-page
           MAP
+          # The per-team clips (t_kc, p_kc, ...) are named by the same
+          # catalog the weekly planner posts from.
+          python3 - <<'PY'
+          import glob, os, shutil, sys
+          sys.path.insert(0, "scripts")
+          from promo_plan import catalog
+          slug = {e["scene"]: e["slug"] for v in catalog().values() for e in v}
+          for src in glob.glob("clips/*.mp4"):
+              scene, shape = os.path.basename(src)[:-4].rsplit("-", 1)
+              if scene[:2] in ("t_", "p_") and scene in slug:
+                  kind = "vertical" if shape == "tall" else "desktop"
+                  shutil.copy(src, f"out/{slug[scene]}-{kind}.mp4")
+          PY
           ls -la out
           test "$(ls out/*.mp4 | wc -l)" -ge 1
 
