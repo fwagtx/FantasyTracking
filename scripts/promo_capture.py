@@ -902,7 +902,9 @@ async def scene_gameday(s):
     # The feed of a finished game is its last plays -- a column of
     # kneel-downs. The box score is the part that sells it, so a finished
     # game goes straight there; a live one shows the field first.
-    if await s.has(".gd-field"):
+    # The page has loaded by now; a finished game simply has no field,
+    # and waiting the default 2.5s for one filmed the kneel-downs.
+    if await s.has(".gd-field", timeout=300):
         await s.card(kicker="Game detail", big="INSIDE<em>every game</em>",
                      sub="Live drives, box score, odds", ms=1700)
         await s.uncard(300)
