@@ -115,13 +115,19 @@ jobs:
           python3 scripts/promo_qa.py out --missed missed-slugs.txt --out qa.json | tee -a $GITHUB_STEP_SUMMARY
           python3 scripts/promo_plan.py final --plan plan.json --qa qa.json --out final.json | tee -a $GITHUB_STEP_SUMMARY
 
+      - name: Make covers
+        if: env.SKIP != '1'
+        run: |
+          mkdir -p covers
+          python3 scripts/promo_covers.py out covers
+
       - name: Publish as a release
         if: env.SKIP != '1'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -eu
-          files="out/*.mp4 plan.json qa.json final.json"
+          files="out/*.mp4 covers/*.jpg plan.json qa.json final.json"
           gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1 \
             && gh release upload "$TAG" $files --clobber --repo "$GITHUB_REPOSITORY" \
             || gh release create "$TAG" $files --repo "$GITHUB_REPOSITORY" --prerelease \
@@ -133,7 +139,7 @@ jobs:
         run: |
           set -eu
           bad=0
-          for url in $(python3 -c "import json; [print(p['info']['media'][0]) for p in json.load(open('final.json'))['posts']]"); do
+          for url in $(python3 -c "import json; [print(p['info']['media'][0] + chr(10) + p['info']['videoThumbnailUrl']) for p in json.load(open('final.json'))['posts']]"); do
             code=$(curl -sL -o /dev/null -w '%{http_code}' "$url")
             if [ "$code" = 200 ]; then echo "PUBLIC $url"; else echo "FAIL $url -> $code"; bad=1; fi
           done

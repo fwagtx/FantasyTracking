@@ -81,6 +81,10 @@ def media_url(tag, slug):
     return f"https://github.com/{REPO}/releases/download/{tag}/{slug}-vertical.mp4"
 
 
+def cover_url(tag, slug):
+    return f"https://github.com/{REPO}/releases/download/{tag}/{slug}-cover.jpg"
+
+
 def payload(entry, tag, day, time):
     local = dt.datetime.combine(day, dt.time.fromisoformat(time), TZ)
     text = entry["caption"].rstrip() + "\n\n" + entry["hashtags"]
@@ -90,6 +94,7 @@ def payload(entry, tag, day, time):
         "info": {
             "autoPublish": True, "draft": False, "descendants": [], "firstCommentText": "",
             "hasNotReadNotes": False, "media": [media_url(tag, entry["slug"])], "mediaAltText": [],
+            "videoThumbnailUrl": cover_url(tag, entry["slug"]),
             "providers": [{"network": "instagram"}, {"network": "tiktok"}, {"network": "youtube"}],
             "publicationDate": {"dateTime": f"{day.isoformat()}T{time}:00", "timezone": "America/Chicago"},
             "shortener": False, "smartLinkData": {"ids": []}, "text": text,

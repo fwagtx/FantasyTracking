@@ -1,0 +1,47 @@
+name: Promo Covers
+
+# A cover image for every clip in one or more promo Releases, uploaded
+# next to the clip: <slug>-cover.jpg for each vertical clip,
+# <slug>-cover-wide.jpg for each desktop one (scripts/promo_covers.py).
+# The weekly workflow makes its own; this is for Releases made before
+# covers existed, or to remake them.
+on:
+  workflow_dispatch:
+    inputs:
+      tags:
+        description: "Release tags, space-separated"
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  covers:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: |
+          pip install --quiet playwright opencv-python-headless
+          python -m playwright install --with-deps chromium
+      - name: Make and upload covers
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -eu
+          for tag in ${{ github.event.inputs.tags }}; do
+            rm -rf clips covers && mkdir -p clips covers
+            gh release download "$tag" --repo "$GITHUB_REPOSITORY" --pattern '*.mp4' --dir clips
+            python3 scripts/promo_covers.py clips covers
+            gh release upload "$tag" covers/*.jpg --clobber --repo "$GITHUB_REPOSITORY"
+            for f in covers/*.jpg; do
+              url="https://github.com/$GITHUB_REPOSITORY/releases/download/$tag/$(basename $f)"
+              code=$(curl -sL -o /dev/null -w '%{http_code}' "$url")
+              [ "$code" = 200 ] && echo "PUBLIC $url" || { echo "FAIL $url $code"; exit 1; }
+            done
+            echo "$tag: $(ls covers/*.jpg | wc -l) covers" >> $GITHUB_STEP_SUMMARY
+          done
