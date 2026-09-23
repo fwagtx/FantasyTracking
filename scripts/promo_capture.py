@@ -107,9 +107,14 @@ GLIDE_JS = """
 # Hidden in the recording browser only -- the live site is untouched.
 HIDE_CTA_JS = r"""
 (() => {
+  // The Start/Bench/Cut vote popup opens itself 350ms after every page
+  // load unless this session has already seen it. Set the site's own
+  // flag -- exactly what a visitor who dismissed it has -- so it never
+  // opens, and hide the overlay as a backstop.
+  try { sessionStorage.setItem('vote_shown', '1'); } catch (e) {}
   const css = `
-    .nav-auth, .sk-join,
-    .sc-draft:has(a[href^="/login"]), .sc-draft:has(a[href^="/signup"])
+    .nav-auth, .sk-join, .vote-overlay,
+    .sc-draft, .sc-sync-banner
     { display:none !important; }`;
   const add = () => {
     if (document.getElementById('__promoHideCta')) return;
@@ -241,8 +246,13 @@ def miss(what):
 class Stage:
     """One recording. Thin wrapper so a scene reads as a storyboard."""
 
-    def __init__(self, page, base, walls=None, taps=None, dry=False, scout=None):
+    def __init__(self, page, base, walls=None, taps=None, dry=False, scout=None,
+                 signed_in=False):
         self.page = page
+        # Whether this recording has an account behind it. League pages
+        # show nothing worth filming without one, and finding that out by
+        # opening them is filming them.
+        self.signed_in = signed_in
         self.base = base.rstrip("/")
         # What the camera-off pass learned. walls maps a page (path and
         # query) to {"wall": y or None, "top": bool, "what": str}: where
@@ -542,38 +552,29 @@ class Film(Stage):
 # move, hold on the result.
 
 async def scene_streaks(s):
-    """The signature page: who has cleared a line, and how often."""
-    await s.visit("/streaks", wait_for=".sk-item", ms=1800)
-    await s.glide(420, 1700)
-    await s.hold(700)
-    # The window pills are the point -- the same player looks different
-    # over ten games than over five.
-    await s.tap("#skWindows button", index=2, after=1500)
-    await s.tap("#skWindows button", index=3, after=1500)
-    await s.glide(0, 800)
-    # Into one player, where the bars get big enough to read.
-    await s.tap(".sk-item", index=0, after=2200)
-    await s.glide(300, 1400)
-    await s.hold(800)
-    # And the thing nobody else does: move the line yourself -- when
-    # the viewer is allowed to. Signed out that panel is blurred, so
-    # hold on the game-by-game bars instead, which are the part that
-    # reads on a phone anyway.
-    if await s.gated():
-        # The line-adjust panel is members-only. Signed out it is a
-        # blurred box, which is the last thing an advert should dwell
-        # on, so the clip pans back to the game-by-game bars -- open to
-        # everyone and the part that reads on a phone anyway.
-        diverted("the streaks line-adjust panel is gated -- panning to the bars")
-        await s.glide(300, 1200)
-        await s.hold(1800)
-        return
-    for _ in range(3):
-        await s.tap("#spPlus", after=700)
-    await s.hold(1200)
-    for _ in range(2):
-        await s.tap("#spMinus", after=700)
-    await s.hold(1600)
+    """The signature page: who has cleared a line, and how often.
+
+    Two things this used to do, and why it no longer does them. It tapped
+    the window pills (L5, L20), which to a signed-out viewer empties the
+    list -- seven seconds of filter buttons over nothing. And it tapped
+    into one player, whose page currently shows the line as 0.5 and the
+    hit rate as 0% in red, contradicting the 10/10 the list just showed
+    (a site bug, reported separately). So it stays on the list, which is
+    the part that makes the point anyway.
+    """
+    await s.mark(True)
+    await s.clock(14000)
+    await s.visit("/streaks", wait_for=".sk-item", ms=1000)
+    await s.card(kicker="Streaks", big="WHO<em>keeps hitting</em>",
+                 sub="Every prop, every position", ms=1700)
+    await s.uncard(300)
+    await s.spotlight(".sk-item", "Hit rate, not a hunch", ms=1900)
+    await s.unspotlight()
+    await s.point(".sk-bars-mini")
+    await s.hold(1400)
+    await s.glide(260, 1000)
+    await s.hold(900)
+    await s.card(logo=True, url="streakpros.com", ms=2200)
 
 
 async def scene_scores(s):
@@ -602,7 +603,7 @@ async def scene_matchups(s):
     if not await s.open_visit("/matchups", wait_for=".wrap", ms=1400):
         await s.visit("/performances?scope=season", ms=900)
         await s.card(kicker="Performances", big="EVERY<em>game, rated</em>",
-                     sub="Out of ten, every position", ms=1700)
+                     sub="Against what the position normally does", ms=1700)
         await s.uncard(300)
         # The board is data-dependent: between slates it can come back
         # empty for a moment. Ringing a row that is not there would be a
@@ -761,8 +762,9 @@ async def scene_montage(s):
     # show them with. Set PROMO_EMAIL and PROMO_PASSWORD to record this
     # half; without them the two beats below stand in, and they are
     # real features rather than filler.
-    await s.visit("/league-manager", ms=1100)
-    if await s.has(".lg-stats"):
+    # Signed out, League Manager is an empty lookup box, and checking for
+    # that by opening it put four seconds of it in the montage.
+    if s.signed_in and await s.visit("/league-manager", ms=1100) and await s.has(".lg-stats"):
         await s.card(kicker="Your leagues", big="ALL<em>of them, ranked</em>",
                      sub="Best team to worst, with the maths", ms=1600)
         await s.uncard(300)
@@ -784,7 +786,7 @@ async def scene_montage(s):
         print("  note: signed out -- recording the public half of the montage",
               file=sys.stderr)
         await s.visit("/performances?scope=season", wait_for=".pl-row-item", ms=1100)
-        await s.card(kicker="Every performance", big="RATED<em>out of ten</em>",
+        await s.card(kicker="Every performance", big="EVERY<em>game, rated</em>",
                      sub="Every player, every week", ms=1600)
         await s.uncard(300)
         await s.glide(380, 1000)
@@ -817,12 +819,12 @@ async def scene_montage(s):
 
 
 async def scene_performances(s):
-    """Every scored game, rated out of ten."""
+    """Every scored game, rated against its position."""
     await s.mark(True)
     await s.clock(17000)
     await s.visit("/performances?scope=season", wait_for=".pl-row-item", ms=900)
     await s.card(kicker="Performances", big="EVERY<em>game, rated</em>",
-                 sub="Out of ten, every position", ms=1600)
+                 sub="Against what the position normally does", ms=1600)
     await s.uncard(300)
     await s.spotlight(".pl-row-item", "Not points. A rating.", ms=1700)
     await s.unspotlight()
@@ -879,26 +881,34 @@ async def scene_gameday(s):
     if await s.has(".gd-field"):
         await s.spotlight(".gd-field", "Where the ball is", ms=1600)
         await s.unspotlight()
-    await s.glide(460, 1300)
-    await s.hold(1200)
-    await s.glide(900, 1200)
-    await s.hold(1200)
+    # The feed of a finished game is its last plays -- a column of
+    # kneel-downs. The box score is the part that sells it.
+    await s.tap(".gd-tab[data-panel='game']", after=1300)
+    await s.glide(420, 1300)
+    await s.hold(1300)
     await s.card(logo=True, url="streakpros.com", ms=2200)
 
 
 async def scene_player(s):
-    """A player's whole profile, depth chart included."""
+    """A player's whole profile, depth chart included.
+
+    Reached through a team's roster, not the injury feed: the feed's top
+    entry is whoever was designated last, which on the first take was a
+    rookie DT on PUP with no rank and no value -- the emptiest profile on
+    the site. A roster's first name is its starting quarterback.
+    """
     await s.mark(True)
-    await s.clock(17000)
-    await s.visit("/injuries", wait_for=".fd-row", ms=800)
-    await s.tap("a[href^='/player']", index=0, after=2000)
+    await s.clock(16000)
+    await s.visit("/team?abbr=KC", wait_for=".tm-head", ms=700)
+    await s.tap(".tm-tab[data-panel='players']", after=900)
+    await s.tap(".tm-player-name", index=0, after=1800)
     await s.card(kicker="Player profiles", big="EVERY<em>player, in full</em>",
                  sub="Stats, value, depth chart", ms=1700)
     await s.uncard(300)
     await s.spotlight(".player-hero", ms=1500)
     await s.unspotlight()
     await s.glide(520, 1300)
-    await s.hold(1500)
+    await s.hold(1400)
     await s.card(logo=True, url="streakpros.com", ms=2200)
 
 
@@ -910,13 +920,16 @@ async def scene_tradecalc(s):
     await s.card(kicker="Trade calculator", big="IS IT<em>fair?</em>",
                  sub="Priced on real market value", ms=1700)
     await s.uncard(300)
-    # Build a lopsided side so the bar has something to say.
-    await s.tap(".quick-add-tile", index=0, after=900)
-    await s.tap(".quick-add-tile", index=1, after=900)
-    await s.spotlight(".balance-bar-wrap", "The answer, instantly", ms=1900)
+    # A real two-sided offer: two picks going out, one coming back. Both
+    # sides need something on them or the balance bar never appears --
+    # which is how the first cut ringed an empty space.
+    await s.tap(".quick-add-tile[onclick^='quickAddClick(1']", index=0, after=800)
+    await s.tap(".quick-add-tile[onclick^='quickAddClick(1']", index=4, after=800)
+    await s.tap(".quick-add-tile[onclick^='quickAddClick(2']", index=1, after=1000)
+    await s.point(".balance-bar-wrap")
+    await s.spotlight(".balance-bar-wrap", "Who wins it, instantly", ms=2000)
     await s.unspotlight()
-    await s.glide(360, 1100)
-    await s.hold(900)
+    await s.hold(700)
     await s.card(logo=True, url="streakpros.com", ms=2200)
 
 
@@ -983,8 +996,8 @@ async def scene_leaguemanager(s):
     """Your leagues, ranked, with the odds behind the ranking."""
     await s.mark(True)
     await s.clock(17000)
-    await s.visit("/league-manager", ms=1200)
-    if not await s.has(".lg-stats"):
+    if not (s.signed_in and await s.visit("/league-manager", ms=1200)
+            and await s.has(".lg-stats")):
         # Signed out this page is a sign-in prompt, so the pitch goes
         # over a page that actually has data on it rather than over an
         # empty panel.
@@ -1073,8 +1086,426 @@ async def scene_waivers(s):
     await s.card(logo=True, url="streakpros.com", ms=2200)
 
 
+
+# --- variants: one slice of one feature each ------------------------------
+#
+# Three posts a day cannot repeat a video, so these are distinct slices of
+# the same features: a position, a team, a view. Written out one by one
+# rather than generated at runtime, so the page-by-page selector sweep can
+# read every beat of every one.
+
+async def scene_v_perf_qb(s):
+    """The best quarterback games of the season, rated."""
+    await s.mark(True)
+    await s.clock(15000)
+    await s.visit("/performances?scope=season&position=QB", wait_for=".pl-row-item", ms=900)
+    await s.card(kicker="Quarterbacks", big="BEST<em>QB games this year</em>",
+                 sub="Rated against every other QB", ms=1700)
+    await s.uncard(300)
+    await s.spotlight(".pl-row-item", "The top QB game of the season", ms=1800)
+    await s.unspotlight()
+    await s.tap("a[href^='/performance']", index=0, after=1600)
+    await s.glide(320, 1200)
+    await s.hold(1100)
+    await s.card(logo=True, url="streakpros.com", ms=2200)
+
+async def scene_v_perf_rb(s):
+    """The best running back games of the season."""
+    await s.mark(True)
+    await s.clock(15000)
+    await s.visit("/performances?scope=season&position=RB", wait_for=".pl-row-item", ms=900)
+    await s.card(kicker="Running backs", big="BEST<em>RB games this year</em>",
+                 sub="Rated against every other RB", ms=1700)
+    await s.uncard(300)
+    await s.spotlight(".pl-row-item", "Not points. A rating.", ms=1800)
+    await s.unspotlight()
+    await s.tap("a[href^='/performance']", index=0, after=1600)
+    await s.glide(320, 1200)
+    await s.hold(1100)
+    await s.card(logo=True, url="streakpros.com", ms=2200)
+
+async def scene_v_perf_wr(s):
+    """The best wide receiver games of the season."""
+    await s.mark(True)
+    await s.clock(15000)
+    await s.visit("/performances?scope=season&position=WR", wait_for=".pl-row-item", ms=900)
+    await s.card(kicker="Wide receivers", big="BEST<em>WR games this year</em>",
+                 sub="Rated against every other WR", ms=1700)
+    await s.uncard(300)
+    await s.spotlight(".pl-row-item", "Not points. A rating.", ms=1800)
+    await s.unspotlight()
+    await s.tap("a[href^='/performance']", index=0, after=1600)
+    await s.glide(320, 1200)
+    await s.hold(1100)
+    await s.card(logo=True, url="streakpros.com", ms=2200)
+
+async def scene_v_perf_te(s):
+    """The best tight end games of the season."""
+    await s.mark(True)
+    await s.clock(15000)
+    await s.visit("/performances?scope=season&position=TE", wait_for=".pl-row-item", ms=900)
+    await s.card(kicker="Tight ends", big="BEST<em>TE games this year</em>",
+                 sub="Rated against every other TE", ms=1700)
+    await s.uncard(300)
+    await s.spotlight(".pl-row-item", "Not points. A rating.", ms=1800)
+    await s.unspotlight()
+    await s.tap("a[href^='/performance']", index=0, after=1600)
+    await s.glide(320, 1200)
+    await s.hold(1100)
+    await s.card(logo=True, url="streakpros.com", ms=2200)
+
+async def scene_v_perf_lb(s):
+    """The best linebacker games -- IDP gets rated too."""
+    await s.mark(True)
+    await s.clock(15000)
+    await s.visit("/performances?scope=season&position=LB", wait_for=".pl-row-item", ms=900)
+    await s.card(kicker="Defense too", big="BEST<em>defensive games</em>",
+                 sub="IDP players rated the same way", ms=1700)
+    await s.uncard(300)
+    await s.spotlight(".pl-row-item", "Linebackers, rated", ms=1800)
+    await s.unspotlight()
+    await s.tap("a[href^='/performance']", index=0, after=1600)
+    await s.glide(320, 1200)
+    await s.hold(1100)
+    await s.card(logo=True, url="streakpros.com", ms=2200)
+
+async def scene_v_perf_worst(s):
+    """The lowest-rated games of the season. Engagement bait, honestly labelled."""
+    await s.mark(True)
+    await s.clock(15000)
+    await s.visit("/performances?scope=season&order=lowest", wait_for=".pl-row-item", ms=900)
+    await s.card(kicker="Performances", big="WORST<em>games this year</em>",
+                 sub="Every dud, rated", ms=1700)
+    await s.uncard(300)
+    await s.spotlight(".pl-row-item", "Rock bottom", ms=1800)
+    await s.unspotlight()
+    await s.glide(520, 1200)
+    await s.hold(1100)
+    await s.card(logo=True, url="streakpros.com", ms=2200)
+
+async def scene_v_rank_qb(s):
+    """Dynasty quarterback rankings with weekly movement."""
+    await s.mark(True)
+    await s.clock(15000)
+    await s.visit("/rankings?pos=QB", wait_for=".rk-page", ms=900)
+    await s.card(kicker="Dynasty rankings", big="EVERY<em>QB, ranked</em>",
+                 sub="With this week's movement", ms=1700)
+    await s.uncard(300)
+    await s.spotlight(".rk-move", "Who moved, and how far", ms=1800)
+    await s.unspotlight()
+    await s.glide(360, 1200)
+    await s.hold(1100)
+    await s.card(logo=True, url="streakpros.com", ms=2200)
+
+async def scene_v_rank_rb(s):
+    """Dynasty running back rankings with weekly movement."""
+    await s.mark(True)
+    await s.clock(15000)
+    await s.visit("/rankings?pos=RB", wait_for=".rk-page", ms=900)
+    await s.card(kicker="Dynasty rankings", big="EVERY<em>RB, ranked</em>",
+                 sub="With this week's movement", ms=1700)
+    await s.uncard(300)
+    await s.spotlight(".rk-move", "Who moved, and how far", ms=1800)
+    await s.unspotlight()
+    await s.glide(360, 1200)
+    await s.hold(1100)
+    await s.card(logo=True, url="streakpros.com", ms=2200)
+
+async def scene_v_rank_wr(s):
+    """Dynasty wide receiver rankings with weekly movement."""
+    await s.mark(True)
+    await s.clock(15000)
+    await s.visit("/rankings?pos=WR", wait_for=".rk-page", ms=900)
+    await s.card(kicker="Dynasty rankings", big="EVERY<em>WR, ranked</em>",
+                 sub="With this week's movement", ms=1700)
+    await s.uncard(300)
+    await s.spotlight(".rk-move", "Who moved, and how far", ms=1800)
+    await s.unspotlight()
+    await s.glide(360, 1200)
+    await s.hold(1100)
+    await s.card(logo=True, url="streakpros.com", ms=2200)
+
+async def scene_v_rank_te(s):
+    """Dynasty tight end rankings with weekly movement."""
+    await s.mark(True)
+    await s.clock(15000)
+    await s.visit("/rankings?pos=TE", wait_for=".rk-page", ms=900)
+    await s.card(kicker="Dynasty rankings", big="EVERY<em>TE, ranked</em>",
+                 sub="With this week's movement", ms=1700)
+    await s.uncard(300)
+    await s.spotlight(".rk-move", "Who moved, and how far", ms=1800)
+    await s.unspotlight()
+    await s.glide(360, 1200)
+    await s.hold(1100)
+    await s.card(logo=True, url="streakpros.com", ms=2200)
+
+async def scene_v_team_kc(s):
+    """Chiefs team page: results, then the roster with values."""
+    await s.mark(True)
+    await s.clock(15000)
+    await s.visit("/team?abbr=KC", wait_for=".tm-head", ms=900)
+    await s.card(kicker="Kansas City", big="THE CHIEFS<em>on one page</em>",
+                 sub="Results, roster, dynasty values", ms=1700)
+    await s.uncard(300)
+    await s.spotlight(".tm-panel", ms=1800)
+    await s.unspotlight()
+    await s.tap(".tm-tab[data-panel='players']", index=0, after=1600)
+    await s.glide(480, 1200)
+    await s.hold(1100)
+    await s.card(logo=True, url="streakpros.com", ms=2200)
+
+async def scene_v_team_phi(s):
+    """Eagles team page."""
+    await s.mark(True)
+    await s.clock(15000)
+    await s.visit("/team?abbr=PHI", wait_for=".tm-head", ms=900)
+    await s.card(kicker="Philadelphia", big="THE EAGLES<em>on one page</em>",
+                 sub="Results, roster, dynasty values", ms=1700)
+    await s.uncard(300)
+    await s.spotlight(".tm-panel", ms=1800)
+    await s.unspotlight()
+    await s.tap(".tm-tab[data-panel='players']", index=0, after=1600)
+    await s.glide(480, 1200)
+    await s.hold(1100)
+    await s.card(logo=True, url="streakpros.com", ms=2200)
+
+async def scene_v_team_det(s):
+    """Lions team page."""
+    await s.mark(True)
+    await s.clock(15000)
+    await s.visit("/team?abbr=DET", wait_for=".tm-head", ms=900)
+    await s.card(kicker="Detroit", big="THE LIONS<em>on one page</em>",
+                 sub="Results, roster, dynasty values", ms=1700)
+    await s.uncard(300)
+    await s.spotlight(".tm-panel", ms=1800)
+    await s.unspotlight()
+    await s.tap(".tm-tab[data-panel='players']", index=0, after=1600)
+    await s.glide(480, 1200)
+    await s.hold(1100)
+    await s.card(logo=True, url="streakpros.com", ms=2200)
+
+async def scene_v_team_buf(s):
+    """Bills team page."""
+    await s.mark(True)
+    await s.clock(15000)
+    await s.visit("/team?abbr=BUF", wait_for=".tm-head", ms=900)
+    await s.card(kicker="Buffalo", big="THE BILLS<em>on one page</em>",
+                 sub="Results, roster, dynasty values", ms=1700)
+    await s.uncard(300)
+    await s.spotlight(".tm-panel", ms=1800)
+    await s.unspotlight()
+    await s.tap(".tm-tab[data-panel='players']", index=0, after=1600)
+    await s.glide(480, 1200)
+    await s.hold(1100)
+    await s.card(logo=True, url="streakpros.com", ms=2200)
+
+async def scene_v_team_dal(s):
+    """Cowboys team page."""
+    await s.mark(True)
+    await s.clock(15000)
+    await s.visit("/team?abbr=DAL", wait_for=".tm-head", ms=900)
+    await s.card(kicker="Dallas", big="THE COWBOYS<em>on one page</em>",
+                 sub="Results, roster, dynasty values", ms=1700)
+    await s.uncard(300)
+    await s.spotlight(".tm-panel", ms=1800)
+    await s.unspotlight()
+    await s.tap(".tm-tab[data-panel='players']", index=0, after=1600)
+    await s.glide(480, 1200)
+    await s.hold(1100)
+    await s.card(logo=True, url="streakpros.com", ms=2200)
+
+async def scene_v_st_power(s):
+    """Power rankings computed from results."""
+    await s.mark(True)
+    await s.clock(15000)
+    await s.visit("/standings?view=rankings", wait_for=".st-row", ms=900)
+    await s.card(kicker="Power rankings", big="RANKED<em>by results</em>",
+                 sub="Not by opinions", ms=1700)
+    await s.uncard(300)
+    await s.spotlight(".st-row", "Every team, one list", ms=1800)
+    await s.unspotlight()
+    await s.glide(420, 1200)
+    await s.hold(1100)
+    await s.card(logo=True, url="streakpros.com", ms=2200)
+
+async def scene_v_st_playoffs(s):
+    """The playoff picture as it stands."""
+    await s.mark(True)
+    await s.clock(15000)
+    await s.visit("/standings?view=playoffs", wait_for=".st-row", ms=900)
+    await s.card(kicker="Playoff picture", big="WHO'S IN<em>right now</em>",
+                 sub="Seeds, byes and the bubble", ms=1700)
+    await s.uncard(300)
+    await s.spotlight(".st-row", "The one seed", ms=1800)
+    await s.unspotlight()
+    await s.glide(420, 1200)
+    await s.hold(1100)
+    await s.card(logo=True, url="streakpros.com", ms=2200)
+
+async def scene_v_st_draft(s):
+    """The live draft order."""
+    await s.mark(True)
+    await s.clock(15000)
+    await s.visit("/standings?view=draft", wait_for=".st-row", ms=900)
+    await s.card(kicker="Draft order", big="WHO PICKS<em>first?</em>",
+                 sub="The draft order, live", ms=1700)
+    await s.uncard(300)
+    await s.spotlight(".st-row", "On the clock", ms=1800)
+    await s.unspotlight()
+    await s.glide(420, 1200)
+    await s.hold(1100)
+    await s.card(logo=True, url="streakpros.com", ms=2200)
+
+async def scene_v_st_nfc(s):
+    """NFC standings."""
+    await s.mark(True)
+    await s.clock(15000)
+    await s.visit("/standings?view=nfc", wait_for=".st-row", ms=900)
+    await s.card(kicker="NFC standings", big="THE NFC<em>right now</em>",
+                 sub="Every division, every record", ms=1700)
+    await s.uncard(300)
+    await s.spotlight(".st-row", "Division leader", ms=1800)
+    await s.unspotlight()
+    await s.glide(420, 1200)
+    await s.hold(1100)
+    await s.card(logo=True, url="streakpros.com", ms=2200)
+
+async def scene_v_trade_sf(s):
+    """The calculator in superflex, where quarterbacks carry more value."""
+    await s.mark(True)
+    await s.clock(15000)
+    await s.visit("/trade-calculator?format=superflex", wait_for=".quick-add-grid", ms=900)
+    await s.card(kicker="Superflex", big="SUPERFLEX<em>values, built in</em>",
+                 sub="Priced for 2-QB leagues", ms=1700)
+    await s.uncard(300)
+    await s.tap(".quick-add-tile[onclick^='quickAddClick(1']", index=0, after=900)
+    await s.tap(".quick-add-tile[onclick^='quickAddClick(2']", index=2, after=900)
+    await s.point(".balance-bar-wrap")
+    await s.spotlight(".balance-bar-wrap", "Who wins it", ms=1800)
+    await s.unspotlight()
+    await s.hold(1100)
+    await s.card(logo=True, url="streakpros.com", ms=2200)
+
+async def scene_v_trade_redraft(s):
+    """The calculator in redraft mode."""
+    await s.mark(True)
+    await s.clock(15000)
+    await s.visit("/trade-calculator?mode=redraft", wait_for=".quick-add-grid", ms=900)
+    await s.card(kicker="Redraft", big="NOT<em>a dynasty league?</em>",
+                 sub="Redraft values too", ms=1700)
+    await s.uncard(300)
+    await s.tap(".quick-add-tile[onclick^='quickAddClick(1']", index=0, after=900)
+    await s.tap(".quick-add-tile[onclick^='quickAddClick(2']", index=1, after=900)
+    await s.point(".balance-bar-wrap")
+    await s.spotlight(".balance-bar-wrap", "Who wins it", ms=1800)
+    await s.unspotlight()
+    await s.hold(1100)
+    await s.card(logo=True, url="streakpros.com", ms=2200)
+
+async def scene_v_feed_moves(s):
+    """Every signing, release and trade."""
+    await s.mark(True)
+    await s.clock(15000)
+    await s.visit("/moves", wait_for=".fd-row", ms=900)
+    await s.card(kicker="Roster moves", big="WHO<em>just signed</em>",
+                 sub="Every transaction, as it happens", ms=1700)
+    await s.uncard(300)
+    await s.spotlight(".fd-row", ms=1800)
+    await s.unspotlight()
+    await s.glide(440, 1200)
+    await s.hold(1100)
+    await s.card(logo=True, url="streakpros.com", ms=2200)
+
+async def scene_v_feed_bdays(s):
+    """Player birthdays -- the lighter one."""
+    await s.mark(True)
+    await s.clock(15000)
+    await s.visit("/birthdays", wait_for=".fd-row", ms=900)
+    await s.card(kicker="Birthdays", big="WHO'S<em>a year older</em>",
+                 sub="Yes, we track that too", ms=1700)
+    await s.uncard(300)
+    await s.spotlight(".fd-row", ms=1800)
+    await s.unspotlight()
+    await s.glide(440, 1200)
+    await s.hold(1100)
+    await s.card(logo=True, url="streakpros.com", ms=2200)
+
+async def scene_v_player_cin(s):
+    """A Bengals starter's full profile."""
+    await s.mark(True)
+    await s.clock(15000)
+    await s.visit("/team?abbr=CIN", wait_for=".tm-head", ms=900)
+    await s.tap(".tm-tab[data-panel='players']", index=0, after=1500)
+    await s.tap(".tm-player-name", index=0, after=1500)
+    await s.card(kicker="Player profiles", big="EVERY<em>player, in full</em>",
+                 sub="Stats, value, depth chart", ms=1700)
+    await s.uncard(300)
+    await s.spotlight(".player-hero", ms=1500)
+    await s.unspotlight()
+    await s.glide(520, 1200)
+    await s.hold(1100)
+    await s.card(logo=True, url="streakpros.com", ms=2200)
+
+async def scene_v_player_bal(s):
+    """A Ravens starter's full profile."""
+    await s.mark(True)
+    await s.clock(15000)
+    await s.visit("/team?abbr=BAL", wait_for=".tm-head", ms=900)
+    await s.tap(".tm-tab[data-panel='players']", index=0, after=1500)
+    await s.tap(".tm-player-name", index=0, after=1500)
+    await s.card(kicker="Player profiles", big="EVERY<em>player, in full</em>",
+                 sub="Stats, value, depth chart", ms=1700)
+    await s.uncard(300)
+    await s.spotlight(".player-hero", ms=1500)
+    await s.unspotlight()
+    await s.glide(520, 1200)
+    await s.hold(1100)
+    await s.card(logo=True, url="streakpros.com", ms=2200)
+
+async def scene_v_player_sf(s):
+    """A 49ers starter's full profile."""
+    await s.mark(True)
+    await s.clock(15000)
+    await s.visit("/team?abbr=SF", wait_for=".tm-head", ms=900)
+    await s.tap(".tm-tab[data-panel='players']", index=0, after=1500)
+    await s.tap(".tm-player-name", index=0, after=1500)
+    await s.card(kicker="Player profiles", big="EVERY<em>player, in full</em>",
+                 sub="Stats, value, depth chart", ms=1700)
+    await s.uncard(300)
+    await s.spotlight(".player-hero", ms=1500)
+    await s.unspotlight()
+    await s.glide(520, 1200)
+    await s.hold(1100)
+    await s.card(logo=True, url="streakpros.com", ms=2200)
+
 SCENES = {
     "montage": scene_montage,
+    "v_perf_qb": scene_v_perf_qb,
+    "v_perf_rb": scene_v_perf_rb,
+    "v_perf_wr": scene_v_perf_wr,
+    "v_perf_te": scene_v_perf_te,
+    "v_perf_lb": scene_v_perf_lb,
+    "v_perf_worst": scene_v_perf_worst,
+    "v_rank_qb": scene_v_rank_qb,
+    "v_rank_rb": scene_v_rank_rb,
+    "v_rank_wr": scene_v_rank_wr,
+    "v_rank_te": scene_v_rank_te,
+    "v_team_kc": scene_v_team_kc,
+    "v_team_phi": scene_v_team_phi,
+    "v_team_det": scene_v_team_det,
+    "v_team_buf": scene_v_team_buf,
+    "v_team_dal": scene_v_team_dal,
+    "v_st_power": scene_v_st_power,
+    "v_st_playoffs": scene_v_st_playoffs,
+    "v_st_draft": scene_v_st_draft,
+    "v_st_nfc": scene_v_st_nfc,
+    "v_trade_sf": scene_v_trade_sf,
+    "v_trade_redraft": scene_v_trade_redraft,
+    "v_feed_moves": scene_v_feed_moves,
+    "v_feed_bdays": scene_v_feed_bdays,
+    "v_player_cin": scene_v_player_cin,
+    "v_player_bal": scene_v_player_bal,
+    "v_player_sf": scene_v_player_sf,
     "performances": scene_performances,
     "standings": scene_standings,
     "team": scene_team,
@@ -1141,7 +1572,8 @@ async def record(base, scene, shape, out_dir, email=None, password=None):
         await scout_ctx.add_init_script(CURSOR_JS)
         await scout_ctx.add_init_script(OVERLAY_JS)
         dry_page = await scout_ctx.new_page()
-        dry = Film(dry_page, base, walls=walls, taps=taps, dry=True)
+        dry = Film(dry_page, base, walls=walls, taps=taps, dry=True,
+                   signed_in=bool(email and password))
         if email and password:
             await sign_in(dry, email, password)
         DRY = True
@@ -1158,21 +1590,32 @@ async def record(base, scene, shape, out_dir, email=None, password=None):
         # --- the take ----------------------------------------------------
         # Signed in on the camera-off pass, cookies carried across, so
         # the login form is never in the take.
+        # The phone layout is laid out at 540x960 CSS pixels, but drawn at
+        # device scale 2 and recorded at 1080x1920, so every glyph is
+        # rendered at full resolution rather than drawn small and
+        # stretched 2x by ffmpeg afterwards -- which is what softened
+        # every vertical clip up to now.
+        dpr = 2 if shape == "tall" else 1
         ctx = await browser.new_context(
             storage_state=await scout_ctx.storage_state(),
             viewport=size,
             record_video_dir=out_dir,
-            record_video_size=size,
-            # The recorder captures whatever the page draws, so the
-            # site's own view transitions end up in the video for free.
-            device_scale_factor=1,
+            record_video_size={"width": size["width"] * dpr,
+                               "height": size["height"] * dpr},
+            device_scale_factor=dpr,
         )
         await ctx.add_init_script(HIDE_CTA_JS)
         await ctx.add_init_script(HIDE_GATE_JS)
         await ctx.add_init_script(CURSOR_JS)
         await ctx.add_init_script(OVERLAY_JS)
         page = await ctx.new_page()
-        stage = Film(page, base, walls=walls, taps=taps, scout=dry_page)
+        # Recording starts on about:blank, which is white. A scene that
+        # opens on a title card drew it over that -- the first frame of
+        # the montage was a white screen. Start on the site's own dark.
+        await page.goto("data:text/html,<html style='background:%230d0f0d'>"
+                        "<body style='margin:0;background:%230d0f0d'></body></html>")
+        stage = Film(page, base, walls=walls, taps=taps, scout=dry_page,
+                     signed_in=bool(email and password))
 
         try:
             await SCENES[scene](stage)

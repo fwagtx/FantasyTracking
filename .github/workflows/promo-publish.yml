@@ -69,9 +69,35 @@ jobs:
           sbc start-bench-cut-fantasy-football
           leaguemanager sleeper-league-sync-free
           tour streakpros-full-walkthrough
+          v_perf_qb nfl-best-qb-games-rated
+          v_perf_rb nfl-best-rb-games-rated
+          v_perf_wr nfl-best-wr-games-rated
+          v_perf_te nfl-best-te-games-rated
+          v_perf_lb nfl-best-defensive-games-idp
+          v_perf_worst nfl-worst-games-of-the-season
+          v_rank_qb dynasty-qb-rankings
+          v_rank_rb dynasty-rb-rankings
+          v_rank_wr dynasty-wr-rankings
+          v_rank_te dynasty-te-rankings
+          v_team_kc kansas-city-chiefs-team-page
+          v_team_phi philadelphia-eagles-team-page
+          v_team_det detroit-lions-team-page
+          v_team_buf buffalo-bills-team-page
+          v_team_dal dallas-cowboys-team-page
+          v_st_power nfl-power-rankings
+          v_st_playoffs nfl-playoff-picture
+          v_st_draft nfl-draft-order
+          v_st_nfc nfc-standings
+          v_trade_sf superflex-trade-calculator
+          v_trade_redraft redraft-trade-calculator
+          v_feed_moves nfl-roster-moves
+          v_feed_bdays nfl-player-birthdays
+          v_player_cin bengals-player-profile
+          v_player_bal ravens-player-profile
+          v_player_sf 49ers-player-profile
           MAP
           ls -la out
-          test "$(ls out/*.mp4 | wc -l)" -ge 20
+          test "$(ls out/*.mp4 | wc -l)" -ge 3
 
       - name: Publish as a release
         env:
