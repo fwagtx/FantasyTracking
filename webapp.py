@@ -22,6 +22,7 @@ import ctypes
 import gc
 import gzip
 import hashlib
+import itertools
 import hmac
 import json
 import html
@@ -17392,6 +17393,252 @@ def consolidation_adjusted_value(items):
     them, without needing to know anything about the other side."""
     ranked = sorted(items, key=lambda p: p.get("value") or 0, reverse=True)
     return sum((p.get("value") or 0) * (0.92 ** i) for i, p in enumerate(ranked))
+
+
+# --- Suggested trades ---------------------------------------------------
+#
+# "I want this player. What do I send?" -- answered against a real
+# league rather than in the abstract.
+#
+# The thing that makes this different from a value matcher: a package
+# that is even on paper gets turned down all the time, because it does
+# not fit the other manager's team. So every candidate is scored on
+# three things, not one:
+#
+#   fairness  how close to the value, allowing for the premium the side
+#             giving up the best player always wants
+#   fit       does it fill a hole on THEIR roster out of YOUR surplus
+#   shape     fewer pieces, because a 3-for-1 is a harder sell than a
+#             1-for-1 whatever the numbers say
+#
+# Nothing here claims a trade will be accepted. It finds defensible
+# starting points and says out loud why each one might work.
+
+TRADE_FAIR_LOW = 0.95            # below this it reads as an insult
+TRADE_FAIR_HIGH = 1.25           # above this you are the one being robbed
+# Dynasty convention: consolidating into one better player costs a
+# premium, because the side giving him up loses a starter and gains
+# depth they may not be able to start.
+TRADE_PREMIUM = 1.05
+TRADE_MAX_PIECES = 3
+TRADE_ASSET_POOL = 22            # the best N of your assets are worth searching
+TRADE_MIN_PIECE_SHARE = 0.06     # anything smaller is filler, and reads as filler
+TRADE_PICK_YEARS = 3
+TRADE_SUGGESTIONS = 3
+
+
+def _pick_name(year, rnd, slot=None, num_teams=None):
+    ordinal = {1: "1st", 2: "2nd", 3: "3rd"}.get(rnd, "%dth" % rnd)
+    if slot and num_teams:
+        return "%d %d.%02d (%s, est.)" % (year, rnd, slot, ordinal)
+    return "%d %s" % (year, ordinal)
+
+
+def league_pick_owners(league_id, league, teams, fc, cache={}):
+    """{roster_id: [pick, ...]} -- the future picks each team actually holds.
+
+    Every roster starts owning its own, and Sleeper's traded_picks
+    endpoint publishes the exceptions. Assuming nobody has traded a pick
+    would be wrong in most dynasty leagues by year two, and offering
+    somebody a first they dealt away in 2024 is worse than offering
+    nothing.
+
+    A pick's value comes from where its ORIGINAL owner is projected to
+    finish -- it is their draft slot, not the holder's. Next season only:
+    beyond that the projection does not exist and the middle of the round
+    is the honest answer."""
+    key = (str(league_id), len(teams))
+    now = time.time()
+    entry = cache.get(key)
+    if entry and now - entry["time"] < 1800:
+        return entry["data"]
+
+    settings = (league or {}).get("settings") or {}
+    num_teams = len(teams) or _safe_int(league.get("total_rosters"), 12) or 12
+    rounds = max(1, min(_safe_int(settings.get("draft_rounds"), 4) or 4, 5))
+    season = _safe_int(league.get("season"), int(SEASON)) or int(SEASON)
+    years = [season + 1 + i for i in range(TRADE_PICK_YEARS)]
+    rids = [t["roster_id"] for t in teams]
+
+    moved = {}
+    try:
+        rows = _cached_get(f"{SLEEPER_BASE}/league/{league_id}/traded_picks", {}, ttl=1800)
+        for r in (rows if isinstance(rows, list) else []):
+            yr, rnd = _safe_int(r.get("season"), 0), _safe_int(r.get("round"), 0)
+            orig, holder = _safe_int(r.get("roster_id"), 0), _safe_int(r.get("owner_id"), 0)
+            if yr and rnd and orig and holder:
+                moved[(yr, rnd, orig)] = holder
+    except Exception:
+        app.logger.exception("could not read traded picks for %s", league_id)
+
+    tiers = pick_tier_value_map(fc.get("picks") or {})
+    by_rid = {t["roster_id"]: t for t in teams}
+    out = {rid: [] for rid in rids}
+    for yr in years:
+        for rnd in range(1, rounds + 1):
+            tier_values = tiers.get((yr, rnd))
+            for orig in rids:
+                holder = moved.get((yr, rnd, orig), orig)
+                if holder not in out:
+                    continue
+                slot = None
+                if yr == season + 1:
+                    seed = ((by_rid.get(orig) or {}).get("odds") or {}).get("proj_seed")
+                    if seed:
+                        # Worst finish drafts first, which is how every
+                        # dynasty league orders it.
+                        slot = max(1, min(num_teams, int(round(num_teams + 1 - seed))))
+                value = None
+                if tier_values:
+                    value = (interpolate_pick_slot_value(slot, num_teams, tier_values) if slot
+                             else (tier_values.get("mid") or tier_values.get("flat")
+                                   or tier_values.get("early") or tier_values.get("late")))
+                if not value:
+                    continue
+                out[holder].append({
+                    "kind": "pick", "sid": "pick_slot_%d_%d_%d_%d" % (yr, rnd, slot or (num_teams // 2), num_teams),
+                    "name": _pick_name(yr, rnd, slot, num_teams), "position": "PICK",
+                    "value": int(round(value)), "year": yr, "round": rnd,
+                    "from_roster": orig, "acquired": holder != orig,
+                    "owner_name": (by_rid.get(orig) or {}).get("owner_name"),
+                })
+    cache[key] = {"data": out, "time": now}
+    _cache_trim(cache, CACHE_LIMIT_BOARDS)
+    return out
+
+
+def roster_assets(team, fc_players, picks_for_rid):
+    """Everything one team could put in a trade, priced."""
+    out = []
+    for pos in POSITIONS:
+        for sid, name in (team.get("positions", {}).get(pos) or []):
+            value = (fc_players.get(sid) or {}).get("value", 0) or 0
+            if value > 0:
+                out.append({"kind": "player", "sid": sid, "name": name, "position": pos,
+                            "value": value,
+                            "position_rank": (fc_players.get(sid) or {}).get("position_rank")})
+    out.extend(picks_for_rid or [])
+    out.sort(key=lambda a: -a["value"])
+    return out
+
+
+def _positional_ranks(pos_values):
+    """{roster_id: {pos: rank}} from {roster_id: {pos: value}}."""
+    ranks = {}
+    for pos in POSITIONS:
+        order = sorted(pos_values, key=lambda r: -(pos_values[r].get(pos) or 0))
+        for i, rid in enumerate(order, 1):
+            ranks.setdefault(rid, {})[pos] = i
+    return ranks
+
+
+def trade_after_state(teams, my_rid, their_rid, sending, target):
+    """(before, after) positional ranks for every team, if this trade happened.
+
+    Only the two sides move, but the ranks are recomputed across the
+    whole league -- a team that gains nothing can still slide when
+    somebody above them improves, and a rank that ignored that would be
+    a different number from the one on the league page."""
+    base = {t["roster_id"]: dict(t.get("pos_value") or {}) for t in teams}
+    after = {rid: dict(v) for rid, v in base.items()}
+    tpos = target.get("position")
+    if tpos in POSITIONS:
+        after.setdefault(my_rid, {})[tpos] = (after[my_rid].get(tpos) or 0) + target["value"]
+        after.setdefault(their_rid, {})[tpos] = (after[their_rid].get(tpos) or 0) - target["value"]
+    for a in sending:
+        if a["kind"] != "player" or a["position"] not in POSITIONS:
+            continue   # a pick belongs to no position group
+        after[my_rid][a["position"]] = (after[my_rid].get(a["position"]) or 0) - a["value"]
+        after[their_rid][a["position"]] = (after[their_rid].get(a["position"]) or 0) + a["value"]
+    return _positional_ranks(base), _positional_ranks(after)
+
+
+def _fit_score(before, after, my_rid, their_rid, n):
+    """How well the package suits both rosters, 0 to 1.
+
+    Weighted by need on their side -- moving a team from 11th to 4th at
+    their worst position is worth far more than 3rd to 1st at their best
+    -- and by damage on yours, so a package is not recommended just
+    because it happens to add up."""
+    their_gain = my_harm = 0.0
+    for pos in POSITIONS:
+        b, a = before[their_rid][pos], after[their_rid][pos]
+        if a < b:
+            their_gain += ((b - a) / n) * (b / n)
+        mb, ma = before[my_rid][pos], after[my_rid][pos]
+        if ma > mb:
+            my_harm += ((ma - mb) / n) * (ma / n)
+    return max(0.0, min(1.0, 0.5 + 1.6 * their_gain - 1.1 * my_harm))
+
+
+def score_package(combo, total, target_value, fit):
+    """One number to rank candidates on. Fairness, fit and shape."""
+    want = target_value * TRADE_PREMIUM
+    fairness = max(0.0, 1.0 - abs(total / want - 1.0) * 3.0) if want else 0.0
+    shape = 1.0 - (len(combo) - 1) * 0.14
+    return round(0.45 * fairness + 0.40 * fit + 0.15 * shape, 4)
+
+
+def find_trade_packages(teams, my_rid, their_rid, target, my_assets, limit=TRADE_SUGGESTIONS):
+    """The best few packages that could buy `target`, already scored.
+
+    Exhaustive up to TRADE_MAX_PIECES over the best TRADE_ASSET_POOL of
+    your assets -- a few thousand combinations, which is nothing, and
+    beats any greedy walk that can talk itself past the right answer."""
+    tv = target["value"]
+    if not tv or not my_assets:
+        return []
+    n = len(teams) or 1
+    pool = [a for a in my_assets[:TRADE_ASSET_POOL] if a["sid"] != target["sid"]]
+    lo, hi = tv * TRADE_FAIR_LOW, tv * TRADE_FAIR_HIGH
+    floor = tv * TRADE_MIN_PIECE_SHARE
+    scored = []
+    for size in range(1, TRADE_MAX_PIECES + 1):
+        for combo in itertools.combinations(pool, size):
+            total = sum(a["value"] for a in combo)
+            if total < lo or total > hi:
+                continue
+            # Filler makes a package look bigger without making it
+            # better, and every manager can see it.
+            if size > 1 and min(a["value"] for a in combo) < floor:
+                continue
+            before, after = trade_after_state(teams, my_rid, their_rid, combo, target)
+            fit = _fit_score(before, after, my_rid, their_rid, n)
+            scored.append({
+                "assets": list(combo), "total": int(round(total)),
+                "balance": round(100.0 * total / tv, 1),
+                "over_pct": round(100.0 * (total / tv - 1.0), 1),
+                "pick_share": round(sum(a["value"] for a in combo if a["kind"] == "pick") / total, 3) if total else 0.0,
+                "fit": round(fit, 3),
+                "score": score_package(combo, total, tv, fit),
+                "mine_before": before[my_rid], "mine_after": after[my_rid],
+                "theirs_before": before[their_rid], "theirs_after": after[their_rid],
+            })
+    if not scored:
+        return []
+    # Three different answers to three different questions, rather than
+    # the same package three times with a piece swapped.
+    picked, seen = [], set()
+
+    def take(row, tag, why):
+        key = tuple(sorted(a["sid"] for a in row["assets"]))
+        if key in seen:
+            return False
+        seen.add(key)
+        picked.append(dict(row, tag=tag, tag_why=why))
+        return True
+
+    for row in sorted(scored, key=lambda r: -r["score"]):
+        if take(row, "likely", "Most likely accepted"):
+            break
+    for row in sorted(scored, key=lambda r: abs(r["balance"] - 100.0)):
+        if take(row, "value", "Closest on value"):
+            break
+    keeps = [r for r in scored if r["pick_share"] >= 0.5]
+    for row in sorted(keeps or scored, key=lambda r: (-r["pick_share"], -r["score"])):
+        if take(row, "picks", "Keep your starters"):
+            break
+    return picked[:limit]
 
 
 def compute_trade_state(args):
