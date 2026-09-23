@@ -129,6 +129,13 @@ jobs:
           done
           ls -la promo
 
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: promo-clips
+          path: promo/
+          retention-days: 30
+
       # Trusting the ffmpeg flags is not the same as checking the file
       # they produced. A clip a pixel off, missing its audio stream, or
       # under three seconds gets rejected at upload time, which is the
@@ -162,13 +169,6 @@ jobs:
             fi
           done
           [ "$bad" = "0" ] || { echo "Some clips are not postable."; exit 1; }
-
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: promo-clips
-          path: promo/
-          retention-days: 30
 
       # Last, so the clips are always uploaded first and you can still
       # watch what did record. A red run here means "a beat aimed at
