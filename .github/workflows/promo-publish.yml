@@ -1,0 +1,107 @@
+name: Promo Publish
+
+# Put finished promo clips at public URLs, so a scheduler can fetch them.
+#
+# The clips a Promo Capture run produces live in that run's artifact,
+# which needs a GitHub login to download -- no social scheduler can reach
+# it. A Release on this (public) repository gives every file a permanent,
+# anonymous download URL instead. That is the only thing this does: it
+# publishes video that was already made to be published.
+#
+# Only the clips that show the feature they are named after go out. The
+# four that divert because their page needs an account (matchups,
+# suggested, waivers, ratingdraft) are left behind -- posting a clip
+# titled "Matchups" that shows the performances board would be a lie.
+on:
+  workflow_dispatch:
+    inputs:
+      run_id:
+        description: "Promo Capture run whose clips to publish"
+        required: true
+      tag:
+        description: "Release tag (default promo-<run_id>)"
+        required: false
+
+permissions:
+  contents: write   # create the release
+  actions: read     # read another run's artifact
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: promo-clips
+          run-id: ${{ github.event.inputs.run_id }}
+          github-token: ${{ github.token }}
+          path: clips
+
+      - name: Name each clip for search
+        run: |
+          set -eu
+          mkdir -p out
+          # The filename is a (weak) ranking signal on YouTube, and it is
+          # what a viewer sees if they save the file. Scene names are not
+          # searches; these are.
+          while read -r scene slug; do
+            [ -n "$scene" ] || continue
+            for shape in tall wide; do
+              src="clips/$scene-$shape.mp4"
+              [ -e "$src" ] || { echo "missing $src"; continue; }
+              [ "$shape" = tall ] && kind=vertical || kind=desktop
+              cp "$src" "out/$slug-$kind.mp4"
+            done
+          done <<'MAP'
+          montage streakpros-fantasy-football-tools
+          scores nfl-live-scores-fantasy
+          gameday nfl-live-game-tracker
+          streaks nfl-player-prop-hit-rates
+          streaks_story nfl-prop-streak-tracker
+          rankings dynasty-fantasy-football-rankings
+          performances nfl-player-ratings-every-game
+          tradecalc dynasty-trade-calculator
+          standings nfl-standings-power-rankings
+          team nfl-team-pages
+          player nfl-player-profiles-depth-chart
+          newsfeed nfl-injury-report
+          sbc start-bench-cut-fantasy-football
+          leaguemanager sleeper-league-sync-free
+          tour streakpros-full-walkthrough
+          MAP
+          ls -la out
+          test "$(ls out/*.mp4 | wc -l)" -ge 20
+
+      - name: Publish as a release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.event.inputs.tag || format('promo-{0}', github.event.inputs.run_id) }}
+        run: |
+          set -eu
+          gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1 \
+            && gh release upload "$TAG" out/*.mp4 --clobber --repo "$GITHUB_REPOSITORY" \
+            || gh release create "$TAG" out/*.mp4 --repo "$GITHUB_REPOSITORY" \
+                 --prerelease --title "Promo clips ($TAG)" \
+                 --notes "Promo videos for social posting, recorded from streakpros.com by Promo Capture run ${{ github.event.inputs.run_id }}."
+          echo "TAG=$TAG" >> "$GITHUB_ENV"
+
+      # A URL that 404s or needs a login fails at posting time, which is
+      # the worst place to find out. Fetch every one anonymously.
+      - name: Check every URL is public
+        run: |
+          set -eu
+          bad=0
+          for f in out/*.mp4; do
+            name=$(basename "$f")
+            url="https://github.com/$GITHUB_REPOSITORY/releases/download/$TAG/$name"
+            read -r code size ctype <<<"$(curl -sL -o /dev/null -w '%{http_code} %{size_download} %{content_type}' "$url")"
+            want=$(stat -c %s "$f")
+            if [ "$code" = 200 ] && [ "$size" = "$want" ]; then
+              echo "PUBLIC $url ($size bytes)"
+              echo "- $url" >> "$GITHUB_STEP_SUMMARY"
+            else
+              echo "FAIL $url -> $code, $size of $want bytes, $ctype"; bad=1
+            fi
+          done
+          [ "$bad" = 0 ]
