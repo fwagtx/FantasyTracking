@@ -173,15 +173,24 @@ async () => {
     const t = (el.textContent || '').replace(/\s+/g, ' ').trim();
     if (t && t.length < 60 && RX.test(t)) hits.push([el, 'prompt "' + t + '"']);
   }
-  let wall = null, what = '';
+  // Gates that come AFTER free content by design: the rankings and
+  // streaks lists show their free rows first, the streak page its bars.
+  // The take hides these outright (HIDE_GATE_JS), so they never stop a
+  // page being filmed -- only a gate or prompt that IS the page does.
+  // Counting them was how desktop Rankings got refused: at 1920 wide its
+  // free rows are short enough that the gate sits in the top half.
+  const PARTIAL = '#rkGateWrap, .sk-gate, #spGate';
+  let wall = null, what = '', hard = null, hardWhat = '';
   for (const [el, label] of hits) {
     const y = el.getBoundingClientRect().top + scrollY;
     if (wall === null || y < wall) { wall = y; what = label; }
+    if (!el.closest(PARTIAL) && (hard === null || y < hard)) { hard = y; hardWhat = label; }
   }
   const path = location.pathname;
   const onAuth = path === '/login' || path === '/signup';
-  return { wall: onAuth ? 0 : wall, top: onAuth || (wall !== null && wall < vh * 0.5),
-           what: onAuth ? 'redirected to ' + path : what };
+  return { wall: onAuth ? 0 : wall, hard: onAuth ? 0 : hard,
+           top: onAuth || (hard !== null && hard < vh * 0.5),
+           what: onAuth ? 'redirected to ' + path : (hardWhat || what) };
 }
 """
 
@@ -340,9 +349,9 @@ class Stage:
         # sign-in card partway down the list, and a pan that ends on it
         # films exactly what the clip is meant to avoid.
         fact = self.walls.get(self.here())
-        if fact and fact.get("wall") is not None:
+        if fact and fact.get("hard") is not None:
             vh = (self.page.viewport_size or {}).get("height", 720)
-            ceiling = max(0, int(fact["wall"] - vh - 24))
+            ceiling = max(0, int(fact["hard"] - vh - 24))
             to_y = min(to_y, ceiling)
         await self._eval(GLIDE_JS, [to_y, ms])
         await self.hold(250)
@@ -442,10 +451,28 @@ class Stage:
         except Exception:
             # A click that starts a navigation can report a timeout
             # while the next document is already loading, so this is
-            # not proof that nothing happened.
-            print(f"  note: click on {selector}[{index}] did not confirm",
-                  file=sys.stderr)
+            # not proof that nothing happened. But the streak rows have
+            # failed to register outright on several takes, after which
+            # the scene went on pressing buttons on a page it never
+            # reached. If the target is a link and we have not moved,
+            # follow the link: the cursor has already pointed and
+            # tapped, so the footage reads exactly the same.
             clicked = False
+            try:
+                await self.page.wait_for_timeout(600)
+                href = await el.evaluate(
+                    "e => (e.closest('a[href]') || {}).href || ''")
+            except Exception:
+                href = ""
+            if href and self._key(self.page.url) == before:
+                try:
+                    await self.page.goto(href, wait_until="domcontentloaded")
+                    clicked = True
+                except Exception:
+                    pass
+            if not clicked:
+                print(f"  note: click on {selector}[{index}] did not confirm",
+                      file=sys.stderr)
         try:
             await self.page.wait_for_load_state("domcontentloaded", timeout=8000)
         except Exception:
@@ -573,7 +600,7 @@ async def scene_matchups(s):
     await s.mark(True)
     await s.clock(16000)
     if not await s.open_visit("/matchups", wait_for=".wrap", ms=1400):
-        await s.visit("/performances", ms=900)
+        await s.visit("/performances?scope=season", ms=900)
         await s.card(kicker="Performances", big="EVERY<em>game, rated</em>",
                      sub="Out of ten, every position", ms=1700)
         await s.uncard(300)
@@ -756,7 +783,7 @@ async def scene_montage(s):
     else:
         print("  note: signed out -- recording the public half of the montage",
               file=sys.stderr)
-        await s.visit("/performances", wait_for=".pl-row-item", ms=1100)
+        await s.visit("/performances?scope=season", wait_for=".pl-row-item", ms=1100)
         await s.card(kicker="Every performance", big="RATED<em>out of ten</em>",
                      sub="Every player, every week", ms=1600)
         await s.uncard(300)
@@ -793,7 +820,7 @@ async def scene_performances(s):
     """Every scored game, rated out of ten."""
     await s.mark(True)
     await s.clock(17000)
-    await s.visit("/performances", wait_for=".pl-row-item", ms=900)
+    await s.visit("/performances?scope=season", wait_for=".pl-row-item", ms=900)
     await s.card(kicker="Performances", big="EVERY<em>game, rated</em>",
                  sub="Out of ten, every position", ms=1600)
     await s.uncard(300)
