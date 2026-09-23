@@ -97,10 +97,13 @@ jobs:
               for m in missed:
                   f.write(slug.get(m, m) + "\n")
           PY
+          # -nostdin: ffmpeg otherwise reads this loop's input as keypresses,
+          # eating names.txt (most clips never converted) and quitting early
+          # on a "q" (a 3s montage).
           while read -r scene slug; do
             src="promo/$scene-tall.webm"
             [ -e "$src" ] || { echo "no clip for $scene"; continue; }
-            ffmpeg -y -loglevel error -i "$src" \
+            ffmpeg -nostdin -y -loglevel error -i "$src" \
               -f lavfi -i anullsrc=channel_layout=stereo:sample_rate=44100 \
               -vf "fps=30,scale=1080:1920:flags=lanczos,format=yuv420p" \
               -c:v libx264 -profile:v high -level 4.1 -preset medium -crf 20 \

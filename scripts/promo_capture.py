@@ -135,9 +135,13 @@ HIDE_CTA_JS = r"""
   // flag -- exactly what a visitor who dismissed it has -- so it never
   // opens, and hide the overlay as a backstop.
   try { sessionStorage.setItem('vote_shown', '1'); } catch (e) {}
+  // Between game days the Scores page's Player Rankings row is a line
+  // saying no one has scored yet -- an empty list on camera. It fills in
+  // once games kick off; until then the clip simply skips it.
   const css = `
     .nav-auth, .sk-join, .vote-overlay,
-    .sc-draft, .sc-sync-banner
+    .sc-draft, .sc-sync-banner,
+    .sc-group:has(.sc-perf-empty)
     { display:none !important; }`;
   __STYLE_NOW__('__promoHideCta', css);
 })();
