@@ -105,6 +105,29 @@ GLIDE_JS = """
 # of them locks anything, but every one of them reads as "you need an
 # account" in an advert, which is the one thing a clip must not say.
 # Hidden in the recording browser only -- the live site is untouched.
+# A stylesheet that is in force from the page's first painted frame.
+#
+# An init script runs before the page's own <html> is parsed, and a
+# <style> added to the document at that moment does not survive the
+# parse; adding it again at DOMContentLoaded is after first paint. That
+# gap was two frames -- long enough for the rankings sign-in card to
+# flash on camera. Watching the document and adding the style the
+# moment <head> exists closes it: observer callbacks run before the
+# browser can paint.
+STYLE_NOW_JS = r"""((id, css) => {
+    const add = () => {
+      if (document.getElementById(id) || !document.head) return;
+      const st = document.createElement('style');
+      st.id = id;
+      st.textContent = css;
+      document.head.appendChild(st);
+    };
+    add();
+    const mo = new MutationObserver(add);
+    mo.observe(document, {childList: true, subtree: true});
+    addEventListener('load', () => { add(); mo.disconnect(); });
+  })"""
+
 HIDE_CTA_JS = r"""
 (() => {
   // The Start/Bench/Cut vote popup opens itself 350ms after every page
@@ -116,17 +139,9 @@ HIDE_CTA_JS = r"""
     .nav-auth, .sk-join, .vote-overlay,
     .sc-draft, .sc-sync-banner
     { display:none !important; }`;
-  const add = () => {
-    if (document.getElementById('__promoHideCta')) return;
-    const st = document.createElement('style');
-    st.id = '__promoHideCta';
-    st.textContent = css;
-    (document.head || document.documentElement).appendChild(st);
-  };
-  if (document.documentElement) add();
-  document.addEventListener('DOMContentLoaded', add);
+  __STYLE_NOW__('__promoHideCta', css);
 })();
-"""
+""".replace("__STYLE_NOW__", STYLE_NOW_JS)
 
 # In the take only. A page whose gate owns its opening view is never
 # opened at all (see WALL_JS); a page with a gate further down -- Streaks
@@ -136,17 +151,9 @@ HIDE_CTA_JS = r"""
 HIDE_GATE_JS = r"""
 (() => {
   const css = `.gate-wrap, .sk-gate, #rkGateWrap, #spGate { display:none !important; }`;
-  const add = () => {
-    if (document.getElementById('__promoHideGate')) return;
-    const st = document.createElement('style');
-    st.id = '__promoHideGate';
-    st.textContent = css;
-    (document.head || document.documentElement).appendChild(st);
-  };
-  if (document.documentElement) add();
-  document.addEventListener('DOMContentLoaded', add);
+  __STYLE_NOW__('__promoHideGate', css);
 })();
-"""
+""".replace("__STYLE_NOW__", STYLE_NOW_JS)
 
 # Where on this page does the first sign-in wall start? Run on the camera-
 # off pass, after the page has settled and been scrolled end to end so
@@ -629,19 +636,17 @@ async def scene_matchups(s):
     await s.card(logo=True, url="streakpros.com", ms=2200)
 
 
-async def rankings_board(s, ms=700):
+async def rankings_board(s, ms=900):
     """Open Rankings on a board that is full for a signed-out viewer.
 
-    Signed out, the default all-positions view shows only its top tier --
-    four players -- and puts everything below behind a sign-in box. The
-    take hides that box, which left a four-row list over an empty page.
-    Sorting by the 30-day trend is an open view of the whole board,
-    risers first, which is also the point of the clip.
+    Signed out, the default list shows only its top tier -- four
+    players -- and puts everything below behind a sign-in box. The take
+    hides that box, which left four rows over an empty page. Sorting by
+    trend fills the list but leads with rank-220 depth players. The card
+    grid is open to everyone, in rank order, stars first, each with a
+    photo and its movement badge -- the better picture on both counts.
     """
-    if not await s.visit("/rankings", wait_for=".rk-page", ms=ms):
-        return False
-    await s.tap("th.col-rank_delta", after=900)
-    return True
+    return await s.visit("/rankings?view=grid", wait_for=".rk-card", ms=ms)
 
 
 async def scene_rankings(s):
@@ -652,8 +657,9 @@ async def scene_rankings(s):
     await s.card(kicker="Dynasty rankings", big="WHAT<em>everyone is worth</em>",
                  sub="And which way it moved", ms=1700)
     await s.uncard(300)
-    await s.spotlight(".rk-move", "Who moved, and how far", ms=1700)
-    await s.unspotlight()
+    if await s.has(".rk-card-move"):
+        await s.spotlight(".rk-card-move", "Who moved, and how far", ms=1700)
+        await s.unspotlight()
     await s.glide(520, 1400)
     await s.hold(1400)
     await s.card(logo=True, url="streakpros.com", ms=2200)
@@ -771,9 +777,10 @@ async def scene_montage(s):
     await rankings_board(s)
     await s.card(kicker="Dynasty rankings", big="WHAT<em>everyone is worth</em>", ms=1400)
     await s.uncard(300)
+    if await s.has(".rk-card-move"):
+        await s.spotlight(".rk-card-move", "Who moved, and how far", ms=1500)
+        await s.unspotlight()
     await s.glide(360, 1000)
-    await s.spotlight(".rk-move", "Who moved, and how far", ms=1500)
-    await s.unspotlight()
 
     # 0:22 -- the league tools, when there is a signed-in league to
     # show them with. Set PROMO_EMAIL and PROMO_PASSWORD to record this
