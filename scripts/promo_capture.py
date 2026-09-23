@@ -446,7 +446,7 @@ class Stage:
             "}")
         return bool(found)
 
-    async def tap(self, selector, index=0, after=1500):
+    async def tap(self, selector, index=0, after=1500, force=False):
         # A tap that opens a locked page is refused before the cursor
         # even moves, using where the same tap led on the camera-off
         # pass.
@@ -464,7 +464,11 @@ class Stage:
         await self.hold(180)
         clicked = True
         try:
-            await el.click(timeout=4000)
+            # force: skip Playwright's wait for the element to be
+            # "stable". The game page re-renders on its live poll, and
+            # that wait held the tap for its full four seconds -- on
+            # camera, over the kneel-down feed it was meant to leave.
+            await el.click(timeout=4000, force=force)
         except Exception:
             # A click that starts a navigation can report a timeout
             # while the next document is already loading, so this is
@@ -594,7 +598,7 @@ async def scene_scores(s):
     await s.glide(0, 1000)
     await s.tap("a[href^='/game']", index=0, after=1600)
     # Not the feed: a finished game's feed is its kneel-downs.
-    await s.tap(".gd-tab[data-panel='game']", after=1000)
+    await s.tap(".gd-tab[data-panel='game']", force=True, after=1000)
     await s.glide(340, 1600)
     await s.hold(2200)
 
@@ -910,9 +914,9 @@ async def scene_gameday(s):
         await s.uncard(300)
         await s.spotlight(".gd-field", "Where the ball is", ms=1600)
         await s.unspotlight()
-        await s.tap(".gd-tab[data-panel='game']", after=1300)
+        await s.tap(".gd-tab[data-panel='game']", force=True, after=1300)
     else:
-        await s.tap(".gd-tab[data-panel='game']", after=900)
+        await s.tap(".gd-tab[data-panel='game']", force=True, after=900)
         await s.card(kicker="Game detail", big="INSIDE<em>every game</em>",
                      sub="Live drives, box score, odds", ms=1700)
         await s.uncard(300)
