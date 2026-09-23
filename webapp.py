@@ -274,6 +274,7 @@ TABBAR_SECTIONS = (
 # Where each path belongs. A prefix match, longest first.
 TABBAR_PATHS = (
     ("/rankings", "rankings"), ("/player", "rankings"), ("/trade-calculator", "rankings"),
+    ("/suggested-trades", "rankings"),
     ("/start-bench-cut", "rankings"), ("/kickers-dst", "rankings"), ("/streaks", "streaks"), ("/matchups", "matchups"), ("/lineup", "matchups"), ("/waivers", "matchups"),
     ("/matchup", "scores"),
     ("/settings", "you"), ("/league", "you"), ("/league-manager", "you"), ("/plus", "you"), ("/pricing", "you"),
@@ -397,6 +398,7 @@ PAGE_META = (
     ("/birthdays", "Birthdays", "Who is having one."),
     ("/streaks", "Streaks", "Every starter against the line, game by game."),
     ("/trade-calculator", "Trade Calculator", "Weigh any trade both ways, with real draft-pick pricing."),
+    ("/suggested-trades", "Suggested Trades", "Name a player you want; see what it would take to get them."),
     ("/start-bench-cut", "Start, Bench, Cut", "Three players, one call, and the crowd's answer."),
     ("/draft", "Mock Draft", "Draft a board and see how it grades."),
     ("/league-manager", "Your Leagues", "Every synced league, roster and standing in one place."),
@@ -2751,6 +2753,8 @@ PREGAME_POLL_MS = 15000      # waiting for kickoff, where seconds do not matter
 app.jinja_env.globals["live_poll_ms"] = LIVE_POLL_MS
 app.jinja_env.globals["bio_link"] = lambda sid: bio_link(sid)
 app.jinja_env.globals["pregame_poll_ms"] = PREGAME_POLL_MS
+# A suggested trade lists players the template only has ids for.
+app.jinja_env.globals["player_photo_url"] = lambda sid: player_photo_url(sid)
 
 
 @app.context_processor
@@ -17641,6 +17645,106 @@ def find_trade_packages(teams, my_rid, their_rid, target, my_assets, limit=TRADE
     return picked[:limit]
 
 
+def build_trade_suggestions(username, user_id, league, target_sid, all_players, fc):
+    """Everything the Suggested Trades page needs for one league.
+
+    Returns the league's whole tradeable population as well as the
+    packages: the page filters that list client-side, which keeps the
+    search instant and -- more to the point -- makes it impossible to
+    ask for somebody who is not in the league. A free agent is not a
+    trade."""
+    league_id = league["league_id"]
+    users = {u["user_id"]: {"name": u.get("display_name", "?"), "avatar_url": sleeper_avatar_url(u.get("avatar"))}
+             for u in get_league_users(league_id)}
+    teams = build_league_teams(league_id, league, all_players, users, user_id)
+    me = next((t for t in teams if t.get("is_you")), None)
+    fc_players = fc["players"]
+
+    roster_of, owner_of = {}, {}
+    population = []
+    for t in teams:
+        for pos in POSITIONS:
+            for sid, name in (t.get("positions", {}).get(pos) or []):
+                value = (fc_players.get(sid) or {}).get("value", 0) or 0
+                roster_of[sid] = t["roster_id"]
+                owner_of[sid] = t.get("owner_name")
+                population.append({"sid": sid, "name": name, "position": pos, "value": value,
+                                   "owner": t.get("owner_name"), "roster_id": t["roster_id"],
+                                   "mine": bool(t.get("is_you"))})
+    population.sort(key=lambda p: -p["value"])
+
+    out = {"league_id": league_id, "league_name": league.get("name", "League"),
+           "teams": teams, "me": me, "population": population,
+           "target": None, "owner": None, "packages": [], "note": None, "warn": None}
+    if not me:
+        out["note"] = "You do not have a team in this league."
+        return out
+    if not target_sid:
+        return out
+    if target_sid not in roster_of:
+        out["note"] = "Nobody in this league has that player."
+        return out
+    their_rid = roster_of[target_sid]
+    if their_rid == me["roster_id"]:
+        out["note"] = "You already have them."
+        return out
+
+    them = next(t for t in teams if t["roster_id"] == their_rid)
+    tinfo = next(p for p in population if p["sid"] == target_sid)
+    pl = all_players.get(target_sid) or {}
+    target = {"kind": "player", "sid": target_sid, "name": tinfo["name"], "position": tinfo["position"],
+              "value": tinfo["value"], "team": pl.get("team"),
+              "age": compute_age_decimal(pl.get("birth_date")) or pl.get("age"),
+              "photo": player_photo_url(target_sid),
+              "position_rank": (fc_players.get(target_sid) or {}).get("position_rank")}
+    out["target"] = target
+    out["owner"] = {"name": them.get("owner_name"), "roster_id": their_rid,
+                    "record": "%s-%s" % (them.get("wins"), them.get("losses")),
+                    "value_rank": them.get("value_rank"), "size": len(teams),
+                    "odds": them.get("odds")}
+
+    # Worth saying before they waste a message: their best player, on a
+    # team with something to play for, is not usually for sale.
+    best = max((p for p in population if p["roster_id"] == their_rid),
+               key=lambda p: p["value"], default=None)
+    playoff = ((them.get("odds") or {}).get("playoff_pct") or 0)
+    if best and best["sid"] == target_sid and playoff >= 50:
+        out["warn"] = ("They are not rebuilding. %s is the best player on their roster and they have a "
+                       "%d%% playoff chance -- expect to pay over the odds, and expect a no."
+                       % (target["name"], round(playoff)))
+    elif best and best["sid"] == target_sid:
+        out["warn"] = "%s is the best player on their roster. It will cost more than the value says." % target["name"]
+
+    picks = league_pick_owners(league_id, league, teams, fc)
+    assets = roster_assets(me, fc_players, picks.get(me["roster_id"]))
+    out["packages"] = find_trade_packages(teams, me["roster_id"], their_rid, target, assets)
+    if not out["packages"]:
+        out["note"] = ("Nothing on your roster gets there without either insulting them or overpaying badly. "
+                       "You may simply not have the pieces for this one.")
+    return out
+
+
+@app.route("/suggested-trades")
+def suggested_trades_page():
+    """What to send for the player you want, in a league you actually play in."""
+    username, user_id, leagues = _account_leagues_for_pages()
+    fmt = request.args.get("format", "1qb")
+    mode = request.args.get("mode", "dynasty")
+    target_sid = (request.args.get("target") or "").strip()
+    data, error = None, None
+    league = _pick_league(leagues)
+    if username and league:
+        try:
+            fc = get_fantasycalc_values(2 if fmt == "superflex" else 1, mode != "redraft", len(leagues) and 12 or 12)
+            data = build_trade_suggestions(username, user_id, league, target_sid, get_all_players(), fc)
+        except Exception as e:
+            app.logger.exception("suggested trades failed")
+            error = str(e)
+    return render_template_string(SUGGEST_HTML, username=username, leagues=leagues,
+                                  league=league, data=data, error=error, fmt=fmt, mode=mode,
+                                  target_sid=target_sid)
+
+
 def compute_trade_state(args):
     """Everything the trade calculator page needs, computed once: parsed
     format/mode/league-size, both sides' items/totals (raw and
@@ -20655,6 +20759,7 @@ NAV_GROUPS = [
         ("Tools", [
             ("matchups", "/matchups", "Matchup Grades", "Who is worth starting this week"),
             ("trade", "/trade-calculator", "Trade Calculator", "Weigh any trade both ways"),
+            ("trade", "/suggested-trades", "Suggested Trades", "What to send for the player you want"),
             ("sbc", "/start-bench-cut", "Start / Bench / Cut", "Help keep the rankings sharp"),
         ]),
     ]),
@@ -27738,7 +27843,19 @@ render();
 """
 
 TRADE_CALC_HTML = BASE_STYLE + make_header("trade") + """
+<style>
+  /* The two halves of one tool: weigh a trade you have in mind, or be
+     told what a trade would take. Same pills on both pages. */
+  .tc-tabs{ display:flex; gap:8px; margin:22px 0 14px; }
+  .tc-tabs a{ padding:8px 16px; border-radius:999px; text-decoration:none; font-weight:700; font-size:14px;
+              border:1px solid var(--line); color:var(--ink-secondary); }
+  .tc-tabs a.on{ background:var(--accent); color:var(--accent-on); border-color:var(--accent); }
+</style>
 <main><div class="wrap">
+  <div class="tc-tabs">
+    <a class="on" href="/trade-calculator">Calculator</a>
+    <a href="/suggested-trades">Suggested trades</a>
+  </div>
   <div class="panel">
     <p class="eyebrow-desc">Real dynasty &amp; redraft values, including draft picks</p>
     <h2>Trade calculator</h2>
@@ -29212,6 +29329,236 @@ const DR = {{ {"day": day, "season": season, "week": week, "season_type": season
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
+
+
+# --- Suggested Trades page ------------------------------------------------
+SUGGEST_HTML = BASE_STYLE + make_header("rankings") + """
+<style>
+  .sg-wrap{ max-width:1000px; }
+  .sg-tabs{ display:flex; gap:8px; margin:22px 0 4px; }
+  .sg-tabs a{ padding:8px 16px; border-radius:999px; text-decoration:none; font-weight:700; font-size:14px;
+              border:1px solid var(--line); color:var(--ink-secondary); }
+  .sg-tabs a.on{ background:var(--accent); color:var(--accent-on); border-color:var(--accent); }
+  .sg-setup{ display:grid; grid-template-columns:1.2fr 1.6fr; gap:12px; margin-top:16px; }
+  .sg-fld label{ display:block; font-size:10.5px; letter-spacing:.09em; text-transform:uppercase;
+                 color:var(--ink-muted); font-weight:700; margin-bottom:5px; }
+  .sg-fld select, .sg-fld input{ width:100%; background:var(--paper-sunken); border:1px solid var(--line);
+       border-radius:10px; padding:11px 13px; font-size:15px; color:var(--ink); font-family:"Source Sans 3"; }
+  .sg-fld input:focus, .sg-fld select:focus{ outline:none; border-color:var(--accent); }
+  .sg-list{ margin-top:8px; max-height:280px; overflow-y:auto; border:1px solid var(--line);
+            border-radius:10px; background:var(--paper-sunken); display:none; }
+  .sg-list.on{ display:block; }
+  .sg-opt{ display:flex; align-items:center; gap:10px; padding:9px 13px; cursor:pointer; border-bottom:1px solid var(--line); }
+  .sg-opt:hover{ background:var(--paper-raised); }
+  .sg-opt b{ flex:1; min-width:0; font-size:14px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .sg-opt .o{ font-size:12px; color:var(--ink-muted); }
+  .sg-opt .v{ font-family:"IBM Plex Mono"; font-size:12.5px; color:var(--ink-secondary); }
+  .sg-opt.mine{ opacity:.45; }
+
+  .sg-target{ display:flex; align-items:center; gap:16px; margin-top:18px; background:var(--paper-sunken);
+              border-radius:14px; padding:14px 16px; border-left:3px solid var(--accent); }
+  .sg-target img{ width:54px; height:54px; border-radius:50%; object-fit:cover; object-position:top; background:var(--paper-raised); }
+  .sg-target .nm{ font-family:"Big Shoulders Display"; font-size:26px; font-weight:800; line-height:1; }
+  .sg-target .sub{ font-size:12.5px; color:var(--ink-secondary); margin-top:4px; }
+  .sg-target .sub b{ color:var(--ink); }
+  .sg-target .val{ margin-left:auto; text-align:right; }
+  .sg-target .val b{ display:block; font-family:"Big Shoulders Display"; font-size:30px; font-weight:800; line-height:1; }
+  .sg-target .val span{ font-size:10.5px; letter-spacing:.09em; text-transform:uppercase; color:var(--ink-muted); font-weight:700; }
+  .sg-warn{ margin-top:10px; background:var(--warning-wash); border-left:3px solid var(--warning);
+            border-radius:0 10px 10px 0; padding:9px 13px; font-size:13px; color:var(--ink-secondary); line-height:1.5; }
+  .sg-note{ margin-top:14px; color:var(--ink-secondary); font-size:14px; line-height:1.6; }
+
+  .sg-pk{ background:var(--paper-raised); border:1px solid var(--line); border-radius:16px; padding:18px 20px; margin-top:14px; }
+  .sg-pk.likely{ border-color:rgba(31,174,90,.45); }
+  .sg-pk-head{ display:flex; align-items:center; gap:10px; margin-bottom:14px; flex-wrap:wrap; }
+  .sg-tag{ font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; font-weight:800; border-radius:999px; padding:3px 10px; }
+  .sg-tag.likely{ background:var(--good-wash); color:var(--good); }
+  .sg-tag.value{ background:rgba(74,144,226,.18); color:#7fb4f2; }
+  .sg-tag.picks{ background:rgba(185,122,31,.20); color:var(--accent-ink); }
+  .sg-pk-head h3{ font-size:18px; }
+  .sg-bal{ margin-left:auto; font-family:"IBM Plex Mono"; font-size:12.5px; color:var(--ink-muted); }
+  .sg-bal b{ color:var(--good); }
+  .sg-swap{ display:grid; grid-template-columns:1fr 40px 1fr; gap:12px; }
+  .sg-side{ background:var(--paper-sunken); border-radius:12px; padding:12px 13px; }
+  .sg-side .lbl{ font-size:10px; letter-spacing:.09em; text-transform:uppercase; color:var(--ink-muted);
+                 font-weight:700; margin-bottom:9px; display:flex; justify-content:space-between; }
+  .sg-side .lbl em{ font-style:normal; font-family:"IBM Plex Mono"; color:var(--ink-secondary); }
+  .sg-row{ display:flex; align-items:center; gap:9px; padding:5px 0; }
+  .sg-row img{ width:30px; height:30px; border-radius:50%; object-fit:cover; object-position:top; background:var(--paper-raised); flex:none; }
+  .sg-row .pk{ width:30px; height:30px; border-radius:8px; background:rgba(185,122,31,.22); flex:none;
+               display:flex; align-items:center; justify-content:center; font-family:"IBM Plex Mono";
+               font-size:10px; font-weight:700; color:var(--accent-ink); }
+  .sg-row .n{ flex:1; min-width:0; font-size:14px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .sg-row .n small{ display:block; font-size:11px; color:var(--ink-muted); font-weight:500; }
+  .sg-row .v{ font-family:"IBM Plex Mono"; font-size:12.5px; color:var(--ink-secondary); }
+  .sg-arrow{ display:flex; align-items:center; justify-content:center; color:var(--ink-muted); font-size:20px; }
+  .sg-why{ margin-top:13px; display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .sg-w{ background:var(--paper-sunken); border-radius:10px; padding:10px 13px; }
+  .sg-w .h{ font-size:10.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-muted); font-weight:700; margin-bottom:6px; }
+  .sg-mv{ display:flex; align-items:center; gap:7px; font-size:13px; padding:2px 0; }
+  .sg-mv .p{ font-family:"IBM Plex Mono"; font-size:11px; font-weight:700; width:24px; }
+  .sg-mv .up{ color:var(--good); font-weight:700; } .sg-mv .dn{ color:var(--critical); font-weight:700; }
+  .sg-mv .was{ color:var(--ink-muted); }
+  .sg-acts{ display:flex; gap:10px; margin-top:13px; flex-wrap:wrap; }
+  .sg-btn{ flex:1; min-width:150px; text-align:center; border-radius:10px; padding:10px; font-weight:700;
+           font-size:14px; text-decoration:none; border:1px solid var(--accent); color:var(--accent-ink);
+           background:transparent; cursor:pointer; font-family:"Source Sans 3"; }
+  .sg-btn.primary{ background:var(--accent); color:var(--accent-on); }
+  @media (max-width:640px){
+    .sg-setup{ grid-template-columns:1fr; } .sg-why{ grid-template-columns:1fr; }
+    .sg-swap{ grid-template-columns:1fr; } .sg-arrow{ transform:rotate(90deg); height:24px; }
+  }
+</style>
+<main><div class="wrap sg-wrap">
+  <div class="sg-tabs">
+    <a href="/trade-calculator">Calculator</a>
+    <a class="on" href="/suggested-trades">Suggested trades</a>
+  </div>
+  <h1 style="font-size:30px;">Suggested trades</h1>
+  <p class="muted" style="margin-top:6px;">Name someone you want. We look at who actually has them, what you actually own,
+    and build packages that work for both sides.</p>
+
+  {% if error %}<div class="sg-note">Could not build suggestions: {{ error }}</div>{% endif %}
+  {% if not username %}
+  <div class="panel" style="margin-top:18px;">
+    <p><a href="/login?next=/suggested-trades" style="color:var(--accent-ink);">Sign in</a> and sync a league
+      &mdash; suggestions need to know which rosters are real.</p>
+  </div>
+  {% elif not leagues %}
+  <div class="panel" style="margin-top:18px;">
+    <p>No synced leagues yet. <a href="/league-manager" style="color:var(--accent-ink);">Sync one</a> and come back.</p>
+  </div>
+  {% elif data %}
+  <div class="panel" style="margin-top:14px;">
+    <form method="get" id="sgForm">
+      <input type="hidden" name="target" id="sgTarget" value="{{ target_sid }}">
+      <div class="sg-setup">
+        <div class="sg-fld"><label>League</label>
+          <select name="league" onchange="document.getElementById('sgTarget').value='';this.form.submit()">
+            {% for lg in leagues %}
+            <option value="{{ lg.league_id }}" {{ 'selected' if lg.league_id == league.league_id else '' }}>{{ lg.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="sg-fld"><label>Who do you want?</label>
+          <input type="text" id="sgSearch" autocomplete="off" placeholder="Start typing a name&hellip;"
+                 value="{{ data.target.name if data.target else '' }}">
+          <div class="sg-list" id="sgList"></div>
+        </div>
+      </div>
+    </form>
+
+    {% if data.target %}
+    <div class="sg-target">
+      <img src="{{ data.target.photo }}" alt="" onerror="this.style.visibility='hidden'">
+      <div>
+        <div class="nm">{{ data.target.name }}</div>
+        <div class="sub">{{ data.target.team or '&mdash;'|safe }} &middot; {{ data.target.position }}{% if data.target.age %} &middot; {{ data.target.age }} yo{% endif %}
+          &middot; owned by <b>{{ data.owner.name }}</b> ({{ data.owner.record }}{% if data.owner.value_rank %}, {{ data.owner.value_rank|ordinal }} of {{ data.owner.size }} by roster value{% endif %})</div>
+      </div>
+      <div class="val"><b>{{ '{:,}'.format(data.target.value) }}</b><span>Dynasty value</span></div>
+    </div>
+    {% if data.warn %}<div class="sg-warn">{{ data.warn }}</div>{% endif %}
+    {% endif %}
+    {% if data.note %}<div class="sg-note">{{ data.note }}</div>{% endif %}
+  </div>
+
+  {% for pk in data.packages %}
+  <div class="sg-pk {{ pk.tag }}">
+    <div class="sg-pk-head">
+      <span class="sg-tag {{ pk.tag }}">{{ pk.tag_why }}</span>
+      <h3>{{ pk.assets|map(attribute='name')|join(' + ') }}</h3>
+      <span class="sg-bal">balance <b>{{ pk.balance|round|int }}%</b> &middot;
+        {% if pk.over_pct > 0 %}you pay {{ pk.over_pct|round|int }}% over{% elif pk.over_pct < 0 %}{{ (-pk.over_pct)|round|int }}% under{% else %}dead even{% endif %}</span>
+    </div>
+    <div class="sg-swap">
+      <div class="sg-side">
+        <div class="lbl"><span>You send</span><em>{{ '{:,}'.format(pk.total) }}</em></div>
+        {% for a in pk.assets %}
+        <div class="sg-row">
+          {% if a.kind == 'pick' %}<span class="pk">'{{ (a.year|string)[2:] }}</span>
+          {% else %}<img src="{{ player_photo_url(a.sid) }}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">{% endif %}
+          <span class="n">{{ a.name }}<small>
+            {%- if a.kind == 'pick' -%}
+              round {{ a.round }}{% if a.acquired %} &middot; via {{ a.owner_name }}{% else %} &middot; your own{% endif %}
+            {%- else -%}
+              {{ a.position }}{% if a.position_rank %}{{ a.position_rank }}{% endif %}
+            {%- endif -%}
+          </small></span>
+          <span class="v">{{ '{:,}'.format(a.value) }}</span>
+        </div>
+        {% endfor %}
+      </div>
+      <div class="sg-arrow">&#8646;</div>
+      <div class="sg-side">
+        <div class="lbl"><span>You get</span><em>{{ '{:,}'.format(data.target.value) }}</em></div>
+        <div class="sg-row">
+          <img src="{{ data.target.photo }}" alt="" onerror="this.style.visibility='hidden'">
+          <span class="n">{{ data.target.name }}<small>{{ data.target.team }} &middot; {{ data.target.position }}{% if data.target.position_rank %}{{ data.target.position_rank }}{% endif %}</small></span>
+          <span class="v">{{ '{:,}'.format(data.target.value) }}</span>
+        </div>
+      </div>
+    </div>
+    <div class="sg-why">
+      <div class="sg-w"><div class="h">What it does to you</div>
+        {% for pos in ['QB','RB','WR','TE'] %}{% if pk.mine_before[pos] != pk.mine_after[pos] %}
+        <div class="sg-mv"><span class="p" style="color:var(--pos-{{ pos.lower() }})">{{ pos }}</span>
+          <span class="was">{{ pk.mine_before[pos]|ordinal }}</span>&rarr;
+          <span class="{{ 'up' if pk.mine_after[pos] < pk.mine_before[pos] else 'dn' }}">{{ pk.mine_after[pos]|ordinal }}</span></div>
+        {% endif %}{% endfor %}
+      </div>
+      <div class="sg-w"><div class="h">What it does to them</div>
+        {% for pos in ['QB','RB','WR','TE'] %}{% if pk.theirs_before[pos] != pk.theirs_after[pos] %}
+        <div class="sg-mv"><span class="p" style="color:var(--pos-{{ pos.lower() }})">{{ pos }}</span>
+          <span class="was">{{ pk.theirs_before[pos]|ordinal }}</span>&rarr;
+          <span class="{{ 'up' if pk.theirs_after[pos] < pk.theirs_before[pos] else 'dn' }}">{{ pk.theirs_after[pos]|ordinal }}</span></div>
+        {% endif %}{% endfor %}
+      </div>
+    </div>
+    <div class="sg-acts">
+      <a class="sg-btn primary" href="/trade-calculator?u={{ username }}&league_id={{ data.league_id }}&other_roster_id={{ data.owner.roster_id }}&side1={{ pk.assets|map(attribute='sid')|join(',') }}&side2={{ data.target.sid }}&format={{ fmt }}&mode={{ mode }}">Open in calculator</a>
+      <button type="button" class="sg-btn" data-msg="Hey {{ data.owner.name }} &mdash; would you do {{ pk.assets|map(attribute='name')|join(' + ') }} for {{ data.target.name }}?">Copy as a message</button>
+    </div>
+  </div>
+  {% endfor %}
+  {% endif %}
+</div></main>
+<script>
+(function(){
+  const POP = {{ (data.population if data else [])|tojson }};
+  const box = document.getElementById('sgSearch'), list = document.getElementById('sgList');
+  const form = document.getElementById('sgForm'), hid = document.getElementById('sgTarget');
+  if (!box) return;
+  function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+  function render(q){
+    const t = q.trim().toLowerCase();
+    if (t.length < 2){ list.classList.remove('on'); return; }
+    const hits = POP.filter(p => p.name.toLowerCase().indexOf(t) >= 0).slice(0, 40);
+    list.innerHTML = hits.map(p =>
+      '<div class="sg-opt' + (p.mine ? ' mine' : '') + '" data-sid="' + esc(p.sid) + '">' +
+      '<b>' + esc(p.name) + '</b><span class="o">' + esc(p.position) + ' &middot; ' +
+      (p.mine ? 'yours' : esc(p.owner)) + '</span><span class="v">' + (p.value || 0).toLocaleString() + '</span></div>'
+    ).join('') || '<div class="sg-opt"><b>Nobody in this league by that name.</b></div>';
+    list.classList.add('on');
+  }
+  box.addEventListener('input', e => render(e.target.value));
+  box.addEventListener('focus', e => render(e.target.value));
+  list.addEventListener('click', e => {
+    const row = e.target.closest('[data-sid]'); if (!row) return;
+    hid.value = row.dataset.sid; form.submit();
+  });
+  document.addEventListener('click', e => {
+    if (!list.contains(e.target) && e.target !== box) list.classList.remove('on');
+  });
+  document.querySelectorAll('[data-msg]').forEach(b => b.addEventListener('click', () => {
+    const txt = b.dataset.msg;
+    const done = () => { const o = b.textContent; b.textContent = 'Copied'; setTimeout(() => b.textContent = o, 1400); };
+    if (navigator.clipboard) navigator.clipboard.writeText(txt).then(done).catch(done);
+    else done();
+  }));
+})();
+</script>
+"""
 
 # --- Your Matchup and Lineup pages -----------------------------------------
 MU_STYLE = """
