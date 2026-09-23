@@ -124,6 +124,13 @@ jobs:
           mkdir -p covers
           python3 scripts/promo_covers.py out covers
 
+      # After the checks, which judge the recording itself: each clip now
+      # opens on its cover, so an account that ignores custom covers
+      # (personal TikTok, unverified YouTube) still shows it.
+      - name: Open each clip on its cover
+        if: env.SKIP != '1'
+        run: python3 scripts/promo_intro.py out covers out | tee -a $GITHUB_STEP_SUMMARY
+
       - name: Publish as a release
         if: env.SKIP != '1'
         env:

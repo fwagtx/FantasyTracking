@@ -1,0 +1,66 @@
+name: Promo Intro
+
+# Rebuild a promo Release's clips so each opens on its own cover
+# (scripts/promo_intro.py), and publish them, with the covers, as a new
+# Release. A new tag, not the same one: a post already scheduled keeps
+# pointing at the clip it was given until it is updated to the new URL.
+# The weekly workflow does this itself; this is for Releases made before.
+on:
+  workflow_dispatch:
+    inputs:
+      src:
+        description: "Release tag to read clips and covers from"
+        required: true
+      dst:
+        description: "Release tag to publish the rebuilt clips to"
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  intro:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: |
+          pip install --quiet opencv-python-headless numpy
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends ffmpeg
+      - name: Rebuild
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -eu
+          mkdir -p src out
+          gh release download "${{ github.event.inputs.src }}" --repo "$GITHUB_REPOSITORY" \
+            --pattern '*.mp4' --pattern '*.jpg' --dir src
+          python3 scripts/promo_intro.py src src out | tee -a $GITHUB_STEP_SUMMARY
+          cp src/*.jpg out/
+      - name: Publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.event.inputs.dst }}
+        run: |
+          set -eu
+          gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1 \
+            && gh release upload "$TAG" out/* --clobber --repo "$GITHUB_REPOSITORY" \
+            || gh release create "$TAG" out/* --repo "$GITHUB_REPOSITORY" --prerelease \
+                 --title "Promo clips ($TAG)" \
+                 --notes "The clips of ${{ github.event.inputs.src }}, each opening on its cover."
+      - name: Check every URL is public
+        run: |
+          set -eu
+          bad=0
+          for f in out/*; do
+            url="https://github.com/$GITHUB_REPOSITORY/releases/download/${{ github.event.inputs.dst }}/$(basename "$f")"
+            read -r code size <<<"$(curl -sL -o /dev/null -w '%{http_code} %{size_download}' "$url")"
+            if [ "$code" = 200 ] && [ "$size" = "$(stat -c %s "$f")" ]; then echo "PUBLIC $url"
+            else echo "FAIL $url -> $code $size"; bad=1; fi
+          done
+          [ "$bad" = 0 ]
