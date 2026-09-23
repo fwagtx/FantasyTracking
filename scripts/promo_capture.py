@@ -105,6 +105,20 @@ SHAPES = {
 }
 
 
+MISSED = []
+
+
+def miss(what):
+    """A beat that did not land.
+
+    These used to be notes on stderr and nothing more, which is how two
+    spotlights aimed at invented classes (.sc-card, .pf-row) recorded
+    clean for weeks: the run stayed green and the clip just quietly had
+    nothing highlighted. Now they are counted, and the run ends red."""
+    MISSED.append(what)
+    print(f"  note: {what}", file=sys.stderr)
+
+
 class Stage:
     """One recording. Thin wrapper so a scene reads as a storyboard."""
 
@@ -120,7 +134,7 @@ class Stage:
             try:
                 await self.page.wait_for_selector(wait_for, timeout=12000)
             except Exception:
-                print(f"  note: {wait_for} never appeared on {path}", file=sys.stderr)
+                miss(f"{wait_for} never appeared on {path}")
         await self.hold(ms)
 
     async def hold(self, ms):
@@ -150,7 +164,7 @@ class Stage:
             await el.scroll_into_view_if_needed(timeout=2500)
             box = await el.bounding_box()
         except Exception:
-            print(f"  note: could not find {selector}[{index}]", file=sys.stderr)
+            miss(f"could not find {selector}[{index}]")
             return None
         if not box:
             return None
@@ -238,7 +252,7 @@ class Film(Stage):
         ok = await self._eval("a => window.__promo.ring(a[0], a[1], a[2])",
                               [selector, tag, pad])
         if not ok:
-            print(f"  note: nothing to spotlight at {selector}", file=sys.stderr)
+            miss(f"nothing to spotlight at {selector}")
         await self.hold(ms)
         return bool(ok)
 
@@ -478,15 +492,18 @@ async def scene_montage(s):
     else:
         print("  note: signed out -- recording the public half of the montage",
               file=sys.stderr)
-        await s.visit("/performances", ms=1100)
+        await s.visit("/performances", wait_for=".pl-row-item", ms=1100)
         await s.card(kicker="Every performance", big="RATED<em>out of ten</em>",
                      sub="Every player, every week", ms=1600)
         await s.uncard(300)
         await s.glide(380, 1000)
-        await s.spotlight(".pf-grid", "Not points. A rating.", ms=1700)
+        # .pl-row-item, not .pf-grid: the list page and the player
+        # detail page do not share a prefix, and .pf-* belongs to the
+        # detail page.
+        await s.spotlight(".pl-row-item", "Not points. A rating.", ms=1700)
         await s.unspotlight()
 
-        await s.visit("/standings", ms=1100)
+        await s.visit("/standings", wait_for=".st-row", ms=1100)
         await s.card(kicker="Standings", big="WHO<em>is actually good</em>", ms=1500)
         await s.uncard(300)
         await s.glide(420, 1000)
@@ -613,6 +630,15 @@ def main():
     asyncio.run(record(a.base, a.scene, a.shape, a.out,
                        os.environ.get("PROMO_EMAIL"),
                        os.environ.get("PROMO_PASSWORD")))
+    # The clip is on disk by now either way -- a missed beat is worth
+    # seeing, not worth throwing the footage away for. Exit 2 says
+    # "recorded, but look at it"; a crash is still 1.
+    if MISSED:
+        print(f"\n{len(MISSED)} beat(s) did not land:", file=sys.stderr)
+        for m in MISSED:
+            print(f"  - {m}", file=sys.stderr)
+        raise SystemExit(2)
+    print("every beat landed")
 
 
 if __name__ == "__main__":

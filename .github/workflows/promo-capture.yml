@@ -58,6 +58,7 @@ jobs:
           SHAPE: ${{ github.event.inputs.shape || 'both' }}
         run: |
           set -u
+          missed=0
           mkdir -p promo
           case "$SHAPE" in
             both) shapes="wide tall" ;;
@@ -68,15 +69,25 @@ jobs:
             for shape in $shapes; do
               echo "--- recording $scene ($shape)"
               # One bad scene must not cost you the others in the run.
-              if python3 scripts/promo_capture.py \
-                   --base "$SITE" --scene "$scene" --shape "$shape" --out promo; then
-                echo "RECORDED - $scene ($shape)" >> $GITHUB_STEP_SUMMARY
-              else
-                echo "FAILED - $scene ($shape)" >> $GITHUB_STEP_SUMMARY
-              fi
+              # Exit 2 means the clip recorded but a beat did not land
+              # -- worth reading the log before posting it. Anything
+              # else means there is no clip at all.
+              set +e
+              python3 scripts/promo_capture.py \
+                --base "$SITE" --scene "$scene" --shape "$shape" --out promo
+              code=$?
+              set -e
+              case "$code" in
+                0) echo "RECORDED - $scene ($shape)" >> $GITHUB_STEP_SUMMARY ;;
+                2) echo "RECORDED WITH MISSED BEATS - $scene ($shape), see the log" >> $GITHUB_STEP_SUMMARY
+                   missed=1 ;;
+                *) echo "FAILED - $scene ($shape)" >> $GITHUB_STEP_SUMMARY ;;
+              esac
             done
           done
           ls -la promo
+          # Red the run so a half-empty clip is not mistaken for a good one.
+          [ "$missed" = "0" ] || echo "PROMO_MISSED=1" >> $GITHUB_ENV
 
       - name: Convert to mp4
         run: |
@@ -111,3 +122,15 @@ jobs:
           name: promo-clips
           path: promo/
           retention-days: 30
+
+      # Last, so the clips are always uploaded first and you can still
+      # watch what did record. A red run here means "a beat aimed at
+      # something that was not on the page" -- which is the failure that
+      # used to be invisible, because the clip still came out looking
+      # plausible.
+      - name: A missed beat fails the run
+        if: env.PROMO_MISSED == '1'
+        run: |
+          echo "One or more beats did not land. The clips are in the"
+          echo "artifact; read the Record step's log for which ones."
+          exit 1
