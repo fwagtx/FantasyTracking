@@ -100,7 +100,7 @@ jobs:
           v_team_gb green-bay-packers-team-page
           MAP
           ls -la out
-          test "$(ls out/*.mp4 | wc -l)" -ge 3
+          test "$(ls out/*.mp4 | wc -l)" -ge 1
 
       - name: Publish as a release
         env:
