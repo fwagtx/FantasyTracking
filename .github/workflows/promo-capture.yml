@@ -14,8 +14,8 @@ on:
   workflow_dispatch:
     inputs:
       scenes:
-        description: "Comma-separated: streaks, scores, matchups, rankings, tour"
-        default: "streaks,scores,matchups"
+        description: "Comma-separated: montage, streaks, scores, matchups, rankings, tour"
+        default: "montage"
       shape:
         description: "wide (X/Reddit/YouTube), tall (TikTok/Reels/Shorts), or both"
         default: "both"
@@ -26,6 +26,7 @@ on:
 jobs:
   capture:
     runs-on: ubuntu-latest
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
 
@@ -53,7 +54,7 @@ jobs:
           PROMO_EMAIL: ${{ secrets.PROMO_EMAIL }}
           PROMO_PASSWORD: ${{ secrets.PROMO_PASSWORD }}
           SITE: ${{ github.event.inputs.site || 'https://streakpros.com' }}
-          SCENES: ${{ github.event.inputs.scenes || 'streaks,scores,matchups' }}
+          SCENES: ${{ github.event.inputs.scenes || 'montage' }}
           SHAPE: ${{ github.event.inputs.shape || 'both' }}
         run: |
           set -u

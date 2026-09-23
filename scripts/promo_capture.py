@@ -389,14 +389,93 @@ async def scene_streaks_story(s):
     await s.card(logo=True, url="streakpros.com", free="Free to use", ms=2600)
 
 
+
+async def scene_montage(s):
+    """The whole site in about forty seconds: every feature worth
+    showing, cut fast, with a card naming each one.
+
+    Built as a montage rather than a tour because the two are not the
+    same film. A tour walks a page at a time and assumes somebody is
+    already interested; a montage assumes three seconds to earn the
+    next three, so every beat opens on the thing itself and the card
+    lands over it rather than before it.
+
+    Ordered by what a stranger can judge instantly. Live scores first,
+    because everyone understands a scoreboard. Streaks second, because
+    it is the number nobody else shows. The league tools last, because
+    they only mean anything once you believe the data underneath them.
+    """
+    await s.mark(True)
+    await s.clock(42000)
+
+    # 0:00 -- open cold on the hook, no page behind it.
+    await s.card(kicker="Fantasy football",
+                 big="EVERY<em>number that matters</em>",
+                 sub="One site. Free.", ms=2200)
+    await s.uncard()
+
+    # 0:02 -- live scores. The universally legible one.
+    await s.visit("/scores", wait_for=".sc-day-tabs", ms=1100)
+    await s.card(kicker="Live scores", big="EVERY<em>game, live</em>", ms=1500)
+    await s.uncard(300)
+    await s.point(".sc-day-tab.active")
+    await s.glide(420, 1100)
+    await s.spotlight(".sc-card, .sc-game", "Your players, in every game", ms=1600)
+    await s.unspotlight()
+
+    # 0:09 -- streaks. The thing nobody else has.
+    await s.visit("/streaks", wait_for=".sk-item", ms=1000)
+    await s.card(kicker="Streaks", big="WHO<em>keeps hitting</em>",
+                 sub="Every prop, every position", ms=1600)
+    await s.uncard(300)
+    await s.spotlight(".sk-item", "Hit rate, not a hunch", ms=1700)
+    await s.unspotlight()
+    await s.glide(540, 1100)
+    await s.hold(700)
+
+    # 0:16 -- rankings, with the movement column.
+    await s.visit("/rankings", wait_for=".rk-page", ms=1000)
+    await s.card(kicker="Dynasty rankings", big="WHAT<em>everyone is worth</em>", ms=1400)
+    await s.uncard(300)
+    await s.glide(360, 1000)
+    await s.spotlight(".rk-move", "Who moved, and how far", ms=1500)
+    await s.unspotlight()
+
+    # 0:22 -- the league tools. This is where it stops being a website
+    # and starts being yours.
+    await s.visit("/league-manager", wait_for=".panel", ms=1200)
+    await s.card(kicker="Your leagues", big="ALL<em>of them, ranked</em>",
+                 sub="Best team to worst, with the maths", ms=1600)
+    await s.uncard(300)
+    await s.spotlight(".lg-stats", "Playoff odds. Title odds. Luck.", ms=1900)
+    await s.unspotlight()
+    await s.glide(520, 1100)
+    await s.hold(600)
+
+    # 0:30 -- suggested trades, the newest and most distinctive thing.
+    await s.visit("/suggested-trades", wait_for=".sg-tabs", ms=1100)
+    await s.card(kicker="Suggested trades", big="NAME<em>who you want</em>",
+                 sub="We work out what it takes", ms=1700)
+    await s.uncard(300)
+    await s.spotlight(".sg-pk, .panel", "Priced for YOUR league's settings", ms=1800)
+    await s.unspotlight()
+    await s.glide(480, 1000)
+    await s.hold(700)
+
+    # 0:38 -- the sign-off.
+    await s.card(logo=True, big="STREAK<em>PROS</em>", url="streakpros.com",
+                 free="Free to use", ms=3200)
+
+
 # Where each scene lands first, so the cold load can be taken before
 # the camera is rolling.
 SCENE_FIRST_PATH = {"streaks": "/streaks", "streaks_story": "/streaks",
                     "scores": "/scores",
                     "matchups": "/matchups", "rankings": "/rankings",
-                    "tour": "/streaks"}
+                    "tour": "/streaks", "montage": "/scores"}
 
 SCENES = {
+    "montage": scene_montage,
     "streaks": scene_streaks,
     "streaks_story": scene_streaks_story,
     "scores": scene_scores,
