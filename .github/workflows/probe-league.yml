@@ -70,6 +70,10 @@ jobs:
           echo "--- league ---";  echo "$body" | jq -c '.league'
           echo "--- roster ---";  echo "$body" | jq -c '.roster'
           echo "--- verdict ---"; echo "$body" | jq -c '.verdict'
+          echo "--- traded picks (who still owns what) ---"
+          echo "$body" | jq -c '.traded_picks_error // {count: .traded_picks.count,
+                                 keys: .traded_picks.keys, seasons: .traded_picks.seasons}'
+          echo "$body" | jq -c '.traded_picks.sample // []'
           echo "--- standings, end to end ---"
           echo "$body" | jq -c '.standings_error // {teams: .standings.teams,
                                  playoff_total: .standings.playoff_pct_total,

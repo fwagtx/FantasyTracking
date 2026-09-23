@@ -17843,6 +17843,22 @@ def api_debug_league():
         "future_weeks_with_pairings": ahead,
         "schedule_is_published_ahead": bool(ahead),
     }
+    # Who owns which future pick. A suggested trade that offers a first
+    # its owner traded away two years ago is worse than no suggestion:
+    # picks move constantly in dynasty, and assuming every team still
+    # holds its own is wrong often enough to matter. Sleeper publishes
+    # the exceptions; this confirms the shape of them.
+    try:
+        tp = _cached_get(f"{SLEEPER_BASE}/league/{league_id}/traded_picks", {}, ttl=60)
+        rows = tp if isinstance(tp, list) else []
+        out["traded_picks"] = {
+            "count": len(rows),
+            "keys": sorted(rows[0].keys()) if rows else [],
+            "sample": rows[:4],
+            "seasons": sorted({str(r.get("season")) for r in rows if r.get("season")}),
+        }
+    except Exception as e:
+        out["traded_picks_error"] = f"{type(e).__name__}: {e}"
     # End to end: the numbers the card actually prints, for a real
     # league. Shapes being right is not the same as the maths being
     # right, and this is the only place both can be checked at once.
