@@ -2,6 +2,14 @@
 
 Separate from the clips — nothing here is burned into the video. Paste as is.
 
+## Where StreakPros posts go
+
+Only the **StreakPros** brand in Metricool (Instagram @streak.pros, TikTok
+@streakpros, YouTube). Any other brand on the same Metricool account is
+completely separate: never schedule, cross-post, draft or read StreakPros
+content into it, and never post its content here. Every hashtag set starts
+with `#streakpros`.
+
 One clip per section, named to match the file in the `promo-clips` artifact
 (`<scene>-wide.mp4` for YouTube and X, `<scene>-tall.mp4` for TikTok, Reels
 and Shorts).
