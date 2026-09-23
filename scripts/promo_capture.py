@@ -773,11 +773,16 @@ async def scene_leaguemanager(s):
     await s.clock(17000)
     await s.visit("/league-manager", ms=1200)
     if not await s.has(".lg-stats"):
-        print("  note: signed out -- no league to show, skipping this clip",
-              file=sys.stderr)
+        # Signed out this page is a sign-in prompt, so the pitch goes
+        # over a page that actually has data on it rather than over an
+        # empty panel.
+        diverted("no synced league -- putting the league pitch over the rankings")
+        await s.visit("/rankings", wait_for=".rk-page", ms=1000)
         await s.card(kicker="League manager", big="ALL<em>your leagues</em>",
-                     sub="Sync free with any account", ms=2400)
+                     sub="Sync every one, free", ms=2000)
         await s.uncard(300)
+        await s.glide(400, 1200)
+        await s.hold(1300)
         await s.card(logo=True, url="streakpros.com", free="Free to use", ms=2400)
         return
     await s.card(kicker="League manager", big="ALL<em>of them, ranked</em>",
@@ -791,23 +796,42 @@ async def scene_leaguemanager(s):
 
 
 async def scene_suggested(s):
-    """Name who you want; it works out what it takes."""
+    """Name who you want; it works out what it takes.
+
+    Signed out this page is one panel saying "sign in and sync a
+    league" -- not a gate element, just a plain panel, so the gate
+    check does not catch it. Filming it would be twelve seconds of an
+    advert for a feature, showing a box telling you to make an account.
+    So the clip proves the real thing is on screen first, and otherwise
+    shows the trade calculator, which is the same idea and open to
+    everyone.
+    """
     await s.mark(True)
-    await s.clock(18000)
+    await s.clock(17000)
     await s.visit("/suggested-trades", wait_for=".sg-tabs", ms=1000)
+    if not await s.has(".sg-setup") and not await s.has(".sg-row"):
+        diverted("/suggested-trades needs a synced league -- showing the calculator")
+        await s.visit("/trade-calculator", wait_for=".quick-add-grid", ms=900)
+        await s.card(kicker="Trade calculator", big="IS IT<em>fair?</em>",
+                     sub="Real market value, both sides", ms=1700)
+        await s.uncard(300)
+        await s.tap(".quick-add-tile", index=0, after=900)
+        await s.tap(".quick-add-tile", index=1, after=900)
+        await s.spotlight(".balance-bar-wrap", "The answer, instantly", ms=1800)
+        await s.unspotlight()
+        await s.hold(800)
+        await s.card(logo=True, url="streakpros.com", ms=2200)
+        return
     await s.card(kicker="Suggested trades", big="NAME<em>who you want</em>",
                  sub="We work out what it takes", ms=1800)
     await s.uncard(300)
-    await s.point(".sg-tabs")
-    await s.hold(800)
+    await s.spotlight(".sg-setup", "Your league, your settings", ms=1700)
+    await s.unspotlight()
     if await s.has(".sg-row"):
-        await s.spotlight(".sg-row", "Priced for YOUR league", ms=1900)
+        await s.spotlight(".sg-row", "Priced for YOUR league", ms=1800)
         await s.unspotlight()
-        await s.glide(460, 1200)
-    else:
-        await s.spotlight(".sg-setup", "Your league, your settings", ms=1900)
-        await s.unspotlight()
-    await s.hold(1100)
+    await s.glide(460, 1200)
+    await s.hold(1000)
     await s.card(logo=True, url="streakpros.com", ms=2200)
 
 
