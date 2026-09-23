@@ -59,6 +59,7 @@ jobs:
         run: |
           set -u
           missed=0
+          miss_list=""
           mkdir -p promo
           case "$SHAPE" in
             both) shapes="wide tall" ;;
@@ -84,14 +85,23 @@ jobs:
               case "$code" in
                 0) echo "RECORDED - $scene ($shape)" >> $GITHUB_STEP_SUMMARY ;;
                 2) echo "RECORDED WITH MISSED BEATS - $scene ($shape), see the log" >> $GITHUB_STEP_SUMMARY
-                   missed=1 ;;
+                   missed=1
+                   miss_list="${miss_list}${miss_list:+, }$scene ($shape)" ;;
                 *) echo "FAILED - $scene ($shape)" >> $GITHUB_STEP_SUMMARY ;;
               esac
             done
           done
           ls -la promo
-          # Red the run so a half-empty clip is not mistaken for a good one.
-          [ "$missed" = "0" ] || echo "PROMO_MISSED=1" >> $GITHUB_ENV
+          # One line naming every clip with a missed beat, printed last so
+          # a short tail of the log answers "which ones?" without reading
+          # the whole recording transcript.
+          echo
+          if [ "$missed" = "0" ]; then
+            echo "=== every clip landed every beat ==="
+          else
+            echo "=== clips with a missed beat: $miss_list ==="
+            echo "PROMO_MISSED=1" >> $GITHUB_ENV
+          fi
 
       - name: Convert to mp4
         run: |

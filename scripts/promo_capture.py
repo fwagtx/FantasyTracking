@@ -382,12 +382,18 @@ async def scene_matchups(s):
     await s.mark(True)
     await s.clock(16000)
     if not await s.open_visit("/matchups", wait_for=".wrap", ms=1400):
-        await s.visit("/performances", wait_for=".pl-row-item", ms=900)
+        await s.visit("/performances", ms=900)
         await s.card(kicker="Performances", big="EVERY<em>game, rated</em>",
                      sub="Out of ten, every position", ms=1700)
         await s.uncard(300)
-        await s.spotlight(".pl-row-item", ms=1700)
-        await s.unspotlight()
+        # The board is data-dependent: between slates it can come back
+        # empty for a moment. Ringing a row that is not there would be a
+        # missed beat over an empty list, so check before reaching.
+        if await s.has(".pl-row-item", timeout=8000):
+            await s.spotlight(".pl-row-item", ms=1700)
+            await s.unspotlight()
+        else:
+            diverted("the performances board was empty -- no row to ring")
         await s.glide(420, 1200)
         await s.hold(1200)
         await s.card(logo=True, url="streakpros.com", ms=2200)
