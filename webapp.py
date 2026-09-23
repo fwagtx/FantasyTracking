@@ -17645,7 +17645,140 @@ def find_trade_packages(teams, my_rid, their_rid, target, my_assets, limit=TRADE
     return picked[:limit]
 
 
-def build_trade_suggestions(username, user_id, league, target_sid, all_players, fc):
+# Where a position stops getting better with age. Not a cliff anyone
+# falls off on their birthday -- it is where the market starts pricing
+# the decline, which is exactly when selling is still easy.
+POS_AGE_CLIFF = {"RB": 25.5, "WR": 27.5, "TE": 28.5, "QB": 32.0}
+SELL_MIN_VALUE_SHARE = 0.10      # your 14th receiver is not a trade asset
+SELL_CANDIDATES = 6
+
+
+def _starting_slots(league):
+    """{pos: how many this league starts}, flex counted where it can go."""
+    slots = {p: 0 for p in POSITIONS}
+    flex = superflex = 0
+    for slot in ((league or {}).get("roster_positions") or []):
+        if slot in slots:
+            slots[slot] += 1
+        elif slot in ("FLEX", "WRRB_FLEX", "REC_FLEX"):
+            flex += 1
+        elif slot == "SUPER_FLEX":
+            superflex += 1
+    if not any(slots.values()):
+        slots = {"QB": 1, "RB": 2, "WR": 2, "TE": 1}
+    # A flex is a start for whoever fills it. Spread it over the three
+    # positions that can, so depth at any of them counts as startable.
+    for pos in ("RB", "WR", "TE"):
+        slots[pos] += flex / 3.0
+    slots["QB"] += superflex
+    return slots
+
+
+def sell_candidates(team, league, fc_players, all_players, limit=SELL_CANDIDATES):
+    """Who on this roster is worth selling, and why.
+
+    Three things make a player sellable, and none of them is "he is
+    bad". Depth, because your fourth back scores you nothing while he is
+    on the bench. A rising price, because that is when somebody else is
+    willing to pay it. And age, because the market prices a decline
+    before the production shows it -- which is the last moment selling
+    is easy.
+
+    Deliberately not a "these players are overrated" list. It is a list
+    of assets whose value to YOU is lower than their value to somebody
+    else, which is the only honest definition of a sell."""
+    slots = _starting_slots(league)
+    rows = []
+    top = 0
+    by_pos = {}
+    for pos in POSITIONS:
+        holding = []
+        for sid, name in (team.get("positions", {}).get(pos) or []):
+            fcp = fc_players.get(sid) or {}
+            value = fcp.get("value", 0) or 0
+            if value > 0:
+                holding.append((sid, name, value, fcp))
+        holding.sort(key=lambda h: -h[2])
+        by_pos[pos] = holding
+        top = max(top, holding[0][2] if holding else 0)
+    if not top:
+        return []
+    for pos, holding in by_pos.items():
+        starts = slots.get(pos, 1) or 1
+        for depth, (sid, name, value, fcp) in enumerate(holding, 1):
+            if value < top * SELL_MIN_VALUE_SHARE:
+                continue
+            # Past the starting slots, and by how much.
+            surplus = max(0.0, min(1.0, (depth - starts) / 2.0))
+            trend = fcp.get("trend_30day") or 0
+            rise = max(0.0, min(1.0, (trend / value) * 4.0)) if value else 0.0
+            pl = all_players.get(sid) or {}
+            age = compute_age_decimal(pl.get("birth_date")) or pl.get("age")
+            cliff = POS_AGE_CLIFF.get(pos, 28.0)
+            age_risk = max(0.0, min(1.0, ((age - cliff) / 4.0))) if age else 0.0
+            score = 0.40 * surplus + 0.35 * rise + 0.25 * age_risk
+            # Age alone is a weak signal on a player you are starting --
+            # every good running back is eventually 26. It takes depth or
+            # a rising price to make one of those a sell.
+            if score < 0.12:
+                continue
+            why = []
+            if surplus > 0:
+                why.append("Your %s%s %s, and this league starts about %d"
+                           % (depth, ordinal_suffix(depth), pos, round(starts)))
+            if rise > 0:
+                why.append("up %s in 30 days" % f"{int(trend):+,}")
+            if age_risk > 0 and age:
+                # "an RB" -- it is said ar-bee. The others start with a
+                # consonant sound and take "a".
+                why.append("%.1f years old, where the market starts discounting %s %s"
+                           % (age, "an" if pos == "RB" else "a", pos))
+            reason = "; ".join(why)
+            rows.append({"sid": sid, "name": name, "position": pos, "value": value,
+                         "depth": depth, "starts": round(starts, 1), "trend": trend,
+                         "age": age, "score": round(score, 4),
+                         # Only the first letter -- capitalize() would
+                         # lowercase the rest, which turns RB into rb.
+                         "why": (reason[0].upper() + reason[1:]) if reason else ""})
+    rows.sort(key=lambda r: -r["score"])
+    return rows[:limit]
+
+
+def ordinal_suffix(n):
+    n = int(n)
+    if 10 <= n % 100 <= 20:
+        return "th"
+    return {1: "st", 2: "nd", 3: "rd"}.get(n % 10, "th")
+
+
+SELL_MAX_BUYERS = 5
+
+
+def find_buyers(teams, my_rid, target, picks_by_rid, fc_players, per_team=1,
+                limit=SELL_MAX_BUYERS):
+    """What each rival could send for one of your players, best first.
+
+    The same search, pointed the other way: the package now comes off
+    THEIR roster and the premium is theirs to pay, because they are the
+    side getting the best player in the deal."""
+    out = []
+    for t in teams:
+        rid = t["roster_id"]
+        if rid == my_rid:
+            continue
+        assets = roster_assets(t, fc_players, picks_by_rid.get(rid))
+        # Sender and receiver swap: they send the package, you send the
+        # player, so every score is measured from their side out.
+        found = find_trade_packages(teams, rid, my_rid, target, assets, limit=per_team)
+        for row in found:
+            out.append(dict(row, buyer=t.get("owner_name"), buyer_roster_id=rid,
+                            buyer_record="%s-%s" % (t.get("wins"), t.get("losses")),
+                            buyer_odds=t.get("odds")))
+    out.sort(key=lambda r: -r["score"])
+    return out[:limit]
+
+
+def build_trade_suggestions(username, user_id, league, target_sid, all_players, fc, side="buy"):
     """Everything the Suggested Trades page needs for one league.
 
     Returns the league's whole tradeable population as well as the
@@ -17674,11 +17807,40 @@ def build_trade_suggestions(username, user_id, league, target_sid, all_players, 
     population.sort(key=lambda p: -p["value"])
 
     out = {"league_id": league_id, "league_name": league.get("name", "League"),
-           "teams": teams, "me": me, "population": population,
-           "target": None, "owner": None, "packages": [], "note": None, "warn": None}
+           "teams": teams, "me": me, "population": population, "side": side,
+           "target": None, "owner": None, "packages": [], "note": None, "warn": None,
+           "sells": [], "offers": []}
     if not me:
         out["note"] = "You do not have a team in this league."
         return out
+
+    if side == "sell":
+        out["sells"] = sell_candidates(me, league, fc_players, all_players)
+        mine = {p["sid"] for p in population if p["roster_id"] == me["roster_id"]}
+        if not target_sid:
+            if not out["sells"]:
+                out["note"] = ("Nothing on this roster is an obvious sell -- no surplus, nothing spiking, "
+                               "nobody at an age the market has started discounting.")
+            return out
+        if target_sid not in mine:
+            out["note"] = "You can only sell your own players."
+            return out
+        tinfo = next(p for p in population if p["sid"] == target_sid)
+        pl = all_players.get(target_sid) or {}
+        out["target"] = {"kind": "player", "sid": target_sid, "name": tinfo["name"],
+                         "position": tinfo["position"], "value": tinfo["value"],
+                         "team": pl.get("team"),
+                         "age": compute_age_decimal(pl.get("birth_date")) or pl.get("age"),
+                         "photo": player_photo_url(target_sid),
+                         "position_rank": (fc_players.get(target_sid) or {}).get("position_rank")}
+        picks = league_pick_owners(league_id, league, teams, fc)
+        out["offers"] = find_buyers(teams, me["roster_id"], out["target"], picks, fc_players)
+        if not out["offers"]:
+            out["note"] = ("Nobody in this league can put together a fair offer for them right now. "
+                           "That usually means they are the best asset in the league, or the teams who "
+                           "want them have nothing left to give.")
+        return out
+
     if not target_sid:
         return out
     if target_sid not in roster_of:
@@ -17731,18 +17893,19 @@ def suggested_trades_page():
     fmt = request.args.get("format", "1qb")
     mode = request.args.get("mode", "dynasty")
     target_sid = (request.args.get("target") or "").strip()
+    side = "sell" if (request.args.get("side") or "").lower() == "sell" else "buy"
     data, error = None, None
     league = _pick_league(leagues)
     if username and league:
         try:
             fc = get_fantasycalc_values(2 if fmt == "superflex" else 1, mode != "redraft", len(leagues) and 12 or 12)
-            data = build_trade_suggestions(username, user_id, league, target_sid, get_all_players(), fc)
+            data = build_trade_suggestions(username, user_id, league, target_sid, get_all_players(), fc, side)
         except Exception as e:
             app.logger.exception("suggested trades failed")
             error = str(e)
     return render_template_string(SUGGEST_HTML, username=username, leagues=leagues,
                                   league=league, data=data, error=error, fmt=fmt, mode=mode,
-                                  target_sid=target_sid)
+                                  target_sid=target_sid, side=side)
 
 
 def compute_trade_state(args):
@@ -29368,6 +29531,20 @@ SUGGEST_HTML = BASE_STYLE + make_header("rankings") + """
             border-radius:0 10px 10px 0; padding:9px 13px; font-size:13px; color:var(--ink-secondary); line-height:1.5; }
   .sg-note{ margin-top:14px; color:var(--ink-secondary); font-size:14px; line-height:1.6; }
 
+  .sg-sell{ display:flex; align-items:center; gap:11px; padding:10px 12px; border-radius:11px;
+            background:var(--paper-sunken); margin-bottom:8px; text-decoration:none; color:inherit;
+            border:1px solid transparent; }
+  .sg-sell:hover{ border-color:var(--accent); }
+  .sg-sell img{ width:38px; height:38px; border-radius:50%; object-fit:cover; object-position:top;
+                background:var(--paper-raised); flex:none; }
+  .sg-sell .n{ flex:1; min-width:0; }
+  .sg-sell .n b{ display:block; font-size:14.5px; }
+  .sg-sell .n small{ display:block; font-size:12px; color:var(--ink-muted); line-height:1.4; }
+  .sg-sell .tr{ font-family:"IBM Plex Mono"; font-size:12.5px; font-weight:700; flex:none; }
+  .sg-sell .tr.up{ color:var(--good); } .sg-sell .tr.dn{ color:var(--critical); }
+  .sg-sell .v{ font-family:"IBM Plex Mono"; font-size:13px; color:var(--ink-secondary); flex:none; min-width:52px; text-align:right; }
+  .sg-sell .go{ font-size:12.5px; font-weight:700; color:var(--accent-ink); flex:none; }
+  @media (max-width:560px){ .sg-sell .go{ display:none; } }
   .sg-pk{ background:var(--paper-raised); border:1px solid var(--line); border-radius:16px; padding:18px 20px; margin-top:14px; }
   .sg-pk.likely{ border-color:rgba(31,174,90,.45); }
   .sg-pk-head{ display:flex; align-items:center; gap:10px; margin-bottom:14px; flex-wrap:wrap; }
@@ -29415,8 +29592,14 @@ SUGGEST_HTML = BASE_STYLE + make_header("rankings") + """
     <a class="on" href="/suggested-trades">Suggested trades</a>
   </div>
   <h1 style="font-size:30px;">Suggested trades</h1>
-  <p class="muted" style="margin-top:6px;">Name someone you want. We look at who actually has them, what you actually own,
-    and build packages that work for both sides.</p>
+  <p class="muted" style="margin-top:6px;">
+    {% if side == 'sell' %}Who on your roster is worth selling, and what each rival could send for them.
+    {% else %}Name someone you want. We look at who actually has them, what you actually own,
+    and build packages that work for both sides.{% endif %}</p>
+  <div class="sg-tabs" style="margin:14px 0 0;">
+    <a class="{{ '' if side == 'sell' else 'on' }}" href="/suggested-trades">I want to buy</a>
+    <a class="{{ 'on' if side == 'sell' else '' }}" href="/suggested-trades?side=sell">Who should I sell?</a>
+  </div>
 
   {% if error %}<div class="sg-note">Could not build suggestions: {{ error }}</div>{% endif %}
   {% if not username %}
@@ -29432,6 +29615,7 @@ SUGGEST_HTML = BASE_STYLE + make_header("rankings") + """
   <div class="panel" style="margin-top:14px;">
     <form method="get" id="sgForm">
       <input type="hidden" name="target" id="sgTarget" value="{{ target_sid }}">
+      {% if side == 'sell' %}<input type="hidden" name="side" value="sell">{% endif %}
       <div class="sg-setup">
         <div class="sg-fld"><label>League</label>
           <select name="league" onchange="document.getElementById('sgTarget').value='';this.form.submit()">
@@ -29440,7 +29624,7 @@ SUGGEST_HTML = BASE_STYLE + make_header("rankings") + """
             {% endfor %}
           </select>
         </div>
-        <div class="sg-fld"><label>Who do you want?</label>
+        <div class="sg-fld"><label>{{ 'Who are you selling?' if side == 'sell' else 'Who do you want?' }}</label>
           <input type="text" id="sgSearch" autocomplete="off" placeholder="Start typing a name&hellip;"
                  value="{{ data.target.name if data.target else '' }}">
           <div class="sg-list" id="sgList"></div>
@@ -29454,7 +29638,7 @@ SUGGEST_HTML = BASE_STYLE + make_header("rankings") + """
       <div>
         <div class="nm">{{ data.target.name }}</div>
         <div class="sub">{{ data.target.team or '&mdash;'|safe }} &middot; {{ data.target.position }}{% if data.target.age %} &middot; {{ data.target.age }} yo{% endif %}
-          &middot; owned by <b>{{ data.owner.name }}</b> ({{ data.owner.record }}{% if data.owner.value_rank %}, {{ data.owner.value_rank|ordinal }} of {{ data.owner.size }} by roster value{% endif %})</div>
+          {% if data.owner %}&middot; owned by <b>{{ data.owner.name }}</b> ({{ data.owner.record }}{% if data.owner.value_rank %}, {{ data.owner.value_rank|ordinal }} of {{ data.owner.size }} by roster value{% endif %}){% else %}&middot; <b>yours</b>{% endif %}</div>
       </div>
       <div class="val"><b>{{ '{:,}'.format(data.target.value) }}</b><span>Dynasty value</span></div>
     </div>
@@ -29462,6 +29646,72 @@ SUGGEST_HTML = BASE_STYLE + make_header("rankings") + """
     {% endif %}
     {% if data.note %}<div class="sg-note">{{ data.note }}</div>{% endif %}
   </div>
+
+  {% if side == 'sell' and data.sells and not data.target %}
+  <div class="panel" style="margin-top:14px;">
+    <p class="eyebrow">Worth selling</p>
+    <h2 style="font-size:20px;">Where your value is doing nothing</h2>
+    <p class="muted" style="margin-top:6px;">Not a list of bad players. A list of players worth more to
+      somebody else than they are to you &mdash; because you are deep there, because the price is rising,
+      or because the market has started pricing their age.</p>
+    <div style="margin-top:12px;">
+      {% for c in data.sells %}
+      <a class="sg-sell" href="/suggested-trades?side=sell&league={{ data.league_id }}&target={{ c.sid }}">
+        <img src="{{ player_photo_url(c.sid) }}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">
+        <span class="n"><b>{{ c.name }}</b><small>{{ c.why or 'Worth testing the market on.' }}</small></span>
+        {% if c.trend %}<span class="tr {{ 'up' if c.trend > 0 else 'dn' }}">{{ '{:+,}'.format(c.trend|int) }}</span>{% endif %}
+        <span class="v">{{ '{:,}'.format(c.value) }}</span>
+        <span class="go">See offers &rsaquo;</span>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+  {% if side == 'sell' and data.target and data.offers %}
+  <p class="muted" style="margin-top:18px;">{{ data.offers|length }} team{{ 's' if data.offers|length != 1 else '' }}
+    could make a fair offer. Best first &mdash; and "best" means it suits them too, because the ones that suit
+    nobody do not get accepted.</p>
+  {% for of in data.offers %}
+  <div class="sg-pk {{ 'likely' if loop.first else '' }}">
+    <div class="sg-pk-head">
+      <span class="sg-tag {{ 'likely' if loop.first else 'value' }}">{{ of.buyer }}</span>
+      <h3>{{ of.assets|map(attribute='name')|join(' + ') }}</h3>
+      <span class="sg-bal">{{ of.buyer_record }}{% if of.buyer_odds %} &middot; {{ of.buyer_odds.playoff_pct|round|int }}% playoffs{% endif %}
+        &middot; balance <b>{{ of.balance|round|int }}%</b></span>
+    </div>
+    <div class="sg-swap">
+      <div class="sg-side">
+        <div class="lbl"><span>You send</span><em>{{ '{:,}'.format(data.target.value) }}</em></div>
+        <div class="sg-row">
+          <img src="{{ data.target.photo }}" alt="" onerror="this.style.visibility='hidden'">
+          <span class="n">{{ data.target.name }}<small>{{ data.target.team }} &middot; {{ data.target.position }}</small></span>
+          <span class="v">{{ '{:,}'.format(data.target.value) }}</span>
+        </div>
+      </div>
+      <div class="sg-arrow">&#8646;</div>
+      <div class="sg-side">
+        <div class="lbl"><span>You get</span><em>{{ '{:,}'.format(of.total) }}</em></div>
+        {% for a in of.assets %}
+        <div class="sg-row">
+          {% if a.kind == 'pick' %}<span class="pk">'{{ (a.year|string)[2:] }}</span>
+          {% else %}<img src="{{ player_photo_url(a.sid) }}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">{% endif %}
+          <span class="n">{{ a.name }}<small>
+            {%- if a.kind == 'pick' -%}round {{ a.round }}{% if a.acquired %} &middot; via {{ a.owner_name }}{% else %} &middot; theirs{% endif %}
+            {%- else -%}{{ a.position }}{% if a.position_rank %}{{ a.position_rank }}{% endif %}{%- endif -%}
+          </small></span>
+          <span class="v">{{ '{:,}'.format(a.value) }}</span>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="sg-acts">
+      <a class="sg-btn primary" href="/trade-calculator?u={{ username }}&league_id={{ data.league_id }}&other_roster_id={{ of.buyer_roster_id }}&side1={{ data.target.sid }}&side2={{ of.assets|map(attribute='sid')|join(',') }}&format={{ fmt }}&mode={{ mode }}">Open in calculator</a>
+      <button type="button" class="sg-btn" data-msg="Hey {{ of.buyer }} &mdash; would you do {{ of.assets|map(attribute='name')|join(' + ') }} for {{ data.target.name }}?">Copy as a message</button>
+    </div>
+  </div>
+  {% endfor %}
+  {% endif %}
 
   {% for pk in data.packages %}
   <div class="sg-pk {{ pk.tag }}">
@@ -29526,6 +29776,7 @@ SUGGEST_HTML = BASE_STYLE + make_header("rankings") + """
 <script>
 (function(){
   const POP = {{ (data.population if data else [])|tojson }};
+  const SIDE = {{ side|tojson }};
   const box = document.getElementById('sgSearch'), list = document.getElementById('sgList');
   const form = document.getElementById('sgForm'), hid = document.getElementById('sgTarget');
   if (!box) return;
@@ -29533,9 +29784,9 @@ SUGGEST_HTML = BASE_STYLE + make_header("rankings") + """
   function render(q){
     const t = q.trim().toLowerCase();
     if (t.length < 2){ list.classList.remove('on'); return; }
-    const hits = POP.filter(p => p.name.toLowerCase().indexOf(t) >= 0).slice(0, 40);
+    const hits = POP.filter(p => (SIDE !== 'sell' || p.mine) && p.name.toLowerCase().indexOf(t) >= 0).slice(0, 40);
     list.innerHTML = hits.map(p =>
-      '<div class="sg-opt' + (p.mine ? ' mine' : '') + '" data-sid="' + esc(p.sid) + '">' +
+      '<div class="sg-opt' + (p.mine && SIDE !== 'sell' ? ' mine' : '') + '" data-sid="' + esc(p.sid) + '">' +
       '<b>' + esc(p.name) + '</b><span class="o">' + esc(p.position) + ' &middot; ' +
       (p.mine ? 'yours' : esc(p.owner)) + '</span><span class="v">' + (p.value || 0).toLocaleString() + '</span></div>'
     ).join('') || '<div class="sg-opt"><b>Nobody in this league by that name.</b></div>';
