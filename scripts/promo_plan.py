@@ -1,7 +1,7 @@
 """Plan a week of StreakPros promo posts, and pick what actually goes out.
 
-Three posts a day, each an Instagram Reel, a TikTok and a YouTube Short
-of the same vertical clip:
+Three posts a day, each an Instagram Reel, a TikTok, a YouTube Short and
+a Facebook Reel of the same vertical clip:
 
   10:00 CT  a feature (montage, streaks, trade calculator, ...)
   13:00 CT  a slice of one (QB rankings, the playoff picture, ...)
@@ -102,12 +102,14 @@ def payload(entry, tag, day, time):
             "autoPublish": True, "draft": False, "descendants": [], "firstCommentText": "",
             "hasNotReadNotes": False, "media": [media_url(tag, entry["slug"])], "mediaAltText": [],
             "videoThumbnailUrl": cover_url(tag, entry["slug"]),
-            "providers": [{"network": "instagram"}, {"network": "tiktok"}, {"network": "youtube"}],
+            "providers": [{"network": "instagram"}, {"network": "tiktok"}, {"network": "youtube"},
+                          {"network": "facebook"}],
             "publicationDate": {"dateTime": f"{day.isoformat()}T{time}:00", "timezone": "America/Chicago"},
             "shortener": False, "smartLinkData": {"ids": []}, "text": text,
             "youtubeData": {"title": entry["yt"], "type": "short", "privacy": "public", "tags": entry["tags"],
                             "category": "SPORTS", "madeForKids": False, "isAiGeneratedContent": False},
             "instagramData": {"type": "REEL", "showReelOnFeed": True, "isAiGenerated": False},
+            "facebookData": {"type": "REEL"},
             "tiktokData": {"privacyOption": "PUBLIC_TO_EVERYONE", "commercialContentOwnBrand": True,
                            "commercialContentThirdParty": False, "title": entry["tt"], "autoAddMusic": False,
                            "isAigc": False, "disableComment": False, "disableDuet": False,
