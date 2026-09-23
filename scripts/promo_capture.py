@@ -1588,6 +1588,14 @@ async def record(base, scene, shape, out_dir, email=None, password=None):
         # its own Chromium at a fixed path instead, so allow an override
         # rather than downloading a second copy of the same browser.
         launch = {"args": ["--hide-scrollbars"]}
+        if shape == "tall":
+            # device_scale_factor=2 on the context alone is not enough:
+            # the recorder then captures a 540x960 picture and pads it
+            # into the top-left quarter of the 1080x1920 frame, with the
+            # rest filled gray. Forcing the scale on the browser itself
+            # makes the captured picture 1080x1920, filling the frame,
+            # while the page is still laid out at the 540px phone width.
+            launch["args"].append("--force-device-scale-factor=2")
         chrome = os.environ.get("PROMO_CHROME")
         if chrome:
             launch["executable_path"] = chrome
