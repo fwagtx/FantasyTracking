@@ -100,12 +100,28 @@ GLIDE_JS = """
 """
 
 SHAPES = {
-    "wide": {"width": 1280, "height": 720},
+    # 1920x1080 for YouTube and X; recorded at full size rather than
+    # upscaled, so text stays sharp.
+    "wide": {"width": 1920, "height": 1080},
+    # Recorded at 540x960 so the page lays itself out as a phone, then
+    # doubled to 1080x1920 for TikTok, Reels and Shorts.
     "tall": {"width": 540, "height": 960},
 }
 
 
 MISSED = []
+DIVERTED = []
+
+
+def diverted(what):
+    """A page that turned out to be behind a gate, so the scene went
+    somewhere else instead.
+
+    Not a failure -- the clip is still clean, which is the whole point.
+    But it must be said out loud, because a diversion means the feature
+    the clip was named after never appeared in it."""
+    DIVERTED.append(what)
+    print(f"  note: {what}", file=sys.stderr)
 
 
 def miss(what):
@@ -178,6 +194,22 @@ class Stage:
         await self.hold(settle)
         return el
 
+    async def open_visit(self, path, wait_for=None, ms=1400):
+        """Land on a page, but never film a gate.
+
+        The sign-up and upgrade cards are the single worst thing that
+        can be in an advert for the thing they are covering up: the clip
+        is named after a feature and then shows a box asking you to make
+        an account. So if the page is gated, the scene does not film it
+        at all -- it diverts to an open page, or gives up on the beat.
+
+        Returns True when the real page is open and worth filming."""
+        await self.visit(path, wait_for=wait_for, ms=ms)
+        if not await self.gated():
+            return True
+        diverted(f"{path} is gated -- not filming it")
+        return False
+
     async def has(self, selector, timeout=2500):
         """Is this actually on the page? Asked before a card claims it is.
 
@@ -199,11 +231,15 @@ class Stage:
         on a blurred panel, which is the worst footage imaginable.
         """
         found = await self._eval(
-            "() => { const g = document.querySelector('.gate-wrap, .gate-card, #spGate');"
-            "        return g ? (g.id || g.className) : ''; }")
-        if found:
-            print(f"  note: page is gated ({found}) -- skipping the locked beats",
-                  file=sys.stderr)
+            "() => {"
+            "  for (const g of document.querySelectorAll('.gate-wrap, .gate-card, #spGate')) {"
+            "    const cs = getComputedStyle(g);"
+            "    const shown = g.offsetParent !== null && cs.display !== 'none'"
+            "                  && cs.visibility !== 'hidden' && g.getClientRects().length;"
+            "    if (shown) return g.id || g.className;"
+            "  }"
+            "  return '';"
+            "}")
         return bool(found)
 
     async def tap(self, selector, index=0, after=1500):
@@ -306,8 +342,13 @@ async def scene_streaks(s):
     # hold on the game-by-game bars instead, which are the part that
     # reads on a phone anyway.
     if await s.gated():
-        await s.glide(560, 1500)
-        await s.hold(2400)
+        # The line-adjust panel is members-only. Signed out it is a
+        # blurred box, which is the last thing an advert should dwell
+        # on, so the clip pans back to the game-by-game bars -- open to
+        # everyone and the part that reads on a phone anyway.
+        diverted("the streaks line-adjust panel is gated -- panning to the bars")
+        await s.glide(300, 1200)
+        await s.hold(1800)
         return
     for _ in range(3):
         await s.tap("#spPlus", after=700)
@@ -331,23 +372,49 @@ async def scene_scores(s):
 
 
 async def scene_matchups(s):
-    """Every starter graded, with the sentence that explains the grade."""
-    await s.visit("/matchups", wait_for=".wrap", ms=2000)
-    await s.glide(340, 1700)
-    await s.hold(1200)
-    await s.glide(680, 1500)
+    """Every starter graded, with the sentence that explains the grade.
+
+    Matchups is members-only, so to a guest this page is nothing but a
+    gate. Rather than film the gate -- an advert for a feature, showing
+    a box that hides it -- the clip falls back to Performances, which is
+    the same idea (a number on a player) and open to everyone.
+    """
+    await s.mark(True)
+    await s.clock(16000)
+    if not await s.open_visit("/matchups", wait_for=".wrap", ms=1400):
+        await s.visit("/performances", wait_for=".pl-row-item", ms=900)
+        await s.card(kicker="Performances", big="EVERY<em>game, rated</em>",
+                     sub="Out of ten, every position", ms=1700)
+        await s.uncard(300)
+        await s.spotlight(".pl-row-item", ms=1700)
+        await s.unspotlight()
+        await s.glide(420, 1200)
+        await s.hold(1200)
+        await s.card(logo=True, url="streakpros.com", ms=2200)
+        return
+    await s.card(kicker="Matchups", big="START<em>or sit?</em>",
+                 sub="Every starter, graded", ms=1700)
+    await s.uncard(300)
+    await s.spotlight(".mu-grade", "The grade, and why", ms=1700)
+    await s.unspotlight()
+    await s.glide(680, 1400)
     await s.hold(1400)
-    await s.glide(1020, 1500)
-    await s.hold(1800)
+    await s.card(logo=True, url="streakpros.com", ms=2200)
 
 
 async def scene_rankings(s):
     """Dynasty values, and which way they moved this week."""
-    await s.visit("/rankings", wait_for=".wrap", ms=2400)
-    await s.glide(360, 1900)
-    await s.hold(1500)
-    await s.glide(720, 1700)
-    await s.hold(2200)
+    await s.mark(True)
+    await s.clock(16000)
+    await s.visit("/rankings", wait_for=".rk-page", ms=1400)
+    await s.card(kicker="Dynasty rankings", big="WHAT<em>everyone is worth</em>",
+                 sub="And which way it moved", ms=1700)
+    await s.uncard(300)
+    await s.spotlight(".rk-move", "Who moved, and how far", ms=1700)
+    await s.unspotlight()
+    await s.glide(520, 1400)
+    await s.hold(1400)
+    await s.card(logo=True, url="streakpros.com", ms=2200)
 
 
 async def scene_tour(s):
@@ -519,10 +586,271 @@ async def scene_montage(s):
 SCENE_FIRST_PATH = {"streaks": "/streaks", "streaks_story": "/streaks",
                     "scores": "/scores",
                     "matchups": "/matchups", "rankings": "/rankings",
-                    "tour": "/streaks", "montage": "/scores"}
+                    "tour": "/streaks", "montage": "/scores",
+                    "performances": "/performances", "standings": "/standings",
+                    "team": "/standings", "gameday": "/scores",
+                    "player": "/injuries", "tradecalc": "/trade-calculator",
+                    "newsfeed": "/injuries", "sbc": "/start-bench-cut",
+                    "ratingdraft": "/draft", "leaguemanager": "/league-manager",
+                    "suggested": "/suggested-trades", "waivers": "/waivers"}
+
+
+# --- one feature per clip ----------------------------------------------
+#
+# Each of these is about fifteen seconds and shows exactly one thing.
+# Same grammar every time so a run of them cuts together: land on the
+# page, name it with a card, ring the one element that makes the point,
+# move once, stop. Nothing here explains -- if a beat needs a sentence
+# to make sense it does not belong in a fifteen second clip.
+
+
+async def scene_performances(s):
+    """Every scored game, rated out of ten."""
+    await s.mark(True)
+    await s.clock(17000)
+    await s.visit("/performances", wait_for=".pl-row-item", ms=900)
+    await s.card(kicker="Performances", big="EVERY<em>game, rated</em>",
+                 sub="Out of ten, every position", ms=1600)
+    await s.uncard(300)
+    await s.spotlight(".pl-row-item", "Not points. A rating.", ms=1700)
+    await s.unspotlight()
+    await s.point(".pl-filters")
+    await s.glide(420, 1100)
+    # Into one performance, where the rating is broken apart.
+    await s.tap("a[href^='/performance']", index=0, after=2000)
+    await s.glide(300, 1200)
+    await s.hold(1400)
+    await s.card(logo=True, url="streakpros.com", ms=2200)
+
+
+async def scene_standings(s):
+    """Who is actually good, not who got lucky."""
+    await s.mark(True)
+    await s.clock(15000)
+    await s.visit("/standings", wait_for=".st-row", ms=900)
+    await s.card(kicker="Standings", big="WHO<em>is actually good</em>", ms=1500)
+    await s.uncard(300)
+    await s.spotlight(".st-row", "Every team, ranked", ms=1600)
+    await s.unspotlight()
+    await s.point(".st-tabs")
+    await s.glide(420, 1200)
+    await s.spotlight(".st-legend", ms=1400)
+    await s.unspotlight()
+    await s.card(logo=True, url="streakpros.com", ms=2200)
+
+
+async def scene_team(s):
+    """One page per team: results, news, every player."""
+    await s.mark(True)
+    await s.clock(17000)
+    await s.visit("/standings", wait_for=".st-row", ms=800)
+    await s.tap("a[href^='/team']", index=0, after=1900)
+    await s.card(kicker="Team pages", big="ONE<em>page per team</em>",
+                 sub="Results, news, the whole roster", ms=1700)
+    await s.uncard(300)
+    await s.spotlight(".tm-panel", ms=1600)
+    await s.unspotlight()
+    await s.glide(520, 1300)
+    await s.hold(1500)
+    await s.card(logo=True, url="streakpros.com", ms=2200)
+
+
+async def scene_gameday(s):
+    """Inside a single game: field, drives, box score."""
+    await s.mark(True)
+    await s.clock(18000)
+    await s.visit("/scores", wait_for=".sc-day-tabs", ms=900)
+    await s.tap("a[href^='/game']", index=0, after=2200)
+    await s.card(kicker="Game detail", big="INSIDE<em>every game</em>",
+                 sub="Live drives, box score, odds", ms=1700)
+    await s.uncard(300)
+    if await s.has(".gd-field"):
+        await s.spotlight(".gd-field", "Where the ball is", ms=1600)
+        await s.unspotlight()
+    await s.glide(460, 1300)
+    await s.hold(1200)
+    await s.glide(900, 1200)
+    await s.hold(1200)
+    await s.card(logo=True, url="streakpros.com", ms=2200)
+
+
+async def scene_player(s):
+    """A player's whole profile, depth chart included."""
+    await s.mark(True)
+    await s.clock(17000)
+    await s.visit("/injuries", wait_for=".fd-row", ms=800)
+    await s.tap("a[href^='/player']", index=0, after=2000)
+    await s.card(kicker="Player profiles", big="EVERY<em>player, in full</em>",
+                 sub="Stats, value, depth chart", ms=1700)
+    await s.uncard(300)
+    await s.spotlight(".player-hero", ms=1500)
+    await s.unspotlight()
+    await s.glide(520, 1300)
+    await s.hold(1500)
+    await s.card(logo=True, url="streakpros.com", ms=2200)
+
+
+async def scene_tradecalc(s):
+    """Two sides, one bar, an honest answer."""
+    await s.mark(True)
+    await s.clock(18000)
+    await s.visit("/trade-calculator", wait_for=".quick-add-grid", ms=900)
+    await s.card(kicker="Trade calculator", big="IS IT<em>fair?</em>",
+                 sub="Priced on real market value", ms=1700)
+    await s.uncard(300)
+    # Build a lopsided side so the bar has something to say.
+    await s.tap(".quick-add-tile", index=0, after=900)
+    await s.tap(".quick-add-tile", index=1, after=900)
+    await s.spotlight(".balance-bar-wrap", "The answer, instantly", ms=1900)
+    await s.unspotlight()
+    await s.glide(360, 1100)
+    await s.hold(900)
+    await s.card(logo=True, url="streakpros.com", ms=2200)
+
+
+async def scene_newsfeed(s):
+    """Injuries, moves and birthdays, all in one list."""
+    await s.mark(True)
+    await s.clock(15000)
+    await s.visit("/injuries", wait_for=".fd-row", ms=900)
+    await s.card(kicker="Injury feed", big="WHO<em>is hurt</em>",
+                 sub="Updated all day", ms=1600)
+    await s.uncard(300)
+    await s.spotlight(".fd-row", ms=1600)
+    await s.unspotlight()
+    await s.glide(430, 1200)
+    await s.hold(900)
+    await s.visit("/moves", wait_for=".fd-row", ms=900)
+    await s.card(kicker="Roster moves", big="WHO<em>just signed</em>", ms=1500)
+    await s.uncard(300)
+    await s.card(logo=True, url="streakpros.com", ms=2200)
+
+
+async def scene_sbc(s):
+    """Start, bench, cut -- the vote that feeds the rankings."""
+    await s.mark(True)
+    await s.clock(15000)
+    await s.visit("/start-bench-cut", wait_for=".vote-cards", ms=1000)
+    await s.card(kicker="Start / Bench / Cut", big="YOU<em>set the market</em>",
+                 sub="Every vote moves the rankings", ms=1800)
+    await s.uncard(300)
+    await s.spotlight(".vote-cards", ms=1700)
+    await s.unspotlight()
+    await s.point(".vote-btns")
+    await s.hold(1400)
+    await s.card(logo=True, url="streakpros.com", ms=2200)
+
+
+async def scene_ratingdraft(s):
+    """The day's board, when one is open."""
+    await s.mark(True)
+    await s.clock(15000)
+    await s.visit("/draft", ms=1200)
+    if not await s.has(".dr-picks"):
+        print("  note: no rating draft open -- showing the scores board instead",
+              file=sys.stderr)
+        await s.visit("/scores", wait_for=".sc-day-tabs", ms=900)
+        await s.card(kicker="Rating draft", big="EVERY<em>game day</em>",
+                     sub="Opens the morning after each slate", ms=1900)
+        await s.uncard(300)
+        await s.glide(380, 1200)
+        await s.hold(1400)
+        await s.card(logo=True, url="streakpros.com", ms=2200)
+        return
+    await s.card(kicker="Rating draft", big="PICK<em>the day's best</em>",
+                 sub="A new board after every slate", ms=1800)
+    await s.uncard(300)
+    await s.spotlight(".dr-picks", ms=1700)
+    await s.unspotlight()
+    await s.glide(380, 1200)
+    await s.hold(1100)
+    await s.card(logo=True, url="streakpros.com", ms=2200)
+
+
+async def scene_leaguemanager(s):
+    """Your leagues, ranked, with the odds behind the ranking."""
+    await s.mark(True)
+    await s.clock(17000)
+    await s.visit("/league-manager", ms=1200)
+    if not await s.has(".lg-stats"):
+        print("  note: signed out -- no league to show, skipping this clip",
+              file=sys.stderr)
+        await s.card(kicker="League manager", big="ALL<em>your leagues</em>",
+                     sub="Sync free with any account", ms=2400)
+        await s.uncard(300)
+        await s.card(logo=True, url="streakpros.com", free="Free to use", ms=2400)
+        return
+    await s.card(kicker="League manager", big="ALL<em>of them, ranked</em>",
+                 sub="Best team to worst, with the maths", ms=1800)
+    await s.uncard(300)
+    await s.spotlight(".lg-stats", "Playoff odds. Title odds. Luck.", ms=1900)
+    await s.unspotlight()
+    await s.glide(520, 1300)
+    await s.hold(1400)
+    await s.card(logo=True, url="streakpros.com", free="Free to use", ms=2200)
+
+
+async def scene_suggested(s):
+    """Name who you want; it works out what it takes."""
+    await s.mark(True)
+    await s.clock(18000)
+    await s.visit("/suggested-trades", wait_for=".sg-tabs", ms=1000)
+    await s.card(kicker="Suggested trades", big="NAME<em>who you want</em>",
+                 sub="We work out what it takes", ms=1800)
+    await s.uncard(300)
+    await s.point(".sg-tabs")
+    await s.hold(800)
+    if await s.has(".sg-row"):
+        await s.spotlight(".sg-row", "Priced for YOUR league", ms=1900)
+        await s.unspotlight()
+        await s.glide(460, 1200)
+    else:
+        await s.spotlight(".sg-setup", "Your league, your settings", ms=1900)
+        await s.unspotlight()
+    await s.hold(1100)
+    await s.card(logo=True, url="streakpros.com", ms=2200)
+
+
+async def scene_waivers(s):
+    """Who to pick up, for the league you actually play in."""
+    await s.mark(True)
+    await s.clock(15000)
+    await s.visit("/waivers", ms=1200)
+    if not await s.has(".wv-row"):
+        print("  note: signed out -- no waiver board, showing rankings instead",
+              file=sys.stderr)
+        await s.visit("/rankings", wait_for=".rk-page", ms=1000)
+        await s.card(kicker="Waiver targets", big="WHO<em>to pick up</em>",
+                     sub="Sync a league to see yours", ms=2000)
+        await s.uncard(300)
+        await s.glide(360, 1200)
+        await s.hold(1300)
+        await s.card(logo=True, url="streakpros.com", ms=2200)
+        return
+    await s.card(kicker="Waiver targets", big="WHO<em>to pick up</em>",
+                 sub="Ranked for your roster", ms=1800)
+    await s.uncard(300)
+    await s.spotlight(".wv-row", ms=1700)
+    await s.unspotlight()
+    await s.glide(400, 1200)
+    await s.hold(1100)
+    await s.card(logo=True, url="streakpros.com", ms=2200)
+
 
 SCENES = {
     "montage": scene_montage,
+    "performances": scene_performances,
+    "standings": scene_standings,
+    "team": scene_team,
+    "gameday": scene_gameday,
+    "player": scene_player,
+    "tradecalc": scene_tradecalc,
+    "newsfeed": scene_newsfeed,
+    "sbc": scene_sbc,
+    "ratingdraft": scene_ratingdraft,
+    "leaguemanager": scene_leaguemanager,
+    "suggested": scene_suggested,
+    "waivers": scene_waivers,
     "streaks": scene_streaks,
     "streaks_story": scene_streaks_story,
     "scores": scene_scores,
@@ -633,12 +961,18 @@ def main():
     # The clip is on disk by now either way -- a missed beat is worth
     # seeing, not worth throwing the footage away for. Exit 2 says
     # "recorded, but look at it"; a crash is still 1.
+    if DIVERTED:
+        print(f"\n{len(DIVERTED)} beat(s) went around a gate:", file=sys.stderr)
+        for d in DIVERTED:
+            print(f"  - {d}", file=sys.stderr)
+        print("  the clip is clean, but it does not show that feature.",
+              file=sys.stderr)
     if MISSED:
         print(f"\n{len(MISSED)} beat(s) did not land:", file=sys.stderr)
         for m in MISSED:
             print(f"  - {m}", file=sys.stderr)
         raise SystemExit(2)
-    print("every beat landed")
+    print("every beat landed" + (" (no gate was filmed)" if DIVERTED else ""))
 
 
 if __name__ == "__main__":
