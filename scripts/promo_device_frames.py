@@ -35,14 +35,53 @@ def backdrop():
     </defs>"""
 
 
+def status_icons(right, mid, k):
+    """Signal, Wi-Fi and battery, right-aligned at x=right, centred on
+    y=mid, drawn at iPhone proportions (k scales them with the phone)."""
+    import math
+    u = 1.15 * k                              # one icon unit, in px
+    parts = []
+    # Battery: outline, charge, and the nub on the right.
+    bw, bh = 25 * u, 12 * u
+    bx = right - bw - 2.5 * u
+    by = mid - bh / 2
+    parts.append(f'<rect x="{bx:.1f}" y="{by:.1f}" width="{bw:.1f}" height="{bh:.1f}" rx="{3.8 * u:.1f}" '
+                 f'fill="none" stroke="#fff" stroke-opacity=".4" stroke-width="{1.1 * u:.1f}"/>')
+    parts.append(f'<rect x="{bx + 2 * u:.1f}" y="{by + 2 * u:.1f}" width="{bw - 4 * u:.1f}" '
+                 f'height="{bh - 4 * u:.1f}" rx="{2 * u:.1f}" fill="#fff"/>')
+    parts.append(f'<path d="M{bx + bw + 1 * u:.1f} {mid - 2 * u:.1f} a{2 * u:.1f} {2 * u:.1f} 0 0 1 0 {4 * u:.1f} z" '
+                 f'fill="#fff" fill-opacity=".45"/>')
+    # Wi-Fi: a dot and two arcs fanning up from it, 90 degrees wide.
+    wx = bx - 7 * u - 8.5 * u                 # centre of the fan
+    wb = mid + 5.5 * u                        # its base
+    parts.append(f'<path d="M{wx:.1f} {wb:.1f} l{-3.2 * u:.1f} {-3.2 * u:.1f} '
+                 f'a{4.5 * u:.1f} {4.5 * u:.1f} 0 0 1 {6.4 * u:.1f} 0 z" fill="#fff"/>')
+    for r in (7.8 * u, 11.4 * u):
+        dx, dy = r * math.sin(math.pi / 4), r * math.cos(math.pi / 4)
+        parts.append(f'<path d="M{wx - dx:.1f} {wb - dy:.1f} A{r:.1f} {r:.1f} 0 0 1 {wx + dx:.1f} {wb - dy:.1f}" '
+                     f'fill="none" stroke="#fff" stroke-width="{2.3 * u:.1f}" stroke-linecap="round"/>')
+    # Signal: four bars, rising.
+    sx = wx - 8.5 * u - 6 * u - 4 * 4.6 * u
+    for i in range(4):
+        hgt = (4.5 + 2.6 * i) * u
+        parts.append(f'<rect x="{sx + i * 4.6 * u:.1f}" y="{mid + 5.5 * u - hgt:.1f}" width="{3.2 * u:.1f}" '
+                     f'height="{hgt:.1f}" rx="{0.9 * u:.1f}" fill="#fff"/>')
+    return "\n      ".join(parts)
+
+
 def phone_svg():
     cw, ch = PHONE["canvas"]
     x, y, w, h = PHONE["clip"]
-    sb = 64                      # status bar above the clip
-    bez = 20                     # bezel
-    sr, br = 70, 90              # screen and body corner radius
+    k = w / 820                  # everything is drawn relative to the screen width
+    sb = round(64 * k)           # status bar above the clip
+    bez = round(20 * k)          # bezel
+    sr, br = 70 * k, 90 * k      # screen and body corner radius
     sx, sy, sh = x, y - sb, h + sb
     bx, by, bw, bh = sx - bez, sy - bez, w + 2 * bez, sh + 2 * bez
+    btn = lambda top, hgt, side: (  # noqa: E731
+        f'<rect x="{bx - 5 * k if side == "l" else bx + bw - 3 * k:.1f}" y="{by + top * k:.1f}" '
+        f'width="{8 * k:.1f}" height="{hgt * k:.1f}" rx="{3 * k:.1f}" fill="#3a3a40"/>')
+    mid = sy + sb * 0.56
     return f"""<svg xmlns="http://www.w3.org/2000/svg" width="{cw}" height="{ch}">
     {backdrop()}
     <defs>
@@ -58,27 +97,18 @@ def phone_svg():
     </defs>
     <g mask="url(#hole)">
       <rect width="{cw}" height="{ch}" fill="url(#lift)"/>
-      <rect x="{bx + 14}" y="{by + 36}" width="{bw}" height="{bh}" rx="{br}" fill="#000" opacity=".55" filter="url(#shadow)"/>
-      <rect x="{bx - 5}" y="{by + 260}" width="8" height="70" rx="3" fill="#3a3a40"/>
-      <rect x="{bx - 5}" y="{by + 360}" width="8" height="120" rx="3" fill="#3a3a40"/>
-      <rect x="{bx - 5}" y="{by + 500}" width="8" height="120" rx="3" fill="#3a3a40"/>
-      <rect x="{bx + bw - 3}" y="{by + 400}" width="8" height="180" rx="3" fill="#3a3a40"/>
+      <rect x="{bx + 14 * k}" y="{by + 36 * k}" width="{bw}" height="{bh}" rx="{br}" fill="#000" opacity=".55" filter="url(#shadow)"/>
+      {btn(260, 70, "l")}{btn(360, 120, "l")}{btn(500, 120, "l")}{btn(400, 180, "r")}
       <rect x="{bx}" y="{by}" width="{bw}" height="{bh}" rx="{br}" fill="url(#rim)"/>
-      <rect x="{bx + 5}" y="{by + 5}" width="{bw - 10}" height="{bh - 10}" rx="{br - 5}" fill="#050506"/>
+      <rect x="{bx + 5 * k}" y="{by + 5 * k}" width="{bw - 10 * k}" height="{bh - 10 * k}" rx="{br - 5 * k}" fill="#050506"/>
     </g>
     <g clip-path="url(#screen)">
       <rect x="{sx}" y="{sy}" width="{w}" height="{sb}" fill="#0b0b0d"/>
-      <rect x="{sx + w / 2 - 70}" y="{sy + 14}" width="140" height="38" rx="19" fill="#000"/>
-      <text x="{sx + 74}" y="{sy + 44}" font-family="-apple-system,Helvetica,Arial,sans-serif"
-            font-size="28" font-weight="600" fill="#fff">9:41</text>
-      <g fill="#fff" transform="translate({sx + w - 170},{sy + 22})">
-        <rect x="0" y="14" width="5" height="8" rx="1"/><rect x="8" y="10" width="5" height="12" rx="1"/>
-        <rect x="16" y="6" width="5" height="16" rx="1"/><rect x="24" y="2" width="5" height="20" rx="1"/>
-        <path d="M44 20 l7 -7 a10 10 0 0 0 -14 0 z M37 11 a16 16 0 0 1 22 0 l3 -3 a20 20 0 0 0 -28 0 z"/>
-        <rect x="72" y="3" width="40" height="19" rx="5" fill="none" stroke="#fff" stroke-width="2" opacity=".6"/>
-        <rect x="75" y="6" width="30" height="13" rx="3"/>
-        <rect x="114" y="9" width="3" height="7" rx="1" opacity=".6"/>
-      </g>
+      <rect x="{sx + w / 2 - 62 * k}" y="{sy + 12 * k}" width="{124 * k}" height="{36 * k}" rx="{18 * k}" fill="#000"/>
+      <text x="{sx + 104 * k}" y="{mid}" dominant-baseline="central" text-anchor="middle"
+            font-family="-apple-system,'SF Pro Text','Helvetica Neue',Arial,sans-serif"
+            font-size="{27 * k:.1f}" font-weight="600" fill="#fff">9:41</text>
+      {status_icons(sx + w - 56 * k, mid, k)}
     </g>
     </svg>"""
 

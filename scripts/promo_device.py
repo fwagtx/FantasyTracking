@@ -26,7 +26,12 @@ ASSETS = os.path.join(HERE, "promo_assets")
 BACKDROP = "0x141417"
 
 # Canvas, then where the clip sits inside it (x, y, w, h).
-PHONE = {"canvas": (1080, 1920), "clip": (130, 263, 820, 1458), "frame": "phone.png"}
+#
+# The phone is kept inside the part of a Reel / TikTok / Short that the
+# app leaves clear: below the top tabs (~200px), above the caption and
+# username (~1430px), and left of the like/comment/share column (~925px).
+# Sized to the full canvas, the caption and buttons sat on the phone.
+PHONE = {"canvas": (1080, 1920), "clip": (206, 250, 620, 1102), "frame": "phone.png"}
 LAPTOP = {"canvas": (1920, 1080), "clip": (260, 110, 1400, 788), "frame": "laptop.png"}
 DEVICE = {"vertical": PHONE, "desktop": LAPTOP}
 
