@@ -99,6 +99,93 @@ GLIDE_JS = """
 })
 """
 
+# Signed-out calls to action that are not gates, only invitations: the
+# header's Sign In / Create Account pair on every page, the Join strip on
+# Streaks, the "Sign in to draft" button in the Scores draft card. None
+# of them locks anything, but every one of them reads as "you need an
+# account" in an advert, which is the one thing a clip must not say.
+# Hidden in the recording browser only -- the live site is untouched.
+HIDE_CTA_JS = r"""
+(() => {
+  const css = `
+    .nav-auth, .sk-join,
+    .sc-draft:has(a[href^="/login"]), .sc-draft:has(a[href^="/signup"])
+    { display:none !important; }`;
+  const add = () => {
+    if (document.getElementById('__promoHideCta')) return;
+    const st = document.createElement('style');
+    st.id = '__promoHideCta';
+    st.textContent = css;
+    (document.head || document.documentElement).appendChild(st);
+  };
+  if (document.documentElement) add();
+  document.addEventListener('DOMContentLoaded', add);
+})();
+"""
+
+# In the take only. A page whose gate owns its opening view is never
+# opened at all (see WALL_JS); a page with a gate further down -- Streaks
+# after its free rows, the line-adjust panel on a streak page -- is
+# filmed with that gate taken out, so the free content simply ends where
+# it ends. It hides a box; it reveals nothing that was locked.
+HIDE_GATE_JS = r"""
+(() => {
+  const css = `.gate-wrap, .sk-gate, #rkGateWrap, #spGate { display:none !important; }`;
+  const add = () => {
+    if (document.getElementById('__promoHideGate')) return;
+    const st = document.createElement('style');
+    st.id = '__promoHideGate';
+    st.textContent = css;
+    (document.head || document.documentElement).appendChild(st);
+  };
+  if (document.documentElement) add();
+  document.addEventListener('DOMContentLoaded', add);
+})();
+"""
+
+# Where on this page does the first sign-in wall start? Run on the camera-
+# off pass, after the page has settled and been scrolled end to end so
+# anything revealed on scroll is revealed. Returns the wall's top in
+# document coordinates, whether it is visible without scrolling, and
+# what it was, for the log.
+WALL_JS = r"""
+async () => {
+  window.scrollTo(0, document.documentElement.scrollHeight);
+  await new Promise(r => setTimeout(r, 450));
+  window.scrollTo(0, 0);
+  await new Promise(r => setTimeout(r, 150));
+  const vh = innerHeight;
+  const shown = el => {
+    const cs = getComputedStyle(el);
+    if (cs.display === 'none' || cs.visibility === 'hidden' || +cs.opacity === 0) return false;
+    const r = el.getBoundingClientRect();
+    return r.width > 0 && r.height > 0;
+  };
+  const hits = [];
+  for (const g of document.querySelectorAll(
+        '.gate-wrap, .gate-card, .gate-blur, #spGate, .sk-gate, #rkGateWrap')) {
+    if (shown(g)) hits.push([g, 'gate ' + (g.id || g.className)]);
+  }
+  const RX = /\b(sign ?in|sign ?up|log ?in|create (a |an |your )?(free )?account|join (for )?free)\b/i;
+  for (const el of document.querySelectorAll('a, button')) {
+    if (el.closest('header, nav, footer, #__promo_stage')) continue;
+    if (!shown(el)) continue;
+    const t = (el.textContent || '').replace(/\s+/g, ' ').trim();
+    if (t && t.length < 60 && RX.test(t)) hits.push([el, 'prompt "' + t + '"']);
+  }
+  let wall = null, what = '';
+  for (const [el, label] of hits) {
+    const y = el.getBoundingClientRect().top + scrollY;
+    if (wall === null || y < wall) { wall = y; what = label; }
+  }
+  const path = location.pathname;
+  const onAuth = path === '/login' || path === '/signup';
+  return { wall: onAuth ? 0 : wall, top: onAuth || (wall !== null && wall < vh * 0.5),
+           what: onAuth ? 'redirected to ' + path : what };
+}
+"""
+
+
 SHAPES = {
     # 1920x1080 for YouTube and X; recorded at full size rather than
     # upscaled, so text stays sharp.
@@ -111,6 +198,9 @@ SHAPES = {
 
 MISSED = []
 DIVERTED = []
+# True during the camera-off pass. Nothing that pass sees is a missed
+# beat or a diversion in the finished clip, so it records neither.
+DRY = False
 
 
 def diverted(what):
@@ -120,6 +210,8 @@ def diverted(what):
     Not a failure -- the clip is still clean, which is the whole point.
     But it must be said out loud, because a diversion means the feature
     the clip was named after never appeared in it."""
+    if DRY:
+        return
     DIVERTED.append(what)
     print(f"  note: {what}", file=sys.stderr)
 
@@ -131,6 +223,8 @@ def miss(what):
     spotlights aimed at invented classes (.sc-card, .pf-row) recorded
     clean for weeks: the run stayed green and the clip just quietly had
     nothing highlighted. Now they are counted, and the run ends red."""
+    if DRY:
+        return
     MISSED.append(what)
     print(f"  note: {what}", file=sys.stderr)
 
@@ -138,11 +232,77 @@ def miss(what):
 class Stage:
     """One recording. Thin wrapper so a scene reads as a storyboard."""
 
-    def __init__(self, page, base):
+    def __init__(self, page, base, walls=None, taps=None, dry=False, scout=None):
         self.page = page
         self.base = base.rstrip("/")
+        # What the camera-off pass learned. walls maps a page (path and
+        # query) to {"wall": y or None, "top": bool, "what": str}: where
+        # the first sign-in prompt starts, and whether it is on screen
+        # the moment the page lands. taps maps (page, selector, index) to
+        # the page that tap opened.
+        self.walls = walls if walls is not None else {}
+        self.taps = taps if taps is not None else {}
+        self.dry = dry
+        # A camera-off page kept open during the take, for the rare page
+        # the dry pass never reached because a branch went another way.
+        self.scout = scout
+        # Set when the last visit was refused, so the has() checks that
+        # follow it answer at once instead of waiting on a page that was
+        # never opened.
+        self.skipped = False
+
+    def _key(self, url):
+        base = self.base
+        return url[len(base):] if url.startswith(base) else url
+
+    def here(self):
+        return self._key(self.page.url)
+
+    async def _survey(self, page):
+        """Measure the sign-in wall on whatever `page` is showing."""
+        try:
+            await page.wait_for_timeout(600)
+            fact = await page.evaluate(WALL_JS)
+        except Exception as e:
+            fact = {"wall": None, "top": False, "what": f"unmeasured ({e})"}
+        key = self._key(page.url)
+        self.walls[key] = fact
+        return key, fact
+
+    async def _known(self, path):
+        """The wall fact for `path`, scouting it off camera if the dry
+        pass never went there."""
+        if path in self.walls:
+            return self.walls[path]
+        if self.scout is not None:
+            try:
+                await self.scout.goto(self.base + path, wait_until="domcontentloaded",
+                                      timeout=30000)
+                key, fact = await self._survey(self.scout)
+                self.walls[path] = fact
+                return fact
+            except Exception:
+                pass
+        return None
 
     async def visit(self, path, wait_for=None, ms=1400):
+        """Open a page -- unless it opens on a sign-in prompt.
+
+        The camera rolls from the moment the browser starts, so a page
+        cannot be checked for a gate by opening it: by then it is in
+        the clip. Every scene runs once first with the camera off, which
+        records where each page's wall is, and this consults that record
+        before navigating. A page that lands on a prompt is never opened
+        on camera at all; the scene's own fallback takes over.
+
+        Returns True when the page was opened."""
+        if not self.dry:
+            fact = await self._known(path)
+            if fact and fact.get("top"):
+                diverted(f"{path} opens on a sign-in wall ({fact.get('what')}) -- not filmed")
+                self.skipped = True
+                return False
+        self.skipped = False
         await self.page.goto(self.base + path, wait_until="domcontentloaded")
         if wait_for:
             # A missing selector is not worth failing a whole render
@@ -152,9 +312,15 @@ class Stage:
             except Exception:
                 miss(f"{wait_for} never appeared on {path}")
         await self.hold(ms)
+        if self.dry:
+            key, fact = await self._survey(self.page)
+            self.walls[path] = fact
+        return True
 
     async def hold(self, ms):
-        await self.page.wait_for_timeout(ms)
+        # The camera-off pass only needs pages to settle, not to be
+        # watched, so it does not sit through the pacing.
+        await self.page.wait_for_timeout(min(ms, 250) if self.dry else ms)
 
     async def _eval(self, script, arg=None):
         """Every evaluate runs against a document that a click may have
@@ -170,6 +336,14 @@ class Stage:
             return None
 
     async def glide(self, to_y, ms=1500):
+        # Never scroll a wall into view. Streaks, for one, puts its
+        # sign-in card partway down the list, and a pan that ends on it
+        # films exactly what the clip is meant to avoid.
+        fact = self.walls.get(self.here())
+        if fact and fact.get("wall") is not None:
+            vh = (self.page.viewport_size or {}).get("height", 720)
+            ceiling = max(0, int(fact["wall"] - vh - 24))
+            to_y = min(to_y, ceiling)
         await self._eval(GLIDE_JS, [to_y, ms])
         await self.hold(250)
 
@@ -204,17 +378,15 @@ class Stage:
         at all -- it diverts to an open page, or gives up on the beat.
 
         Returns True when the real page is open and worth filming."""
-        await self.visit(path, wait_for=wait_for, ms=ms)
-        if not await self.gated():
-            return True
-        diverted(f"{path} is gated -- not filming it")
-        return False
+        return await self.visit(path, wait_for=wait_for, ms=ms)
 
     async def has(self, selector, timeout=2500):
         """Is this actually on the page? Asked before a card claims it is.
 
         A montage that narrates "playoff odds, title odds, luck" over a
         sign-in gate is worse than one that never mentions them."""
+        if self.skipped:
+            return False
         try:
             await self.page.wait_for_selector(selector, timeout=timeout, state="attached")
             return True
@@ -230,6 +402,12 @@ class Stage:
         spent forty seconds of a ninety-second clip doing exactly that,
         on a blurred panel, which is the worst footage imaginable.
         """
+        if not self.dry:
+            # The take hides gates (HIDE_GATE_JS), so looking would always
+            # say no -- and the scene would then reach for buttons inside
+            # a panel that is not there. Answer from the camera-off pass.
+            fact = self.walls.get(self.here())
+            return bool(fact and fact.get("wall") is not None)
         found = await self._eval(
             "() => {"
             "  for (const g of document.querySelectorAll('.gate-wrap, .gate-card, #spGate')) {"
@@ -243,6 +421,16 @@ class Stage:
         return bool(found)
 
     async def tap(self, selector, index=0, after=1500):
+        # A tap that opens a locked page is refused before the cursor
+        # even moves, using where the same tap led on the camera-off
+        # pass.
+        before = self.here()
+        if not self.dry:
+            dest = self.taps.get((before, selector, index))
+            fact = self.walls.get(dest) if dest else None
+            if fact and fact.get("top"):
+                diverted(f"tap on {selector} opens {dest}, which is walled -- not filmed")
+                return False
         el = await self.point(selector, index)
         if el is None:
             return False
@@ -263,6 +451,9 @@ class Stage:
         except Exception:
             pass
         await self.hold(after)
+        if self.dry and self.here() != before:
+            key, _ = await self._survey(self.page)
+            self.taps[(before, selector, index)] = key
         return clicked
 
 
@@ -587,18 +778,6 @@ async def scene_montage(s):
                  free="Free to use", ms=3200)
 
 
-# Where each scene lands first, so the cold load can be taken before
-# the camera is rolling.
-SCENE_FIRST_PATH = {"streaks": "/streaks", "streaks_story": "/streaks",
-                    "scores": "/scores",
-                    "matchups": "/matchups", "rankings": "/rankings",
-                    "tour": "/streaks", "montage": "/scores",
-                    "performances": "/performances", "standings": "/standings",
-                    "team": "/standings", "gameday": "/scores",
-                    "player": "/injuries", "tradecalc": "/trade-calculator",
-                    "newsfeed": "/injuries", "sbc": "/start-bench-cut",
-                    "ratingdraft": "/draft", "leaguemanager": "/league-manager",
-                    "suggested": "/suggested-trades", "waivers": "/waivers"}
 
 
 # --- one feature per clip ----------------------------------------------
@@ -920,7 +1099,40 @@ async def record(base, scene, shape, out_dir, email=None, password=None):
         if chrome:
             launch["executable_path"] = chrome
         browser = await pw.chromium.launch(**launch)
+
+        # --- the camera-off pass -----------------------------------------
+        # Run the whole scene once with no recording, measuring where every
+        # page it opens puts its first sign-in prompt and where every tap
+        # leads. The take then knows, before it opens anything, which
+        # pages would put a wall on screen -- it cannot find out by
+        # looking, because looking is filming. This also warms every page
+        # the take will open, so a cold instance is never the opening shot.
+        global DRY
+        walls, taps = {}, {}
+        scout_ctx = await browser.new_context(viewport=size, device_scale_factor=1)
+        await scout_ctx.add_init_script(HIDE_CTA_JS)
+        await scout_ctx.add_init_script(CURSOR_JS)
+        await scout_ctx.add_init_script(OVERLAY_JS)
+        dry_page = await scout_ctx.new_page()
+        dry = Film(dry_page, base, walls=walls, taps=taps, dry=True)
+        if email and password:
+            await sign_in(dry, email, password)
+        DRY = True
+        try:
+            await SCENES[scene](dry)
+        except Exception as e:
+            print(f"  note: camera-off pass stopped early ({e})", file=sys.stderr)
+        finally:
+            DRY = False
+        walled = sorted(k for k, v in walls.items() if v.get("top"))
+        if walled:
+            print(f"  walled on landing: {', '.join(walled)}", file=sys.stderr)
+
+        # --- the take ----------------------------------------------------
+        # Signed in on the camera-off pass, cookies carried across, so
+        # the login form is never in the take.
         ctx = await browser.new_context(
+            storage_state=await scout_ctx.storage_state(),
             viewport=size,
             record_video_dir=out_dir,
             record_video_size=size,
@@ -928,28 +1140,12 @@ async def record(base, scene, shape, out_dir, email=None, password=None):
             # site's own view transitions end up in the video for free.
             device_scale_factor=1,
         )
+        await ctx.add_init_script(HIDE_CTA_JS)
+        await ctx.add_init_script(HIDE_GATE_JS)
         await ctx.add_init_script(CURSOR_JS)
         await ctx.add_init_script(OVERLAY_JS)
         page = await ctx.new_page()
-        stage = Film(page, base)
-
-        # Recording starts the moment the context does, so a cold
-        # instance waking up is the opening shot of the clip. Pull that
-        # first load through a throwaway context instead, and let the
-        # real one land on a warm origin.
-        warm = SCENE_FIRST_PATH.get(scene)
-        if warm:
-            try:
-                scout = await browser.new_context()
-                sp = await scout.new_page()
-                await sp.goto(base.rstrip("/") + warm,
-                              wait_until="domcontentloaded", timeout=45000)
-                await scout.close()
-            except Exception as e:
-                print(f"  note: warm-up skipped ({e})", file=sys.stderr)
-
-        if email and password:
-            await sign_in(stage, email, password)
+        stage = Film(page, base, walls=walls, taps=taps, scout=dry_page)
 
         try:
             await SCENES[scene](stage)
@@ -958,6 +1154,7 @@ async def record(base, scene, shape, out_dir, email=None, password=None):
             # is still a clip; a crashed job is nothing.
             print(f"  scene stopped early: {e}", file=sys.stderr)
 
+        await scout_ctx.close()
         await ctx.close()
         await browser.close()
 

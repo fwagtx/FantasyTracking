@@ -131,9 +131,6 @@ jobs:
               -c:v libx264 -profile:v high -level 4.1 -preset medium -crf 20 \
               -c:a aac -b:a 128k -shortest \
               -movflags +faststart "promo/$name.mp4"
-            # A still from a second in, for a thumbnail or a post image.
-            ffmpeg -y -loglevel error -ss 1 -i "promo/$name.mp4" \
-              -frames:v 1 -q:v 2 "promo/$name.jpg"
             rm -f "$f"
             printf '  %-22s %s\n' "$name.mp4" "$(du -h "promo/$name.mp4" | cut -f1)"
           done
@@ -143,7 +140,9 @@ jobs:
         if: always()
         with:
           name: promo-clips
-          path: promo/
+          # Videos only. The zip used to carry a still per clip too, which
+          # nobody asked for and which buried the clips.
+          path: promo/*.mp4
           retention-days: 30
 
       # Trusting the ffmpeg flags is not the same as checking the file
