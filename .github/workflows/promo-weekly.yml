@@ -1,0 +1,143 @@
+name: Promo Weekly
+
+# Next week's promo videos, recorded, checked and published, every week.
+#
+# Monday morning this plans the week that starts on Wednesday (three
+# posts a day -- see scripts/promo_plan.py), records every clip it needs
+# plus spares from the live site, checks each one (scripts/promo_qa.py:
+# full frame, no white flash, every beat landed, and no sign-in prompt,
+# vote popup or empty list in any frame), and publishes the clips with
+# the plan and the check results as a Release. final.json in that
+# Release is the week's posts, with any clip that failed its checks
+# already swapped for a spare that passed. Scheduling them in Metricool
+# happens after this, from final.json -- this workflow posts nothing.
+on:
+  schedule:
+    - cron: "0 13 * * 1"     # Mondays 13:00 UTC (8am Central)
+  workflow_dispatch:
+    inputs:
+      start:
+        description: "Week start, a Wednesday (YYYY-MM-DD). Default: the next one."
+        required: false
+
+permissions:
+  contents: write   # create the release
+
+jobs:
+  weekly:
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Plan the week
+        run: |
+          set -eu
+          if [ -n "${{ github.event.inputs.start }}" ]; then
+            python3 scripts/promo_plan.py plan --start "${{ github.event.inputs.start }}" --out plan.json
+          else
+            python3 scripts/promo_plan.py plan --out plan.json
+          fi
+          if python3 -c "import json,sys; sys.exit(0 if json.load(open('plan.json')).get('skip') else 1)"; then
+            echo "SKIP=1" >> $GITHUB_ENV
+          else
+            echo "TAG=$(python3 -c "import json; print(json.load(open('plan.json'))['tag'])")" >> $GITHUB_ENV
+            echo "SCENES=$(python3 -c "import json; print(' '.join(json.load(open('plan.json'))['scenes']))")" >> $GITHUB_ENV
+          fi
+
+      - name: Install Playwright, ffmpeg and the checker
+        if: env.SKIP != '1'
+        run: |
+          pip install --quiet playwright opencv-python-headless rapidocr-onnxruntime
+          python -m playwright install --with-deps chromium
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends ffmpeg
+
+      - name: Record
+        if: env.SKIP != '1'
+        env:
+          PROMO_EMAIL: ${{ secrets.PROMO_EMAIL }}
+          PROMO_PASSWORD: ${{ secrets.PROMO_PASSWORD }}
+        run: |
+          set -u
+          mkdir -p promo
+          : > missed.txt
+          for scene in $SCENES; do
+            echo "--- recording $scene"
+            set +e
+            python3 scripts/promo_capture.py --base https://streakpros.com \
+              --scene "$scene" --shape tall --out promo
+            code=$?
+            set -e
+            # A missed beat still leaves a clip; the check fails it.
+            [ "$code" = "0" ] || echo "$scene" >> missed.txt
+            echo "$scene exit $code" >> $GITHUB_STEP_SUMMARY
+          done
+
+      - name: Convert and name
+        if: env.SKIP != '1'
+        run: |
+          set -u
+          mkdir -p out
+          python3 - <<'PY'
+          import json
+          pl = json.load(open("plan.json"))
+          slug = {e["scene"]: e["slug"] for e in pl["posts"]}
+          for v in pl["spares"].values():
+              slug.update({e["scene"]: e["slug"] for e in v})
+          with open("names.txt", "w") as f:
+              for scene, s in slug.items():
+                  f.write(f"{scene} {s}\n")
+          missed = [l.strip() for l in open("missed.txt") if l.strip()]
+          with open("missed-slugs.txt", "w") as f:
+              for m in missed:
+                  f.write(slug.get(m, m) + "\n")
+          PY
+          while read -r scene slug; do
+            src="promo/$scene-tall.webm"
+            [ -e "$src" ] || { echo "no clip for $scene"; continue; }
+            ffmpeg -y -loglevel error -i "$src" \
+              -f lavfi -i anullsrc=channel_layout=stereo:sample_rate=44100 \
+              -vf "fps=30,scale=1080:1920:flags=lanczos,format=yuv420p" \
+              -c:v libx264 -profile:v high -level 4.1 -preset medium -crf 20 \
+              -c:a aac -b:a 128k -shortest \
+              -movflags +faststart "out/$slug-vertical.mp4"
+          done < names.txt
+          ls -la out
+
+      - name: Check every clip
+        if: env.SKIP != '1'
+        run: |
+          python3 scripts/promo_qa.py out --missed missed-slugs.txt --out qa.json | tee -a $GITHUB_STEP_SUMMARY
+          python3 scripts/promo_plan.py final --plan plan.json --qa qa.json --out final.json | tee -a $GITHUB_STEP_SUMMARY
+
+      - name: Publish as a release
+        if: env.SKIP != '1'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -eu
+          files="out/*.mp4 plan.json qa.json final.json"
+          gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1 \
+            && gh release upload "$TAG" $files --clobber --repo "$GITHUB_REPOSITORY" \
+            || gh release create "$TAG" $files --repo "$GITHUB_REPOSITORY" --prerelease \
+                 --title "Promo week ($TAG)" \
+                 --notes "Promo clips for the week, recorded from streakpros.com and checked. final.json is the week's posts."
+
+      - name: Check every scheduled clip is public
+        if: env.SKIP != '1'
+        run: |
+          set -eu
+          bad=0
+          for url in $(python3 -c "import json; [print(p['info']['media'][0]) for p in json.load(open('final.json'))['posts']]"); do
+            code=$(curl -sL -o /dev/null -w '%{http_code}' "$url")
+            if [ "$code" = 200 ]; then echo "PUBLIC $url"; else echo "FAIL $url -> $code"; bad=1; fi
+          done
+          n=$(python3 -c "import json; print(len(json.load(open('final.json'))['posts']))")
+          echo "$n posts ready in $TAG" >> $GITHUB_STEP_SUMMARY
+          [ "$bad" = 0 ]
+          [ "$n" -ge 18 ] || { echo "only $n of 21 posts have a clip that passed"; exit 1; }
