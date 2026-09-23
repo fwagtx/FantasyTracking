@@ -627,11 +627,26 @@ async def scene_matchups(s):
     await s.card(logo=True, url="streakpros.com", ms=2200)
 
 
+async def rankings_board(s, ms=700):
+    """Open Rankings on a board that is full for a signed-out viewer.
+
+    Signed out, the default all-positions view shows only its top tier --
+    four players -- and puts everything below behind a sign-in box. The
+    take hides that box, which left a four-row list over an empty page.
+    Sorting by the 30-day trend is an open view of the whole board,
+    risers first, which is also the point of the clip.
+    """
+    if not await s.visit("/rankings", wait_for=".rk-page", ms=ms):
+        return False
+    await s.tap("th.col-rank_delta", after=900)
+    return True
+
+
 async def scene_rankings(s):
     """Dynasty values, and which way they moved this week."""
     await s.mark(True)
     await s.clock(16000)
-    await s.visit("/rankings", wait_for=".rk-page", ms=1400)
+    await rankings_board(s)
     await s.card(kicker="Dynasty rankings", big="WHAT<em>everyone is worth</em>",
                  sub="And which way it moved", ms=1700)
     await s.uncard(300)
@@ -751,7 +766,7 @@ async def scene_montage(s):
     await s.hold(700)
 
     # 0:16 -- rankings, with the movement column.
-    await s.visit("/rankings", wait_for=".rk-page", ms=1000)
+    await rankings_board(s)
     await s.card(kicker="Dynasty rankings", big="WHAT<em>everyone is worth</em>", ms=1400)
     await s.uncard(300)
     await s.glide(360, 1000)
@@ -1002,7 +1017,7 @@ async def scene_leaguemanager(s):
         # over a page that actually has data on it rather than over an
         # empty panel.
         diverted("no synced league -- putting the league pitch over the rankings")
-        await s.visit("/rankings", wait_for=".rk-page", ms=1000)
+        await rankings_board(s)
         await s.card(kicker="League manager", big="ALL<em>your leagues</em>",
                      sub="Sync every one, free", ms=2000)
         await s.uncard(300)
@@ -1068,7 +1083,7 @@ async def scene_waivers(s):
     if not await s.has(".wv-row"):
         print("  note: signed out -- no waiver board, showing rankings instead",
               file=sys.stderr)
-        await s.visit("/rankings", wait_for=".rk-page", ms=1000)
+        await rankings_board(s)
         await s.card(kicker="Waiver targets", big="WHO<em>to pick up</em>",
                      sub="Sync a league to see yours", ms=2000)
         await s.uncard(300)
