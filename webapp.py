@@ -2120,6 +2120,16 @@ def get_leagues(user_id, season, cache={}):
     return _cached_get(f"{SLEEPER_BASE}/user/{user_id}/leagues/nfl/{season}", cache)
 
 
+def get_league(league_id, cache={}):
+    """One league's own settings -- roster slots, size, scoring, type.
+
+    Needed wherever a value has to be priced for the league it is in
+    rather than for a 12-team default, which is most places."""
+    if not league_id:
+        return None
+    return _cached_get(f"{SLEEPER_BASE}/league/{league_id}", cache, ttl=3600)
+
+
 def get_rosters(league_id, cache={}):
     return _cached_get(f"{SLEEPER_BASE}/league/{league_id}/rosters", cache)
 
@@ -2203,12 +2213,12 @@ def get_all_players(cache={}):
 
 # ---------------- FantasyCalc (real dynasty/redraft trade values, incl. picks) ----------------
 
-def get_fantasycalc_values(num_qbs, is_dynasty=True, num_teams=12, cache={}):
+def get_fantasycalc_values(num_qbs, is_dynasty=True, num_teams=12, ppr=1, cache={}):
     """Returns {"players": {sleeper_id: {...}}, "picks": {pick_id: {...}}},
     cached 1hr per (format, dynasty-vs-redraft, league size). num_teams
     lets the trade calculator price picks/players for the user's actual
     league instead of only a fixed 12-team consensus."""
-    key = (num_qbs, is_dynasty, num_teams)
+    key = (num_qbs, is_dynasty, num_teams, ppr)
     now = time.time()
     entry = cache.get(key)
     if entry and now - entry["time"] < 3600:
@@ -2217,7 +2227,7 @@ def get_fantasycalc_values(num_qbs, is_dynasty=True, num_teams=12, cache={}):
     try:
         r = requests.get(FANTASYCALC_BASE, params={
             "isDynasty": "true" if is_dynasty else "false",
-            "numQbs": num_qbs, "numTeams": num_teams, "ppr": 1,
+            "numQbs": num_qbs, "numTeams": num_teams, "ppr": ppr,
         }, timeout=UPSTREAM_TIMEOUT_S)
         r.raise_for_status()
     except Exception:
@@ -5392,6 +5402,55 @@ def league_num_qbs(league):
     return max(1, positions.count("QB"))
 
 
+# FantasyCalc publishes a board per league size, not per team count.
+FC_LEAGUE_SIZES = (8, 10, 12, 14)
+
+
+def league_value_settings(league):
+    """(num_qbs, is_dynasty, num_teams, ppr) taken from the league itself.
+
+    THE BUG THIS EXISTS FOR: every page that priced a roster asked
+    FantasyCalc for a 12-team, one-quarterback, full-PPR dynasty board
+    and then used those numbers for whatever league the reader was
+    actually in. In a superflex league that is not a rounding error --
+    a quarterback is worth two or three times what the one-QB board
+    says, so every trade involving one was wrong, and wrong in the
+    direction that makes you give them away.
+
+    Four things move the numbers and all four are in the league:
+      roster_positions   a SUPER_FLEX slot, or two QB slots, doubles
+                         what a quarterback is worth
+      total_rosters      a 10-team league has shallower waivers, so
+                         depth is worth less and starters more
+      settings.type      0 redraft, 1 keeper, 2 dynasty -- a redraft
+                         board prices this year and nothing else
+      scoring_settings   points per reception, which is the difference
+                         between a possession receiver and a decoy
+    """
+    settings = (league or {}).get("settings") or {}
+    scoring = (league or {}).get("scoring_settings") or {}
+    num_qbs = league_num_qbs(league or {})
+    rosters = _safe_int((league or {}).get("total_rosters"), 12) or 12
+    num_teams = min(FC_LEAGUE_SIZES, key=lambda n: (abs(n - rosters), n))
+    # Keeper leagues carry value forward like dynasty ones; only a true
+    # redraft league should be priced for this season alone.
+    is_dynasty = _safe_int(settings.get("type"), 2) != 0
+    try:
+        ppr = float(scoring.get("rec", 1) if scoring.get("rec") is not None else 1)
+    except (TypeError, ValueError):
+        ppr = 1.0
+    ppr = max(0.0, min(2.0, ppr))
+    return num_qbs, is_dynasty, num_teams, ppr
+
+
+def value_settings_label(num_qbs, is_dynasty, num_teams, ppr):
+    """How the numbers on this page were priced, in the reader's words."""
+    fmt = "superflex" if num_qbs >= 2 else "1QB"
+    scoring = "PPR" if ppr >= 1 else ("%.1f PPR" % ppr if ppr > 0 else "standard")
+    return "%d-team %s %s %s" % (num_teams, fmt, scoring,
+                                 "dynasty" if is_dynasty else "redraft")
+
+
 def format_height(raw):
     """Sleeper stores height as total inches (e.g. '69'). Convert to 5'9"."""
     if not raw:
@@ -6724,7 +6783,7 @@ def attach_league_standings(league_id, league, teams):
 
 def build_league_teams(league_id, league, all_players, league_users, user_id):
     with ThreadPoolExecutor(max_workers=2) as executor:
-        fc_future = executor.submit(get_fantasycalc_values, league_num_qbs(league))
+        fc_future = executor.submit(get_fantasycalc_values, *league_value_settings(league))
         rosters_future = executor.submit(get_rosters, league_id)
         fc = fc_future.result()
         rosters = rosters_future.result()
@@ -12040,7 +12099,23 @@ def api_player_search():
 
     num_qbs = 2 if fmt == "superflex" else 1
     is_dynasty = mode != "redraft"
-    fc = get_fantasycalc_values(num_qbs, is_dynasty, teams)
+    ppr = 1
+    league_id = request.args.get("league_id", "")
+    if league_id:
+        try:
+            linked = get_league(league_id)
+        except Exception:
+            linked = None
+        if linked:
+            lq, ld, lt, lp = league_value_settings(linked)
+            if "format" not in request.args:
+                num_qbs = lq
+            if "mode" not in request.args:
+                is_dynasty = ld
+            if "teams" not in request.args:
+                teams = lt
+            ppr = lp
+    fc = get_fantasycalc_values(num_qbs, is_dynasty, teams, ppr)
     all_players = get_all_players()
     q_low = q.lower()
     # Pick labels look like "2026 Mid 1st" -- they never contain the words
@@ -17894,18 +17969,27 @@ def suggested_trades_page():
     mode = request.args.get("mode", "dynasty")
     target_sid = (request.args.get("target") or "").strip()
     side = "sell" if (request.args.get("side") or "").lower() == "sell" else "buy"
-    data, error = None, None
+    data, error, settings_label = None, None, None
     league = _pick_league(leagues)
     if username and league:
         try:
-            fc = get_fantasycalc_values(2 if fmt == "superflex" else 1, mode != "redraft", len(leagues) and 12 or 12)
+            # From the league, never from a query string. This page used
+            # to price every roster as a 12-team one-quarterback board,
+            # which in a superflex league undervalues every quarterback
+            # by a factor of two or more.
+            num_qbs, is_dynasty, num_teams, ppr = league_value_settings(league)
+            settings_label = value_settings_label(num_qbs, is_dynasty, num_teams, ppr)
+            fmt = "superflex" if num_qbs >= 2 else "1qb"
+            mode = "dynasty" if is_dynasty else "redraft"
+            fc = get_fantasycalc_values(num_qbs, is_dynasty, num_teams, ppr)
             data = build_trade_suggestions(username, user_id, league, target_sid, get_all_players(), fc, side)
         except Exception as e:
             app.logger.exception("suggested trades failed")
             error = str(e)
     return render_template_string(SUGGEST_HTML, username=username, leagues=leagues,
                                   league=league, data=data, error=error, fmt=fmt, mode=mode,
-                                  target_sid=target_sid, side=side)
+                                  target_sid=target_sid, side=side,
+                                  settings_label=settings_label)
 
 
 def compute_trade_state(args):
@@ -17923,15 +18007,33 @@ def compute_trade_state(args):
         teams = 12
     num_qbs = 2 if fmt == "superflex" else 1
     is_dynasty = mode != "redraft"
+    ppr = 1
     side1_ids = [x for x in args.get("side1", "").split(",") if x]
     side2_ids = [x for x in args.get("side2", "").split(",") if x]
 
     u = args.get("u", "").strip()
     league_id = args.get("league_id", "")
+    # A linked league knows its own format better than a default does.
+    # Only where the reader has not said otherwise: the toggles stay
+    # theirs the moment they touch one.
+    if league_id:
+        try:
+            linked = get_league(league_id)
+        except Exception:
+            linked = None
+        if linked:
+            lq, ld, lt, lp = league_value_settings(linked)
+            if "format" not in args:
+                num_qbs, fmt = lq, ("superflex" if lq >= 2 else "1qb")
+            if "mode" not in args:
+                is_dynasty, mode = ld, ("dynasty" if ld else "redraft")
+            if "teams" not in args:
+                teams = lt
+            ppr = lp
     my_roster_id = args.get("my_roster_id", type=int)
     other_roster_id = args.get("other_roster_id", type=int)
 
-    fc = get_fantasycalc_values(num_qbs, is_dynasty, teams)
+    fc = get_fantasycalc_values(num_qbs, is_dynasty, teams, ppr)
     all_players = get_all_players()
 
     draft_picks_quick = []
@@ -29505,6 +29607,12 @@ SUGGEST_HTML = BASE_STYLE + make_header("rankings") + """
   .sg-setup{ display:grid; grid-template-columns:1.2fr 1.6fr; gap:12px; margin-top:16px; }
   .sg-fld label{ display:block; font-size:10.5px; letter-spacing:.09em; text-transform:uppercase;
                  color:var(--ink-muted); font-weight:700; margin-bottom:5px; }
+  /* Which board these numbers came from. On the page because a reader
+     in a superflex league should be able to see at a glance that it was
+     priced as one -- that was wrong for a while and looked fine. */
+  .sg-settings{ float:right; text-transform:none; letter-spacing:0; font-weight:600;
+                color:var(--accent-ink); }
+  @media (max-width:560px){ .sg-settings{ float:none; display:block; margin-top:3px; } }
   .sg-fld select, .sg-fld input{ width:100%; background:var(--paper-sunken); border:1px solid var(--line);
        border-radius:10px; padding:11px 13px; font-size:15px; color:var(--ink); font-family:"Source Sans 3"; }
   .sg-fld input:focus, .sg-fld select:focus{ outline:none; border-color:var(--accent); }
@@ -29624,7 +29732,8 @@ SUGGEST_HTML = BASE_STYLE + make_header("rankings") + """
             {% endfor %}
           </select>
         </div>
-        <div class="sg-fld"><label>{{ 'Who are you selling?' if side == 'sell' else 'Who do you want?' }}</label>
+        <div class="sg-fld"><label>{{ 'Who are you selling?' if side == 'sell' else 'Who do you want?' }}
+          {% if settings_label %}<span class="sg-settings">priced as {{ settings_label }}</span>{% endif %}</label>
           <input type="text" id="sgSearch" autocomplete="off" placeholder="Start typing a name&hellip;"
                  value="{{ data.target.name if data.target else '' }}">
           <div class="sg-list" id="sgList"></div>
