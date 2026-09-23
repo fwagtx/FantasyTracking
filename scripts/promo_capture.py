@@ -164,6 +164,17 @@ class Stage:
         await self.hold(settle)
         return el
 
+    async def has(self, selector, timeout=2500):
+        """Is this actually on the page? Asked before a card claims it is.
+
+        A montage that narrates "playoff odds, title odds, luck" over a
+        sign-in gate is worse than one that never mentions them."""
+        try:
+            await self.page.wait_for_selector(selector, timeout=timeout, state="attached")
+            return True
+        except Exception:
+            return False
+
     async def gated(self):
         """Whether this page is showing a sign-in or plan gate.
 
@@ -420,7 +431,7 @@ async def scene_montage(s):
     await s.uncard(300)
     await s.point(".sc-day-tab.active")
     await s.glide(420, 1100)
-    await s.spotlight(".sc-card, .sc-game", "Your players, in every game", ms=1600)
+    await s.spotlight(".sc-game-card", "Every game, every score", ms=1600)
     await s.unspotlight()
 
     # 0:09 -- streaks. The thing nobody else has.
@@ -441,26 +452,45 @@ async def scene_montage(s):
     await s.spotlight(".rk-move", "Who moved, and how far", ms=1500)
     await s.unspotlight()
 
-    # 0:22 -- the league tools. This is where it stops being a website
-    # and starts being yours.
-    await s.visit("/league-manager", wait_for=".panel", ms=1200)
-    await s.card(kicker="Your leagues", big="ALL<em>of them, ranked</em>",
-                 sub="Best team to worst, with the maths", ms=1600)
-    await s.uncard(300)
-    await s.spotlight(".lg-stats", "Playoff odds. Title odds. Luck.", ms=1900)
-    await s.unspotlight()
-    await s.glide(520, 1100)
-    await s.hold(600)
+    # 0:22 -- the league tools, when there is a signed-in league to
+    # show them with. Set PROMO_EMAIL and PROMO_PASSWORD to record this
+    # half; without them the two beats below stand in, and they are
+    # real features rather than filler.
+    await s.visit("/league-manager", ms=1100)
+    if await s.has(".lg-stats"):
+        await s.card(kicker="Your leagues", big="ALL<em>of them, ranked</em>",
+                     sub="Best team to worst, with the maths", ms=1600)
+        await s.uncard(300)
+        await s.spotlight(".lg-stats", "Playoff odds. Title odds. Luck.", ms=1900)
+        await s.unspotlight()
+        await s.glide(520, 1100)
+        await s.hold(600)
 
-    # 0:30 -- suggested trades, the newest and most distinctive thing.
-    await s.visit("/suggested-trades", wait_for=".sg-tabs", ms=1100)
-    await s.card(kicker="Suggested trades", big="NAME<em>who you want</em>",
-                 sub="We work out what it takes", ms=1700)
-    await s.uncard(300)
-    await s.spotlight(".sg-pk, .panel", "Priced for YOUR league's settings", ms=1800)
-    await s.unspotlight()
-    await s.glide(480, 1000)
-    await s.hold(700)
+        await s.visit("/suggested-trades", wait_for=".sg-tabs", ms=1100)
+        await s.card(kicker="Suggested trades", big="NAME<em>who you want</em>",
+                     sub="We work out what it takes", ms=1700)
+        await s.uncard(300)
+        if await s.has(".sg-pk"):
+            await s.spotlight(".sg-pk", "Priced for YOUR league's settings", ms=1800)
+            await s.unspotlight()
+        await s.glide(480, 1000)
+        await s.hold(700)
+    else:
+        print("  note: signed out -- recording the public half of the montage",
+              file=sys.stderr)
+        await s.visit("/performances", ms=1100)
+        await s.card(kicker="Every performance", big="RATED<em>out of ten</em>",
+                     sub="Every player, every week", ms=1600)
+        await s.uncard(300)
+        await s.glide(380, 1000)
+        await s.spotlight(".pf-grid", "Not points. A rating.", ms=1700)
+        await s.unspotlight()
+
+        await s.visit("/standings", ms=1100)
+        await s.card(kicker="Standings", big="WHO<em>is actually good</em>", ms=1500)
+        await s.uncard(300)
+        await s.glide(420, 1000)
+        await s.hold(900)
 
     # 0:38 -- the sign-off.
     await s.card(logo=True, big="STREAK<em>PROS</em>", url="streakpros.com",
