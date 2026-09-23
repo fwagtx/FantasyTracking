@@ -97,6 +97,7 @@ jobs:
           v_player_sf 49ers-player-profile
           v_team_min minnesota-vikings-team-page
           v_st_nfc_playoffs nfc-playoff-picture
+          v_team_gb green-bay-packers-team-page
           MAP
           ls -la out
           test "$(ls out/*.mp4 | wc -l)" -ge 3

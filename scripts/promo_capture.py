@@ -570,10 +570,10 @@ async def scene_streaks(s):
     await s.uncard(300)
     await s.spotlight(".sk-item", "Hit rate, not a hunch", ms=1900)
     await s.unspotlight()
-    await s.point(".sk-bars-mini")
-    await s.hold(1400)
-    await s.glide(260, 1000)
-    await s.hold(900)
+    # Without the plan the board is three rows, and the rest of a phone
+    # screen under them is empty. Push in so the rows are the picture.
+    await s.push(1.35, ".sk-list", ms=700, hold=2600)
+    await s.pull(ms=500, hold=300)
     await s.card(logo=True, url="streakpros.com", ms=2200)
 
 
@@ -585,7 +585,9 @@ async def scene_scores(s):
     await s.glide(760, 1500)
     await s.hold(900)
     await s.glide(0, 1000)
-    await s.tap("a[href^='/game']", index=0, after=2600)
+    await s.tap("a[href^='/game']", index=0, after=1600)
+    # Not the feed: a finished game's feed is its kneel-downs.
+    await s.tap(".gd-tab[data-panel='game']", after=1000)
     await s.glide(340, 1600)
     await s.hold(2200)
 
@@ -889,16 +891,22 @@ async def scene_gameday(s):
     await s.mark(True)
     await s.clock(18000)
     await s.visit("/scores", wait_for=".sc-day-tabs", ms=900)
-    await s.tap("a[href^='/game']", index=0, after=2200)
-    await s.card(kicker="Game detail", big="INSIDE<em>every game</em>",
-                 sub="Live drives, box score, odds", ms=1700)
-    await s.uncard(300)
+    await s.tap("a[href^='/game']", index=0, after=1400)
+    # The feed of a finished game is its last plays -- a column of
+    # kneel-downs. The box score is the part that sells it, so a finished
+    # game goes straight there; a live one shows the field first.
     if await s.has(".gd-field"):
+        await s.card(kicker="Game detail", big="INSIDE<em>every game</em>",
+                     sub="Live drives, box score, odds", ms=1700)
+        await s.uncard(300)
         await s.spotlight(".gd-field", "Where the ball is", ms=1600)
         await s.unspotlight()
-    # The feed of a finished game is its last plays -- a column of
-    # kneel-downs. The box score is the part that sells it.
-    await s.tap(".gd-tab[data-panel='game']", after=1300)
+        await s.tap(".gd-tab[data-panel='game']", after=1300)
+    else:
+        await s.tap(".gd-tab[data-panel='game']", after=900)
+        await s.card(kicker="Game detail", big="INSIDE<em>every game</em>",
+                     sub="Live drives, box score, odds", ms=1700)
+        await s.uncard(300)
     await s.glide(420, 1300)
     await s.hold(1300)
     await s.card(logo=True, url="streakpros.com", ms=2200)
@@ -951,7 +959,7 @@ async def scene_tradecalc(s):
 async def scene_newsfeed(s):
     """Injuries, moves and birthdays, all in one list."""
     await s.mark(True)
-    await s.clock(15000)
+    await s.clock(17000)
     await s.visit("/injuries", wait_for=".fd-row", ms=900)
     await s.card(kicker="Injury feed", big="WHO<em>is hurt</em>",
                  sub="Updated all day", ms=1600)
@@ -960,9 +968,13 @@ async def scene_newsfeed(s):
     await s.unspotlight()
     await s.glide(430, 1200)
     await s.hold(900)
-    await s.visit("/moves", wait_for=".fd-row", ms=900)
-    await s.card(kicker="Roster moves", big="WHO<em>just signed</em>", ms=1500)
+    await s.visit("/moves", wait_for=".fd-row", ms=700)
+    await s.card(kicker="Roster moves", big="WHO<em>just signed</em>", ms=1400)
     await s.uncard(300)
+    # The moves list gets its own time on screen; on the first cut it
+    # was covered by its card and then the sign-off within a second.
+    await s.glide(420, 1200)
+    await s.hold(1000)
     await s.card(logo=True, url="streakpros.com", ms=2200)
 
 
@@ -1510,6 +1522,23 @@ async def scene_v_team_min(s):
     await s.card(logo=True, url="streakpros.com", ms=2200)
 
 
+async def scene_v_team_gb(s):
+    """Packers team page. Replaces the worst-games board, which is a list
+    of backups rated 0.0 -- accurate, and not worth a post."""
+    await s.mark(True)
+    await s.clock(15000)
+    await s.visit("/team?abbr=GB", wait_for=".tm-head", ms=900)
+    await s.card(kicker="Green Bay", big="THE PACKERS<em>on one page</em>",
+                 sub="Results, roster, dynasty values", ms=1700)
+    await s.uncard(300)
+    await s.spotlight(".tm-panel", ms=1800)
+    await s.unspotlight()
+    await s.tap(".tm-tab[data-panel='players']", index=0, after=1600)
+    await s.glide(480, 1200)
+    await s.hold(1100)
+    await s.card(logo=True, url="streakpros.com", ms=2200)
+
+
 async def scene_v_st_nfc_playoffs(s):
     """NFC playoff picture. Replaces birthdays, which is empty on any day
     nobody has one."""
@@ -1529,6 +1558,7 @@ async def scene_v_st_nfc_playoffs(s):
 SCENES = {
     "montage": scene_montage,
     "v_team_min": scene_v_team_min,
+    "v_team_gb": scene_v_team_gb,
     "v_st_nfc_playoffs": scene_v_st_nfc_playoffs,
     "v_perf_qb": scene_v_perf_qb,
     "v_perf_rb": scene_v_perf_rb,
