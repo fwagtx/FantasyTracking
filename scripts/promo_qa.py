@@ -4,7 +4,8 @@ A clip passes only if all of these hold:
 
   - the right size (1080x1920), long enough, and filling the frame --
     no gray padding, which is what a broken device-scale setting gives;
-  - it opens dark, not on a white flash;
+  - it does not open on a blank white flash (a light-theme page is
+    fine; an empty white screen is not);
   - every beat of its scene landed (the recorder's missed-beat list);
   - no frame shows a sign-in prompt, the Start/Bench/Cut vote popup, or
     one of the site's empty-list messages. This is read off the frames
@@ -58,7 +59,7 @@ def check(job):
         reasons.append(f"{w}x{h}, not 1080x1920")
     if n / fps < 6:
         reasons.append(f"only {n / fps:.1f}s long")
-    gray, first = 0.0, None
+    gray, first, blank = 0.0, None, False
     for k in range(10):
         c.set(1, int(k * (n - 1) / 9))
         ok, f = c.read()
@@ -66,12 +67,13 @@ def check(job):
             continue
         if first is None:
             first = float(f.mean())
+            blank = first > 235 and float(f.std()) < 6
         q = f[h // 2:, w // 2:]
         gray = max(gray, float((np.abs(q.astype(int) - 128).max(axis=2) <= 2).mean()))
     if gray > 0.3:
         reasons.append("picture does not fill the frame (gray padding)")
-    if first is not None and first > 60:
-        reasons.append("opens on a bright frame")
+    if blank:
+        reasons.append("opens on a blank white frame")
     if missed:
         reasons.append("a beat did not land while recording")
 

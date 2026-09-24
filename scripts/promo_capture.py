@@ -41,6 +41,24 @@ import sys
 from promo_overlay import OVERLAY_JS, TOP_ROW_JS
 
 
+# The look a clip is filmed in: the site's own Theme setting (light,
+# dark or gray, and a primary colour), set the way a guest's choice is
+# kept -- in localStorage, before the page's first script runs, so the
+# first frame is already in it. Signed in, the account's saved choice
+# wins, so sign_in() saves this one to the account as well. Varied from
+# clip to clip by promo_plan, so a week of posts does not look like one
+# video three times a day.
+THEMES = ("light", "dark", "gray")
+ACCENTS = ("amber", "blue", "red", "green", "yellow", "purple", "orange", "pink")
+PAPER = {"dark": "#0d0f0d", "light": "#f6f6f3", "gray": "#1b1d1f"}
+LOOK = {"theme": "light", "accent": "red"}
+
+
+def theme_js(theme, accent):
+    return ("try{localStorage.setItem('ffc-theme',%r);"
+            "localStorage.setItem('ffc-accent',%r)}catch(e){}" % (theme, accent))
+
+
 # A pointer, drawn. Playwright's recorder captures the page, not the
 # cursor, so without this a click looks like the page changing on its
 # own -- which is exactly the thing a demo has to show on purpose.
@@ -1733,6 +1751,16 @@ async def sign_in(stage, email, password):
     except Exception as e:
         print(f"  note: sign-in did not complete ({e}) -- recording signed out",
               file=sys.stderr)
+        return
+    # Signed in, the account's saved theme beats the browser's, so save
+    # this clip's look to the (dedicated promo) account too.
+    try:
+        await stage.page.evaluate(
+            """(look) => fetch('/api/theme', {method: 'POST', credentials: 'same-origin',
+                 headers: {'Content-Type': 'application/json'}, body: JSON.stringify(look)})""",
+            LOOK)
+    except Exception as e:
+        print(f"  note: could not save the theme to the account ({e})", file=sys.stderr)
 
 
 async def record(base, scene, shape, out_dir, email=None, password=None):
@@ -1770,6 +1798,7 @@ async def record(base, scene, shape, out_dir, email=None, password=None):
         global DRY
         walls, taps = {}, {}
         scout_ctx = await browser.new_context(viewport=size, device_scale_factor=1)
+        await scout_ctx.add_init_script(theme_js(LOOK["theme"], LOOK["accent"]))
         await scout_ctx.add_init_script(HIDE_CTA_JS)
         await scout_ctx.add_init_script(CURSOR_JS)
         await scout_ctx.add_init_script(OVERLAY_JS)
@@ -1806,6 +1835,7 @@ async def record(base, scene, shape, out_dir, email=None, password=None):
                                "height": size["height"] * dpr},
             device_scale_factor=dpr,
         )
+        await ctx.add_init_script(theme_js(LOOK["theme"], LOOK["accent"]))
         await ctx.add_init_script(HIDE_CTA_JS)
         await ctx.add_init_script(HIDE_GATE_JS)
         await ctx.add_init_script(CURSOR_JS)
@@ -1813,9 +1843,11 @@ async def record(base, scene, shape, out_dir, email=None, password=None):
         page = await ctx.new_page()
         # Recording starts on about:blank, which is white. A scene that
         # opens on a title card drew it over that -- the first frame of
-        # the montage was a white screen. Start on the site's own dark.
-        await page.goto("data:text/html,<html style='background:%230d0f0d'>"
-                        "<body style='margin:0;background:%230d0f0d'></body></html>")
+        # the montage was a white screen. Start on the page colour of the
+        # theme being filmed, so nothing flashes on the way in.
+        paper = PAPER[LOOK["theme"]].replace("#", "%23")
+        await page.goto(f"data:text/html,<html style='background:{paper}'>"
+                        f"<body style='margin:0;background:{paper}'></body></html>")
         stage = Film(page, base, walls=walls, taps=taps, scout=dry_page,
                      signed_in=bool(email and password))
 
@@ -1916,7 +1948,10 @@ def main():
     ap.add_argument("--scene", default="streaks", choices=sorted(SCENES))
     ap.add_argument("--shape", default="wide", choices=sorted(SHAPES))
     ap.add_argument("--out", default="promo")
+    ap.add_argument("--theme", default=os.environ.get("PROMO_THEME") or LOOK["theme"], choices=THEMES)
+    ap.add_argument("--accent", default=os.environ.get("PROMO_ACCENT") or LOOK["accent"], choices=ACCENTS)
     a = ap.parse_args()
+    LOOK.update(theme=a.theme, accent=a.accent)
     asyncio.run(record(a.base, a.scene, a.shape, a.out,
                        os.environ.get("PROMO_EMAIL"),
                        os.environ.get("PROMO_PASSWORD")))

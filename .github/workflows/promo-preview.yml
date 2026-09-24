@@ -1,0 +1,86 @@
+name: Promo Preview
+
+# A few clips recorded and put on the phone exactly as the weekly run
+# would, published as a prerelease so a look can be checked before it
+# goes into a week of posts. Nothing is scheduled from here.
+on:
+  workflow_dispatch:
+    inputs:
+      items:
+        description: "scene:theme:accent, comma-separated (e.g. t_pit:light:red,streaks:dark:blue)"
+        required: true
+      tag:
+        description: "Release tag to publish the preview under"
+        required: true
+
+permissions:
+  contents: write   # create the release
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Playwright, ffmpeg and OpenCV
+        run: |
+          pip install --quiet playwright opencv-python-headless numpy
+          python -m playwright install --with-deps chromium
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends ffmpeg
+
+      - name: Record
+        env:
+          PROMO_EMAIL: ${{ secrets.PROMO_EMAIL }}
+          PROMO_PASSWORD: ${{ secrets.PROMO_PASSWORD }}
+          ITEMS: ${{ github.event.inputs.items }}
+        run: |
+          set -u
+          mkdir -p promo out
+          for item in $(echo "$ITEMS" | tr ',' ' '); do
+            IFS=: read -r scene theme accent <<< "$item"
+            echo "--- recording $scene ($theme, $accent)"
+            set +e
+            python3 scripts/promo_capture.py --base https://streakpros.com \
+              --scene "$scene" --shape tall --out promo --theme "$theme" --accent "$accent"
+            echo "$scene $theme $accent exit $?" >> $GITHUB_STEP_SUMMARY
+            set -e
+            [ -e "promo/$scene-tall.webm" ] || continue
+            ffmpeg -nostdin -y -loglevel error -i "promo/$scene-tall.webm" \
+              -f lavfi -i anullsrc=channel_layout=stereo:sample_rate=44100 \
+              -vf "fps=30,scale=1080:1920:flags=lanczos,format=yuv420p" \
+              -c:v libx264 -profile:v high -level 4.1 -preset medium -crf 20 \
+              -c:a aac -b:a 128k -shortest \
+              -movflags +faststart "out/$scene-$theme-$accent-vertical.mp4"
+          done
+
+      - name: Put each clip on the phone
+        run: python3 scripts/promo_device.py out out | tee -a $GITHUB_STEP_SUMMARY
+
+      - name: Stills
+        run: |
+          python3 - <<'PY'
+          import glob, cv2
+          for f in glob.glob("out/*.mp4"):
+              c = cv2.VideoCapture(f)
+              n = int(c.get(7))
+              for k in (0.25, 0.5, 0.75):
+                  c.set(1, int(n * k))
+                  ok, im = c.read()
+                  if ok:
+                      cv2.imwrite(f[:-4] + f"-{int(k * 100)}.jpg", im, [cv2.IMWRITE_JPEG_QUALITY, 88])
+          PY
+
+      - name: Publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.event.inputs.tag }}
+        run: |
+          set -eu
+          gh release create "$TAG" out/*.mp4 out/*.jpg --repo "$GITHUB_REPOSITORY" --prerelease \
+            --title "Promo preview ($TAG)" --notes "Preview clips on the phone. Nothing is scheduled from this."

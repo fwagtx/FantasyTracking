@@ -4,7 +4,8 @@ name: Promo Weekly
 #
 # Monday morning this plans the week that starts on Wednesday (three
 # posts a day -- see scripts/promo_plan.py), records every clip it needs
-# plus spares from the live site, checks each one (scripts/promo_qa.py:
+# plus spares from the live site -- each in its own Theme setting (light,
+# dark or gray, and a primary colour) -- checks each one (scripts/promo_qa.py:
 # full frame, no white flash, every beat landed, and no sign-in prompt,
 # vote popup or empty list in any frame), and publishes the clips with
 # the plan and the check results as a Release. final.json in that
@@ -71,10 +72,13 @@ jobs:
           mkdir -p promo
           : > missed.txt
           for scene in $SCENES; do
-            echo "--- recording $scene"
+            # The Theme setting this clip is filmed in (plan.json looks).
+            look=$(python3 -c "import json,sys; print(json.load(open('plan.json')).get('looks', {}).get(sys.argv[1], 'light red'))" "$scene")
+            set -- $look
+            echo "--- recording $scene ($1, $2)"
             set +e
             python3 scripts/promo_capture.py --base https://streakpros.com \
-              --scene "$scene" --shape tall --out promo
+              --scene "$scene" --shape tall --out promo --theme "$1" --accent "$2"
             code=$?
             set -e
             # A missed beat still leaves a clip; the check fails it.

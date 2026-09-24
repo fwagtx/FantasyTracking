@@ -101,6 +101,8 @@ OVERLAY_JS = """
                      font-weight:800; font-size:20px; color:${CREAM};
                      text-shadow:0 2px 8px rgba(0,0,0,.7); }
       .__pmark span b{ color:${FLAME}; font-weight:800; }
+      /* Filmed in the light theme, cream on a white header disappears. */
+      html[data-theme="light"] .__pmark span{ color:#16181a; text-shadow:none; }
 
       /* A sliver of progress along the top edge. Cheap, and it tells a
          scroller the clip is nearly over, which keeps them to the end. */

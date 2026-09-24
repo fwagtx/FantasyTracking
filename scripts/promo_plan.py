@@ -39,6 +39,14 @@ ANCHOR = dt.date(2026, 10, 7)          # first automated week; before it was sch
 SLOTS = [("10:00", "feature"), ("13:00", "variant"), ("18:00", "team")]
 SPARES = 3                             # per slot, recorded in case a clip fails QA
 
+# The site's Theme setting each clip is filmed in (promo_capture --theme
+# --accent), walked in order like everything else so no two posts in a
+# row look alike. Light with red -- the look the owner picked -- comes
+# round most often; the rest show off that the site can be anyone's.
+LOOKS = [("light", "red"), ("dark", "amber"), ("light", "blue"), ("gray", "green"),
+         ("light", "purple"), ("dark", "red"), ("light", "red"), ("gray", "blue"),
+         ("light", "orange"), ("dark", "green"), ("light", "pink"), ("gray", "purple")]
+
 
 def slugify(s):
     return "".join(c if c.isalnum() else "-" for c in s.lower()).strip("-").replace("--", "-")
@@ -145,8 +153,11 @@ def plan(start):
             k += 1
         spares[slot] = out
     scenes = sorted({p["scene"] for p in posts} | {e["scene"] for v in spares.values() for e in v})
+    looks = {}
+    for i, e in enumerate(posts + [e for v in spares.values() for e in v]):
+        looks.setdefault(e["scene"], " ".join(LOOKS[(week * 21 + i) % len(LOOKS)]))
     return {"week_start": start.isoformat(), "tag": tag, "brand": BRAND,
-            "posts": posts, "spares": spares, "scenes": scenes}
+            "posts": posts, "spares": spares, "scenes": scenes, "looks": looks}
 
 
 def final(pl, qa):
