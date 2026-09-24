@@ -109,12 +109,12 @@ jobs:
           # eating names.txt (most clips never converted) and quitting early
           # on a "q" (a 3s montage).
           while read -r scene slug; do
-            src="promo/$scene-tall.webm"
+            src="promo/$scene-tall.mp4"
             [ -e "$src" ] || { echo "no clip for $scene"; continue; }
             ffmpeg -nostdin -y -loglevel error -i "$src" \
               -f lavfi -i anullsrc=channel_layout=stereo:sample_rate=44100 \
               -vf "fps=30,scale=1080:1920:flags=lanczos,format=yuv420p" \
-              -c:v libx264 -profile:v high -level 4.1 -preset medium -crf 20 \
+              -c:v libx264 -profile:v high -level 4.1 -preset medium -crf 16 \
               -c:a aac -b:a 128k -shortest \
               -movflags +faststart "out/$slug-vertical.mp4"
           done < names.txt

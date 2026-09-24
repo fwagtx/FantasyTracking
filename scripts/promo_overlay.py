@@ -47,27 +47,27 @@ OVERLAY_JS = """
          sign-off at the end. Padded clear of the bottom furniture. */
       .__pc{ position:absolute; inset:0; background:${NAVY};
              display:flex; flex-direction:column; align-items:center;
-             justify-content:center; gap:14px; padding:0 34px 16%% 34px;
+             justify-content:center; gap:calc(14px*var(--pk,1)); padding:0 calc(34px*var(--pk,1)) 16%% calc(34px*var(--pk,1));
              opacity:0; transition:opacity 340ms ease; text-align:center; }
       .__pc.on{ opacity:1; }
       .__pc-kick{ font-family:"Source Sans 3",system-ui,sans-serif;
-                  font-weight:700; font-size:14px; letter-spacing:.20em;
+                  font-weight:700; font-size:calc(14px*var(--pk,1)); letter-spacing:.20em;
                   text-transform:uppercase; color:${FLAME}; }
       .__pc-big{ font-family:"Big Shoulders Display",Impact,sans-serif;
-                 font-weight:800; font-size:104px; line-height:.88;
+                 font-weight:800; font-size:calc(104px*var(--pk,1)); line-height:.88;
                  color:${CREAM}; letter-spacing:-.01em; }
       .__pc-big em{ font-style:normal; color:${AMBER}; display:block;
-                    font-size:56px; line-height:1.05; }
+                    font-size:calc(56px*var(--pk,1)); line-height:1.05; }
       .__pc-sub{ font-family:"Source Sans 3",system-ui,sans-serif;
-                 font-weight:600; font-size:21px; line-height:1.3;
+                 font-weight:600; font-size:calc(21px*var(--pk,1)); line-height:1.3;
                  color:${MUTED}; max-width:15em; }
       .__pc-url{ font-family:"Big Shoulders Display",Impact,sans-serif;
-                 font-weight:800; font-size:46px; color:${CREAM};
+                 font-weight:800; font-size:calc(46px*var(--pk,1)); color:${CREAM};
                  letter-spacing:.01em; }
       .__pc-free{ font-family:"Source Sans 3",system-ui,sans-serif;
-                  font-weight:700; font-size:15px; letter-spacing:.16em;
+                  font-weight:700; font-size:calc(15px*var(--pk,1)); letter-spacing:.16em;
                   text-transform:uppercase; color:${FLAME}; }
-      .__pc-logo{ width:104px; height:104px; border-radius:24px; }
+      .__pc-logo{ width:calc(104px*var(--pk,1)); height:calc(104px*var(--pk,1)); border-radius:calc(24px*var(--pk,1)); }
 
       /* The spotlight: a ring around the thing being talked about, with
          everything else dimmed by an enormous spread shadow. One
@@ -113,6 +113,11 @@ OVERLAY_JS = """
 
     const stage = document.createElement('div');
     stage.id = '__promo_stage';
+    // The title cards are sized for a 540px-wide page. Filmed at a
+    // phone's 390px they scale down to match, so a headline that fitted
+    // still fits; everything else (tags, cursor) stays at CSS size and
+    // so reads larger on the narrower page.
+    stage.style.setProperty('--pk', Math.min(1, window.innerWidth / 540));
     stage.innerHTML = `
       <div class="__pprog" id="__pprog"></div>
       <div class="__pring" id="__pring"></div>

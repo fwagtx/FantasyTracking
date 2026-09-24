@@ -50,11 +50,11 @@ jobs:
               --scene "$scene" --shape tall --out promo --theme "$theme" --accent "$accent"
             echo "$scene $theme $accent exit $?" >> $GITHUB_STEP_SUMMARY
             set -e
-            [ -e "promo/$scene-tall.webm" ] || continue
-            ffmpeg -nostdin -y -loglevel error -i "promo/$scene-tall.webm" \
+            [ -e "promo/$scene-tall.mp4" ] || continue
+            ffmpeg -nostdin -y -loglevel error -i "promo/$scene-tall.mp4" \
               -f lavfi -i anullsrc=channel_layout=stereo:sample_rate=44100 \
               -vf "fps=30,scale=1080:1920:flags=lanczos,format=yuv420p" \
-              -c:v libx264 -profile:v high -level 4.1 -preset medium -crf 20 \
+              -c:v libx264 -profile:v high -level 4.1 -preset medium -crf 16 \
               -c:a aac -b:a 128k -shortest \
               -movflags +faststart "out/$scene-$theme-$accent-vertical.mp4"
           done

@@ -17,10 +17,9 @@ Two shapes:
   wide  1280x720  -- X, Reddit, YouTube, an embed on the site itself.
                      The page's own .wrap is 1060px, so this leaves a
                      natural gutter rather than a stretched layout.
-  tall   540x960  -- TikTok, Reels, Shorts. Under the 760px breakpoint,
-                     so this records the real phone layout, tab bar and
-                     all. Doubled to 1080x1920 on the way out, which is
-                     a clean 2x rather than a soft resample.
+  tall   390x693  -- TikTok, Reels, Shorts. An iPhone's width, so this
+                     records the real phone layout, tab bar and all,
+                     drawn at 1080x1920 device pixels.
 
 Signing in is optional and off unless PROMO_EMAIL and PROMO_PASSWORD are
 set. Signed out, the paid panels record as their locked state, which is
@@ -233,10 +232,78 @@ SHAPES = {
     # 1920x1080 for YouTube and X; recorded at full size rather than
     # upscaled, so text stays sharp.
     "wide": {"width": 1920, "height": 1080},
-    # Recorded at 540x960 so the page lays itself out as a phone, then
-    # doubled to 1080x1920 for TikTok, Reels and Shorts.
-    "tall": {"width": 540, "height": 960},
+    # Laid out at 390 CSS px wide -- an iPhone's own width, so the page
+    # is exactly the layout a phone gets -- and drawn at 1080x1920 for
+    # TikTok, Reels and Shorts. (It used to be laid out at 540px, which
+    # made every word 28% smaller once the clip sat on the phone.)
+    "tall": {"width": 390, "height": 693},
 }
+# The picture each shape is filmed at, in device pixels.
+FILM = {"wide": (1920, 1080), "tall": (1080, 1920)}
+
+
+class Camera:
+    """Films one page from Chromium's own screencast, at full quality.
+
+    Playwright's built-in recorder takes the same screencast but encodes
+    it to VP8 capped at 1 Mbit/s -- for a 1080x1920 picture that is what
+    turned small text to mush as it moved. Here every frame is kept as
+    Chromium delivers it (JPEG at quality 95) with its timestamp, and
+    ffmpeg builds a constant-30fps H.264 at near-lossless quality from
+    them, holding each frame for exactly as long as it was on screen."""
+
+    def __init__(self, ctx, page, size, frames_dir):
+        self.ctx, self.page, self.size, self.dir = ctx, page, size, frames_dir
+        self.frames = []            # (timestamp, path)
+        self.cdp = None
+
+    async def start(self):
+        import base64
+        os.makedirs(self.dir, exist_ok=True)
+        self.cdp = await self.ctx.new_cdp_session(self.page)
+
+        def on_frame(ev):
+            path = os.path.join(self.dir, f"{len(self.frames):06d}.jpg")
+            with open(path, "wb") as f:
+                f.write(base64.b64decode(ev["data"]))
+            self.frames.append((ev["metadata"]["timestamp"], path))
+            asyncio.ensure_future(self.cdp.send("Page.screencastFrameAck",
+                                                {"sessionId": ev["sessionId"]}))
+
+        self.cdp.on("Page.screencastFrame", on_frame)
+        await self.cdp.send("Page.startScreencast", {
+            "format": "jpeg", "quality": 95, "everyNthFrame": 1,
+            "maxWidth": self.size[0], "maxHeight": self.size[1]})
+
+    async def stop(self):
+        import time
+        self.stop_time = time.time()
+        try:
+            await self.cdp.send("Page.stopScreencast")
+        except Exception:
+            pass
+
+    def write(self, out):
+        import shutil
+        import subprocess
+        if not self.frames:
+            return None
+        lst = os.path.join(self.dir, "frames.txt")
+        end = max(self.frames[-1][0] + 0.5, getattr(self, "stop_time", 0) or 0)
+        with open(lst, "w") as f:
+            for i, (t, path) in enumerate(self.frames):
+                nxt = self.frames[i + 1][0] if i + 1 < len(self.frames) else end
+                f.write(f"file '{os.path.abspath(path)}'\nduration {max(nxt - t, 0.001):.6f}\n")
+            f.write(f"file '{os.path.abspath(self.frames[-1][1])}'\n")
+        w, h = self.size
+        subprocess.run([
+            "ffmpeg", "-nostdin", "-y", "-loglevel", "error",
+            "-f", "concat", "-safe", "0", "-i", lst,
+            "-vf", f"scale={w}:{h}:flags=lanczos,fps=30,format=yuv420p",
+            "-c:v", "libx264", "-preset", "medium", "-crf", "12",
+            "-movflags", "+faststart", out], check=True)
+        shutil.rmtree(self.dir, ignore_errors=True)
+        return out
 
 
 MISSED = []
@@ -1775,14 +1842,13 @@ async def record(base, scene, shape, out_dir, email=None, password=None):
         # its own Chromium at a fixed path instead, so allow an override
         # rather than downloading a second copy of the same browser.
         launch = {"args": ["--hide-scrollbars"]}
-        if shape == "tall":
-            # device_scale_factor=2 on the context alone is not enough:
-            # the recorder then captures a 540x960 picture and pads it
-            # into the top-left quarter of the 1080x1920 frame, with the
-            # rest filled gray. Forcing the scale on the browser itself
-            # makes the captured picture 1080x1920, filling the frame,
-            # while the page is still laid out at the 540px phone width.
-            launch["args"].append("--force-device-scale-factor=2")
+        # The page is laid out at `size` CSS px and drawn at FILM device
+        # px: 390px wide drawn 1080 wide is a device scale of ~2.77, set
+        # on the browser itself as well as the context -- on the context
+        # alone the capture comes out at CSS size, padded with gray.
+        dpr = FILM[shape][0] / size["width"]
+        if dpr != 1:
+            launch["args"].append(f"--force-device-scale-factor={dpr:.5f}")
         chrome = os.environ.get("PROMO_CHROME")
         if chrome:
             launch["executable_path"] = chrome
@@ -1821,18 +1887,11 @@ async def record(base, scene, shape, out_dir, email=None, password=None):
         # --- the take ----------------------------------------------------
         # Signed in on the camera-off pass, cookies carried across, so
         # the login form is never in the take.
-        # The phone layout is laid out at 540x960 CSS pixels, but drawn at
-        # device scale 2 and recorded at 1080x1920, so every glyph is
-        # rendered at full resolution rather than drawn small and
-        # stretched 2x by ffmpeg afterwards -- which is what softened
-        # every vertical clip up to now.
-        dpr = 2 if shape == "tall" else 1
+        # Drawn at full device resolution (see dpr above), so every glyph
+        # is rendered sharp rather than drawn small and stretched later.
         ctx = await browser.new_context(
             storage_state=await scout_ctx.storage_state(),
             viewport=size,
-            record_video_dir=out_dir,
-            record_video_size={"width": size["width"] * dpr,
-                               "height": size["height"] * dpr},
             device_scale_factor=dpr,
         )
         await ctx.add_init_script(theme_js(LOOK["theme"], LOOK["accent"]))
@@ -1841,6 +1900,8 @@ async def record(base, scene, shape, out_dir, email=None, password=None):
         await ctx.add_init_script(CURSOR_JS)
         await ctx.add_init_script(OVERLAY_JS)
         page = await ctx.new_page()
+        camera = Camera(ctx, page, FILM[shape], os.path.join(out_dir, f".frames-{scene}-{shape}"))
+        await camera.start()
         # Recording starts on about:blank, which is white. A scene that
         # opens on a title card drew it over that -- the first frame of
         # the montage was a white screen. Start on the page colour of the
@@ -1858,23 +1919,14 @@ async def record(base, scene, shape, out_dir, email=None, password=None):
             # is still a clip; a crashed job is nothing.
             print(f"  scene stopped early: {e}", file=sys.stderr)
 
+        await camera.stop()
         await scout_ctx.close()
         await ctx.close()
         await browser.close()
 
-    # Playwright names its recording with a random hash. Clips already
-    # renamed by an earlier scene in the same run are skipped, so a run
-    # that records several scenes into one directory keeps them all.
-    done = {f"{sc}-{sh}.webm" for sc in SCENES for sh in SHAPES}
-    videos = sorted(
-        (os.path.join(out_dir, f) for f in os.listdir(out_dir)
-         if f.endswith(".webm") and f not in done),
-        key=os.path.getmtime,
-    )
-    if not videos:
+    final = camera.write(os.path.join(out_dir, f"{scene}-{shape}.mp4"))
+    if not final:
         raise SystemExit("no video was recorded")
-    final = os.path.join(out_dir, f"{scene}-{shape}.webm")
-    os.replace(videos[-1], final)
     print(final)
     return final
 

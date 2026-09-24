@@ -55,7 +55,7 @@ def add_intro(clip, cover, out, kind):
         f"[a][b]xfade=transition=fade:duration={FADE}:offset={HOLD},format=yuv420p[v]",
         "-map", "[v]", "-map", "2:a",
         "-c:v", "libx264", "-profile:v", "high", "-level", "4.1",
-        "-preset", "medium", "-crf", "20",
+        "-preset", "medium", "-crf", "16",
         "-c:a", "aac", "-b:a", "128k", "-shortest",
         "-movflags", "+faststart", tmp,
     ], check=True)

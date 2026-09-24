@@ -112,7 +112,7 @@ def on_device(clip, out, kind):
         "-filter_complex", graph,
         "-map", "[v]", "-map", audio,
         "-c:v", "libx264", "-profile:v", "high", "-level", "4.1",
-        "-preset", "medium", "-crf", "20",
+        "-preset", "medium", "-crf", "16",
         "-c:a", "aac", "-b:a", "128k", "-shortest",
         "-movflags", "+faststart", tmp,
     ], check=True)

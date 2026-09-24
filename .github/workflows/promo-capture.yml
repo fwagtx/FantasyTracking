@@ -40,7 +40,7 @@ jobs:
           python -m playwright install --with-deps chromium
           # The runner image does not ship ffmpeg, and the conversion
           # step below is useless without it: Playwright records VP8 in
-          # a .webm and no social platform takes that.
+          # its frames and no social platform takes a bare stream.
           sudo apt-get update -qq
           sudo apt-get install -y --no-install-recommends ffmpeg
           ffmpeg -version | head -1
@@ -106,33 +106,27 @@ jobs:
       - name: Convert to mp4
         run: |
           set -u
-          # Playwright writes VP8 in a .webm. Every platform wants H.264
-          # in an .mp4, yuv420p, with the index at the front so it starts
-          # playing before it has finished downloading.
-          for f in promo/*.webm; do
+          # The recorder writes H.264 at the right size and 30fps but no
+          # sound. Every platform wants yuv420p H.264 in an .mp4 with an
+          # audio track and the index at the front.
+          for f in promo/*-wide.mp4 promo/*-tall.mp4; do
             [ -e "$f" ] || continue
-            name=$(basename "$f" .webm)
+            name=$(basename "$f" .mp4)
             case "$name" in
-              # Recorded at 540x960 so the page renders its real phone
-              # layout; doubled here to exactly 1080x1920 -- TikTok,
-              # Reels and Shorts.
               *-tall) scale="1080:1920" ;;
-              # Recorded at 1920x1080 already -- YouTube and X.
               *)      scale="1920:1080" ;;
             esac
-            # H.264 High in an .mp4, yuv420p (the only chroma TikTok
-            # reliably accepts), a fixed 30fps and the index at the
-            # front. The silent AAC track is not padding: a file with no
-            # audio stream at all is the most common reason a TikTok or
-            # Reels upload is rejected outright.
-            ffmpeg -y -loglevel error -i "$f" \
+            # The silent AAC track is not padding: a file with no audio
+            # stream at all is the most common reason a TikTok or Reels
+            # upload is rejected outright.
+            ffmpeg -nostdin -y -loglevel error -i "$f" \
               -f lavfi -i anullsrc=channel_layout=stereo:sample_rate=44100 \
               -vf "fps=30,scale=$scale:flags=lanczos,format=yuv420p" \
-              -c:v libx264 -profile:v high -level 4.1 -preset medium -crf 20 \
+              -c:v libx264 -profile:v high -level 4.1 -preset medium -crf 16 \
               -c:a aac -b:a 128k -shortest \
-              -movflags +faststart "promo/$name.mp4"
-            rm -f "$f"
-            printf '  %-22s %s\n' "$name.mp4" "$(du -h "promo/$name.mp4" | cut -f1)"
+              -movflags +faststart "promo/$name.part.mp4"
+            mv "promo/$name.part.mp4" "$f"
+            printf '  %-22s %s\n' "$name.mp4" "$(du -h "$f" | cut -f1)"
           done
           ls -la promo
 
