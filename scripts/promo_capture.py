@@ -681,6 +681,25 @@ async def scene_streaks(s):
     await s.card(logo=True, url="streakpros.com", ms=2200)
 
 
+# The id of the most recent finished game of the previous week, read
+# from the site's own scoreboard API (or null).
+FINISHED_GAME_JS = """async () => {
+  try {
+    const now = await (await fetch('/api/scoreboard')).json();
+    for (let back = 1; back <= 2; back++) {
+      const w = (now.week || 1) - back;
+      if (w < 1) break;
+      const r = await (await fetch('/api/scoreboard?season=' + now.season + '&week=' + w +
+                                   '&seasontype=' + (now.season_type || 2))).json();
+      const done = (r.games || []).filter(g => g.status === 'final')
+                     .sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')));
+      if (done.length) return done[0].id;
+    }
+  } catch (e) {}
+  return null;
+}"""
+
+
 async def scene_scores(s):
     """Live game day: the board, then one game opened up."""
     await s.visit("/scores", wait_for=".wrap", ms=2000)
@@ -689,7 +708,21 @@ async def scene_scores(s):
     await s.glide(760, 1500)
     await s.hold(900)
     await s.glide(0, 1000)
-    await s.tap("a[href^='/game']", index=0, after=1600)
+    # Open a game that has something in it: a live one, else one that has
+    # finished today. On a day whose games have not kicked off yet (a
+    # Thursday morning), the first card is a pregame page whose panels
+    # all say "appears once the game kicks off" -- so open the latest
+    # finished game from last week instead.
+    if await s.has("a.sc-game-card.live", timeout=800):
+        await s.tap("a.sc-game-card.live", index=0, after=1600)
+    elif await s.has("a.sc-game-card.done", timeout=800):
+        await s.tap("a.sc-game-card.done", index=0, after=1600)
+    else:
+        gid = await s.page.evaluate(FINISHED_GAME_JS)
+        if gid:
+            await s.visit(f"/game?id={gid}", wait_for=".gd-tab", ms=1300)
+        else:
+            await s.tap("a[href^='/game']", index=0, after=1600)
     # Not the feed: a finished game's feed is its kneel-downs.
     await s.tap(".gd-tab[data-panel='game']", force=True, after=1000)
     await s.glide(340, 1600)
