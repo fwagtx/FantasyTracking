@@ -1,0 +1,119 @@
+name: Promo Rebuild
+
+# Re-record a set of already-scheduled clips with the current recorder,
+# and publish them finished -- on the device, opening on a fresh cover,
+# with music -- under a new release tag, ready to swap into their posts.
+# Nothing is scheduled from here.
+on:
+  workflow_dispatch:
+    inputs:
+      items:
+        description: "scene:slug:theme:accent, comma-separated"
+        required: true
+      shape:
+        description: "tall (phone, vertical) or wide (laptop, desktop)"
+        default: "tall"
+      tag:
+        description: "Release tag to publish under"
+        required: true
+
+permissions:
+  contents: write   # create the release
+
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Playwright, ffmpeg and the checker
+        run: |
+          pip install --quiet playwright opencv-python-headless numpy rapidocr-onnxruntime
+          python -m playwright install --with-deps chromium
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends ffmpeg
+
+      - name: Record
+        env:
+          PROMO_EMAIL: ${{ secrets.PROMO_EMAIL }}
+          PROMO_PASSWORD: ${{ secrets.PROMO_PASSWORD }}
+          ITEMS: ${{ github.event.inputs.items }}
+          SHAPE: ${{ github.event.inputs.shape }}
+        run: |
+          set -u
+          mkdir -p promo out
+          [ "$SHAPE" = tall ] && kind=vertical || kind=desktop
+          [ "$SHAPE" = tall ] && size=1080:1920 || size=1920:1080
+          : > missed.txt
+          for item in $(echo "$ITEMS" | tr ',' ' '); do
+            IFS=: read -r scene slug theme accent <<< "$item"
+            echo "--- recording $scene -> $slug ($theme, $accent)"
+            set +e
+            python3 scripts/promo_capture.py --base https://streakpros.com \
+              --scene "$scene" --shape "$SHAPE" --out promo --theme "$theme" --accent "$accent"
+            code=$?
+            set -e
+            echo "$scene $theme $accent exit $code" >> $GITHUB_STEP_SUMMARY
+            [ "$code" = 0 ] || echo "$slug" >> missed.txt
+            [ -e "promo/$scene-$SHAPE.mp4" ] || continue
+            ffmpeg -nostdin -y -loglevel error -i "promo/$scene-$SHAPE.mp4" \
+              -f lavfi -i anullsrc=channel_layout=stereo:sample_rate=44100 \
+              -vf "fps=30,scale=$size:flags=lanczos,format=yuv420p" \
+              -c:v libx264 -profile:v high -level 4.1 -preset medium -crf 16 \
+              -c:a aac -b:a 128k -shortest \
+              -movflags +faststart "out/$slug-$kind.mp4"
+          done
+          ls -la out
+
+      # The frame-by-frame check reads phone-shaped clips; a laptop clip
+      # is checked by the beats landing (missed.txt) and by eye.
+      - name: Check every clip
+        if: github.event.inputs.shape == 'tall'
+        run: python3 scripts/promo_qa.py out --missed missed.txt --out qa.json | tee -a $GITHUB_STEP_SUMMARY
+
+      - name: Covers, device, cover intro, music
+        run: |
+          set -eu
+          mkdir -p covers
+          python3 scripts/promo_covers.py out covers
+          python3 scripts/promo_device.py out out | tee -a $GITHUB_STEP_SUMMARY
+          python3 scripts/promo_intro.py out covers out | tee -a $GITHUB_STEP_SUMMARY
+          python3 scripts/promo_audio.py out | tee -a $GITHUB_STEP_SUMMARY
+          cp covers/*.jpg out/
+
+      - name: Stills
+        run: |
+          python3 - <<'PY'
+          import glob, cv2
+          for f in glob.glob("out/*.mp4"):
+              c = cv2.VideoCapture(f)
+              n = int(c.get(7))
+              for k in (0.2, 0.4, 0.6, 0.8):
+                  c.set(1, int(n * k))
+                  ok, im = c.read()
+                  if ok:
+                      cv2.imwrite(f[:-4] + f"-still{int(k * 100)}.jpg", im, [cv2.IMWRITE_JPEG_QUALITY, 88])
+          PY
+
+      - name: Publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.event.inputs.tag }}
+        run: |
+          set -eu
+          files=$(ls out/*.mp4 out/*.jpg)
+          [ -e qa.json ] && files="$files qa.json"
+          gh release create "$TAG" $files --repo "$GITHUB_REPOSITORY" --prerelease \
+            --title "Promo rebuild ($TAG)" --notes "Re-recorded clips, finished and ready to swap into their scheduled posts."
+          bad=0
+          for f in out/*.mp4 out/*-cover*.jpg; do
+            url="https://github.com/$GITHUB_REPOSITORY/releases/download/$TAG/$(basename "$f")"
+            code=$(curl -sL -o /dev/null -w '%{http_code}' "$url")
+            [ "$code" = 200 ] && echo "PUBLIC $url" || { echo "FAIL $url -> $code"; bad=1; }
+          done
+          [ "$bad" = 0 ]

@@ -43,7 +43,9 @@ BACKDROP = "0x141417"
 # which left a one-pixel seam of backdrop under the status bar.)
 PHONE = {"canvas": (1080, 1920), "clip": (206, 250, 620, 1102), "frame": "phone.png",
          "top": 74, "bottom": 56, "ui": "phone-ui.png"}
-LAPTOP = {"canvas": (1920, 1080), "clip": (260, 110, 1400, 788), "frame": "laptop.png"}
+# The laptop has no app furniture over it (these go to YouTube as
+# ordinary videos), so its screen takes most of the frame.
+LAPTOP = {"canvas": (1920, 1080), "clip": (176, 52, 1568, 882), "frame": "laptop.png"}
 DEVICE = {"vertical": PHONE, "desktop": LAPTOP}
 EDGE_SRC = 10                    # first row under the progress sliver, in the 1080x1920 clip
 EDGE = round(EDGE_SRC * PHONE["clip"][3] / 1920)   # the same row once the clip is scaled onto the phone

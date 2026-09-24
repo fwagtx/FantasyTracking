@@ -17,6 +17,7 @@ Two shapes:
   wide  1280x720  -- X, Reddit, YouTube, an embed on the site itself.
                      The page's own .wrap is 1060px, so this leaves a
                      natural gutter rather than a stretched layout.
+                     Drawn at 1920x1080.
   tall   390x693  -- TikTok, Reels, Shorts. An iPhone's width, so this
                      records the real phone layout, tab bar and all,
                      drawn at 1080x1920 device pixels.
@@ -229,9 +230,12 @@ async () => {
 
 
 SHAPES = {
-    # 1920x1080 for YouTube and X; recorded at full size rather than
-    # upscaled, so text stays sharp.
-    "wide": {"width": 1920, "height": 1080},
+    # For YouTube and X: laid out at 1280x720, an ordinary laptop
+    # window, and drawn at 1920x1080. Laid out at 1920 CSS px the site's
+    # 1060px column sat small in the middle of a sea of margin and every
+    # word read as zoomed out; at 1280 the column fills the screen and
+    # the text is drawn 1.5x.
+    "wide": {"width": 1280, "height": 720},
     # Laid out at 390 CSS px wide -- an iPhone's own width, so the page
     # is exactly the layout a phone gets -- and drawn at 1080x1920 for
     # TikTok, Reels and Shorts. (It used to be laid out at 540px, which

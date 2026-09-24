@@ -113,11 +113,13 @@ OVERLAY_JS = """
 
     const stage = document.createElement('div');
     stage.id = '__promo_stage';
-    // The title cards are sized for a 540px-wide page. Filmed at a
+    // The title cards are sized for a 540px-square area. Filmed at a
     // phone's 390px they scale down to match, so a headline that fitted
-    // still fits; everything else (tags, cursor) stays at CSS size and
-    // so reads larger on the narrower page.
-    stage.style.setProperty('--pk', Math.min(1, window.innerWidth / 540));
+    // still fits; on a 1280x720 laptop page they scale up with the
+    // height, so a card fills the screen instead of sitting small in the
+    // middle of it. Everything else (tags, cursor) stays at CSS size.
+    stage.style.setProperty('--pk',
+      Math.min(window.innerWidth / 540, window.innerHeight / 540));
     stage.innerHTML = `
       <div class="__pprog" id="__pprog"></div>
       <div class="__pring" id="__pring"></div>
