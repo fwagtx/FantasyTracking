@@ -7,8 +7,7 @@ anti-aliased the same way a browser draws them.
 
   promo_device_frames.py [--chromium PATH]
 
-Writes scripts/promo_assets/phone.png, phone-ui-ink.png, phone-ui-white.png
-and laptop.png. Only needed when
+Writes scripts/promo_assets/phone.png, phone-ui.png and laptop.png. Only needed when
 the geometry or the look changes; the PNGs are committed.
 """
 import argparse
@@ -190,8 +189,8 @@ def phone_svg():
 
 def phone_ui_svg(ink):
     """What iOS draws over the page: the time, signal/Wi-Fi/battery either
-    side of the notch, and the home indicator. Black on a light page,
-    white on a dark one -- promo_device picks which per clip."""
+    side of the notch, and the home indicator. Only its shape is used:
+    promo_device colours it black or white to suit the page, per frame."""
     cw, ch = PHONE["canvas"]
     g = iphone()
     pt = g["pt"]
@@ -264,8 +263,7 @@ def main():
     a = ap.parse_args()
     os.makedirs(ASSETS, exist_ok=True)
     jobs = [(phone_svg(), PHONE["frame"], PHONE["canvas"]),
-            (phone_ui_svg("#0b0b0c"), PHONE["ui"]["ink"], PHONE["canvas"]),
-            (phone_ui_svg("#ffffff"), PHONE["ui"]["white"], PHONE["canvas"]),
+            (phone_ui_svg("#ffffff"), PHONE["ui"], PHONE["canvas"]),
             (laptop_svg(), LAPTOP["frame"], LAPTOP["canvas"])]
     for svg, name, size in jobs:
         out = os.path.join(ASSETS, name)

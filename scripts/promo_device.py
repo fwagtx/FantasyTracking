@@ -36,10 +36,13 @@ BACKDROP = "0x141417"
 # does: a status bar (top) and the home-indicator strip (bottom). Both
 # are painted from the clip's own edge rows every frame, so they are
 # always the colour of whatever the page is showing -- white under the
-# light theme's header, navy under a title card.
+# light theme's header, navy under a title card. The clock, signal,
+# Wi-Fi, battery and home indicator are drawn over them in black or
+# white, whichever the strip under them needs at that moment, as iOS
+# does. (Both strip heights are even: yuv420p rounds an odd one down,
+# which left a one-pixel seam of backdrop under the status bar.)
 PHONE = {"canvas": (1080, 1920), "clip": (206, 250, 620, 1102), "frame": "phone.png",
-         "top": 73, "bottom": 56,
-         "ui": {"ink": "phone-ui-ink.png", "white": "phone-ui-white.png"}}
+         "top": 74, "bottom": 56, "ui": "phone-ui.png"}
 LAPTOP = {"canvas": (1920, 1080), "clip": (260, 110, 1400, 788), "frame": "laptop.png"}
 DEVICE = {"vertical": PHONE, "desktop": LAPTOP}
 EDGE_SRC = 10                    # first row under the progress sliver, in the 1080x1920 clip
@@ -56,21 +59,6 @@ def frame_at(path, t):
     c.set(cv2.CAP_PROP_POS_MSEC, t * 1000)
     ok, f = c.read()
     return f if ok else None
-
-
-def page_is_light(clip):
-    """Whether the page along the clip's top edge is mostly light -- which
-    decides if the status bar is drawn in black or white, as iOS does."""
-    c = cv2.VideoCapture(clip)
-    n = int(c.get(cv2.CAP_PROP_FRAME_COUNT))
-    votes = []
-    for k in range(1, 10):
-        c.set(cv2.CAP_PROP_POS_FRAMES, int(n * k / 10))
-        ok, f = c.read()
-        if ok:
-            top = f[EDGE_SRC:EDGE_SRC + 6].reshape(-1, 3).astype(np.float32).mean(axis=0)   # BGR
-            votes.append(0.114 * top[0] + 0.587 * top[1] + 0.299 * top[2] > 150)
-    return sum(votes) > len(votes) / 2
 
 
 def on_device(clip, out, kind):
@@ -90,8 +78,8 @@ def on_device(clip, out, kind):
         # from just under the clip's progress sliver (3 CSS px, 6 here),
         # or the status bar would fill up with it as the clip plays.
         graph += (f"[s0]split=3[s1][t0][b0];"
-                  f"[t0]crop={w}:2:0:{EDGE},scale={w}:{top}[t1];"
-                  f"[b0]crop={w}:2:0:{h - 2},scale={w}:{bottom}[b1];"
+                  f"[t0]crop={w}:2:0:{EDGE},scale={w}:{top},split=2[t1][t2];"
+                  f"[b0]crop={w}:2:0:{h - 2},scale={w}:{bottom},split=2[b1][b2];"
                   f"[bg0][t1]overlay={x}:{y - top}:shortest=1[bg1];"
                   f"[bg1][b1]overlay={x}:{y + h}:shortest=1[bg2];")
         bg, sc = "bg2", "s1"
@@ -99,10 +87,19 @@ def on_device(clip, out, kind):
               f"[a][1:v]overlay=0:0:shortest=1")
     audio = "2:a"
     if d.get("ui"):
-        ui = d["ui"]["ink" if page_is_light(clip) else "white"]
-        inputs += ["-loop", "1", "-framerate", "30", "-i", os.path.join(ASSETS, ui)]
-        graph += "[a2];[a2][2:v]overlay=0:0:shortest=1"
+        # The iOS furniture: its shapes are the alpha of phone-ui.png;
+        # its colour is black wherever the strip under it is light and
+        # white wherever it is dark, worked out frame by frame.
+        inputs += ["-loop", "1", "-framerate", "30", "-i", os.path.join(ASSETS, d["ui"])]
         audio = "3:a"
+        lum = "format=gray,lut=y='if(gt(val,150),0,255)',format=rgba"
+        graph += (f"[a2];[2:v]format=rgba,split=2[u0][u1];"
+                  f"[u0]crop={w}:{top}:{x}:{y - top},alphaextract[ua];"
+                  f"[u1]crop={w}:{bottom}:{x}:{y + h},alphaextract[ub];"
+                  f"[t2]{lum}[tc];[b2]{lum}[bc];"
+                  f"[tc][ua]alphamerge[ti];[bc][ub]alphamerge[bi];"
+                  f"[a2][ti]overlay={x}:{y - top}:shortest=1[a3];"
+                  f"[a3][bi]overlay={x}:{y + h}:shortest=1")
     graph += ",format=yuv420p[v]"
     subprocess.run([
         "ffmpeg", "-nostdin", "-y", "-loglevel", "error",
