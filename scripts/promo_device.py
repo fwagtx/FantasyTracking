@@ -73,13 +73,17 @@ def on_device(clip, out, kind):
              f"[0:v]fps=30,scale={w}:{h}:flags=lanczos,setsar=1[s0];")
     bg, sc = "bg0", "s0"
     if top or bottom:
-        # The status bar and home strip: the clip's top and bottom rows,
-        # stretched to fill them, frame by frame. The top rows are taken
+        # The status bar and home strip: the colour of the page at the
+        # clip's top-left and bottom-left corner, frame by frame -- the
+        # page's gutter, which is its background even when a list has
+        # scrolled up under the header. (Stretching the whole top row
+        # streaked the status bar with whatever scrolled under it; its
+        # average turned a row of player photos brown.) The top rows are taken
         # from just under the clip's progress sliver (3 CSS px, 6 here),
         # or the status bar would fill up with it as the clip plays.
         graph += (f"[s0]split=3[s1][t0][b0];"
-                  f"[t0]crop={w}:2:0:{EDGE},scale={w}:{top},split=2[t1][t2];"
-                  f"[b0]crop={w}:2:0:{h - 2},scale={w}:{bottom},split=2[b1][b2];"
+                  f"[t0]crop=4:2:2:{EDGE},scale=1:1:flags=area,scale={w}:{top},split=2[t1][t2];"
+                  f"[b0]crop=4:2:2:{h - 2},scale=1:1:flags=area,scale={w}:{bottom},split=2[b1][b2];"
                   f"[bg0][t1]overlay={x}:{y - top}:shortest=1[bg1];"
                   f"[bg1][b1]overlay={x}:{y + h}:shortest=1[bg2];")
         bg, sc = "bg2", "s1"
