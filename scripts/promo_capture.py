@@ -747,6 +747,24 @@ FINISHED_GAME_JS = """async () => {
 }"""
 
 
+async def open_a_game(s, after=1400):
+    """From the scores board, open a game that has something in it: a
+    live one, else one finished today. On a day whose games have not
+    kicked off yet (a Thursday morning), the first card is a pregame page
+    whose panels all say "appears once the game kicks off" -- so open the
+    latest finished game from last week instead."""
+    if await s.has("a.sc-game-card.live", timeout=800):
+        await s.tap("a.sc-game-card.live", index=0, after=after)
+    elif await s.has("a.sc-game-card.done", timeout=800):
+        await s.tap("a.sc-game-card.done", index=0, after=after)
+    else:
+        gid = await s.page.evaluate(FINISHED_GAME_JS)
+        if gid:
+            await s.visit(f"/game?id={gid}", wait_for=".gd-tab", ms=after)
+        else:
+            await s.tap("a[href^='/game']", index=0, after=after)
+
+
 async def scene_scores(s):
     """Live game day: the board, then one game opened up."""
     await s.visit("/scores", wait_for=".wrap", ms=2000)
@@ -755,21 +773,7 @@ async def scene_scores(s):
     await s.glide(760, 1500)
     await s.hold(900)
     await s.glide(0, 1000)
-    # Open a game that has something in it: a live one, else one that has
-    # finished today. On a day whose games have not kicked off yet (a
-    # Thursday morning), the first card is a pregame page whose panels
-    # all say "appears once the game kicks off" -- so open the latest
-    # finished game from last week instead.
-    if await s.has("a.sc-game-card.live", timeout=800):
-        await s.tap("a.sc-game-card.live", index=0, after=1600)
-    elif await s.has("a.sc-game-card.done", timeout=800):
-        await s.tap("a.sc-game-card.done", index=0, after=1600)
-    else:
-        gid = await s.page.evaluate(FINISHED_GAME_JS)
-        if gid:
-            await s.visit(f"/game?id={gid}", wait_for=".gd-tab", ms=1300)
-        else:
-            await s.tap("a[href^='/game']", index=0, after=1600)
+    await open_a_game(s, after=1600)
     # Not the feed: a finished game's feed is its kneel-downs.
     await s.tap(".gd-tab[data-panel='game']", force=True, after=1000)
     await s.glide(340, 1600)
@@ -1075,7 +1079,7 @@ async def scene_gameday(s):
     await s.mark(True)
     await s.clock(18000)
     await s.visit("/scores", wait_for=".sc-day-tabs", ms=900)
-    await s.tap("a[href^='/game']", index=0, after=1400)
+    await open_a_game(s, after=1400)
     # The feed of a finished game is its last plays -- a column of
     # kneel-downs. The box score is the part that sells it, so a finished
     # game goes straight there; a live one shows the field first.

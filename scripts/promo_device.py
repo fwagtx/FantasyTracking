@@ -1,12 +1,12 @@
-"""Put every promo clip on a device: vertical clips play on a phone,
-desktop clips on a laptop, each on a dark backdrop.
+"""Put every promo clip on a device: vertical clips play on an iPhone
+(promo_phone.py), desktop clips on a laptop.
 
 A bare screen recording reads as "a web page"; the same recording on a
 phone reads as "an app I could have in my pocket", and the laptop shows
 the desktop site is a real, full-size thing too. The recording itself is
 untouched -- scaled down and framed, nothing added to the page.
 
-  promo_device.py CLIPS_DIR OUT_DIR
+  promo_device.py CLIPS_DIR OUT_DIR [--looks looks.json]
 
 <slug>-vertical.mp4 -> phone, 1080x1920; <slug>-desktop.mp4 -> laptop,
 1920x1080. The frames (scripts/promo_assets/*.png) are drawn by
@@ -18,10 +18,16 @@ import os
 import subprocess
 import sys
 
+import argparse
+import json
+import zlib
+
 import cv2
 import numpy as np
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, HERE)
+import promo_phone  # noqa: E402
 ASSETS = os.path.join(HERE, "promo_assets")
 BACKDROP = "0x141417"
 
@@ -41,14 +47,11 @@ BACKDROP = "0x141417"
 # white, whichever the strip under them needs at that moment, as iOS
 # does. (Both strip heights are even: yuv420p rounds an odd one down,
 # which left a one-pixel seam of backdrop under the status bar.)
-PHONE = {"canvas": (1080, 1920), "clip": (206, 250, 620, 1102), "frame": "phone.png",
-         "top": 74, "bottom": 56, "ui": "phone-ui.png"}
+PHONE = {"canvas": promo_phone.CANVAS, "clip": promo_phone.CONTENT}
 # The laptop has no app furniture over it (these go to YouTube as
 # ordinary videos), so its screen takes most of the frame.
 LAPTOP = {"canvas": (1920, 1080), "clip": (176, 52, 1568, 882), "frame": "laptop.png"}
 DEVICE = {"vertical": PHONE, "desktop": LAPTOP}
-EDGE_SRC = 10                    # first row under the progress sliver, in the 1080x1920 clip
-EDGE = round(EDGE_SRC * PHONE["clip"][3] / 1920)   # the same row once the clip is scaled onto the phone
 
 
 def duration(path):
@@ -63,7 +66,16 @@ def frame_at(path, t):
     return f if ok else None
 
 
-def on_device(clip, out, kind):
+def look_for(name, looks):
+    """The phone look for a clip: from looks.json when it names one, else
+    alternating between the two by name, so a week of posts mixes them."""
+    return looks.get(name) or ("brand", "ambient")[zlib.crc32(name.encode()) % 2]
+
+
+def on_device(clip, out, kind, look="brand"):
+    if kind == "vertical":
+        promo_phone.compose(clip, out, look)
+        return
     d = DEVICE[kind]
     cw, ch = d["canvas"]
     x, y, w, h = d["clip"]
@@ -144,7 +156,13 @@ def check(clip, out, kind):
 
 
 def main():
-    clips_dir, out_dir = sys.argv[1:3]
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("clips_dir")
+    ap.add_argument("out_dir")
+    ap.add_argument("--looks", default="", help="JSON {clip name: brand|ambient} for the phone look")
+    a = ap.parse_args()
+    clips_dir, out_dir = a.clips_dir, a.out_dir
+    looks = json.load(open(a.looks)) if a.looks and os.path.exists(a.looks) else {}
     os.makedirs(out_dir, exist_ok=True)
     ok, bad = 0, []
     for clip in sorted(glob.glob(os.path.join(clips_dir, "*.mp4"))):
@@ -157,7 +175,8 @@ def main():
         if os.path.abspath(out) == os.path.abspath(clip):
             src = clip + ".raw.mp4"
             os.replace(clip, src)
-        on_device(src, out, kind)
+        look = look_for(name, looks)
+        on_device(src, out, kind, look)
         why = check(src, out, kind)
         if src != clip:
             os.remove(src)
@@ -166,7 +185,7 @@ def main():
             print(f"FAIL {name}: {why}")
         else:
             ok += 1
-            print(f"ok   {name} on a {'phone' if kind == 'vertical' else 'laptop'}")
+            print(f"ok   {name} on a {'phone (' + look + ')' if kind == 'vertical' else 'laptop'}")
     print(f"{ok} clips on a device, {len(bad)} failed")
     sys.exit(1 if bad else 0)
 

@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
     inputs:
       items:
-        description: "scene:slug:theme:accent, comma-separated"
+        description: "scene:slug:theme:accent[:look], comma-separated (look: brand or ambient, phone only)"
         required: true
       shape:
         description: "tall (phone, vertical) or wide (laptop, desktop)"
@@ -50,8 +50,10 @@ jobs:
           [ "$SHAPE" = tall ] && kind=vertical || kind=desktop
           [ "$SHAPE" = tall ] && size=1080:1920 || size=1920:1080
           : > missed.txt
+          echo '{}' > looks.json
           for item in $(echo "$ITEMS" | tr ',' ' '); do
-            IFS=: read -r scene slug theme accent <<< "$item"
+            IFS=: read -r scene slug theme accent look <<< "$item"
+            [ -n "${look:-}" ] && python3 -c "import json,sys; d=json.load(open('looks.json')); d[sys.argv[1]]=sys.argv[2]; json.dump(d,open('looks.json','w'))" "$slug-$kind" "$look"
             echo "--- recording $scene -> $slug ($theme, $accent)"
             set +e
             python3 scripts/promo_capture.py --base https://streakpros.com \
@@ -81,7 +83,7 @@ jobs:
           set -eu
           mkdir -p covers
           python3 scripts/promo_covers.py out covers
-          python3 scripts/promo_device.py out out | tee -a $GITHUB_STEP_SUMMARY
+          python3 scripts/promo_device.py out out --looks looks.json | tee -a $GITHUB_STEP_SUMMARY
           python3 scripts/promo_intro.py out covers out | tee -a $GITHUB_STEP_SUMMARY
           python3 scripts/promo_audio.py out | tee -a $GITHUB_STEP_SUMMARY
           cp covers/*.jpg out/
