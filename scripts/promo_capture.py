@@ -298,6 +298,16 @@ class Camera:
         if not self.frames:
             return None
         w, h = self.size
+        # Start on the first frame with something on it: the take opens
+        # on a blank page of the theme's colour while the first page
+        # loads, and a light theme's is a flash of white.
+        first = 0
+        for i, (_, path) in enumerate(self.frames[:120]):
+            im = cv2.imread(path, cv2.IMREAD_REDUCED_GRAYSCALE_8)
+            if im is not None and float(im.std()) > 6:
+                first = i
+                break
+        self.frames = self.frames[first:]
         t0 = self.frames[0][0]
         end = max(self.frames[-1][0] + 0.5, getattr(self, "stop_time", 0) or 0)
         # Screencast timestamps and time.time() share the wall clock.
@@ -1125,6 +1135,25 @@ async def scene_player(s):
     await s.card(logo=True, url="streakpros.com", ms=2200)
 
 
+async def add_player(s, side, name):
+    """Type a player into one side of the trade calculator and pick him
+    from the dropdown. False if he did not come up."""
+    box = f"#search{side}"
+    if not await s.has(box, timeout=1500):
+        return False
+    await s.tap(box, after=250)
+    try:
+        await s.page.type(box, name, delay=0 if s.dry else 70)
+    except Exception:
+        return False
+    item = f"#dropdown{side} .search-dropdown-item"
+    if not await s.has(item, timeout=4000):
+        return False
+    await s.hold(450)
+    await s.tap(item, index=0, after=900)
+    return True
+
+
 async def scene_tradecalc(s):
     """Two sides, one bar, an honest answer."""
     await s.mark(True)
@@ -1133,14 +1162,22 @@ async def scene_tradecalc(s):
     await s.card(kicker="Trade calculator", big="IS IT<em>fair?</em>",
                  sub="Priced on real market value", ms=1700)
     await s.uncard(300)
-    # A real two-sided offer: two picks going out, one coming back. Both
-    # sides need something on them or the balance bar never appears --
-    # which is how the first cut ringed an empty space.
-    await s.tap(".quick-add-tile[onclick^='quickAddClick(1']", index=0, after=800)
-    await s.tap(".quick-add-tile[onclick^='quickAddClick(1']", index=4, after=800)
-    await s.tap(".quick-add-tile[onclick^='quickAddClick(2']", index=1, after=1000)
+    # A real two-sided offer, typed in the way a person would: a star
+    # going out, a star and a first coming back. Both sides need
+    # something on them or the balance bar never appears -- which is how
+    # the first cut ringed an empty space. Picks stand in if a search
+    # comes back empty.
+    if not await add_player(s, 1, "Bijan Robinson"):
+        await s.tap(".quick-add-tile[onclick^='quickAddClick(1']", index=0, after=800)
+    if not await add_player(s, 2, "Ja'Marr Chase"):
+        await s.tap(".quick-add-tile[onclick^='quickAddClick(2']", index=1, after=800)
+    await s.tap(".quick-add-tile[onclick^='quickAddClick(2']", index=0, after=1000)
+    # The bar sits under the second side; bring it to the middle of the
+    # screen first, or at a phone's width the ring lands on the tab bar.
+    await s._eval("s => window.__promo.aim(s)", ".balance-bar-wrap")
+    await s.hold(500)
     await s.point(".balance-bar-wrap")
-    await s.spotlight(".balance-bar-wrap", "Who wins it, instantly", ms=2000)
+    await s.spotlight(".balance-bar-wrap", "Who wins it, instantly", ms=2200)
     await s.unspotlight()
     await s.hold(700)
     await s.card(logo=True, url="streakpros.com", ms=2200)
