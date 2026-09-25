@@ -57,6 +57,9 @@ jobs:
               -c:v libx264 -profile:v high -level 4.1 -preset medium -crf 16 \
               -c:a aac -b:a 128k -shortest \
               -movflags +faststart "out/$scene-$theme-$accent-vertical.mp4"
+            # The bare recording too, before the phone goes on, so new
+            # device looks can be tried on the same footage.
+            cp "out/$scene-$theme-$accent-vertical.mp4" "out/$scene-$theme-$accent-raw.mp4"
           done
 
       - name: Put each clip on the phone
