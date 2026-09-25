@@ -795,6 +795,21 @@ async def scene_scores(s):
     await s.hold(2200)
 
 
+async def scene_scores_clip(s):
+    """The scores walk as a clip of its own: the same board and game,
+    opened on a title card and closed on the sign-off like every other
+    clip. (The bare walk is also the middle of the tour, which has its
+    own cards around it.)"""
+    await s.mark(True)
+    await s.clock(20000)
+    await s.visit("/scores", wait_for=".wrap", ms=700)
+    await s.card(kicker="Live scores", big="EVERY<em>game, live</em>",
+                 sub="Scores, box scores, win odds", ms=1700)
+    await s.uncard(300)
+    await scene_scores(s)
+    await s.card(logo=True, url="streakpros.com", ms=2200)
+
+
 async def scene_matchups(s):
     """Every starter graded, with the sentence that explains the grade.
 
@@ -1117,6 +1132,20 @@ async def scene_gameday(s):
     await s.card(logo=True, url="streakpros.com", ms=2200)
 
 
+async def glide_to_depth(s, ms=1300):
+    """Glide a player page down to its team's depth chart. A plain
+    520px pan stopped on the Latest News panel, which for most players
+    on most days reads "No recent headlines mention him right now" -- an
+    empty box, filmed. The depth chart is the part worth showing."""
+    y = await s.page.evaluate("""() => {
+      const h = [...document.querySelectorAll('.panel h2')]
+        .find(e => /Depth Chart$/.test(e.textContent.trim()));
+      return h ? Math.max(0, h.closest('.panel').getBoundingClientRect().top
+                              + window.scrollY - 64) : null;
+    }""")
+    await s.glide(520 if y is None else int(y), ms)
+
+
 async def scene_player(s):
     """A player's whole profile, depth chart included.
 
@@ -1135,7 +1164,7 @@ async def scene_player(s):
     await s.uncard(300)
     await s.spotlight(".player-hero", ms=1500)
     await s.unspotlight()
-    await s.glide(520, 1300)
+    await glide_to_depth(s)
     await s.hold(1400)
     await s.card(logo=True, url="streakpros.com", ms=2200)
 
@@ -1632,15 +1661,23 @@ async def scene_v_st_nfc(s):
 async def scene_v_trade_sf(s):
     """The calculator in superflex, where quarterbacks carry more value."""
     await s.mark(True)
-    await s.clock(15000)
+    await s.clock(18000)
     await s.visit("/trade-calculator?format=superflex", wait_for=".quick-add-grid", ms=900)
     await s.card(kicker="Superflex", big="SUPERFLEX<em>values, built in</em>",
                  sub="Priced for 2-QB leagues", ms=1700)
     await s.uncard(300)
-    await s.tap(".quick-add-tile[onclick^='quickAddClick(1']", index=0, after=900)
-    await s.tap(".quick-add-tile[onclick^='quickAddClick(2']", index=2, after=900)
+    # Quarterback for quarterback, the trade superflex is about. Two
+    # draft picks alone said nothing about the format; picks stand in
+    # only if a search comes back empty.
+    if not await add_player(s, 1, "Josh Allen"):
+        await s.tap(".quick-add-tile[onclick^='quickAddClick(1']", index=0, after=900)
+    if not await add_player(s, 2, "Jayden Daniels"):
+        await s.tap(".quick-add-tile[onclick^='quickAddClick(2']", index=2, after=900)
+    await s.tap(".quick-add-tile[onclick^='quickAddClick(2']", index=0, after=1000)
+    await s._eval("s => window.__promo.aim(s)", ".balance-bar-wrap")
+    await s.hold(500)
     await s.point(".balance-bar-wrap")
-    await s.spotlight(".balance-bar-wrap", "Who wins it", ms=1800)
+    await s.spotlight(".balance-bar-wrap", "Who wins it", ms=2000)
     await s.unspotlight()
     await s.hold(1100)
     await s.card(logo=True, url="streakpros.com", ms=2200)
@@ -1701,7 +1738,7 @@ async def scene_v_player_cin(s):
     await s.uncard(300)
     await s.spotlight(".player-hero", ms=1500)
     await s.unspotlight()
-    await s.glide(520, 1200)
+    await glide_to_depth(s)
     await s.hold(1100)
     await s.card(logo=True, url="streakpros.com", ms=2200)
 
@@ -1717,7 +1754,7 @@ async def scene_v_player_bal(s):
     await s.uncard(300)
     await s.spotlight(".player-hero", ms=1500)
     await s.unspotlight()
-    await s.glide(520, 1200)
+    await glide_to_depth(s)
     await s.hold(1100)
     await s.card(logo=True, url="streakpros.com", ms=2200)
 
@@ -1733,7 +1770,7 @@ async def scene_v_player_sf(s):
     await s.uncard(300)
     await s.spotlight(".player-hero", ms=1500)
     await s.unspotlight()
-    await s.glide(520, 1200)
+    await glide_to_depth(s)
     await s.hold(1100)
     await s.card(logo=True, url="streakpros.com", ms=2200)
 
@@ -1929,7 +1966,7 @@ SCENES = {
     "waivers": scene_waivers,
     "streaks": scene_streaks,
     "streaks_story": scene_streaks_story,
-    "scores": scene_scores,
+    "scores": scene_scores_clip,
     "matchups": scene_matchups,
     "rankings": scene_rankings,
     "tour": scene_tour,

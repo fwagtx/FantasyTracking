@@ -131,6 +131,12 @@ OVERLAY_JS = """
   }
 
   function el(id) { build(); return document.getElementById(id); }
+  // The drawn pointer sits above everything, cards included, so a card
+  // hides it: left showing, it was a stray ring on the sign-off card.
+  function pointer(v) {
+    const d = document.getElementById('__promo_cursor');
+    if (d) d.style.visibility = v;
+  }
 
   window.__promo = {
     /* A full-bleed card. `big` may carry a nested <em> for a second,
@@ -146,8 +152,9 @@ OVERLAY_JS = """
         (o.url ? `<div class="__pc-url">${o.url}</div>` : '') +
         (o.free ? `<div class="__pc-free">${o.free}</div>` : '');
       c.classList.add('on');
+      pointer('hidden');
     },
-    hideCard() { el('__pc').classList.remove('on'); },
+    hideCard() { el('__pc').classList.remove('on'); pointer(''); },
 
     /* Ring an element, by selector, with an optional tag beside it.
        Coordinates come from the live box so the ring tracks whatever
