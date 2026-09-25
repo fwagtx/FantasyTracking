@@ -611,7 +611,12 @@ class Stage:
             # "stable". The game page re-renders on its live poll, and
             # that wait held the tap for its full four seconds -- on
             # camera, over the kneel-down feed it was meant to leave.
-            await el.click(timeout=4000, force=force)
+            # no_wait_after: a tap that navigates would otherwise hold
+            # until Playwright was satisfied the navigation had settled
+            # -- on the player-streak page, which keeps fetching, that
+            # was 26 seconds of the camera filming one still frame. The
+            # page's own load is waited for below, capped.
+            await el.click(timeout=4000, force=force, no_wait_after=True)
         except Exception:
             # A click that starts a navigation can report a timeout
             # while the next document is already loading, so this is

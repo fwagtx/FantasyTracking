@@ -4,6 +4,7 @@ A clip passes only if all of these hold:
 
   - the right size (1080x1920), long enough, and filling the frame --
     no gray padding, which is what a broken device-scale setting gives;
+  - it never sits on one frame for more than 8 seconds (a stalled take);
   - it does not open on a blank white flash (a light-theme page is
     fine; an empty white screen is not);
   - every beat of its scene landed (the recorder's missed-beat list);
@@ -81,7 +82,13 @@ def check(job):
     ocr = RapidOCR(intra_op_num_threads=1)
     sbc = "start-bench-cut" in name
     seen = set()
+    # A stalled take films one frame for as long as the stall lasted --
+    # 26 seconds of it, once, while a tap waited on a page that kept
+    # loading. No beat holds that long on purpose.
+    last_change, longest = 0.0, 0.0
     for t, f in frames_to_read(path):
+        longest = max(longest, t - last_change)
+        last_change = t
         res, _ = ocr(cv2.resize(f, (540, 960)))
         for _box, txt, _conf in res or []:
             flat = txt.replace(" ", "")
@@ -91,6 +98,9 @@ def check(job):
                 if (rx.search(txt) or rx.search(flat)) and (label, txt) not in seen:
                     seen.add((label, txt))
                     reasons.append(f'{label} on screen at {t:.1f}s: "{txt}"')
+    longest = max(longest, n / fps - last_change)
+    if longest > 8:
+        reasons.append(f"picture frozen for {longest:.0f}s")
     return name, {"ok": not reasons, "reasons": reasons}
 
 
