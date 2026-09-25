@@ -7,11 +7,9 @@ the type renders in the site's own fonts, the timing is frame-accurate
 because there is no second pass, and one Playwright run produces a
 finished video.
 
-The stage is appended to <html>, not <body>, on purpose. That leaves
-the page free to zoom underneath it -- `body { zoom }` pushes in on a
-row without dragging the titles and callouts along with it, and without
-moving a single node inside the site's own DOM, which would risk
-breaking its scripts.
+The stage is appended to <html>, not <body>, on purpose, so nothing in
+the site's own DOM moves. Pushing in on a row is done by the camera
+(promo_capture.Camera), on the recorded picture, not by zooming the page.
 
 Layout obeys TikTok's furniture: the app's own buttons sit over the
 right edge and its caption sits over the bottom, so nothing that has to
@@ -204,6 +202,20 @@ OVERLAY_JS = """
         }
       }
       b.style.zoom = scale;
+    },
+    /* Bring a point of the page to the middle of the screen, and say
+       where it sits (as a fraction of the viewport), so the camera can
+       push in on it. The page itself is never scaled: a CSS zoom
+       reflows a phone-width layout, and names came out as "Chris Bos...". */
+    aim(sel) {
+      const t = sel && document.querySelector(sel);
+      if (!t) return {x: 0.5, y: 0.45};
+      let r = t.getBoundingClientRect();
+      const want = r.top + r.height / 2 - window.innerHeight * 0.45;
+      window.scrollTo(0, Math.max(0, window.scrollY + want));
+      r = t.getBoundingClientRect();
+      return {x: (r.left + r.width / 2) / window.innerWidth,
+              y: (r.top + r.height / 2) / window.innerHeight};
     },
     unzoom(ms) {
       const b = document.body;

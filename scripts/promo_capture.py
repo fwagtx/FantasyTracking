@@ -37,6 +37,7 @@ import asyncio
 import html
 import os
 import sys
+import time
 
 from promo_overlay import OVERLAY_JS, TOP_ROW_JS
 
@@ -288,30 +289,69 @@ class Camera:
             pass
 
     def write(self, out):
+        """Build a constant-30fps H.264 from the frames: each output frame
+        shows the latest screencast frame at that moment, with any camera
+        push (ZOOMS) applied as an eased crop-and-scale of the picture."""
         import shutil
         import subprocess
+        import cv2
         if not self.frames:
             return None
-        lst = os.path.join(self.dir, "frames.txt")
-        end = max(self.frames[-1][0] + 0.5, getattr(self, "stop_time", 0) or 0)
-        with open(lst, "w") as f:
-            for i, (t, path) in enumerate(self.frames):
-                nxt = self.frames[i + 1][0] if i + 1 < len(self.frames) else end
-                f.write(f"file '{os.path.abspath(path)}'\nduration {max(nxt - t, 0.001):.6f}\n")
-            f.write(f"file '{os.path.abspath(self.frames[-1][1])}'\n")
         w, h = self.size
-        subprocess.run([
+        t0 = self.frames[0][0]
+        end = max(self.frames[-1][0] + 0.5, getattr(self, "stop_time", 0) or 0)
+        # Screencast timestamps and time.time() share the wall clock.
+        zooms = sorted(z for z in ZOOMS if t0 - 1 <= z[0] <= end + 1)
+
+        def camera(t):
+            s, x, y = 1.0, 0.5, 0.5
+            for (zt, zs, zx, zy, dur) in zooms:
+                if t < zt:
+                    break
+                f = min(1.0, (t - zt) / dur) if dur > 0 else 1.0
+                f = f * f * (3 - 2 * f)                      # ease in and out
+                tx = zx if zx is not None else x
+                ty = zy if zy is not None else y
+                s, x, y = s + (zs - s) * f, x + (tx - x) * f, y + (ty - y) * f
+            return s, x, y
+
+        enc = subprocess.Popen([
             "ffmpeg", "-nostdin", "-y", "-loglevel", "error",
-            "-f", "concat", "-safe", "0", "-i", lst,
-            "-vf", f"scale={w}:{h}:flags=lanczos,fps=30,format=yuv420p",
-            "-c:v", "libx264", "-preset", "medium", "-crf", "12",
-            "-movflags", "+faststart", out], check=True)
+            "-f", "rawvideo", "-pix_fmt", "bgr24", "-s", f"{w}x{h}", "-r", "30", "-i", "-",
+            "-c:v", "libx264", "-preset", "medium", "-crf", "10", "-pix_fmt", "yuv420p",
+            "-movflags", "+faststart", out], stdin=subprocess.PIPE)
+        i, cur, cur_path = 0, None, None
+        n = int((end - t0) * 30) + 1
+        for k in range(n):
+            t = t0 + k / 30
+            while i + 1 < len(self.frames) and self.frames[i + 1][0] <= t:
+                i += 1
+            if self.frames[i][1] != cur_path:
+                cur_path = self.frames[i][1]
+                cur = cv2.imread(cur_path)
+                if cur.shape[1] != w or cur.shape[0] != h:
+                    cur = cv2.resize(cur, (w, h), interpolation=cv2.INTER_LANCZOS4)
+            s, x, y = camera(t)
+            img = cur
+            if s > 1.001:
+                cw, ch = w / s, h / s
+                x0 = min(max(x * w - cw / 2, 0), w - cw)
+                y0 = min(max(y * h - ch / 2, 0), h - ch)
+                m = cv2.getRotationMatrix2D((0, 0), 0, s)
+                m[0, 2], m[1, 2] = -x0 * s, -y0 * s
+                img = cv2.warpAffine(cur, m, (w, h), flags=cv2.INTER_LANCZOS4)
+            enc.stdin.write(img.tobytes())
+        enc.stdin.close()
+        if enc.wait() != 0:
+            raise RuntimeError("ffmpeg could not encode the recording")
         shutil.rmtree(self.dir, ignore_errors=True)
         return out
 
-
 MISSED = []
 DIVERTED = []
+# Camera pushes during the take: (wall time, scale, x, y, seconds to get
+# there), x and y the point pushed in on as fractions of the frame.
+ZOOMS = []
 # True during the camera-off pass. Nothing that pass sees is a missed
 # beat or a diversion in the finished clip, so it records neither.
 DRY = False
@@ -636,12 +676,19 @@ class Film(Stage):
         await self._eval("m => window.__promo.progress(m)", ms)
 
     async def push(self, scale, selector=None, ms=700, hold=900):
-        await self._eval("a => window.__promo.zoom(a[0], a[1], a[2])",
-                         [scale, selector, ms])
+        """Push the camera in on a point of the page. The page is only
+        scrolled; the zoom itself is done on the recorded frames by
+        Camera, so the layout never reflows (a CSS zoom at a phone's
+        width cut names down to "Chris Bos...")."""
+        at = await self._eval("s => window.__promo.aim(s)", selector) or {"x": 0.5, "y": 0.45}
+        await self.page.wait_for_timeout(120)
+        if not self.dry:
+            ZOOMS.append((time.time(), scale, at["x"], at["y"], ms / 1000))
         await self.hold(ms + hold)
 
     async def pull(self, ms=600, hold=500):
-        await self._eval("m => window.__promo.unzoom(m)", ms)
+        if not self.dry:
+            ZOOMS.append((time.time(), 1.0, None, None, ms / 1000))
         await self.hold(ms + hold)
 
     async def headline(self):
