@@ -104,6 +104,7 @@ def payload(entry, tag, day, time):
     local = dt.datetime.combine(day, dt.time.fromisoformat(time), TZ)
     text = entry["caption"].rstrip() + "\n\n" + entry["hashtags"]
     assert entry["hashtags"].startswith("#streakpros ")
+    assert len(text) <= 500, f"{entry['slug']}: caption too long for Threads"
     return {
         "date": local.isoformat(),
         "info": {
@@ -111,13 +112,16 @@ def payload(entry, tag, day, time):
             "hasNotReadNotes": False, "media": [media_url(tag, entry["slug"])], "mediaAltText": [],
             "videoThumbnailUrl": cover_url(tag, entry["slug"]),
             "providers": [{"network": "instagram"}, {"network": "tiktok"}, {"network": "youtube"},
-                          {"network": "facebook"}],
+                          {"network": "facebook"}, {"network": "threads"}],
             "publicationDate": {"dateTime": f"{day.isoformat()}T{time}:00", "timezone": "America/Chicago"},
             "shortener": False, "smartLinkData": {"ids": []}, "text": text,
             "youtubeData": {"title": entry["yt"], "type": "short", "privacy": "public", "tags": entry["tags"],
                             "category": "SPORTS", "madeForKids": False, "isAiGeneratedContent": False},
             "instagramData": {"type": "REEL", "showReelOnFeed": True, "isAiGenerated": False},
             "facebookData": {"type": "REEL"},
+            # Threads was connected on 2026-09-29. Captions stay well under
+            # its 500-character limit.
+            "threadsData": {},
             "tiktokData": {"privacyOption": "PUBLIC_TO_EVERYONE", "commercialContentOwnBrand": True,
                            "commercialContentThirdParty": False, "title": entry["tt"], "autoAddMusic": False,
                            "isAigc": False, "disableComment": False, "disableDuet": False,
