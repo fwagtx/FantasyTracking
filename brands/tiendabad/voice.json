@@ -1,0 +1,8 @@
+{
+ "_note": "TIENDA BAD (Spanish twin of BAD ROYALE). Latin American Spanish: lang es-419 gives seseo (gracias = 'grasias'). ef_dora is Kokoro's Spanish female voice; em_alex is the male alternative. Numbers are fed as plain digits so the voice reads them as Spanish words.",
+ "voice": "ef_dora",
+ "speed": 1.2,
+ "lang": "es-419",
+ "lead": 0.2,
+ "mode": "flow"
+}
