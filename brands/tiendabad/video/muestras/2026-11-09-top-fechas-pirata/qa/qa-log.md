@@ -1,11 +1,10 @@
 # Pre-post check: latienditabad-2026-11-09-top-fechas-pirata.mp4
 
-Checked 2026-11-09T18:13:11Z · **DO NOT POST: fix failures**
+Checked 2026-11-09T18:26:16Z · **READY FOR OWNER APPROVAL**
 
 ## 1. Facts: PASS
-8/8 claims verified against saved official data
+7/7 claims verified against saved official data
 - La minitemporada arrancó el 1 de noviembre · PASS · matched in vgc-guide.json
-- Lugares de One Piece en el mapa · PASS · matched in news.json
 - Cada uso dura 14 días · PASS · matched in vgc-guide.json
 - Los 14 días cuentan desde que lo activas · PASS · matched in gamingbible.json
 - Las skins de One Piece salen de la tienda el 5 de diciembre, con el reinicio de las 18:00 (CDMX) · PASS · matched in onepiece-shop.json
@@ -13,19 +12,17 @@ Checked 2026-11-09T18:13:11Z · **DO NOT POST: fix failures**
 - Tu segundo uso llega en 2027 · PASS · matched in vgc-odds-confirmed.json
 - Otros 14 días: dos tiendas gratis · PASS · matched in gamingbible.json
 
-## 2. Spelling and grammar: FAIL
-Unknown words or a misspelled code
-- code DE · FAIL · code must be spelled exactly BAD
+## 2. Spelling and grammar: PASS
+49 distinct words checked; code written as BAD in all 2 mentions
 
 ## 3. Frames: PASS
 No black frames, no frozen stretches over 1.5 s. Contact sheet (1 frame/s) reviewed by eye: contact-sheet.png
 
 ## 4. Audio: PASS
-Integrated -14.2 LUFS, true peak -2.3 dBTP, no clipping, no silence gaps. All sound is original synthesis (no game rips, no copyrighted music). No voiceover in this cut.
+Integrated -14.3 LUFS, true peak -2.6 dBTP, no clipping, no silence gaps. All sound is original synthesis (no game rips, no copyrighted music). No voiceover in this cut.
 
-## 5. Specs and safe zones: FAIL
-1080x1920 h264 60 fps, aac 48000 Hz, 51.0s. Fits TikTok, Reels, Shorts, X, Facebook, Threads. Every on-screen text box sampled 4x/s stays out of the top bar, bottom caption area and button column.
-- length 51.0s outside (8, 45) · FAIL
+## 5. Specs and safe zones: PASS
+1080x1920 h264 60 fps, aac 48000 Hz, 41.7s. Fits TikTok, Reels, Shorts, X, Facebook, Threads. Every on-screen text box sampled 4x/s stays out of the top bar, bottom caption area and button column.
 
 ## 6. Disclosure and wording: PASS
 #EpicPartner is the first hashtag in caption line 1 and on screen in every sampled frame from 0.0s. No discount, giveaway, endorsement or filler-CTA wording.

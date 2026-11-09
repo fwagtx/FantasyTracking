@@ -119,7 +119,7 @@ def main(folder, mode):
                            "reveal": {"p": v, "text": f"{r['gap']} días"}},
                       extras=[{**x, "text": f"la última vez: {short(r['last'])}"}], recap=f"#{rank} · {r['gap']} días")
             if r["out"] == day:
-                it["sticker"] = {"p": say("¡Y se va hoy!", 0.3), "text": "¡y se va hoy! ⏰"}
+                it["sticker"] = {"p": say("¡Y se va hoy!", 0.65), "text": "¡y se va hoy! ⏰"}
             claims.append({"text": f"{r['name']}: volvió a la tienda después de {r['gap']} días (la última vez: {short(r['last'])})", "source": f"{r['id']}.json", "match": [r["name"], f'"{r["last"]}']})
         else:
             years = (today - datetime.date.fromisoformat(r["first"])).days // 365
@@ -130,7 +130,7 @@ def main(folder, mode):
             it.update(cap={"p": c, "text": "llegó a la tienda en"}, box={"hidden": "??? 20??", "reveal": {"p": v, "text": f"{MES3[int(r['first'][5:7]) - 1]} {r['first'][:4]}"}},
                       extras=[{**x, "text": f"Capítulo {r['chapter']}, Temporada {r['season']}"}], recap=f"#{rank} · {r['first'][:4]}")
             if rank == 1 and years >= 2:
-                it["sticker"] = {"p": say(f"¡Hace {years} años!", 0.3), "text": f"¡hace {years} años! 😳"}
+                it["sticker"] = {"p": say(f"¡Hace {years} años!", 0.65), "text": f"¡hace {years} años! 😳"}
             claims.append({"text": f"{r['name']}: llegó a la tienda en {MES3[int(r['first'][5:7]) - 1]} {r['first'][:4]}; Capítulo {r['chapter']}, Temporada {r['season']}", "source": f"{r['id']}.json",
                            "match": [r["name"], f'"{r["first"]}', f'"chapter": "{r["chapter"]}"', f'"season": "{r["season"]}"']})
         claims.append({"text": f"{r['name']} está en la tienda de hoy ({day})", "source": "shop-entries.json", "match": [r["name"], f'"date": "{shop["date"]}"']})

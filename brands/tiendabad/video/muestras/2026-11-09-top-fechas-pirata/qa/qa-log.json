@@ -1,22 +1,17 @@
 {
   "video": "latienditabad-2026-11-09-top-fechas-pirata.mp4",
-  "checked_utc": "2026-11-09T18:13:11Z",
-  "verdict": "DO NOT POST: fix failures",
+  "checked_utc": "2026-11-09T18:26:16Z",
+  "verdict": "READY FOR OWNER APPROVAL",
   "results": [
     {
       "check": "1. Facts",
       "status": "PASS",
-      "detail": "8/8 claims verified against saved official data",
+      "detail": "7/7 claims verified against saved official data",
       "items": [
         {
           "claim": "La minitemporada arrancó el 1 de noviembre",
           "result": "PASS",
           "why": "matched in vgc-guide.json"
-        },
-        {
-          "claim": "Lugares de One Piece en el mapa",
-          "result": "PASS",
-          "why": "matched in news.json"
         },
         {
           "claim": "Cada uso dura 14 días",
@@ -52,15 +47,9 @@
     },
     {
       "check": "2. Spelling and grammar",
-      "status": "FAIL",
-      "detail": "Unknown words or a misspelled code",
-      "items": [
-        {
-          "word": "code DE",
-          "result": "FAIL",
-          "why": "code must be spelled exactly BAD"
-        }
-      ]
+      "status": "PASS",
+      "detail": "49 distinct words checked; code written as BAD in all 2 mentions",
+      "items": []
     },
     {
       "check": "3. Frames",
@@ -71,19 +60,14 @@
     {
       "check": "4. Audio",
       "status": "PASS",
-      "detail": "Integrated -14.2 LUFS, true peak -2.3 dBTP, no clipping, no silence gaps. All sound is original synthesis (no game rips, no copyrighted music). No voiceover in this cut.",
+      "detail": "Integrated -14.3 LUFS, true peak -2.6 dBTP, no clipping, no silence gaps. All sound is original synthesis (no game rips, no copyrighted music). No voiceover in this cut.",
       "items": []
     },
     {
       "check": "5. Specs and safe zones",
-      "status": "FAIL",
-      "detail": "1080x1920 h264 60 fps, aac 48000 Hz, 51.0s. Fits TikTok, Reels, Shorts, X, Facebook, Threads. Every on-screen text box sampled 4x/s stays out of the top bar, bottom caption area and button column.",
-      "items": [
-        {
-          "issue": "length 51.0s outside (8, 45)",
-          "result": "FAIL"
-        }
-      ]
+      "status": "PASS",
+      "detail": "1080x1920 h264 60 fps, aac 48000 Hz, 41.7s. Fits TikTok, Reels, Shorts, X, Facebook, Threads. Every on-screen text box sampled 4x/s stays out of the top bar, bottom caption area and button column.",
+      "items": []
     },
     {
       "check": "6. Disclosure and wording",

@@ -1,5 +1,5 @@
 {
- "duration": 51.3,
+ "duration": 42,
  "caption": "#EpicPartner Tienda Pirata: las 5 fechas que no te puedes perder ⏰ El #1 es tu segunda tienda gratis en 2027 😳\n¿Cuándo usarías el tuyo? 👇\nUsa el código BAD en la tienda de objetos 💛\n#fortnite #tiendapirata #onepiece",
  "claims": [
   {
@@ -7,13 +7,6 @@
    "source": "vgc-guide.json",
    "match": [
     "started on November 1"
-   ]
-  },
-  {
-   "text": "Lugares de One Piece en el mapa",
-   "source": "news.json",
-   "match": [
-    "Arlong Park de One Piece"
    ]
   },
   {
@@ -70,7 +63,6 @@
   "#5",
   "YA EMPEZÓ",
   "LA MINITEMPORADA ARRANCÓ EL",
-  "LUGARES DE ONE PIECE EN EL MAPA 🗺️",
   "? NOV",
   "1 NOV",
   "¡QUE EMPIECE LA CACERÍA! 🏴‍☠️",
@@ -112,10 +104,10 @@
   "#4 · 14 DÍAS",
   "#5 · 1 NOV",
   "USA EL CÓDIGO BAD EN LA TIENDA DE OBJETOS 🛒",
-  "CÓDIGO DE CREADOR",
+  "APOYA A UN CREADOR",
   "#EPICPARTNER",
   "ACEPTAR",
-  "✓ APOYA A UN CREADOR: BAD",
+  "✓ APOYANDO A: BAD",
   "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
   "LA TIENDITA BAD",
   "USA EL CÓDIGO: BAD"
