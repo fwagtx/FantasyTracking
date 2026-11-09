@@ -1,0 +1,137 @@
+{
+ "duration": 39.3,
+ "caption": "#EpicPartner Las 5 skins de la tienda de hoy que más tardaron en volver ⏳ La #1 volvió después de 473 días 😳\n¿Cuál te llevas? 👇\nUsa el código BAD en la tienda de objetos 💛\n#fortnite #tiendafortnite #skinsfortnite",
+ "claims": [
+  {
+   "text": "Stormtrooper samurái: volvió a la tienda después de 186 días (la última vez: 7 may 2026)",
+   "source": "Character_BeetTread.json",
+   "match": [
+    "Stormtrooper samurái",
+    "\"2026-05-07"
+   ]
+  },
+  {
+   "text": "Stormtrooper samurái está en la tienda de hoy (2026-11-09)",
+   "source": "shop-entries.json",
+   "match": [
+    "Stormtrooper samurái",
+    "\"date\": \"2026-11-09T00:00:00Z\""
+   ]
+  },
+  {
+   "text": "Darth Vader samurái: volvió a la tienda después de 186 días (la última vez: 7 may 2026)",
+   "source": "Character_SequinPie.json",
+   "match": [
+    "Darth Vader samurái",
+    "\"2026-05-07"
+   ]
+  },
+  {
+   "text": "Darth Vader samurái está en la tienda de hoy (2026-11-09)",
+   "source": "shop-entries.json",
+   "match": [
+    "Darth Vader samurái",
+    "\"date\": \"2026-11-09T00:00:00Z\""
+   ]
+  },
+  {
+   "text": "Sincopador: volvió a la tienda después de 347 días (la última vez: 27 nov 2025)",
+   "source": "CID_A_164_Athena_Commando_M_Stands_B.json",
+   "match": [
+    "Sincopador",
+    "\"2025-11-27"
+   ]
+  },
+  {
+   "text": "Sincopador está en la tienda de hoy (2026-11-09)",
+   "source": "shop-entries.json",
+   "match": [
+    "Sincopador",
+    "\"date\": \"2026-11-09T00:00:00Z\""
+   ]
+  },
+  {
+   "text": "Especialista en tiros libres: volvió a la tienda después de 457 días (la última vez: 9 ago 2025)",
+   "source": "Character_ImpulseSpring_B.json",
+   "match": [
+    "Especialista en tiros libres",
+    "\"2025-08-09"
+   ]
+  },
+  {
+   "text": "Especialista en tiros libres está en la tienda de hoy (2026-11-09)",
+   "source": "shop-entries.json",
+   "match": [
+    "Especialista en tiros libres",
+    "\"date\": \"2026-11-09T00:00:00Z\""
+   ]
+  },
+  {
+   "text": "Asesora de envoltorios: volvió a la tienda después de 473 días (la última vez: 24 jul 2025)",
+   "source": "CID_A_151_Athena_Commando_F_Pliant_E.json",
+   "match": [
+    "Asesora de envoltorios",
+    "\"2025-07-24"
+   ]
+  },
+  {
+   "text": "Asesora de envoltorios está en la tienda de hoy (2026-11-09)",
+   "source": "shop-entries.json",
+   "match": [
+    "Asesora de envoltorios",
+    "\"date\": \"2026-11-09T00:00:00Z\""
+   ]
+  }
+ ],
+ "text": [
+  "LA TIENDA DE HOY:",
+  "LOS REGRESOS MÁS ESPERADOS ⏳",
+  "¿CUÁNTOS DÍAS? 👀",
+  "ESPERA AL #1 👀",
+  "#5",
+  "STORMTROOPER SAMURÁI",
+  "VOLVIÓ A LA TIENDA DESPUÉS DE",
+  "LA ÚLTIMA VEZ: 7 MAY 2026",
+  "??? DÍAS",
+  "55 DÍAS",
+  "130 DÍAS",
+  "186 DÍAS",
+  "#4",
+  "DARTH VADER SAMURÁI",
+  "#3",
+  "SINCOPADOR",
+  "LA ÚLTIMA VEZ: 27 NOV 2025",
+  "104 DÍAS",
+  "242 DÍAS",
+  "347 DÍAS",
+  "#2",
+  "ESPECIALISTA EN TIROS LIBRES",
+  "LA ÚLTIMA VEZ: 9 AGO 2025",
+  "137 DÍAS",
+  "319 DÍAS",
+  "457 DÍAS",
+  "¡Y SE VA HOY! ⏰",
+  "#1",
+  "ASESORA DE ENVOLTORIOS",
+  "LA ÚLTIMA VEZ: 24 JUL 2025",
+  "141 DÍAS",
+  "331 DÍAS",
+  "473 DÍAS",
+  "Y EL #1 ES… 🥁",
+  "LA MÁS ESPERADA 👀",
+  "¿CUÁL TE LLEVAS? 👇",
+  "#2 · 457 DÍAS",
+  "#1 · 473 DÍAS",
+  "#3 · 347 DÍAS",
+  "#4 · 186 DÍAS",
+  "#5 · 186 DÍAS",
+  "USA EL CÓDIGO BAD EN LA TIENDA DE OBJETOS 🛒",
+  "APOYA A UN CREADOR",
+  "#EPICPARTNER",
+  "ACEPTAR",
+  "✓ APOYANDO A: BAD",
+  "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+  "LA TIENDITA BAD",
+  "USA EL CÓDIGO: BAD"
+ ]
+}

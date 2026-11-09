@@ -74,7 +74,7 @@
   },
   {
    "text": "¡Hace 7 años!",
-   "pause": 0.3
+   "pause": 0.65
   },
   {
    "text": "¿Cuál es tu favorita? Dímelo abajo.",
@@ -89,5 +89,10 @@
    "text": "¡Gracias por ver! Síguenos para más contenido diario.",
    "pause": 0.3
   }
- ]
+ ],
+ "voice": "ef_dora",
+ "speed": 1.2,
+ "lang": "es-419",
+ "lead": 0.2,
+ "mode": "flow"
 }

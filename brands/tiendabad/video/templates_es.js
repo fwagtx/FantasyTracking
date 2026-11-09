@@ -377,7 +377,7 @@
       const darkBg = mk(stage, `inset:0;background:radial-gradient(circle at 50% 42%,#2b2b36,#0d0d12 75%)`);
       // ---- hook: title pills, tag, the five cards (top: #2 #1 #3, bottom: #4 #5) ----
       const hook = mk(stage, `inset:0`);
-      const hookLines = cfg.hook.lines.map((l, i) => pill(hook, l, 520 + i * 78, { size: fit(l, 820, 52, 0.58) }));
+      const hookLines = cfg.hook.lines.map((l, i) => pill(hook, l, 520 + i * 78, { size: fit(l, 740, 52, 0.58) }));   // 740: room for the pop's overshoot
       const tagY = 520 + cfg.hook.lines.length * 78 + 8;
       const tag1 = pill(hook, cfg.hook.tag, tagY, { size: 28, bg: "rgba(12,10,20,.92)", fg: "#fff" });
       const tag2 = cfg.hook.tag2 ? pill(hook, cfg.hook.tag2.text, tagY, { size: 28, bg: "rgba(12,10,20,.92)", fg: "#fff" }) : null;
@@ -415,7 +415,7 @@
       })() : null;
       // ---- recap ----
       const rc = mk(stage, `inset:0`);
-      const rcTitle = pill(rc, cfg.recap.title, 540, { size: fit(cfg.recap.title, 820, 46, 0.58) });
+      const rcTitle = pill(rc, cfg.recap.title, 540, { size: fit(cfg.recap.title, 740, 46, 0.58) });
       const rcGrid = gridAt(640, rc, true);
       const rcCode = pill(rc, "usa el código BAD en la tienda de objetos 🛒", 1290, { size: 34, bg: YEL, weight: 900 });
       // ---- the creator code, typed in ----
