@@ -7,7 +7,8 @@ window.SCENE = TPL.top({
   ],
   "tag": "¿de qué año? 👀",
   "tag2": {
-   "p": 1,
+   "p": 0,
+   "dt": 1.8,
    "text": "espera al #1 👀"
   }
  },
@@ -17,22 +18,23 @@ window.SCENE = TPL.top({
    "label": "Cuervopool",
    "img": "../../tiendabad/video/muestras/2026-11-09-top-og/img/CID_745_Athena_Commando_M_RavenQuill.png",
    "rarity": "marvel",
-   "p": 2,
+   "p": 1,
    "recap": "#5 · 2020",
    "cap": {
-    "p": 3,
+    "p": 2,
     "text": "llegó a la tienda en"
    },
    "box": {
     "hidden": "??? 20??",
     "reveal": {
-     "p": 4,
+     "p": 3,
      "text": "abr 2020"
     }
    },
    "extras": [
     {
-     "p": 5,
+     "p": 3,
+     "dt": 0.35,
      "text": "Capítulo 2, Temporada 2"
     }
    ]
@@ -42,22 +44,23 @@ window.SCENE = TPL.top({
    "label": "Cariñosapool",
    "img": "../../tiendabad/video/muestras/2026-11-09-top-og/img/CID_746_Athena_Commando_F_FuzzyBear.png",
    "rarity": "marvel",
-   "p": 6,
+   "p": 4,
    "recap": "#4 · 2020",
    "cap": {
-    "p": 7,
+    "p": 5,
     "text": "llegó a la tienda en"
    },
    "box": {
     "hidden": "??? 20??",
     "reveal": {
-     "p": 8,
+     "p": 6,
      "text": "abr 2020"
     }
    },
    "extras": [
     {
-     "p": 9,
+     "p": 6,
+     "dt": 0.35,
      "text": "Capítulo 2, Temporada 2"
     }
    ]
@@ -67,8 +70,34 @@ window.SCENE = TPL.top({
    "label": "Nieve",
    "img": "../../tiendabad/video/muestras/2026-11-09-top-og/img/CID_341_Athena_Commando_F_SkullBrite.png",
    "rarity": "rare",
-   "p": 10,
+   "p": 7,
    "recap": "#3 · 2019",
+   "cap": {
+    "p": 8,
+    "text": "llegó a la tienda en"
+   },
+   "box": {
+    "hidden": "??? 20??",
+    "reveal": {
+     "p": 9,
+     "text": "feb 2019"
+    }
+   },
+   "extras": [
+    {
+     "p": 9,
+     "dt": 0.35,
+     "text": "Capítulo 1, Temporada 7"
+    }
+   ]
+  },
+  {
+   "rank": 2,
+   "label": "Bujía",
+   "img": "../../tiendabad/video/muestras/2026-11-09-top-og/img/CID_335_Athena_Commando_F_Scrapyard.png",
+   "rarity": "rare",
+   "p": 10,
+   "recap": "#2 · 2019",
    "cap": {
     "p": 11,
     "text": "llegó a la tienda en"
@@ -82,32 +111,8 @@ window.SCENE = TPL.top({
    },
    "extras": [
     {
-     "p": 13,
-     "text": "Capítulo 1, Temporada 7"
-    }
-   ]
-  },
-  {
-   "rank": 2,
-   "label": "Bujía",
-   "img": "../../tiendabad/video/muestras/2026-11-09-top-og/img/CID_335_Athena_Commando_F_Scrapyard.png",
-   "rarity": "rare",
-   "p": 14,
-   "recap": "#2 · 2019",
-   "cap": {
-    "p": 15,
-    "text": "llegó a la tienda en"
-   },
-   "box": {
-    "hidden": "??? 20??",
-    "reveal": {
-     "p": 16,
-     "text": "feb 2019"
-    }
-   },
-   "extras": [
-    {
-     "p": 17,
+     "p": 12,
+     "dt": 0.35,
      "text": "Capítulo 1, Temporada 7"
     }
    ]
@@ -117,39 +122,39 @@ window.SCENE = TPL.top({
    "label": "Defensor sabroso",
    "img": "../../tiendabad/video/muestras/2026-11-09-top-og/img/CID_274_Athena_Commando_M_Feathers.png",
    "rarity": "epic",
-   "p": 19,
+   "p": 14,
    "recap": "#1 · 2018",
    "flag": "👑",
    "cap": {
-    "p": 20,
+    "p": 15,
     "text": "llegó a la tienda en"
    },
    "box": {
     "hidden": "??? 20??",
     "reveal": {
-     "p": 21,
+     "p": 16,
      "text": "nov 2018"
     }
    },
    "extras": [
     {
-     "p": 22,
+     "p": 17,
      "text": "Capítulo 1, Temporada 6"
     }
    ],
    "sticker": {
-    "p": 23,
+    "p": 18,
     "text": "¡hace 7 años! 😳"
    }
   }
  ],
  "tease": {
-  "p": 18,
+  "p": 13,
   "title": "y el #1 es… 🥁",
   "text": "la más OG 👀"
  },
  "recap": {
-  "p": 24,
+  "p": 19,
   "title": "¿cuál es tu favorita? 👇"
  },
  "caption": "#EpicPartner Las 5 skins más OG de la tienda de hoy 🧓 La #1 llegó a la tienda en noviembre de 2018 😳\n¿Cuál es tu favorita? 👇\nUsa el código BAD en la tienda de objetos 💛\n#fortnite #fortniteog #tiendafortnite",

@@ -7,7 +7,8 @@ window.SCENE = TPL.top({
   ],
   "tag": "¿cuántos días? 👀",
   "tag2": {
-   "p": 1,
+   "p": 0,
+   "dt": 1.8,
    "text": "espera al #1 👀"
   }
  },
@@ -17,34 +18,35 @@ window.SCENE = TPL.top({
    "label": "Stormtrooper samurái",
    "img": "../../tiendabad/video/muestras/2026-11-09-top-regresos/img/Character_BeetTread.png",
    "rarity": "starwars",
-   "p": 2,
+   "p": 1,
    "recap": "#5 · 186 días",
    "cap": {
-    "p": 3,
+    "p": 2,
     "text": "volvió a la tienda después de"
    },
    "box": {
     "hidden": "??? días",
     "count": [
      {
-      "p": 3,
+      "p": 2,
       "dt": 0.45,
       "text": "55 días"
      },
      {
-      "p": 3,
+      "p": 2,
       "dt": 0.9,
       "text": "130 días"
      }
     ],
     "reveal": {
-     "p": 4,
+     "p": 3,
      "text": "186 días"
     }
    },
    "extras": [
     {
-     "p": 5,
+     "p": 3,
+     "dt": 0.35,
      "text": "la última vez: 7 may 2026"
     }
    ]
@@ -54,34 +56,35 @@ window.SCENE = TPL.top({
    "label": "Darth Vader samurái",
    "img": "../../tiendabad/video/muestras/2026-11-09-top-regresos/img/Character_SequinPie.png",
    "rarity": "starwars",
-   "p": 6,
+   "p": 4,
    "recap": "#4 · 186 días",
    "cap": {
-    "p": 7,
+    "p": 5,
     "text": "volvió a la tienda después de"
    },
    "box": {
     "hidden": "??? días",
     "count": [
      {
-      "p": 7,
+      "p": 5,
       "dt": 0.45,
       "text": "55 días"
      },
      {
-      "p": 7,
+      "p": 5,
       "dt": 0.9,
       "text": "130 días"
      }
     ],
     "reveal": {
-     "p": 8,
+     "p": 6,
      "text": "186 días"
     }
    },
    "extras": [
     {
-     "p": 9,
+     "p": 6,
+     "dt": 0.35,
      "text": "la última vez: 7 may 2026"
     }
    ]
@@ -91,8 +94,46 @@ window.SCENE = TPL.top({
    "label": "Sincopador",
    "img": "../../tiendabad/video/muestras/2026-11-09-top-regresos/img/CID_A_164_Athena_Commando_M_Stands_B.png",
    "rarity": "rare",
-   "p": 10,
+   "p": 7,
    "recap": "#3 · 347 días",
+   "cap": {
+    "p": 8,
+    "text": "volvió a la tienda después de"
+   },
+   "box": {
+    "hidden": "??? días",
+    "count": [
+     {
+      "p": 8,
+      "dt": 0.45,
+      "text": "104 días"
+     },
+     {
+      "p": 8,
+      "dt": 0.9,
+      "text": "242 días"
+     }
+    ],
+    "reveal": {
+     "p": 9,
+     "text": "347 días"
+    }
+   },
+   "extras": [
+    {
+     "p": 9,
+     "dt": 0.35,
+     "text": "la última vez: 27 nov 2025"
+    }
+   ]
+  },
+  {
+   "rank": 2,
+   "label": "Especialista en tiros libres",
+   "img": "../../tiendabad/video/muestras/2026-11-09-top-regresos/img/Character_ImpulseSpring_B.png",
+   "rarity": "epic",
+   "p": 10,
+   "recap": "#2 · 457 días",
    "cap": {
     "p": 11,
     "text": "volvió a la tienda después de"
@@ -103,64 +144,28 @@ window.SCENE = TPL.top({
      {
       "p": 11,
       "dt": 0.45,
-      "text": "104 días"
-     },
-     {
-      "p": 11,
-      "dt": 0.9,
-      "text": "242 días"
-     }
-    ],
-    "reveal": {
-     "p": 12,
-     "text": "347 días"
-    }
-   },
-   "extras": [
-    {
-     "p": 13,
-     "text": "la última vez: 27 nov 2025"
-    }
-   ]
-  },
-  {
-   "rank": 2,
-   "label": "Especialista en tiros libres",
-   "img": "../../tiendabad/video/muestras/2026-11-09-top-regresos/img/Character_ImpulseSpring_B.png",
-   "rarity": "epic",
-   "p": 14,
-   "recap": "#2 · 457 días",
-   "cap": {
-    "p": 15,
-    "text": "volvió a la tienda después de"
-   },
-   "box": {
-    "hidden": "??? días",
-    "count": [
-     {
-      "p": 15,
-      "dt": 0.45,
       "text": "137 días"
      },
      {
-      "p": 15,
+      "p": 11,
       "dt": 0.9,
       "text": "319 días"
      }
     ],
     "reveal": {
-     "p": 16,
+     "p": 12,
      "text": "457 días"
     }
    },
    "extras": [
     {
-     "p": 17,
+     "p": 12,
+     "dt": 0.35,
      "text": "la última vez: 9 ago 2025"
     }
    ],
    "sticker": {
-    "p": 18,
+    "p": 13,
     "text": "¡y se va hoy! ⏰"
    }
   },
@@ -169,51 +174,51 @@ window.SCENE = TPL.top({
    "label": "Asesora de envoltorios",
    "img": "../../tiendabad/video/muestras/2026-11-09-top-regresos/img/CID_A_151_Athena_Commando_F_Pliant_E.png",
    "rarity": "epic",
-   "p": 20,
+   "p": 15,
    "recap": "#1 · 473 días",
    "flag": "👑",
    "cap": {
-    "p": 21,
+    "p": 16,
     "text": "volvió a la tienda después de"
    },
    "box": {
     "hidden": "??? días",
     "count": [
      {
-      "p": 21,
+      "p": 16,
       "dt": 0.45,
       "text": "141 días"
      },
      {
-      "p": 21,
+      "p": 16,
       "dt": 0.9,
       "text": "331 días"
      }
     ],
     "reveal": {
-     "p": 22,
+     "p": 17,
      "text": "473 días"
     }
    },
    "extras": [
     {
-     "p": 23,
+     "p": 18,
      "text": "la última vez: 24 jul 2025"
     }
    ],
    "sticker": {
-    "p": 24,
+    "p": 19,
     "text": "¡y se va hoy! ⏰"
    }
   }
  ],
  "tease": {
-  "p": 19,
+  "p": 14,
   "title": "y el #1 es… 🥁",
   "text": "la más esperada 👀"
  },
  "recap": {
-  "p": 25,
+  "p": 20,
   "title": "¿cuál te llevas? 👇"
  },
  "caption": "#EpicPartner Las 5 skins de la tienda de hoy que más tardaron en volver ⏳ La #1 volvió después de 473 días 😳\n¿Cuál te llevas? 👇\nUsa el código BAD en la tienda de objetos 💛\n#fortnite #tiendafortnite #skinsfortnite",

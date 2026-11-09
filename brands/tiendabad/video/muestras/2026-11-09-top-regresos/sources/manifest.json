@@ -5,37 +5,37 @@
    "file": "Character_BeetTread.json",
    "source": "Epic's cosmetics data for Stormtrooper samurái with its shop history (es-419)",
    "url": "https://fortnite-api.com/v2/cosmetics/br/Character_BeetTread?language=es-419&responseFlags=4",
-   "fetched_utc": "2026-11-09T18:07:57Z"
+   "fetched_utc": "2026-11-09T18:15:09Z"
   },
   {
    "file": "Character_SequinPie.json",
    "source": "Epic's cosmetics data for Darth Vader samurái with its shop history (es-419)",
    "url": "https://fortnite-api.com/v2/cosmetics/br/Character_SequinPie?language=es-419&responseFlags=4",
-   "fetched_utc": "2026-11-09T18:07:57Z"
+   "fetched_utc": "2026-11-09T18:15:09Z"
   },
   {
    "file": "CID_A_164_Athena_Commando_M_Stands_B.json",
    "source": "Epic's cosmetics data for Sincopador with its shop history (es-419)",
    "url": "https://fortnite-api.com/v2/cosmetics/br/CID_A_164_Athena_Commando_M_Stands_B?language=es-419&responseFlags=4",
-   "fetched_utc": "2026-11-09T18:07:57Z"
+   "fetched_utc": "2026-11-09T18:15:09Z"
   },
   {
    "file": "Character_ImpulseSpring_B.json",
    "source": "Epic's cosmetics data for Especialista en tiros libres with its shop history (es-419)",
    "url": "https://fortnite-api.com/v2/cosmetics/br/Character_ImpulseSpring_B?language=es-419&responseFlags=4",
-   "fetched_utc": "2026-11-09T18:07:57Z"
+   "fetched_utc": "2026-11-09T18:15:09Z"
   },
   {
    "file": "CID_A_151_Athena_Commando_F_Pliant_E.json",
    "source": "Epic's cosmetics data for Asesora de envoltorios with its shop history (es-419)",
    "url": "https://fortnite-api.com/v2/cosmetics/br/CID_A_151_Athena_Commando_F_Pliant_E?language=es-419&responseFlags=4",
-   "fetched_utc": "2026-11-09T18:07:57Z"
+   "fetched_utc": "2026-11-09T18:15:09Z"
   },
   {
    "file": "shop-entries.json",
    "source": "Epic's item shop for 2026-11-09: the listings of these outfits (es-419)",
    "url": "https://fortnite-api.com/v2/shop?language=es-419",
-   "fetched_utc": "2026-11-09T18:07:57Z"
+   "fetched_utc": "2026-11-09T18:15:09Z"
   }
  ]
 }

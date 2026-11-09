@@ -5,24 +5,16 @@
    "pause": 0.15
   },
   {
-   "text": "¡Y espera al número uno!",
-   "pause": 0.25
-  },
-  {
    "text": "Número cinco: Stormtrooper samurái.",
    "pause": 0.15
   },
   {
    "text": "Volvió después de…",
-   "pause": 0.6
+   "pause": 0.5
   },
   {
    "text": "¡186 días!",
    "pause": 0.2
-  },
-  {
-   "text": "La última vez fue el 7 de mayo de 2026.",
-   "pause": 0.15
   },
   {
    "text": "Número cuatro: Darth Vader samurái.",
@@ -30,15 +22,11 @@
   },
   {
    "text": "Volvió después de…",
-   "pause": 0.6
+   "pause": 0.5
   },
   {
    "text": "¡También 186 días!",
    "pause": 0.2
-  },
-  {
-   "text": "La última vez fue el 7 de mayo de 2026.",
-   "pause": 0.15
   },
   {
    "text": "Número tres: Sincopador.",
@@ -46,15 +34,11 @@
   },
   {
    "text": "Volvió después de…",
-   "pause": 0.6
+   "pause": 0.5
   },
   {
    "text": "¡347 días!",
    "pause": 0.2
-  },
-  {
-   "text": "La última vez fue el 27 de noviembre de 2025.",
-   "pause": 0.15
   },
   {
    "text": "Número dos: Especialista en tiros libres.",
@@ -62,15 +46,11 @@
   },
   {
    "text": "Volvió después de…",
-   "pause": 0.6
+   "pause": 0.5
   },
   {
    "text": "¡457 días!",
    "pause": 0.2
-  },
-  {
-   "text": "La última vez fue el 9 de agosto de 2025.",
-   "pause": 0.15
   },
   {
    "text": "¡Y se va hoy!",
@@ -86,7 +66,7 @@
   },
   {
    "text": "Volvió después de…",
-   "pause": 0.6
+   "pause": 0.5
   },
   {
    "text": "¡473 días!",
@@ -101,13 +81,13 @@
    "pause": 0.3
   },
   {
-   "text": "¿Cuál te llevas? Dímelo en los comentarios.",
+   "text": "¿Cuál te llevas? Dímelo abajo.",
    "pause": 0.2
   },
   {
-   "text": "Usa el código BAD en la tienda de objetos. Le ayuda muchísimo al canal.",
+   "text": "Usa el código BAD en la tienda de objetos.",
    "pause": 0.25,
-   "say": "Usa el código bad, en la tienda de objetos. Le ayuda muchísimo al canal."
+   "say": "Usa el código bad, en la tienda de objetos."
   },
   {
    "text": "¡Gracias por ver! Síguenos para más contenido diario.",

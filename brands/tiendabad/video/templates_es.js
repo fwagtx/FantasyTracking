@@ -421,18 +421,18 @@
       // ---- the creator code, typed in ----
       const dim = mk(stage, `inset:0;background:rgba(7,6,14,.8)`);
       const panel = mk(stage, `left:70px;top:700px;width:820px;padding:26px 30px 28px;border-radius:14px;background:linear-gradient(180deg,#1c1c26,#121219);border:3px solid rgba(255,255,255,.12);box-shadow:0 20px 50px rgba(0,0,0,.6)`);
-      panel.innerHTML = `<div style="font-family:'Barlow Condensed';font-weight:900;font-style:italic;font-size:78px;line-height:1;color:#fff;letter-spacing:1px">CÓDIGO DE CREADOR</div>
+      panel.innerHTML = `<div style="font-family:'Barlow Condensed';font-weight:900;font-style:italic;font-size:78px;line-height:1;color:#fff;letter-spacing:1px">APOYA A UN CREADOR</div>
         <div style="height:5px;margin:14px 0 22px;background:${YEL};border-radius:3px"></div>
         <div style="height:74px;border-radius:6px;background:#fff;border:3px solid ${INK};padding:6px 16px;font:900 46px Montserrat;color:${INK};line-height:58px"><span class="typed"></span><span class="caret" style="display:inline-block;width:4px;height:44px;margin-left:3px;vertical-align:-6px;background:${INK}"></span></div>
         <div style="display:flex;align-items:center;justify-content:space-between;margin-top:22px">
           <div class="disc" style="font:800 34px Montserrat;color:#fff">#EpicPartner</div>
           <div class="ok" style="padding:12px 34px;border-radius:10px;background:${YEL};font:900 36px Montserrat;color:${INK};box-shadow:0 6px 0 #B58F00">Aceptar</div></div>`;
       panel.querySelector(".ok").dataset.text = "ACEPTAR";
-      panel.firstElementChild.dataset.text = "CÓDIGO DE CREADOR";
+      panel.firstElementChild.dataset.text = "APOYA A UN CREADOR";
       panel.querySelector(".disc").dataset.text = "#EPICPARTNER";
       const typedEl = panel.querySelector(".typed"), caret = panel.querySelector(".caret"), okBtn = panel.querySelector(".ok");
       const cursor = mk(stage, `left:0;top:0;width:52px;height:64px`, `<svg width="52" height="64" viewBox="0 0 26 32"><path d="M2 2 L2 26 L8.5 20 L13 30 L17 28 L12.6 18.4 L21 18.4 Z" fill="#fff" stroke="${INK}" stroke-width="2.2" stroke-linejoin="round"/></svg>`);
-      const done = pill(stage, "✓ APOYA A UN CREADOR: BAD", 812, { size: 46, bg: YEL, weight: 900 });
+      const done = pill(stage, "✓ APOYANDO A: BAD", 812, { size: 46, bg: YEL, weight: 900 });
       const doneSub = pill(stage, "#EpicPartner", 900, { size: 30, bg: "rgba(12,10,20,.85)", fg: "#fff" });
       const thanks = thanksES(stage, 1010);
       const logo = mk(stage, `left:${CX - 190}px;top:1166px;width:380px`, `<img src="${BR}/watermark.svg" style="display:block;width:380px;height:auto">`, "LA TIENDITA BAD");

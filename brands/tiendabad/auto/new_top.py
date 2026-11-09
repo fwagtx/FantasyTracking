@@ -100,7 +100,7 @@ def main(folder, mode):
     else:
         hook = {"lines": ["la tienda de hoy:", "las skins más OG 🧓"], "tag": "¿de qué año? 👀"}
         say("Las cinco skins más OG de la tienda de hoy.", 0.15)
-    hook["tag2"] = {"p": say("¡Y espera al número uno!", 0.25), "text": "espera al #1 👀"}
+    hook["tag2"] = {"p": 0, "dt": 1.8, "text": "espera al #1 👀"}
     tease = None
     for k, r in enumerate(pick):
         rank = 5 - k
@@ -111,33 +111,33 @@ def main(folder, mode):
         prev = pick[k - 1] if k else None
         it = {"rank": rank, "label": r["name"], "img": img(r), "rarity": r["rarity"], "p": p, "recap": "", "flag": "👑" if rank == 1 else None}
         if mode == "regresos":
-            c = say("Volvió después de…", 0.6)
+            c = say("Volvió después de…", 0.5)
             v = say(f"¡También {r['gap']} días!" if prev and prev["gap"] == r["gap"] else f"¡{r['gap']} días!", 0.2)
-            x = say(f"La última vez fue el {date_es(r['last'])}.", 0.15)
+            x = {"p": say(f"La última vez fue el {date_es(r['last'])}.", 0.15)} if rank == 1 else {"p": v, "dt": 0.35}
             it.update(cap={"p": c, "text": "volvió a la tienda después de"},
                       box={"hidden": "??? días", "count": [{"p": c, "dt": 0.45, "text": f"{max(1, r['gap'] * 3 // 10)} días"}, {"p": c, "dt": 0.9, "text": f"{max(2, r['gap'] * 7 // 10)} días"}],
                            "reveal": {"p": v, "text": f"{r['gap']} días"}},
-                      extras=[{"p": x, "text": f"la última vez: {short(r['last'])}"}], recap=f"#{rank} · {r['gap']} días")
+                      extras=[{**x, "text": f"la última vez: {short(r['last'])}"}], recap=f"#{rank} · {r['gap']} días")
             if r["out"] == day:
                 it["sticker"] = {"p": say("¡Y se va hoy!", 0.3), "text": "¡y se va hoy! ⏰"}
             claims.append({"text": f"{r['name']}: volvió a la tienda después de {r['gap']} días (la última vez: {short(r['last'])})", "source": f"{r['id']}.json", "match": [r["name"], f'"{r["last"]}']})
         else:
             years = (today - datetime.date.fromisoformat(r["first"])).days // 365
-            c = say("Llegó a la tienda en…", 0.6)
+            c = say("Llegó a la tienda en…", 0.5)
             mes = f"{MES[int(r['first'][5:7]) - 1]} de {r['first'][:4]}"
             v = say(f"¡También en {mes}!" if prev and prev["first"][:7] == r["first"][:7] else f"¡{mes.capitalize()}!", 0.2)
-            x = say(f"Capítulo {r['chapter']}, temporada {r['season']}.", 0.15)
+            x = {"p": say(f"Capítulo {r['chapter']}, temporada {r['season']}.", 0.15)} if rank == 1 else {"p": v, "dt": 0.35}
             it.update(cap={"p": c, "text": "llegó a la tienda en"}, box={"hidden": "??? 20??", "reveal": {"p": v, "text": f"{MES3[int(r['first'][5:7]) - 1]} {r['first'][:4]}"}},
-                      extras=[{"p": x, "text": f"Capítulo {r['chapter']}, Temporada {r['season']}"}], recap=f"#{rank} · {r['first'][:4]}")
+                      extras=[{**x, "text": f"Capítulo {r['chapter']}, Temporada {r['season']}"}], recap=f"#{rank} · {r['first'][:4]}")
             if rank == 1 and years >= 2:
                 it["sticker"] = {"p": say(f"¡Hace {years} años!", 0.3), "text": f"¡hace {years} años! 😳"}
             claims.append({"text": f"{r['name']}: llegó a la tienda en {MES3[int(r['first'][5:7]) - 1]} {r['first'][:4]}; Capítulo {r['chapter']}, Temporada {r['season']}", "source": f"{r['id']}.json",
                            "match": [r["name"], f'"{r["first"]}', f'"chapter": "{r["chapter"]}"', f'"season": "{r["season"]}"']})
         claims.append({"text": f"{r['name']} está en la tienda de hoy ({day})", "source": "shop-entries.json", "match": [r["name"], f'"date": "{shop["date"]}"']})
         items.append({k2: v2 for k2, v2 in it.items() if v2 is not None})
-    recap = {"p": say("¿Cuál te llevas? Dímelo en los comentarios." if mode == "regresos" else "¿Cuál es tu favorita? Dímelo en los comentarios.", 0.2),
+    recap = {"p": say("¿Cuál te llevas? Dímelo abajo." if mode == "regresos" else "¿Cuál es tu favorita? Dímelo abajo.", 0.2),
              "title": "¿cuál te llevas? 👇" if mode == "regresos" else "¿cuál es tu favorita? 👇"}
-    say("Usa el código BAD en la tienda de objetos. Le ayuda muchísimo al canal.", 0.25, "Usa el código bad, en la tienda de objetos. Le ayuda muchísimo al canal.")
+    say("Usa el código BAD en la tienda de objetos.", 0.25, "Usa el código bad, en la tienda de objetos.")
     say("¡Gracias por ver! Síguenos para más contenido diario.", 0.3)
     one = pick[-1]
     if mode == "regresos":

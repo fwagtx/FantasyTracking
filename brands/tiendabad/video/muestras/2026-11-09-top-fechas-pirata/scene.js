@@ -7,7 +7,8 @@ window.SCENE = TPL.top({
   ],
   "tag": "no te las pierdas 🏴‍☠️",
   "tag2": {
-   "p": 1,
+   "p": 0,
+   "dt": 1.7,
    "text": "espera al #1 👀"
   }
  },
@@ -17,26 +18,20 @@ window.SCENE = TPL.top({
    "label": "ya empezó",
    "kind": "map",
    "img": "../../tiendabad/sources/map-labels.png",
-   "p": 2,
+   "p": 1,
    "cap": {
-    "p": 3,
+    "p": 2,
     "text": "la minitemporada arrancó el"
    },
    "box": {
     "hidden": "? nov",
     "reveal": {
-     "p": 4,
+     "p": 3,
      "text": "1 nov"
     }
    },
-   "extras": [
-    {
-     "p": 5,
-     "text": "lugares de One Piece en el mapa 🗺️"
-    }
-   ],
    "sticker": {
-    "p": 6,
+    "p": 4,
     "text": "¡que empiece la cacería! 🏴‍☠️"
    },
    "recap": "#5 · 1 nov"
@@ -46,38 +41,38 @@ window.SCENE = TPL.top({
    "label": "tu ventana",
    "img": "../../tiendabad/video/muestras/2026-11-09-top-fechas-pirata/img/Character_BoastJoint.png",
    "rarity": "epic",
-   "p": 7,
+   "p": 5,
    "cap": {
-    "p": 8,
+    "p": 6,
     "text": "cada uso dura"
    },
    "box": {
     "hidden": "? días",
     "count": [
      {
-      "p": 8,
-      "dt": 0.55,
+      "p": 6,
+      "dt": 0.45,
       "text": "3 días"
      },
      {
-      "p": 8,
-      "dt": 0.95,
+      "p": 6,
+      "dt": 0.85,
       "text": "9 días"
      }
     ],
     "reveal": {
-     "p": 9,
+     "p": 7,
      "text": "14 días"
     }
    },
    "extras": [
     {
-     "p": 10,
+     "p": 8,
      "text": "desde que lo activas"
     }
    ],
    "sticker": {
-    "p": 11,
+    "p": 9,
     "text": "¡elige bien tu momento! 🧠"
    },
    "recap": "#4 · 14 días"
@@ -87,26 +82,26 @@ window.SCENE = TPL.top({
    "label": "skins de One Piece",
    "img": "../../tiendabad/video/muestras/2026-11-09-top-fechas-pirata/img/Character_InsightBawl.png",
    "rarity": "epic",
-   "p": 12,
+   "p": 10,
    "cap": {
-    "p": 13,
+    "p": 11,
     "text": "salen de la tienda el"
    },
    "box": {
     "hidden": "? dic",
     "reveal": {
-     "p": 14,
+     "p": 12,
      "text": "5 dic"
     }
    },
    "extras": [
     {
-     "p": 15,
+     "p": 13,
      "text": "con el reinicio de las 18:00 (CDMX)"
     }
    ],
    "sticker": {
-    "p": 16,
+    "p": 14,
     "text": "¡antes de que se vayan! ⏰"
    },
    "recap": "#3 · 5 dic"
@@ -116,26 +111,26 @@ window.SCENE = TPL.top({
    "label": "límite 2026",
    "img": "../../tiendabad/video/muestras/2026-11-09-top-fechas-pirata/img/Character_BrandCreed.png",
    "rarity": "epic",
-   "p": 17,
+   "p": 15,
    "cap": {
-    "p": 18,
+    "p": 16,
     "text": "activa tu uso de 2026 hasta el"
    },
    "box": {
     "hidden": "? dic",
     "reveal": {
-     "p": 19,
+     "p": 17,
      "text": "15 dic"
     }
    },
    "extras": [
     {
-     "p": 20,
+     "p": 18,
      "text": "luego tienes 14 días"
     }
    ],
    "sticker": {
-    "p": 21,
+    "p": 19,
     "text": "¡no te duermas! ⏰"
    },
    "recap": "#2 · 15 dic"
@@ -145,40 +140,40 @@ window.SCENE = TPL.top({
    "label": "uso #2",
    "img": "../../tiendabad/video/muestras/2026-11-09-top-fechas-pirata/img/Character_CeleryStitch.png",
    "rarity": "epic",
-   "p": 23,
+   "p": 21,
    "flag": true,
    "cap": {
-    "p": 23,
+    "p": 21,
     "dt": 0.1,
     "text": "tu segundo uso llega en"
    },
    "box": {
     "hidden": "20??",
     "reveal": {
-     "p": 24,
+     "p": 22,
      "text": "2027"
     }
    },
    "extras": [
     {
-     "p": 25,
+     "p": 23,
      "text": "otros 14 días"
     }
    ],
    "sticker": {
-    "p": 26,
+    "p": 24,
     "text": "¡dos tiendas gratis! 😳"
    },
    "recap": "#1 · 2027"
   }
  ],
  "tease": {
-  "p": 22,
+  "p": 20,
   "title": "y el #1 es… 🥁",
   "text": "el mejor 👀"
  },
  "recap": {
-  "p": 27,
+  "p": 25,
   "title": "¿cuándo usarías el tuyo? 👇"
  },
  "caption": "#EpicPartner Tienda Pirata: las 5 fechas que no te puedes perder ⏰ El #1 es tu segunda tienda gratis en 2027 😳\n¿Cuándo usarías el tuyo? 👇\nUsa el código BAD en la tienda de objetos 💛\n#fortnite #tiendapirata #onepiece",
@@ -188,13 +183,6 @@ window.SCENE = TPL.top({
    "source": "vgc-guide.json",
    "match": [
     "started on November 1"
-   ]
-  },
-  {
-   "text": "Lugares de One Piece en el mapa",
-   "source": "news.json",
-   "match": [
-    "Arlong Park de One Piece"
    ]
   },
   {
