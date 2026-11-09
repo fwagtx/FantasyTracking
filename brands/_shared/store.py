@@ -38,12 +38,13 @@ def _env(suffix):
 def _sibling():
     """Without TB_R2_*, reuse the bucket settings of the owner's BrandPros checkout if one is on this machine."""
     import re
-    path = os.path.join(os.environ.get("BRANDPROS_DIR", "/home/user/fwagtx/brandpros"), "brand", "_shared", "store.py")
-    try:
-        txt = open(path).read()
-        return re.search(r'"bucket": "([^"]+)"', txt).group(1), re.search(r'"account_id": "([^"]+)"', txt).group(1)
-    except Exception:
-        return None, None
+    for root in (os.environ.get("BRANDPROS_DIR", "/home/user/fwagtx/brandpros"), os.path.expanduser("~/.cache/latienditabad-bp")):
+        try:
+            txt = open(os.path.join(root, "brand", "_shared", "store.py")).read()
+            return re.search(r'"bucket": "([^"]+)"', txt).group(1), re.search(r'"account_id": "([^"]+)"', txt).group(1)
+        except Exception:
+            continue
+    return None, None
 
 
 def _cfg():

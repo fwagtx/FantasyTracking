@@ -68,7 +68,7 @@
         e.head = mk(g, `left:200px;right:200px;top:150px;text-align:center`, big(s.title, 54), s.title.toUpperCase());
         e.tiles = s.items.map((o, j) => { const el = tile(g, o, w, h); el.style.left = `${960 - (n * (w + 30) - 30) / 2 + j * (w + 30)}px`; el.style.top = `${300 + (j % 2) * 24}px`; return el; });
       } else if (s.type === "stat") {
-        e.card = mk(g, `left:160px;right:160px;top:250px;text-align:center`, big(s.big, 300, YEL) + `<div style="margin-top:10px">${big(s.label, 70)}</div>`, `${s.big} / ${s.label}`.toUpperCase());
+        e.card = mk(g, `left:160px;right:160px;top:250px;text-align:center`, big(s.big, Math.min(300, Math.floor(1500 / (0.62 * s.big.length))), YEL) + `<div style="margin-top:10px">${big(s.label, 70)}</div>`, `${s.big} / ${s.label}`.toUpperCase());
       } else if (s.type === "code") {
         e.card = mk(g, `left:590px;width:740px;top:90px;text-align:center`,
           `<img src="${BR}/awning.svg" style="position:relative;z-index:2;display:block;width:740px;height:auto">

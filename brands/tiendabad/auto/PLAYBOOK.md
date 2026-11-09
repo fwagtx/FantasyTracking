@@ -95,20 +95,15 @@ A skipped slot costs nothing; a wrong post costs the channel.
 9. Check yesterday: getScheduledPosts for D-1; any network not PUBLISHED goes in the summary with its detailedStatus.
 10. Log line, commit `brands/tiendabad/video/auto brands/tiendabad/auto brands/tiendabad/sources/manifest.json`, push, summary.
 
-### Planned series: Tienda Pirata (1:00 PM, Nov 10–14)
+### Already queued: the Tienda Pirata series (made 2026-11-09, leave these posts alone)
 
-Facts from `video/auto/pirata-sources/` (press reports quoting Epic's Fortnite Status post of Nov 7, 2026), with
-`TPL.guide` (facts over the real map) and `--sources brands/tiendabad/video/auto/pirata-sources`. The fetched_utc
-dates in its manifest must be under 24 h old when shipping: if they are older, refresh them from the BAD ROYALE
-branch's `brand/badroyale/video/auto/pirate-shop-sources/` (read only) or skip the series post.
-
-| Day | Topic | Facts |
-|---|---|---|
-| Nov 10 | Las probabilidades reales | 1 en 137,500 por cofre; skin dorada semanal 1 en 1,562,500 |
-| Nov 11 | Juega en escuadrón | si alguien del escuadrón la encuentra, todos la reciben; usa Relleno (Fill) |
-| Nov 12 | Lo que NO incluye | sin niveles del pase, sin lotes de dinero real, sin regalos, solo un compañero |
-| Nov 13 | Mitos | no hay brújula, la skin no importa, nuevos o veteranos tienen la misma probabilidad |
-| Nov 14 (sáb) | Horas del Tesoro HOY | 1–3 PM y 8–10 PM CDMX (11 AM–1 PM y 6–8 PM PT), probabilidad ×1.5; post at 11:00 AM |
+Facts from `video/auto/pirata-sources/` (press reports quoting Epic's Fortnite Status post of Nov 7, 2026), built with
+`TPL.guide` and scheduled on all networks: Nov 10, 11, 12 and 13 at 1:00 PM (probabilidades, escuadrón, lo que no
+incluye, mitos) and Sat Nov 14 at 11:00 AM (Horas del Tesoro: 1–3 PM and 8–10 PM CDMX, ×1.5). On those days the
+1:00 PM slot is taken, so the DAY run only does the evergreen slot. If the in-game news or fetch_sources shows the
+Treasure Hours schedule or the Pirate Shop rules changed, set the affected queued posts to draft (Facts change).
+To make more pirate posts later, refresh the sources first (they must be under 24 h old when shipping), from the
+BAD ROYALE branch's `brand/badroyale/video/auto/pirate-shop-sources/` (read only), or skip.
 
 ## Facts change: pull outdated posts
 

@@ -18,6 +18,13 @@ fi
 node -e "try{require('playwright')}catch(e){require(require('child_process').execSync('npm root -g').toString().trim()+'/playwright')}"
 python3 -c "import imageio_ffmpeg; imageio_ffmpeg.get_ffmpeg_exe()" >/dev/null
 [ -f tiendabad/sources/map-labels.png ] || python3 tiendabad/auto/fetch_sources.py >/dev/null
+# hosting settings: TB_R2_BUCKET / TB_R2_ACCOUNT_ID, or the owner's BrandPros checkout (one file is enough)
+# (a read-only sparse copy goes in ~/.cache, never over an existing checkout)
+CACHE="$HOME/.cache/latienditabad-bp"
+if [ -z "${TB_R2_BUCKET:-}" ] && [ ! -f "${BRANDPROS_DIR:-/home/user/fwagtx/brandpros}/brand/_shared/store.py" ] && [ ! -f "$CACHE/brand/_shared/store.py" ]; then
+  rm -rf "$CACHE" && git clone -q --depth 1 --filter=blob:none --sparse -b claude/eloquent-lovelace-vu2quk https://github.com/fwagtx/brandpros "$CACHE" &&
+    git -C "$CACHE" sparse-checkout set brand/_shared || echo "STOP: no hosting settings (TB_R2_* or a BrandPros checkout)"
+fi
 python3 _shared/store.py ls >/dev/null
 python3 _shared/store.py sweep 48
 echo "setup ok"
