@@ -48,6 +48,13 @@
    "format": "Tienda Pirata",
    "topic": "Horas del Tesoro hoy (14 nov)",
    "folder": "video/auto/2026-11-14-horas-del-tesoro"
+  },
+  {
+   "date": "2026-11-09",
+   "slot": "15:00 (YouTube largo)",
+   "format": "LONG",
+   "topic": "Tienda Pirata: guía completa",
+   "folder": "video/long/2026-11-09-tienda-pirata-guia"
   }
  ]
 }

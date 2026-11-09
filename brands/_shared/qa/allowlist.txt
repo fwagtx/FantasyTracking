@@ -64,3 +64,18 @@ renuévalo
 # Spanish ordinal marks (1ª, 2º)
 ª
 º
+# Spanish month abbreviations, loanwords and imperatives with pronouns that the dictionary misses
+ene
+feb
+abr
+ago
+sep
+oct
+nov
+dic
+intro
+rómpelos
+ábrelos
+guárdalo
+síguenos
+cuéntame

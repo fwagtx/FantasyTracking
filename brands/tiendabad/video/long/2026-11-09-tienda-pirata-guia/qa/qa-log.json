@@ -1,0 +1,137 @@
+{
+  "video": "latienditabad-2026-11-09-tienda-pirata-guia.mp4",
+  "checked_utc": "2026-11-09T17:14:08Z",
+  "verdict": "READY TO POST",
+  "results": [
+    {
+      "check": "1. Facts",
+      "status": "PASS",
+      "detail": "16/16 claims verified against saved official data",
+      "items": [
+        {
+          "claim": "La mini temporada va del 1 de noviembre al 5 de diciembre",
+          "result": "PASS",
+          "why": "matched in vgc-odds-confirmed.json"
+        },
+        {
+          "claim": "Búsqueda del tesoro en Battle Royale y Cero construcción; abrir o romper cofres da una pequeña probabilidad",
+          "result": "PASS",
+          "why": "matched in vgc-guide.json"
+        },
+        {
+          "claim": "Cualquier tipo de cofre: normales, raros, enterrados y otros",
+          "result": "PASS",
+          "why": "matched in vgc-guide.json"
+        },
+        {
+          "claim": "El premio no se recoge; aparece un mensaje en pantalla",
+          "result": "PASS",
+          "why": "matched in vgc-guide.json"
+        },
+        {
+          "claim": "Tres niveles: estándar (objetos de partida), mayor (cosméticos de la semana), supremo (skin dorada o Tienda Pirata)",
+          "result": "PASS",
+          "why": "matched in vgc-guide.json"
+        },
+        {
+          "claim": "14 días: todo lo que cuesta pavos es gratis; skins, gestos, mochilas, picos, instrumentos, autos, planeadores",
+          "result": "PASS",
+          "why": "matched in vgc-odds-confirmed.json"
+        },
+        {
+          "claim": "Te quedas lo que reclamas",
+          "result": "PASS",
+          "why": "matched in biglead-pirate-shop.json"
+        },
+        {
+          "claim": "Dos fichas: 1 nov-15 dic 2026 y todo 2027",
+          "result": "PASS",
+          "why": "matched in vgc-odds-confirmed.json"
+        },
+        {
+          "claim": "Probabilidades oficiales por cofre",
+          "result": "PASS",
+          "why": "matched in vgc-odds-confirmed.json"
+        },
+        {
+          "claim": "Menos del 0.001 % por cofre; las probabilidades no han cambiado desde el inicio",
+          "result": "PASS",
+          "why": "matched in vice-treasure-hours.json"
+        },
+        {
+          "claim": "Horas del Tesoro: sábados 14, 21, 28 nov y 5 dic; 11 AM-1 PM y 6-8 PM PT (1-3 PM y 8-10 PM CDMX); ×1.5 ≈ 1 en 91 667",
+          "result": "PASS",
+          "why": "matched in vice-treasure-hours.json"
+        },
+        {
+          "claim": "Escuadrón: cuentan los cofres de los cuatro; rellenar escuadrón",
+          "result": "PASS",
+          "why": "matched in vgc-guide.json"
+        },
+        {
+          "claim": "Si alguien del escuadrón la encuentra, todos la reciben",
+          "result": "PASS",
+          "why": "matched in biglead-pirate-shop.json"
+        },
+        {
+          "claim": "No incluye niveles del pase, lotes de dinero real ni regalos; solo un sidekick",
+          "result": "PASS",
+          "why": "matched in vgc-guide.json"
+        },
+        {
+          "claim": "Mitos: brújula, skin, jugadores nuevos, cofres con mejores probabilidades: todo falso",
+          "result": "PASS",
+          "why": "matched in vgc-guide.json"
+        },
+        {
+          "claim": "La probabilidad no cambia según el jugador, nuevo o que regresa",
+          "result": "PASS",
+          "why": "matched in vgc-odds-confirmed.json"
+        }
+      ]
+    },
+    {
+      "check": "2. Spelling and grammar",
+      "status": "PASS",
+      "detail": "248 distinct words checked; code written as BAD in all 3 mentions",
+      "items": []
+    },
+    {
+      "check": "3. Frames",
+      "status": "PASS",
+      "detail": "No black frames, no frozen stretches over 1.5 s. Contact sheet (1 frame/s) reviewed by eye: contact-sheet.png",
+      "items": []
+    },
+    {
+      "check": "4. Audio",
+      "status": "PASS",
+      "detail": "Integrated -14.1 LUFS, true peak -2.9 dBTP, no clipping, no silence gaps. All sound is original synthesis (no game rips, no copyrighted music). No voiceover in this cut.",
+      "items": []
+    },
+    {
+      "check": "5. Specs and safe zones",
+      "status": "PASS",
+      "detail": "1920x1080 h264 30 fps, aac 48000 Hz, 209.4s. Long YouTube video; every on-screen text box sampled 4x/s stays inside the title-safe area.",
+      "items": []
+    },
+    {
+      "check": "6. Disclosure and wording",
+      "status": "PASS",
+      "detail": "#EpicPartner is the first hashtag in caption line 1 and on screen in every sampled frame from 0.0s. No discount, giveaway, endorsement or filler-CTA wording.",
+      "items": []
+    },
+    {
+      "check": "7. Would a fan stop scrolling? Made by a person?",
+      "status": "PASS",
+      "detail": "3:30 guide in 11 chapters. Opens on 'GUÍA COMPLETA · La Tienda Pirata de Fortnite' over the official map; every number card (1 en 137 500, 1 en 1 562 500, 1 en 7813, 1 en 568, ×1.5 ≈ 1 en 91 667, Horas del Tesoro dates and CDMX times) is big, centered and readable; chapter chips, watermark and #EpicPartner sit in the corners; subtitles readable at the bottom; mid-roll and closing code cards clean, sign-off under the closing card. Spanish reads naturally.",
+      "items": []
+    },
+    {
+      "check": "8. Owner approval",
+      "status": "PASS",
+      "detail": "Standing approval for autopilot (owner, 2026-10-28): posts when checks 1-7 all PASS.",
+      "items": []
+    }
+  ],
+  "caption": "#EpicPartner Todo sobre la Tienda Pirata de Fortnite 🏴‍☠️ Cómo se consigue, qué te da, las probabilidades oficiales, las Horas del Tesoro (hora CDMX), qué no incluye y los mitos.\nUsa el código BAD en la tienda de objetos 💛\n#Fortnite #TiendaPirata #FortniteEspañol"
+}

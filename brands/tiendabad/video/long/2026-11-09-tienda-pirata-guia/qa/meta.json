@@ -1,0 +1,346 @@
+{
+ "duration": 210.2,
+ "caption": "#EpicPartner Todo sobre la Tienda Pirata de Fortnite 🏴‍☠️ Cómo se consigue, qué te da, las probabilidades oficiales, las Horas del Tesoro (hora CDMX), qué no incluye y los mitos.\nUsa el código BAD en la tienda de objetos 💛\n#Fortnite #TiendaPirata #FortniteEspañol",
+ "claims": [
+  {
+   "text": "La mini temporada va del 1 de noviembre al 5 de diciembre",
+   "source": "vgc-odds-confirmed.json",
+   "match": [
+    "started on November 1 and is set to end on December 5"
+   ]
+  },
+  {
+   "text": "Búsqueda del tesoro en Battle Royale y Cero construcción; abrir o romper cofres da una pequeña probabilidad",
+   "source": "vgc-guide.json",
+   "match": [
+    "open chests during Battle Royale and Zero Build modes",
+    "every time you open or break a chest, there's a small chance that you'll get a treasure reward"
+   ]
+  },
+  {
+   "text": "Cualquier tipo de cofre: normales, raros, enterrados y otros",
+   "source": "vgc-guide.json",
+   "match": [
+    "This can be any type of chest, including: Normal chests, Rare chests, Sprite Chests, Buried Chests, Wanted Poster Chests, Relic Chests"
+   ]
+  },
+  {
+   "text": "El premio no se recoge; aparece un mensaje en pantalla",
+   "source": "vgc-guide.json",
+   "match": [
+    "you won't have to pick it up – you'll just get a message on the screen telling you what you got"
+   ]
+  },
+  {
+   "text": "Tres niveles: estándar (objetos de partida), mayor (cosméticos de la semana), supremo (skin dorada o Tienda Pirata)",
+   "source": "vgc-guide.json",
+   "match": [
+    "Treasure Hunt prizes are split into three tiers – Standard, Major and Supreme",
+    "If it's Major you'll get one of the current week's special cosmetics",
+    "if it's Supreme, you'll get one of two things – that week's gold skin or the Pirate Shop Token"
+   ]
+  },
+  {
+   "text": "14 días: todo lo que cuesta pavos es gratis; skins, gestos, mochilas, picos, instrumentos, autos, planeadores",
+   "source": "vgc-odds-confirmed.json",
+   "match": [
+    "every single item in the Fortnite Shop which costs V-Bucks – skins, emotes, backpacks, pickaxes, instruments, cars, gliders, jam tracks and more – becomes entirely free to that player for the next 14 days"
+   ]
+  },
+  {
+   "text": "Te quedas lo que reclamas",
+   "source": "biglead-pirate-shop.json",
+   "match": [
+    "you keep the items forever"
+   ]
+  },
+  {
+   "text": "Dos fichas: 1 nov-15 dic 2026 y todo 2027",
+   "source": "vgc-odds-confirmed.json",
+   "match": [
+    "one which can be activated at any point in 2026 between November 1 and December 15, and one which can be activated at any point in 2027 between January 1 and December 31"
+   ]
+  },
+  {
+   "text": "Probabilidades oficiales por cofre",
+   "source": "vgc-odds-confirmed.json",
+   "match": [
+    "Pirate Shop Access – 1 in 137,500",
+    "Weekly Gold Outfit – 1 in 1,562,500",
+    "Weekly Vehicle & Decal – 1 in 7,813",
+    "Weekly Pickaxe or Backbling – 1 in 568",
+    "Weekly Loading Screen – 1 in 272"
+   ]
+  },
+  {
+   "text": "Menos del 0.001 % por cofre; las probabilidades no han cambiado desde el inicio",
+   "source": "vice-treasure-hours.json",
+   "match": [
+    "That works out to about 0.00073% per chest",
+    "the normal chest drop rates have stayed the same since Fortnite Treasure Hunters launched"
+   ]
+  },
+  {
+   "text": "Horas del Tesoro: sábados 14, 21, 28 nov y 5 dic; 11 AM-1 PM y 6-8 PM PT (1-3 PM y 8-10 PM CDMX); ×1.5 ≈ 1 en 91 667",
+   "source": "vice-treasure-hours.json",
+   "match": [
+    "run on Saturdays during the Treasure Hunters mini-season",
+    "November 14 | 11 AM–1 PM PT / 2–4 PM ET | 6–8 PM PT / 9–11 PM ET | 1.5× both rounds",
+    "November 21 | 11 AM–1 PM PT",
+    "November 28 | 11 AM–1 PM PT",
+    "December 5 | 11 AM–1 PM PT",
+    "A 1.5× boost brings it to about 1 in 91,667"
+   ]
+  },
+  {
+   "text": "Escuadrón: cuentan los cofres de los cuatro; rellenar escuadrón",
+   "source": "vgc-guide.json",
+   "match": [
+    "in each round you're opening four times as many chests as usual",
+    "choose the Fill option to add random players to your squad of four"
+   ]
+  },
+  {
+   "text": "Si alguien del escuadrón la encuentra, todos la reciben",
+   "source": "biglead-pirate-shop.json",
+   "match": [
+    "all squad members will get it too"
+   ]
+  },
+  {
+   "text": "No incluye niveles del pase, lotes de dinero real ni regalos; solo un sidekick",
+   "source": "vgc-guide.json",
+   "match": [
+    "you can't claim Battle Pass levels",
+    "you can't get bundles that cost real money",
+    "you can't gift items to other players",
+    "you can only claim one free sidekick"
+   ]
+  },
+  {
+   "text": "Mitos: brújula, skin, jugadores nuevos, cofres con mejores probabilidades: todo falso",
+   "source": "vgc-guide.json",
+   "match": [
+    "There's no such thing as a Token Compass",
+    "the skin you choose has no effect on your odds",
+    "some chests give better odds than others",
+    "These are all nonsense",
+    "everyone has an equal chance of finding a Pirate Shop Token"
+   ]
+  },
+  {
+   "text": "La probabilidad no cambia según el jugador, nuevo o que regresa",
+   "source": "vgc-odds-confirmed.json",
+   "match": [
+    "the rate does not change depending on the player, so the likelihood doesn't improve if you're a new or returning player"
+   ]
+  }
+ ],
+ "text": [
+  "GUÍA COMPLETA / LA TIENDA PIRATA / DE FORTNITE",
+  "INTRO",
+  "1 NOV - 5 DIC / MINI TEMPORADA: BÚSQUEDA DEL TESORO",
+  "CÓMO SE CONSIGUE",
+  "COFRES / ÁBRELOS O RÓMPELOS: CUALQUIER TIPO",
+  "3 NIVELES / ESTÁNDAR · MAYOR · SUPREMO",
+  "LOS PREMIOS",
+  "SUPREMO / SKIN DORADA O TIENDA PIRATA",
+  "14 DÍAS / TODO LO QUE CUESTA PAVOS, GRATIS",
+  "QUÉ TE DA",
+  "×2 / UNA PARA 2026 Y OTRA PARA 2027",
+  "DOS FICHAS",
+  "1 EN 137 500 / TIENDA PIRATA, POR COFRE",
+  "PROBABILIDADES",
+  "1 EN 1 562 500 / SKIN DORADA DE LA SEMANA",
+  "1 EN 7813 / VEHÍCULO Y CALCOMANÍA",
+  "1 EN 568 / PICO O MOCHILA DE LA SEMANA",
+  "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+  "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+  "CÓDIGO BAD",
+  "SÁBADOS / 14, 21 Y 28 NOV · 5 DIC",
+  "HORAS DEL TESORO",
+  "1-3 PM · 8-10 PM / HORA DE LA CIUDAD DE MÉXICO",
+  "×1.5 / TIENDA PIRATA: ~1 EN 91 667",
+  "×4 / CUENTAN LOS COFRES DE LOS CUATRO",
+  "JUEGA EN ESCUADRÓN",
+  "OJO / LO QUE / NO INCLUYE",
+  "LO QUE NO INCLUYE",
+  "FALSO / MITOS DE LA / TIENDA PIRATA",
+  "MITOS",
+  "FINAL",
+  "¿TODA LA TIENDA DE OBJETOS DE",
+  "FORTNITE GRATIS POR 14 DÍAS?",
+  "EXISTE,",
+  "SE LLAMA LA TIENDA PIRATA,",
+  "¡Y HOY TE EXPLICO TODO!",
+  "CÓMO SE CONSIGUE,",
+  "QUÉ TE DA,",
+  "LAS PROBABILIDADES OFICIALES,",
+  "CUÁNDO SUBEN LAS PROBABILIDADES,",
+  "Y QUÉ NO INCLUYE.",
+  "Y QUÉDATE HASTA EL FINAL,",
+  "PORQUE TE VOY A DESMENTIR LOS",
+  "MITOS QUE MÁS SE ESTÁN COMPARTIENDO.",
+  "EMPECEMOS.",
+  "ESTA MINI TEMPORADA EMPEZÓ EL 1",
+  "DE NOVIEMBRE Y TERMINA EL 5",
+  "DE DICIEMBRE.",
+  "DURANTE TODA LA TEMPORADA,",
+  "BATTLE ROYALE Y CERO CONSTRUCCIÓN TIENEN",
+  "UNA BÚSQUEDA DEL TESORO.",
+  "CADA VEZ QUE ABRES O ROMPES",
+  "UN COFRE,",
+  "TIENES UNA PEQUEÑA PROBABILIDAD DE GANAR",
+  "UN TESORO.",
+  "SIRVE CUALQUIER TIPO DE COFRE:",
+  "NORMALES,",
+  "RAROS,",
+  "ENTERRADOS,",
+  "Y LOS DEMÁS COFRES DE LA",
+  "TEMPORADA.",
+  "EL PREMIO NO SALE DEL COFRE",
+  "COMO UN ARMA:",
+  "NO TIENES QUE RECOGERLO.",
+  "SOLO TE APARECE UN MENSAJE EN",
+  "LA PANTALLA.",
+  "LOS PREMIOS VIENEN EN TRES NIVELES:",
+  "ESTÁNDAR,",
+  "MAYOR Y SUPREMO.",
+  "LOS ESTÁNDAR SON OBJETOS PARA USAR",
+  "EN LA PARTIDA.",
+  "LOS MAYORES SON COSMÉTICOS ESPECIALES DE",
+  "LA SEMANA.",
+  "Y LOS SUPREMOS SON SOLO DOS:",
+  "LA SKIN DORADA DE LA SEMANA,",
+  "O EL ACCESO A LA TIENDA",
+  "PIRATA.",
+  "AHORA SÍ:",
+  "¿QUÉ TE DA LA TIENDA PIRATA?",
+  "CUANDO LA ACTIVAS,",
+  "TODO LO QUE CUESTA PAVOS EN",
+  "LA TIENDA ES GRATIS PARA TI",
+  "DURANTE 14 DÍAS.",
+  "SKINS,",
+  "GESTOS,",
+  "MOCHILAS,",
+  "PICOS,",
+  "INSTRUMENTOS,",
+  "AUTOS,",
+  "PLANEADORES,",
+  "Y MÁS.",
+  "¡Y TODO LO QUE RECLAMAS,",
+  "TE LO QUEDAS PARA SIEMPRE!",
+  "ALGO QUE POCOS SABEN:",
+  "SI LA ENCUENTRAS,",
+  "RECIBES DOS FICHAS.",
+  "UNA LA PUEDES ACTIVAR DEL 1",
+  "DE NOVIEMBRE AL 15 DE DICIEMBRE",
+  "DE 2026.",
+  "Y LA OTRA,",
+  "EN CUALQUIER MOMENTO DE 2027.",
+  "O SEA,",
+  "SON DOS TIENDAS COMPLETAS.",
+  "AHORA,",
+  "LAS PROBABILIDADES.",
+  "EPIC YA CONFIRMÓ LOS NÚMEROS OFICIALES,",
+  "POR CADA COFRE QUE ABRES.",
+  "EL ACCESO A LA TIENDA PIRATA",
+  "SALE EN 1 DE CADA 137",
+  "500 COFRES.",
+  "ESO ES MENOS DEL 0.001 POR",
+  "CIENTO POR COFRE.",
+  "LA SKIN DORADA DE LA SEMANA",
+  "ES TODAVÍA MÁS RARA:",
+  "1 DE CADA 1 562 500.",
+  "EL VEHÍCULO Y LA CALCOMANÍA DE",
+  "LA SEMANA SALEN EN 1 DE",
+  "CADA 7813.",
+  "EL PICO O LA MOCHILA DE",
+  "LA SEMANA,",
+  "EN 1 DE CADA 568.",
+  "Y LA PANTALLA DE CARGA DE",
+  "EN 1 DE CADA 272.",
+  "EPIC TAMBIÉN DIJO QUE ESTAS PROBABILIDADES",
+  "NO HAN CAMBIADO DESDE QUE EMPEZÓ",
+  "LA TEMPORADA.",
+  "POR CIERTO,",
+  "SI ESTE VIDEO TE ESTÁ SIRVIENDO,",
+  "USA EL CÓDIGO BAD EN LA",
+  "TIENDA DE OBJETOS.",
+  "LE AYUDA MUCHÍSIMO AL CANAL.",
+  "HAY UN MOMENTO EN QUE TODO",
+  "ESTO MEJORA:",
+  "LAS HORAS DEL TESORO.",
+  "SON LOS SÁBADOS DE ESTA TEMPORADA,",
+  "Y LAS QUE SIGUEN SON EL",
+  "14,",
+  "EL 21 Y EL 28 DE",
+  "NOVIEMBRE,",
+  "Y EL 5 DE DICIEMBRE.",
+  "CADA SÁBADO HAY DOS RONDAS:",
+  "DE 1 A 3 DE LA",
+  "TARDE Y DE 8 A 10",
+  "DE LA NOCHE,",
+  "HORA DE LA CIUDAD DE MÉXICO.",
+  "EN LAS DOS,",
+  "LA PROBABILIDAD DE LA TIENDA PIRATA",
+  "SUBE 1.5 VECES.",
+  "ASÍ PASA DE 1 EN 137",
+  "500,",
+  "A MÁS O MENOS 1 EN",
+  "91 667 POR COFRE.",
+  "Y EL MEJOR CONSEJO PARA TENER",
+  "MÁS CHANCES:",
+  "¡JUEGA EN ESCUADRÓN!",
+  "SI ALGUIEN DE TU ESCUADRÓN ENCUENTRA",
+  "LA TIENDA PIRATA,",
+  "TODOS LA RECIBEN.",
+  "ASÍ,",
+  "EN CADA PARTIDA CUENTAN LOS COFRES",
+  "DE LOS CUATRO.",
+  "Y SI NO TIENES CON QUIÉN",
+  "JUGAR,",
+  "ELIGE RELLENAR ESCUADRÓN PARA ENTRAR CON",
+  "JUGADORES AL AZAR.",
+  "OJO,",
+  "PORQUE LA TIENDA PIRATA NO LO",
+  "INCLUYE TODO.",
+  "NO PUEDES RECLAMAR NIVELES DEL PASE",
+  "DE BATALLA.",
+  "TAMPOCO LOS LOTES QUE SE PAGAN",
+  "CON DINERO REAL.",
+  "NO PUEDES REGALAR OBJETOS A OTROS",
+  "JUGADORES.",
+  "Y SOLO PUEDES RECLAMAR UN SIDEKICK.",
+  "Y AHORA SÍ,",
+  "LOS MITOS.",
+  "MITO UNO:",
+  "HAY UNA BRÚJULA DEL TOKEN QUE",
+  "TE LLEVA A ELLA.",
+  "FALSO,",
+  "NO EXISTE.",
+  "MITO DOS:",
+  "TU SKIN CAMBIA LA PROBABILIDAD.",
+  "LA SKIN NO IMPORTA.",
+  "MITO TRES:",
+  "LOS JUGADORES NUEVOS O LOS QUE",
+  "REGRESAN TIENEN VENTAJA.",
+  "LA PROBABILIDAD ES LA MISMA PARA",
+  "TODOS.",
+  "MITO CUATRO:",
+  "ALGUNOS COFRES DAN MEJORES PROBABILIDADES.",
+  "TAMPOCO:",
+  "LO QUE CUENTA ES ABRIR COFRES.",
+  "ASÍ QUE YA LO SABES:",
+  "ABRE TODOS LOS COFRES QUE PUEDAS,",
+  "JUEGA EN ESCUADRÓN,",
+  "Y NO TE PIERDAS LAS HORAS",
+  "DEL TESORO.",
+  "¿YA ABRISTE TUS COFRES HOY?",
+  "¡CUÉNTAME EN LOS COMENTARIOS!",
+  "¡GRACIAS POR VER!",
+  "SÍGUENOS PARA MÁS CONTENIDO DIARIO.",
+  "LA TIENDITA BAD",
+  "#EPICPARTNER"
+ ]
+}
