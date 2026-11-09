@@ -1,4 +1,4 @@
-# TIENDA BAD
+# LA TIENDITA BAD
 
 The daily Fortnite item shop in Latin American Spanish, for the social accounts that used to be StreakPros.
 It is the BAD ROYALE shop video rebuilt in Spanish, with a few upgrades. Fan-made, not affiliated with
@@ -13,9 +13,11 @@ Copy this folder to `brand/tiendabad` in a BrandPros checkout, then `bash brand/
 | `voice.json` | Voice: Kokoro `ef_dora`, `es-419` (Latin American "s"), speed 1.2 |
 | `shop/shop_pick.py` | Reads today's shop from fortnite-api.com in `es-419`, picks the three stories, writes the Spanish script |
 | `shop/scene.js` | The 1080x1920, 60 fps video |
-| `video/templates_es.js` | BAD ROYALE's templates with Spanish end cards and the official Spanish map |
+| `video/templates_es.js` | BAD ROYALE's templates with the Spanish end card and the official Spanish map |
 | `auto/new_where.py` | "¿Dónde está …?" map short (`python3 auto/new_where.py <folder> "<lugar>"`). It reads `sources/`: `map.json` from `https://fortnite-api.com/v1/map?language=es-419`, `map-labels.png` from `https://fortnite-api.com/images/map_es-419.png`, `map-blank.png` from `https://fortnite-api.com/images/map.png` |
-| `art/scenes_tienda.js` | Profile picture (1080x1080) and banner (2560x1440) |
+| `brand/` | Brand art the videos load: `watermark.svg`, `awning.svg` and `bad.svg` (the end card) |
+| `brand/logo/` | Logo masters (vector, text outlined): main logo, icon, wide logo, each in colour, white and black |
+| `brand/src/` | Generators for the logos, social images and brand guide (`kit.py`, `social.py`); fonts go in `brand/src/fonts` or `$BRAND_FONTS` |
 | `build.sh` | One day's shop video, start to finish |
 
 ## The three stories, every day
@@ -30,12 +32,18 @@ Copy this folder to `brand/tiendabad` in a BrandPros checkout, then `bash brand/
 - The hook shows all three stories up front (OFERTA / OG / ÚLTIMO DÍA), so viewers wait for them.
 - Numbered beats, a savings sticker (-63% / AHORRAS 6500) and "146 días sin salir" for the OG.
 - Times are in Mexico City time. Item names come from the game's own Spanish data.
-- The code card reminds people the code lasts 14 days ("Dura 14 días · ¡renuévalo!").
-- A TIENDA BAD watermark on every frame.
+- The end card is the shop itself: the brand awning over a turquoise counter with CÓDIGO BAD, and a
+  reminder that the code lasts 14 days ("Dura 14 días · ¡renuévalo!").
+- A LA TIENDITA BAD watermark (mini awning) on every frame.
+
+## Brand
+
+Rosa `#E4007C`, Amarillo `#FFD21E`, Turquesa `#13B5C6`, Tinta `#0B0D1A`; video background Noche `#1A1F7A` to
+Morado `#2A0F5E`. Type: Barlow Condensed Black Italic (logo, titles) and Montserrat ExtraBold/Black (captions).
 
 ## Accounts
 
-- Name: `TIENDA BAD · Fortnite` (TikTok) or `TIENDA BAD · Fortnite en Español` (everywhere else). Handle: `@tiendabad`.
+- Name: `LA TIENDITA BAD · Fortnite`. Handle: `@latienditabad`.
 - TikTok bio: `La tienda de Fortnite cada día, en español. Código BAD #EpicPartner`
 - Instagram / Threads bio: `La tienda de objetos de Fortnite cada día: ofertas, regresos OG y lo que se va. Hecho por fans, sin afiliación con Epic. Código BAD #EpicPartner`
-- Facebook intro: `La tienda de Fortnite cada día, en español. Código BAD en la tienda de objetos. #EpicPartner`
+- Facebook / YouTube: `La tienda de Fortnite cada día, en español. Código BAD en la tienda de objetos. Hecho por fans, sin afiliación con Epic Games. #EpicPartner`

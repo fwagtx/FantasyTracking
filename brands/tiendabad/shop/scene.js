@@ -1,4 +1,4 @@
-/* TIENDA BAD · tienda de objetos diaria. Spanish twin of BAD ROYALE's shop short.
+/* LA TIENDITA BAD · tienda de objetos diaria. Spanish twin of BAD ROYALE's shop short.
  * Data: window.SHOP (shop_pick.py, es-419), voice timings: window.VO. Beats follow the voice by role:
  * hook, mejor oferta (+ how much you save), regreso OG (+ days since last seen), último día, código.
  */
@@ -47,14 +47,19 @@
        <div style="position:absolute;left:0;top:200px;width:340px;text-align:center;font-family:'Barlow Condensed';font-weight:900;font-size:38px;line-height:1;color:${YEL};-webkit-text-stroke:6px ${INK};paint-order:stroke fill">AHORRAS ${num(D.deal.saving)}</div>`,
       `-${D.deal.pct}% / AHORRAS ${num(D.deal.saving)}`);
   }
-  // Spanish code card: same build as BAD ROYALE's, plus the 14-day reminder (codes expire; most people never re-enter)
-  function codeCardES(stage, y = 520) {
-    return mk(stage, `left:170px;width:740px;top:${y}px;text-align:center;padding:26px 0 26px;border-radius:22px;background:linear-gradient(180deg,#1A63E6,${BLUE});border:6px solid ${INK};box-shadow:0 12px 0 rgba(0,0,0,.4)`,
-      `<div style="display:inline-block;background:${YEL};border:4px solid ${INK};border-radius:8px;transform:skewX(-7deg);padding:0 16px;font-family:'Barlow Condensed';font-weight:900;font-size:40px;color:${BLUE}">CÓDIGO</div>
-       <div style="font-family:'Barlow Condensed';font-weight:900;font-size:190px;line-height:.95;color:${YEL};-webkit-text-stroke:16px ${INK};paint-order:stroke fill;text-shadow:0 10px 0 #B06A00,0 16px 0 ${INK};transform:skewX(-7deg)">BAD</div>
-       <div style="font:700 30px Montserrat;color:#fff;margin-top:14px">Tienda de objetos → Apoya a un creador</div>
-       <div style="display:inline-block;margin-top:14px;padding:6px 18px;border-radius:30px;background:${INK};font:800 26px Montserrat;color:${YEL}">Dura 14 días · ¡renuévalo!</div>
-       <div style="font:800 26px Montserrat;color:#fff;margin-top:10px">#EpicPartner</div>`,
+  // brand art (brand/tiendabad/brand, exported from the logo files): the awning, the logo's own BAD, the watermark
+  const BR = "../../tiendabad/brand";
+  // the CÓDIGO BAD card dressed as the shop: the brand awning over a turquoise counter, plus the 14-day reminder
+  const codeCardES = function (stage, y = 520) {
+    return mk(stage, `left:140px;width:800px;top:${y - 150}px;text-align:center`,
+      `<img src="${BR}/awning.svg" style="position:relative;z-index:2;display:block;width:800px;height:auto">
+       <div style="position:relative;z-index:1;margin:-34px 36px 0;padding:50px 0 24px;border-radius:0 0 24px 24px;background:linear-gradient(180deg,#36D3E2,#13B5C6 55%,#0B8796);border:6px solid ${INK};border-top:0;box-shadow:0 12px 0 rgba(0,0,0,.4)">
+         <div style="display:inline-block;background:${YEL};border:4px solid ${INK};border-radius:8px;transform:skewX(-7deg);padding:0 16px;font-family:'Barlow Condensed';font-weight:900;font-size:40px;color:${INK}">CÓDIGO</div>
+         <img src="${BR}/bad.svg" style="display:block;margin:8px auto 0;height:176px">
+         <div style="font:800 31px Montserrat;color:#fff;margin-top:12px;-webkit-text-stroke:7px ${INK};paint-order:stroke fill">Tienda de objetos → Apoya a un creador</div>
+         <div style="display:inline-block;margin-top:12px;padding:6px 18px;border-radius:30px;background:${INK};font:800 26px Montserrat;color:${YEL}">Dura 14 días · ¡renuévalo!</div>
+         <div style="font:800 26px Montserrat;color:#fff;margin-top:8px;-webkit-text-stroke:6px ${INK};paint-order:stroke fill">#EpicPartner</div>
+       </div>`,
       "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER");
   }
   function thanksES(stage, y = 1010) {
@@ -63,9 +68,8 @@
        <div style="font:800 30px Montserrat;color:#fff;margin-top:12px;-webkit-text-stroke:5px ${INK};paint-order:stroke fill">Síguenos para más contenido diario</div>`,
       "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO");
   }
-  // NEW: a small channel watermark, opposite the #EpicPartner chip
-  const bug = (stage) => mk(stage, `right:44px;top:166px;padding:6px 16px;border-radius:24px;background:rgba(11,13,26,.72);border:2px solid rgba(255,255,255,.85)`,
-    `<span style="font-family:'Barlow Condensed';font-weight:900;font-size:26px;letter-spacing:1px;color:${YEL}">TIENDA</span><span style="font-family:'Barlow Condensed';font-weight:900;font-size:26px;letter-spacing:1px;color:#fff"> BAD</span>`, "TIENDA BAD");
+  // channel watermark (mini awning + LA TIENDITA BAD), opposite the #EpicPartner chip
+  const bug = (stage) => mk(stage, `right:34px;top:136px;width:228px`, `<img src="${BR}/watermark.svg" style="display:block;width:228px;height:auto">`, "LA TIENDITA BAD");
 
   function build(stage) {
     mk(stage, `inset:0;background:linear-gradient(160deg,#1D2E8F,#14156B 45%,#2A0F5E)`);

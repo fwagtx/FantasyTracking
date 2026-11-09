@@ -1,4 +1,4 @@
-"""TIENDA BAD daily Item Shop short (Spanish twin of BAD ROYALE's shop video).
+"""LA TIENDITA BAD daily Item Shop short (Spanish twin of BAD ROYALE's shop video).
 Fetches today's shop in Latin American Spanish, picks the three facts, writes the Spanish voice script.
 
 Usage: python3 shop_pick.py [YYYY-MM-DD]   (default: today's shop, UTC)

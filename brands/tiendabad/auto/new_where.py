@@ -1,4 +1,4 @@
-"""TIENDA BAD: make a "¿Dónde está <lugar>?" short (Spanish twin of BAD ROYALE's Where Is).
+"""LA TIENDITA BAD: make a "¿Dónde está <lugar>?" short (Spanish twin of BAD ROYALE's Where Is).
 
     python3 brand/tiendabad/auto/new_where.py <folder> "<nombre del lugar en map.json (es-419)>"
 
@@ -46,7 +46,7 @@ def main(folder, name):
            "claims": [{"text": f"{name} es un lugar del mapa oficial", "source": "map.json", "match": [name]},
                       {"text": f"Está {d}, cerca de {near}", "source": "map-labels.png", "visual": f"map pixel ({x:.0f}, {y:.0f}); nearest named POI by coordinates: {near}"}]}
     os.makedirs(folder, exist_ok=True)
-    open(os.path.join(folder, "scene.js"), "w").write(open(TPL).read() + f"\n/* TIENDA BAD · ¿Dónde está {name}? */\nwindow.SCENE = TPL.map(" + json.dumps(cfg, indent=1, ensure_ascii=False) + ");\n")
+    open(os.path.join(folder, "scene.js"), "w").write(open(TPL).read() + f"\n/* LA TIENDITA BAD · ¿Dónde está {name}? */\nwindow.SCENE = TPL.map(" + json.dumps(cfg, indent=1, ensure_ascii=False) + ");\n")
     voice = json.load(open(os.path.join(HERE, "..", "voice.json")))
     phrases = [{"text": f"¿No encuentras {name} en Fortnite? Aquí está exactamente.", "pause": 0.25},
                {"text": f"Está {d},", "pause": 0.1},

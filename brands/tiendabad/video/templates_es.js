@@ -1,4 +1,4 @@
-/* TIENDA BAD templates: BAD ROYALE's templates with Spanish end cards and the Spanish map. */
+/* LA TIENDITA BAD templates: BAD ROYALE's templates with Spanish end cards and the Spanish map. */
 /* BAD ROYALE short templates. A short's scene.js is just a config:  window.SCENE = TPL.guess({...})
  * Every template: hook on screen from frame 1, word-by-word captions, #EpicPartner on screen, the code card on the
  * last voice line. Beats are tied to the voice: "p" is a phrase index in vo.json (P[p].t0 = when it starts).
@@ -38,17 +38,23 @@
     return el;
   }
   // Spanish end card: CÓDIGO BAD, the in-game path in Spanish, the 14-day reminder, #EpicPartner; then the sign-off
-  const codeES = (stage, y) => mk(stage, `left:170px;width:740px;top:${y}px;text-align:center;padding:26px 0 26px;border-radius:22px;background:linear-gradient(180deg,#1A63E6,#0E2F9E);border:6px solid ${INK};box-shadow:0 12px 0 rgba(0,0,0,.4)`,
-    `<div style="display:inline-block;background:${YEL};border:4px solid ${INK};border-radius:8px;transform:skewX(-7deg);padding:0 16px;font-family:'Barlow Condensed';font-weight:900;font-size:40px;color:#0E2F9E">CÓDIGO</div>
-     <div style="font-family:'Barlow Condensed';font-weight:900;font-size:190px;line-height:.95;color:${YEL};-webkit-text-stroke:16px ${INK};paint-order:stroke fill;text-shadow:0 10px 0 #B06A00,0 16px 0 ${INK};transform:skewX(-7deg)">BAD</div>
-     <div style="font:700 30px Montserrat;color:#fff;margin-top:14px">Tienda de objetos → Apoya a un creador</div>
-     <div style="display:inline-block;margin-top:14px;padding:6px 18px;border-radius:30px;background:${INK};font:800 26px Montserrat;color:${YEL}">Dura 14 días · ¡renuévalo!</div>
-     <div style="font:800 26px Montserrat;color:#fff;margin-top:10px">#EpicPartner</div>`, "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER");
+  const BR = "../../tiendabad/brand";
+  const codeES = (stage, y = 520) => {
+    return mk(stage, `left:140px;width:800px;top:${y - 150}px;text-align:center`,
+      `<img src="${BR}/awning.svg" style="position:relative;z-index:2;display:block;width:800px;height:auto">
+       <div style="position:relative;z-index:1;margin:-34px 36px 0;padding:50px 0 24px;border-radius:0 0 24px 24px;background:linear-gradient(180deg,#36D3E2,#13B5C6 55%,#0B8796);border:6px solid ${INK};border-top:0;box-shadow:0 12px 0 rgba(0,0,0,.4)">
+         <div style="display:inline-block;background:${YEL};border:4px solid ${INK};border-radius:8px;transform:skewX(-7deg);padding:0 16px;font-family:'Barlow Condensed';font-weight:900;font-size:40px;color:${INK}">CÓDIGO</div>
+         <img src="${BR}/bad.svg" style="display:block;margin:8px auto 0;height:176px">
+         <div style="font:800 31px Montserrat;color:#fff;margin-top:12px;-webkit-text-stroke:7px ${INK};paint-order:stroke fill">Tienda de objetos → Apoya a un creador</div>
+         <div style="display:inline-block;margin-top:12px;padding:6px 18px;border-radius:30px;background:${INK};font:800 26px Montserrat;color:${YEL}">Dura 14 días · ¡renuévalo!</div>
+         <div style="font:800 26px Montserrat;color:#fff;margin-top:8px;-webkit-text-stroke:6px ${INK};paint-order:stroke fill">#EpicPartner</div>
+       </div>`,
+      "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER");
+  };
   const thanksES = (stage, y) => mk(stage, `left:170px;width:740px;top:${y}px;text-align:center`,
     `<div style="display:inline-block;padding:8px 26px 4px;background:${YEL};border:5px solid ${INK};border-radius:10px;transform:skewX(-7deg);box-shadow:0 6px 0 ${INK};font-family:'Barlow Condensed';font-weight:900;font-size:48px;line-height:1;color:${INK}">¡GRACIAS POR VER!</div>
      <div style="font:800 30px Montserrat;color:#fff;margin-top:12px;-webkit-text-stroke:5px ${INK};paint-order:stroke fill">Síguenos para más contenido diario</div>`, "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO");
-  const bugES = (stage) => mk(stage, `right:44px;top:166px;padding:6px 16px;border-radius:24px;background:rgba(11,13,26,.72);border:2px solid rgba(255,255,255,.85)`,
-    `<span style="font-family:'Barlow Condensed';font-weight:900;font-size:26px;letter-spacing:1px;color:${YEL}">TIENDA</span><span style="font-family:'Barlow Condensed';font-weight:900;font-size:26px;letter-spacing:1px;color:#fff"> BAD</span>`, "TIENDA BAD");
+  const bugES = (stage) => mk(stage, `right:34px;top:136px;width:228px`, `<img src="${BR}/watermark.svg" style="display:block;width:228px;height:auto">`, "LA TIENDITA BAD");
   const end = (stage, VO) => ({ code: codeES(stage, 500), thanks: thanksES(stage, 1010), caps: S.captions(stage, VO.words, { y: 1150 }), disc: S.disclosure(stage), bug: bugES(stage), fin: S.finish(stage) });
 
   // ---------------- Guess the Season ----------------
