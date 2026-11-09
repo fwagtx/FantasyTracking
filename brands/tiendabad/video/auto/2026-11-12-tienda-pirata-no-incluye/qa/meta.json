@@ -1,0 +1,64 @@
+{
+ "duration": 18.8,
+ "caption": "#EpicPartner La Tienda Pirata no lo incluye TODO 👀 Sin niveles del pase de batalla, sin lotes de dinero real, sin regalos y solo un sidekick\n¿Lo sabías? 👇\nUsa el código BAD en la tienda de objetos 💛\n#fortnite #tiendapirata #fortniteespañol",
+ "claims": [
+  {
+   "text": "Los niveles del pase de batalla no se pueden reclamar",
+   "source": "vgc-guide.json",
+   "match": [
+    "you can't claim Battle Pass levels"
+   ]
+  },
+  {
+   "text": "No incluye lotes de dinero real ni regalos",
+   "source": "vgc-guide.json",
+   "match": [
+    "you can't get bundles that cost real money",
+    "you can't gift items to other players"
+   ]
+  },
+  {
+   "text": "Solo un sidekick",
+   "source": "vgc-guide.json",
+   "match": [
+    "you can only claim one free sidekick"
+   ]
+  }
+ ],
+ "text": [
+  "TIENDA PIRATA",
+  "LO QUE NO / INCLUYE",
+  "PASE DE BATALLA / LOS NIVELES NO ENTRAN",
+  "DINERO REAL / NI ESOS LOTES, NI REGALOS",
+  "SIDEKICK / SOLO UNO",
+  "TIENDA / PIRATA",
+  "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+  "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+  "LA TIENDA PIRATA",
+  "NO TE DA",
+  "TODO.",
+  "¡ESTO ES LO",
+  "QUE NO INCLUYE!",
+  "NO PUEDES RECLAMAR",
+  "NIVELES DEL PASE",
+  "DE BATALLA.",
+  "TAMPOCO LOTES QUE",
+  "SE PAGAN CON",
+  "DINERO REAL,",
+  "Y NO PUEDES",
+  "REGALAR OBJETOS.",
+  "Y SOLO PUEDES",
+  "RECLAMAR UN SIDEKICK.",
+  "¿LO SABÍAS?",
+  "USA EL CÓDIGO",
+  "BAD EN LA",
+  "TIENDA DE OBJETOS.",
+  "LE AYUDA MUCHÍSIMO",
+  "AL CANAL.",
+  "¡GRACIAS POR VER!",
+  "SÍGUENOS PARA MÁS",
+  "CONTENIDO DIARIO.",
+  "#EPICPARTNER",
+  "LA TIENDITA BAD"
+ ]
+}

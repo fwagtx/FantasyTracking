@@ -1,0 +1,66 @@
+{
+ "duration": 21.6,
+ "caption": "#EpicPartner 3 mitos de la Tienda Pirata 🏴‍☠️ No hay brújula del token, tu skin no cambia nada y todos tienen la misma probabilidad\n¿Cuál te habías creído? 👇\nUsa el código BAD en la tienda de objetos 💛\n#fortnite #tiendapirata #fortniteespañol",
+ "claims": [
+  {
+   "text": "No existe una brújula del token",
+   "source": "vgc-guide.json",
+   "match": [
+    "There's no such thing as a Token Compass"
+   ]
+  },
+  {
+   "text": "La skin no cambia la probabilidad",
+   "source": "vgc-guide.json",
+   "match": [
+    "the skin you choose has no effect on your odds"
+   ]
+  },
+  {
+   "text": "Todos tienen la misma probabilidad, nuevos o no",
+   "source": "vgc-odds-confirmed.json",
+   "match": [
+    "the rate does not change depending on the player, so the likelihood doesn't improve if you're a new or returning player"
+   ]
+  }
+ ],
+ "text": [
+  "TIENDA PIRATA",
+  "3 MITOS DE LA / TIENDA PIRATA",
+  "MITO 1 / NO EXISTE LA BRÚJULA DEL TOKEN",
+  "MITO 2 / TU SKIN NO CAMBIA NADA",
+  "MITO 3 / TODOS TIENEN LA MISMA PROBABILIDAD",
+  "TIENDA / PIRATA",
+  "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+  "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+  "¡TRES MITOS DE",
+  "LA TIENDA PIRATA",
+  "QUE TIENES QUE",
+  "DEJAR DE CREER!",
+  "MITO UNO: LA",
+  "BRÚJULA DEL TOKEN.",
+  "NO EXISTE.",
+  "MITO DOS: TU",
+  "SKIN CAMBIA LA",
+  "PROBABILIDAD.",
+  "FALSO,",
+  "LA SKIN NO",
+  "IMPORTA.",
+  "MITO TRES: LOS",
+  "NUEVOS TIENEN VENTAJA.",
+  "TODOS TIENEN LA",
+  "MISMA PROBABILIDAD.",
+  "¿CUÁL TE HABÍAS",
+  "CREÍDO?",
+  "USA EL CÓDIGO",
+  "BAD EN LA",
+  "TIENDA DE OBJETOS.",
+  "LE AYUDA MUCHÍSIMO",
+  "AL CANAL.",
+  "¡GRACIAS POR VER!",
+  "SÍGUENOS PARA MÁS",
+  "CONTENIDO DIARIO.",
+  "#EPICPARTNER",
+  "LA TIENDITA BAD"
+ ]
+}

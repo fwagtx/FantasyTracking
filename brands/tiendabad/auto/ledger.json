@@ -1,3 +1,53 @@
-{"topics": [
- {"date": "2026-11-09", "slot": "13:00", "format": "Tienda Pirata", "topic": "Qué es la Tienda Pirata (cofres, 14 días, te lo quedas)", "folder": "video/auto/2026-11-09-tienda-pirata"}
-]}
+{
+ "topics": [
+  {
+   "date": "2026-11-09",
+   "slot": "13:00",
+   "format": "Tienda Pirata",
+   "topic": "Qué es la Tienda Pirata (cofres, 14 días, te lo quedas)",
+   "folder": "video/auto/2026-11-09-tienda-pirata"
+  },
+  {
+   "date": "2026-11-09",
+   "slot": "20:30",
+   "format": "¿Dónde está?",
+   "topic": "Arlong Park",
+   "folder": "video/auto/2026-11-09-donde-arlong-park"
+  },
+  {
+   "date": "2026-11-10",
+   "slot": "13:00",
+   "format": "Tienda Pirata",
+   "topic": "Probabilidades oficiales",
+   "folder": "video/auto/2026-11-10-tienda-pirata-probabilidades"
+  },
+  {
+   "date": "2026-11-11",
+   "slot": "13:00",
+   "format": "Tienda Pirata",
+   "topic": "Juega en escuadrón",
+   "folder": "video/auto/2026-11-11-tienda-pirata-escuadron"
+  },
+  {
+   "date": "2026-11-12",
+   "slot": "13:00",
+   "format": "Tienda Pirata",
+   "topic": "Lo que no incluye",
+   "folder": "video/auto/2026-11-12-tienda-pirata-no-incluye"
+  },
+  {
+   "date": "2026-11-13",
+   "slot": "13:00",
+   "format": "Tienda Pirata",
+   "topic": "Mitos",
+   "folder": "video/auto/2026-11-13-tienda-pirata-mitos"
+  },
+  {
+   "date": "2026-11-14",
+   "slot": "11:00",
+   "format": "Tienda Pirata",
+   "topic": "Horas del Tesoro hoy (14 nov)",
+   "folder": "video/auto/2026-11-14-horas-del-tesoro"
+  }
+ ]
+}

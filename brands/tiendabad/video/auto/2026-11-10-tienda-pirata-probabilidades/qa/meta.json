@@ -1,0 +1,69 @@
+{
+ "duration": 26.9,
+ "caption": "#EpicPartner La Tienda Pirata sale en 1 de cada 137 500 cofres 😳 Y la skin dorada de la semana, en 1 de cada 1 562 500\n¿Cuántos cofres llevas abiertos? 👇\nUsa el código BAD en la tienda de objetos 💛\n#fortnite #tiendapirata #fortniteespañol",
+ "claims": [
+  {
+   "text": "La Tienda Pirata sale en 1 de cada 137 500 cofres",
+   "source": "vgc-odds-confirmed.json",
+   "match": [
+    "Pirate Shop Access – 1 in 137,500"
+   ]
+  },
+  {
+   "text": "La skin dorada semanal sale en 1 de cada 1 562 500 cofres",
+   "source": "vgc-odds-confirmed.json",
+   "match": [
+    "Weekly Gold Outfit – 1 in 1,562,500"
+   ]
+  },
+  {
+   "text": "Las Horas del Tesoro suben 1.5 veces la probabilidad de la Tienda Pirata",
+   "source": "vgc-odds-confirmed.json",
+   "match": [
+    "boost the drop rates for the Pirate Shop Access by 1.5x"
+   ]
+  }
+ ],
+ "text": [
+  "TIENDA PIRATA",
+  "¿QUÉ TAN DIFÍCIL / ES CONSEGUIRLA?",
+  "POR COFRE / 1 EN 137 500",
+  "SKIN DORADA / 1 EN 1 562 500",
+  "HORAS DEL TESORO / PROBABILIDAD ×1.5",
+  "1 EN / 137 500",
+  "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+  "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+  "¿QUÉ TAN DIFÍCIL",
+  "ES CONSEGUIR LA",
+  "TIENDA PIRATA?",
+  "¡EPIC YA DIO",
+  "LOS NÚMEROS!",
+  "POR CADA COFRE",
+  "QUE ABRES,",
+  "LA PROBABILIDAD ES",
+  "DE 1 EN",
+  "137 500.",
+  "LA SKIN DORADA",
+  "DE LA SEMANA",
+  "ES TODAVÍA MÁS",
+  "RARA: 1 EN",
+  "1 562 500.",
+  "Y EN LAS",
+  "HORAS DEL TESORO,",
+  "LA PROBABILIDAD DE",
+  "LA TIENDA PIRATA",
+  "SUBE 1.5 VECES.",
+  "¿CUÁNTOS COFRES LLEVAS",
+  "ABIERTOS?",
+  "USA EL CÓDIGO",
+  "BAD EN LA",
+  "TIENDA DE OBJETOS.",
+  "LE AYUDA MUCHÍSIMO",
+  "AL CANAL.",
+  "¡GRACIAS POR VER!",
+  "SÍGUENOS PARA MÁS",
+  "CONTENIDO DIARIO.",
+  "#EPICPARTNER",
+  "LA TIENDITA BAD"
+ ]
+}

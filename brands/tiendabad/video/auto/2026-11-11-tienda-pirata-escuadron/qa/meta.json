@@ -1,0 +1,67 @@
+{
+ "duration": 22.1,
+ "caption": "#EpicPartner Si alguien de tu escuadrón encuentra la Tienda Pirata, ¡la reciben todos! 🏴‍☠️ Por eso cuentan los cofres de los cuatro\n¿Con quién vas a buscarla? 👇\nUsa el código BAD en la tienda de objetos 💛\n#fortnite #tiendapirata #fortniteespañol",
+ "claims": [
+  {
+   "text": "Si alguien del escuadrón la encuentra, todos la reciben",
+   "source": "biglead-pirate-shop.json",
+   "match": [
+    "all squad members will get it too"
+   ]
+  },
+  {
+   "text": "Cuentan los cofres de los cuatro",
+   "source": "vgc-guide.json",
+   "match": [
+    "in each round you're opening four times as many chests as usual"
+   ]
+  },
+  {
+   "text": "Rellenar agrega jugadores al azar al escuadrón",
+   "source": "vgc-guide.json",
+   "match": [
+    "choose the Fill option to add random players to your squad of four"
+   ]
+  }
+ ],
+ "text": [
+  "TIENDA PIRATA",
+  "MÁS CHANCES: / ¡JUEGA EN ESCUADRÓN!",
+  "ESCUADRÓN / SI UNO LA ENCUENTRA, TODOS LA RECIBEN",
+  "×4 / CUENTAN LOS COFRES DE LOS CUATRO",
+  "SIN AMIGOS / ELIGE RELLENAR ESCUADRÓN",
+  "TIENDA / PIRATA",
+  "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+  "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+  "¿QUIERES MÁS CHANCES",
+  "DE CONSEGUIR LA",
+  "TIENDA PIRATA?",
+  "¡JUEGA EN ESCUADRÓN!",
+  "SI ALGUIEN DE",
+  "TU ESCUADRÓN LA",
+  "ENCUENTRA EN UN",
+  "COFRE,",
+  "TODOS LA RECIBEN.",
+  "ASÍ,",
+  "EN CADA PARTIDA",
+  "CUENTAN LOS COFRES",
+  "DE LOS CUATRO.",
+  "¿NO TIENES CON",
+  "QUIÉN JUGAR?",
+  "ELIGE RELLENAR ESCUADRÓN",
+  "Y ENTRA CON",
+  "JUGADORES AL AZAR.",
+  "¿CON QUIÉN VAS",
+  "A BUSCARLA?",
+  "USA EL CÓDIGO",
+  "BAD EN LA",
+  "TIENDA DE OBJETOS.",
+  "LE AYUDA MUCHÍSIMO",
+  "AL CANAL.",
+  "¡GRACIAS POR VER!",
+  "SÍGUENOS PARA MÁS",
+  "CONTENIDO DIARIO.",
+  "#EPICPARTNER",
+  "LA TIENDITA BAD"
+ ]
+}
