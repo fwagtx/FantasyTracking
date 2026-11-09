@@ -304,5 +304,233 @@
     return { duration: DUR, build, cues, caption: cfg.caption, claims: cfg.claims };
   }
 
-  root.TPL = { guess, map, news, drop, guide, mapPx };
+  // ---------------- Top 5 countdown: "#5 … y el #1 es…" ----------------
+  // A creator-style countdown: the code sticker top left, a big rank top right with its label, one art card per entry,
+  // a "?" box under the card that turns into the answer on its voice line, caption lines and emoji stickers that pop on
+  // the voice, a dark "y el #1 es…" beat with the #1 in silhouette, a recap grid, then the creator code typed in.
+  //   hook:   {lines: ["Tienda Pirata:", "las fechas ⏰"], tag: "no te las pierdas 🏴‍☠️", tag2: {p, text}}
+  //   items:  countdown order (#5 first): {rank, label, img, kind: "skin"|"map", rarity?, p (the "Número cinco" line),
+  //           cap: {p, text}, box: {hidden, count?: [{p, dt, text}], reveal: {p, dt?, text}}, extras?: [{p, dt?, text}],
+  //           sticker?: {p, dt?, text}, recap: "#5 · 1 nov", flag?: true}
+  //   tease:  {p, title: "y el #1 es… 🥁", text: "el mejor 👀"}      recap: {p, title: "¿cuándo usarías el tuyo? 👇"}
+  // The voice ends like every template: the code line, then the sign-off.
+  function top(cfg) {
+    const { VO, P, DUR, codeP, thanksP } = timing();
+    const I = cfg.items, n = I.length, last = n - 1;
+    const at = (o) => P[o.p].t0 + (o.dt || 0) - 0.06;
+    const tIn = I.map((it) => P[it.p].t0 - 0.15);
+    const teaseT = cfg.tease ? P[cfg.tease.p].t0 - 0.15 : null;
+    const recapT = P[cfg.recap.p].t0 - 0.15;
+    const tOut = I.map((_, i) => (i === last ? recapT : i === last - 1 && teaseT != null ? teaseT : tIn[i + 1]));
+    const codeT = codeP.t0 - 0.1, thanksT = thanksP ? thanksP.t0 - 0.05 : DUR + 1;
+    const typed = [0.85, 1.05, 1.25].map((d) => codeT + d), clickT = codeT + 2.15, okT = clickT + 0.22;
+    const CX = 480, CARD = { x: 150, y: 540, w: 660, h: 770 };
+    const colors = (it) => it.colors || RAR[it.rarity] || RAR.epic;
+    const fit = (text, maxW, base, em = 0.6) => Math.min(base, Math.floor(maxW / (em * [...text].length)));
+    // a centred pill: the wrapper is wide and invisible, the pill inside carries the text box for the checks
+    function pill(parent, text, top, o = {}) {
+      const { size = 44, bg = "#fff", fg = INK, cx = CX, w = 900, weight = 800, shadow = true } = o;
+      const wr = mk(parent, `left:${cx - w / 2}px;width:${w}px;top:${top}px;text-align:center;transform-origin:50% 50%`);
+      const p = document.createElement("div");
+      p.style.cssText = `display:inline-block;padding:${size * 0.1}px ${size * 0.4}px ${size * 0.16}px;border-radius:${size * 0.3}px;background:${bg};color:${fg};font-family:Montserrat;font-weight:${weight};font-size:${size}px;line-height:1.12;white-space:nowrap;${shadow ? `box-shadow:0 ${size * 0.12}px ${size * 0.35}px rgba(0,0,0,.4)` : ""}`;
+      p.textContent = text; p.dataset.text = text.toUpperCase(); wr.appendChild(p);
+      return wr;
+    }
+    // white words with a dark edge, for the small caption lines over the card
+    function cline(parent, text, top) {
+      const wr = mk(parent, `left:${CX - 420}px;width:840px;top:${top}px;text-align:center`);
+      const p = document.createElement("div");
+      p.style.cssText = `display:inline-block;font-family:Montserrat;font-weight:800;font-size:${fit(text, 640, 35, 0.56)}px;line-height:1.1;color:#fff;-webkit-text-stroke:7px rgba(16,6,30,.92);paint-order:stroke fill;white-space:nowrap`;
+      p.textContent = text; p.dataset.text = text.toUpperCase(); wr.appendChild(p);
+      return wr;
+    }
+    function cardEl(parent, it, o = {}) {
+      const { w = CARD.w, h = CARD.h, silhouette = false, label = null } = o;
+      const [a, b] = colors(it);
+      const el = mk(parent, `left:0;top:0;width:${w}px;height:${h}px;border-radius:${w * 0.045}px;overflow:hidden;background:radial-gradient(circle at 50% 36%,${a},${b} 88%);box-shadow:0 ${w * 0.04}px ${w * 0.09}px rgba(0,0,0,.5),inset 0 0 0 ${Math.max(2, w * 0.004)}px rgba(255,255,255,.16);transform-origin:50% 55%`);
+      el.innerHTML = it.kind === "map"
+        ? `<div style="position:absolute;inset:0;background:linear-gradient(180deg,#5FC9F5,#1C8FD6 30%,#0E6FB8)"></div><img src="${it.img}" style="position:absolute;left:${-w * 0.07}px;top:${(h - w * 1.14) / 2 + h * 0.03}px;width:${w * 1.14}px;height:auto">`
+        : `<div style="position:absolute;inset:0;background:linear-gradient(120deg,rgba(255,255,255,.14) 0 22%,transparent 22%)"></div><img src="${it.img}" style="position:absolute;left:50%;top:${h * 0.03}px;height:${h * 1.0}px;width:auto;transform:translateX(-50%);${silhouette ? "filter:brightness(0) drop-shadow(0 0 18px rgba(255,255,255,.18))" : ""}">`;
+      el.innerHTML += `<div style="position:absolute;left:0;right:0;bottom:0;height:40%;background:linear-gradient(transparent,rgba(12,3,26,.78))"></div>`;
+      if (it.flag && !silhouette) el.innerHTML += `<div style="position:absolute;right:${w * 0.035}px;top:${w * 0.035}px;width:${w * 0.15}px;height:${w * 0.15}px;border-radius:${w * 0.03}px;background:#17171f;display:flex;align-items:center;justify-content:center;font-size:${w * 0.095}px;transform:rotate(9deg);box-shadow:0 6px 14px rgba(0,0,0,.45)">${it.flag === true ? "🏴‍☠️" : it.flag}</div>`;
+      if (label) {
+        const tag = document.createElement("div");
+        tag.style.cssText = `position:absolute;left:0;right:0;bottom:${w * 0.04}px;text-align:center`;
+        tag.innerHTML = `<span style="display:inline-block;padding:3px 12px 5px;border-radius:9px;background:rgba(12,10,20,.9);color:#fff;font:800 ${fit(label, w * 0.86, 23, 0.6)}px Montserrat;white-space:nowrap">${label}</span>`;
+        tag.firstChild.dataset.text = label.toUpperCase();
+        el.appendChild(tag);
+      }
+      return el;
+    }
+    // blurred copy of the card art behind everything (small and blurred, then scaled up: cheap and smooth)
+    function backdrop(it, dark = 0.34) {
+      const [a, b] = colors(it);
+      const el = mk(stage0, `inset:0;overflow:hidden;background:radial-gradient(circle at 50% 40%,${a},${b} 90%)`);
+      el.innerHTML = `<img src="${it.img}" style="position:absolute;left:${540 - 135}px;top:${960 - 240}px;width:270px;height:480px;object-fit:${it.kind === "map" ? "cover" : "contain"};filter:blur(11px) saturate(1.2);transform:translateY(130px) scale(4.7)">
+        <div style="position:absolute;inset:0;background:rgba(14,6,30,${dark})"></div>`;
+      return el;
+    }
+    let stage0;
+    function build(stage) {
+      stage0 = stage;
+      const bgs = I.map((it) => backdrop(it));
+      const darkBg = mk(stage, `inset:0;background:radial-gradient(circle at 50% 42%,#2b2b36,#0d0d12 75%)`);
+      // ---- hook: title pills, tag, the five cards (top: #2 #1 #3, bottom: #4 #5) ----
+      const hook = mk(stage, `inset:0`);
+      const hookLines = cfg.hook.lines.map((l, i) => pill(hook, l, 520 + i * 78, { size: fit(l, 820, 52, 0.58) }));
+      const tagY = 520 + cfg.hook.lines.length * 78 + 8;
+      const tag1 = pill(hook, cfg.hook.tag, tagY, { size: 28, bg: "rgba(12,10,20,.92)", fg: "#fff" });
+      const tag2 = cfg.hook.tag2 ? pill(hook, cfg.hook.tag2.text, tagY, { size: 28, bg: "rgba(12,10,20,.92)", fg: "#fff" }) : null;
+      const slots = [{ r: 2, x: 62, y: 0 }, { r: 1, x: 340, y: 0 }, { r: 3, x: 618, y: 0 }, { r: 4, x: 201, y: 1 }, { r: 5, x: 479, y: 1 }].filter((s) => s.r <= n);
+      const gridAt = (y0, parent, labels) => slots.map((s, j) => ({ ...s, el: cardEl(parent, I[n - s.r], { w: 240, h: 290, label: labels ? I[n - s.r].recap : null }), y: y0 + s.y * 316, j }));
+      const hookGrid = gridAt(tagY + 66, hook, false);
+      // ---- one group per entry ----
+      const G = I.map((it, i) => {
+        const g = mk(stage, `inset:0`);
+        const card = cardEl(g, it);
+        const rank = mk(g, `right:62px;top:232px;text-align:right`);
+        rank.innerHTML = `<div style="display:inline-block;font-family:Montserrat;font-weight:900;font-style:italic;font-size:178px;line-height:1;letter-spacing:-4px;color:#fff;-webkit-text-stroke:15px ${INK};paint-order:stroke fill;text-shadow:0 10px 0 rgba(0,0,0,.45);padding-right:10px">#${it.rank}</div>`;
+        rank.firstChild.dataset.text = `#${it.rank}`;
+        const lab = mk(g, `right:62px;top:432px;text-align:right`);
+        const ls = fit(it.label, 600, 44, 0.6);
+        lab.innerHTML = `<div style="display:inline-block;padding:${ls * 0.08}px ${ls * 0.36}px ${ls * 0.16}px;border-radius:${ls * 0.26}px;background:#fff;color:${INK};font:800 ${ls}px Montserrat;line-height:1.12;white-space:nowrap;box-shadow:0 6px 16px rgba(0,0,0,.35)">${it.label}</div>`;
+        lab.firstChild.dataset.text = it.label.toUpperCase();
+        const cap = it.cap ? cline(g, it.cap.text, 1222) : null;
+        const extras = (it.extras || []).map((x) => ({ ...x, el: cline(g, x.text, 1180) }));
+        const boxSize = (s) => fit(s, 560, 78, 0.62);
+        const boxes = [{ t: it.cap ? at(it.cap) : tIn[i] + 0.3, text: it.box.hidden }, ...(it.box.count || []).map((c) => ({ t: at(c), text: c.text })), { t: at(it.box.reveal), text: it.box.reveal.text, final: true }]
+          .map((b) => ({ ...b, el: pill(g, b.text, 1262, { size: boxSize(b.text), weight: 900 }) }));
+        const stk = it.sticker ? pill(g, it.sticker.text, 1068, { size: fit(it.sticker.text, 640, 40, 0.58), bg: "rgba(255,255,255,.95)" }) : null;
+        return { g, card, rank, lab, cap, extras, boxes, stk };
+      });
+      // ---- "y el #1 es…" ----
+      const tz = cfg.tease ? (() => {
+        const g = mk(stage, `inset:0`);
+        const card = cardEl(g, I[last], { silhouette: true });
+        const title = mk(g, `right:62px;top:300px;text-align:right`);
+        title.innerHTML = `<div style="display:inline-block;font-family:Montserrat;font-weight:900;font-size:${fit(cfg.tease.title, 620, 66, 0.6)}px;line-height:1;color:#fff;-webkit-text-stroke:9px ${INK};paint-order:stroke fill;text-shadow:0 6px 0 rgba(0,0,0,.45);white-space:nowrap">${cfg.tease.title}</div>`;
+        title.firstChild.dataset.text = cfg.tease.title.toUpperCase();
+        const cap = pill(g, cfg.tease.text, 1100, { size: 34, bg: "rgba(12,10,20,.9)", fg: "#fff" });
+        return { g, card, title, cap };
+      })() : null;
+      // ---- recap ----
+      const rc = mk(stage, `inset:0`);
+      const rcTitle = pill(rc, cfg.recap.title, 540, { size: fit(cfg.recap.title, 820, 46, 0.58) });
+      const rcGrid = gridAt(640, rc, true);
+      const rcCode = pill(rc, "usa el código BAD en la tienda de objetos 🛒", 1290, { size: 34, bg: YEL, weight: 900 });
+      // ---- the creator code, typed in ----
+      const dim = mk(stage, `inset:0;background:rgba(7,6,14,.8)`);
+      const panel = mk(stage, `left:70px;top:700px;width:820px;padding:26px 30px 28px;border-radius:14px;background:linear-gradient(180deg,#1c1c26,#121219);border:3px solid rgba(255,255,255,.12);box-shadow:0 20px 50px rgba(0,0,0,.6)`);
+      panel.innerHTML = `<div style="font-family:'Barlow Condensed';font-weight:900;font-style:italic;font-size:78px;line-height:1;color:#fff;letter-spacing:1px">CÓDIGO DE CREADOR</div>
+        <div style="height:5px;margin:14px 0 22px;background:${YEL};border-radius:3px"></div>
+        <div style="height:74px;border-radius:6px;background:#fff;border:3px solid ${INK};padding:6px 16px;font:900 46px Montserrat;color:${INK};line-height:58px"><span class="typed"></span><span class="caret" style="display:inline-block;width:4px;height:44px;margin-left:3px;vertical-align:-6px;background:${INK}"></span></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:22px">
+          <div class="disc" style="font:800 34px Montserrat;color:#fff">#EpicPartner</div>
+          <div class="ok" style="padding:12px 34px;border-radius:10px;background:${YEL};font:900 36px Montserrat;color:${INK};box-shadow:0 6px 0 #B58F00">Aceptar</div></div>`;
+      panel.querySelector(".ok").dataset.text = "ACEPTAR";
+      panel.firstElementChild.dataset.text = "CÓDIGO DE CREADOR";
+      panel.querySelector(".disc").dataset.text = "#EPICPARTNER";
+      const typedEl = panel.querySelector(".typed"), caret = panel.querySelector(".caret"), okBtn = panel.querySelector(".ok");
+      const cursor = mk(stage, `left:0;top:0;width:52px;height:64px`, `<svg width="52" height="64" viewBox="0 0 26 32"><path d="M2 2 L2 26 L8.5 20 L13 30 L17 28 L12.6 18.4 L21 18.4 Z" fill="#fff" stroke="${INK}" stroke-width="2.2" stroke-linejoin="round"/></svg>`);
+      const done = pill(stage, "✓ APOYA A UN CREADOR: BAD", 812, { size: 46, bg: YEL, weight: 900 });
+      const doneSub = pill(stage, "#EpicPartner", 900, { size: 30, bg: "rgba(12,10,20,.85)", fg: "#fff" });
+      const thanks = thanksES(stage, 1010);
+      const logo = mk(stage, `left:${CX - 190}px;top:1166px;width:380px`, `<img src="${BR}/watermark.svg" style="display:block;width:380px;height:auto">`, "LA TIENDITA BAD");
+      // ---- always on: the code sticker under a little shop awning, and the disclosure ----
+      const stick = mk(stage, `left:56px;top:226px;width:300px`);
+      stick.innerHTML = `<img src="${BR}/awning.svg" style="position:relative;z-index:2;display:block;width:300px;height:auto;transform:rotate(-4deg);transform-origin:0 100%">
+        <div style="position:relative;z-index:1;margin:-14px 0 0 12px;width:272px;padding:12px 0 8px;text-align:center;background:${YEL};border:5px solid ${INK};border-top:0;border-radius:0 0 16px 16px;transform:rotate(-4deg);transform-origin:0 0;box-shadow:0 8px 0 ${INK}">
+          <div style="font-family:Montserrat;font-weight:900;font-size:27px;line-height:1;color:${INK}">USA EL CÓDIGO:</div>
+          <div style="font-family:Montserrat;font-weight:900;font-size:100px;line-height:.9;letter-spacing:-3px;color:${INK}">BAD</div></div>`;
+      stick.dataset.text = "USA EL CÓDIGO: BAD";
+      const disc = mk(stage, `left:66px;top:448px`, `<span style="font:800 25px Montserrat;color:#fff;-webkit-text-stroke:5px rgba(10,6,20,.85);paint-order:stroke fill">#EpicPartner</span>`, "#EPICPARTNER");
+      const fin = S.finish(stage);
+      const vis = (el, a) => { el.style.opacity = a; el.style.visibility = a <= 0.001 ? "hidden" : "visible"; };
+      return function renderAt(t) {
+        // backgrounds: the hook, the recap and the code use the #1's art; the tease is dark
+        const which = t < tIn[0] ? last : t >= recapT ? last : teaseT != null && t >= teaseT && t < tIn[last] ? -1 : I.findIndex((_, i) => t >= tIn[i] && t < tOut[i]);
+        bgs.forEach((b, i) => vis(b, i === which ? 1 : 0));
+        vis(darkBg, which === -1 ? 1 : 0);
+        // hook
+        const hookA = t < tIn[0] ? 1 : 1 - k(t, tIn[0], tIn[0] + 0.18);
+        vis(hook, hookA);
+        hookLines.forEach((h, i) => T(h, { r: i % 2 ? 1.5 : -2, s: E.back(k(t, 0.02 + i * 0.08, 0.3 + i * 0.08)) }));
+        const swap = tag2 ? at(cfg.hook.tag2) : 1e9;
+        T(tag1, { a: t < swap ? 1 : 0, s: E.back(k(t, 0.2, 0.45)) });
+        if (tag2) T(tag2, { a: t >= swap ? 1 : 0, s: E.back(k(t, swap, swap + 0.25)) });
+        hookGrid.forEach((c) => T(c.el, { x: c.x, y: c.y + Math.sin(t * 1.3 + c.j) * 5, r: (c.j % 2 ? 3 : -3) + Math.sin(t + c.j * 2) * 1, s: E.back(k(t, 0.12 + c.j * 0.08, 0.42 + c.j * 0.08)) }));
+        // entries
+        G.forEach((e, i) => {
+          const a = tIn[i], b = tOut[i], on = t >= a - 0.02 && t < b + 0.3;
+          vis(e.g, on ? 1 : 0);
+          if (!on) return;
+          const flashIn = i === last && teaseT != null;           // the #1 appears in place of its silhouette
+          const pin = flashIn ? 1 : E.out5(k(t, a, a + 0.32)), pout = E.in(k(t, b - 0.04, b + 0.24));
+          const x = (1 - pin) * 820 - pout * 900, speed = Math.abs((1 - pin) * 820) > 2 || pout > 0.01;
+          T(e.card, { x: CARD.x + x, y: CARD.y + Math.sin(t * 1.1) * 6, r: (1 - pin) * 7 - pout * 7 + Math.sin(t * 0.8) * 0.8, s: flashIn ? 0.92 + 0.08 * E.back(k(t, a, a + 0.35)) : 1 });
+          e.card.style.filter = speed ? `blur(${Math.min(6, 2 + (1 - pin + pout) * 6).toFixed(1)}px)` : "none";
+          const txtA = t < b - 0.05 ? 1 : 0;
+          T(e.rank, { a: txtA * (t >= a + 0.06 ? 1 : 0), s: 0.7 + 0.3 * E.back(k(t, a + 0.06, a + 0.36)) });
+          T(e.lab, { a: txtA * (t >= a + 0.16 ? 1 : 0), s: 0.8 + 0.2 * E.back(k(t, a + 0.16, a + 0.42)) });
+          if (e.cap) T(e.cap, { a: txtA * (t >= at(I[i].cap) ? 1 : 0), s: 0.85 + 0.15 * E.out(k(t, at(I[i].cap), at(I[i].cap) + 0.2)) });
+          const stkT = e.stk ? at(I[i].sticker) : 1e9;
+          e.extras.forEach((x, j) => { const t0 = at(x), t1 = j < e.extras.length - 1 ? at(e.extras[j + 1]) : stkT; T(x.el, { a: txtA * (t >= t0 && t < t1 ? 1 : 0), s: 0.85 + 0.15 * E.out(k(t, t0, t0 + 0.2)) }); });
+          e.boxes.forEach((bx, j) => { const nx = e.boxes[j + 1]; const show = t >= bx.t && (!nx || t < nx.t); T(bx.el, { a: txtA * (show ? 1 : 0), s: bx.final ? 1.28 - 0.28 * E.back(k(t, bx.t, bx.t + 0.3)) : 1 + 0.1 * (1 - E.out(k(t, bx.t, bx.t + 0.15))) }); });
+          if (e.stk) T(e.stk, { a: txtA * (t >= stkT ? 1 : 0), r: -4, s: 0.6 + 0.4 * E.back(k(t, stkT, stkT + 0.3)) });
+        });
+        // tease
+        if (tz) {
+          const on = t >= teaseT && t < tIn[last];
+          vis(tz.g, on ? 1 : 0);
+          if (on) {
+            const pin = E.out5(k(t, teaseT, teaseT + 0.32));
+            T(tz.card, { x: CARD.x + (1 - pin) * 820, y: CARD.y + Math.sin(t * 1.1) * 6, r: (1 - pin) * 7 });
+            tz.card.style.filter = pin < 0.995 ? `blur(${(2 + (1 - pin) * 6).toFixed(1)}px)` : "none";
+            T(tz.title, { a: t >= teaseT + 0.1 ? 1 : 0, s: 0.8 + 0.2 * E.back(k(t, teaseT + 0.1, teaseT + 0.4)) });
+            T(tz.cap, { a: t >= teaseT + 0.5 ? 1 : 0, s: 0.8 + 0.2 * E.back(k(t, teaseT + 0.5, teaseT + 0.75)) });
+          }
+        }
+        // recap
+        const r0 = recapT + 0.2, rcA = win(t, r0, codeT + 0.35, 0.15, 0.2);
+        vis(rc, rcA);
+        if (rcA > 0) {
+          T(rcTitle, { r: -2, s: 0.85 + 0.15 * E.back(k(t, r0, r0 + 0.3)) });
+          rcGrid.forEach((c) => T(c.el, { x: c.x, y: c.y + Math.sin(t * 1.3 + c.j) * 5, r: (c.j % 2 ? 3 : -3), s: E.back(k(t, r0 + 0.1 + c.j * 0.08, r0 + 0.4 + c.j * 0.08)) }));
+          T(rcCode, { a: t >= codeT - 0.6 ? 1 : 0, s: 0.8 + 0.2 * E.back(k(t, codeT - 0.6, codeT - 0.3)) });
+        }
+        // creator code: typed, accepted, confirmed
+        const cA = t >= codeT + 0.3 ? 1 : 0;
+        vis(dim, cA * 0.95);
+        const pA = cA * (t < okT ? 1 : 1 - k(t, okT, okT + 0.15));
+        T(panel, { a: pA, s: 0.9 + 0.1 * E.back(k(t, codeT + 0.3, codeT + 0.6)) });
+        typedEl.textContent = "BAD".slice(0, typed.filter((x) => t >= x).length);
+        caret.style.opacity = Math.floor(t * 2.4) % 2 ? 0.15 : 1;
+        T(okBtn, { a: t >= typed[2] + 0.15 ? 1 : 0, s: t >= clickT && t < clickT + 0.12 ? 0.92 : 1 });
+        const cx0 = 980, cy0 = 1240, cx1 = 790, cy1 = 1000, cp = E.inOut(k(t, typed[2] + 0.3, clickT - 0.05));
+        T(cursor, { a: pA * (t >= typed[2] + 0.25 ? 1 : 0), x: lerp(cx0, cx1, cp), y: lerp(cy0, cy1, cp), s: t >= clickT && t < clickT + 0.12 ? 0.9 : 1 });
+        T(done, { a: t >= okT ? 1 : 0, s: 0.75 + 0.25 * E.back(k(t, okT, okT + 0.3)) });
+        T(doneSub, { a: t >= okT + 0.15 ? 1 : 0, s: 0.8 + 0.2 * E.back(k(t, okT + 0.15, okT + 0.4)) });
+        T(thanks, { a: t >= thanksT ? 1 : 0, s: 0.9 + 0.1 * E.back(k(t, thanksT, thanksT + 0.3)) });
+        T(logo, { a: t >= okT + 0.3 ? 1 : 0, s: 0.85 + 0.15 * E.back(k(t, okT + 0.3, okT + 0.6)) });
+        T(stick, { s: 0.6 + 0.4 * E.back(k(t, 0, 0.3)) });
+        T(disc, { a: 1 });
+        fin(t, [tIn[last]].filter(() => teaseT != null));
+      };
+    }
+    const cues = [[0.03, "pop"], ...[0.12, 0.2, 0.28, 0.36, 0.44].slice(0, n).map((x) => [x, "flip"])];
+    I.forEach((it, i) => {
+      cues.push([tIn[i] + 0.02, "whoosh"], [tIn[i] + 0.08, "pop"]);
+      (it.box.count || []).forEach((c) => cues.push([at(c), "tick"]));
+      cues.push([at(it.box.reveal), "reveal"]);
+      if (it.sticker) cues.push([at(it.sticker), "pop"]);
+    });
+    if (teaseT != null) cues.push([teaseT + 0.02, "sting"]);
+    cues.push([recapT + 0.02, "whoosh"]);
+    typed.forEach((x) => cues.push([x, "tick"]));
+    cues.push([clickT, "pop"], [okT, "notify"]);
+    if (thanksP) cues.push([thanksT, "chime"]);
+    return { duration: DUR, build, cues, caption: cfg.caption, claims: cfg.claims };
+  }
+
+  root.TPL = { guess, map, news, drop, guide, top, mapPx };
 })(window);

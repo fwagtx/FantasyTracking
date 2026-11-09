@@ -1,0 +1,731 @@
+{
+ "date": "2026-11-09T00:00:00Z",
+ "entries": [
+  {
+   "regularPrice": 1500,
+   "finalPrice": 1500,
+   "devName": "[VIRTUAL]1 x Ravenpool, 1 x Ravenpool's Cage for -1 MtxCurrency",
+   "offerId": "v2:/c1d9ec070bdca3663adfa784455ca4b37523a5c94cab32110acaae68dfa71690",
+   "inDate": "2026-11-08T00:00:00Z",
+   "outDate": "2026-11-11T23:59:59.999Z",
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -2,
+   "layoutId": "DPMash.99",
+   "layout": {
+    "id": "DPMash",
+    "name": "Combinaciones con Deadpool",
+    "index": 19,
+    "rank": 188,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "c81614ff",
+    "color2": "660606ff",
+    "color3": "970e0dff",
+    "textBackgroundColor": "660606ff"
+   },
+   "tileBackgroundMaterial": "Streaks_Marvel",
+   "tileSize": "Size_1_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_CID_745_Athena_Commando_M_RavenQuill",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/DAv2_CID_745_M_RavenQuill",
+   "newDisplayAsset": {
+    "id": "DAv2_CID_745_M_RavenQuill",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__b2eebee08432f2b6_72d809ec4c7e8734.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/b2eebee08432f2b6/renderimage_0.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "CID_745_Athena_Commando_M_RavenQuill",
+     "name": "Cuervopool",
+     "description": "Oscuridad máxima.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "marvel",
+      "displayValue": "SERIE DE MARVEL",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "SERIE DE MARVEL",
+      "colors": [
+       "ed1c24ff",
+       "d60203ff",
+       "b30102ff",
+       "610709ff",
+       "280102ff"
+      ],
+      "backendValue": "MarvelSeries"
+     },
+     "set": {
+      "value": "Deadpool",
+      "text": "Pieza del conjunto Deadpool.",
+      "backendValue": "PropertySector"
+     },
+     "introduction": {
+      "chapter": "2",
+      "season": "2",
+      "text": "Introducido en Capítulo 2, Temporada 2.",
+      "backendValue": 12
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/cid_745_athena_commando_m_ravenquill/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/cid_745_athena_commando_m_ravenquill/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/cid_745_athena_commando_m_ravenquill/featured.png"
+     },
+     "showcaseVideo": "-DYUbMEUtJ8",
+     "added": "2020-04-10T00:00:00Z"
+    },
+    {
+     "id": "BID_525_RavenQuillDonut",
+     "name": "Jaula de Cuervopool",
+     "description": "Todavía no hay escapatoria.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "marvel",
+      "displayValue": "SERIE DE MARVEL",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "SERIE DE MARVEL",
+      "colors": [
+       "ed1c24ff",
+       "d60203ff",
+       "b30102ff",
+       "610709ff",
+       "280102ff"
+      ],
+      "backendValue": "MarvelSeries"
+     },
+     "set": {
+      "value": "Deadpool",
+      "text": "Pieza del conjunto Deadpool.",
+      "backendValue": "PropertySector"
+     },
+     "introduction": {
+      "chapter": "2",
+      "season": "2",
+      "text": "Introducido en Capítulo 2, Temporada 2.",
+      "backendValue": 12
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/bid_525_ravenquilldonut/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/bid_525_ravenquilldonut/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/bid_525_ravenquilldonut/featured.png"
+     },
+     "added": "2020-05-20T10:27:55Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 1500,
+   "finalPrice": 1500,
+   "devName": "[VIRTUAL]1 x Cuddlepool, 1 x Cuddlepool's Bow for -1 MtxCurrency",
+   "offerId": "v2:/cb372c13258c3a3ad5f713e77f566b543f3efdf49721e2d3e94aec2bcf27b6a5",
+   "inDate": "2026-11-08T00:00:00Z",
+   "outDate": "2026-11-11T23:59:59.999Z",
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -3,
+   "layoutId": "DPMash.99",
+   "layout": {
+    "id": "DPMash",
+    "name": "Combinaciones con Deadpool",
+    "index": 19,
+    "rank": 188,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "c81614ff",
+    "color2": "660606ff",
+    "color3": "970e0dff",
+    "textBackgroundColor": "660606ff"
+   },
+   "tileBackgroundMaterial": "Streaks_Marvel",
+   "tileSize": "Size_1_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_CID_746_Athena_Commando_F_FuzzyBear",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/DAv2_CID_746_F_FuzzyBear",
+   "newDisplayAsset": {
+    "id": "DAv2_CID_746_F_FuzzyBear",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__cef8b334ff05fd37_08dd23f2989af6c9.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/cef8b334ff05fd37/renderimage_0.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "CID_746_Athena_Commando_F_FuzzyBear",
+     "name": "Cariñosapool",
+     "description": "Suavidad feroz.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "marvel",
+      "displayValue": "SERIE DE MARVEL",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "SERIE DE MARVEL",
+      "colors": [
+       "ed1c24ff",
+       "d60203ff",
+       "b30102ff",
+       "610709ff",
+       "280102ff"
+      ],
+      "backendValue": "MarvelSeries"
+     },
+     "set": {
+      "value": "Deadpool",
+      "text": "Pieza del conjunto Deadpool.",
+      "backendValue": "PropertySector"
+     },
+     "introduction": {
+      "chapter": "2",
+      "season": "2",
+      "text": "Introducido en Capítulo 2, Temporada 2.",
+      "backendValue": 12
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/cid_746_athena_commando_f_fuzzybear/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/cid_746_athena_commando_f_fuzzybear/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/cid_746_athena_commando_f_fuzzybear/featured.png"
+     },
+     "metaTags": [
+      "Cosmetics.Emote.CharacterGroup.BigHead"
+     ],
+     "showcaseVideo": "gmkdlwDofQk",
+     "added": "2020-04-10T00:00:00Z"
+    },
+    {
+     "id": "BID_526_FuzzyBearDonut",
+     "name": "Lazo de Cariñosapool",
+     "description": "¡Abrazos adicionales!",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "marvel",
+      "displayValue": "SERIE DE MARVEL",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "SERIE DE MARVEL",
+      "colors": [
+       "ed1c24ff",
+       "d60203ff",
+       "b30102ff",
+       "610709ff",
+       "280102ff"
+      ],
+      "backendValue": "MarvelSeries"
+     },
+     "set": {
+      "value": "Deadpool",
+      "text": "Pieza del conjunto Deadpool.",
+      "backendValue": "PropertySector"
+     },
+     "introduction": {
+      "chapter": "2",
+      "season": "2",
+      "text": "Introducido en Capítulo 2, Temporada 2.",
+      "backendValue": 12
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/bid_526_fuzzybeardonut/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/bid_526_fuzzybeardonut/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/bid_526_fuzzybeardonut/featured.png"
+     },
+     "added": "2020-05-20T10:27:55Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 1200,
+   "finalPrice": 1200,
+   "devName": "[VIRTUAL]1 x Skully, 1 x Skully Satchel for -1 MtxCurrency",
+   "offerId": "v2:/f0172ac5c571bc8dcc1bbc025cd7fcba562d92fbba5bce16971bdf6aae09e30a",
+   "inDate": "2026-11-03T00:00:00Z",
+   "outDate": "2026-11-09T23:59:59.999Z",
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -2,
+   "layoutId": "NoSweat110326.98",
+   "layout": {
+    "id": "NoSweat110326",
+    "name": "No te preocupes",
+    "index": 32,
+    "rank": 182,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "499ca8ff",
+    "color2": "012743ff",
+    "color3": "256176ff",
+    "textBackgroundColor": "28788cff"
+   },
+   "tileSize": "Size_1_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_CID_341_Athena_Commando_F_SkullBrite",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/DAv2_CID_341_F_SkullBrite",
+   "newDisplayAsset": {
+    "id": "DAv2_CID_341_F_SkullBrite",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "T-AthenaSoldiers-CID-431-AthenaCommando-F-SkullBrite_01",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/63d797a940747f12/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__63d797a940747f12_bd12a02dd0bc054c.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/63d797a940747f12/renderimage_1.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "T-AthenaSoldiers-CID-431-AthenaCommando-F-SkullBrite_01",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/63d797a940747f12/renderimage_2.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__63d797a940747f12_bd12a02dd0bc054c.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/63d797a940747f12/renderimage_3.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__63d797a940747f12_3228201a7c2cf32a.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/63d797a940747f12/renderimage_4.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "CID_341_Athena_Commando_F_SkullBrite",
+     "name": "Nieve",
+     "description": "No aceptes menos que una dominación con estilo.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Calaveras y lazos",
+      "text": "Pieza del conjunto Calaveras y lazos.",
+      "backendValue": "SkullBrite"
+     },
+     "introduction": {
+      "chapter": "1",
+      "season": "7",
+      "text": "Introducido en Capítulo 1, Temporada 7.",
+      "backendValue": 7
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/cid_341_athena_commando_f_skullbrite/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/cid_341_athena_commando_f_skullbrite/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/cid_341_athena_commando_f_skullbrite/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/cid_341_athena_commando_f_skullbrite/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/cid_341_athena_commando_f_skullbrite/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/cid_341_athena_commando_f_skullbrite/wide.png"
+      },
+      "bean": {
+       "small": "https://fortnite-api.com/images/cosmetics/beans/bean_skullbrite/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/beans/bean_skullbrite/large.png"
+      }
+     },
+     "variants": [
+      {
+       "channel": "Material",
+       "type": "ESTILO",
+       "options": [
+        {
+         "tag": "Mat0",
+         "name": "Cráneo",
+         "image": "https://fortnite-api.com/images/cosmetics/br/cid_341_athena_commando_f_skullbrite/variants/material/mat0.png"
+        },
+        {
+         "tag": "Mat1",
+         "name": "Corazón",
+         "image": "https://fortnite-api.com/images/cosmetics/br/cid_341_athena_commando_f_skullbrite/variants/material/mat1.png"
+        }
+       ]
+      }
+     ],
+     "showcaseVideo": "Op_h4VZealI",
+     "added": "2019-11-20T12:50:06Z"
+    },
+    {
+     "id": "BID_211_SkullBrite",
+     "name": "Mochila de Calaverita",
+     "description": "Perturbadora y adorable a la vez.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Calaveras y lazos",
+      "text": "Pieza del conjunto Calaveras y lazos.",
+      "backendValue": "SkullBrite"
+     },
+     "introduction": {
+      "chapter": "1",
+      "season": "7",
+      "text": "Introducido en Capítulo 1, Temporada 7.",
+      "backendValue": 7
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/bid_211_skullbrite/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/bid_211_skullbrite/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/bid_211_skullbrite/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Parts",
+       "type": "ESTILO",
+       "options": [
+        {
+         "tag": "Stage0",
+         "name": "Cráneo",
+         "image": "https://fortnite-api.com/images/cosmetics/br/bid_211_skullbrite/variants/parts/stage0.png"
+        },
+        {
+         "tag": "Stage1",
+         "name": "Corazón",
+         "image": "https://fortnite-api.com/images/cosmetics/br/bid_211_skullbrite/variants/parts/stage1.png"
+        }
+       ]
+      }
+     ],
+     "added": "2019-11-20T12:50:36Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 1200,
+   "finalPrice": 1200,
+   "devName": "[VIRTUAL]1 x Sparkplug, 1 x Scrappy for -1 MtxCurrency",
+   "offerId": "v2:/abedcf0bd324443dfa1daea50fa10d172da48eeeaf0118707e5d592b37149418",
+   "inDate": "2026-11-03T00:00:00Z",
+   "outDate": "2026-11-09T23:59:59.999Z",
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -6,
+   "layoutId": "NoSweat110326.99",
+   "layout": {
+    "id": "NoSweat110326",
+    "name": "No te preocupes",
+    "index": 32,
+    "rank": 182,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "499ca8ff",
+    "color2": "012743ff",
+    "color3": "256176ff",
+    "textBackgroundColor": "28788cff"
+   },
+   "tileSize": "Size_1_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_CID_335_Athena_Commando_F_Scrapyard",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/DAv2_CID_335_F_Scrapyard",
+   "newDisplayAsset": {
+    "id": "DAv2_CID_335_F_Scrapyard",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__cbcad97d0b2a5673_dea44fbed7cf42c3.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/cbcad97d0b2a5673/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__cbcad97d0b2a5673_3a19965cd80bce7b.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/cbcad97d0b2a5673/renderimage_1.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__cbcad97d0b2a5673_03901630ce170c79.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/cbcad97d0b2a5673/renderimage_2.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "CID_335_Athena_Commando_F_Scrapyard",
+     "name": "Bujía",
+     "description": "Desarma a la competencia.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Depósito de chatarra",
+      "text": "Pieza del conjunto Depósito de chatarra.",
+      "backendValue": "Scrapyard"
+     },
+     "introduction": {
+      "chapter": "1",
+      "season": "7",
+      "text": "Introducido en Capítulo 1, Temporada 7.",
+      "backendValue": 7
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/cid_335_athena_commando_f_scrapyard/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/cid_335_athena_commando_f_scrapyard/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/cid_335_athena_commando_f_scrapyard/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/cid_335_athena_commando_f_scrapyard/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/cid_335_athena_commando_f_scrapyard/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/cid_335_athena_commando_f_scrapyard/wide.png"
+      },
+      "bean": {
+       "small": "https://fortnite-api.com/images/cosmetics/beans/bean_scrapyard/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/beans/bean_scrapyard/large.png"
+      }
+     },
+     "variants": [
+      {
+       "channel": "Parts",
+       "type": "ESTILO",
+       "options": [
+        {
+         "tag": "Stage1",
+         "name": "PREDETERMINADO",
+         "image": "https://fortnite-api.com/images/cosmetics/br/cid_335_athena_commando_f_scrapyard/variants/parts/stage1.png"
+        },
+        {
+         "tag": "Stage2",
+         "name": "TINTA",
+         "image": "https://fortnite-api.com/images/cosmetics/br/cid_335_athena_commando_f_scrapyard/variants/parts/stage2.png"
+        }
+       ]
+      }
+     ],
+     "showcaseVideo": "xG_A_mV_rJM",
+     "added": "2019-11-20T12:48:08Z"
+    },
+    {
+     "id": "BID_206_ScrapyardFemale",
+     "name": "Chatarrita",
+     "description": "Ladra desde el depósito de chatarra.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Depósito de chatarra",
+      "text": "Pieza del conjunto Depósito de chatarra.",
+      "backendValue": "Scrapyard"
+     },
+     "introduction": {
+      "chapter": "1",
+      "season": "7",
+      "text": "Introducido en Capítulo 1, Temporada 7.",
+      "backendValue": 7
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/bid_206_scrapyardfemale/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/bid_206_scrapyardfemale/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/bid_206_scrapyardfemale/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Parts",
+       "type": "ESTILO",
+       "options": [
+        {
+         "tag": "Stage1",
+         "name": "PREDETERMINADO",
+         "image": "https://fortnite-api.com/images/cosmetics/br/bid_206_scrapyardfemale/variants/parts/stage1.png"
+        },
+        {
+         "tag": "Stage2",
+         "name": "MOTOR",
+         "image": "https://fortnite-api.com/images/cosmetics/br/bid_206_scrapyardfemale/variants/parts/stage2.png"
+        }
+       ]
+      }
+     ],
+     "added": "2019-11-20T12:50:36Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 1500,
+   "finalPrice": 1500,
+   "devName": "[VIRTUAL]1 x Tender Defender, 1 x Hatchback for -1 MtxCurrency",
+   "offerId": "v2:/a9fb0396b2a3b0e3b24ae2849e63922a5941863f795d88cd0a7d0167c23767f7",
+   "inDate": "2026-11-09T00:00:00Z",
+   "outDate": "2026-11-12T23:59:59.999Z",
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -2,
+   "layoutId": "BR110926.99",
+   "layout": {
+    "id": "BR110926",
+    "name": "Estilo de élite",
+    "index": 11,
+    "rank": 184,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "8ad986ff",
+    "color3": "05544cff",
+    "textBackgroundColor": "05544cff"
+   },
+   "tileSize": "Size_1_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_CID_274_Athena_Commando_M_Feathers",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/DAv2_CID_274_M_Feathers",
+   "newDisplayAsset": {
+    "id": "DAv2_CID_274_M_Feathers",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__c71c4d7782f44e28_03b1b5c25fd5e4ab.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/c71c4d7782f44e28/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__c71c4d7782f44e28_534cdafbe5d674e4.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/c71c4d7782f44e28/renderimage_1.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "CID_274_Athena_Commando_M_Feathers",
+     "name": "Defensor sabroso",
+     "description": "Protege tus nuggets.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "Acto gallinal",
+      "text": "Pieza del conjunto Acto gallinal.",
+      "backendValue": "Feathers"
+     },
+     "introduction": {
+      "chapter": "1",
+      "season": "6",
+      "text": "Introducido en Capítulo 1, Temporada 6.",
+      "backendValue": 6
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/cid_274_athena_commando_m_feathers/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/cid_274_athena_commando_m_feathers/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/cid_274_athena_commando_m_feathers/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/cid_274_athena_commando_m_feathers/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/cid_274_athena_commando_m_feathers/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/cid_274_athena_commando_m_feathers/wide.png"
+      },
+      "bean": {
+       "small": "https://fortnite-api.com/images/cosmetics/beans/bean_tenderdefender/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/beans/bean_tenderdefender/large.png"
+      }
+     },
+     "metaTags": [
+      "Cosmetics.Emote.CharacterGroup.BigHead"
+     ],
+     "showcaseVideo": "2kzCDRxZvks",
+     "added": "2019-11-20T12:50:11Z"
+    },
+    {
+     "id": "BID_154_Feathers",
+     "name": "Pollo Jr. será",
+     "description": "Sal del cascarón.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "Acto gallinal",
+      "text": "Pieza del conjunto Acto gallinal.",
+      "backendValue": "Feathers"
+     },
+     "introduction": {
+      "chapter": "1",
+      "season": "6",
+      "text": "Introducido en Capítulo 1, Temporada 6.",
+      "backendValue": 6
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/bid_154_feathers/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/bid_154_feathers/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/bid_154_feathers/featured.png"
+     },
+     "showcaseVideo": "s82BTN05UuQ",
+     "added": "2019-11-20T12:50:37Z"
+    }
+   ]
+  }
+ ]
+}

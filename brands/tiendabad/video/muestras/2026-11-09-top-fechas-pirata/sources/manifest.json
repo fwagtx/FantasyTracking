@@ -1,0 +1,35 @@
+{
+ "via": "Press reports that quote Epic's own statements: the Fortnite Status post of Nov 7, 2026 with the Treasure Hunt odds and the Treasure Hours schedule (x.com/FortniteStatus/status/2119202610322227327). fortnite.com and x.com are not reachable from cloud sessions, so the articles are the saved copy; each file holds verbatim passages. Plus Epic's in-game news and item shop data (fortnite-api.com mirror, es-419).",
+ "files": [
+  {
+   "file": "vgc-guide.json",
+   "source": "VGC: Fortnite Pirate Shop Token guide (published Nov 5, 2026, updated Nov 8 with Epic's confirmed odds)",
+   "url": "https://www.videogameschronicle.com/news/fortnite-pirate-shop-access-token-guide/",
+   "fetched_utc": "2026-11-09T14:42:16Z"
+  },
+  {
+   "file": "vgc-odds-confirmed.json",
+   "source": "VGC: Fortnite officially confirms Pirate Shop Access Token drop rate (Nov 9, 2026), reporting Epic's Fortnite Status post",
+   "url": "https://www.videogameschronicle.com/news/fortnite-officially-confirms-pirate-shop-access-token-drop-rate-as-players-hunt-for-item-which-makes-entire-shop-free/",
+   "fetched_utc": "2026-11-09T14:42:16Z"
+  },
+  {
+   "file": "gamingbible.json",
+   "source": "GAMINGbible: How to get Fortnite's Pirate Shop Token (Nov 2, 2026)",
+   "url": "https://www.gamingbible.com/news/how-to-get-fortnite-pirate-shop-token-068575-20261102",
+   "fetched_utc": "2026-11-09T14:42:16Z"
+  },
+  {
+   "file": "news.json",
+   "source": "In-game news feed, Battle Royale (es-419)",
+   "url": "https://fortnite-api.com/v2/news/br?language=es-419",
+   "fetched_utc": "2026-11-09T17:17:58Z"
+  },
+  {
+   "file": "onepiece-shop.json",
+   "source": "Epic's item shop (es-419): the One Piece entries and their outDate",
+   "url": "https://fortnite-api.com/v2/shop?language=es-419",
+   "fetched_utc": "2026-11-09T16:27:07Z"
+  }
+ ]
+}

@@ -1,0 +1,1246 @@
+{
+ "date": "2026-11-09T00:00:00Z",
+ "entries": [
+  {
+   "regularPrice": 1500,
+   "finalPrice": 1500,
+   "devName": "[VIRTUAL]1 x Stormtrooper Samurai, 1 x Imperial Banner for -1 MtxCurrency",
+   "offerId": "v2:/1e0a7464e616cfe5790ffd6821de1f9f923ea865d4f00ff4f3c3778cb93e8884",
+   "inDate": "2026-11-09T00:00:00Z",
+   "outDate": "2026-11-12T23:59:59.999Z",
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -3,
+   "layoutId": "SamuraiSW.99",
+   "layout": {
+    "id": "SamuraiSW",
+    "name": "Star Wars",
+    "index": 2,
+    "rank": 192,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "c01b1cff",
+    "color2": "ff4c56ff",
+    "color3": "6c0037ff",
+    "textBackgroundColor": "ff4c56ff"
+   },
+   "tileBackgroundMaterial": "ShopTile_Holographic",
+   "tileSize": "Size_1_x_1",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S33/DAv2_Character_BeetTread",
+   "newDisplayAsset": {
+    "id": "DAv2_Character_BeetTread",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__ea551fbb2ba3f67d_b275206a8e6e35fc.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/ea551fbb2ba3f67d/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__ea551fbb2ba3f67d_2a118f5237ab7a67.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/ea551fbb2ba3f67d/renderimage_1.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Character_BeetTread",
+     "name": "Stormtrooper samurái",
+     "description": "Los mortíferos y leales soldados de Vader.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "starwars",
+      "displayValue": "Saga Star Wars",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "Saga Star Wars",
+      "image": "https://fortnite-api.com/images/cosmetics/series/columbusseries.png",
+      "colors": [
+       "ffd800ff",
+       "2555b2ff",
+       "0a1833ff",
+       "040a14ff",
+       "050500ff"
+      ],
+      "backendValue": "ColumbusSeries"
+     },
+     "set": {
+      "value": "Star Wars samurái",
+      "text": "Pieza del conjunto Star Wars samurái.",
+      "backendValue": "MindSphere"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "1",
+      "text": "Introducido en Capítulo 6, Temporada 1.",
+      "backendValue": 33
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_beettread/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_beettread/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_beettread/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_beettread/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_beettread/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_beettread/wide.png"
+      }
+     },
+     "showcaseVideo": "mG4XPKHjCv4",
+     "added": "2024-12-25T00:00:00Z"
+    },
+    {
+     "id": "Backpack_BeetTread",
+     "name": "Estandarte Imperial",
+     "description": "Porta el símbolo del Imperio.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "starwars",
+      "displayValue": "Saga Star Wars",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Saga Star Wars",
+      "image": "https://fortnite-api.com/images/cosmetics/series/columbusseries.png",
+      "colors": [
+       "ffd800ff",
+       "2555b2ff",
+       "0a1833ff",
+       "040a14ff",
+       "050500ff"
+      ],
+      "backendValue": "ColumbusSeries"
+     },
+     "set": {
+      "value": "Star Wars samurái",
+      "text": "Pieza del conjunto Star Wars samurái.",
+      "backendValue": "MindSphere"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "1",
+      "text": "Introducido en Capítulo 6, Temporada 1.",
+      "backendValue": 33
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_beettread/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_beettread/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_beettread/featured.png"
+     },
+     "added": "2024-12-25T00:00:00Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 5600,
+   "finalPrice": 3200,
+   "devName": "[VIRTUAL]1 x Darth Vader Samurai, 1 x Stormtrooper Samurai, 1 x Lil' TIE Attack, 1 x Vader's Katana, 1 x Vader's Katana, 1 x Trooper's Kamayari, 1 x Imperial Banner, 1 x Trooper Samurai, 1 x Vader Samurai for -1 MtxCurrency",
+   "offerId": "v2:/2067c212fb36b9c4d2a226e7c73c1d877102c4cfa0f7bd8c283005cd0984a77a",
+   "inDate": "2026-11-09T00:00:00Z",
+   "outDate": "2026-11-12T23:59:59.999Z",
+   "bundle": {
+    "name": "Lote Star Wars samurái",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/e9de63953eb67b32/renderimage_0.png"
+   },
+   "banner": {
+    "value": "2400 monedas V de descuento",
+    "intensity": "Low",
+    "backendValue": "AmountOff"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -1,
+   "layoutId": "SamuraiSW.99",
+   "layout": {
+    "id": "SamuraiSW",
+    "name": "Star Wars",
+    "index": 2,
+    "rank": 192,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "c01b1cff",
+    "color2": "ff4c56ff",
+    "color3": "6c0037ff",
+    "textBackgroundColor": "ff4c56ff"
+   },
+   "tileBackgroundMaterial": "ShopTile_Holographic",
+   "tileSize": "Size_2_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_SequinPieBeetTread_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S33/DAv2_Bundle_Featured_SequinPieBeetTread",
+   "newDisplayAsset": {
+    "id": "DAv2_Bundle_Featured_SequinPieBeetTread",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__e9de63953eb67b32_922bd219dc1c7982.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/e9de63953eb67b32/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__e9de63953eb67b32_94e2c5ebb36cac5a.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/e9de63953eb67b32/renderimage_1.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Character_SequinPie",
+     "name": "Darth Vader samurái",
+     "description": "Tu falta de fe le resulta molesta.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "starwars",
+      "displayValue": "Saga Star Wars",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "Saga Star Wars",
+      "image": "https://fortnite-api.com/images/cosmetics/series/columbusseries.png",
+      "colors": [
+       "ffd800ff",
+       "2555b2ff",
+       "0a1833ff",
+       "040a14ff",
+       "050500ff"
+      ],
+      "backendValue": "ColumbusSeries"
+     },
+     "set": {
+      "value": "Star Wars samurái",
+      "text": "Pieza del conjunto Star Wars samurái.",
+      "backendValue": "MindSphere"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "1",
+      "text": "Introducido en Capítulo 6, Temporada 1.",
+      "backendValue": 33
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_sequinpie/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_sequinpie/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_sequinpie/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_sequinpie/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_sequinpie/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_sequinpie/wide.png"
+      }
+     },
+     "showcaseVideo": "OW5HDpeZKuc",
+     "added": "2024-12-25T00:00:00Z"
+    },
+    {
+     "id": "Character_BeetTread",
+     "name": "Stormtrooper samurái",
+     "description": "Los mortíferos y leales soldados de Vader.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "starwars",
+      "displayValue": "Saga Star Wars",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "Saga Star Wars",
+      "image": "https://fortnite-api.com/images/cosmetics/series/columbusseries.png",
+      "colors": [
+       "ffd800ff",
+       "2555b2ff",
+       "0a1833ff",
+       "040a14ff",
+       "050500ff"
+      ],
+      "backendValue": "ColumbusSeries"
+     },
+     "set": {
+      "value": "Star Wars samurái",
+      "text": "Pieza del conjunto Star Wars samurái.",
+      "backendValue": "MindSphere"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "1",
+      "text": "Introducido en Capítulo 6, Temporada 1.",
+      "backendValue": 33
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_beettread/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_beettread/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_beettread/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_beettread/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_beettread/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_beettread/wide.png"
+      }
+     },
+     "showcaseVideo": "mG4XPKHjCv4",
+     "added": "2024-12-25T00:00:00Z"
+    },
+    {
+     "id": "EID_SequinPie",
+     "name": "Ataque de TIE chiquito",
+     "description": "Defiende el Imperio.",
+     "type": {
+      "value": "emote",
+      "displayValue": "Gesto",
+      "backendValue": "AthenaDance"
+     },
+     "rarity": {
+      "value": "starwars",
+      "displayValue": "Saga Star Wars",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "series": {
+      "value": "Saga Star Wars",
+      "image": "https://fortnite-api.com/images/cosmetics/series/columbusseries.png",
+      "colors": [
+       "ffd800ff",
+       "2555b2ff",
+       "0a1833ff",
+       "040a14ff",
+       "050500ff"
+      ],
+      "backendValue": "ColumbusSeries"
+     },
+     "set": {
+      "value": "Star Wars samurái",
+      "text": "Pieza del conjunto Star Wars samurái.",
+      "backendValue": "MindSphere"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "1",
+      "text": "Introducido en Capítulo 6, Temporada 1.",
+      "backendValue": 33
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/eid_sequinpie/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/eid_sequinpie/icon.png"
+     },
+     "showcaseVideo": "VrH5hHDVdH8",
+     "added": "2024-12-25T00:00:00Z"
+    },
+    {
+     "id": "Pickaxe_SequinPie",
+     "name": "Katana de Vader",
+     "description": "Igual de fiable que un sable de Luz.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "starwars",
+      "displayValue": "Saga Star Wars",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Saga Star Wars",
+      "image": "https://fortnite-api.com/images/cosmetics/series/columbusseries.png",
+      "colors": [
+       "ffd800ff",
+       "2555b2ff",
+       "0a1833ff",
+       "040a14ff",
+       "050500ff"
+      ],
+      "backendValue": "ColumbusSeries"
+     },
+     "set": {
+      "value": "Star Wars samurái",
+      "text": "Pieza del conjunto Star Wars samurái.",
+      "backendValue": "MindSphere"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "1",
+      "text": "Introducido en Capítulo 6, Temporada 1.",
+      "backendValue": 33
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_sequinpie/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_sequinpie/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_sequinpie/featured.png"
+     },
+     "added": "2024-12-25T00:00:00Z"
+    },
+    {
+     "id": "Backpack_SequinPie",
+     "name": "Katana de Vader",
+     "description": "Igual de fiable que un sable de Luz.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "starwars",
+      "displayValue": "Saga Star Wars",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Saga Star Wars",
+      "image": "https://fortnite-api.com/images/cosmetics/series/columbusseries.png",
+      "colors": [
+       "ffd800ff",
+       "2555b2ff",
+       "0a1833ff",
+       "040a14ff",
+       "050500ff"
+      ],
+      "backendValue": "ColumbusSeries"
+     },
+     "set": {
+      "value": "Star Wars samurái",
+      "text": "Pieza del conjunto Star Wars samurái.",
+      "backendValue": "MindSphere"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "1",
+      "text": "Introducido en Capítulo 6, Temporada 1.",
+      "backendValue": 33
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_sequinpie/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_sequinpie/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_sequinpie/featured.png"
+     },
+     "metaTags": [
+      "Cosmetics.MetaTags.SequinPie"
+     ],
+     "added": "2024-12-25T00:00:00Z"
+    },
+    {
+     "id": "Pickaxe_BeetTread",
+     "name": "Kamayari de Stormtrooper",
+     "description": "Una lanza con la hoja perfectamente afilada.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "starwars",
+      "displayValue": "Saga Star Wars",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Saga Star Wars",
+      "image": "https://fortnite-api.com/images/cosmetics/series/columbusseries.png",
+      "colors": [
+       "ffd800ff",
+       "2555b2ff",
+       "0a1833ff",
+       "040a14ff",
+       "050500ff"
+      ],
+      "backendValue": "ColumbusSeries"
+     },
+     "set": {
+      "value": "Star Wars samurái",
+      "text": "Pieza del conjunto Star Wars samurái.",
+      "backendValue": "MindSphere"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "1",
+      "text": "Introducido en Capítulo 6, Temporada 1.",
+      "backendValue": 33
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_beettread/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_beettread/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_beettread/featured.png"
+     },
+     "showcaseVideo": "-VT1HiU6F5w",
+     "added": "2024-12-25T00:00:00Z"
+    },
+    {
+     "id": "Backpack_BeetTread",
+     "name": "Estandarte Imperial",
+     "description": "Porta el símbolo del Imperio.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "starwars",
+      "displayValue": "Saga Star Wars",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Saga Star Wars",
+      "image": "https://fortnite-api.com/images/cosmetics/series/columbusseries.png",
+      "colors": [
+       "ffd800ff",
+       "2555b2ff",
+       "0a1833ff",
+       "040a14ff",
+       "050500ff"
+      ],
+      "backendValue": "ColumbusSeries"
+     },
+     "set": {
+      "value": "Star Wars samurái",
+      "text": "Pieza del conjunto Star Wars samurái.",
+      "backendValue": "MindSphere"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "1",
+      "text": "Introducido en Capítulo 6, Temporada 1.",
+      "backendValue": 33
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_beettread/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_beettread/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_beettread/featured.png"
+     },
+     "added": "2024-12-25T00:00:00Z"
+    },
+    {
+     "id": "Wrap_BeetTread",
+     "name": "Stormtrooper samurái",
+     "description": "Muestra tu estilo.",
+     "type": {
+      "value": "wrap",
+      "displayValue": "Papel",
+      "backendValue": "AthenaItemWrap"
+     },
+     "rarity": {
+      "value": "starwars",
+      "displayValue": "Saga Star Wars",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "series": {
+      "value": "Saga Star Wars",
+      "image": "https://fortnite-api.com/images/cosmetics/series/columbusseries.png",
+      "colors": [
+       "ffd800ff",
+       "2555b2ff",
+       "0a1833ff",
+       "040a14ff",
+       "050500ff"
+      ],
+      "backendValue": "ColumbusSeries"
+     },
+     "set": {
+      "value": "Star Wars samurái",
+      "text": "Pieza del conjunto Star Wars samurái.",
+      "backendValue": "MindSphere"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "1",
+      "text": "Introducido en Capítulo 6, Temporada 1.",
+      "backendValue": 33
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/wrap_beettread/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/wrap_beettread/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/wrap_beettread/featured.png"
+     },
+     "showcaseVideo": "oqG4nry7mBc",
+     "added": "2024-12-25T00:00:00Z"
+    },
+    {
+     "id": "Wrap_SequinPie",
+     "name": "Vader samurái",
+     "description": "Muestra tu estilo.",
+     "type": {
+      "value": "wrap",
+      "displayValue": "Papel",
+      "backendValue": "AthenaItemWrap"
+     },
+     "rarity": {
+      "value": "starwars",
+      "displayValue": "Saga Star Wars",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "series": {
+      "value": "Saga Star Wars",
+      "image": "https://fortnite-api.com/images/cosmetics/series/columbusseries.png",
+      "colors": [
+       "ffd800ff",
+       "2555b2ff",
+       "0a1833ff",
+       "040a14ff",
+       "050500ff"
+      ],
+      "backendValue": "ColumbusSeries"
+     },
+     "set": {
+      "value": "Star Wars samurái",
+      "text": "Pieza del conjunto Star Wars samurái.",
+      "backendValue": "MindSphere"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "1",
+      "text": "Introducido en Capítulo 6, Temporada 1.",
+      "backendValue": 33
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/wrap_sequinpie/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/wrap_sequinpie/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/wrap_sequinpie/featured.png"
+     },
+     "showcaseVideo": "-fmR4Zx80to",
+     "added": "2024-12-25T00:00:00Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 1200,
+   "finalPrice": 1200,
+   "devName": "[VIRTUAL]1 x Syncopator for 1200 MtxCurrency",
+   "offerId": "v2:/99d148a97e1c3ed528c194ff1c69712e01b7afaec55900a4adbc8ec1631ad04d",
+   "inDate": "2026-11-09T00:00:00Z",
+   "outDate": "2026-11-12T23:59:59.999Z",
+   "offerTag": {
+    "id": "outfitlightmusic",
+    "text": "¡El atuendo se enciende y cambia de color según la música!"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -2,
+   "layoutId": "BR110926.98",
+   "layout": {
+    "id": "BR110926",
+    "name": "Estilo de élite",
+    "index": 11,
+    "rank": 184,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "8ad986ff",
+    "color3": "05544cff",
+    "textBackgroundColor": "05544cff"
+   },
+   "tileSize": "Size_1_x_1",
+   "displayAssetPath": "/Game/Catalog/DisplayAssets/DA_Featured_CID_A_164_Athena_Commando_M_Stands_B",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/DAv2_CID_A_164_M_Stands_B",
+   "newDisplayAsset": {
+    "id": "DAv2_CID_A_164_M_Stands_B",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__d5c38e6464bf5114_b79677ae5a4d99c1.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/d5c38e6464bf5114/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__d5c38e6464bf5114_26b3094b22f63539.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/d5c38e6464bf5114/renderimage_1.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__d5c38e6464bf5114_1c3c1155eb85cf34.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/d5c38e6464bf5114/renderimage_2.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "CID_A_164_Athena_Commando_M_Stands_B",
+     "name": "Sincopador",
+     "description": "Mantén un ritmo de 4/4 perfecto. Siempre.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Dale a reproducir",
+      "text": "Pieza del conjunto Dale a reproducir.",
+      "backendValue": "HitStart"
+     },
+     "introduction": {
+      "chapter": "2",
+      "season": "7",
+      "text": "Introducido en Capítulo 2, Temporada 7.",
+      "backendValue": 17
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/cid_a_164_athena_commando_m_stands_b/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/cid_a_164_athena_commando_m_stands_b/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/cid_a_164_athena_commando_m_stands_b/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/cid_a_164_athena_commando_m_stands_b/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/cid_a_164_athena_commando_m_stands_b/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/cid_a_164_athena_commando_m_stands_b/wide.png"
+      },
+      "bean": {
+       "small": "https://fortnite-api.com/images/cosmetics/beans/bean_standsab/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/beans/bean_standsab/large.png"
+      }
+     },
+     "variants": [
+      {
+       "channel": "Material",
+       "type": "color",
+       "options": [
+        {
+         "tag": "Mat1",
+         "name": "predeterminado",
+         "image": "https://fortnite-api.com/images/cosmetics/br/cid_a_164_athena_commando_m_stands_b/variants/material/mat1.png"
+        },
+        {
+         "tag": "Mat2",
+         "name": "blanco",
+         "image": "https://fortnite-api.com/images/cosmetics/br/cid_a_164_athena_commando_m_stands_b/variants/material/mat2.png"
+        }
+       ]
+      },
+      {
+       "channel": "Emissive",
+       "type": "emisivo",
+       "options": [
+        {
+         "tag": "Emissive2",
+         "name": "activado",
+         "image": "https://fortnite-api.com/images/cosmetics/br/cid_a_164_athena_commando_m_stands_b/variants/emissive/emissive2.png"
+        },
+        {
+         "tag": "Emissive1",
+         "name": "desactivado",
+         "image": "https://fortnite-api.com/images/cosmetics/br/cid_a_164_athena_commando_m_stands_b/variants/emissive/emissive1.png"
+        }
+       ]
+      }
+     ],
+     "showcaseVideo": "7M5fifj1xRk",
+     "added": "2021-08-03T11:17:43Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 1500,
+   "finalPrice": 1500,
+   "devName": "[VIRTUAL]1 x Free Kick Maverick for 1500 MtxCurrency",
+   "offerId": "v2:/368a3d4b5201684625bb69f2d7baf3626cabfbe2d76ea2da93e654f81ce607a4",
+   "inDate": "2026-11-09T00:00:00Z",
+   "outDate": "2026-11-09T23:59:59.999Z",
+   "offerTag": {
+    "id": "promodesc67",
+    "text": "¡Escoge un prestablecido de país o personaliza más de 20 componentes para crear tu propio estilo!"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -1,
+   "layoutId": "BR110926.97",
+   "layout": {
+    "id": "BR110926",
+    "name": "Estilo de élite",
+    "index": 11,
+    "rank": 184,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "8ad986ff",
+    "color3": "05544cff",
+    "textBackgroundColor": "05544cff"
+   },
+   "tileSize": "Size_1_x_1",
+   "displayAssetPath": "/Game/Catalog/DisplayAssets/DA_Featured_Character_ImpulseSpring_B",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S22/DAv2_Character_ImpulseSpring_B",
+   "newDisplayAsset": {
+    "id": "DAv2_Character_ImpulseSpring_B",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__be317d94930ec62a_c301a2d5095db02a.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/be317d94930ec62a/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__be317d94930ec62a_9af7387b72ec0732.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/be317d94930ec62a/renderimage_1.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Character_ImpulseSpring_B",
+     "name": "Especialista en tiros libres",
+     "description": "Siempre una jugada por delante.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "Muéstrales tu pasión",
+      "text": "Pieza del conjunto Muéstrales tu pasión.",
+      "backendValue": "TellEm"
+     },
+     "introduction": {
+      "chapter": "3",
+      "season": "4",
+      "text": "Introducido en Capítulo 3, Temporada 4.",
+      "backendValue": 22
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_impulsespring_b/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_impulsespring_b/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_impulsespring_b/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_impulsespring_b/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_impulsespring_b/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_impulsespring_b/wide.png"
+      },
+      "bean": {
+       "small": "https://fortnite-api.com/images/cosmetics/beans/bean_impulsespring_b/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/beans/bean_impulsespring_b/large.png"
+      }
+     },
+     "variants": [
+      {
+       "channel": "JerseyColor",
+       "type": "País",
+       "options": [
+        {
+         "tag": "Mat1",
+         "name": "ENG",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_impulsespring_b/variants/jerseycolor/mat1.png"
+        },
+        {
+         "tag": "Mat3",
+         "name": "MEX",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_impulsespring_b/variants/jerseycolor/mat3.png"
+        },
+        {
+         "tag": "Mat4",
+         "name": "JPN",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_impulsespring_b/variants/jerseycolor/mat4.png"
+        },
+        {
+         "tag": "Mat5",
+         "name": "URU",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_impulsespring_b/variants/jerseycolor/mat5.png"
+        },
+        {
+         "tag": "Mat6",
+         "name": "EE. UU.",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_impulsespring_b/variants/jerseycolor/mat6.png"
+        },
+        {
+         "tag": "Mat7",
+         "name": "ECU",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_impulsespring_b/variants/jerseycolor/mat7.png"
+        },
+        {
+         "tag": "Mat8",
+         "name": "CAN",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_impulsespring_b/variants/jerseycolor/mat8.png"
+        },
+        {
+         "tag": "Mat9",
+         "name": "GHA",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_impulsespring_b/variants/jerseycolor/mat9.png"
+        },
+        {
+         "tag": "Mat10",
+         "name": "SEN",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_impulsespring_b/variants/jerseycolor/mat10.png"
+        },
+        {
+         "tag": "Mat11",
+         "name": "POL",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_impulsespring_b/variants/jerseycolor/mat11.png"
+        },
+        {
+         "tag": "Mat12",
+         "name": "POR",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_impulsespring_b/variants/jerseycolor/mat12.png"
+        },
+        {
+         "tag": "Mat13",
+         "name": "TUN",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_impulsespring_b/variants/jerseycolor/mat13.png"
+        },
+        {
+         "tag": "Mat14",
+         "name": "MAR",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_impulsespring_b/variants/jerseycolor/mat14.png"
+        },
+        {
+         "tag": "Mat15",
+         "name": "CMR",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_impulsespring_b/variants/jerseycolor/mat15.png"
+        },
+        {
+         "tag": "Mat16",
+         "name": "WAL",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_impulsespring_b/variants/jerseycolor/mat16.png"
+        },
+        {
+         "tag": "Mat17",
+         "name": "AUS",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_impulsespring_b/variants/jerseycolor/mat17.png"
+        },
+        {
+         "tag": "Mat18",
+         "name": "CRC",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_impulsespring_b/variants/jerseycolor/mat18.png"
+        },
+        {
+         "tag": "Mat19",
+         "name": "ARG",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_impulsespring_b/variants/jerseycolor/mat19.png"
+        },
+        {
+         "tag": "Mat20",
+         "name": "BEL",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_impulsespring_b/variants/jerseycolor/mat20.png"
+        },
+        {
+         "tag": "Mat21",
+         "name": "BRA",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_impulsespring_b/variants/jerseycolor/mat21.png"
+        },
+        {
+         "tag": "Mat22",
+         "name": "CRO",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_impulsespring_b/variants/jerseycolor/mat22.png"
+        },
+        {
+         "tag": "Mat23",
+         "name": "DEN",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_impulsespring_b/variants/jerseycolor/mat23.png"
+        },
+        {
+         "tag": "Mat24",
+         "name": "FRA",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_impulsespring_b/variants/jerseycolor/mat24.png"
+        },
+        {
+         "tag": "Mat25",
+         "name": "GER",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_impulsespring_b/variants/jerseycolor/mat25.png"
+        },
+        {
+         "tag": "Stage10",
+         "name": "IRA",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_impulsespring_b/variants/jerseycolor/stage10.png"
+        },
+        {
+         "tag": "Stage11",
+         "name": "NED",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_impulsespring_b/variants/jerseycolor/stage11.png"
+        },
+        {
+         "tag": "Stage12",
+         "name": "QAT",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_impulsespring_b/variants/jerseycolor/stage12.png"
+        },
+        {
+         "tag": "Stage13",
+         "name": "KSA",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_impulsespring_b/variants/jerseycolor/stage13.png"
+        },
+        {
+         "tag": "Stage14",
+         "name": "SRB",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_impulsespring_b/variants/jerseycolor/stage14.png"
+        },
+        {
+         "tag": "Stage15",
+         "name": "KOR",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_impulsespring_b/variants/jerseycolor/stage15.png"
+        },
+        {
+         "tag": "Stage16",
+         "name": "ESP",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_impulsespring_b/variants/jerseycolor/stage16.png"
+        },
+        {
+         "tag": "Stage17",
+         "name": "SUI",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_impulsespring_b/variants/jerseycolor/stage17.png"
+        }
+       ]
+      },
+      {
+       "channel": "Pattern",
+       "type": "Patrones",
+       "options": [
+        {
+         "tag": "Stage0",
+         "name": "chaleco",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_impulsespring_b/variants/pattern/stage0.png"
+        },
+        {
+         "tag": "Stage1",
+         "name": "flechas",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_impulsespring_b/variants/pattern/stage1.png"
+        },
+        {
+         "tag": "Stage2",
+         "name": "rayas",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_impulsespring_b/variants/pattern/stage2.png"
+        },
+        {
+         "tag": "Stage3",
+         "name": "rayos",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_impulsespring_b/variants/pattern/stage3.png"
+        },
+        {
+         "tag": "Stage4",
+         "name": "paneles",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_impulsespring_b/variants/pattern/stage4.png"
+        },
+        {
+         "tag": "Stage5",
+         "name": "funda",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_impulsespring_b/variants/pattern/stage5.png"
+        },
+        {
+         "tag": "Stage6",
+         "name": "rayas verticales",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_impulsespring_b/variants/pattern/stage6.png"
+        }
+       ]
+      },
+      {
+       "channel": "Material",
+       "type": "Bufanda",
+       "options": [
+        {
+         "tag": "Mat1",
+         "name": "Sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_impulsespring_b/variants/material/mat1.png"
+        },
+        {
+         "tag": "Mat2",
+         "name": "No",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_impulsespring_b/variants/material/mat2.png"
+        }
+       ]
+      },
+      {
+       "channel": "Parts",
+       "type": "Cabello",
+       "options": [
+        {
+         "tag": "Stage1",
+         "name": "Cola de caballo alta",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_impulsespring_b/variants/parts/stage1.png"
+        },
+        {
+         "tag": "Stage2",
+         "name": "Corto en ángulo",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_impulsespring_b/variants/parts/stage2.png"
+        },
+        {
+         "tag": "Stage3",
+         "name": "Mohicano con textura",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_impulsespring_b/variants/parts/stage3.png"
+        }
+       ]
+      },
+      {
+       "channel": "ClothingColor",
+       "type": "Metálico",
+       "options": [
+        {
+         "tag": "Mat0",
+         "name": "No",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_impulsespring_b/variants/clothingcolor/mat0.png"
+        },
+        {
+         "tag": "Mat1",
+         "name": "Sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_impulsespring_b/variants/clothingcolor/mat1.png"
+        }
+       ]
+      }
+     ],
+     "metaTags": [
+      "Cosmetics.MetaTags.Impulse",
+      "Cosmetics.MetaTags.Style.OptionB"
+     ],
+     "showcaseVideo": "VpH5QiVfV4M",
+     "added": "2022-11-15T10:41:18Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 1500,
+   "finalPrice": 1500,
+   "devName": "[VIRTUAL]1 x Wrap Major, 1 x Pixellator for -1 MtxCurrency",
+   "offerId": "v2:/d5318ec840b1147398133091e5764b9e970a3373ee6009418d2910dbc877e2e4",
+   "inDate": "2026-11-09T00:00:00Z",
+   "outDate": "2026-11-09T23:59:59.999Z",
+   "bundle": {
+    "name": "Asesora de envoltorios",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/42cef2f5321867b3/renderimage_0.png"
+   },
+   "banner": {
+    "value": "¡Equipa papeles! ¡Elige un color de pelo!",
+    "intensity": "High",
+    "backendValue": "EquipWrapsHairColor"
+   },
+   "offerTag": {
+    "id": "pliantoutfitshort",
+    "text": "¡Presume cualquiera de tus papeles! Elige un color de pelo y otros detalles de la ropa. ¡Incluye el papel Pixelizador!"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -4,
+   "layoutId": "BR110926.97",
+   "layout": {
+    "id": "BR110926",
+    "name": "Estilo de élite",
+    "index": 11,
+    "rank": 184,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "8ad986ff",
+    "color3": "05544cff",
+    "textBackgroundColor": "05544cff"
+   },
+   "tileSize": "Size_1_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_CID_A_151_Athena_Commando_F_Pliant_E",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/DAv2_CID_A_151_F_Pliant_E",
+   "newDisplayAsset": {
+    "id": "DAv2_CID_A_151_F_Pliant_E",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__42cef2f5321867b3_8354c736c3a0021c.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/42cef2f5321867b3/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__42cef2f5321867b3_f93ead473fca9b03.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/42cef2f5321867b3/renderimage_1.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "CID_A_151_Athena_Commando_F_Pliant_E",
+     "name": "Asesora de envoltorios",
+     "description": "Mostrando el ajuste perfecto. ",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "Muestra tu estilo",
+      "text": "Pieza del conjunto Muestra tu estilo.",
+      "backendValue": "PresentForm"
+     },
+     "introduction": {
+      "chapter": "2",
+      "season": "7",
+      "text": "Introducido en Capítulo 2, Temporada 7.",
+      "backendValue": 17
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/cid_a_151_athena_commando_f_pliant_e/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/cid_a_151_athena_commando_f_pliant_e/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/cid_a_151_athena_commando_f_pliant_e/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/cid_a_151_athena_commando_f_pliant_e/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/cid_a_151_athena_commando_f_pliant_e/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/cid_a_151_athena_commando_f_pliant_e/wide.png"
+      },
+      "bean": {
+       "small": "https://fortnite-api.com/images/cosmetics/beans/bean_plianteb/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/beans/bean_plianteb/large.png"
+      }
+     },
+     "showcaseVideo": "B40AW2-iEvY",
+     "added": "2021-07-20T07:27:39Z"
+    },
+    {
+     "id": "Wrap_379_Pliant",
+     "name": "Pixelizador",
+     "description": "Muestra tu estilo.",
+     "type": {
+      "value": "wrap",
+      "displayValue": "Papel",
+      "backendValue": "AthenaItemWrap"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Muestra tu estilo",
+      "text": "Pieza del conjunto Muestra tu estilo.",
+      "backendValue": "PresentForm"
+     },
+     "introduction": {
+      "chapter": "2",
+      "season": "7",
+      "text": "Introducido en Capítulo 2, Temporada 7.",
+      "backendValue": 17
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/wrap_379_pliant/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/wrap_379_pliant/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/wrap_379_pliant/featured.png"
+     },
+     "added": "2021-07-20T07:27:39Z"
+    }
+   ]
+  }
+ ]
+}

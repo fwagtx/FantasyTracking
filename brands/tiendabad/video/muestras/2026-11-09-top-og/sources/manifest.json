@@ -1,0 +1,41 @@
+{
+ "via": "fortnite-api.com (mirror of Epic's item shop and cosmetics data, es-419)",
+ "files": [
+  {
+   "file": "CID_745_Athena_Commando_M_RavenQuill.json",
+   "source": "Epic's cosmetics data for Cuervopool with its shop history (es-419)",
+   "url": "https://fortnite-api.com/v2/cosmetics/br/CID_745_Athena_Commando_M_RavenQuill?language=es-419&responseFlags=4",
+   "fetched_utc": "2026-11-09T18:08:27Z"
+  },
+  {
+   "file": "CID_746_Athena_Commando_F_FuzzyBear.json",
+   "source": "Epic's cosmetics data for Cariñosapool with its shop history (es-419)",
+   "url": "https://fortnite-api.com/v2/cosmetics/br/CID_746_Athena_Commando_F_FuzzyBear?language=es-419&responseFlags=4",
+   "fetched_utc": "2026-11-09T18:08:27Z"
+  },
+  {
+   "file": "CID_341_Athena_Commando_F_SkullBrite.json",
+   "source": "Epic's cosmetics data for Nieve with its shop history (es-419)",
+   "url": "https://fortnite-api.com/v2/cosmetics/br/CID_341_Athena_Commando_F_SkullBrite?language=es-419&responseFlags=4",
+   "fetched_utc": "2026-11-09T18:08:27Z"
+  },
+  {
+   "file": "CID_335_Athena_Commando_F_Scrapyard.json",
+   "source": "Epic's cosmetics data for Bujía with its shop history (es-419)",
+   "url": "https://fortnite-api.com/v2/cosmetics/br/CID_335_Athena_Commando_F_Scrapyard?language=es-419&responseFlags=4",
+   "fetched_utc": "2026-11-09T18:08:27Z"
+  },
+  {
+   "file": "CID_274_Athena_Commando_M_Feathers.json",
+   "source": "Epic's cosmetics data for Defensor sabroso with its shop history (es-419)",
+   "url": "https://fortnite-api.com/v2/cosmetics/br/CID_274_Athena_Commando_M_Feathers?language=es-419&responseFlags=4",
+   "fetched_utc": "2026-11-09T18:08:27Z"
+  },
+  {
+   "file": "shop-entries.json",
+   "source": "Epic's item shop for 2026-11-09: the listings of these outfits (es-419)",
+   "url": "https://fortnite-api.com/v2/shop?language=es-419",
+   "fetched_utc": "2026-11-09T18:08:27Z"
+  }
+ ]
+}
