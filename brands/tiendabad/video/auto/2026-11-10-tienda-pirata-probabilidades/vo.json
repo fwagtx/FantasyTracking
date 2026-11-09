@@ -1,0 +1,41 @@
+{
+ "phrases": [
+  {
+   "text": "¿Qué tan difícil es conseguir la Tienda Pirata? ¡Epic ya dio los números!",
+   "pause": 0.3
+  },
+  {
+   "text": "Por cada cofre que abres, la probabilidad es de 1 en 137 500.",
+   "say": "Por cada cofre que abres, la probabilidad es de una en ciento treinta y siete mil quinientos.",
+   "pause": 0.25
+  },
+  {
+   "text": "La skin dorada de la semana es todavía más rara: 1 en 1 562 500.",
+   "say": "La skin dorada de la semana es todavía más rara: una en un millón quinientos sesenta y dos mil quinientos.",
+   "pause": 0.25
+  },
+  {
+   "text": "Y en las Horas del Tesoro, la probabilidad de la Tienda Pirata sube 1.5 veces.",
+   "say": "Y en las Horas del Tesoro, la probabilidad de la Tienda Pirata sube una vez y media.",
+   "pause": 0.25
+  },
+  {
+   "text": "¿Cuántos cofres llevas abiertos?",
+   "pause": 0.25
+  },
+  {
+   "text": "Usa el código BAD en la tienda de objetos. Le ayuda muchísimo al canal.",
+   "say": "Usa el código bad, en la tienda de objetos. Le ayuda muchísimo al canal.",
+   "pause": 0.25
+  },
+  {
+   "text": "¡Gracias por ver! Síguenos para más contenido diario.",
+   "pause": 0.3
+  }
+ ],
+ "voice": "ef_dora",
+ "speed": 1.2,
+ "lang": "es-419",
+ "lead": 0.2,
+ "mode": "flow"
+}

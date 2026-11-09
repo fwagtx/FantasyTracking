@@ -1,0 +1,38 @@
+{
+ "phrases": [
+  {
+   "text": "La Tienda Pirata no te da todo. ¡Esto es lo que no incluye!",
+   "pause": 0.3
+  },
+  {
+   "text": "No puedes reclamar niveles del pase de batalla.",
+   "pause": 0.25
+  },
+  {
+   "text": "Tampoco lotes que se pagan con dinero real, y no puedes regalar objetos.",
+   "pause": 0.25
+  },
+  {
+   "text": "Y solo puedes reclamar un sidekick.",
+   "pause": 0.25
+  },
+  {
+   "text": "¿Lo sabías?",
+   "pause": 0.25
+  },
+  {
+   "text": "Usa el código BAD en la tienda de objetos. Le ayuda muchísimo al canal.",
+   "say": "Usa el código bad, en la tienda de objetos. Le ayuda muchísimo al canal.",
+   "pause": 0.25
+  },
+  {
+   "text": "¡Gracias por ver! Síguenos para más contenido diario.",
+   "pause": 0.3
+  }
+ ],
+ "voice": "ef_dora",
+ "speed": 1.2,
+ "lang": "es-419",
+ "lead": 0.2,
+ "mode": "flow"
+}

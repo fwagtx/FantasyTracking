@@ -1,0 +1,33 @@
+{
+ "phrases": [
+  {
+   "text": "¡Tres mitos de la Tienda Pirata que tienes que dejar de creer!",
+   "pause": 0.3
+  },
+  {
+   "text": "Mito uno: la brújula del token. No existe.",
+   "pause": 0.25
+  },
+  {
+   "text": "Mito dos: tu skin cambia la probabilidad. Falso, la skin no importa.",
+   "pause": 0.25
+  },
+  {
+   "text": "Mito tres: los nuevos tienen ventaja. Falso, todos tienen la misma probabilidad.",
+   "pause": 0.25
+  },
+  {
+   "text": "¿Cuál te habías creído?",
+   "pause": 0.25
+  },
+  {
+   "text": "Usa el código BAD en la tienda de objetos. Le ayuda muchísimo al canal.",
+   "say": "Usa el código bad, en la tienda de objetos. Le ayuda muchísimo al canal.",
+   "pause": 0.25
+  },
+  {
+   "text": "¡Gracias por ver! Síguenos para más contenido diario.",
+   "pause": 0.3
+  }
+ ]
+}

@@ -1,0 +1,67 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>BAD video stage</title>
+<style>
+  @font-face { font-family: "Barlow Condensed"; font-weight: 800; src: url(../fonts/BarlowCondensed-ExtraBold.ttf); font-display: block; }
+  @font-face { font-family: "Barlow Condensed"; font-weight: 900; src: url(../fonts/BarlowCondensed-Black.ttf); font-display: block; }
+  @font-face { font-family: "Barlow"; font-weight: 700; src: url(../fonts/Barlow-Bold.ttf); font-display: block; }
+  @font-face { font-family: "Barlow"; font-weight: 600; src: url(../fonts/Barlow-SemiBold.ttf); font-display: block; }
+  @font-face { font-family: "Montserrat"; font-weight: 100 900; src: url("../fonts/Montserrat[wght].ttf"); font-display: block; }
+  @font-face { font-family: "Permanent Marker"; src: url(../fonts/PermanentMarker-Regular.ttf); font-display: block; }
+  html, body { margin: 0; background: #000; }
+  #stage { position: relative; width: 1080px; height: 1920px; overflow: hidden; }
+  #stage * { box-sizing: border-box; }
+  #stage img { display: block; pointer-events: none; }
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<script src="lib.js"></script>
+<script src="style2.js"></script>
+<script src="../../tiendabad/video/templates_es.js"></script>
+<script>
+  // ?s=<path to scene script, relative to this file>; the scene sets window.SCENE
+  const Q = new URLSearchParams(location.search);
+  const src = Q.get("s");
+  // stage size: 1080x1920 for shorts (default), 1920x1080 for long videos
+  if (Q.get("w")) { const st = document.getElementById("stage"); st.style.width = Q.get("w") + "px"; st.style.height = Q.get("h") + "px"; }
+  const dataSrc = new URLSearchParams(location.search).get("d");
+  const tag = document.createElement("script");
+  tag.src = src;
+  const loadData = () => new Promise((r) => { if (!dataSrc) return r(); const d = document.createElement("script"); d.src = dataSrc; d.onload = r; document.body.appendChild(d); });
+  window.ready = new Promise((resolve) => {
+    tag.onload = () => {
+      const stage = document.getElementById("stage");
+      const scene = window.SCENE;
+      const draw = scene.build(stage);
+      window.duration = scene.duration;
+      window.cues = scene.cues;
+      window.renderAt = draw;
+      // text boxes for the safe-zone check: every element marked data-text that is visible
+      window.textBoxes = () => [...stage.querySelectorAll("[data-text]")].filter((e) => {
+        const cs = getComputedStyle(e); let p = e;
+        while (p && p !== stage) { const c = getComputedStyle(p); if (c.visibility === "hidden" || Number(c.opacity) < 0.05 || c.display === "none") return false; p = p.parentElement; }
+        return cs.visibility !== "hidden";
+      }).map((e) => {
+        // clip to every overflow:hidden ancestor (a scrolling ticker is only visible inside its bar)
+        let r = e.getBoundingClientRect(), x1 = r.left, y1 = r.top, x2 = r.right, y2 = r.bottom, p = e.parentElement;
+        while (p && p !== stage) {
+          if (getComputedStyle(p).overflow === "hidden") { const q = p.getBoundingClientRect(); x1 = Math.max(x1, q.left); y1 = Math.max(y1, q.top); x2 = Math.min(x2, q.right); y2 = Math.min(y2, q.bottom); }
+          p = p.parentElement;
+        }
+        x1 = Math.max(x1, 0); y1 = Math.max(y1, 0); x2 = Math.min(x2, stage.offsetWidth); y2 = Math.min(y2, stage.offsetHeight);
+        return { text: e.dataset.text, x: x1, y: y1, w: x2 - x1, h: y2 - y1 };
+      }).filter((b) => b.w > 1 && b.h > 1);
+      window.allText = () => [...new Set([...stage.querySelectorAll("[data-text]")].map((e) => e.dataset.text))];
+      Promise.all(["800 40px 'Barlow Condensed'", "900 40px 'Barlow Condensed'", "700 40px Barlow", "600 40px Barlow", "900 40px Montserrat", "800 40px Montserrat", "700 40px Montserrat", "40px 'Permanent Marker'"].map((f) => document.fonts.load(f)))
+        .then(() => document.fonts.ready)
+        .then(() => Promise.all([...document.images].map((i) => i.decode().catch(() => {}))))
+        .then(() => { draw(0); resolve(); });
+    };
+    loadData().then(() => document.body.appendChild(tag));
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+{
+ "duration": 15.3,
+ "caption": "#EpicPartner ¿No encuentras Arlong Park en Fortnite? 📍 Está en el oeste de la isla, cerca de Frontera Farol\n¿Ya lo visitaste? 👇\nUsa el código BAD en la tienda de objetos 💛\n#fortnite #mapafortnite #arlongpark",
+ "claims": [
+  {
+   "text": "Arlong Park es un lugar del mapa oficial",
+   "source": "map.json",
+   "match": [
+    "Arlong Park"
+   ]
+  },
+  {
+   "text": "Está en el oeste de la isla, cerca de Frontera Farol",
+   "source": "map-labels.png",
+   "visual": "map pixel (635, 1123); nearest named place by coordinates: Frontera Farol"
+  }
+ ],
+ "text": [
+  "ARLONG PARK",
+  "¿DÓNDE ESTÁ / ARLONG PARK?",
+  "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+  "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+  "¿NO ENCUENTRAS ARLONG",
+  "PARK EN FORTNITE?",
+  "¡AQUÍ ESTÁ EXACTAMENTE!",
+  "ESTÁ EN EL",
+  "OESTE DE LA",
+  "ISLA,",
+  "JUSTO AQUÍ,",
+  "CERCA DE FRONTERA",
+  "FAROL.",
+  "¡GUÁRDALO PARA TU",
+  "PRÓXIMA PARTIDA!",
+  "USA EL CÓDIGO",
+  "BAD EN LA",
+  "TIENDA DE OBJETOS.",
+  "LE AYUDA MUCHÍSIMO",
+  "AL CANAL.",
+  "¡GRACIAS POR VER!",
+  "SÍGUENOS PARA MÁS",
+  "CONTENIDO DIARIO.",
+  "#EPICPARTNER",
+  "LA TIENDITA BAD"
+ ]
+}

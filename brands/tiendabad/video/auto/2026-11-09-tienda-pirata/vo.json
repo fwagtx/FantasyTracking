@@ -1,0 +1,38 @@
+{
+ "phrases": [
+  {
+   "text": "¿Toda la tienda de Fortnite gratis? ¡Así funciona la Tienda Pirata!",
+   "pause": 0.3
+  },
+  {
+   "text": "Esta temporada, cada cofre que abres tiene una probabilidad mínima de darte acceso a la Tienda Pirata.",
+   "pause": 0.25
+  },
+  {
+   "text": "Si lo activas, durante 14 días todo lo que cuesta pavos es gratis.",
+   "pause": 0.25
+  },
+  {
+   "text": "Skins, gestos, picos, planeadores… ¡y te los quedas para siempre!",
+   "pause": 0.3
+  },
+  {
+   "text": "¿Qué te llevarías primero?",
+   "pause": 0.25
+  },
+  {
+   "text": "Usa el código BAD en la tienda de objetos. Le ayuda muchísimo al canal.",
+   "say": "Usa el código bad, en la tienda de objetos. Le ayuda muchísimo al canal.",
+   "pause": 0.25
+  },
+  {
+   "text": "¡Gracias por ver! Síguenos para más contenido diario.",
+   "pause": 0.3
+  }
+ ],
+ "voice": "ef_dora",
+ "speed": 1.2,
+ "lang": "es-419",
+ "lead": 0.2,
+ "mode": "flow"
+}

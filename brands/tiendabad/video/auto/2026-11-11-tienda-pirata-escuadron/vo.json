@@ -1,0 +1,38 @@
+{
+ "phrases": [
+  {
+   "text": "¿Quieres más chances de conseguir la Tienda Pirata? ¡Juega en escuadrón!",
+   "pause": 0.3
+  },
+  {
+   "text": "Si alguien de tu escuadrón la encuentra en un cofre, todos la reciben.",
+   "pause": 0.25
+  },
+  {
+   "text": "Así, en cada partida cuentan los cofres de los cuatro.",
+   "pause": 0.25
+  },
+  {
+   "text": "¿No tienes con quién jugar? Elige rellenar escuadrón y entra con jugadores al azar.",
+   "pause": 0.25
+  },
+  {
+   "text": "¿Con quién vas a buscarla?",
+   "pause": 0.25
+  },
+  {
+   "text": "Usa el código BAD en la tienda de objetos. Le ayuda muchísimo al canal.",
+   "say": "Usa el código bad, en la tienda de objetos. Le ayuda muchísimo al canal.",
+   "pause": 0.25
+  },
+  {
+   "text": "¡Gracias por ver! Síguenos para más contenido diario.",
+   "pause": 0.3
+  }
+ ],
+ "voice": "ef_dora",
+ "speed": 1.2,
+ "lang": "es-419",
+ "lead": 0.2,
+ "mode": "flow"
+}

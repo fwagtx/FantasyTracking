@@ -1,11 +1,11 @@
-/* LA TIENDITA BAD templates: BAD ROYALE's templates with Spanish end cards and the Spanish map. */
-/* BAD ROYALE short templates. A short's scene.js is just a config:  window.SCENE = TPL.guess({...})
+/* LA TIENDITA BAD short templates (Spanish port of BAD ROYALE's). A short's scene.js is just a config:  window.SCENE = TPL.guess({...})
  * Every template: hook on screen from frame 1, word-by-word captions, #EpicPartner on screen, the code card on the
  * last voice line. Beats are tied to the voice: "p" is a phrase index in vo.json (P[p].t0 = when it starts).
  *   TPL.guess({ title, rounds: [{id, name, img, rarity, chapter, season}] })      Guess the Season
  *   TPL.map({ title, map, shots, pins, toasts })                                  a place / Easter egg on the map
  *   TPL.news({ kicker, tile, quote: [{p, text}], points: [{p, label, text}] })    an in-game news tile explained
  *   TPL.drop({ title, cards, name, contents, price, when, tone })                 a shop listing: new today / leaving tonight
+ *   TPL.guide({ kicker, title, facts: [{p, label, text}] })                        a feature explained: each fact lands on its voice line
  * Each takes caption and claims too (see make_short.py and the pre-post checklist).
  */
 (function (root) {
@@ -37,12 +37,11 @@
        </div>`, o.name.toUpperCase());
     return el;
   }
-  // Spanish end card: CÓDIGO BAD, the in-game path in Spanish, the 14-day reminder, #EpicPartner; then the sign-off
   const BR = "../../tiendabad/brand";
   const codeES = (stage, y = 520) => {
-    return mk(stage, `left:140px;width:800px;top:${y - 150}px;text-align:center`,
-      `<img src="${BR}/awning.svg" style="position:relative;z-index:2;display:block;width:800px;height:auto">
-       <div style="position:relative;z-index:1;margin:-34px 36px 0;padding:50px 0 24px;border-radius:0 0 24px 24px;background:linear-gradient(180deg,#36D3E2,#13B5C6 55%,#0B8796);border:6px solid ${INK};border-top:0;box-shadow:0 12px 0 rgba(0,0,0,.4)">
+    return mk(stage, `left:170px;width:740px;top:${y - 140}px;text-align:center`,
+      `<img src="${BR}/awning.svg" style="position:relative;z-index:2;display:block;width:740px;height:auto">
+       <div style="position:relative;z-index:1;margin:-32px 32px 0;padding:48px 0 24px;border-radius:0 0 24px 24px;background:linear-gradient(180deg,#36D3E2,#13B5C6 55%,#0B8796);border:6px solid ${INK};border-top:0;box-shadow:0 12px 0 rgba(0,0,0,.4)">
          <div style="display:inline-block;background:${YEL};border:4px solid ${INK};border-radius:8px;transform:skewX(-7deg);padding:0 16px;font-family:'Barlow Condensed';font-weight:900;font-size:40px;color:${INK}">CÓDIGO</div>
          <img src="${BR}/bad.svg" style="display:block;margin:8px auto 0;height:176px">
          <div style="font:800 31px Montserrat;color:#fff;margin-top:12px;-webkit-text-stroke:7px ${INK};paint-order:stroke fill">Tienda de objetos → Apoya a un creador</div>
@@ -54,7 +53,7 @@
   const thanksES = (stage, y) => mk(stage, `left:170px;width:740px;top:${y}px;text-align:center`,
     `<div style="display:inline-block;padding:8px 26px 4px;background:${YEL};border:5px solid ${INK};border-radius:10px;transform:skewX(-7deg);box-shadow:0 6px 0 ${INK};font-family:'Barlow Condensed';font-weight:900;font-size:48px;line-height:1;color:${INK}">¡GRACIAS POR VER!</div>
      <div style="font:800 30px Montserrat;color:#fff;margin-top:12px;-webkit-text-stroke:5px ${INK};paint-order:stroke fill">Síguenos para más contenido diario</div>`, "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO");
-  const bugES = (stage) => mk(stage, `right:34px;top:136px;width:228px`, `<img src="${BR}/watermark.svg" style="display:block;width:228px;height:auto">`, "LA TIENDITA BAD");
+  const bugES = (stage) => mk(stage, `right:44px;top:154px;width:200px`, `<img src="${BR}/watermark.svg" style="display:block;width:200px;height:auto">`, "LA TIENDITA BAD");
   const end = (stage, VO) => ({ code: codeES(stage, 500), thanks: thanksES(stage, 1010), caps: S.captions(stage, VO.words, { y: 1150 }), disc: S.disclosure(stage), bug: bugES(stage), fin: S.finish(stage) });
 
   // ---------------- Guess the Season ----------------
@@ -68,18 +67,18 @@
       const hook = mk(stage, `inset:0`);
       const hookTiles = R.map((o) => tile(hook, o, 250, 360));
       const qs = R.map((_, i) => mk(hook, `left:0;top:0;width:250px;text-align:center;font-family:'Barlow Condensed';font-weight:900;font-size:150px;line-height:1;color:${YEL};-webkit-text-stroke:12px ${INK};paint-order:stroke fill`, "?", "?"));
-      const title = S.title(stage, cfg.title || ["Guess the season", "3 skins · no cheating"], { y: 236, size: 66 });
+      const title = S.title(stage, cfg.title || ["Adivina la temporada", "3 skins · sin trampa"], { y: 236, size: 66 });
       const rounds = R.map((o, i) => {
         const g = mk(stage, `inset:0`);
         const card = tile(g, o, 500, 680);
         const counter = chip(g, `${i + 1} / ${R.length}`, "#fff");
-        const ring = mk(g, `left:810px;top:300px;width:170px;height:170px;border-radius:50%;background:${INK};border:8px solid ${YEL};display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed';font-weight:900;font-size:110px;color:#fff`, "3", "COUNTDOWN");
+        const ring = mk(g, `left:810px;top:300px;width:170px;height:170px;border-radius:50%;background:${INK};border:8px solid ${YEL};display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed';font-weight:900;font-size:110px;color:#fff`, "3", "CUENTA");
         const stamp = mk(g, `left:210px;top:1012px;width:660px;text-align:center;padding:10px 0 4px;background:${YEL};border:8px solid ${INK};transform:rotate(-5deg);box-shadow:0 10px 0 ${INK}`,
-          `<span style="font-family:'Barlow Condensed';font-weight:900;font-size:70px;line-height:1;color:${INK}">CHAPTER ${o.chapter} · SEASON ${o.season}</span>`, `CHAPTER ${o.chapter} · SEASON ${o.season}`);
+          `<span style="font-family:'Barlow Condensed';font-weight:900;font-size:56px;line-height:1;color:${INK};white-space:nowrap">CAPÍTULO ${o.chapter} · TEMPORADA ${o.season}</span>`, `CAPÍTULO ${o.chapter} · TEMPORADA ${o.season}`);
         const ask = mk(g, `left:170px;top:1018px;width:740px;text-align:center;font-family:Montserrat;font-weight:900;font-size:64px;color:#fff;-webkit-text-stroke:9px ${INK};paint-order:stroke fill`, "WHICH SEASON?", "WHICH SEASON?");
         return { g, card, counter, ring, stamp, ask };
       });
-      const score = S.title(stage, ["How many", "did you get?"], { y: 330, size: 96 });
+      const score = S.title(stage, ["¿Cuántas", "acertaste?"], { y: 330, size: 96 });
       const e = end(stage, VO);
       const dim = mk(stage, `inset:0;background:rgba(5,8,25,.55)`);
       stage.appendChild(e.code); stage.appendChild(e.thanks);
@@ -173,10 +172,10 @@
       const bands = wall(stage);
       const panel = mk(stage, `left:50px;top:330px;width:860px;border-radius:18px;overflow:hidden;border:6px solid ${INK};box-shadow:0 14px 0 rgba(0,0,0,.4);background:linear-gradient(180deg,#0E1B5C,#0A1240)`,
         `<div style="display:flex;align-items:center;gap:14px;padding:16px 26px;background:${YEL};border-bottom:6px solid ${INK}">
-           <span style="font-family:'Barlow Condensed';font-weight:900;font-size:44px;color:${INK}">${cfg.kicker || "IN-GAME NEWS"}</span></div>
+           <span style="font-family:'Barlow Condensed';font-weight:900;font-size:44px;color:${INK}">${cfg.kicker || "NOTICIAS DEL JUEGO"}</span></div>
          <div style="padding:26px 34px 34px">
            <div style="font-family:Montserrat;font-weight:900;font-size:${cfg.tileSize || 62}px;line-height:1.02;text-transform:uppercase;color:#fff;-webkit-text-stroke:3px ${INK};paint-order:stroke fill">${cfg.tile}</div>
-           <div class="q" style="margin-top:22px;min-height:120px"></div></div>`, `${cfg.kicker || "IN-GAME NEWS"} / ${cfg.tile}`.toUpperCase());
+           <div class="q" style="margin-top:22px;min-height:120px"></div></div>`, `${cfg.kicker || "NOTICIAS DEL JUEGO"} / ${cfg.tile}`.toUpperCase());
       const q = panel.querySelector(".q");
       const lines = cfg.quote.map((l) => { const d = document.createElement("div"); d.style.cssText = `font:700 40px/1.25 Montserrat;color:#C9D6FF;margin-top:10px;opacity:0`; d.textContent = `“${l.text}”`; d.dataset.text = l.text.toUpperCase(); q.appendChild(d); return { ...l, d }; });
       const hook = cfg.hook ? S.title(stage, cfg.hook, { y: 950, size: 78 }) : null;
@@ -198,6 +197,47 @@
       };
     }
     const cues = [[0.03, "pop"], ...cfg.quote.map((l) => [P[l.p].t0, "tick"]), ...(cfg.points || []).map((o) => [P[o.p].t0, "notify"]), [codeP.t0 - 0.05, "pop"]];
+    if (thanksP) cues.push([thanksP.t0 - 0.03, "chime"]);
+    return { duration: DUR, build, cues, caption: cfg.caption, claims: cfg.claims };
+  }
+
+  // ---------------- a feature explained: kicker, headline, 3-4 facts that land on their voice lines ----------------
+  // cfg: { kicker, title: [l1, l2], titleSize?, facts: [{p, label, text, color?}] (max 4) }
+  function guide(cfg) {
+    const { VO, P, DUR, codeP, thanksP } = timing();
+    const F = (cfg.facts || []).slice(0, 4), gap = F.length > 3 ? 150 : 190, top = F.length > 3 ? 500 : 560;
+    function build(stage) {
+      // the real map behind everything (owner: "make sure you show the actual map as well"), a slow push-in, shaded so the text reads
+      mk(stage, `inset:0;background:#084687`);
+      const cam = S.mapCam(stage, `../../tiendabad/sources/${cfg.map === "blank" ? "map-blank" : "map-labels"}.png`, [[0, { x: 1010, y: 1040 }, 1.1], [DUR, { x: 1010, y: 990 }, 1.22]]);
+      mk(stage, `inset:0;background:linear-gradient(180deg,rgba(5,8,25,.8) 0 28%,rgba(5,8,25,.5) 58%,rgba(5,8,25,.6))`);
+      const kick = chip(stage, cfg.kicker || "TIENDA PIRATA", cfg.kickerColor || YEL, 236);
+      const title = S.title(stage, cfg.title, { y: 322, size: cfg.titleSize || 66 });
+      const facts = F.map((o, i) => { const el = S.toast(stage, o.label, o.text, top + i * gap, o.color || YEL); el.style.width = "770px"; return { ...o, el }; });
+      // a gold token below the captions: the thing everyone is hunting, drawn here (no Epic art)
+      const coinText = cfg.coin || ["TIENDA", "PIRATA"];
+      const coin = mk(stage, `left:60px;top:1232px;width:190px;height:190px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#FFE98A,#F2B21B 55%,#B06A00);border:10px solid ${INK};box-shadow:0 14px 0 rgba(0,0,0,.4),inset 0 0 0 14px rgba(255,255,255,.28)`,
+        `<div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'Barlow Condensed';font-weight:900;color:${INK};text-transform:uppercase;line-height:.95;text-align:center">
+           <div style="font-size:${coinText[0].length > 11 ? 24 : 29}px">${coinText[0]}</div><div style="font-size:${coinText[1].length > 8 ? 34 : 46}px">${coinText[1]}</div></div>`, coinText.join(" / ").toUpperCase());
+      const dim = mk(stage, `inset:0;background:rgba(5,8,25,.75)`);
+      const e = end(stage, VO);
+      return function renderAt(t) {
+        cam.draw(t);
+        // everything clears away when the code card comes in, so nothing peeks out around the taller shop card
+        const codeOn = win(t, codeP.t0 - 0.05, DUR + 1, 0.12, 0.1), keep = 1 - codeOn;
+        const kx = 1 - E.out(k(t, 0, 0.3)); T(kick, { x: -60 * kx, a: (1 - kx) * keep });
+        T(title, { a: keep, s: 0.9 + 0.1 * E.out(k(t, 0, 0.35)) });
+        T(coin, { y: Math.sin(t * 1.6) * 6, r: Math.sin(t * 0.9) * 4, s: 0.7 + 0.3 * E.out(k(t, 0.15, 0.6)), a: keep });
+        facts.forEach((o) => {
+          const t0 = P[o.p].t0 - 0.05, u = 1 - E.out(k(t, t0, t0 + 0.25)), live = t >= t0 && t < P[o.p].t1 + 0.15;
+          T(o.el, { a: (t >= t0 ? 1 - u : 0) * keep, x: -70 * u, s: live ? 1.02 : 1 });
+        });
+        T(dim, { a: codeOn });
+        T(e.code, { a: codeOn, s: 0.86 + 0.14 * E.back(k(t, codeP.t0 - 0.05, codeP.t0 + 0.3)) }); signoff(e, t, thanksP, DUR);
+        e.caps(t); e.fin(t);
+      };
+    }
+    const cues = [[0.03, "pop"], ...F.map((o) => [P[o.p].t0 - 0.03, "notify"]), [codeP.t0 - 0.05, "pop"]];
     if (thanksP) cues.push([thanksP.t0 - 0.03, "chime"]);
     return { duration: DUR, build, cues, caption: cfg.caption, claims: cfg.claims };
   }
@@ -226,13 +266,14 @@
       const fit = (s, max) => Math.min(max, Math.floor(1300 / Math.max(8, s.length)));
       const name = line(`<div style="font-family:'Barlow Condensed';font-weight:900;font-size:${nameSize}px;line-height:1;text-transform:uppercase;color:#fff;-webkit-text-stroke:10px ${INK};paint-order:stroke fill">${cfg.name}</div>`, cfg.name.toUpperCase());
       const list = hasList ? line(`<div style="font-family:Montserrat;font-weight:900;font-size:${listSize}px;line-height:1.12;color:#fff;-webkit-text-stroke:8px ${INK};paint-order:stroke fill">${cfg.contents}</div>`, cfg.contents.toUpperCase()) : null;
-      const priceTxt = `${cfg.price.final.toLocaleString("en-US")} V-BUCKS`;
-      const was = cfg.price.regular && cfg.price.regular > cfg.price.final ? `<span style="font-size:44px;color:#5A5A5A;text-decoration:line-through;margin-left:18px">${cfg.price.regular.toLocaleString("en-US")}</span>` : "";
+      const num = (n) => (n >= 10000 ? n.toLocaleString("en-US").replace(/,/g, " ") : String(n));
+      const priceTxt = `${num(cfg.price.final)} PAVOS`;
+      const was = cfg.price.regular && cfg.price.regular > cfg.price.final ? `<span style="font-size:44px;color:#5A5A5A;text-decoration:line-through;margin-left:18px">${num(cfg.price.regular)}</span>` : "";
       const price = mk(stage, `left:210px;top:${infoY}px;width:660px;text-align:center;padding:10px 0 4px;background:${YEL};border:8px solid ${INK};transform:rotate(-4deg);box-shadow:0 10px 0 ${INK}`,
         `<span style="font-family:'Barlow Condensed';font-weight:900;font-size:76px;line-height:1;color:${INK}">${priceTxt}</span>${was}`, priceTxt);
       const when = mk(stage, `left:190px;top:${infoY}px;width:700px;text-align:center;padding:12px 0 6px;background:${accent};border:8px solid ${INK};transform:rotate(3deg);box-shadow:0 10px 0 ${INK}`,
         `<span style="font-family:'Barlow Condensed';font-weight:900;font-size:${fit(cfg.when, 70)}px;line-height:1;color:${cfg.tone === "last" ? "#fff" : INK}">${cfg.when.toUpperCase()}</span>`, cfg.when.toUpperCase());
-      const ask = S.title(stage, cfg.ask || ["Are you", "getting it?"], { y: 330, size: 96 });
+      const ask = S.title(stage, cfg.ask || ["¿Lo vas a", "comprar?"], { y: 330, size: 96 });
       const e = end(stage, VO);
       const dim = mk(stage, `inset:0;background:rgba(5,8,25,.62)`);
       stage.appendChild(ask); stage.appendChild(e.code); stage.appendChild(e.thanks);
@@ -263,5 +304,5 @@
     return { duration: DUR, build, cues, caption: cfg.caption, claims: cfg.claims };
   }
 
-  root.TPL = { guess, map, news, drop, mapPx };
+  root.TPL = { guess, map, news, drop, guide, mapPx };
 })(window);

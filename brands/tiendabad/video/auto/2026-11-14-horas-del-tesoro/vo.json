@@ -1,0 +1,36 @@
+{
+ "phrases": [
+  {
+   "text": "¡Hoy hay Horas del Tesoro en Fortnite! Estos son los horarios.",
+   "pause": 0.3
+  },
+  {
+   "text": "La primera es de 1 a 3 de la tarde, hora de la Ciudad de México.",
+   "say": "La primera es de una a tres de la tarde, hora de la Ciudad de México.",
+   "pause": 0.25
+  },
+  {
+   "text": "La segunda, de 8 a 10 de la noche.",
+   "say": "La segunda, de ocho a diez de la noche.",
+   "pause": 0.25
+  },
+  {
+   "text": "Y en las dos, la probabilidad de la Tienda Pirata sube 1.5 veces.",
+   "say": "Y en las dos, la probabilidad de la Tienda Pirata sube una vez y media.",
+   "pause": 0.25
+  },
+  {
+   "text": "¿A cuál te vas a conectar?",
+   "pause": 0.25
+  },
+  {
+   "text": "Usa el código BAD en la tienda de objetos. Le ayuda muchísimo al canal.",
+   "say": "Usa el código bad, en la tienda de objetos. Le ayuda muchísimo al canal.",
+   "pause": 0.25
+  },
+  {
+   "text": "¡Gracias por ver! Síguenos para más contenido diario.",
+   "pause": 0.3
+  }
+ ]
+}

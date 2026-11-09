@@ -1,0 +1,78 @@
+{
+ "duration": 23.4,
+ "caption": "#EpicPartner ¿Toda la tienda de Fortnite GRATIS? 😳 Si un cofre te da acceso a la Tienda Pirata, todo lo que cuesta pavos es gratis por 14 días, y te lo quedas\n¿Qué te llevarías primero? 👇\nUsa el código BAD en la tienda de objetos 💛\n#fortnite #tiendapirata #fortniteespañol",
+ "claims": [
+  {
+   "text": "Los cofres de esta temporada pueden dar acceso a la Tienda Pirata",
+   "source": "vgc-guide.json",
+   "match": [
+    "every time you open or break a chest, there's a small chance that you'll get a treasure reward",
+    "Pirate Shop"
+   ]
+  },
+  {
+   "text": "Al activarlo, todo lo que cuesta pavos es gratis durante 14 días",
+   "source": "vgc-guide.json",
+   "match": [
+    "every single item in the Fortnite Shop which costs V-Bucks becomes entirely free for the next 14 days"
+   ]
+  },
+  {
+   "text": "Te quedas lo que reclamas",
+   "source": "biglead-pirate-shop.json",
+   "match": [
+    "you keep the items forever"
+   ]
+  },
+  {
+   "text": "Skins, gestos, picos y planeadores están incluidos",
+   "source": "vgc-guide.json",
+   "match": [
+    "skins, emotes, backpacks, pickaxes, instruments, cars, gliders, jam tracks"
+   ]
+  }
+ ],
+ "text": [
+  "TIENDA PIRATA",
+  "¿TODA LA TIENDA / GRATIS?",
+  "COFRES / PUEDEN DAR ACCESO A LA TIENDA PIRATA",
+  "14 DÍAS / TODO LO QUE CUESTA PAVOS, GRATIS",
+  "PARA SIEMPRE / TE QUEDAS LO QUE RECLAMAS",
+  "TIENDA / PIRATA",
+  "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+  "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+  "¿TODA LA TIENDA",
+  "DE FORTNITE GRATIS?",
+  "¡ASÍ FUNCIONA LA",
+  "TIENDA PIRATA!",
+  "ESTA TEMPORADA,",
+  "CADA COFRE QUE",
+  "ABRES TIENE UNA",
+  "PROBABILIDAD MÍNIMA DE",
+  "DARTE ACCESO A",
+  "LA TIENDA PIRATA.",
+  "SI LO ACTIVAS,",
+  "DURANTE 14 DÍAS",
+  "TODO LO QUE",
+  "CUESTA PAVOS ES",
+  "GRATIS.",
+  "SKINS,",
+  "GESTOS,",
+  "PICOS,",
+  "PLANEADORES… ¡Y TE",
+  "LOS QUEDAS PARA",
+  "SIEMPRE!",
+  "¿QUÉ TE LLEVARÍAS",
+  "PRIMERO?",
+  "USA EL CÓDIGO",
+  "BAD EN LA",
+  "TIENDA DE OBJETOS.",
+  "LE AYUDA MUCHÍSIMO",
+  "AL CANAL.",
+  "¡GRACIAS POR VER!",
+  "SÍGUENOS PARA MÁS",
+  "CONTENIDO DIARIO.",
+  "#EPICPARTNER",
+  "LA TIENDITA BAD"
+ ]
+}

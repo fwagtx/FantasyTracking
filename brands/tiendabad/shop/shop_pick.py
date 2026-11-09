@@ -142,8 +142,10 @@ def main():
     open(os.path.join(out, "img", "vbuck.png"), "wb").write(get(shop["vbuckIcon"]))
 
     voice = json.load(open(os.path.join(HERE, "..", "voice.json")))
+    # names styled with symbols (A$AP Rocky, The $.$. Rocky) are read with the letter they stand for
+    spoken = lambda x: x.replace("$", "S")
     json.dump({**{k: voice[k] for k in ("voice", "speed", "lang", "lead", "mode", "slack") if k in voice},
-               "phrases": [dict({"text": t, "pause": p}, **({"say": s} if s else {})) for _, t, s, p in P]},
+               "phrases": [dict({"text": t, "pause": p}, **({"say": spoken(s or t)} if (s or spoken(t) != t) else {})) for _, t, s, p in P]},
               open(os.path.join(out, "vo.json"), "w"), indent=1, ensure_ascii=False)
 
     plan = {"date": day, "dateLabel": f"{d0.day} {MES3[d0.month - 1]}", "dateLong": f"{d0.day} de {MES[d0.month - 1]}",

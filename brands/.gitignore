@@ -1,0 +1,17 @@
+# renders, audio, images, hosted-copy links and downloaded models/dictionaries stay out of git
+*.mp4
+*.wav
+*.mp3
+*.png
+*.jpg
+*.jpeg
+**/posts.json
+**/out/
+**/img/
+**/qa/stills/
+_shared/voice/models/
+_shared/qa/dict/
+__pycache__/
+*.live.json
+**/shop/20*/shop.json
+**/shop/20*/history.json

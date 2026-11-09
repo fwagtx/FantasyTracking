@@ -43,17 +43,17 @@
   function burst(stage) {
     const pts = []; for (let i = 0; i < 28; i++) { const a = (i / 28) * Math.PI * 2, r = i % 2 ? 132 : 158; pts.push(`${(170 + Math.cos(a) * r).toFixed(1)},${(170 + Math.sin(a) * r).toFixed(1)}`); }
     return mk(stage, `left:0;top:0;width:340px;height:340px`, svg(340, 340, `<polygon points="${pts.join(" ")}" fill="${INK}" transform="translate(0,10)"/><polygon points="${pts.join(" ")}" fill="${RED}" stroke="${INK}" stroke-width="10" stroke-linejoin="round"/>`) +
-      `<div style="position:absolute;left:0;top:96px;width:340px;text-align:center;font-family:'Barlow Condensed';font-weight:900;font-size:112px;line-height:.9;color:#fff;-webkit-text-stroke:9px ${INK};paint-order:stroke fill">-${D.deal.pct}%</div>
-       <div style="position:absolute;left:0;top:200px;width:340px;text-align:center;font-family:'Barlow Condensed';font-weight:900;font-size:38px;line-height:1;color:${YEL};-webkit-text-stroke:6px ${INK};paint-order:stroke fill">AHORRAS ${num(D.deal.saving)}</div>`,
+      `<div style="position:absolute;left:0;top:84px;width:340px;text-align:center;font-family:'Barlow Condensed';font-weight:900;font-size:124px;line-height:.9;color:#fff;-webkit-text-stroke:10px ${INK};paint-order:stroke fill">-${D.deal.pct}%</div>
+       <div style="position:absolute;left:0;top:208px;width:340px;text-align:center;font-family:'Barlow Condensed';font-weight:900;font-size:42px;line-height:1;color:${YEL};-webkit-text-stroke:7px ${INK};paint-order:stroke fill">AHORRAS ${num(D.deal.saving)}</div>`,
       `-${D.deal.pct}% / AHORRAS ${num(D.deal.saving)}`);
   }
   // brand art (brand/tiendabad/brand, exported from the logo files): the awning, the logo's own BAD, the watermark
   const BR = "../../tiendabad/brand";
   // the CÓDIGO BAD card dressed as the shop: the brand awning over a turquoise counter, plus the 14-day reminder
   const codeCardES = function (stage, y = 520) {
-    return mk(stage, `left:140px;width:800px;top:${y - 150}px;text-align:center`,
-      `<img src="${BR}/awning.svg" style="position:relative;z-index:2;display:block;width:800px;height:auto">
-       <div style="position:relative;z-index:1;margin:-34px 36px 0;padding:50px 0 24px;border-radius:0 0 24px 24px;background:linear-gradient(180deg,#36D3E2,#13B5C6 55%,#0B8796);border:6px solid ${INK};border-top:0;box-shadow:0 12px 0 rgba(0,0,0,.4)">
+    return mk(stage, `left:170px;width:740px;top:${y - 140}px;text-align:center`,
+      `<img src="${BR}/awning.svg" style="position:relative;z-index:2;display:block;width:740px;height:auto">
+       <div style="position:relative;z-index:1;margin:-32px 32px 0;padding:48px 0 24px;border-radius:0 0 24px 24px;background:linear-gradient(180deg,#36D3E2,#13B5C6 55%,#0B8796);border:6px solid ${INK};border-top:0;box-shadow:0 12px 0 rgba(0,0,0,.4)">
          <div style="display:inline-block;background:${YEL};border:4px solid ${INK};border-radius:8px;transform:skewX(-7deg);padding:0 16px;font-family:'Barlow Condensed';font-weight:900;font-size:40px;color:${INK}">CÓDIGO</div>
          <img src="${BR}/bad.svg" style="display:block;margin:8px auto 0;height:176px">
          <div style="font:800 31px Montserrat;color:#fff;margin-top:12px;-webkit-text-stroke:7px ${INK};paint-order:stroke fill">Tienda de objetos → Apoya a un creador</div>
@@ -69,7 +69,7 @@
       "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO");
   }
   // channel watermark (mini awning + LA TIENDITA BAD), opposite the #EpicPartner chip
-  const bug = (stage) => mk(stage, `right:34px;top:136px;width:228px`, `<img src="${BR}/watermark.svg" style="display:block;width:228px;height:auto">`, "LA TIENDITA BAD");
+  const bug = (stage) => mk(stage, `right:44px;top:154px;width:200px`, `<img src="${BR}/watermark.svg" style="display:block;width:200px;height:auto">`, "LA TIENDITA BAD");
 
   function build(stage) {
     mk(stage, `inset:0;background:linear-gradient(160deg,#1D2E8F,#14156B 45%,#2A0F5E)`);
@@ -78,14 +78,14 @@
     // hook: the three tiles of the three beats, each with its label, under the date
     const hook = mk(stage, `inset:0`);
     const hookRecs = [D.deal.outfits[0], D.og.outfits[D.og.outfits.length - 1], D.last.outfits[0] || D.deal.outfits[1]];
-    const hookTiles = hookRecs.map((o, i) => add(hook, tile(o, 290, 420, false), `left:${50 + i * 300}px;top:${520 + (i === 1 ? -30 : 0)}px`));
+    const hookTiles = hookRecs.map((o, i) => add(hook, tile(o, 270, 392, false), `left:${70 + i * 275}px;top:${530 + (i === 1 ? -30 : 0)}px`));
     const hookTags = [["OFERTA", YEL], ["OG", "#5BD0FF"], ["ÚLTIMO DÍA", RED]].map(([t, c], i) => chip(hook, t, c, 0, 0, 34));
     const title = S.title(stage, ["Tienda de hoy", D.dateLabel], { y: 236, size: 78 });
 
     // beat 1: mejor oferta
     const g1 = mk(stage, `inset:0`);
     chip(g1, "1 · Mejor oferta");
-    const dealTiles = D.deal.outfits.map((o, i) => add(g1, tile(o, 205, 300, false), `left:${68 + i * 215}px;top:${380 + (i % 2) * 30}px`));
+    const dealTiles = D.deal.outfits.slice(0, 4).map((o, i) => add(g1, tile(o, 182, 266, false), `left:${60 + i * 192}px;top:${380 + (i % 2) * 30}px`));
     const priceNew = mk(g1, `left:70px;top:800px;font-family:'Barlow Condensed';font-weight:900;font-size:150px;line-height:1;color:${YEL};-webkit-text-stroke:12px ${INK};paint-order:stroke fill;text-shadow:0 8px 0 ${INK}`, `${vb(120)} ${num(D.deal.final)}`, num(D.deal.final));
     const priceOld = mk(g1, `left:520px;top:838px;font-family:'Barlow Condensed';font-weight:900;font-size:84px;line-height:1;color:#fff;-webkit-text-stroke:9px ${INK};paint-order:stroke fill`, num(D.deal.regular), num(D.deal.regular));
     const strike = mk(g1, `left:505px;top:874px;width:${D.deal.regular >= 10000 ? 262 : 212}px;height:16px;background:#FF2D2D;border:4px solid ${INK};border-radius:8px;transform:rotate(-8deg);transform-origin:0 50%`);
@@ -131,7 +131,7 @@
       // hook
       swap(hook, t, -1, b1);
       hookTiles.forEach((el, i) => T(el, { y: lerp(80, 0, E.out(k(t, i * 0.07, 0.3 + i * 0.07))), s: lerp(0.85, 1, E.back(k(t, i * 0.07, 0.3 + i * 0.07))), a: k(t, i * 0.07, 0.12 + i * 0.07), r: [-3, 0, 3][i] + Math.sin(t * 2 + i) * 0.6 }));
-      hookTags.forEach((el, i) => { const t0 = 0.55 + i * 0.12; T(el, { x: 70 + i * 300 + (i === 2 ? -20 : 0), y: 490 + (i === 1 ? -30 : 0), s: E.back(k(t, t0, t0 + 0.25)), a: t >= t0 ? 1 : 0, r: [-4, 2, 4][i] }); });
+      hookTags.forEach((el, i) => { const t0 = 0.55 + i * 0.12; T(el, { x: 90 + i * 275 + (i === 2 ? -20 : 0), y: 500 + (i === 1 ? -30 : 0), s: E.back(k(t, t0, t0 + 0.25)), a: t >= t0 ? 1 : 0, r: [-4, 2, 4][i] }); });
       T(title, { a: t < b1 ? 1 : 0, s: 0.94 + 0.06 * E.out(k(t, 0, 0.3)) });
       // deal
       swap(g1, t, b1, b2);
@@ -140,7 +140,7 @@
       T(priceOld, { a: t >= tOld ? 1 : 0, s: E.back(k(t, tOld, tOld + 0.2)) });
       strike.style.transform = `rotate(-8deg) scaleX(${E.out(k(t, tOld + 0.45, tOld + 0.7))})`;
       T(dealName, { a: k(t, tp + 0.3, tp + 0.6) });
-      T(sv, { x: 746, y: 700, r: -12 + Math.sin(t * 3) * 1.5, s: 0.72 * (t >= tSave ? E.back(k(t, tSave, tSave + 0.3)) : 0) * (1 + 0.03 * Math.sin(t * 9)), a: t >= tSave ? 1 : 0 });
+      T(sv, { x: Math.min(912, 60 + (Math.min(4, D.deal.outfits.length) - 1) * 192 + 182 + 125) - 170, y: 345, r: -12 + Math.sin(t * 3) * 1.5, s: 0.55 * (t >= tSave ? E.back(k(t, tSave, tSave + 0.3)) : 0) * (1 + 0.03 * Math.sin(t * 9)), a: t >= tSave ? 1 : 0 });
       // OG
       swap(g2, t, b2, b3);
       ogTiles.forEach((el, i) => T(el, { r: i ? 4 : -4, s: E.back(k(t, b2 + i * 0.12, b2 + 0.35 + i * 0.12)) }));

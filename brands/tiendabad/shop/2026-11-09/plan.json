@@ -1,0 +1,148 @@
+{
+ "date": "2026-11-09",
+ "dateLabel": "9 NOV",
+ "dateLong": "9 de noviembre",
+ "resetLabel": "6 PM",
+ "resetZone": "CDMX",
+ "dealOutLabel": "6 DIC",
+ "dealOutTime": "6 PM",
+ "deal": {
+  "name": "Lote A$AP Rocky",
+  "final": 3200,
+  "regular": 8800,
+  "out": "2026-12-06T23:59:59.999Z",
+  "outfits": [
+   {
+    "id": "Character_TonicMailWeb",
+    "name": "Flacko Helicopter",
+    "rarity": "Serie de ídolos",
+    "rarityKey": "icon",
+    "series": "Serie de ídolos",
+    "img": "https://fortnite-api.com/images/cosmetics/br/character_tonicmailweb/featured.png",
+    "price": null,
+    "out": null
+   },
+   {
+    "id": "Character_TonicMailYam",
+    "name": "Rocky Rugahand",
+    "rarity": "Serie de ídolos",
+    "rarityKey": "icon",
+    "series": "Serie de ídolos",
+    "img": "https://fortnite-api.com/images/cosmetics/br/character_tonicmailyam/featured.png",
+    "price": 1500,
+    "out": "2026-12-06"
+   }
+  ],
+  "saving": 5600,
+  "pct": 64
+ },
+ "og": {
+  "chapter": 1,
+  "season": 6,
+  "gapDays": 57,
+  "outfits": [
+   {
+    "id": "CID_274_Athena_Commando_M_Feathers",
+    "name": "Defensor sabroso",
+    "rarity": "Épico",
+    "rarityKey": "epic",
+    "series": null,
+    "img": "https://fortnite-api.com/images/cosmetics/br/cid_274_athena_commando_m_feathers/featured.png",
+    "price": 1500,
+    "out": "2026-11-12",
+    "gapDays": 57
+   }
+  ]
+ },
+ "last": {
+  "count": 10,
+  "outfits": [
+   {
+    "id": "Character_SteamMarauder",
+    "name": "Adanna de las profundidades",
+    "rarity": "Raro",
+    "rarityKey": "rare",
+    "series": null,
+    "img": "https://fortnite-api.com/images/cosmetics/br/character_steammarauder/featured.png",
+    "price": 1200,
+    "out": "2026-11-09"
+   },
+   {
+    "id": "CID_335_Athena_Commando_F_Scrapyard",
+    "name": "Bujía",
+    "rarity": "Raro",
+    "rarityKey": "rare",
+    "series": null,
+    "img": "https://fortnite-api.com/images/cosmetics/br/cid_335_athena_commando_f_scrapyard/featured.png",
+    "price": 1200,
+    "out": "2026-11-09"
+   },
+   {
+    "id": "Character_PennantSeasShade_B",
+    "name": "Furtiva feudal",
+    "rarity": "Raro",
+    "rarityKey": "rare",
+    "series": null,
+    "img": "https://fortnite-api.com/images/cosmetics/br/character_pennantseasshade_b/featured.png",
+    "price": 1200,
+    "out": "2026-11-09"
+   },
+   {
+    "id": "CID_341_Athena_Commando_F_SkullBrite",
+    "name": "Nieve",
+    "rarity": "Raro",
+    "rarityKey": "rare",
+    "series": null,
+    "img": "https://fortnite-api.com/images/cosmetics/br/cid_341_athena_commando_f_skullbrite/featured.png",
+    "price": 1200,
+    "out": "2026-11-09"
+   },
+   {
+    "id": "CID_A_152_Athena_Commando_F_Musician",
+    "name": "Pepper Thorne",
+    "rarity": "Raro",
+    "rarityKey": "rare",
+    "series": null,
+    "img": "https://fortnite-api.com/images/cosmetics/br/cid_a_152_athena_commando_f_musician/featured.png",
+    "price": 1200,
+    "out": "2026-11-09"
+   },
+   {
+    "id": "Character_ImpulseSpring_B",
+    "name": "Especialista en tiros libres",
+    "rarity": "Épico",
+    "rarityKey": "epic",
+    "series": null,
+    "img": "https://fortnite-api.com/images/cosmetics/br/character_impulsespring_b/featured.png",
+    "price": 1500,
+    "out": "2026-11-09"
+   }
+  ]
+ },
+ "roles": [
+  "intro",
+  "hook",
+  "deal_name",
+  "deal_price",
+  "saving",
+  "og_name",
+  "og_era",
+  "last",
+  "ask",
+  "code",
+  "thanks"
+ ],
+ "phrases": [
+  "Esta es la tienda de objetos de hoy, 9 de noviembre.",
+  "¡Tres cosas antes de gastar un solo pavo!",
+  "El Lote A$AP Rocky:",
+  "3200 pavos, en vez de 8800.",
+  "¡Te ahorras 5600!",
+  "Defensor sabroso está en la tienda.",
+  "Es del Capítulo 1, Temporada 6, y no salía desde hace 57 días.",
+  "Y diez skins están en su último día, cinco de ellas raras.",
+  "¿Vas a comprar algo hoy?",
+  "Usa el código BAD en la tienda de objetos. Le ayuda muchísimo al canal.",
+  "¡Gracias por ver! Síguenos para más contenido diario."
+ ]
+}
