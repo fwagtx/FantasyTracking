@@ -5,25 +5,25 @@
    "file": "map.json",
    "source": "Official map and named places (fortnite-api.com mirror of Epic's data, es-419)",
    "url": "https://fortnite-api.com/v1/map?language=es-419",
-   "fetched_utc": "2026-11-09T16:27:32Z"
+   "fetched_utc": "2026-11-09T17:17:58Z"
   },
   {
    "file": "news.json",
    "source": "In-game news feed, Battle Royale (es-419)",
    "url": "https://fortnite-api.com/v2/news/br?language=es-419",
-   "fetched_utc": "2026-11-09T16:27:32Z"
+   "fetched_utc": "2026-11-09T17:17:58Z"
   },
   {
    "file": "map-labels.png",
    "source": "Official map image with Spanish labels",
    "url": "https://fortnite-api.com/images/map_es-419.png",
-   "fetched_utc": "2026-11-09T16:27:32Z"
+   "fetched_utc": "2026-11-09T17:17:58Z"
   },
   {
    "file": "map-blank.png",
    "source": "Official map image without labels",
    "url": "https://fortnite-api.com/images/map.png",
-   "fetched_utc": "2026-11-09T16:27:32Z"
+   "fetched_utc": "2026-11-09T17:17:58Z"
   }
  ]
 }

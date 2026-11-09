@@ -4,3 +4,4 @@
 - 2026-11-09 20:30 ¿Dónde está Arlong Park?: scheduled on all 5 networks.
 - 2026-11-09 Tienda Pirata series queued: Nov 10-13 at 13:00, Nov 14 at 11:00, all 5 networks (READY TO POST each).
 - 2026-11-09 15:00 LONG 'Tienda Pirata: guía completa' (3:30, 11 chapters) scheduled on YouTube with thumbnail.
+- 2026-11-09 DAY run: 20:30 evergreen filled for Nov 10 (¿Dónde está Loguetown?) and Nov 11 (Adivina la temporada: Nieve, Orelia, Midas ascendido), all 5 networks, READY TO POST each. Sources: no places or news removed. Nov 8: nothing was scheduled.

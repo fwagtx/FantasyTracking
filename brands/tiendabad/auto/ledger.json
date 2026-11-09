@@ -55,6 +55,25 @@
    "format": "LONG",
    "topic": "Tienda Pirata: guía completa",
    "folder": "video/long/2026-11-09-tienda-pirata-guia"
+  },
+  {
+   "date": "2026-11-10",
+   "slot": "20:30",
+   "format": "¿Dónde está?",
+   "topic": "Loguetown",
+   "folder": "video/auto/2026-11-10-donde-loguetown"
+  },
+  {
+   "date": "2026-11-11",
+   "slot": "20:30",
+   "format": "Adivina la temporada",
+   "topic": "Nieve (C1 T7), Orelia (C2 T6), Midas ascendido (C5 T2)",
+   "ids": [
+    "CID_341_Athena_Commando_F_SkullBrite",
+    "CID_A_057_Athena_Commando_F_TheGoldenSkeleton",
+    "Character_PiteousKicks"
+   ],
+   "folder": "video/auto/2026-11-11-adivina-temporada"
   }
  ]
 }

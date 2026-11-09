@@ -39,7 +39,7 @@ A skipped slot costs nothing; a wrong post costs the channel.
 |---|---|---|
 | **SHOP** | 6:05 PM daily (00:05 UTC), right after the shop resets | Today's shop video about 15 min later, all 5 networks |
 | **SHOP safety** | 7:47 PM daily | The SHOP run again; it ends at step 3 if the shop video is already scheduled |
-| **DAY** | 9:41 AM daily | **1:00 PM** today's current short (made that morning) and **8:30 PM** evergreen (kept 7 days ahead) |
+| **DAY** | 11:07 AM daily | **1:00 PM** today's current short (made that morning) and **8:30 PM** evergreen (kept 7 days ahead) |
 | **LONG** | 5:13 AM Mon, Wed, Sat | One long YouTube video at **3:00 PM** |
 
 3 shorts a day on every network (1:00 PM, about 6:25 PM, 8:30 PM) plus 3 long YouTube videos a week.
@@ -83,7 +83,8 @@ A skipped slot costs nothing; a wrong post costs the channel.
    Never fill a 1:00 PM slot for a later day.
 5. **Keep the 8:30 PM evergreen slot 7 days ahead**, at most 2 new shorts per run, earliest empty day first:
    two "¿Dónde está…?" (`python3 brands/tiendabad/auto/new_where.py <folder> "<lugar de map.json>"`, a place never in
-   the ledger) for every one "Adivina la temporada" (TPL.guess, three outfits from a recent shop folder's history.json).
+   the ledger) for every one "Adivina la temporada" (`python3 brands/tiendabad/auto/new_guess.py <folder> auto`: three
+   outfits from today's shop that are not in the ledger; ship it with `--sources <folder>/sources`).
 6. For each short: folder `brands/tiendabad/video/auto/<D>-<slug>/`, then
    `python3 brands/tiendabad/auto/make_short.py build <folder>`, open `<folder>/qa/review-sheet.png` and judge it like
    a fan scrolling (frame 1 stops you; every word readable on a phone; nothing overlapping or cut off; fix and
@@ -91,7 +92,8 @@ A skipped slot costs nothing; a wrong post costs the channel.
    `python3 brands/tiendabad/auto/make_short.py ship <folder> --at "<D> 13:00"` (or 20:30) with `--sources <dir>` when
    the facts come from a series folder. On STOP read `<folder>/qa/qa-log.md`, fix, retry (up to 3 times), else skip.
 7. Schedule posts.json exactly as in SHOP 6–7, then `python3 brands/tiendabad/auto/make_short.py done <folder>`.
-8. Add each posted topic to `brands/tiendabad/auto/ledger.json`; never repeat a topic.
+8. Add each posted topic to `brands/tiendabad/auto/ledger.json`; never repeat a topic. An "Adivina la temporada" entry
+   also lists its outfits in `"ids"` (new_guess.py prints them), which is how the next quiz skips them.
 9. Check yesterday: getScheduledPosts for D-1; any network not PUBLISHED goes in the summary with its detailedStatus.
 10. Log line, commit `brands/tiendabad/video/auto brands/tiendabad/auto brands/tiendabad/sources/manifest.json`, push, summary.
 

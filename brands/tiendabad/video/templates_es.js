@@ -75,7 +75,7 @@
         const ring = mk(g, `left:810px;top:300px;width:170px;height:170px;border-radius:50%;background:${INK};border:8px solid ${YEL};display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed';font-weight:900;font-size:110px;color:#fff`, "3", "CUENTA");
         const stamp = mk(g, `left:210px;top:1012px;width:660px;text-align:center;padding:10px 0 4px;background:${YEL};border:8px solid ${INK};transform:rotate(-5deg);box-shadow:0 10px 0 ${INK}`,
           `<span style="font-family:'Barlow Condensed';font-weight:900;font-size:56px;line-height:1;color:${INK};white-space:nowrap">CAPÍTULO ${o.chapter} · TEMPORADA ${o.season}</span>`, `CAPÍTULO ${o.chapter} · TEMPORADA ${o.season}`);
-        const ask = mk(g, `left:170px;top:1018px;width:740px;text-align:center;font-family:Montserrat;font-weight:900;font-size:64px;color:#fff;-webkit-text-stroke:9px ${INK};paint-order:stroke fill`, "WHICH SEASON?", "WHICH SEASON?");
+        const ask = mk(g, `left:170px;top:1018px;width:740px;text-align:center;font-family:Montserrat;font-weight:900;font-size:64px;color:#fff;-webkit-text-stroke:9px ${INK};paint-order:stroke fill`, "¿QUÉ TEMPORADA?", "¿QUÉ TEMPORADA?");
         return { g, card, counter, ring, stamp, ask };
       });
       const score = S.title(stage, ["¿Cuántas", "acertaste?"], { y: 330, size: 96 });
