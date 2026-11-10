@@ -1,0 +1,123 @@
+{
+ "phrases": [
+  {
+   "text": "Tienda Pirata: las cinco fechas que no te puedes perder.",
+   "pause": 0.2
+  },
+  {
+   "text": "Número cinco: ya empezó.",
+   "pause": 0.15
+  },
+  {
+   "text": "La minitemporada arrancó el…",
+   "pause": 0.4
+  },
+  {
+   "text": "¡1 de noviembre!",
+   "pause": 0.2,
+   "say": "¡Primero de noviembre!"
+  },
+  {
+   "text": "¡Que empiece la cacería!",
+   "pause": 0.25
+  },
+  {
+   "text": "Número cuatro: tu ventana.",
+   "pause": 0.15
+  },
+  {
+   "text": "Cada uso dura…",
+   "pause": 0.55
+  },
+  {
+   "text": "¡14 días!",
+   "pause": 0.2
+  },
+  {
+   "text": "Desde que lo activas.",
+   "pause": 0.1
+  },
+  {
+   "text": "¡Elige bien tu momento!",
+   "pause": 0.25
+  },
+  {
+   "text": "Número tres: las skins de One Piece.",
+   "pause": 0.15
+  },
+  {
+   "text": "Salen de la tienda el…",
+   "pause": 0.4
+  },
+  {
+   "text": "¡5 de diciembre!",
+   "pause": 0.15
+  },
+  {
+   "text": "A las 6 de la tarde, hora de México.",
+   "pause": 0.1
+  },
+  {
+   "text": "¡Antes de que se vayan!",
+   "pause": 0.25
+  },
+  {
+   "text": "Número dos: tu fecha límite.",
+   "pause": 0.15
+  },
+  {
+   "text": "Activa tu uso de 2026 hasta el…",
+   "pause": 0.4
+  },
+  {
+   "text": "¡15 de diciembre!",
+   "pause": 0.15
+  },
+  {
+   "text": "Y luego, catorce días de tienda gratis.",
+   "pause": 0.1
+  },
+  {
+   "text": "¡No te duermas!",
+   "pause": 0.3
+  },
+  {
+   "text": "¿Y el número uno?",
+   "pause": 0.5
+  },
+  {
+   "text": "Tu segundo uso llega en…",
+   "pause": 0.4
+  },
+  {
+   "text": "¡2027!",
+   "pause": 0.2
+  },
+  {
+   "text": "Otros catorce días.",
+   "pause": 0.05
+  },
+  {
+   "text": "¡Dos tiendas gratis!",
+   "pause": 0.3
+  },
+  {
+   "text": "¿Cuándo usarías el tuyo? Dímelo abajo.",
+   "pause": 0.2
+  },
+  {
+   "text": "Usa el código BAD en la tienda de objetos.",
+   "pause": 0.25,
+   "say": "Usa el código bad, en la tienda de objetos."
+  },
+  {
+   "text": "¡Gracias por ver! Síguenos para más contenido diario.",
+   "pause": 0.3
+  }
+ ],
+ "voice": "ef_dora",
+ "speed": 1.2,
+ "lang": "es-419",
+ "lead": 0.2,
+ "mode": "flow"
+}

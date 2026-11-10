@@ -74,6 +74,27 @@
     "Character_PiteousKicks"
    ],
    "folder": "video/auto/2026-11-11-adivina-temporada"
+  },
+  {
+   "date": "2026-11-10",
+   "slot": "10:30",
+   "format": "Top 5 (TPL.top)",
+   "topic": "Tienda Pirata: las 5 fechas (1 nov, 14 días, 5 dic, 15 dic, 2027)",
+   "folder": "video/auto/2026-11-10-top-fechas-pirata"
+  },
+  {
+   "date": "2026-11-10",
+   "slot": "16:00",
+   "format": "Tienda Pirata",
+   "topic": "Qué cofres cuentan (cualquiera, BR y Cero Construcción, mensaje en pantalla)",
+   "folder": "video/auto/2026-11-10-tienda-pirata-cofres"
+  },
+  {
+   "date": "2026-11-10",
+   "slot": "22:00",
+   "format": "Tienda Pirata",
+   "topic": "Los 3 niveles de tesoro (estándar, mayor, supremo)",
+   "folder": "video/auto/2026-11-10-tienda-pirata-niveles"
   }
  ]
 }

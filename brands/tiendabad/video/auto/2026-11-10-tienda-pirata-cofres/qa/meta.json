@@ -1,0 +1,72 @@
+{
+ "duration": 21.2,
+ "caption": "#EpicPartner ¿Qué cofres cuentan para la Tienda Pirata? 🏴‍☠️ Cualquiera: normales, raros, enterrados, de reliquia… en Battle Royale y Cero Construcción\n¿Cuántos abriste hoy? 👇\nUsa el código BAD en la tienda de objetos 💛\n#fortnite #tiendapirata #fortniteespañol",
+ "claims": [
+  {
+   "text": "Cuenta en Battle Royale y Cero Construcción",
+   "source": "vgc-guide.json",
+   "match": [
+    "open chests during Battle Royale and Zero Build modes"
+   ]
+  },
+  {
+   "text": "Sirve cualquier cofre: normales, raros, enterrados, de reliquia",
+   "source": "vgc-guide.json",
+   "match": [
+    "This can be any type of chest",
+    "Normal chests",
+    "Rare chests",
+    "Buried Chests",
+    "Relic Chests"
+   ]
+  },
+  {
+   "text": "El premio no sale del cofre: te sale un mensaje en pantalla",
+   "source": "vgc-guide.json",
+   "match": [
+    "This won't come out of the chest",
+    "you'll just get a message on the screen"
+   ]
+  }
+ ],
+ "text": [
+  "TIENDA PIRATA",
+  "¿QUÉ COFRES / CUENTAN?",
+  "MODOS / BATTLE ROYALE Y CERO CONSTRUCCIÓN",
+  "CUALQUIER COFRE / NORMALES, RAROS, ENTERRADOS…",
+  "NO SE RECOGE / TE SALE UN MENSAJE EN PANTALLA",
+  "TIENDA / PIRATA",
+  "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+  "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+  "¿QUÉ COFRES CUENTAN",
+  "PARA LA TIENDA",
+  "PIRATA?",
+  "¡TE LO EXPLICO",
+  "RÁPIDO!",
+  "CUENTA EN BATTLE",
+  "ROYALE Y EN",
+  "CERO CONSTRUCCIÓN.",
+  "Y SIRVE CUALQUIER",
+  "COFRE: NORMALES,",
+  "RAROS,",
+  "ENTERRADOS,",
+  "DE RELIQUIA… ¡TODOS!",
+  "EL PREMIO NO",
+  "SALE DEL COFRE:",
+  "TE APARECE UN",
+  "MENSAJE EN LA",
+  "PANTALLA.",
+  "¿CUÁNTOS COFRES ABRISTE",
+  "HOY?",
+  "USA EL CÓDIGO",
+  "BAD EN LA",
+  "TIENDA DE OBJETOS.",
+  "LE AYUDA MUCHÍSIMO",
+  "AL CANAL.",
+  "¡GRACIAS POR VER!",
+  "SÍGUENOS PARA MÁS",
+  "CONTENIDO DIARIO.",
+  "#EPICPARTNER",
+  "LA TIENDITA BAD"
+ ]
+}

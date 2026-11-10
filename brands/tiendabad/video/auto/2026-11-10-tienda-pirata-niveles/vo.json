@@ -1,0 +1,38 @@
+{
+ "phrases": [
+  {
+   "text": "¡Cada cofre puede darte un tesoro! Y hay tres niveles.",
+   "pause": 0.3
+  },
+  {
+   "text": "Estándar: objetos para la partida, como localizadores.",
+   "pause": 0.25
+  },
+  {
+   "text": "Mayor: uno de los cosméticos especiales de la semana.",
+   "pause": 0.25
+  },
+  {
+   "text": "Y supremo: la skin dorada de la semana… ¡o el acceso a la Tienda Pirata!",
+   "pause": 0.25
+  },
+  {
+   "text": "¿Cuál te ha salido a ti?",
+   "pause": 0.25
+  },
+  {
+   "text": "Usa el código BAD en la tienda de objetos. Le ayuda muchísimo al canal.",
+   "say": "Usa el código bad, en la tienda de objetos. Le ayuda muchísimo al canal.",
+   "pause": 0.25
+  },
+  {
+   "text": "¡Gracias por ver! Síguenos para más contenido diario.",
+   "pause": 0.3
+  }
+ ],
+ "voice": "ef_dora",
+ "speed": 1.2,
+ "lang": "es-419",
+ "lead": 0.2,
+ "mode": "flow"
+}

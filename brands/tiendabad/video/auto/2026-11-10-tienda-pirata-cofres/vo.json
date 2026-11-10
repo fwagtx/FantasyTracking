@@ -1,0 +1,38 @@
+{
+ "phrases": [
+  {
+   "text": "¿Qué cofres cuentan para la Tienda Pirata? ¡Te lo explico rápido!",
+   "pause": 0.3
+  },
+  {
+   "text": "Cuenta en Battle Royale y en Cero Construcción.",
+   "pause": 0.25
+  },
+  {
+   "text": "Y sirve cualquier cofre: normales, raros, enterrados, de reliquia… ¡todos!",
+   "pause": 0.25
+  },
+  {
+   "text": "El premio no sale del cofre: te aparece un mensaje en la pantalla.",
+   "pause": 0.25
+  },
+  {
+   "text": "¿Cuántos cofres abriste hoy?",
+   "pause": 0.25
+  },
+  {
+   "text": "Usa el código BAD en la tienda de objetos. Le ayuda muchísimo al canal.",
+   "say": "Usa el código bad, en la tienda de objetos. Le ayuda muchísimo al canal.",
+   "pause": 0.25
+  },
+  {
+   "text": "¡Gracias por ver! Síguenos para más contenido diario.",
+   "pause": 0.3
+  }
+ ],
+ "voice": "ef_dora",
+ "speed": 1.2,
+ "lang": "es-419",
+ "lead": 0.2,
+ "mode": "flow"
+}

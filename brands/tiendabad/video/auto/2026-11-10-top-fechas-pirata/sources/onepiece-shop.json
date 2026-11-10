@@ -1,0 +1,2809 @@
+{
+ "source": "Epic's item shop for 2026-11-10 (fortnite-api.com mirror, es-419): every entry with One Piece items, verbatim",
+ "url": "https://fortnite-api.com/v2/shop?language=es-419",
+ "fetched_utc": "2026-11-10T00:17:24Z",
+ "entries": [
+  {
+   "regularPrice": 1800,
+   "finalPrice": 1800,
+   "devName": "[VIRTUAL]1 x Monkey D. Luffy, 1 x Luffy's Straw Hat, 1 x Gum-Gum Pistol, 1 x Multi-Punches Flex for -1 MtxCurrency",
+   "offerId": "v2:/caccb6ef5e08efaf83a8c744abc3bbed1f22bddc5c7f99027b04b1d2c7024f8d",
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-12-05T23:59:59.999Z",
+   "offerTag": {
+    "id": "celerystitchoutfit",
+    "text": "La mochila retro Hat y el pico Fist cambian de apariencia al equiparlos con el atuendo Monkey D. Luffy"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -1,
+   "layoutId": "ConclusionB110926.95",
+   "layout": {
+    "id": "ConclusionB110926",
+    "name": "One Piece ",
+    "index": 5,
+    "rank": 198,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "8ed1eeff",
+    "color2": "ffffffff",
+    "color3": "0d74c4ff",
+    "textBackgroundColor": "0a67afff"
+   },
+   "tileBackgroundMaterial": "ShopTile_Pirates_Clouds",
+   "tileSize": "Size_1_x_1",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S43/DAv2_Character_celerystitch",
+   "newDisplayAsset": {
+    "id": "DAv2_Character_CeleryStitch",
+    "cosmeticId": "Character_CeleryStitch",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__9af63ea860febe11_29c0c4191e61fb71.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/9af63ea860febe11/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__9af63ea860febe11_d2e71b6320aa32c2.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/9af63ea860febe11/renderimage_1.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__9af63ea860febe11_71e578208f570b02.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/9af63ea860febe11/renderimage_2.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Character_CeleryStitch",
+     "name": "Monkey D. Luffy",
+     "description": "¡Será el nuevo rey de los piratas!",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "One Piece",
+      "text": "Pieza del conjunto One Piece.",
+      "backendValue": "FrailShark"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_celerystitch/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_celerystitch/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_celerystitch/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_celerystitch/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_celerystitch/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_celerystitch/wide.png"
+      }
+     },
+     "showcaseVideo": "U4dZqudChDw",
+     "added": "2026-11-01T05:00:00Z"
+    },
+    {
+     "id": "Backpack_CeleryStitchCud",
+     "name": "Sombrero de paja de Luffy",
+     "description": "Un símbolo de confianza, trabajo en equipo y sueños.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_celerystitchcud/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_celerystitchcud/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_celerystitchcud/featured.png"
+     },
+     "added": "2026-11-01T05:00:00Z"
+    },
+    {
+     "id": "Pickaxe_CeleryStitchCud",
+     "name": "Pistola goma goma",
+     "description": "Un golpe elástico.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "One Piece",
+      "text": "Pieza del conjunto One Piece.",
+      "backendValue": "FrailShark"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_celerystitchcud/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_celerystitchcud/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_celerystitchcud/featured.png"
+     },
+     "added": "2026-11-01T05:00:00Z"
+    },
+    {
+     "id": "EID_CeleryStitch",
+     "name": "Ráfaga de puñetazos",
+     "description": "Remata con la ametralladora goma goma.",
+     "type": {
+      "value": "emote",
+      "displayValue": "Gesto",
+      "backendValue": "AthenaDance"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "One Piece",
+      "text": "Pieza del conjunto One Piece.",
+      "backendValue": "FrailShark"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/eid_celerystitch/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/eid_celerystitch/icon.png"
+     },
+     "showcaseVideo": "g4r-QR4J2J4",
+     "added": "2026-11-01T05:00:00Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 800,
+   "finalPrice": 800,
+   "devName": "[VIRTUAL]1 x Giant Meat on the Bone for 800 MtxCurrency",
+   "offerId": "v2:/267e07d2534ff824a01c4f36cad65dabe577829e527639c78cf6b0848783ec40",
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-12-05T23:59:59.999Z",
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -3,
+   "layoutId": "ConclusionB110926.95",
+   "layout": {
+    "id": "ConclusionB110926",
+    "name": "One Piece ",
+    "index": 5,
+    "rank": 198,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "8ed1eeff",
+    "color2": "ffffffff",
+    "color3": "0d74c4ff",
+    "textBackgroundColor": "0a67afff"
+   },
+   "tileBackgroundMaterial": "ShopTile_Pirates_Clouds",
+   "tileSize": "Size_1_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_pickaxe_celerystitch",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S43/DAv2_pickaxe_celerystitch",
+   "newDisplayAsset": {
+    "id": "DAv2_Pickaxe_CeleryStitch",
+    "cosmeticId": "Pickaxe_CeleryStitch",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__1266e355c813ea76_29c0c4191e61fb71.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/1266e355c813ea76/renderimage_0.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Pickaxe_CeleryStitch",
+     "name": "Carne gigante",
+     "description": "Un arma con mucho sabor.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "One Piece",
+      "text": "Pieza del conjunto One Piece.",
+      "backendValue": "FrailShark"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_celerystitch/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_celerystitch/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_celerystitch/featured.png"
+     },
+     "added": "2026-11-01T05:00:00Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 300,
+   "finalPrice": 300,
+   "devName": "[VIRTUAL]1 x Multi-Punches Flex for 300 MtxCurrency",
+   "offerId": "v2:/2a02811ae5c812df823d9af7957dc2c4cc81d8045942c0167d1bb1befc5400c3",
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-12-05T23:59:59.999Z",
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -4,
+   "layoutId": "ConclusionB110926.95",
+   "layout": {
+    "id": "ConclusionB110926",
+    "name": "One Piece ",
+    "index": 5,
+    "rank": 198,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "8ed1eeff",
+    "color2": "ffffffff",
+    "color3": "0d74c4ff",
+    "textBackgroundColor": "0a67afff"
+   },
+   "tileBackgroundMaterial": "ShopTile_Pirates_Clouds",
+   "tileSize": "Size_1_x_1",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S43/DAv2_eid_celerystitch",
+   "newDisplayAsset": {
+    "id": "DAv2_EID_CeleryStitch",
+    "cosmeticId": "EID_CeleryStitch",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__e608dd301d24f0f3_29c0c4191e61fb71.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/e608dd301d24f0f3/renderimage_0.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "EID_CeleryStitch",
+     "name": "Ráfaga de puñetazos",
+     "description": "Remata con la ametralladora goma goma.",
+     "type": {
+      "value": "emote",
+      "displayValue": "Gesto",
+      "backendValue": "AthenaDance"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "One Piece",
+      "text": "Pieza del conjunto One Piece.",
+      "backendValue": "FrailShark"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/eid_celerystitch/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/eid_celerystitch/icon.png"
+     },
+     "showcaseVideo": "g4r-QR4J2J4",
+     "added": "2026-11-01T05:00:00Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 400,
+   "finalPrice": 400,
+   "devName": "[VIRTUAL]1 x Roasted Meat for 400 MtxCurrency",
+   "offerId": "v2:/c24de3495dcbd0da999d8fab9bbc4f0ade72767ffa7ff50fcbc40cb45d00c3a7",
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-12-05T23:59:59.999Z",
+   "offerTag": {
+    "id": "backblingreactiveelim",
+    "text": "¡La mochila retro reacciona a las eliminaciones!"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -2,
+   "layoutId": "ConclusionB110926.95",
+   "layout": {
+    "id": "ConclusionB110926",
+    "name": "One Piece ",
+    "index": 5,
+    "rank": 198,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "8ed1eeff",
+    "color2": "ffffffff",
+    "color3": "0d74c4ff",
+    "textBackgroundColor": "0a67afff"
+   },
+   "tileBackgroundMaterial": "ShopTile_Pirates_Clouds",
+   "tileSize": "Size_1_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_backpack_celerystitch",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S43/DAv2_backpack_celerystitch",
+   "newDisplayAsset": {
+    "id": "DAv2_Backpack_CeleryStitch",
+    "cosmeticId": "Backpack_CeleryStitch",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__d8cae9b555f8ac8b_29c0c4191e61fb71.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/d8cae9b555f8ac8b/renderimage_0.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Backpack_CeleryStitch",
+     "name": "Carne asada",
+     "description": "La favorita de Luffy.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "One Piece",
+      "text": "Pieza del conjunto One Piece.",
+      "backendValue": "FrailShark"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_celerystitch/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_celerystitch/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_celerystitch/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Parts",
+       "type": "reactividad",
+       "options": [
+        {
+         "tag": "Stage1",
+         "name": "Sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/backpack_celerystitch/variants/parts/stage1.png"
+        },
+        {
+         "tag": "Stage2",
+         "name": "No",
+         "image": "https://fortnite-api.com/images/cosmetics/br/backpack_celerystitch/variants/parts/stage2.png"
+        }
+       ]
+      }
+     ],
+     "added": "2026-11-01T05:00:00Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 1600,
+   "finalPrice": 1600,
+   "devName": "[VIRTUAL]1 x Sanji, 1 x Sanji's Utensils, 1 x Sanji's Utensils for -1 MtxCurrency",
+   "offerId": "v2:/cae62854bce155e64f7d96fc34259706d1edeaa258366012a150e3fda91eed60",
+   "inDate": "2026-11-08T00:00:00Z",
+   "outDate": "2026-12-05T23:59:59.999Z",
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -2,
+   "layoutId": "ConclusionB110926.97",
+   "layout": {
+    "id": "ConclusionB110926",
+    "name": "One Piece ",
+    "index": 5,
+    "rank": 198,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "8ed1eeff",
+    "color2": "ffffffff",
+    "color3": "0d74c4ff",
+    "textBackgroundColor": "0a67afff"
+   },
+   "tileBackgroundMaterial": "ShopTile_Pirates_Clouds",
+   "tileSize": "Size_2_x_1",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S43/DAv2_Character_insightbawl",
+   "newDisplayAsset": {
+    "id": "DAv2_Character_InsightBawl",
+    "cosmeticId": "Character_InsightBawl",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__0e6ada1f404630c6_29c0c4191e61fb71.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/0e6ada1f404630c6/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__0e6ada1f404630c6_5aff8d0c456b1e98.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/0e6ada1f404630c6/renderimage_1.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Character_InsightBawl",
+     "name": "Sanji",
+     "description": "Chef en busca del All Blue.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "One Piece",
+      "text": "Pieza del conjunto One Piece.",
+      "backendValue": "FrailShark"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_insightbawl/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_insightbawl/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_insightbawl/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_insightbawl/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_insightbawl/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_insightbawl/wide.png"
+      }
+     },
+     "showcaseVideo": "CtBK2RxgQRU",
+     "added": "2026-11-01T23:10:43Z"
+    },
+    {
+     "id": "Pickaxe_InsightBawl",
+     "name": "Utensilios de Sanji",
+     "description": "Mantén bien alimentada a toda la tripulación.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "One Piece",
+      "text": "Pieza del conjunto One Piece.",
+      "backendValue": "FrailShark"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_insightbawl/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_insightbawl/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_insightbawl/featured.png"
+     },
+     "added": "2026-11-01T23:10:43Z"
+    },
+    {
+     "id": "Backpack_InsightBawl",
+     "name": "Utensilios de Sanji",
+     "description": "Mantén bien alimentada a toda la tripulación.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_insightbawl/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_insightbawl/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_insightbawl/featured.png"
+     },
+     "added": "2026-11-01T23:10:43Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 500,
+   "finalPrice": 500,
+   "devName": "[VIRTUAL]1 x 5 Ton Hammer for 500 MtxCurrency",
+   "offerId": "v2:/6f2ddd3ca34a0ae64536c4280bf7100ad4b8b78262ca11186f849142207b35f9",
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-12-05T23:59:59.999Z",
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -3,
+   "layoutId": "ConclusionB110926.93",
+   "layout": {
+    "id": "ConclusionB110926",
+    "name": "One Piece ",
+    "index": 5,
+    "rank": 198,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "8ed1eeff",
+    "color2": "ffffffff",
+    "color3": "0d74c4ff",
+    "textBackgroundColor": "0a67afff"
+   },
+   "tileBackgroundMaterial": "ShopTile_Pirates_Clouds",
+   "tileSize": "Size_1_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_pickaxe_loomrise",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S43/DAv2_pickaxe_loomrise",
+   "newDisplayAsset": {
+    "id": "DAv2_Pickaxe_LoomRise",
+    "cosmeticId": "Pickaxe_LoomRise",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__1ee2767c8db118a8_29c0c4191e61fb71.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/1ee2767c8db118a8/renderimage_0.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Pickaxe_LoomRise",
+     "name": "Martillo de 5 toneladas",
+     "description": "Hecho con dos sartenes muy pesados.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "One Piece",
+      "text": "Pieza del conjunto One Piece.",
+      "backendValue": "FrailShark"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_loomrise/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_loomrise/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_loomrise/featured.png"
+     },
+     "added": "2026-11-01T05:00:00Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 300,
+   "finalPrice": 300,
+   "devName": "[VIRTUAL]1 x Test of Will for 300 MtxCurrency",
+   "offerId": "v2:/b7bf254c89be1808b2bedc93354ae96539475aaf28171ecf36f05c040c6bcb66",
+   "inDate": "2026-11-08T00:00:00Z",
+   "outDate": "2026-12-05T23:59:59.999Z",
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -4,
+   "layoutId": "ConclusionB110926.98",
+   "layout": {
+    "id": "ConclusionB110926",
+    "name": "One Piece ",
+    "index": 5,
+    "rank": 198,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "8ed1eeff",
+    "color2": "ffffffff",
+    "color3": "0d74c4ff",
+    "textBackgroundColor": "0a67afff"
+   },
+   "tileBackgroundMaterial": "ShopTile_Pirates_Clouds",
+   "tileSize": "Size_1_x_1",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S43/DAv2_eid_brandcreed",
+   "newDisplayAsset": {
+    "id": "DAv2_EID_BrandCreed",
+    "cosmeticId": "EID_BrandCreed",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__1237a29a1ed004e9_29c0c4191e61fb71.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/1237a29a1ed004e9/renderimage_0.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "EID_BrandCreed",
+     "name": "Prueba de voluntad",
+     "description": "Demuestra que puedes empuñar tres espadas sin dificultad.",
+     "type": {
+      "value": "emote",
+      "displayValue": "Gesto",
+      "backendValue": "AthenaDance"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "One Piece",
+      "text": "Pieza del conjunto One Piece.",
+      "backendValue": "FrailShark"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/eid_brandcreed/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/eid_brandcreed/icon.png"
+     },
+     "showcaseVideo": "8DlbDYyqfUU",
+     "added": "2026-11-01T23:10:43Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 1800,
+   "finalPrice": 1800,
+   "devName": "[VIRTUAL]1 x Roronoa Zoro, 1 x Zoro's Swords, 1 x Zoro's Training Gear, 1 x Test of Will for -1 MtxCurrency",
+   "offerId": "v2:/6718448ad7ce411a886042d8ed72c7ab6117df92ce7e74e0eb64bd17376b6e12",
+   "inDate": "2026-11-08T00:00:00Z",
+   "outDate": "2026-12-05T23:59:59.999Z",
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -2,
+   "layoutId": "ConclusionB110926.98",
+   "layout": {
+    "id": "ConclusionB110926",
+    "name": "One Piece ",
+    "index": 5,
+    "rank": 198,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "8ed1eeff",
+    "color2": "ffffffff",
+    "color3": "0d74c4ff",
+    "textBackgroundColor": "0a67afff"
+   },
+   "tileBackgroundMaterial": "ShopTile_Pirates_Clouds",
+   "tileSize": "Size_2_x_1",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S43/DAv2_Character_brandcreed",
+   "newDisplayAsset": {
+    "id": "DAv2_Character_BrandCreed",
+    "cosmeticId": "Character_BrandCreed",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__7dada1d37dd74140_29c0c4191e61fb71.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/7dada1d37dd74140/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__7dada1d37dd74140_d2e71b6320aa32c2.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/7dada1d37dd74140/renderimage_1.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__7dada1d37dd74140_71e578208f570b02.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/7dada1d37dd74140/renderimage_2.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Character_BrandCreed",
+     "name": "Roronoa Zoro",
+     "description": "Maestro espadachín de los Sombrero de paja.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "One Piece",
+      "text": "Pieza del conjunto One Piece.",
+      "backendValue": "FrailShark"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_brandcreed/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_brandcreed/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_brandcreed/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_brandcreed/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_brandcreed/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_brandcreed/wide.png"
+      }
+     },
+     "variants": [
+      {
+       "channel": "Parts",
+       "type": "Bandana",
+       "options": [
+        {
+         "tag": "Stage1",
+         "name": "No",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_brandcreed/variants/parts/stage1.png"
+        },
+        {
+         "tag": "Stage2",
+         "name": "Sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_brandcreed/variants/parts/stage2.png"
+        }
+       ]
+      }
+     ],
+     "metaTags": [
+      "Cosmetics.MetaTags.BrandCreed"
+     ],
+     "showcaseVideo": "cn8i4g7rASA",
+     "added": "2026-11-01T23:10:43Z"
+    },
+    {
+     "id": "Pickaxe_BrandCreed",
+     "name": "Espadas de Zoro",
+     "description": "Yubashiri y Sandai Kitetsu están listas para la batalla.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "One Piece",
+      "text": "Pieza del conjunto One Piece.",
+      "backendValue": "FrailShark"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_brandcreed/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_brandcreed/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_brandcreed/featured.png"
+     },
+     "metaTags": [
+      "Cosmetics.MetaTags.BrandCreed"
+     ],
+     "added": "2026-11-01T23:10:43Z"
+    },
+    {
+     "id": "Backpack_BrandCreed",
+     "name": "Pesas de Zoro",
+     "description": "Levanta con los dientes.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_brandcreed/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_brandcreed/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_brandcreed/featured.png"
+     },
+     "added": "2026-11-01T23:10:43Z"
+    },
+    {
+     "id": "EID_BrandCreed",
+     "name": "Prueba de voluntad",
+     "description": "Demuestra que puedes empuñar tres espadas sin dificultad.",
+     "type": {
+      "value": "emote",
+      "displayValue": "Gesto",
+      "backendValue": "AthenaDance"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "One Piece",
+      "text": "Pieza del conjunto One Piece.",
+      "backendValue": "FrailShark"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/eid_brandcreed/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/eid_brandcreed/icon.png"
+     },
+     "showcaseVideo": "8DlbDYyqfUU",
+     "added": "2026-11-01T23:10:43Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 1600,
+   "finalPrice": 1600,
+   "devName": "[VIRTUAL]1 x Nami, 1 x Nami's Tangerines, 1 x Climate Baton for -1 MtxCurrency",
+   "offerId": "v2:/26b85553542f54a4b77f1c41979b7fb8450b6fe7a67c96f218e4340b2629e8da",
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-12-05T23:59:59.999Z",
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -2,
+   "layoutId": "ConclusionB110926.94",
+   "layout": {
+    "id": "ConclusionB110926",
+    "name": "One Piece ",
+    "index": 5,
+    "rank": 198,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "8ed1eeff",
+    "color2": "ffffffff",
+    "color3": "0d74c4ff",
+    "textBackgroundColor": "0a67afff"
+   },
+   "tileBackgroundMaterial": "ShopTile_Pirates_Clouds",
+   "tileSize": "Size_1_x_1",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S43/DAv2_Character_boastjoint",
+   "newDisplayAsset": {
+    "id": "DAv2_Character_BoastJoint",
+    "cosmeticId": "Character_BoastJoint",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__764245f1c0535262_29c0c4191e61fb71.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/764245f1c0535262/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__764245f1c0535262_5aff8d0c456b1e98.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/764245f1c0535262/renderimage_1.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Character_BoastJoint",
+     "name": "Nami",
+     "description": "Ladrona, navegante y cartógrafa.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "One Piece",
+      "text": "Pieza del conjunto One Piece.",
+      "backendValue": "FrailShark"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_boastjoint/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_boastjoint/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_boastjoint/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_boastjoint/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_boastjoint/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_boastjoint/wide.png"
+      }
+     },
+     "metaTags": [
+      "Cosmetics.Emote.CharacterGroup.Skirts"
+     ],
+     "showcaseVideo": "M37HpMEFGR0",
+     "added": "2026-11-01T05:00:00Z"
+    },
+    {
+     "id": "Backpack_BoastJoint",
+     "name": "Mandarinas de Nami",
+     "description": "Un pedacito de hogar recién cultivado.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_boastjoint/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_boastjoint/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_boastjoint/featured.png"
+     },
+     "added": "2026-11-01T05:00:00Z"
+    },
+    {
+     "id": "Pickaxe_BoastJoint",
+     "name": "Bastón del clima",
+     "description": "El emblemático bastón segmentado de Nami.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "One Piece",
+      "text": "Pieza del conjunto One Piece.",
+      "backendValue": "FrailShark"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_boastjoint/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_boastjoint/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_boastjoint/featured.png"
+     },
+     "added": "2026-11-01T05:00:00Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 1600,
+   "finalPrice": 1600,
+   "devName": "[VIRTUAL]1 x Usopp, 1 x Usopp's Kit, 1 x 5 Ton Hammer for -1 MtxCurrency",
+   "offerId": "v2:/e3fae283d6d7a1c43fe04f919bb5f0f404517bfdf266fba2b0adfd86fd713589",
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-12-05T23:59:59.999Z",
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -1,
+   "layoutId": "ConclusionB110926.93",
+   "layout": {
+    "id": "ConclusionB110926",
+    "name": "One Piece ",
+    "index": 5,
+    "rank": 198,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "8ed1eeff",
+    "color2": "ffffffff",
+    "color3": "0d74c4ff",
+    "textBackgroundColor": "0a67afff"
+   },
+   "tileBackgroundMaterial": "ShopTile_Pirates_Clouds",
+   "tileSize": "Size_1_x_1",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S43/DAv2_Character_loomrise",
+   "newDisplayAsset": {
+    "id": "DAv2_Character_LoomRise",
+    "cosmeticId": "Character_LoomRise",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__8d18a7d0a6c5be85_29c0c4191e61fb71.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/8d18a7d0a6c5be85/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__8d18a7d0a6c5be85_5aff8d0c456b1e98.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/8d18a7d0a6c5be85/renderimage_1.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Character_LoomRise",
+     "name": "Usopp",
+     "description": "Francotirador y mitómano.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "One Piece",
+      "text": "Pieza del conjunto One Piece.",
+      "backendValue": "FrailShark"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_loomrise/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_loomrise/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_loomrise/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_loomrise/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_loomrise/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_loomrise/wide.png"
+      }
+     },
+     "showcaseVideo": "tTSfkTgvsio",
+     "added": "2026-11-01T05:00:00Z"
+    },
+    {
+     "id": "Backpack_LoomRise",
+     "name": "Kit de Usopp",
+     "description": "Contiene todo lo que necesita el Señor de la destrucción.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_loomrise/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_loomrise/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_loomrise/featured.png"
+     },
+     "added": "2026-11-01T05:00:00Z"
+    },
+    {
+     "id": "Pickaxe_LoomRise",
+     "name": "Martillo de 5 toneladas",
+     "description": "Hecho con dos sartenes muy pesados.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "One Piece",
+      "text": "Pieza del conjunto One Piece.",
+      "backendValue": "FrailShark"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_loomrise/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_loomrise/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_loomrise/featured.png"
+     },
+     "added": "2026-11-01T05:00:00Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 1500,
+   "finalPrice": 1500,
+   "devName": "[VIRTUAL]1 x Tony Tony Chopper for 1500 MtxCurrency",
+   "offerId": "v2:/1d114b879f80f65a7001b7f12d2ca3b4c097c9725f6e603fbdea1c8e337ca6e3",
+   "inDate": "2026-11-08T00:00:00Z",
+   "outDate": "2026-12-05T23:59:59.999Z",
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -3,
+   "layoutId": "ConclusionB110926.97",
+   "layout": {
+    "id": "ConclusionB110926",
+    "name": "One Piece ",
+    "index": 5,
+    "rank": 198,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "8ed1eeff",
+    "color2": "ffffffff",
+    "color3": "0d74c4ff",
+    "textBackgroundColor": "0a67afff"
+   },
+   "tileBackgroundMaterial": "ShopTile_Pirates_Clouds",
+   "tileSize": "Size_1_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_companion_bloomscar",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S43/DAv2_companion_bloomscar",
+   "newDisplayAsset": {
+    "id": "DAv2_Companion_BloomScar",
+    "cosmeticId": "Companion_BloomScar",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__a09eaa8da361febd_29c0c4191e61fb71.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/a09eaa8da361febd/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__a09eaa8da361febd_d2e71b6320aa32c2.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/a09eaa8da361febd/renderimage_1.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Companion_BloomScar",
+     "name": "Tony Tony Chopper",
+     "description": "Un reno doctor amante del algodón de azúcar.",
+     "type": {
+      "value": "sidekick",
+      "displayValue": "Compañero",
+      "backendValue": "CosmeticCompanion"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "One Piece",
+      "text": "Pieza del conjunto One Piece.",
+      "backendValue": "FrailShark"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/companion_bloomscar/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/companion_bloomscar/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/companion_bloomscar/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Emote",
+       "type": "Gesto de compañero",
+       "options": [
+        {
+         "tag": "CompanionEmote0",
+         "name": "Algodón de azúcar de Chopper",
+         "image": "https://fortnite-api.com/images/cosmetics/br/companion_bloomscar/variants/emote/companionemote0.png"
+        }
+       ]
+      },
+      {
+       "channel": "Outfit",
+       "type": "Estilo",
+       "options": [
+        {
+         "tag": "Stage1",
+         "name": "Tony Tony Chopper",
+         "image": "https://fortnite-api.com/images/cosmetics/br/companion_bloomscar/variants/outfit/stage1.png"
+        },
+        {
+         "tag": "Stage2",
+         "name": "Chopper Arabasta",
+         "image": "https://fortnite-api.com/images/cosmetics/br/companion_bloomscar/variants/outfit/stage2.png"
+        }
+       ]
+      },
+      {
+       "channel": "Material",
+       "type": "Mochila retro",
+       "options": [
+        {
+         "tag": "Mat1",
+         "name": "Sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/companion_bloomscar/variants/material/mat1.png"
+        },
+        {
+         "tag": "Mat2",
+         "name": "No",
+         "image": "https://fortnite-api.com/images/cosmetics/br/companion_bloomscar/variants/material/mat2.png"
+        }
+       ]
+      }
+     ],
+     "added": "2026-11-01T23:10:43Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 500,
+   "finalPrice": 500,
+   "devName": "[VIRTUAL]1 x Climate Baton for 500 MtxCurrency",
+   "offerId": "v2:/64cb0ef45952b00e793490bad5ab92ce2ca34e3047a5958bfcb89dbf12893c78",
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-12-05T23:59:59.999Z",
+   "offerTag": {
+    "id": "3weakpoints",
+    "text": "¡Reacciona a puntos débiles! Máximo 3 puntos débiles."
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -4,
+   "layoutId": "ConclusionB110926.94",
+   "layout": {
+    "id": "ConclusionB110926",
+    "name": "One Piece ",
+    "index": 5,
+    "rank": 198,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "8ed1eeff",
+    "color2": "ffffffff",
+    "color3": "0d74c4ff",
+    "textBackgroundColor": "0a67afff"
+   },
+   "tileBackgroundMaterial": "ShopTile_Pirates_Clouds",
+   "tileSize": "Size_1_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_pickaxe_boastjoint",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S43/DAv2_pickaxe_boastjoint",
+   "newDisplayAsset": {
+    "id": "DAv2_Pickaxe_BoastJoint",
+    "cosmeticId": "Pickaxe_BoastJoint",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__3ae6b56d744af2d6_29c0c4191e61fb71.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/3ae6b56d744af2d6/renderimage_0.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Pickaxe_BoastJoint",
+     "name": "Bastón del clima",
+     "description": "El emblemático bastón segmentado de Nami.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "One Piece",
+      "text": "Pieza del conjunto One Piece.",
+      "backendValue": "FrailShark"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_boastjoint/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_boastjoint/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_boastjoint/featured.png"
+     },
+     "added": "2026-11-01T05:00:00Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 4900,
+   "finalPrice": 3200,
+   "devName": "[VIRTUAL]1 x Roronoa Zoro, 1 x Zoro's Swords, 1 x Zoro's Training Gear, 1 x Test of Will, 1 x Sanji, 1 x Sanji's Utensils, 1 x Sanji's Utensils, 1 x Tony Tony Chopper for -1 MtxCurrency",
+   "offerId": "v2:/f5dba82fd8e98540fc491b9a609f638399183fe47def96d8c60e844eb6616fea",
+   "inDate": "2026-11-08T00:00:00Z",
+   "outDate": "2026-12-05T23:59:59.999Z",
+   "bundle": {
+    "name": "Lote Sombrero de paja",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/08e43d2736617a99/renderimage_0.png"
+   },
+   "banner": {
+    "value": "1700 monedas V de descuento",
+    "intensity": "Low",
+    "backendValue": "AmountOff"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -3,
+   "layoutId": "ConclusionB110926.99",
+   "layout": {
+    "id": "ConclusionB110926",
+    "name": "One Piece ",
+    "index": 5,
+    "rank": 198,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "billboard",
+    "textureMetadata": [
+     {
+      "key": "background",
+      "value": "https://cdn2.unrealengine.com/sk-Billboard_BrandCreed_BG-cf03b6a4.png"
+     },
+     {
+      "key": "foreground",
+      "value": "https://cdn2.unrealengine.com/sk-Billboard_BrandCreed_Character-0ac98e09.png"
+     },
+     {
+      "key": "banner",
+      "value": "https://cdn2.unrealengine.com/sk-Billboard_Delilah_Logo-17440ac3.png"
+     },
+     {
+      "key": "foreground_juno",
+      "value": "https://cdn2.unrealengine.com/sk-Billboard_BrandCreed_Figure-7d86b4a6.png"
+     },
+     {
+      "key": "bodyImage",
+      "value": "https://cdn2.unrealengine.com/sk-Billboard_BrandCreed_ItemStack-c6d68b7c.png"
+     }
+    ],
+    "stringMetadata": [
+     {
+      "key": "alignment",
+      "value": "left"
+     },
+     {
+      "key": "highlightEnabled",
+      "value": "true"
+     },
+     {
+      "key": "parallaxEnabled",
+      "value": "true"
+     },
+     {
+      "key": "titleColorA",
+      "value": "FFFFFF"
+     },
+     {
+      "key": "titleColorB",
+      "value": "FFFFFF"
+     }
+    ],
+    "textMetadata": [
+     {
+      "key": "cta",
+      "value": "Ver oferta"
+     },
+     {
+      "key": "subtitle",
+      "value": "Lote de 8 objetos"
+     },
+     {
+      "key": "title",
+      "value": "Sombreros de paja "
+     }
+    ]
+   },
+   "colors": {
+    "color1": "8ed1eeff",
+    "color2": "ffffffff",
+    "color3": "0d74c4ff",
+    "textBackgroundColor": "0a67afff"
+   },
+   "tileBackgroundMaterial": "ShopTile_Pirates_Clouds",
+   "tileSize": "Size_4_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_Brandcreed_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S43/DAv2_Bundle_Featured_Brandcreed",
+   "newDisplayAsset": {
+    "id": "DAv2_Bundle_Featured_BrandCreed",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__08e43d2736617a99_29c0c4191e61fb71.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/08e43d2736617a99/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__08e43d2736617a99_d2e71b6320aa32c2.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/08e43d2736617a99/renderimage_1.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__08e43d2736617a99_71e578208f570b02.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/08e43d2736617a99/renderimage_2.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Character_BrandCreed",
+     "name": "Roronoa Zoro",
+     "description": "Maestro espadachín de los Sombrero de paja.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "One Piece",
+      "text": "Pieza del conjunto One Piece.",
+      "backendValue": "FrailShark"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_brandcreed/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_brandcreed/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_brandcreed/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_brandcreed/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_brandcreed/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_brandcreed/wide.png"
+      }
+     },
+     "variants": [
+      {
+       "channel": "Parts",
+       "type": "Bandana",
+       "options": [
+        {
+         "tag": "Stage1",
+         "name": "No",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_brandcreed/variants/parts/stage1.png"
+        },
+        {
+         "tag": "Stage2",
+         "name": "Sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_brandcreed/variants/parts/stage2.png"
+        }
+       ]
+      }
+     ],
+     "metaTags": [
+      "Cosmetics.MetaTags.BrandCreed"
+     ],
+     "showcaseVideo": "cn8i4g7rASA",
+     "added": "2026-11-01T23:10:43Z"
+    },
+    {
+     "id": "Pickaxe_BrandCreed",
+     "name": "Espadas de Zoro",
+     "description": "Yubashiri y Sandai Kitetsu están listas para la batalla.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "One Piece",
+      "text": "Pieza del conjunto One Piece.",
+      "backendValue": "FrailShark"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_brandcreed/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_brandcreed/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_brandcreed/featured.png"
+     },
+     "metaTags": [
+      "Cosmetics.MetaTags.BrandCreed"
+     ],
+     "added": "2026-11-01T23:10:43Z"
+    },
+    {
+     "id": "Backpack_BrandCreed",
+     "name": "Pesas de Zoro",
+     "description": "Levanta con los dientes.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_brandcreed/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_brandcreed/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_brandcreed/featured.png"
+     },
+     "added": "2026-11-01T23:10:43Z"
+    },
+    {
+     "id": "EID_BrandCreed",
+     "name": "Prueba de voluntad",
+     "description": "Demuestra que puedes empuñar tres espadas sin dificultad.",
+     "type": {
+      "value": "emote",
+      "displayValue": "Gesto",
+      "backendValue": "AthenaDance"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "One Piece",
+      "text": "Pieza del conjunto One Piece.",
+      "backendValue": "FrailShark"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/eid_brandcreed/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/eid_brandcreed/icon.png"
+     },
+     "showcaseVideo": "8DlbDYyqfUU",
+     "added": "2026-11-01T23:10:43Z"
+    },
+    {
+     "id": "Character_InsightBawl",
+     "name": "Sanji",
+     "description": "Chef en busca del All Blue.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "One Piece",
+      "text": "Pieza del conjunto One Piece.",
+      "backendValue": "FrailShark"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_insightbawl/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_insightbawl/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_insightbawl/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_insightbawl/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_insightbawl/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_insightbawl/wide.png"
+      }
+     },
+     "showcaseVideo": "CtBK2RxgQRU",
+     "added": "2026-11-01T23:10:43Z"
+    },
+    {
+     "id": "Pickaxe_InsightBawl",
+     "name": "Utensilios de Sanji",
+     "description": "Mantén bien alimentada a toda la tripulación.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "One Piece",
+      "text": "Pieza del conjunto One Piece.",
+      "backendValue": "FrailShark"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_insightbawl/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_insightbawl/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_insightbawl/featured.png"
+     },
+     "added": "2026-11-01T23:10:43Z"
+    },
+    {
+     "id": "Backpack_InsightBawl",
+     "name": "Utensilios de Sanji",
+     "description": "Mantén bien alimentada a toda la tripulación.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_insightbawl/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_insightbawl/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_insightbawl/featured.png"
+     },
+     "added": "2026-11-01T23:10:43Z"
+    },
+    {
+     "id": "Companion_BloomScar",
+     "name": "Tony Tony Chopper",
+     "description": "Un reno doctor amante del algodón de azúcar.",
+     "type": {
+      "value": "sidekick",
+      "displayValue": "Compañero",
+      "backendValue": "CosmeticCompanion"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "One Piece",
+      "text": "Pieza del conjunto One Piece.",
+      "backendValue": "FrailShark"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/companion_bloomscar/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/companion_bloomscar/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/companion_bloomscar/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Emote",
+       "type": "Gesto de compañero",
+       "options": [
+        {
+         "tag": "CompanionEmote0",
+         "name": "Algodón de azúcar de Chopper",
+         "image": "https://fortnite-api.com/images/cosmetics/br/companion_bloomscar/variants/emote/companionemote0.png"
+        }
+       ]
+      },
+      {
+       "channel": "Outfit",
+       "type": "Estilo",
+       "options": [
+        {
+         "tag": "Stage1",
+         "name": "Tony Tony Chopper",
+         "image": "https://fortnite-api.com/images/cosmetics/br/companion_bloomscar/variants/outfit/stage1.png"
+        },
+        {
+         "tag": "Stage2",
+         "name": "Chopper Arabasta",
+         "image": "https://fortnite-api.com/images/cosmetics/br/companion_bloomscar/variants/outfit/stage2.png"
+        }
+       ]
+      },
+      {
+       "channel": "Material",
+       "type": "Mochila retro",
+       "options": [
+        {
+         "tag": "Mat1",
+         "name": "Sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/companion_bloomscar/variants/material/mat1.png"
+        },
+        {
+         "tag": "Mat2",
+         "name": "No",
+         "image": "https://fortnite-api.com/images/cosmetics/br/companion_bloomscar/variants/material/mat2.png"
+        }
+       ]
+      }
+     ],
+     "added": "2026-11-01T23:10:43Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 800,
+   "finalPrice": 800,
+   "devName": "[VIRTUAL]1 x Sanji's Utensils, 1 x Sanji's Utensils for 800 MtxCurrency",
+   "offerId": "v2:/05b06b3cb6996edf8512d477b58c4552b4fa35e7a031a34d0e604e18b881f62f",
+   "inDate": "2026-11-08T00:00:00Z",
+   "outDate": "2026-12-05T23:59:59.999Z",
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -1,
+   "layoutId": "ConclusionB110926.97",
+   "layout": {
+    "id": "ConclusionB110926",
+    "name": "One Piece ",
+    "index": 5,
+    "rank": 198,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "8ed1eeff",
+    "color2": "ffffffff",
+    "color3": "0d74c4ff",
+    "textBackgroundColor": "0a67afff"
+   },
+   "tileBackgroundMaterial": "ShopTile_Pirates_Clouds",
+   "tileSize": "Size_1_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_Pickaxe_insightbawl_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S43/DAv2_Pickaxe_insightbawl",
+   "newDisplayAsset": {
+    "id": "DAv2_Pickaxe_InsightBawl",
+    "cosmeticId": "Pickaxe_InsightBawl",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__0cffae2d10c12c17_29c0c4191e61fb71.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/0cffae2d10c12c17/renderimage_0.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Pickaxe_InsightBawl",
+     "name": "Utensilios de Sanji",
+     "description": "Mantén bien alimentada a toda la tripulación.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "One Piece",
+      "text": "Pieza del conjunto One Piece.",
+      "backendValue": "FrailShark"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_insightbawl/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_insightbawl/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_insightbawl/featured.png"
+     },
+     "added": "2026-11-01T23:10:43Z"
+    },
+    {
+     "id": "Backpack_InsightBawl",
+     "name": "Utensilios de Sanji",
+     "description": "Mantén bien alimentada a toda la tripulación.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_insightbawl/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_insightbawl/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_insightbawl/featured.png"
+     },
+     "added": "2026-11-01T23:10:43Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 1200,
+   "finalPrice": 1200,
+   "devName": "[VIRTUAL]1 x Going Merry for 1200 MtxCurrency",
+   "offerId": "v2:/58772f33d10da1ceca6e15eed94e5420455ffb77f112e0cb1ad67794b2a55b69",
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-12-05T23:59:59.999Z",
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -1,
+   "layoutId": "ConclusionB110926.94",
+   "layout": {
+    "id": "ConclusionB110926",
+    "name": "One Piece ",
+    "index": 5,
+    "rank": 198,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "8ed1eeff",
+    "color2": "ffffffff",
+    "color3": "0d74c4ff",
+    "textBackgroundColor": "0a67afff"
+   },
+   "tileBackgroundMaterial": "ShopTile_Pirates_Clouds",
+   "tileSize": "Size_1_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_glider_celerystitch",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S43/DAv2_glider_celerystitch",
+   "newDisplayAsset": {
+    "id": "DAv2_Glider_CeleryStitch",
+    "cosmeticId": "Glider_CeleryStitch",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__b59d99f835501268_29c0c4191e61fb71.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/b59d99f835501268/renderimage_0.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Glider_CeleryStitch",
+     "name": "Going Merry",
+     "description": "El primer barco de los Sombrero de paja.",
+     "type": {
+      "value": "glider",
+      "displayValue": "Planeador",
+      "backendValue": "AthenaGlider"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "One Piece",
+      "text": "Pieza del conjunto One Piece.",
+      "backendValue": "FrailShark"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/glider_celerystitch/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/glider_celerystitch/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/glider_celerystitch/featured.png"
+     },
+     "added": "2026-11-01T05:00:00Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 8200,
+   "finalPrice": 4000,
+   "devName": "[VIRTUAL]1 x Monkey D. Luffy, 1 x Luffy's Straw Hat, 1 x Gum-Gum Pistol, 1 x Multi-Punches Flex, 1 x Nami, 1 x Nami's Tangerines, 1 x Climate Baton, 1 x Usopp, 1 x Usopp's Kit, 1 x 5 Ton Hammer, 1 x Going Merry, 1 x Roasted Meat, 1 x Giant Meat on the Bone, 1 x Straw Hat Guitar, 1 x Straw Hat Guitar, 1 x Straw Hat Guitar for -1 MtxCurrency",
+   "offerId": "v2:/8c57975e9814357c059acb6102b3af63c1f7ceec628657d40cbcde2a89738443",
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-12-05T23:59:59.999Z",
+   "bundle": {
+    "name": "Lote One Piece",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/d5ad5f42d4062e78/renderimage_0.png"
+   },
+   "banner": {
+    "value": "4200 monedas V de descuento",
+    "intensity": "Low",
+    "backendValue": "AmountOff"
+   },
+   "offerTag": {
+    "id": "celerystitchoutfit",
+    "text": "La mochila retro Hat y el pico Fist cambian de apariencia al equiparlos con el atuendo Monkey D. Luffy"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -3,
+   "layoutId": "ConclusionB110926.96",
+   "layout": {
+    "id": "ConclusionB110926",
+    "name": "One Piece ",
+    "index": 5,
+    "rank": 198,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "8ed1eeff",
+    "color2": "ffffffff",
+    "color3": "0d74c4ff",
+    "textBackgroundColor": "0a67afff"
+   },
+   "tileBackgroundMaterial": "ShopTile_Pirates_Clouds",
+   "tileSize": "Size_4_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_Celerystitch_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S43/DAv2_Bundle_Featured_Celerystitch",
+   "newDisplayAsset": {
+    "id": "DAv2_Bundle_Featured_CeleryStitch",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__d5ad5f42d4062e78_29c0c4191e61fb71.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/d5ad5f42d4062e78/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__d5ad5f42d4062e78_d2e71b6320aa32c2.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/d5ad5f42d4062e78/renderimage_1.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__d5ad5f42d4062e78_71e578208f570b02.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/d5ad5f42d4062e78/renderimage_2.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Character_CeleryStitch",
+     "name": "Monkey D. Luffy",
+     "description": "¡Será el nuevo rey de los piratas!",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "One Piece",
+      "text": "Pieza del conjunto One Piece.",
+      "backendValue": "FrailShark"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_celerystitch/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_celerystitch/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_celerystitch/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_celerystitch/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_celerystitch/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_celerystitch/wide.png"
+      }
+     },
+     "showcaseVideo": "U4dZqudChDw",
+     "added": "2026-11-01T05:00:00Z"
+    },
+    {
+     "id": "Backpack_CeleryStitchCud",
+     "name": "Sombrero de paja de Luffy",
+     "description": "Un símbolo de confianza, trabajo en equipo y sueños.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_celerystitchcud/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_celerystitchcud/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_celerystitchcud/featured.png"
+     },
+     "added": "2026-11-01T05:00:00Z"
+    },
+    {
+     "id": "Pickaxe_CeleryStitchCud",
+     "name": "Pistola goma goma",
+     "description": "Un golpe elástico.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "One Piece",
+      "text": "Pieza del conjunto One Piece.",
+      "backendValue": "FrailShark"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_celerystitchcud/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_celerystitchcud/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_celerystitchcud/featured.png"
+     },
+     "added": "2026-11-01T05:00:00Z"
+    },
+    {
+     "id": "EID_CeleryStitch",
+     "name": "Ráfaga de puñetazos",
+     "description": "Remata con la ametralladora goma goma.",
+     "type": {
+      "value": "emote",
+      "displayValue": "Gesto",
+      "backendValue": "AthenaDance"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "One Piece",
+      "text": "Pieza del conjunto One Piece.",
+      "backendValue": "FrailShark"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/eid_celerystitch/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/eid_celerystitch/icon.png"
+     },
+     "showcaseVideo": "g4r-QR4J2J4",
+     "added": "2026-11-01T05:00:00Z"
+    },
+    {
+     "id": "Character_BoastJoint",
+     "name": "Nami",
+     "description": "Ladrona, navegante y cartógrafa.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "One Piece",
+      "text": "Pieza del conjunto One Piece.",
+      "backendValue": "FrailShark"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_boastjoint/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_boastjoint/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_boastjoint/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_boastjoint/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_boastjoint/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_boastjoint/wide.png"
+      }
+     },
+     "metaTags": [
+      "Cosmetics.Emote.CharacterGroup.Skirts"
+     ],
+     "showcaseVideo": "M37HpMEFGR0",
+     "added": "2026-11-01T05:00:00Z"
+    },
+    {
+     "id": "Backpack_BoastJoint",
+     "name": "Mandarinas de Nami",
+     "description": "Un pedacito de hogar recién cultivado.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_boastjoint/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_boastjoint/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_boastjoint/featured.png"
+     },
+     "added": "2026-11-01T05:00:00Z"
+    },
+    {
+     "id": "Pickaxe_BoastJoint",
+     "name": "Bastón del clima",
+     "description": "El emblemático bastón segmentado de Nami.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "One Piece",
+      "text": "Pieza del conjunto One Piece.",
+      "backendValue": "FrailShark"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_boastjoint/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_boastjoint/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_boastjoint/featured.png"
+     },
+     "added": "2026-11-01T05:00:00Z"
+    },
+    {
+     "id": "Character_LoomRise",
+     "name": "Usopp",
+     "description": "Francotirador y mitómano.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "One Piece",
+      "text": "Pieza del conjunto One Piece.",
+      "backendValue": "FrailShark"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_loomrise/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_loomrise/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_loomrise/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_loomrise/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_loomrise/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_loomrise/wide.png"
+      }
+     },
+     "showcaseVideo": "tTSfkTgvsio",
+     "added": "2026-11-01T05:00:00Z"
+    },
+    {
+     "id": "Backpack_LoomRise",
+     "name": "Kit de Usopp",
+     "description": "Contiene todo lo que necesita el Señor de la destrucción.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_loomrise/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_loomrise/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_loomrise/featured.png"
+     },
+     "added": "2026-11-01T05:00:00Z"
+    },
+    {
+     "id": "Pickaxe_LoomRise",
+     "name": "Martillo de 5 toneladas",
+     "description": "Hecho con dos sartenes muy pesados.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "One Piece",
+      "text": "Pieza del conjunto One Piece.",
+      "backendValue": "FrailShark"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_loomrise/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_loomrise/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_loomrise/featured.png"
+     },
+     "added": "2026-11-01T05:00:00Z"
+    },
+    {
+     "id": "Glider_CeleryStitch",
+     "name": "Going Merry",
+     "description": "El primer barco de los Sombrero de paja.",
+     "type": {
+      "value": "glider",
+      "displayValue": "Planeador",
+      "backendValue": "AthenaGlider"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "One Piece",
+      "text": "Pieza del conjunto One Piece.",
+      "backendValue": "FrailShark"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/glider_celerystitch/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/glider_celerystitch/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/glider_celerystitch/featured.png"
+     },
+     "added": "2026-11-01T05:00:00Z"
+    },
+    {
+     "id": "Backpack_CeleryStitch",
+     "name": "Carne asada",
+     "description": "La favorita de Luffy.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "One Piece",
+      "text": "Pieza del conjunto One Piece.",
+      "backendValue": "FrailShark"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_celerystitch/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_celerystitch/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_celerystitch/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Parts",
+       "type": "reactividad",
+       "options": [
+        {
+         "tag": "Stage1",
+         "name": "Sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/backpack_celerystitch/variants/parts/stage1.png"
+        },
+        {
+         "tag": "Stage2",
+         "name": "No",
+         "image": "https://fortnite-api.com/images/cosmetics/br/backpack_celerystitch/variants/parts/stage2.png"
+        }
+       ]
+      }
+     ],
+     "added": "2026-11-01T05:00:00Z"
+    },
+    {
+     "id": "Pickaxe_CeleryStitch",
+     "name": "Carne gigante",
+     "description": "Un arma con mucho sabor.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "One Piece",
+      "text": "Pieza del conjunto One Piece.",
+      "backendValue": "FrailShark"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_celerystitch/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_celerystitch/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_celerystitch/featured.png"
+     },
+     "added": "2026-11-01T05:00:00Z"
+    },
+    {
+     "id": "Backpack_CeleryStitch_Guitar",
+     "name": "Cuerdas de los Sombrero de paja",
+     "description": "Elige una canción en alta mar.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "One Piece",
+      "text": "Pieza del conjunto One Piece.",
+      "backendValue": "FrailShark"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_celerystitch_guitar/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_celerystitch_guitar/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_celerystitch_guitar/featured.png"
+     },
+     "added": "2026-11-01T05:00:00Z"
+    },
+    {
+     "id": "Pickaxe_CeleryStitch_Guitar",
+     "name": "Cuerdas de los Sombrero de paja",
+     "description": "Elige una canción en alta mar.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "One Piece",
+      "text": "Pieza del conjunto One Piece.",
+      "backendValue": "FrailShark"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_celerystitch_guitar/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_celerystitch_guitar/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_celerystitch_guitar/featured.png"
+     },
+     "added": "2026-11-01T05:00:00Z"
+    }
+   ],
+   "instruments": [
+    {
+     "id": "Sparks_CeleryStitch_Guitar",
+     "name": "Cuerdas de los Sombrero de paja",
+     "description": "Elige una canción en alta mar.",
+     "type": {
+      "value": "guitar",
+      "displayValue": "Guitarra",
+      "backendValue": "SparksGuitar"
+     },
+     "rarity": {
+      "value": "common",
+      "displayValue": "Común",
+      "backendValue": "EFortRarity::Common"
+     },
+     "images": {
+      "small": "https://fortnite-api.com/images/cosmetics/instruments/sparks_celerystitch_guitar/small.png",
+      "large": "https://fortnite-api.com/images/cosmetics/instruments/sparks_celerystitch_guitar/large.png"
+     },
+     "added": "2026-11-01T05:00:00Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 800,
+   "finalPrice": 800,
+   "devName": "[VIRTUAL]1 x Straw Hat Guitar, 1 x Straw Hat Guitar, 1 x Straw Hat Guitar for 800 MtxCurrency",
+   "offerId": "v2:/bba959166b14246f2d4f86d3583479b914e49a1105e920a6c160c4939aa1565b",
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-12-05T23:59:59.999Z",
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -4,
+   "layoutId": "ConclusionB110926.93",
+   "layout": {
+    "id": "ConclusionB110926",
+    "name": "One Piece ",
+    "index": 5,
+    "rank": 198,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "8ed1eeff",
+    "color2": "ffffffff",
+    "color3": "0d74c4ff",
+    "textBackgroundColor": "0a67afff"
+   },
+   "tileBackgroundMaterial": "ShopTile_Pirates_Clouds",
+   "tileSize": "Size_1_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_sparks_celerystitch_guitar",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S43/DAv2_sparks_celerystitch_guitar",
+   "newDisplayAsset": {
+    "id": "DAv2_Sparks_Celerystitch_Guitar",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__5eb28f7e18991c73_29c0c4191e61fb71.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/5eb28f7e18991c73/renderimage_0.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Pickaxe_CeleryStitch_Guitar",
+     "name": "Cuerdas de los Sombrero de paja",
+     "description": "Elige una canción en alta mar.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "One Piece",
+      "text": "Pieza del conjunto One Piece.",
+      "backendValue": "FrailShark"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_celerystitch_guitar/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_celerystitch_guitar/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_celerystitch_guitar/featured.png"
+     },
+     "added": "2026-11-01T05:00:00Z"
+    },
+    {
+     "id": "Backpack_CeleryStitch_Guitar",
+     "name": "Cuerdas de los Sombrero de paja",
+     "description": "Elige una canción en alta mar.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "One Piece",
+      "text": "Pieza del conjunto One Piece.",
+      "backendValue": "FrailShark"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_celerystitch_guitar/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_celerystitch_guitar/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_celerystitch_guitar/featured.png"
+     },
+     "added": "2026-11-01T05:00:00Z"
+    }
+   ],
+   "instruments": [
+    {
+     "id": "Sparks_CeleryStitch_Guitar",
+     "name": "Cuerdas de los Sombrero de paja",
+     "description": "Elige una canción en alta mar.",
+     "type": {
+      "value": "guitar",
+      "displayValue": "Guitarra",
+      "backendValue": "SparksGuitar"
+     },
+     "rarity": {
+      "value": "common",
+      "displayValue": "Común",
+      "backendValue": "EFortRarity::Common"
+     },
+     "images": {
+      "small": "https://fortnite-api.com/images/cosmetics/instruments/sparks_celerystitch_guitar/small.png",
+      "large": "https://fortnite-api.com/images/cosmetics/instruments/sparks_celerystitch_guitar/large.png"
+     },
+     "added": "2026-11-01T05:00:00Z"
+    }
+   ]
+  }
+ ]
+}

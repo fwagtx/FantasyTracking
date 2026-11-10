@@ -1,0 +1,73 @@
+{
+ "duration": 20,
+ "caption": "#EpicPartner Los 3 niveles de tesoro de los cofres 🏴‍☠️ Estándar, mayor y supremo… y en el supremo está la Tienda Pirata 😳\n¿Cuál te ha salido? 👇\nUsa el código BAD en la tienda de objetos 💛\n#fortnite #tiendapirata #fortniteespañol",
+ "claims": [
+  {
+   "text": "Hay tres niveles de tesoro: estándar, mayor y supremo",
+   "source": "vgc-guide.json",
+   "match": [
+    "split into three tiers",
+    "Standard, Major and Supreme"
+   ]
+  },
+  {
+   "text": "Estándar: objetos para la partida, como localizadores",
+   "source": "vgc-guide.json",
+   "match": [
+    "If it's standard you'll get either a Sprite Locator, Lucky Locator, Golden Firework, Extraction Accelerator or Portable Extractor"
+   ]
+  },
+  {
+   "text": "Mayor: uno de los cosméticos especiales de la semana",
+   "source": "vgc-guide.json",
+   "match": [
+    "If it's Major you'll get one of the current week's special cosmetics"
+   ]
+  },
+  {
+   "text": "Supremo: la skin dorada de la semana o el acceso a la Tienda Pirata",
+   "source": "vgc-guide.json",
+   "match": [
+    "that week's gold skin",
+    "or the Pirate Shop Token"
+   ]
+  }
+ ],
+ "text": [
+  "TIENDA PIRATA",
+  "LOS 3 NIVELES / DE TESORO",
+  "ESTÁNDAR / OBJETOS PARA LA PARTIDA",
+  "MAYOR / COSMÉTICOS DE LA SEMANA",
+  "SUPREMO / SKIN DORADA O TIENDA PIRATA",
+  "TIENDA / PIRATA",
+  "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+  "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+  "¡CADA COFRE PUEDE",
+  "DARTE UN TESORO!",
+  "Y HAY TRES",
+  "NIVELES.",
+  "ESTÁNDAR: OBJETOS PARA",
+  "LA PARTIDA,",
+  "COMO LOCALIZADORES.",
+  "MAYOR: UNO DE",
+  "LOS COSMÉTICOS ESPECIALES",
+  "DE LA SEMANA.",
+  "Y SUPREMO: LA",
+  "SKIN DORADA DE",
+  "LA SEMANA… ¡O",
+  "EL ACCESO A",
+  "LA TIENDA PIRATA!",
+  "¿CUÁL TE HA",
+  "SALIDO A TI?",
+  "USA EL CÓDIGO",
+  "BAD EN LA",
+  "TIENDA DE OBJETOS.",
+  "LE AYUDA MUCHÍSIMO",
+  "AL CANAL.",
+  "¡GRACIAS POR VER!",
+  "SÍGUENOS PARA MÁS",
+  "CONTENIDO DIARIO.",
+  "#EPICPARTNER",
+  "LA TIENDITA BAD"
+ ]
+}

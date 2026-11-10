@@ -1,0 +1,115 @@
+{
+ "duration": 42,
+ "caption": "#EpicPartner Tienda Pirata: las 5 fechas que no te puedes perder ⏰ El #1 es tu segunda tienda gratis en 2027 😳\n¿Cuándo usarías el tuyo? 👇\nUsa el código BAD en la tienda de objetos 💛\n#fortnite #tiendapirata #onepiece",
+ "claims": [
+  {
+   "text": "La minitemporada arrancó el 1 de noviembre",
+   "source": "vgc-guide.json",
+   "match": [
+    "started on November 1"
+   ]
+  },
+  {
+   "text": "Cada uso dura 14 días",
+   "source": "vgc-guide.json",
+   "match": [
+    "for the next 14 days"
+   ]
+  },
+  {
+   "text": "Los 14 días cuentan desde que lo activas",
+   "source": "gamingbible.json",
+   "match": [
+    "Activate Now",
+    "14-day 2026 access will begin"
+   ]
+  },
+  {
+   "text": "Las skins de One Piece salen de la tienda el 5 de diciembre, con el reinicio de las 18:00 (CDMX)",
+   "source": "onepiece-shop.json",
+   "match": [
+    "One Piece",
+    "2026-12-05T23:59:59.999Z"
+   ]
+  },
+  {
+   "text": "Activa tu uso de 2026 hasta el 15 de diciembre",
+   "source": "vgc-guide.json",
+   "match": [
+    "between November 1 and December 15"
+   ]
+  },
+  {
+   "text": "Tu segundo uso llega en 2027",
+   "source": "vgc-odds-confirmed.json",
+   "match": [
+    "in 2027 between January 1 and December 31"
+   ]
+  },
+  {
+   "text": "Otros 14 días: dos tiendas gratis",
+   "source": "gamingbible.json",
+   "match": [
+    "split into two 14-day chunks",
+    "second 14-day window"
+   ]
+  }
+ ],
+ "text": [
+  "ACCESO A LA TIENDA PIRATA:",
+  "LAS FECHAS ⏰",
+  "NO TE LAS PIERDAS 🏴‍☠️",
+  "ESPERA AL #1 👀",
+  "#5",
+  "YA EMPEZÓ",
+  "LA MINITEMPORADA ARRANCÓ EL",
+  "? NOV",
+  "1 NOV",
+  "¡QUE EMPIECE LA CACERÍA! 🏴‍☠️",
+  "#4",
+  "TU VENTANA",
+  "CADA USO DURA",
+  "DESDE QUE LO ACTIVAS",
+  "? DÍAS",
+  "3 DÍAS",
+  "9 DÍAS",
+  "14 DÍAS",
+  "¡ELIGE BIEN TU MOMENTO! 🧠",
+  "#3",
+  "SKINS DE ONE PIECE",
+  "SALEN DE LA TIENDA EL",
+  "CON EL REINICIO DE LAS 18:00 (CDMX)",
+  "? DIC",
+  "5 DIC",
+  "¡ANTES DE QUE SE VAYAN! ⏰",
+  "#2",
+  "LÍMITE 2026",
+  "ACTIVA TU USO DE 2026 HASTA EL",
+  "LUEGO TIENES 14 DÍAS",
+  "15 DIC",
+  "¡NO TE DUERMAS! ⏰",
+  "#1",
+  "USO #2",
+  "TU SEGUNDO USO LLEGA EN",
+  "OTROS 14 DÍAS",
+  "20??",
+  "2027",
+  "¡DOS TIENDAS GRATIS! 😳",
+  "Y EL #1 ES… 🥁",
+  "EL MEJOR 👀",
+  "¿CUÁNDO USARÍAS EL TUYO? 👇",
+  "#2 · 15 DIC",
+  "#1 · 2027",
+  "#3 · 5 DIC",
+  "#4 · 14 DÍAS",
+  "#5 · 1 NOV",
+  "USA EL CÓDIGO BAD EN LA TIENDA DE OBJETOS 🛒",
+  "APOYA A UN CREADOR",
+  "#EPICPARTNER",
+  "ACEPTAR",
+  "✓ APOYANDO A: BAD",
+  "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+  "LA TIENDITA BAD",
+  "USA EL CÓDIGO: BAD"
+ ]
+}

@@ -104,7 +104,11 @@ Facts from `video/auto/pirata-sources/` (press reports quoting Epic's Fortnite S
 incluye, mitos) and Sat Nov 14 at 11:00 AM (Horas del Tesoro: 1–3 PM and 8–10 PM CDMX, ×1.5). On those days the
 1:00 PM slot is taken, so the DAY run only does the evergreen slot. If the in-game news or fetch_sources shows the
 Treasure Hours schedule or the Pirate Shop rules changed, set the affected queued posts to draft (Facts change).
-To make more pirate posts later, refresh the sources first (they must be under 24 h old when shipping), from the
+Extra pirate posts on Nov 10 (the owner asked for more that day): 10:30 AM "las 5 fechas" countdown (TPL.top),
+4:00 PM "¿Qué cofres cuentan?" and 10:00 PM "Los 3 niveles de tesoro" (TPL.guide), facts from
+`video/auto/pirata-sources-2026-11-10/` (the five articles re-fetched live on Nov 10, passages copied verbatim, plus Epic's
+shop data for the One Piece leave date). The Big Lead lists the 2026 activation window as ending Dec 16; VGC (citing Epic)
+says Dec 15: always use Dec 15. To make more pirate posts later, refresh the sources first (they must be under 24 h old when shipping), from the
 BAD ROYALE branch's `brand/badroyale/video/auto/pirate-shop-sources/` (read only), or skip.
 
 ## Facts change: pull outdated posts
