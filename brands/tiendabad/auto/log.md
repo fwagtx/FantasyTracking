@@ -5,3 +5,4 @@
 - 2026-11-09 Tienda Pirata series queued: Nov 10-13 at 13:00, Nov 14 at 11:00, all 5 networks (READY TO POST each).
 - 2026-11-09 15:00 LONG 'Tienda Pirata: guía completa' (3:30, 11 chapters) scheduled on YouTube with thumbnail.
 - 2026-11-09 DAY run: 20:30 evergreen filled for Nov 10 (¿Dónde está Loguetown?) and Nov 11 (Adivina la temporada: Nieve, Orelia, Midas ascendido), all 5 networks, READY TO POST each. Sources: no places or news removed. Nov 8: nothing was scheduled.
+- 2026-11-10 SHOP (run 2026-11-09 18:06 CDMX): Tienda 10 nov scheduled 6:35 PM CDMX on TikTok, Instagram, Facebook, YouTube Shorts, Threads (READY TO POST after two fixes in shop/scene.js: the last-day note says the date, 'se van el 10 nov, 6 PM', not 'mañana'; the OG stamp is centred and pops from 110% so it stays out of the button column). Note: the Nov 9 1:00 PM post published on TikTok, Instagram, Facebook, YouTube; Threads failed with 'authentication failure'.

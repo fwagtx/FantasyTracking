@@ -96,7 +96,7 @@
     const g2 = mk(stage, `inset:0`);
     chip(g2, "2 · Regreso OG", "#5BD0FF");
     const ogTiles = D.og.outfits.map((o, i, a) => add(g2, tile(o, 380, 500), `left:${a.length === 2 ? 90 + i * 420 : 330}px;top:360px`));
-    const stamp = mk(g2, `left:110px;top:890px;width:780px;text-align:center;padding:10px 0 4px;background:${YEL};border:8px solid ${INK};transform:rotate(-6deg);box-shadow:0 10px 0 ${INK}`,
+    const stamp = mk(g2, `left:90px;top:890px;width:780px;text-align:center;padding:10px 0 4px;background:${YEL};border:8px solid ${INK};transform:rotate(-6deg);box-shadow:0 10px 0 ${INK}`,
       `<span style="font-family:'Barlow Condensed';font-weight:900;font-size:66px;line-height:1;color:${INK};white-space:nowrap">CAPÍTULO ${D.og.chapter} · TEMPORADA ${D.og.season}</span>`, `CAPÍTULO ${D.og.chapter} · TEMPORADA ${D.og.season}`);
     const gapNote = D.og.gapDays >= 30 ? S.scrawl(g2, `¡${D.og.gapDays} días sin salir!`, 66, YEL, -5) : null;
 
@@ -105,7 +105,7 @@
     chip(g3, "3 · Último día", RED);
     const lastTiles = D.last.outfits.slice(0, 6).map((o, i) => add(g3, tile(o, 260, 330), `left:${80 + (i % 3) * 280}px;top:${350 + Math.floor(i / 3) * 350}px`));
     const more = D.last.count > 6 ? mk(g3, `left:700px;top:1045px;padding:6px 20px 2px;background:#fff;border:5px solid ${INK};border-radius:30px;font-family:'Barlow Condensed';font-weight:900;font-size:54px;color:${INK}`, `+${D.last.count - 6} más`, `+${D.last.count - 6} MÁS`) : null;
-    const resetNote = S.scrawl(g3, `se van mañana, ${D.resetLabel}`, 52, YEL, -5);
+    const resetNote = S.scrawl(g3, `se van el ${D.dateLabel.toLowerCase()}, ${D.resetLabel}`, 52, YEL, -5);   // a date, not "mañana": the post is seen on both sides of midnight
 
     const code = codeCardES(stage, 500);
     const thanks = thanksES(stage, 1010);
@@ -144,7 +144,7 @@
       // OG
       swap(g2, t, b2, b3);
       ogTiles.forEach((el, i) => T(el, { r: i ? 4 : -4, s: E.back(k(t, b2 + i * 0.12, b2 + 0.35 + i * 0.12)) }));
-      T(stamp, { a: t >= tEra ? 1 : 0, s: t < tEra ? 0 : 1 + 0.22 * (1 - E.out(k(t, tEra, tEra + 0.22))), r: -6 });
+      T(stamp, { a: t >= tEra ? 1 : 0, s: t < tEra ? 0 : 1 + 0.1 * (1 - E.out(k(t, tEra, tEra + 0.22))), r: -6 });   // centred on the safe area; the pop stays inside x 40-940
       if (gapNote) gapNote.place(150, 1068, t, tGap, t >= tGap && t < b3 ? 1 : 0);
       // last day
       swap(g3, t, b3, b4);
@@ -168,7 +168,7 @@
   const og = D.og.outfits.map((o) => o.name).join(" y ");
   window.SCENE = {
     duration: DUR, build, cues,
-    caption: `#EpicPartner Tienda de objetos de Fortnite, ${D.dateLong}: el ${D.deal.name} cuesta ${num(D.deal.final)} V-Bucks en vez de ${num(D.deal.regular)} (ahorras ${num(D.deal.saving)}), ${og} ${D.og.outfits.length > 1 ? "están" : "está"} en la tienda (Capítulo ${D.og.chapter}, Temporada ${D.og.season}${D.og.gapDays >= 30 ? `, ${D.og.gapDays} días sin salir` : ""}) y ${D.last.count} skins se van mañana a las ${D.resetLabel} (${D.resetZone}).\n¿Vas a comprar hoy? Usa el código BAD en la tienda de objetos.\n#Fortnite #TiendaFortnite #FortniteTienda`,
+    caption: `#EpicPartner Tienda de objetos de Fortnite, ${D.dateLong}: el ${D.deal.name} cuesta ${num(D.deal.final)} V-Bucks en vez de ${num(D.deal.regular)} (ahorras ${num(D.deal.saving)}), ${og} ${D.og.outfits.length > 1 ? "están" : "está"} en la tienda (Capítulo ${D.og.chapter}, Temporada ${D.og.season}${D.og.gapDays >= 30 ? `, ${D.og.gapDays} días sin salir` : ""}) y ${D.last.count} skins se van el ${D.dateLong} a las ${D.resetLabel} (${D.resetZone}).\n¿Vas a comprar hoy? Usa el código BAD en la tienda de objetos.\n#Fortnite #TiendaFortnite #FortniteTienda`,
     claims: [
       { text: `${D.deal.name}: ${D.deal.final} V-Bucks, regular ${D.deal.regular}`, source: "shop.json", match: [D.deal.name, `"finalPrice": ${D.deal.final}`, `"regularPrice": ${D.deal.regular}`] },
       ...D.og.outfits.map((o) => ({ text: `${o.name}: Capítulo ${D.og.chapter}, Temporada ${D.og.season}`, source: "history.json", match: [o.name, `"chapter": ${D.og.chapter}`, `"season": ${D.og.season}`] })),

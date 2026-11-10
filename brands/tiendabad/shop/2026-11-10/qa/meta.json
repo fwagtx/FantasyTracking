@@ -1,0 +1,104 @@
+{
+ "duration": 27.2,
+ "caption": "#EpicPartner Tienda de objetos de Fortnite, 10 de noviembre: el Lote A$AP Rocky cuesta 3200 V-Bucks en vez de 8800 (ahorras 5600), Superador está en la tienda (Capítulo 1, Temporada 5, 202 días sin salir) y 8 skins se van el 10 de noviembre a las 6 PM (CDMX).\n¿Vas a comprar hoy? Usa el código BAD en la tienda de objetos.\n#Fortnite #TiendaFortnite #FortniteTienda",
+ "claims": [
+  {
+   "text": "Lote A$AP Rocky: 3200 V-Bucks, regular 8800",
+   "source": "shop.json",
+   "match": [
+    "Lote A$AP Rocky",
+    "\"finalPrice\": 3200",
+    "\"regularPrice\": 8800"
+   ]
+  },
+  {
+   "text": "Superador: Capítulo 1, Temporada 5",
+   "source": "history.json",
+   "match": [
+    "Superador",
+    "\"chapter\": 1",
+    "\"season\": 5"
+   ]
+  },
+  {
+   "text": "202 days since last in the shop",
+   "source": "history.json",
+   "match": [
+    "\"gapDays\": 202"
+   ]
+  },
+  {
+   "text": "8 outfits leave at the next reset",
+   "source": "plan.json",
+   "match": [
+    "\"count\": 8"
+   ]
+  }
+ ],
+ "text": [
+  "FLACKO HELICOPTER",
+  "SUPERADOR",
+  "JACK ESQUELETON",
+  "OFERTA",
+  "OG",
+  "ÚLTIMO DÍA",
+  "TIENDA DE HOY / 10 NOV",
+  "1 · MEJOR OFERTA",
+  "ROCKY RUGAHAND",
+  "3200",
+  "8800",
+  "LOTE A$AP ROCKY · SE VA EL 6 DIC",
+  "-64% / AHORRAS 5600",
+  "2 · REGRESO OG",
+  "CAPÍTULO 1 · TEMPORADA 5",
+  "¡202 DÍAS SIN SALIR!",
+  "3 · ÚLTIMO DÍA",
+  "SALLY",
+  "BLAIR",
+  "DÓBERPAN",
+  "LUNELLE",
+  "SERGE",
+  "+2 MÁS",
+  "SE VAN EL 10 NOV, 6 PM",
+  "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+  "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+  "ESTA ES LA",
+  "TIENDA DE OBJETOS",
+  "DE HOY,",
+  "10 DE NOVIEMBRE.",
+  "¡TRES COSAS ANTES",
+  "DE GASTAR UN",
+  "SOLO PAVO!",
+  "EL LOTE A$AP",
+  "ROCKY:",
+  "3200 PAVOS,",
+  "EN VEZ DE",
+  "8800.",
+  "¡TE AHORRAS 5600!",
+  "SUPERADOR ESTÁ EN",
+  "LA TIENDA.",
+  "ES DEL CAPÍTULO",
+  "1,",
+  "TEMPORADA 5,",
+  "Y NO SALÍA",
+  "DESDE HACE 202",
+  "DÍAS.",
+  "Y OCHO SKINS",
+  "ESTÁN EN SU",
+  "ÚLTIMO DÍA,",
+  "SEIS DE ELLAS",
+  "ÉPICAS.",
+  "¿VAS A COMPRAR",
+  "ALGO HOY?",
+  "USA EL CÓDIGO",
+  "BAD EN LA",
+  "TIENDA DE OBJETOS.",
+  "LE AYUDA MUCHÍSIMO",
+  "AL CANAL.",
+  "¡GRACIAS POR VER!",
+  "SÍGUENOS PARA MÁS",
+  "CONTENIDO DIARIO.",
+  "#EPICPARTNER",
+  "LA TIENDITA BAD"
+ ]
+}
