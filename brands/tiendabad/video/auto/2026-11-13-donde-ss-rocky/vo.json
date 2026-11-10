@@ -1,0 +1,35 @@
+{
+ "phrases": [
+  {
+   "text": "¿No encuentras The $.$. Rocky en Fortnite? ¡Aquí está exactamente!",
+   "pause": 0.25,
+   "say": "¿No encuentras el ese-ese Rocky en Fortnite? ¡Aquí está exactamente!"
+  },
+  {
+   "text": "Está en el este de la isla,",
+   "pause": 0.1
+  },
+  {
+   "text": "justo aquí, cerca de Caverna Condenada.",
+   "pause": 0.3
+  },
+  {
+   "text": "¡Guárdalo para tu próxima partida!",
+   "pause": 0.2
+  },
+  {
+   "text": "Usa el código BAD en la tienda de objetos. Le ayuda muchísimo al canal.",
+   "say": "Usa el código bad, en la tienda de objetos. Le ayuda muchísimo al canal.",
+   "pause": 0.25
+  },
+  {
+   "text": "¡Gracias por ver! Síguenos para más contenido diario.",
+   "pause": 0.3
+  }
+ ],
+ "voice": "ef_dora",
+ "speed": 1.2,
+ "lang": "es-419",
+ "lead": 0.2,
+ "mode": "flow"
+}

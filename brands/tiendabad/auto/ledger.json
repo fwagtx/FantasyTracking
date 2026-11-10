@@ -95,6 +95,20 @@
    "format": "Tienda Pirata",
    "topic": "Los 3 niveles de tesoro (estándar, mayor, supremo)",
    "folder": "video/auto/2026-11-10-tienda-pirata-niveles"
+  },
+  {
+   "date": "2026-11-12",
+   "slot": "20:30",
+   "format": "¿Dónde está?",
+   "topic": "Baratie",
+   "folder": "video/auto/2026-11-12-donde-baratie"
+  },
+  {
+   "date": "2026-11-13",
+   "slot": "20:30",
+   "format": "¿Dónde está?",
+   "topic": "The $.$. Rocky",
+   "folder": "video/auto/2026-11-13-donde-ss-rocky"
   }
  ]
 }
