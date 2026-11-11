@@ -1,0 +1,612 @@
+{
+ "duration": 268.1,
+ "caption": "#EpicPartner Recorremos TODO el mapa de Fortnite 🗺️ Los 12 lugares con nombre y los 5 puntos de referencia, región por región, y los récords del mapa: el más al norte, al sur, al este, al oeste y los dos más pegados.\n¿Cuál es tu lugar favorito para caer? 👇\nUsa el código BAD en la tienda de objetos 💛\n#Fortnite #MapaFortnite #FortniteEspañol",
+ "claims": [
+  {
+   "text": "17 lugares en el mapa oficial: 12 lugares con nombre y 5 puntos de referencia",
+   "source": "map.json",
+   "match": [
+    "Arlong Park",
+    "Bahía Botín",
+    "Bahía Bulliciosa",
+    "Baratie",
+    "Bote boogie",
+    "Campo de batalla del gigante",
+    "Caverna Condenada",
+    "El cofre",
+    "Frontera Farol",
+    "Fuerte Fortuna",
+    "Henry",
+    "La calavera salada",
+    "Loguetown",
+    "Puerto Pirata",
+    "Resort relajado",
+    "The $.$. Rocky",
+    "Villa Molino"
+   ],
+   "count": {
+    "Arlong Park": 1,
+    "Bahía Botín": 1,
+    "Bahía Bulliciosa": 1,
+    "Baratie": 1,
+    "Bote boogie": 1,
+    "Campo de batalla del gigante": 1,
+    "Caverna Condenada": 1,
+    "El cofre": 1,
+    "Frontera Farol": 1,
+    "Fuerte Fortuna": 1,
+    "Henry": 1,
+    "La calavera salada": 1,
+    "Loguetown": 1,
+    "Puerto Pirata": 1,
+    "Resort relajado": 1,
+    "The $.$. Rocky": 1,
+    "Villa Molino": 1
+   },
+   "visual": "map.json lists exactly 17 pois: 12 with ids Athena.Location.POI.* and 5 with ids Athena.Location.UnNamedPOI.* (Bote boogie, Baratie, Henry, Campo de batalla del gigante, La calavera salada)"
+  },
+  {
+   "text": "Noticias del juego: ¡La aventura espera! Explora Arlong Park de One Piece, navega por la Bahía Baratie o asalta El $.$. Rocky en esta misteriosa isla en forma de cráneo.",
+   "source": "news.json",
+   "match": [
+    "¡La aventura espera!",
+    "Explora Arlong Park de One Piece, navega por la Bahía Baratie o asalta El $.$. Rocky en esta misteriosa isla en forma de cráneo."
+   ]
+  },
+  {
+   "text": "Noticias del juego: Frutas del diablo por toda la isla. ¡Se soltaron frutas del diablo raras por todo el mapa! Come la fruta Goma Goma para estirar tus habilidades como Luffy o la fruta Fuego Fuego para arrasar como Ace… solo mantente lejos del agua.",
+   "source": "news.json",
+   "match": [
+    "Frutas del diablo por toda la isla",
+    "¡Se soltaron frutas del diablo raras por todo el mapa! Come la fruta Goma Goma para estirar tus habilidades como Luffy o la fruta Fuego Fuego para arrasar como Ace… solo mantente lejos del agua."
+   ]
+  },
+  {
+   "text": "Noticias del juego: en la pestaña Tesoro sigues tu progreso semanal",
+   "source": "news.json",
+   "match": [
+    "¡No te pierdas la aventura!",
+    "Dirígete a la pestaña Tesoro para seguir el progreso semanal"
+   ]
+  },
+  {
+   "text": "Resort relajado: noroeste (by the same rule as new_where.py)",
+   "source": "map.json",
+   "match": [
+    "Resort relajado"
+   ],
+   "visual": "map pixel (818, 718)"
+  },
+  {
+   "text": "Resort relajado en el mapa",
+   "source": "map-labels.png",
+   "visual": "map pixel (818, 718); noroeste (by the same rule as new_where.py); on its own island (water all around, a bridge to the main island); nearest named place El cofre, to the south"
+  },
+  {
+   "text": "El cofre: noroeste",
+   "source": "map.json",
+   "match": [
+    "El cofre"
+   ],
+   "visual": "map pixel (762, 875)"
+  },
+  {
+   "text": "El cofre en el mapa",
+   "source": "map-labels.png",
+   "visual": "map pixel (762, 875); noroeste; the label sits between small islands off the coast"
+  },
+  {
+   "text": "Bahía Botín: norte",
+   "source": "map.json",
+   "match": [
+    "Bahía Botín"
+   ],
+   "visual": "map pixel (1070, 870)"
+  },
+  {
+   "text": "Bahía Botín en el mapa",
+   "source": "map-labels.png",
+   "visual": "map pixel (1070, 870); norte; orange terrain; a ship sits in the water of the inlet right next to the place"
+  },
+  {
+   "text": "Fuerte Fortuna: noreste",
+   "source": "map.json",
+   "match": [
+    "Fuerte Fortuna"
+   ],
+   "visual": "map pixel (1294, 836)"
+  },
+  {
+   "text": "Fuerte Fortuna en el mapa",
+   "source": "map-labels.png",
+   "visual": "map pixel (1294, 836); noreste; where the orange terrain meets the green; nearest named place Bahía Botín, to the west"
+  },
+  {
+   "text": "Bote boogie: este",
+   "source": "map.json",
+   "match": [
+    "Bote boogie"
+   ],
+   "visual": "map pixel (1446, 989)"
+  },
+  {
+   "text": "Bote boogie en el mapa",
+   "source": "map-labels.png",
+   "visual": "map pixel (1446, 989); este; a barge floating in the cove between the two orange arms of land; south-east of Fuerte Fortuna"
+  },
+  {
+   "text": "The $.$. Rocky: este",
+   "source": "map.json",
+   "match": [
+    "The $.$. Rocky"
+   ],
+   "visual": "map pixel (1416, 1217)"
+  },
+  {
+   "text": "The $.$. Rocky en el mapa",
+   "source": "map-labels.png",
+   "visual": "map pixel (1416, 1217); este; a large ship docked in a channel of the eastern island; nearest named place Caverna Condenada, to the west of it"
+  },
+  {
+   "text": "Bahía Bulliciosa: sureste",
+   "source": "map.json",
+   "match": [
+    "Bahía Bulliciosa"
+   ],
+   "visual": "map pixel (1388, 1482)"
+  },
+  {
+   "text": "Bahía Bulliciosa en el mapa",
+   "source": "map-labels.png",
+   "visual": "map pixel (1388, 1482); sureste; a town on the waterfront; nearest named place The $.$. Rocky, to the north of it"
+  },
+  {
+   "text": "Baratie: 24 map px from Bahía Bulliciosa (closest pair of all 17 places)",
+   "source": "map.json",
+   "match": [
+    "Baratie"
+   ],
+   "visual": "map pixel (1411, 1477)"
+  },
+  {
+   "text": "Baratie en el mapa",
+   "source": "map-labels.png",
+   "visual": "map pixel (1411, 1477); 24 map px from Bahía Bulliciosa (closest pair of all 17 places)"
+  },
+  {
+   "text": "Henry: on a small round island in the southern lagoon",
+   "source": "map.json",
+   "match": [
+    "Henry"
+   ],
+   "visual": "map pixel (1203, 1500)"
+  },
+  {
+   "text": "Henry en el mapa",
+   "source": "map-labels.png",
+   "visual": "map pixel (1203, 1500); on a small round island in the southern lagoon; north-east of Puerto Pirata (118 px); west of Bahía Bulliciosa"
+  },
+  {
+   "text": "Puerto Pirata: sur",
+   "source": "map.json",
+   "match": [
+    "Puerto Pirata"
+   ],
+   "visual": "map pixel (1150, 1606)"
+  },
+  {
+   "text": "Puerto Pirata en el mapa",
+   "source": "map-labels.png",
+   "visual": "map pixel (1150, 1606); sur; on the south coast with ships at the pier"
+  },
+  {
+   "text": "Loguetown: sur",
+   "source": "map.json",
+   "match": [
+    "Loguetown"
+   ],
+   "visual": "map pixel (989, 1382)"
+  },
+  {
+   "text": "Loguetown en el mapa",
+   "source": "map-labels.png",
+   "visual": "map pixel (989, 1382); sur; just north of the lagoon with small islands"
+  },
+  {
+   "text": "Villa Molino: suroeste",
+   "source": "map.json",
+   "match": [
+    "Villa Molino"
+   ],
+   "visual": "map pixel (754, 1438)"
+  },
+  {
+   "text": "Villa Molino en el mapa",
+   "source": "map-labels.png",
+   "visual": "map pixel (754, 1438); suroeste; nearest named place Loguetown, to the east"
+  },
+  {
+   "text": "Arlong Park: oeste",
+   "source": "map.json",
+   "match": [
+    "Arlong Park"
+   ],
+   "visual": "map pixel (635, 1123)"
+  },
+  {
+   "text": "Arlong Park en el mapa",
+   "source": "map-labels.png",
+   "visual": "map pixel (635, 1123); oeste; nearest named place Frontera Farol, to the east"
+  },
+  {
+   "text": "Frontera Farol: cerca del centro (162 px from the centroid of the named places, under the 170 px rule)",
+   "source": "map.json",
+   "match": [
+    "Frontera Farol"
+   ],
+   "visual": "map pixel (899, 1050)"
+  },
+  {
+   "text": "Frontera Farol en el mapa",
+   "source": "map-labels.png",
+   "visual": "map pixel (899, 1050); cerca del centro (162 px from the centroid of the named places, under the 170 px rule); just north of the large purple spiral"
+  },
+  {
+   "text": "Campo de batalla del gigante: at the southern edge of the purple spiral",
+   "source": "map.json",
+   "match": [
+    "Campo de batalla del gigante"
+   ],
+   "visual": "map pixel (953, 1243)"
+  },
+  {
+   "text": "Campo de batalla del gigante en el mapa",
+   "source": "map-labels.png",
+   "visual": "map pixel (953, 1243); at the southern edge of the purple spiral; just north of Loguetown (its nearest named place)"
+  },
+  {
+   "text": "Caverna Condenada: cerca del centro, east of the centroid",
+   "source": "map.json",
+   "match": [
+    "Caverna Condenada"
+   ],
+   "visual": "map pixel (1184, 1148)"
+  },
+  {
+   "text": "Caverna Condenada en el mapa",
+   "source": "map-labels.png",
+   "visual": "map pixel (1184, 1148); cerca del centro, east of the centroid; on the northern edge of a dark rocky area"
+  },
+  {
+   "text": "La calavera salada: inside the dark rocky area, just south of Caverna Condenada (its nearest named place, 80 px)",
+   "source": "map.json",
+   "match": [
+    "La calavera salada"
+   ],
+   "visual": "map pixel (1206, 1224)"
+  },
+  {
+   "text": "La calavera salada en el mapa",
+   "source": "map-labels.png",
+   "visual": "map pixel (1206, 1224); inside the dark rocky area, just south of Caverna Condenada (its nearest named place, 80 px)"
+  },
+  {
+   "text": "Récords: más al norte Resort relajado, más al sur Puerto Pirata, más al oeste Arlong Park, más al este Bote boogie; más pegados Baratie y Bahía Bulliciosa; más solitario Arlong Park",
+   "source": "map.json",
+   "match": [
+    "Resort relajado",
+    "Puerto Pirata",
+    "Arlong Park",
+    "Bote boogie",
+    "Baratie",
+    "Bahía Bulliciosa"
+   ],
+   "visual": "min y Resort relajado 718.0, max y Puerto Pirata 1606.1, min x Arlong Park 634.8, max x Bote boogie 1445.9; closest pair Bahía Bulliciosa–Baratie 24 px; largest nearest-neighbour distance Arlong Park 274 px"
+  },
+  {
+   "text": "Resort relajado está en su propia isla, unida por un puente; Arlong Park está separado del centro por un canal con un puente",
+   "source": "map-labels.png",
+   "visual": "zoomed crops of the official map: a bridge from Resort relajado's island to the orange main island (around map px 830-870, 770-800); a bridge over the canal east of Arlong Park (around 725, 1221)"
+  },
+  {
+   "text": "Más céntrico: Caverna Condenada; más alejados: Baratie y Resort relajado",
+   "source": "map.json",
+   "match": [
+    "Caverna Condenada",
+    "Baratie",
+    "Resort relajado"
+   ],
+   "visual": "named place nearest the centroid of the 12 named places (1030, 1145): Caverna Condenada 154 px; farthest pair of the 17: Baratie–Resort relajado 963 px"
+  },
+  {
+   "text": "Barcos por todos lados",
+   "source": "map-labels.png",
+   "visual": "ships visible on the official map at Bahía Botín, The $.$. Rocky, Puerto Pirata (two at the pier), the Arlong Park lagoon, and the Bote boogie barge"
+  }
+ ],
+ "text": [
+  "TOUR COMPLETO / TODOS LOS LUGARES / DEL MAPA",
+  "INTRO",
+  "17 / LUGARES EN EL MAPA OFICIAL",
+  "NOTICIAS DEL JUEGO / ¡LA AVENTURA ESPERA!",
+  "EXPLORA ARLONG PARK DE ONE PIECE, NAVEGA POR LA BAHÍA BARATIE O ASALTA EL $.$. ROCKY EN ESTA MISTERIOSA ISLA EN FORMA DE CRÁNEO.",
+  "LA ISLA",
+  "NOTICIAS DEL JUEGO / FRUTAS DEL DIABLO POR TODA LA ISLA",
+  "¡SE SOLTARON FRUTAS DEL DIABLO RARAS POR TODO EL MAPA!",
+  "COME LA FRUTA GOMA GOMA PARA ESTIRAR TUS HABILIDADES COMO LUFFY O LA FRUTA FUEGO FUEGO PARA ARRASAR COMO ACE… SOLO MANTENTE LEJOS DEL AGUA.",
+  "EL NORTE / 4 LUGARES",
+  "EL NORTE",
+  "RESORT RELAJADO / NOROESTE · EN SU PROPIA ISLA",
+  "EL COFRE / NOROESTE · ENTRE ISLITAS",
+  "BAHÍA BOTÍN / NORTE · ZONA NARANJA",
+  "FUERTE FORTUNA / NORESTE · AL ESTE DE BAHÍA BOTÍN",
+  "EL ESTE / 2 LUGARES",
+  "EL ESTE",
+  "BOTE BOOGIE",
+  "BOTE BOOGIE / PUNTO DE REFERENCIA · ESTE",
+  "THE $.$. ROCKY / ESTE · UN BARCO ENORME",
+  "EL SUR / 5 LUGARES",
+  "EL SUR",
+  "BAHÍA BULLICIOSA / SURESTE · A LA ORILLA DEL AGUA",
+  "BARATIE",
+  "BARATIE / PUNTO DE REFERENCIA · JUNTO A BAHÍA BULLICIOSA",
+  "HENRY",
+  "HENRY / PUNTO DE REFERENCIA · LAGUNA DEL SUR",
+  "PUERTO PIRATA / SUR · BARCOS EN EL MUELLE",
+  "LOGUETOWN / SUR · ARRIBA DE LA LAGUNA",
+  "EL OESTE / 2 LUGARES",
+  "EL OESTE",
+  "VILLA MOLINO / SUROESTE · AL OESTE DE LOGUETOWN",
+  "ARLONG PARK / OESTE · DE ONE PIECE",
+  "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+  "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+  "EL CENTRO / 4 LUGARES",
+  "EL CENTRO",
+  "FRONTERA FAROL / CERCA DEL CENTRO",
+  "AQUÍ",
+  "CAMPO DE BATALLA DEL GIGANTE / PUNTO DE REFERENCIA · LA ESPIRAL MORADA",
+  "CAVERNA CONDENADA / CERCA DEL CENTRO · ZONA OSCURA",
+  "LA CALAVERA SALADA",
+  "LA CALAVERA SALADA / PUNTO DE REFERENCIA · AL SUR DE CAVERNA CONDENADA",
+  "DATOS CURIOSOS / LOS RÉCORDS / DEL MAPA",
+  "DATOS CURIOSOS",
+  "MÁS AL NORTE",
+  "RESORT RELAJADO / EL MÁS AL NORTE DEL MAPA",
+  "MÁS AL SUR",
+  "PUERTO PIRATA / EL MÁS AL SUR DEL MAPA",
+  "MÁS AL OESTE",
+  "ARLONG PARK / EL MÁS AL OESTE · Y EL MÁS SOLITARIO",
+  "MÁS AL ESTE",
+  "BOTE BOOGIE / EL MÁS AL ESTE DEL MAPA",
+  "EL MÁS CÉNTRICO",
+  "CAVERNA CONDENADA / EL LUGAR CON NOMBRE MÁS CÉNTRICO",
+  "LOS MÁS ALEJADOS / DE PUNTA A PUNTA DE LA ISLA",
+  "BARATIE Y BAHÍA BULLICIOSA / LOS DOS LUGARES MÁS PEGADOS",
+  "MAPA COMPLETO / 17 LUGARES",
+  "REPASO",
+  "FINAL",
+  "¿YA TE SABES EL MAPA DE",
+  "FORTNITE DE MEMORIA?",
+  "HOY LO RECORREMOS COMPLETO,",
+  "¡LUGAR POR LUGAR!",
+  "SON 17 LUGARES EN EL MAPA",
+  "OFICIAL:",
+  "12 LUGARES CON NOMBRE Y 5",
+  "PUNTOS DE REFERENCIA.",
+  "LE DAMOS LA VUELTA A TODA",
+  "LA ISLA,",
+  "Y PREPÁRATE,",
+  "PORQUE VAS A VER BARCOS POR",
+  "TODOS LADOS.",
+  "TE DIGO DÓNDE ESTÁ CADA UNO",
+  "Y QUIÉNES SON SUS VECINOS,",
+  "PARA QUE NUNCA TE PIERDAS.",
+  "Y AL FINAL TE DEJO LOS",
+  "DATOS MÁS CURIOSOS DEL MAPA.",
+  "¡QUÉDATE!",
+  "PRIMERO,",
+  "ASÍ PRESENTA EPIC ESTA ISLA EN",
+  "LAS NOTICIAS DEL JUEGO:",
+  "EXPLORA ARLONG PARK DE ONE PIECE,",
+  "NAVEGA POR LA BAHÍA BARATIE O",
+  "ASALTA EL $.$.",
+  "ROCKY",
+  "EN ESTA MISTERIOSA ISLA EN FORMA",
+  "DE CRÁNEO.",
+  "Y SEGÚN LAS NOTICIAS,",
+  "¡SE SOLTARON FRUTAS DEL DIABLO RARAS",
+  "POR TODO EL MAPA!",
+  "COMO LA GOMA GOMA,",
+  "PARA ESTIRARTE COMO LUFFY,",
+  "O LA FUEGO FUEGO,",
+  "PARA ARRASAR COMO ACE.",
+  "¡ESO SÍ,",
+  "LEJOS DEL AGUA!",
+  "EMPEZAMOS POR EL NORTE,",
+  "QUE TIENE CUATRO LUGARES.",
+  "EN EL NOROESTE:",
+  "¡RESORT RELAJADO!",
+  "ESTÁ EN SU PROPIA ISLA,",
+  "UNIDA A LA ISLA PRINCIPAL POR",
+  "UN PUENTE.",
+  "Y SU VECINO MÁS CERCANO ES",
+  "EL COFRE,",
+  "JUSTO AL SUR.",
+  "BAJAMOS A EL COFRE,",
+  "QUE ESTÁ ENTRE ISLITAS,",
+  "TAMBIÉN EN EL NOROESTE.",
+  "DESDE AQUÍ,",
+  "FRONTERA FAROL QUEDA AL SURESTE.",
+  "AHORA VAMOS AL NORTE,",
+  "A BAHÍA BOTÍN,",
+  "EN PLENA ZONA NARANJA.",
+  "FÍJATE:",
+  "HAY UN BARCO EN EL AGUA,",
+  "JUSTO AL LADO.",
+  "Y SI BAJAS AL SUROESTE,",
+  "LLEGAS A FRONTERA FAROL.",
+  "SEGUIMOS AL NORESTE:",
+  "¡FUERTE FORTUNA!",
+  "ESTÁ JUSTO DONDE LA ZONA NARANJA",
+  "SE JUNTA CON LA VERDE,",
+  "BAHÍA BOTÍN,",
+  "AL OESTE.",
+  "AHORA,",
+  "EL ESTE:",
+  "AQUÍ HAY DOS LUGARES.",
+  "BAJAMOS AL ESTE,",
+  "AL PRIMER PUNTO DE REFERENCIA:",
+  "¡EL BOTE BOOGIE!",
+  "ES UN BOTE QUE FLOTA ENTRE",
+  "LOS DOS BRAZOS DE LA ZONA",
+  "NARANJA,",
+  "AL SURESTE DE FUERTE FORTUNA.",
+  "MÁS ABAJO ESTÁ THE $.$.",
+  "ROCKY,",
+  "UN BARCO ENORME EN EL ESTE",
+  "DE LA ISLA.",
+  "LAS NOTICIAS TE INVITAN A ASALTARLO,",
+  "Y ESTÁ AL ESTE DE CAVERNA",
+  "CONDENADA.",
+  "Y SI BAJAS AL SUR,",
+  "LLEGAS A BAHÍA BULLICIOSA.",
+  "EL SUR ES LA ZONA CON",
+  "MÁS LUGARES DE NUESTRO TOUR:",
+  "CINCO.",
+  "BAJAMOS AL SURESTE:",
+  "¡BAHÍA BULLICIOSA!",
+  "ES UN PUEBLO A LA ORILLA",
+  "DEL AGUA,",
+  "JUSTO AL SUR DE THE $.$.",
+  "ROCKY.",
+  "Y PUERTO PIRATA QUEDA AL SUROESTE.",
+  "Y PRÁCTICAMENTE EN EL MISMO LUGAR",
+  "ESTÁ BARATIE,",
+  "OTRO PUNTO DE REFERENCIA.",
+  "¿TE ACUERDAS DE LAS NOTICIAS?",
+  "TE INVITAN A NAVEGAR POR LA",
+  "BAHÍA BARATIE.",
+  "AL OESTE HAY OTRO PUNTO DE",
+  "REFERENCIA CON UN NOMBRE MUY CURIOSO:",
+  "HENRY.",
+  "ESTÁ EN UNA ISLITA REDONDA DE",
+  "LA LAGUNA DEL SUR,",
+  "AL NORESTE DE PUERTO PIRATA.",
+  "Y JUSTO ABAJO:",
+  "¡PUERTO PIRATA!",
+  "ESTÁ EN LA COSTA SUR,",
+  "Y TIENE BARCOS EN EL MUELLE.",
+  "Y LOGUETOWN QUEDA AL NOROESTE.",
+  "SUBIMOS UN POCO Y LLEGAMOS A",
+  "LOGUETOWN.",
+  "ESTÁ EN EL SUR DE LA",
+  "ISLA,",
+  "JUSTO ARRIBA DE LA LAGUNA CON",
+  "ISLITAS.",
+  "Y SI SUBES AL NORTE,",
+  "LLEGAS A LA ENORME ESPIRAL MORADA",
+  "DEL CENTRO.",
+  "VAMOS AL OESTE,",
+  "CON DOS LUGARES MÁS.",
+  "CRUZAMOS AL SUROESTE,",
+  "A VILLA MOLINO.",
+  "SU VECINO MÁS CERCANO ES LOGUETOWN,",
+  "AL ESTE.",
+  "Y ARLONG PARK QUEDA AL NORTE.",
+  "Y SUBIENDO POR EL OESTE:",
+  "¡ARLONG PARK!",
+  "ES EL LUGAR DE ONE PIECE",
+  "QUE LAS NOTICIAS TE INVITAN A",
+  "EXPLORAR.",
+  "ESTÁ SEPARADO DEL CENTRO POR UN",
+  "CANAL,",
+  "QUE CRUZAS POR UN PUENTE.",
+  "FRONTERA FAROL,",
+  "POR CIERTO,",
+  "SI ESTE TOUR TE ESTÁ SIRVIENDO,",
+  "USA EL CÓDIGO BAD EN LA",
+  "TIENDA DE OBJETOS.",
+  "LE AYUDA MUCHÍSIMO AL CANAL.",
+  "Y AHORA SÍ,",
+  "EL CENTRO DE LA ISLA,",
+  "CON CUATRO LUGARES.",
+  "EMPEZAMOS POR FRONTERA FAROL.",
+  "ESTÁ CERCA DEL CENTRO DE LA",
+  "JUSTO AL NORTE DE UNA ENORME",
+  "ESPIRAL MORADA.",
+  "Y BAHÍA BOTÍN QUEDA AL NORESTE.",
+  "Y JUNTO A ESA ESPIRAL ESTÁ",
+  "EL SIGUIENTE PUNTO DE REFERENCIA:",
+  "¡CAMPO DE BATALLA DEL GIGANTE!",
+  "QUEDA JUSTO AL NORTE DE LOGUETOWN.",
+  "AL ESTE DEL CENTRO ESTÁ CAVERNA",
+  "BAHÍA BOTÍN QUEDA AL NORTE,",
+  "Y THE $.$.",
+  "Y FÍJATE:",
+  "ESTÁ AL BORDE DE UNA ZONA",
+  "OSCURA Y ROCOSA,",
+  "DONDE SE ESCONDE EL ÚLTIMO PUNTO",
+  "DE REFERENCIA.",
+  "¡LA CALAVERA SALADA!",
+  "JUSTO AL SUR DE CAVERNA CONDENADA.",
+  "Y CON ESTA,",
+  "¡YA VISITAMOS LOS 17 LUGARES!",
+  "Y AHORA,",
+  "LOS DATOS CURIOSOS QUE TE PROMETÍ.",
+  "EL LUGAR QUE ESTÁ MÁS AL",
+  "NORTE DE TODO EL MAPA:",
+  "RESORT RELAJADO.",
+  "EL QUE ESTÁ MÁS AL SUR:",
+  "PUERTO PIRATA.",
+  "EL QUE ESTÁ MÁS AL OESTE:",
+  "ARLONG PARK.",
+  "Y TAMBIÉN ES EL MÁS SOLITARIO:",
+  "DE TODOS LOS LUGARES,",
+  "ES EL QUE TIENE A SU",
+  "VECINO MÁS LEJOS.",
+  "Y EL QUE ESTÁ MÁS AL",
+  "ESTE:",
+  "EL BOTE BOOGIE.",
+  "EL LUGAR CON NOMBRE MÁS CÉNTRICO:",
+  "CAVERNA CONDENADA.",
+  "Y LOS DOS MÁS ALEJADOS ENTRE",
+  "SÍ:",
+  "RESORT RELAJADO Y BARATIE,",
+  "¡DE PUNTA A PUNTA DE LA",
+  "ISLA!",
+  "Y LOS DOS LUGARES MÁS PEGADOS:",
+  "BARATIE Y BAHÍA BULLICIOSA,",
+  "¡CASI UNO ENCIMA DEL OTRO!",
+  "Y PARA TERMINAR,",
+  "REPASEMOS EL MAPA COMPLETO.",
+  "EN EL NORTE:",
+  "RESORT RELAJADO,",
+  "BAHÍA BOTÍN Y FUERTE FORTUNA.",
+  "EN EL ESTE:",
+  "EL BOTE BOOGIE Y THE $.$.",
+  "EN EL SUR:",
+  "BAHÍA BULLICIOSA,",
+  "BARATIE,",
+  "HENRY,",
+  "PUERTO PIRATA Y LOGUETOWN.",
+  "EN EL OESTE:",
+  "VILLA MOLINO Y ARLONG PARK.",
+  "Y EN EL CENTRO:",
+  "CAMPO DE BATALLA DEL GIGANTE,",
+  "CAVERNA CONDENADA Y LA CALAVERA SALADA.",
+  "¡17 LUGARES EN TOTAL!",
+  "Y SI VAS POR TESOROS,",
+  "LAS NOTICIAS DICEN QUE EN LA",
+  "PESTAÑA TESORO PUEDES SEGUIR TU PROGRESO",
+  "SEMANAL.",
+  "GUARDA ESTE VIDEO PARA TU PRÓXIMA",
+  "PARTIDA.",
+  "¿CUÁL ES TU LUGAR FAVORITO PARA",
+  "CAER?",
+  "¡DÍMELO EN LOS COMENTARIOS!",
+  "¡GRACIAS POR VER!",
+  "SÍGUENOS PARA MÁS CONTENIDO DIARIO.",
+  "LA TIENDITA BAD",
+  "#EPICPARTNER"
+ ]
+}

@@ -82,3 +82,5 @@ cuéntame
 minitemporada
 consíguelas
 actívalo
+islita
+islitas

@@ -1,7 +1,8 @@
 /* LA TIENDITA BAD · long YouTube video (1920x1080), Spanish port of BAD ROYALE's. Data: window.LONG (the episode) and window.VO (voice timings).
  * window.LONG = { title, caption, claims, segments: [...] }; each segment starts with phrase p and runs until the next:
  *   {type:"title", p, kicker, lines:[a, b]}                 opening card over the whole map
- *   {type:"map", p, x, y, z, name, sub, pins:[{x, y, label}]} camera flies to a spot (map pixels), lower-third name card
+ *   {type:"map", p, x, y, z, name, sub, pins:[{x, y, label, p?, dt?, lx?, ly?}]} camera flies to a spot (map pixels), lower-third name card;
+ *                                                             a pin with p appears dt s after phrase p starts (else one every 0.5 s); lx/ly move its label
  *   {type:"quote", p, kicker, title, lines:[{p, text}]}       an in-game news tile, its lines lit as they are read
  *   {type:"items", p, title, items:[{img, name, rarity, price}]} a row of item tiles
  *   {type:"stat", p, big, label}                              one big number
@@ -43,6 +44,17 @@
          ${o.price ? `<div style="font-family:'Barlow Condensed';font-weight:900;font-size:${w * 0.12}px;color:${YEL}">${o.price >= 10000 ? o.price.toLocaleString("en-US").replace(/,/g, " ") : o.price} pavos</div>` : ""}</div>`, o.name.toUpperCase());
   }
 
+  // pin label in marker handwriting: S.scrawl's look, but kept inside the 16:9 frame (S.scrawl hides anything outside the 9:16 app-safe area)
+  function scrawl(parent, text, size = 60, rot = -6) {
+    const el = mk(parent, `left:0;top:0;white-space:nowrap;font-family:'Permanent Marker';font-size:${size}px;line-height:1;color:${YEL};-webkit-text-stroke:${size * 0.12}px ${INK};paint-order:stroke fill;text-shadow:0 4px 0 rgba(0,0,0,.4);transform-origin:0 50%`, text, text.toUpperCase());
+    return {
+      place(x, y, t, t0, a = 1) {
+        T(el, { x, y, r: rot, a: a * (t >= t0 ? 1 : 0), s: E.back(k(t, t0, t0 + 0.25)) });
+        if (a > 0 && t >= t0) { const r = el.getBoundingClientRect(); if (r.left < 60 || r.right > 1860 || r.top < 110 || r.bottom > 880) T(el, { x, y, r: rot, a: 0 }); }
+      },
+    };
+  }
+
   function build(stage) {
     mk(stage, `inset:0;background:#084687`);
     const cam = S.mapCam(stage, `../../tiendabad/sources/map-${L.map === "blank" ? "blank" : "labels"}.png`, kf, { x: 960, y: 560 });
@@ -54,9 +66,9 @@
         e.card = mk(g, `left:160px;width:1600px;top:300px;text-align:center`, (s.kicker ? `<div style="display:inline-block;margin-bottom:24px;padding:8px 26px 4px;background:${YEL};border:6px solid ${INK};border-radius:12px;transform:skewX(-8deg);font-family:'Barlow Condensed';font-weight:900;font-size:56px;color:${INK}">${s.kicker}</div>` : "") +
           s.lines.map((l, j) => big(l, j ? 84 : 112, j ? YEL : "#fff")).join(""), [s.kicker || "", ...s.lines].join(" / ").toUpperCase());
       } else if (s.type === "map") {
-        e.pins = (s.pins || [{ x: s.x, y: s.y, label: "" }]).map((p, j) => ({ ...p, ring: S.marker(g, 64, 64, "#FF2D2D", i * 1.3 + j), lab: p.label ? S.scrawl(g, p.label, 60, YEL, -6) : null }));
+        e.pins = (s.pins || [{ x: s.x, y: s.y, label: "" }]).map((p, j) => ({ ...p, ring: S.marker(g, 64, 64, "#FF2D2D", i * 1.3 + j), lab: p.label ? scrawl(g, p.label) : null }));
         e.card = mk(g, `left:80px;top:760px;max-width:1100px;padding:18px 34px 16px;border-radius:14px;background:linear-gradient(90deg,rgba(9,22,74,.96),rgba(16,52,160,.9));border:5px solid ${INK};box-shadow:0 10px 0 rgba(0,0,0,.35)`,
-          `<div style="font-family:Montserrat;font-weight:900;font-size:58px;line-height:1.05;color:#fff;text-transform:uppercase">${s.name}</div>${s.sub ? `<div style="font:700 32px Montserrat;color:${YEL};margin-top:6px">${s.sub}</div>` : ""}`, `${s.name} / ${s.sub || ""}`.toUpperCase());
+          `<div style="font-family:Montserrat;font-weight:900;font-size:${Math.min(58, Math.floor(1030 / (0.74 * s.name.length)))}px;line-height:1.05;color:#fff;text-transform:uppercase;white-space:nowrap">${s.name}</div>${s.sub ? `<div style="font:700 32px Montserrat;color:${YEL};margin-top:6px">${s.sub}</div>` : ""}`, `${s.name} / ${s.sub || ""}`.toUpperCase());
       } else if (s.type === "quote") {
         e.card = mk(g, `left:260px;width:1400px;top:150px;border-radius:18px;overflow:hidden;border:6px solid ${INK};box-shadow:0 14px 0 rgba(0,0,0,.4);background:linear-gradient(180deg,#0E1B5C,#0A1240)`,
           `<div style="padding:14px 30px;background:${YEL};border-bottom:6px solid ${INK};font-family:'Barlow Condensed';font-weight:900;font-size:44px;color:${INK}">${s.kicker || "NOTICIAS DEL JUEGO"}</div>
@@ -107,7 +119,7 @@
         if (on <= 0) return;
         if (s.type === "title") { dimA = Math.max(dimA, 0.45 * on); T(e.card, { s: 0.9 + 0.1 * E.back(k(t, s.t0, s.t0 + 0.5)) }); }
         if (s.type === "map") {
-          e.pins.forEach((p, j) => { const f = toScreen(p), t0 = s.t0 + 1.0 + j * 0.5; p.ring.place(f.x, f.y, t, t0, t >= t0 ? 1 : 0, 1); if (p.lab) p.lab.place(f.x + 50, f.y + 60, t, t0 + 0.15, t >= t0 + 0.15 ? 1 : 0); });
+          e.pins.forEach((p, j) => { const f = toScreen(p), t0 = p.p != null ? P[p.p].t0 + (p.dt || 0) : s.t0 + 1.0 + j * 0.5; p.ring.place(f.x, f.y, t, t0, t >= t0 ? 1 : 0, 1); if (p.lab) p.lab.place(f.x + (p.lx ?? 50), f.y + (p.ly ?? 60), t, t0 + 0.15, t >= t0 + 0.15 ? 1 : 0); });
           { const x = (1 - E.out5(k(t, s.t0 + 0.6, s.t0 + 1.0))) * -900; T(e.card, { x, a: Math.max(0, 1 - Math.abs(x) / 20) }); }   // only visible once inside the title-safe area
         }
         if (s.type === "quote") { dimA = Math.max(dimA, on); T(e.card, { s: 0.94 + 0.06 * E.back(k(t, s.t0, s.t0 + 0.4)) });

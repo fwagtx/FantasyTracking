@@ -109,6 +109,13 @@
    "format": "¿Dónde está?",
    "topic": "The $.$. Rocky",
    "folder": "video/auto/2026-11-13-donde-ss-rocky"
+  },
+  {
+   "date": "2026-11-11",
+   "slot": "15:00 (YouTube largo)",
+   "format": "LONG",
+   "topic": "Todos los lugares del mapa: tour completo (17 lugares región por región + récords del mapa)",
+   "folder": "video/long/2026-11-11-tour-mapa"
   }
  ]
 }

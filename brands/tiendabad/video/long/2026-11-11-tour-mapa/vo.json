@@ -1,0 +1,357 @@
+{
+ "phrases": [
+  {
+   "text": "¿Ya te sabes el mapa de Fortnite de memoria? Hoy lo recorremos completo, ¡lugar por lugar!",
+   "pause": 0.4
+  },
+  {
+   "text": "Son 17 lugares en el mapa oficial: 12 lugares con nombre y 5 puntos de referencia.",
+   "pause": 0.4,
+   "say": "Son diecisiete lugares en el mapa oficial: doce lugares con nombre y cinco puntos de referencia."
+  },
+  {
+   "text": "Le damos la vuelta a toda la isla, y prepárate, porque vas a ver barcos por todos lados.",
+   "pause": 0.4
+  },
+  {
+   "text": "Te digo dónde está cada uno y quiénes son sus vecinos, para que nunca te pierdas.",
+   "pause": 0.4
+  },
+  {
+   "text": "Y al final te dejo los datos más curiosos del mapa. ¡Quédate!",
+   "pause": 0.4
+  },
+  {
+   "text": "Primero, así presenta Epic esta isla en las noticias del juego:",
+   "pause": 0.4
+  },
+  {
+   "text": "Explora Arlong Park de One Piece, navega por la Bahía Baratie o asalta El $.$. Rocky",
+   "pause": 0.05,
+   "say": "Explora Arlong Park de Uan Pis, navega por la Bahía Baratie o asalta el ese-ese Rocky"
+  },
+  {
+   "text": "en esta misteriosa isla en forma de cráneo.",
+   "pause": 0.4
+  },
+  {
+   "text": "Y según las noticias, ¡se soltaron frutas del diablo raras por todo el mapa!",
+   "pause": 0.4
+  },
+  {
+   "text": "Como la Goma Goma, para estirarte como Luffy, o la Fuego Fuego, para arrasar como Ace. ¡Eso sí, lejos del agua!",
+   "pause": 0.45,
+   "say": "Como la Goma Goma, para estirarte como Luffy, o la Fuego Fuego, para arrasar como Eis. ¡Eso sí, lejos del agua!"
+  },
+  {
+   "text": "Empezamos por el norte, que tiene cuatro lugares.",
+   "pause": 0.8
+  },
+  {
+   "text": "Primero, en el noroeste: ¡Resort relajado!",
+   "pause": 0.4
+  },
+  {
+   "text": "Está en su propia isla, unida a la isla principal por un puente.",
+   "pause": 0.4
+  },
+  {
+   "text": "Y su vecino más cercano es El cofre, justo al sur.",
+   "pause": 0.55
+  },
+  {
+   "text": "Bajamos a El cofre, que está entre islitas, también en el noroeste.",
+   "pause": 0.4
+  },
+  {
+   "text": "Desde aquí, Frontera Farol queda al sureste.",
+   "pause": 0.55
+  },
+  {
+   "text": "Ahora vamos al norte, a Bahía Botín, en plena zona naranja.",
+   "pause": 0.4
+  },
+  {
+   "text": "Fíjate: hay un barco en el agua, justo al lado.",
+   "pause": 0.4
+  },
+  {
+   "text": "Y si bajas al suroeste, llegas a Frontera Farol.",
+   "pause": 0.55
+  },
+  {
+   "text": "Seguimos al noreste: ¡Fuerte Fortuna!",
+   "pause": 0.4
+  },
+  {
+   "text": "Está justo donde la zona naranja se junta con la verde, y su vecino más cercano es Bahía Botín, al oeste.",
+   "pause": 0.4
+  },
+  {
+   "text": "Ahora, el este: aquí hay dos lugares.",
+   "pause": 0.8
+  },
+  {
+   "text": "Bajamos al este, al primer punto de referencia: ¡el Bote boogie!",
+   "pause": 0.4,
+   "say": "Bajamos al este, al primer punto de referencia: ¡el Bote bugui!"
+  },
+  {
+   "text": "Es un bote que flota entre los dos brazos de la zona naranja, al sureste de Fuerte Fortuna.",
+   "pause": 0.55
+  },
+  {
+   "text": "Más abajo está The $.$. Rocky, un barco enorme en el este de la isla.",
+   "pause": 0.4,
+   "say": "Más abajo está el ese-ese Rocky, un barco enorme en el este de la isla."
+  },
+  {
+   "text": "Las noticias te invitan a asaltarlo, y está al este de Caverna Condenada.",
+   "pause": 0.4
+  },
+  {
+   "text": "Y si bajas al sur, llegas a Bahía Bulliciosa.",
+   "pause": 0.55
+  },
+  {
+   "text": "El sur es la zona con más lugares de nuestro tour: cinco.",
+   "pause": 0.8
+  },
+  {
+   "text": "Bajamos al sureste: ¡Bahía Bulliciosa!",
+   "pause": 0.4
+  },
+  {
+   "text": "Es un pueblo a la orilla del agua, justo al sur de The $.$. Rocky.",
+   "pause": 0.4,
+   "say": "Es un pueblo a la orilla del agua, justo al sur del ese-ese Rocky."
+  },
+  {
+   "text": "Y Puerto Pirata queda al suroeste.",
+   "pause": 0.55
+  },
+  {
+   "text": "Y prácticamente en el mismo lugar está Baratie, otro punto de referencia.",
+   "pause": 0.4
+  },
+  {
+   "text": "¿Te acuerdas de las noticias? Te invitan a navegar por la Bahía Baratie.",
+   "pause": 0.4
+  },
+  {
+   "text": "Al oeste hay otro punto de referencia con un nombre muy curioso: Henry.",
+   "pause": 0.4,
+   "say": "Al oeste hay otro punto de referencia con un nombre muy curioso: Jenri."
+  },
+  {
+   "text": "Está en una islita redonda de la laguna del sur, al noreste de Puerto Pirata.",
+   "pause": 0.4
+  },
+  {
+   "text": "Y justo abajo: ¡Puerto Pirata!",
+   "pause": 0.4
+  },
+  {
+   "text": "Está en la costa sur, y tiene barcos en el muelle.",
+   "pause": 0.4
+  },
+  {
+   "text": "Y Loguetown queda al noroeste.",
+   "pause": 0.55,
+   "say": "Y Lóguetaun queda al noroeste."
+  },
+  {
+   "text": "Subimos un poco y llegamos a Loguetown.",
+   "pause": 0.4,
+   "say": "Subimos un poco y llegamos a Lóguetaun."
+  },
+  {
+   "text": "Está en el sur de la isla, justo arriba de la laguna con islitas.",
+   "pause": 0.4
+  },
+  {
+   "text": "Y si subes al norte, llegas a la enorme espiral morada del centro.",
+   "pause": 0.55
+  },
+  {
+   "text": "Vamos al oeste, con dos lugares más.",
+   "pause": 0.8
+  },
+  {
+   "text": "Cruzamos al suroeste, a Villa Molino.",
+   "pause": 0.4
+  },
+  {
+   "text": "Su vecino más cercano es Loguetown, al este.",
+   "pause": 0.4,
+   "say": "Su vecino más cercano es Lóguetaun, al este."
+  },
+  {
+   "text": "Y Arlong Park queda al norte.",
+   "pause": 0.55
+  },
+  {
+   "text": "Y subiendo por el oeste: ¡Arlong Park!",
+   "pause": 0.4
+  },
+  {
+   "text": "Es el lugar de One Piece que las noticias te invitan a explorar.",
+   "pause": 0.4,
+   "say": "Es el lugar de Uan Pis que las noticias te invitan a explorar."
+  },
+  {
+   "text": "Está separado del centro por un canal, que cruzas por un puente.",
+   "pause": 0.4
+  },
+  {
+   "text": "Y su vecino más cercano es Frontera Farol, al este.",
+   "pause": 0.5
+  },
+  {
+   "text": "Por cierto, si este tour te está sirviendo, usa el código BAD en la tienda de objetos. Le ayuda muchísimo al canal.",
+   "pause": 0.5,
+   "say": "Por cierto, si este tour te está sirviendo, usa el código bad, en la tienda de objetos. Le ayuda muchísimo al canal."
+  },
+  {
+   "text": "Y ahora sí, el centro de la isla, con cuatro lugares.",
+   "pause": 0.8
+  },
+  {
+   "text": "Empezamos por Frontera Farol.",
+   "pause": 0.4
+  },
+  {
+   "text": "Está cerca del centro de la isla, justo al norte de una enorme espiral morada.",
+   "pause": 0.4
+  },
+  {
+   "text": "Y Bahía Botín queda al noreste.",
+   "pause": 0.55
+  },
+  {
+   "text": "Y junto a esa espiral está el siguiente punto de referencia: ¡Campo de batalla del gigante!",
+   "pause": 0.4
+  },
+  {
+   "text": "Queda justo al norte de Loguetown.",
+   "pause": 0.4,
+   "say": "Queda justo al norte de Lóguetaun."
+  },
+  {
+   "text": "Al este del centro está Caverna Condenada.",
+   "pause": 0.4
+  },
+  {
+   "text": "Bahía Botín queda al norte, y The $.$. Rocky, al este.",
+   "pause": 0.4,
+   "say": "Bahía Botín queda al norte, y el ese-ese Rocky, al este."
+  },
+  {
+   "text": "Y fíjate: está al borde de una zona oscura y rocosa, donde se esconde el último punto de referencia.",
+   "pause": 0.5
+  },
+  {
+   "text": "¡La calavera salada! Justo al sur de Caverna Condenada.",
+   "pause": 0.4
+  },
+  {
+   "text": "Y con esta, ¡ya visitamos los 17 lugares!",
+   "pause": 0.5,
+   "say": "Y con esta, ¡ya visitamos los diecisiete lugares!"
+  },
+  {
+   "text": "Y ahora, los datos curiosos que te prometí.",
+   "pause": 0.8
+  },
+  {
+   "text": "El lugar que está más al norte de todo el mapa: Resort relajado.",
+   "pause": 0.8
+  },
+  {
+   "text": "El que está más al sur: Puerto Pirata.",
+   "pause": 0.8
+  },
+  {
+   "text": "El que está más al oeste: Arlong Park.",
+   "pause": 0.4
+  },
+  {
+   "text": "Y también es el más solitario: de todos los lugares, es el que tiene a su vecino más lejos.",
+   "pause": 0.8
+  },
+  {
+   "text": "Y el que está más al este: el Bote boogie.",
+   "pause": 0.8,
+   "say": "Y el que está más al este: el Bote bugui."
+  },
+  {
+   "text": "El lugar con nombre más céntrico: Caverna Condenada.",
+   "pause": 0.8
+  },
+  {
+   "text": "Y los dos más alejados entre sí: Resort relajado y Baratie, ¡de punta a punta de la isla!",
+   "pause": 0.8
+  },
+  {
+   "text": "Y los dos lugares más pegados: Baratie y Bahía Bulliciosa, ¡casi uno encima del otro!",
+   "pause": 0.8
+  },
+  {
+   "text": "Y para terminar, repasemos el mapa completo.",
+   "pause": 0.3
+  },
+  {
+   "text": "En el norte: Resort relajado, El cofre, Bahía Botín y Fuerte Fortuna.",
+   "pause": 0.4
+  },
+  {
+   "text": "En el este: el Bote boogie y The $.$. Rocky.",
+   "pause": 0.4,
+   "say": "En el este: el Bote bugui y el ese-ese Rocky."
+  },
+  {
+   "text": "En el sur: Bahía Bulliciosa, Baratie, Henry, Puerto Pirata y Loguetown.",
+   "pause": 0.4,
+   "say": "En el sur: Bahía Bulliciosa, Baratie, Jenri, Puerto Pirata y Lóguetaun."
+  },
+  {
+   "text": "En el oeste: Villa Molino y Arlong Park.",
+   "pause": 0.4
+  },
+  {
+   "text": "Y en el centro: Frontera Farol, Campo de batalla del gigante, Caverna Condenada y La calavera salada.",
+   "pause": 0.4
+  },
+  {
+   "text": "¡17 lugares en total!",
+   "pause": 0.45,
+   "say": "¡Diecisiete lugares en total!"
+  },
+  {
+   "text": "Y si vas por tesoros, las noticias dicen que en la pestaña Tesoro puedes seguir tu progreso semanal.",
+   "pause": 0.4
+  },
+  {
+   "text": "Guarda este video para tu próxima partida.",
+   "pause": 0.4
+  },
+  {
+   "text": "¿Cuál es tu lugar favorito para caer? ¡Dímelo en los comentarios!",
+   "pause": 0.4
+  },
+  {
+   "text": "Usa el código BAD en la tienda de objetos. Le ayuda muchísimo al canal.",
+   "pause": 0.25,
+   "say": "Usa el código bad, en la tienda de objetos. Le ayuda muchísimo al canal."
+  },
+  {
+   "text": "¡Gracias por ver! Síguenos para más contenido diario.",
+   "pause": 0.3
+  }
+ ],
+ "voice": "ef_dora",
+ "speed": 1.2,
+ "lang": "es-419",
+ "lead": 0.2,
+ "mode": "flow"
+}

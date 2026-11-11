@@ -1,0 +1,267 @@
+{
+  "video": "latienditabad-2026-11-11-tour-mapa.mp4",
+  "checked_utc": "2026-11-11T13:05:01Z",
+  "verdict": "READY TO POST",
+  "results": [
+    {
+      "check": "1. Facts",
+      "status": "PASS",
+      "detail": "42/42 claims verified against saved official data",
+      "items": [
+        {
+          "claim": "17 lugares en el mapa oficial: 12 lugares con nombre y 5 puntos de referencia",
+          "result": "PASS",
+          "why": "matched in map.json; map.json lists exactly 17 pois: 12 with ids Athena.Location.POI.* and 5 with ids Athena.Location.UnNamedPOI.* (Bote boogie, Baratie, Henry, Campo de batalla del gigante, La calavera salada)"
+        },
+        {
+          "claim": "Noticias del juego: ¡La aventura espera! Explora Arlong Park de One Piece, navega por la Bahía Baratie o asalta El $.$. Rocky en esta misteriosa isla en forma de cráneo.",
+          "result": "PASS",
+          "why": "matched in news.json"
+        },
+        {
+          "claim": "Noticias del juego: Frutas del diablo por toda la isla. ¡Se soltaron frutas del diablo raras por todo el mapa! Come la fruta Goma Goma para estirar tus habilidades como Luffy o la fruta Fuego Fuego para arrasar como Ace… solo mantente lejos del agua.",
+          "result": "PASS",
+          "why": "matched in news.json"
+        },
+        {
+          "claim": "Noticias del juego: en la pestaña Tesoro sigues tu progreso semanal",
+          "result": "PASS",
+          "why": "matched in news.json"
+        },
+        {
+          "claim": "Resort relajado: noroeste (by the same rule as new_where.py)",
+          "result": "PASS",
+          "why": "matched in map.json; map pixel (818, 718)"
+        },
+        {
+          "claim": "Resort relajado en el mapa",
+          "result": "PASS",
+          "why": "visual check against map-labels.png: map pixel (818, 718); noroeste (by the same rule as new_where.py); on its own island (water all around, a bridge to the main island); nearest named place El cofre, to the south"
+        },
+        {
+          "claim": "El cofre: noroeste",
+          "result": "PASS",
+          "why": "matched in map.json; map pixel (762, 875)"
+        },
+        {
+          "claim": "El cofre en el mapa",
+          "result": "PASS",
+          "why": "visual check against map-labels.png: map pixel (762, 875); noroeste; the label sits between small islands off the coast"
+        },
+        {
+          "claim": "Bahía Botín: norte",
+          "result": "PASS",
+          "why": "matched in map.json; map pixel (1070, 870)"
+        },
+        {
+          "claim": "Bahía Botín en el mapa",
+          "result": "PASS",
+          "why": "visual check against map-labels.png: map pixel (1070, 870); norte; orange terrain; a ship sits in the water of the inlet right next to the place"
+        },
+        {
+          "claim": "Fuerte Fortuna: noreste",
+          "result": "PASS",
+          "why": "matched in map.json; map pixel (1294, 836)"
+        },
+        {
+          "claim": "Fuerte Fortuna en el mapa",
+          "result": "PASS",
+          "why": "visual check against map-labels.png: map pixel (1294, 836); noreste; where the orange terrain meets the green; nearest named place Bahía Botín, to the west"
+        },
+        {
+          "claim": "Bote boogie: este",
+          "result": "PASS",
+          "why": "matched in map.json; map pixel (1446, 989)"
+        },
+        {
+          "claim": "Bote boogie en el mapa",
+          "result": "PASS",
+          "why": "visual check against map-labels.png: map pixel (1446, 989); este; a barge floating in the cove between the two orange arms of land; south-east of Fuerte Fortuna"
+        },
+        {
+          "claim": "The $.$. Rocky: este",
+          "result": "PASS",
+          "why": "matched in map.json; map pixel (1416, 1217)"
+        },
+        {
+          "claim": "The $.$. Rocky en el mapa",
+          "result": "PASS",
+          "why": "visual check against map-labels.png: map pixel (1416, 1217); este; a large ship docked in a channel of the eastern island; nearest named place Caverna Condenada, to the west of it"
+        },
+        {
+          "claim": "Bahía Bulliciosa: sureste",
+          "result": "PASS",
+          "why": "matched in map.json; map pixel (1388, 1482)"
+        },
+        {
+          "claim": "Bahía Bulliciosa en el mapa",
+          "result": "PASS",
+          "why": "visual check against map-labels.png: map pixel (1388, 1482); sureste; a town on the waterfront; nearest named place The $.$. Rocky, to the north of it"
+        },
+        {
+          "claim": "Baratie: 24 map px from Bahía Bulliciosa (closest pair of all 17 places)",
+          "result": "PASS",
+          "why": "matched in map.json; map pixel (1411, 1477)"
+        },
+        {
+          "claim": "Baratie en el mapa",
+          "result": "PASS",
+          "why": "visual check against map-labels.png: map pixel (1411, 1477); 24 map px from Bahía Bulliciosa (closest pair of all 17 places)"
+        },
+        {
+          "claim": "Henry: on a small round island in the southern lagoon",
+          "result": "PASS",
+          "why": "matched in map.json; map pixel (1203, 1500)"
+        },
+        {
+          "claim": "Henry en el mapa",
+          "result": "PASS",
+          "why": "visual check against map-labels.png: map pixel (1203, 1500); on a small round island in the southern lagoon; north-east of Puerto Pirata (118 px); west of Bahía Bulliciosa"
+        },
+        {
+          "claim": "Puerto Pirata: sur",
+          "result": "PASS",
+          "why": "matched in map.json; map pixel (1150, 1606)"
+        },
+        {
+          "claim": "Puerto Pirata en el mapa",
+          "result": "PASS",
+          "why": "visual check against map-labels.png: map pixel (1150, 1606); sur; on the south coast with ships at the pier"
+        },
+        {
+          "claim": "Loguetown: sur",
+          "result": "PASS",
+          "why": "matched in map.json; map pixel (989, 1382)"
+        },
+        {
+          "claim": "Loguetown en el mapa",
+          "result": "PASS",
+          "why": "visual check against map-labels.png: map pixel (989, 1382); sur; just north of the lagoon with small islands"
+        },
+        {
+          "claim": "Villa Molino: suroeste",
+          "result": "PASS",
+          "why": "matched in map.json; map pixel (754, 1438)"
+        },
+        {
+          "claim": "Villa Molino en el mapa",
+          "result": "PASS",
+          "why": "visual check against map-labels.png: map pixel (754, 1438); suroeste; nearest named place Loguetown, to the east"
+        },
+        {
+          "claim": "Arlong Park: oeste",
+          "result": "PASS",
+          "why": "matched in map.json; map pixel (635, 1123)"
+        },
+        {
+          "claim": "Arlong Park en el mapa",
+          "result": "PASS",
+          "why": "visual check against map-labels.png: map pixel (635, 1123); oeste; nearest named place Frontera Farol, to the east"
+        },
+        {
+          "claim": "Frontera Farol: cerca del centro (162 px from the centroid of the named places, under the 170 px rule)",
+          "result": "PASS",
+          "why": "matched in map.json; map pixel (899, 1050)"
+        },
+        {
+          "claim": "Frontera Farol en el mapa",
+          "result": "PASS",
+          "why": "visual check against map-labels.png: map pixel (899, 1050); cerca del centro (162 px from the centroid of the named places, under the 170 px rule); just north of the large purple spiral"
+        },
+        {
+          "claim": "Campo de batalla del gigante: at the southern edge of the purple spiral",
+          "result": "PASS",
+          "why": "matched in map.json; map pixel (953, 1243)"
+        },
+        {
+          "claim": "Campo de batalla del gigante en el mapa",
+          "result": "PASS",
+          "why": "visual check against map-labels.png: map pixel (953, 1243); at the southern edge of the purple spiral; just north of Loguetown (its nearest named place)"
+        },
+        {
+          "claim": "Caverna Condenada: cerca del centro, east of the centroid",
+          "result": "PASS",
+          "why": "matched in map.json; map pixel (1184, 1148)"
+        },
+        {
+          "claim": "Caverna Condenada en el mapa",
+          "result": "PASS",
+          "why": "visual check against map-labels.png: map pixel (1184, 1148); cerca del centro, east of the centroid; on the northern edge of a dark rocky area"
+        },
+        {
+          "claim": "La calavera salada: inside the dark rocky area, just south of Caverna Condenada (its nearest named place, 80 px)",
+          "result": "PASS",
+          "why": "matched in map.json; map pixel (1206, 1224)"
+        },
+        {
+          "claim": "La calavera salada en el mapa",
+          "result": "PASS",
+          "why": "visual check against map-labels.png: map pixel (1206, 1224); inside the dark rocky area, just south of Caverna Condenada (its nearest named place, 80 px)"
+        },
+        {
+          "claim": "Récords: más al norte Resort relajado, más al sur Puerto Pirata, más al oeste Arlong Park, más al este Bote boogie; más pegados Baratie y Bahía Bulliciosa; más solitario Arlong Park",
+          "result": "PASS",
+          "why": "matched in map.json; min y Resort relajado 718.0, max y Puerto Pirata 1606.1, min x Arlong Park 634.8, max x Bote boogie 1445.9; closest pair Bahía Bulliciosa–Baratie 24 px; largest nearest-neighbour distance Arlong Park 274 px"
+        },
+        {
+          "claim": "Resort relajado está en su propia isla, unida por un puente; Arlong Park está separado del centro por un canal con un puente",
+          "result": "PASS",
+          "why": "visual check against map-labels.png: zoomed crops of the official map: a bridge from Resort relajado's island to the orange main island (around map px 830-870, 770-800); a bridge over the canal east of Arlong Park (around 725, 1221)"
+        },
+        {
+          "claim": "Más céntrico: Caverna Condenada; más alejados: Baratie y Resort relajado",
+          "result": "PASS",
+          "why": "matched in map.json; named place nearest the centroid of the 12 named places (1030, 1145): Caverna Condenada 154 px; farthest pair of the 17: Baratie–Resort relajado 963 px"
+        },
+        {
+          "claim": "Barcos por todos lados",
+          "result": "PASS",
+          "why": "visual check against map-labels.png: ships visible on the official map at Bahía Botín, The $.$. Rocky, Puerto Pirata (two at the pier), the Arlong Park lagoon, and the Bote boogie barge"
+        }
+      ]
+    },
+    {
+      "check": "2. Spelling and grammar",
+      "status": "PASS",
+      "detail": "184 distinct words checked; code written as BAD in all 2 mentions",
+      "items": []
+    },
+    {
+      "check": "3. Frames",
+      "status": "PASS",
+      "detail": "No black frames, no frozen stretches over 1.5 s. Contact sheet (1 frame/s) reviewed by eye: contact-sheet.png",
+      "items": []
+    },
+    {
+      "check": "4. Audio",
+      "status": "PASS",
+      "detail": "Integrated -14.2 LUFS, true peak -1.7 dBTP, no clipping, no silence gaps. All sound is original synthesis (no game rips, no copyrighted music). No voiceover in this cut.",
+      "items": []
+    },
+    {
+      "check": "5. Specs and safe zones",
+      "status": "PASS",
+      "detail": "1920x1080 h264 30 fps, aac 48000 Hz, 267.2s. Long YouTube video; every on-screen text box sampled 4x/s stays inside the title-safe area.",
+      "items": []
+    },
+    {
+      "check": "6. Disclosure and wording",
+      "status": "PASS",
+      "detail": "#EpicPartner is the first hashtag in caption line 1 and on screen in every sampled frame from 0.0s. No discount, giveaway, endorsement or filler-CTA wording.",
+      "items": []
+    },
+    {
+      "check": "7. Would a fan stop scrolling? Made by a person?",
+      "status": "PASS",
+      "detail": "4:27 map tour in 10 chapters (Intro, La isla, El norte, El este, El sur, El oeste, El centro, Datos curiosos, Repaso, Final). Every one of the 37 segments checked in stills (plus the recap and the sign-off): the opening card 'TOUR COMPLETO · Todos los lugares del mapa' over the official map, the '17 lugares en el mapa oficial' card, both in-game news tiles quoted word for word and lit as they are read, five region overviews with their places pinned, 17 stops where the camera lands on the right spot (ring on the place; the five landmarks that have no label on the map get a yellow handwritten label), the records (más al norte, sur, oeste, este, más céntrico, más alejados, más pegados) each labelled, and a closing map whose 17 pins appear region by region as they are named. Fixed before passing: pin labels never showed in 16:9 (S.scrawl hides anything outside the 9:16 app-safe area), region overviews and records held too briefly, the final card touched the Villa Molino ring, and three labels collided with printed map names (now clear; 'EL MÁS CÉNTRICO' sits above the Caverna Condenada ring so it can't be read with 'Frontera Farol'). Name cards fit on one line (long names shrink), subtitles readable, #EpicPartner and the watermark in every frame, mid-roll and closing code cards clean, sign-off under the closing card. Voice says One Piece, Loguetown, Henry, Bote boogie, $.$. and Ace the way a Mexican player would; Spanish reads naturally.",
+      "items": []
+    },
+    {
+      "check": "8. Owner approval",
+      "status": "PASS",
+      "detail": "Standing approval for autopilot (owner, 2026-10-28): posts when checks 1-7 all PASS.",
+      "items": []
+    }
+  ],
+  "caption": "#EpicPartner Recorremos TODO el mapa de Fortnite 🗺️ Los 12 lugares con nombre y los 5 puntos de referencia, región por región, y los récords del mapa: el más al norte, al sur, al este, al oeste y los dos más pegados.\n¿Cuál es tu lugar favorito para caer? 👇\nUsa el código BAD en la tienda de objetos 💛\n#Fortnite #MapaFortnite #FortniteEspañol"
+}

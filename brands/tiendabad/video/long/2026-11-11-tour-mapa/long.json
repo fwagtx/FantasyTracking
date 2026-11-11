@@ -1,0 +1,1071 @@
+{
+ "title": "Todos los lugares del mapa: tour completo",
+ "caption": "#EpicPartner Recorremos TODO el mapa de Fortnite 🗺️ Los 12 lugares con nombre y los 5 puntos de referencia, región por región, y los récords del mapa: el más al norte, al sur, al este, al oeste y los dos más pegados.\n¿Cuál es tu lugar favorito para caer? 👇\nUsa el código BAD en la tienda de objetos 💛\n#Fortnite #MapaFortnite #FortniteEspañol",
+ "claims": [
+  {
+   "text": "17 lugares en el mapa oficial: 12 lugares con nombre y 5 puntos de referencia",
+   "source": "map.json",
+   "match": [
+    "Arlong Park",
+    "Bahía Botín",
+    "Bahía Bulliciosa",
+    "Baratie",
+    "Bote boogie",
+    "Campo de batalla del gigante",
+    "Caverna Condenada",
+    "El cofre",
+    "Frontera Farol",
+    "Fuerte Fortuna",
+    "Henry",
+    "La calavera salada",
+    "Loguetown",
+    "Puerto Pirata",
+    "Resort relajado",
+    "The $.$. Rocky",
+    "Villa Molino"
+   ],
+   "count": {
+    "Arlong Park": 1,
+    "Bahía Botín": 1,
+    "Bahía Bulliciosa": 1,
+    "Baratie": 1,
+    "Bote boogie": 1,
+    "Campo de batalla del gigante": 1,
+    "Caverna Condenada": 1,
+    "El cofre": 1,
+    "Frontera Farol": 1,
+    "Fuerte Fortuna": 1,
+    "Henry": 1,
+    "La calavera salada": 1,
+    "Loguetown": 1,
+    "Puerto Pirata": 1,
+    "Resort relajado": 1,
+    "The $.$. Rocky": 1,
+    "Villa Molino": 1
+   },
+   "visual": "map.json lists exactly 17 pois: 12 with ids Athena.Location.POI.* and 5 with ids Athena.Location.UnNamedPOI.* (Bote boogie, Baratie, Henry, Campo de batalla del gigante, La calavera salada)"
+  },
+  {
+   "text": "Noticias del juego: ¡La aventura espera! Explora Arlong Park de One Piece, navega por la Bahía Baratie o asalta El $.$. Rocky en esta misteriosa isla en forma de cráneo.",
+   "source": "news.json",
+   "match": [
+    "¡La aventura espera!",
+    "Explora Arlong Park de One Piece, navega por la Bahía Baratie o asalta El $.$. Rocky en esta misteriosa isla en forma de cráneo."
+   ]
+  },
+  {
+   "text": "Noticias del juego: Frutas del diablo por toda la isla. ¡Se soltaron frutas del diablo raras por todo el mapa! Come la fruta Goma Goma para estirar tus habilidades como Luffy o la fruta Fuego Fuego para arrasar como Ace… solo mantente lejos del agua.",
+   "source": "news.json",
+   "match": [
+    "Frutas del diablo por toda la isla",
+    "¡Se soltaron frutas del diablo raras por todo el mapa! Come la fruta Goma Goma para estirar tus habilidades como Luffy o la fruta Fuego Fuego para arrasar como Ace… solo mantente lejos del agua."
+   ]
+  },
+  {
+   "text": "Noticias del juego: en la pestaña Tesoro sigues tu progreso semanal",
+   "source": "news.json",
+   "match": [
+    "¡No te pierdas la aventura!",
+    "Dirígete a la pestaña Tesoro para seguir el progreso semanal"
+   ]
+  },
+  {
+   "text": "Resort relajado: noroeste (by the same rule as new_where.py)",
+   "source": "map.json",
+   "match": [
+    "Resort relajado"
+   ],
+   "visual": "map pixel (818, 718)"
+  },
+  {
+   "text": "Resort relajado en el mapa",
+   "source": "map-labels.png",
+   "visual": "map pixel (818, 718); noroeste (by the same rule as new_where.py); on its own island (water all around, a bridge to the main island); nearest named place El cofre, to the south"
+  },
+  {
+   "text": "El cofre: noroeste",
+   "source": "map.json",
+   "match": [
+    "El cofre"
+   ],
+   "visual": "map pixel (762, 875)"
+  },
+  {
+   "text": "El cofre en el mapa",
+   "source": "map-labels.png",
+   "visual": "map pixel (762, 875); noroeste; the label sits between small islands off the coast"
+  },
+  {
+   "text": "Bahía Botín: norte",
+   "source": "map.json",
+   "match": [
+    "Bahía Botín"
+   ],
+   "visual": "map pixel (1070, 870)"
+  },
+  {
+   "text": "Bahía Botín en el mapa",
+   "source": "map-labels.png",
+   "visual": "map pixel (1070, 870); norte; orange terrain; a ship sits in the water of the inlet right next to the place"
+  },
+  {
+   "text": "Fuerte Fortuna: noreste",
+   "source": "map.json",
+   "match": [
+    "Fuerte Fortuna"
+   ],
+   "visual": "map pixel (1294, 836)"
+  },
+  {
+   "text": "Fuerte Fortuna en el mapa",
+   "source": "map-labels.png",
+   "visual": "map pixel (1294, 836); noreste; where the orange terrain meets the green; nearest named place Bahía Botín, to the west"
+  },
+  {
+   "text": "Bote boogie: este",
+   "source": "map.json",
+   "match": [
+    "Bote boogie"
+   ],
+   "visual": "map pixel (1446, 989)"
+  },
+  {
+   "text": "Bote boogie en el mapa",
+   "source": "map-labels.png",
+   "visual": "map pixel (1446, 989); este; a barge floating in the cove between the two orange arms of land; south-east of Fuerte Fortuna"
+  },
+  {
+   "text": "The $.$. Rocky: este",
+   "source": "map.json",
+   "match": [
+    "The $.$. Rocky"
+   ],
+   "visual": "map pixel (1416, 1217)"
+  },
+  {
+   "text": "The $.$. Rocky en el mapa",
+   "source": "map-labels.png",
+   "visual": "map pixel (1416, 1217); este; a large ship docked in a channel of the eastern island; nearest named place Caverna Condenada, to the west of it"
+  },
+  {
+   "text": "Bahía Bulliciosa: sureste",
+   "source": "map.json",
+   "match": [
+    "Bahía Bulliciosa"
+   ],
+   "visual": "map pixel (1388, 1482)"
+  },
+  {
+   "text": "Bahía Bulliciosa en el mapa",
+   "source": "map-labels.png",
+   "visual": "map pixel (1388, 1482); sureste; a town on the waterfront; nearest named place The $.$. Rocky, to the north of it"
+  },
+  {
+   "text": "Baratie: 24 map px from Bahía Bulliciosa (closest pair of all 17 places)",
+   "source": "map.json",
+   "match": [
+    "Baratie"
+   ],
+   "visual": "map pixel (1411, 1477)"
+  },
+  {
+   "text": "Baratie en el mapa",
+   "source": "map-labels.png",
+   "visual": "map pixel (1411, 1477); 24 map px from Bahía Bulliciosa (closest pair of all 17 places)"
+  },
+  {
+   "text": "Henry: on a small round island in the southern lagoon",
+   "source": "map.json",
+   "match": [
+    "Henry"
+   ],
+   "visual": "map pixel (1203, 1500)"
+  },
+  {
+   "text": "Henry en el mapa",
+   "source": "map-labels.png",
+   "visual": "map pixel (1203, 1500); on a small round island in the southern lagoon; north-east of Puerto Pirata (118 px); west of Bahía Bulliciosa"
+  },
+  {
+   "text": "Puerto Pirata: sur",
+   "source": "map.json",
+   "match": [
+    "Puerto Pirata"
+   ],
+   "visual": "map pixel (1150, 1606)"
+  },
+  {
+   "text": "Puerto Pirata en el mapa",
+   "source": "map-labels.png",
+   "visual": "map pixel (1150, 1606); sur; on the south coast with ships at the pier"
+  },
+  {
+   "text": "Loguetown: sur",
+   "source": "map.json",
+   "match": [
+    "Loguetown"
+   ],
+   "visual": "map pixel (989, 1382)"
+  },
+  {
+   "text": "Loguetown en el mapa",
+   "source": "map-labels.png",
+   "visual": "map pixel (989, 1382); sur; just north of the lagoon with small islands"
+  },
+  {
+   "text": "Villa Molino: suroeste",
+   "source": "map.json",
+   "match": [
+    "Villa Molino"
+   ],
+   "visual": "map pixel (754, 1438)"
+  },
+  {
+   "text": "Villa Molino en el mapa",
+   "source": "map-labels.png",
+   "visual": "map pixel (754, 1438); suroeste; nearest named place Loguetown, to the east"
+  },
+  {
+   "text": "Arlong Park: oeste",
+   "source": "map.json",
+   "match": [
+    "Arlong Park"
+   ],
+   "visual": "map pixel (635, 1123)"
+  },
+  {
+   "text": "Arlong Park en el mapa",
+   "source": "map-labels.png",
+   "visual": "map pixel (635, 1123); oeste; nearest named place Frontera Farol, to the east"
+  },
+  {
+   "text": "Frontera Farol: cerca del centro (162 px from the centroid of the named places, under the 170 px rule)",
+   "source": "map.json",
+   "match": [
+    "Frontera Farol"
+   ],
+   "visual": "map pixel (899, 1050)"
+  },
+  {
+   "text": "Frontera Farol en el mapa",
+   "source": "map-labels.png",
+   "visual": "map pixel (899, 1050); cerca del centro (162 px from the centroid of the named places, under the 170 px rule); just north of the large purple spiral"
+  },
+  {
+   "text": "Campo de batalla del gigante: at the southern edge of the purple spiral",
+   "source": "map.json",
+   "match": [
+    "Campo de batalla del gigante"
+   ],
+   "visual": "map pixel (953, 1243)"
+  },
+  {
+   "text": "Campo de batalla del gigante en el mapa",
+   "source": "map-labels.png",
+   "visual": "map pixel (953, 1243); at the southern edge of the purple spiral; just north of Loguetown (its nearest named place)"
+  },
+  {
+   "text": "Caverna Condenada: cerca del centro, east of the centroid",
+   "source": "map.json",
+   "match": [
+    "Caverna Condenada"
+   ],
+   "visual": "map pixel (1184, 1148)"
+  },
+  {
+   "text": "Caverna Condenada en el mapa",
+   "source": "map-labels.png",
+   "visual": "map pixel (1184, 1148); cerca del centro, east of the centroid; on the northern edge of a dark rocky area"
+  },
+  {
+   "text": "La calavera salada: inside the dark rocky area, just south of Caverna Condenada (its nearest named place, 80 px)",
+   "source": "map.json",
+   "match": [
+    "La calavera salada"
+   ],
+   "visual": "map pixel (1206, 1224)"
+  },
+  {
+   "text": "La calavera salada en el mapa",
+   "source": "map-labels.png",
+   "visual": "map pixel (1206, 1224); inside the dark rocky area, just south of Caverna Condenada (its nearest named place, 80 px)"
+  },
+  {
+   "text": "Récords: más al norte Resort relajado, más al sur Puerto Pirata, más al oeste Arlong Park, más al este Bote boogie; más pegados Baratie y Bahía Bulliciosa; más solitario Arlong Park",
+   "source": "map.json",
+   "match": [
+    "Resort relajado",
+    "Puerto Pirata",
+    "Arlong Park",
+    "Bote boogie",
+    "Baratie",
+    "Bahía Bulliciosa"
+   ],
+   "visual": "min y Resort relajado 718.0, max y Puerto Pirata 1606.1, min x Arlong Park 634.8, max x Bote boogie 1445.9; closest pair Bahía Bulliciosa–Baratie 24 px; largest nearest-neighbour distance Arlong Park 274 px"
+  },
+  {
+   "text": "Resort relajado está en su propia isla, unida por un puente; Arlong Park está separado del centro por un canal con un puente",
+   "source": "map-labels.png",
+   "visual": "zoomed crops of the official map: a bridge from Resort relajado's island to the orange main island (around map px 830-870, 770-800); a bridge over the canal east of Arlong Park (around 725, 1221)"
+  },
+  {
+   "text": "Más céntrico: Caverna Condenada; más alejados: Baratie y Resort relajado",
+   "source": "map.json",
+   "match": [
+    "Caverna Condenada",
+    "Baratie",
+    "Resort relajado"
+   ],
+   "visual": "named place nearest the centroid of the 12 named places (1030, 1145): Caverna Condenada 154 px; farthest pair of the 17: Baratie–Resort relajado 963 px"
+  },
+  {
+   "text": "Barcos por todos lados",
+   "source": "map-labels.png",
+   "visual": "ships visible on the official map at Bahía Botín, The $.$. Rocky, Puerto Pirata (two at the pier), the Arlong Park lagoon, and the Bote boogie barge"
+  }
+ ],
+ "segments": [
+  {
+   "type": "title",
+   "p": 0,
+   "chapter": "Intro",
+   "kicker": "TOUR COMPLETO",
+   "lines": [
+    "Todos los lugares",
+    "del mapa"
+   ]
+  },
+  {
+   "type": "stat",
+   "p": 1,
+   "big": "17",
+   "label": "lugares en el mapa oficial"
+  },
+  {
+   "type": "quote",
+   "p": 5,
+   "chapter": "La isla",
+   "kicker": "NOTICIAS DEL JUEGO",
+   "title": "¡La aventura espera!",
+   "lines": [
+    {
+     "p": 6,
+     "text": "Explora Arlong Park de One Piece, navega por la Bahía Baratie o asalta El $.$. Rocky en esta misteriosa isla en forma de cráneo."
+    }
+   ]
+  },
+  {
+   "type": "quote",
+   "p": 8,
+   "kicker": "NOTICIAS DEL JUEGO",
+   "title": "Frutas del diablo por toda la isla",
+   "lines": [
+    {
+     "p": 8,
+     "text": "¡Se soltaron frutas del diablo raras por todo el mapa!"
+    },
+    {
+     "p": 9,
+     "text": "Come la fruta Goma Goma para estirar tus habilidades como Luffy o la fruta Fuego Fuego para arrasar como Ace… solo mantente lejos del agua."
+    }
+   ]
+  },
+  {
+   "type": "map",
+   "p": 10,
+   "chapter": "El norte",
+   "x": 1027.9,
+   "y": 796.7,
+   "z": 1.2,
+   "name": "El norte",
+   "sub": "4 lugares",
+   "pins": [
+    {
+     "x": 817.7,
+     "y": 718.0,
+     "label": ""
+    },
+    {
+     "x": 762.1,
+     "y": 875.4,
+     "label": ""
+    },
+    {
+     "x": 1069.6,
+     "y": 869.6,
+     "label": ""
+    },
+    {
+     "x": 1293.7,
+     "y": 836.3,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "type": "map",
+   "p": 11,
+   "x": 817.7,
+   "y": 718.0,
+   "z": 2.0,
+   "name": "Resort relajado",
+   "sub": "Noroeste · en su propia isla",
+   "pins": [
+    {
+     "x": 817.7,
+     "y": 718.0,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "type": "map",
+   "p": 14,
+   "x": 762.1,
+   "y": 875.4,
+   "z": 2.0,
+   "name": "El cofre",
+   "sub": "Noroeste · entre islitas",
+   "pins": [
+    {
+     "x": 762.1,
+     "y": 875.4,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "type": "map",
+   "p": 16,
+   "x": 1069.6,
+   "y": 869.6,
+   "z": 2.0,
+   "name": "Bahía Botín",
+   "sub": "Norte · zona naranja",
+   "pins": [
+    {
+     "x": 1069.6,
+     "y": 869.6,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "type": "map",
+   "p": 19,
+   "x": 1293.7,
+   "y": 836.3,
+   "z": 2.0,
+   "name": "Fuerte Fortuna",
+   "sub": "Noreste · al este de Bahía Botín",
+   "pins": [
+    {
+     "x": 1293.7,
+     "y": 836.3,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "type": "map",
+   "p": 21,
+   "chapter": "El este",
+   "x": 1430.8,
+   "y": 1102.8,
+   "z": 1.4,
+   "name": "El este",
+   "sub": "2 lugares",
+   "pins": [
+    {
+     "x": 1445.9,
+     "y": 988.8,
+     "label": ""
+    },
+    {
+     "x": 1415.7,
+     "y": 1216.9,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "type": "map",
+   "p": 22,
+   "x": 1445.9,
+   "y": 988.8,
+   "z": 2.0,
+   "name": "Bote boogie",
+   "sub": "Punto de referencia · este",
+   "pins": [
+    {
+     "x": 1445.9,
+     "y": 988.8,
+     "label": "BOTE BOOGIE"
+    }
+   ]
+  },
+  {
+   "type": "map",
+   "p": 24,
+   "x": 1415.7,
+   "y": 1216.9,
+   "z": 2.0,
+   "name": "The $.$. Rocky",
+   "sub": "Este · un barco enorme",
+   "pins": [
+    {
+     "x": 1415.7,
+     "y": 1216.9,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "type": "map",
+   "p": 27,
+   "chapter": "El sur",
+   "x": 1199.9,
+   "y": 1494.2,
+   "z": 1.4,
+   "name": "El sur",
+   "sub": "5 lugares",
+   "pins": [
+    {
+     "x": 1387.9,
+     "y": 1481.5,
+     "label": ""
+    },
+    {
+     "x": 1411.1,
+     "y": 1476.8,
+     "label": ""
+    },
+    {
+     "x": 1203.2,
+     "y": 1500.4,
+     "label": ""
+    },
+    {
+     "x": 1150.3,
+     "y": 1606.1,
+     "label": ""
+    },
+    {
+     "x": 988.7,
+     "y": 1382.2,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "type": "map",
+   "p": 28,
+   "x": 1387.9,
+   "y": 1481.5,
+   "z": 2.0,
+   "name": "Bahía Bulliciosa",
+   "sub": "Sureste · a la orilla del agua",
+   "pins": [
+    {
+     "x": 1387.9,
+     "y": 1481.5,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "type": "map",
+   "p": 31,
+   "x": 1411.1,
+   "y": 1476.8,
+   "z": 2.4,
+   "name": "Baratie",
+   "sub": "Punto de referencia · junto a Bahía Bulliciosa",
+   "pins": [
+    {
+     "x": 1411.1,
+     "y": 1476.8,
+     "label": "BARATIE"
+    }
+   ]
+  },
+  {
+   "type": "map",
+   "p": 33,
+   "x": 1203.2,
+   "y": 1500.4,
+   "z": 2.2,
+   "name": "Henry",
+   "sub": "Punto de referencia · laguna del sur",
+   "pins": [
+    {
+     "x": 1203.2,
+     "y": 1500.4,
+     "label": "HENRY"
+    }
+   ]
+  },
+  {
+   "type": "map",
+   "p": 35,
+   "x": 1150.3,
+   "y": 1606.1,
+   "z": 2.0,
+   "name": "Puerto Pirata",
+   "sub": "Sur · barcos en el muelle",
+   "pins": [
+    {
+     "x": 1150.3,
+     "y": 1606.1,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "type": "map",
+   "p": 38,
+   "x": 988.7,
+   "y": 1382.2,
+   "z": 2.0,
+   "name": "Loguetown",
+   "sub": "Sur · arriba de la laguna",
+   "pins": [
+    {
+     "x": 988.7,
+     "y": 1382.2,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "type": "map",
+   "p": 41,
+   "chapter": "El oeste",
+   "x": 694.6,
+   "y": 1280.4,
+   "z": 1.3,
+   "name": "El oeste",
+   "sub": "2 lugares",
+   "pins": [
+    {
+     "x": 754.5,
+     "y": 1437.6,
+     "label": ""
+    },
+    {
+     "x": 634.8,
+     "y": 1123.2,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "type": "map",
+   "p": 42,
+   "x": 754.5,
+   "y": 1437.6,
+   "z": 2.0,
+   "name": "Villa Molino",
+   "sub": "Suroeste · al oeste de Loguetown",
+   "pins": [
+    {
+     "x": 754.5,
+     "y": 1437.6,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "type": "map",
+   "p": 45,
+   "x": 634.8,
+   "y": 1123.2,
+   "z": 2.0,
+   "name": "Arlong Park",
+   "sub": "Oeste · de One Piece",
+   "pins": [
+    {
+     "x": 634.8,
+     "y": 1123.2,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "type": "code",
+   "p": 49
+  },
+  {
+   "type": "map",
+   "p": 50,
+   "chapter": "El centro",
+   "x": 1052.4,
+   "y": 1146.3,
+   "z": 1.5,
+   "name": "El centro",
+   "sub": "4 lugares",
+   "pins": [
+    {
+     "x": 898.7,
+     "y": 1049.7,
+     "label": ""
+    },
+    {
+     "x": 952.6,
+     "y": 1243.0,
+     "label": ""
+    },
+    {
+     "x": 1184.2,
+     "y": 1147.6,
+     "label": ""
+    },
+    {
+     "x": 1206.1,
+     "y": 1224.3,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "type": "map",
+   "p": 51,
+   "x": 898.7,
+   "y": 1049.7,
+   "z": 2.0,
+   "name": "Frontera Farol",
+   "sub": "Cerca del centro",
+   "pins": [
+    {
+     "x": 898.7,
+     "y": 1049.7,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "type": "map",
+   "p": 54,
+   "x": 952.6,
+   "y": 1243.0,
+   "z": 2.0,
+   "name": "Campo de batalla del gigante",
+   "sub": "Punto de referencia · la espiral morada",
+   "pins": [
+    {
+     "x": 952.6,
+     "y": 1243.0,
+     "label": "AQUÍ"
+    }
+   ]
+  },
+  {
+   "type": "map",
+   "p": 56,
+   "x": 1184.2,
+   "y": 1147.6,
+   "z": 2.0,
+   "name": "Caverna Condenada",
+   "sub": "Cerca del centro · zona oscura",
+   "pins": [
+    {
+     "x": 1184.2,
+     "y": 1147.6,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "type": "map",
+   "p": 59,
+   "x": 1206.1,
+   "y": 1224.3,
+   "z": 2.3,
+   "name": "La calavera salada",
+   "sub": "Punto de referencia · al sur de Caverna Condenada",
+   "pins": [
+    {
+     "x": 1206.1,
+     "y": 1224.3,
+     "label": "LA CALAVERA SALADA",
+     "lx": -300,
+     "ly": 110
+    }
+   ]
+  },
+  {
+   "type": "title",
+   "p": 61,
+   "chapter": "Datos curiosos",
+   "kicker": "DATOS CURIOSOS",
+   "lines": [
+    "Los récords",
+    "del mapa"
+   ]
+  },
+  {
+   "type": "map",
+   "p": 62,
+   "x": 817.7,
+   "y": 718.0,
+   "z": 1.3,
+   "name": "Resort relajado",
+   "sub": "El más al norte del mapa",
+   "pins": [
+    {
+     "x": 817.7,
+     "y": 718.0,
+     "label": "MÁS AL NORTE"
+    }
+   ]
+  },
+  {
+   "type": "map",
+   "p": 63,
+   "x": 1150.3,
+   "y": 1606.1,
+   "z": 1.3,
+   "name": "Puerto Pirata",
+   "sub": "El más al sur del mapa",
+   "pins": [
+    {
+     "x": 1150.3,
+     "y": 1606.1,
+     "label": "MÁS AL SUR"
+    }
+   ]
+  },
+  {
+   "type": "map",
+   "p": 64,
+   "x": 634.8,
+   "y": 1123.2,
+   "z": 1.3,
+   "name": "Arlong Park",
+   "sub": "El más al oeste · y el más solitario",
+   "pins": [
+    {
+     "x": 634.8,
+     "y": 1123.2,
+     "label": "MÁS AL OESTE",
+     "ly": 110
+    }
+   ]
+  },
+  {
+   "type": "map",
+   "p": 66,
+   "x": 1445.9,
+   "y": 988.8,
+   "z": 1.3,
+   "name": "Bote boogie",
+   "sub": "El más al este del mapa",
+   "pins": [
+    {
+     "x": 1445.9,
+     "y": 988.8,
+     "label": "MÁS AL ESTE"
+    }
+   ]
+  },
+  {
+   "type": "map",
+   "p": 67,
+   "x": 1184.2,
+   "y": 1147.6,
+   "z": 1.3,
+   "name": "Caverna Condenada",
+   "sub": "El lugar con nombre más céntrico",
+   "pins": [
+    {
+     "x": 1184.2,
+     "y": 1147.6,
+     "label": "EL MÁS CÉNTRICO",
+     "lx": -60,
+     "ly": -150
+    }
+   ]
+  },
+  {
+   "type": "map",
+   "p": 68,
+   "x": 1114,
+   "y": 1150,
+   "z": 0.8,
+   "name": "Los más alejados",
+   "sub": "De punta a punta de la isla",
+   "pins": [
+    {
+     "x": 817.7,
+     "y": 718.0,
+     "label": ""
+    },
+    {
+     "x": 1411.1,
+     "y": 1476.8,
+     "label": "BARATIE",
+     "lx": 60,
+     "ly": -110
+    }
+   ]
+  },
+  {
+   "type": "map",
+   "p": 69,
+   "x": 1411.1,
+   "y": 1476.8,
+   "z": 2.4,
+   "name": "Baratie y Bahía Bulliciosa",
+   "sub": "Los dos lugares más pegados",
+   "pins": [
+    {
+     "x": 1411.1,
+     "y": 1476.8,
+     "label": "BARATIE",
+     "ly": 80
+    },
+    {
+     "x": 1387.9,
+     "y": 1481.5,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "type": "map",
+   "p": 70,
+   "chapter": "Repaso",
+   "x": 940,
+   "y": 1230,
+   "z": 0.75,
+   "name": "Mapa completo",
+   "sub": "17 lugares",
+   "pins": [
+    {
+     "x": 817.7,
+     "y": 718.0,
+     "label": "",
+     "p": 71,
+     "dt": 0.45
+    },
+    {
+     "x": 762.1,
+     "y": 875.4,
+     "label": "",
+     "p": 71,
+     "dt": 0.95
+    },
+    {
+     "x": 1069.6,
+     "y": 869.6,
+     "label": "",
+     "p": 71,
+     "dt": 1.45
+    },
+    {
+     "x": 1293.7,
+     "y": 836.3,
+     "label": "",
+     "p": 71,
+     "dt": 1.95
+    },
+    {
+     "x": 1445.9,
+     "y": 988.8,
+     "label": "",
+     "p": 72,
+     "dt": 0.45
+    },
+    {
+     "x": 1415.7,
+     "y": 1216.9,
+     "label": "",
+     "p": 72,
+     "dt": 0.95
+    },
+    {
+     "x": 1387.9,
+     "y": 1481.5,
+     "label": "",
+     "p": 73,
+     "dt": 0.45
+    },
+    {
+     "x": 1411.1,
+     "y": 1476.8,
+     "label": "",
+     "p": 73,
+     "dt": 0.95
+    },
+    {
+     "x": 1203.2,
+     "y": 1500.4,
+     "label": "",
+     "p": 73,
+     "dt": 1.45
+    },
+    {
+     "x": 1150.3,
+     "y": 1606.1,
+     "label": "",
+     "p": 73,
+     "dt": 1.95
+    },
+    {
+     "x": 988.7,
+     "y": 1382.2,
+     "label": "",
+     "p": 73,
+     "dt": 2.45
+    },
+    {
+     "x": 754.5,
+     "y": 1437.6,
+     "label": "",
+     "p": 74,
+     "dt": 0.45
+    },
+    {
+     "x": 634.8,
+     "y": 1123.2,
+     "label": "",
+     "p": 74,
+     "dt": 0.95
+    },
+    {
+     "x": 898.7,
+     "y": 1049.7,
+     "label": "",
+     "p": 75,
+     "dt": 0.45
+    },
+    {
+     "x": 952.6,
+     "y": 1243.0,
+     "label": "",
+     "p": 75,
+     "dt": 0.95
+    },
+    {
+     "x": 1184.2,
+     "y": 1147.6,
+     "label": "",
+     "p": 75,
+     "dt": 1.45
+    },
+    {
+     "x": 1206.1,
+     "y": 1224.3,
+     "label": "",
+     "p": 75,
+     "dt": 1.95
+    }
+   ]
+  },
+  {
+   "type": "code",
+   "chapter": "Final",
+   "p": 80
+  }
+ ]
+}
