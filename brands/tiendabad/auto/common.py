@@ -90,7 +90,7 @@ def post_calls(when, video, cover_url, c, networks=None, long=False):
     nets = {
         "tiktok": {**base, **thumb, "providers": [{"network": "tiktok"}], "text": c["tiktok"],
                    "tiktokData": {"title": c["tiktokTitle"], "disableComment": False, "disableDuet": False, "disableStitch": False, "privacyOption": "PUBLIC_TO_EVERYONE",
-                                  "commercialContentThirdParty": True, "commercialContentOwnBrand": False, "autoAddMusic": False, "isAigc": False}},
+                                  "commercialContentThirdParty": False, "commercialContentOwnBrand": False, "autoAddMusic": False, "isAigc": False}},
         "instagram": {**base, **thumb, "providers": [{"network": "instagram"}], "text": c["instagram"],
                       "instagramData": {"type": "REEL", "showReelOnFeed": True, "isAiGenerated": False}},
         "facebook": {**base, **thumb, "providers": [{"network": "facebook"}], "text": c["facebook"],
@@ -108,6 +108,12 @@ def post_calls(when, video, cover_url, c, networks=None, long=False):
 
 
 def write_posts(path, slug, when, calls):
+    # owner, 2026-11-11: no post is marked as a paid partnership (or promotional content); #EpicPartner on screen and in
+    # every caption is the disclosure
+    for c in calls:
+        td = c["info"].get("tiktokData") or {}
+        if td.get("commercialContentThirdParty") or td.get("commercialContentOwnBrand"):
+            raise SystemExit(f"STOP: the {c['network']} call is marked as a paid partnership / commercial content; it must not be.")
     json.dump({"slug": slug, "blogId": BLOG, "post_at": when.isoformat(timespec="minutes"), "calls": calls}, open(path, "w"), indent=1, ensure_ascii=False)
 
 

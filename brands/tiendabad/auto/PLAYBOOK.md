@@ -22,8 +22,10 @@ A skipped slot costs nothing; a wrong post costs the channel.
    word "bad": give the code line a `say` of "Usa el código bad, en la tienda de objetos. ...". **Every script
    ends** with the code line and then exactly `¡Gracias por ver! Síguenos para más contenido diario.`
 5. **Art:** skin and item art only inside videos about that item (Epic's fan content policy).
-6. **Labels:** `isAigc`, `isAiGenerated`, `isAiGeneratedContent` stay false; TikTok `commercialContentThirdParty`
-   is true (the code earns a commission). The scripts already write this.
+6. **Labels:** `isAigc`, `isAiGenerated`, `isAiGeneratedContent` stay false, and **no video is marked as a paid partnership**
+   (owner, 2026-11-11): TikTok `commercialContentThirdParty` and `commercialContentOwnBrand` stay false, and no network gets a paid
+   partnership or promotion flag. `#EpicPartner` on screen and in every caption is the disclosure. The scripts already write
+   this, and write_posts refuses a call that breaks it.
 7. **No drafts:** posts go in with `"draft": false` and `"autoPublish": true`, exactly as posts.json has them.
 8. **Captions** in natural Mexican/Latin American Spanish: hook line, one or two short lines of the best facts with
    a few emojis, one question that pulls comments, then `Usa el código BAD en la tienda de objetos 💛`, then 3
