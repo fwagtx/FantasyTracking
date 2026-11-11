@@ -1,0 +1,77 @@
+{
+ "duration": 26.1,
+ "caption": "#EpicPartner Adivina la temporada 👀 Solo los verdaderos OG aciertan las 3\n¿Cuántas acertaste? 👇\nUsa el código BAD en la tienda de objetos 💛\n#fortnite #fortniteog #adivinalatemporada",
+ "claims": [
+  {
+   "text": "Renegada robótica: Capítulo 4, Temporada 2",
+   "source": "Character_HeadhunterStar.json",
+   "match": [
+    "Renegada robótica",
+    "\"chapter\": \"4\"",
+    "\"season\": \"2\""
+   ]
+  },
+  {
+   "text": "Arquetipo: Capítulo 1, Temporada 5",
+   "source": "CID_182_Athena_Commando_M_ModernMilitary.json",
+   "match": [
+    "Arquetipo",
+    "\"chapter\": \"1\"",
+    "\"season\": \"5\""
+   ]
+  },
+  {
+   "text": "Zero (Mega Man): Capítulo 7, Temporada 4",
+   "source": "Character_TackleShow.json",
+   "match": [
+    "Zero (Mega Man)",
+    "\"chapter\": \"7\"",
+    "\"season\": \"4\""
+   ]
+  }
+ ],
+ "text": [
+  "RENEGADA ROBÓTICA",
+  "ARQUETIPO",
+  "ZERO (MEGA MAN)",
+  "?",
+  "ADIVINA LA TEMPORADA / 3 SKINS · SIN TRAMPA",
+  "1 / 3",
+  "CUENTA",
+  "CAPÍTULO 4 · TEMPORADA 2",
+  "¿QUÉ TEMPORADA?",
+  "2 / 3",
+  "CAPÍTULO 1 · TEMPORADA 5",
+  "3 / 3",
+  "CAPÍTULO 7 · TEMPORADA 4",
+  "¿CUÁNTAS / ACERTASTE?",
+  "¡ADIVINA LA TEMPORADA!",
+  "SOLO LOS VERDADEROS",
+  "OG ACIERTAN LAS",
+  "TRES.",
+  "RENEGADA ROBÓTICA.",
+  "¡CAPÍTULO 4,",
+  "TEMPORADA 2!",
+  "ARQUETIPO.",
+  "¡CAPÍTULO 1,",
+  "TEMPORADA 5!",
+  "ZERO (MEGA MAN).",
+  "¡CAPÍTULO 7,",
+  "TEMPORADA 4!",
+  "¿CUÁNTAS ACERTASTE?",
+  "DÍMELO EN LOS",
+  "COMENTARIOS.",
+  "USA EL CÓDIGO",
+  "BAD EN LA",
+  "TIENDA DE OBJETOS.",
+  "LE AYUDA MUCHÍSIMO",
+  "AL CANAL.",
+  "¡GRACIAS POR VER!",
+  "SÍGUENOS PARA MÁS",
+  "CONTENIDO DIARIO.",
+  "#EPICPARTNER",
+  "LA TIENDITA BAD",
+  "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+  "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO"
+ ]
+}

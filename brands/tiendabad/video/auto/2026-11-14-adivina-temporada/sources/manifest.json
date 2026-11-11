@@ -1,0 +1,23 @@
+{
+ "via": "fortnite-api.com (mirror of Epic's cosmetics data, es-419)",
+ "files": [
+  {
+   "file": "Character_HeadhunterStar.json",
+   "source": "Epic cosmetics data for Renegada robótica (es-419)",
+   "url": "https://fortnite-api.com/v2/cosmetics/br/Character_HeadhunterStar?language=es-419",
+   "fetched_utc": "2026-11-11T17:10:14Z"
+  },
+  {
+   "file": "CID_182_Athena_Commando_M_ModernMilitary.json",
+   "source": "Epic cosmetics data for Arquetipo (es-419)",
+   "url": "https://fortnite-api.com/v2/cosmetics/br/CID_182_Athena_Commando_M_ModernMilitary?language=es-419",
+   "fetched_utc": "2026-11-11T17:10:14Z"
+  },
+  {
+   "file": "Character_TackleShow.json",
+   "source": "Epic cosmetics data for Zero (Mega Man) (es-419)",
+   "url": "https://fortnite-api.com/v2/cosmetics/br/Character_TackleShow?language=es-419",
+   "fetched_utc": "2026-11-11T17:10:14Z"
+  }
+ ]
+}

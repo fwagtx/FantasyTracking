@@ -1,0 +1,72 @@
+{
+  "video": "latienditabad-2026-11-14-adivina-temporada.mp4",
+  "checked_utc": "2026-11-11T17:16:32Z",
+  "verdict": "READY TO POST",
+  "results": [
+    {
+      "check": "1. Facts",
+      "status": "PASS",
+      "detail": "3/3 claims verified against saved official data",
+      "items": [
+        {
+          "claim": "Renegada robótica: Capítulo 4, Temporada 2",
+          "result": "PASS",
+          "why": "matched in Character_HeadhunterStar.json"
+        },
+        {
+          "claim": "Arquetipo: Capítulo 1, Temporada 5",
+          "result": "PASS",
+          "why": "matched in CID_182_Athena_Commando_M_ModernMilitary.json"
+        },
+        {
+          "claim": "Zero (Mega Man): Capítulo 7, Temporada 4",
+          "result": "PASS",
+          "why": "matched in Character_TackleShow.json"
+        }
+      ]
+    },
+    {
+      "check": "2. Spelling and grammar",
+      "status": "PASS",
+      "detail": "38 distinct words checked; code written as BAD in all 2 mentions",
+      "items": []
+    },
+    {
+      "check": "3. Frames",
+      "status": "PASS",
+      "detail": "No black frames, no frozen stretches over 1.5 s. Contact sheet (1 frame/s) reviewed by eye: contact-sheet.png",
+      "items": []
+    },
+    {
+      "check": "4. Audio",
+      "status": "PASS",
+      "detail": "Integrated -14.2 LUFS, true peak -1.5 dBTP, no clipping, no silence gaps. All sound is original synthesis (no game rips, no copyrighted music). No voiceover in this cut.",
+      "items": []
+    },
+    {
+      "check": "5. Specs and safe zones",
+      "status": "PASS",
+      "detail": "1080x1920 h264 60 fps, aac 48000 Hz, 25.8s. Fits TikTok, Reels, Shorts, X, Facebook, Threads. Every on-screen text box sampled 4x/s stays out of the top bar, bottom caption area and button column.",
+      "items": []
+    },
+    {
+      "check": "6. Disclosure and wording",
+      "status": "PASS",
+      "detail": "#EpicPartner is the first hashtag in caption line 1 and on screen in every sampled frame from 0.0s. No discount, giveaway, endorsement or filler-CTA wording.",
+      "items": []
+    },
+    {
+      "check": "7. Would a fan stop scrolling? Made by a person?",
+      "status": "PASS",
+      "detail": "25.8 s quiz. Frame 1 stops you: 'ADIVINA LA TEMPORADA · 3 SKINS · SIN TRAMPA' with three hidden cards (Renegada robótica, Arquetipo, Zero (Mega Man)). Each round shows the outfit with '¿QUÉ TEMPORADA?', the 3-2-1 countdown, then the answer chip (Capítulo 4 · Temporada 2; Capítulo 1 · Temporada 5; Capítulo 7 · Temporada 4), matching Epic's cosmetics data in sources/. Names fit their cards, captions readable, #EpicPartner and the logo in every frame, code card and sign-off at the end.",
+      "items": []
+    },
+    {
+      "check": "8. Owner approval",
+      "status": "PASS",
+      "detail": "Standing approval for autopilot (owner, 2026-10-28): posts when checks 1-7 all PASS.",
+      "items": []
+    }
+  ],
+  "caption": "#EpicPartner Adivina la temporada 👀 Solo los verdaderos OG aciertan las 3\n¿Cuántas acertaste? 👇\nUsa el código BAD en la tienda de objetos 💛\n#fortnite #fortniteog #adivinalatemporada"
+}

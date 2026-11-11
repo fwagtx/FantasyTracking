@@ -116,6 +116,25 @@
    "format": "LONG",
    "topic": "Todos los lugares del mapa: tour completo (17 lugares región por región + récords del mapa)",
    "folder": "video/long/2026-11-11-tour-mapa"
+  },
+  {
+   "date": "2026-11-14",
+   "slot": "20:30",
+   "format": "Adivina la temporada",
+   "topic": "Renegada robótica (C4 T2), Arquetipo (C1 T5), Zero (Mega Man) (C7 T4)",
+   "ids": [
+    "Character_HeadhunterStar",
+    "CID_182_Athena_Commando_M_ModernMilitary",
+    "Character_TackleShow"
+   ],
+   "folder": "video/auto/2026-11-14-adivina-temporada"
+  },
+  {
+   "date": "2026-11-15",
+   "slot": "20:30",
+   "format": "¿Dónde está?",
+   "topic": "Puerto Pirata",
+   "folder": "video/auto/2026-11-15-donde-puerto-pirata"
   }
  ]
 }

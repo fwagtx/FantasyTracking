@@ -1,0 +1,50 @@
+{
+ "phrases": [
+  {
+   "text": "¡Adivina la temporada! Solo los verdaderos OG aciertan las tres.",
+   "pause": 0.25
+  },
+  {
+   "text": "Renegada robótica.",
+   "pause": 1.7
+  },
+  {
+   "text": "¡Capítulo 4, Temporada 2!",
+   "pause": 0.4
+  },
+  {
+   "text": "Arquetipo.",
+   "pause": 1.7
+  },
+  {
+   "text": "¡Capítulo 1, Temporada 5!",
+   "pause": 0.4
+  },
+  {
+   "text": "Zero (Mega Man).",
+   "pause": 1.7
+  },
+  {
+   "text": "¡Capítulo 7, Temporada 4!",
+   "pause": 0.4
+  },
+  {
+   "text": "¿Cuántas acertaste? Dímelo en los comentarios.",
+   "pause": 0.2
+  },
+  {
+   "text": "Usa el código BAD en la tienda de objetos. Le ayuda muchísimo al canal.",
+   "say": "Usa el código bad, en la tienda de objetos. Le ayuda muchísimo al canal.",
+   "pause": 0.25
+  },
+  {
+   "text": "¡Gracias por ver! Síguenos para más contenido diario.",
+   "pause": 0.3
+  }
+ ],
+ "voice": "ef_dora",
+ "speed": 1.2,
+ "lang": "es-419",
+ "lead": 0.2,
+ "mode": "flow"
+}

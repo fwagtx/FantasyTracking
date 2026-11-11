@@ -1,0 +1,67 @@
+{
+  "video": "latienditabad-2026-11-15-donde-puerto-pirata.mp4",
+  "checked_utc": "2026-11-11T17:17:46Z",
+  "verdict": "READY TO POST",
+  "results": [
+    {
+      "check": "1. Facts",
+      "status": "PASS",
+      "detail": "2/2 claims verified against saved official data",
+      "items": [
+        {
+          "claim": "Puerto Pirata es un lugar del mapa oficial",
+          "result": "PASS",
+          "why": "matched in map.json"
+        },
+        {
+          "claim": "Está en el sur de la isla, cerca de Bahía Bulliciosa",
+          "result": "PASS",
+          "why": "visual check against map-labels.png: map pixel (1150, 1606); nearest named place by coordinates: Bahía Bulliciosa"
+        }
+      ]
+    },
+    {
+      "check": "2. Spelling and grammar",
+      "status": "PASS",
+      "detail": "32 distinct words checked; code written as BAD in all 2 mentions",
+      "items": []
+    },
+    {
+      "check": "3. Frames",
+      "status": "PASS",
+      "detail": "No black frames, no frozen stretches over 1.5 s. Contact sheet (1 frame/s) reviewed by eye: contact-sheet.png",
+      "items": []
+    },
+    {
+      "check": "4. Audio",
+      "status": "PASS",
+      "detail": "Integrated -14.2 LUFS, true peak -2.9 dBTP, no clipping, no silence gaps. All sound is original synthesis (no game rips, no copyrighted music). No voiceover in this cut.",
+      "items": []
+    },
+    {
+      "check": "5. Specs and safe zones",
+      "status": "PASS",
+      "detail": "1080x1920 h264 60 fps, aac 48000 Hz, 15.2s. Fits TikTok, Reels, Shorts, X, Facebook, Threads. Every on-screen text box sampled 4x/s stays out of the top bar, bottom caption area and button column.",
+      "items": []
+    },
+    {
+      "check": "6. Disclosure and wording",
+      "status": "PASS",
+      "detail": "#EpicPartner is the first hashtag in caption line 1 and on screen in every sampled frame from 0.0s. No discount, giveaway, endorsement or filler-CTA wording.",
+      "items": []
+    },
+    {
+      "check": "7. Would a fan stop scrolling? Made by a person?",
+      "status": "PASS",
+      "detail": "15.6 s. Frame 1: '¿DÓNDE ESTÁ PUERTO PIRATA?' over the map zoomed on Puerto Pirata with the marker circle on it; the wide shot shows it on the south coast with a 'PUERTO PIRATA' label; the close-up returns with the label under the circle. Voice: 'en el sur de la isla, cerca de Bahía Bulliciosa' (official map coordinates, refreshed today). Captions readable, #EpicPartner and the logo in every frame, code card and sign-off at the end.",
+      "items": []
+    },
+    {
+      "check": "8. Owner approval",
+      "status": "PASS",
+      "detail": "Standing approval for autopilot (owner, 2026-10-28): posts when checks 1-7 all PASS.",
+      "items": []
+    }
+  ],
+  "caption": "#EpicPartner ¿No encuentras Puerto Pirata en Fortnite? 📍 Está en el sur de la isla, cerca de Bahía Bulliciosa\n¿Ya lo visitaste? 👇\nUsa el código BAD en la tienda de objetos 💛\n#fortnite #mapafortnite #puertopirata"
+}
