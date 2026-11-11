@@ -98,7 +98,8 @@
     const ogTiles = D.og.outfits.map((o, i, a) => add(g2, tile(o, 380, 500), `left:${a.length === 2 ? 90 + i * 420 : 330}px;top:360px`));
     const stamp = mk(g2, `left:90px;top:890px;width:780px;text-align:center;padding:10px 0 4px;background:${YEL};border:8px solid ${INK};transform:rotate(-6deg);box-shadow:0 10px 0 ${INK}`,
       `<span style="font-family:'Barlow Condensed';font-weight:900;font-size:66px;line-height:1;color:${INK};white-space:nowrap">CAPÍTULO ${D.og.chapter} · TEMPORADA ${D.og.season}</span>`, `CAPÍTULO ${D.og.chapter} · TEMPORADA ${D.og.season}`);
-    const gapNote = D.og.gapDays >= 30 ? S.scrawl(g2, `¡${D.og.gapDays} días sin salir!`, 66, YEL, -5) : null;
+    const gapText = D.og.gapName ? `¡${D.og.gapName}: ${D.og.gapDays} días!` : `¡${D.og.gapDays} días sin salir!`;   // with two OG skins, say whose gap it is
+    const gapNote = D.og.gapDays >= 30 ? S.scrawl(g2, gapText, Math.min(66, Math.floor(780 / (0.55 * gapText.length))), YEL, -5) : null;
 
     // beat 3: último día
     const g3 = mk(stage, `inset:0`);

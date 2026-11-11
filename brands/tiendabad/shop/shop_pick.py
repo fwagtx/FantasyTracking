@@ -111,13 +111,20 @@ def main():
          ("deal_name", f"El {deal['name']}:", None, 0.06),
          ("deal_price", f"{num(deal['final'])} pavos, en vez de {num(deal['regular'])}.", f"{deal['final']} pavos, en vez de {deal['regular']}.", 0.1),
          ("saving", f"¡Te ahorras {num(saving)}!", f"¡Te ahorras {saving}!", 0.26)]
+    # two OG skins can have different gaps (one may have been in yesterday's shop): name the one the gap belongs to
+    gap_name = None
     if len(og_recs) == 2:
         P += [("og_name", f"{og_recs[0]['name']} y {og_recs[1]['name']} están en la tienda.", None, 0.06)]
         era = f"Las dos son del Capítulo {ch}, Temporada {se}"
+        same = (og_recs[0]["gapDays"] or 0) == (og_recs[1]["gapDays"] or 0)
+        if gap >= 30 and not same:
+            gap_name = og_recs[0]["name"]                      # og is sorted by gap, longest first
+        tail = (f", y no salían desde hace {gap} días." if same else f", y {gap_name} no salía desde hace {gap} días.") if gap >= 30 else "."
     else:
         P += [("og_name", f"{og_recs[0]['name']} está en la tienda.", None, 0.06)]
         era = f"Es del Capítulo {ch}, Temporada {se}"
-    P += [("og_era", era + (f", y no salía desde hace {gap} días." if gap >= 30 else "."), None, 0.26)]
+        tail = f", y no salía desde hace {gap} días." if gap >= 30 else "."
+    P += [("og_era", era + tail, None, 0.26)]
     if last_recs:
         top, k = Counter(r["rarityKey"] for r in last_recs).most_common(1)[0]
         label = next(r["rarity"] for r in last_recs if r["rarityKey"] == top)
@@ -152,7 +159,7 @@ def main():
             "resetLabel": reset_mx.strftime("%-I %p").replace("PM", "PM").replace("AM", "AM"), "resetZone": "CDMX",
             "dealOutLabel": f"{deal_out.day} {MES3[deal_out.month - 1]}", "dealOutTime": deal_out.strftime("%-I %p"),
             "deal": {**deal, "saving": saving, "pct": pct, "outfits": [outfits[o] for o in deal["outfits"][:4]]},
-            "og": {"chapter": ch, "season": se, "gapDays": gap, "outfits": og_recs}, "last": {"count": len(last_recs), "outfits": last_recs[:6]},
+            "og": {"chapter": ch, "season": se, "gapDays": gap, "gapName": gap_name, "outfits": og_recs}, "last": {"count": len(last_recs), "outfits": last_recs[:6]},
             "roles": [r for r, _, _, _ in P], "phrases": [t for _, t, _, _ in P]}
     json.dump(plan, open(os.path.join(out, "plan.json"), "w"), indent=1, ensure_ascii=False)
     open(os.path.join(out, "plan.js"), "w").write("window.SHOP=" + json.dumps(plan, ensure_ascii=False) + ";\n")

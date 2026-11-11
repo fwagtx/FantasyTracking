@@ -1,0 +1,115 @@
+{
+ "duration": 28.6,
+ "caption": "#EpicPartner Tienda de objetos de Fortnite, 11 de noviembre: el Lote A$AP Rocky cuesta 3200 V-Bucks en vez de 8800 (ahorras 5600), Arquetipo y Superador están en la tienda (Capítulo 1, Temporada 5, 89 días sin salir) y 11 skins se van el 11 de noviembre a las 6 PM (CDMX).\n¿Vas a comprar hoy? Usa el código BAD en la tienda de objetos.\n#Fortnite #TiendaFortnite #FortniteTienda",
+ "claims": [
+  {
+   "text": "Lote A$AP Rocky: 3200 V-Bucks, regular 8800",
+   "source": "shop.json",
+   "match": [
+    "Lote A$AP Rocky",
+    "\"finalPrice\": 3200",
+    "\"regularPrice\": 8800"
+   ]
+  },
+  {
+   "text": "Arquetipo: Capítulo 1, Temporada 5",
+   "source": "history.json",
+   "match": [
+    "Arquetipo",
+    "\"chapter\": 1",
+    "\"season\": 5"
+   ]
+  },
+  {
+   "text": "Superador: Capítulo 1, Temporada 5",
+   "source": "history.json",
+   "match": [
+    "Superador",
+    "\"chapter\": 1",
+    "\"season\": 5"
+   ]
+  },
+  {
+   "text": "89 days since last in the shop",
+   "source": "history.json",
+   "match": [
+    "\"gapDays\": 89"
+   ]
+  },
+  {
+   "text": "11 outfits leave at the next reset",
+   "source": "plan.json",
+   "match": [
+    "\"count\": 11"
+   ]
+  }
+ ],
+ "text": [
+  "FLACKO HELICOPTER",
+  "SUPERADOR",
+  "CHIGUSA",
+  "OFERTA",
+  "OG",
+  "ÚLTIMO DÍA",
+  "TIENDA DE HOY / 11 NOV",
+  "1 · MEJOR OFERTA",
+  "ROCKY RUGAHAND",
+  "3200",
+  "8800",
+  "LOTE A$AP ROCKY · SE VA EL 6 DIC",
+  "-64% / AHORRAS 5600",
+  "2 · REGRESO OG",
+  "ARQUETIPO",
+  "CAPÍTULO 1 · TEMPORADA 5",
+  "¡ARQUETIPO: 89 DÍAS!",
+  "3 · ÚLTIMO DÍA",
+  "MEGUMI",
+  "PARADA EN BOXES",
+  "ROMPEMANDÍBULAS",
+  "YUKI",
+  "AMANECER",
+  "+5 MÁS",
+  "SE VAN EL 11 NOV, 6 PM",
+  "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+  "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+  "ESTA ES LA",
+  "TIENDA DE OBJETOS",
+  "DE HOY,",
+  "11 DE NOVIEMBRE.",
+  "¡TRES COSAS ANTES",
+  "DE GASTAR UN",
+  "SOLO PAVO!",
+  "EL LOTE A$AP",
+  "ROCKY:",
+  "3200 PAVOS,",
+  "EN VEZ DE",
+  "8800.",
+  "¡TE AHORRAS 5600!",
+  "ARQUETIPO Y SUPERADOR",
+  "ESTÁN EN LA",
+  "TIENDA.",
+  "LAS DOS SON",
+  "DEL CAPÍTULO 1,",
+  "TEMPORADA 5,",
+  "Y ARQUETIPO NO",
+  "SALÍA DESDE HACE",
+  "89 DÍAS.",
+  "Y ONCE SKINS",
+  "ESTÁN EN SU",
+  "ÚLTIMO DÍA,",
+  "CINCO DE ELLAS",
+  "RARAS.",
+  "¿VAS A COMPRAR",
+  "ALGO HOY?",
+  "USA EL CÓDIGO",
+  "BAD EN LA",
+  "TIENDA DE OBJETOS.",
+  "LE AYUDA MUCHÍSIMO",
+  "AL CANAL.",
+  "¡GRACIAS POR VER!",
+  "SÍGUENOS PARA MÁS",
+  "CONTENIDO DIARIO.",
+  "#EPICPARTNER",
+  "LA TIENDITA BAD"
+ ]
+}

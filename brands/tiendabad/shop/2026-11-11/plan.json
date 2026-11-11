@@ -1,0 +1,160 @@
+{
+ "date": "2026-11-11",
+ "dateLabel": "11 NOV",
+ "dateLong": "11 de noviembre",
+ "resetLabel": "6 PM",
+ "resetZone": "CDMX",
+ "dealOutLabel": "6 DIC",
+ "dealOutTime": "6 PM",
+ "deal": {
+  "name": "Lote A$AP Rocky",
+  "final": 3200,
+  "regular": 8800,
+  "out": "2026-12-06T23:59:59.999Z",
+  "outfits": [
+   {
+    "id": "Character_TonicMailWeb",
+    "name": "Flacko Helicopter",
+    "rarity": "Serie de ídolos",
+    "rarityKey": "icon",
+    "series": "Serie de ídolos",
+    "img": "https://fortnite-api.com/images/cosmetics/br/character_tonicmailweb/featured.png",
+    "price": null,
+    "out": null
+   },
+   {
+    "id": "Character_TonicMailYam",
+    "name": "Rocky Rugahand",
+    "rarity": "Serie de ídolos",
+    "rarityKey": "icon",
+    "series": "Serie de ídolos",
+    "img": "https://fortnite-api.com/images/cosmetics/br/character_tonicmailyam/featured.png",
+    "price": 1500,
+    "out": "2026-12-06"
+   }
+  ],
+  "saving": 5600,
+  "pct": 64
+ },
+ "og": {
+  "chapter": 1,
+  "season": 5,
+  "gapDays": 89,
+  "gapName": "Arquetipo",
+  "outfits": [
+   {
+    "id": "CID_182_Athena_Commando_M_ModernMilitary",
+    "name": "Arquetipo",
+    "rarity": "Épico",
+    "rarityKey": "epic",
+    "series": null,
+    "img": "https://fortnite-api.com/images/cosmetics/br/cid_182_athena_commando_m_modernmilitary/featured.png",
+    "price": 1500,
+    "out": "2026-11-12",
+    "gapDays": 89
+   },
+   {
+    "id": "CID_190_Athena_Commando_M_StreetRacerWhite",
+    "name": "Superador",
+    "rarity": "Épico",
+    "rarityKey": "epic",
+    "series": null,
+    "img": "https://fortnite-api.com/images/cosmetics/br/cid_190_athena_commando_m_streetracerwhite/featured.png",
+    "price": 1500,
+    "out": "2026-11-16",
+    "gapDays": 1
+   }
+  ]
+ },
+ "last": {
+  "count": 11,
+  "outfits": [
+   {
+    "id": "CID_A_048_Athena_Commando_F_SailorSquadLeader",
+    "name": "Chigusa",
+    "rarity": "Raro",
+    "rarityKey": "rare",
+    "series": null,
+    "img": "https://fortnite-api.com/images/cosmetics/br/cid_a_048_athena_commando_f_sailorsquadleader/featured.png",
+    "price": 1200,
+    "out": "2026-11-11"
+   },
+   {
+    "id": "CID_A_049_Athena_Commando_F_SailorSquadRebel",
+    "name": "Megumi",
+    "rarity": "Raro",
+    "rarityKey": "rare",
+    "series": null,
+    "img": "https://fortnite-api.com/images/cosmetics/br/cid_a_049_athena_commando_f_sailorsquadrebel/featured.png",
+    "price": 1200,
+    "out": "2026-11-11"
+   },
+   {
+    "id": "CID_828_Athena_Commando_F_Valet",
+    "name": "Parada en boxes",
+    "rarity": "Raro",
+    "rarityKey": "rare",
+    "series": null,
+    "img": "https://fortnite-api.com/images/cosmetics/br/cid_828_athena_commando_f_valet/featured.png",
+    "price": 1200,
+    "out": "2026-11-11"
+   },
+   {
+    "id": "CID_583_Athena_Commando_F_NoshHunter",
+    "name": "Rompemandíbulas",
+    "rarity": "Raro",
+    "rarityKey": "rare",
+    "series": null,
+    "img": "https://fortnite-api.com/images/cosmetics/br/cid_583_athena_commando_f_noshhunter/featured.png",
+    "price": 1200,
+    "out": "2026-11-11"
+   },
+   {
+    "id": "CID_A_050_Athena_Commando_F_SailorSquadRose",
+    "name": "Yuki",
+    "rarity": "Raro",
+    "rarityKey": "rare",
+    "series": null,
+    "img": "https://fortnite-api.com/images/cosmetics/br/cid_a_050_athena_commando_f_sailorsquadrose/featured.png",
+    "price": 1200,
+    "out": "2026-11-11"
+   },
+   {
+    "id": "CID_A_308_Athena_Commando_F_Sunshine",
+    "name": "Amanecer",
+    "rarity": "Épico",
+    "rarityKey": "epic",
+    "series": null,
+    "img": "https://fortnite-api.com/images/cosmetics/br/cid_a_308_athena_commando_f_sunshine/featured.png",
+    "price": 1500,
+    "out": "2026-11-11"
+   }
+  ]
+ },
+ "roles": [
+  "intro",
+  "hook",
+  "deal_name",
+  "deal_price",
+  "saving",
+  "og_name",
+  "og_era",
+  "last",
+  "ask",
+  "code",
+  "thanks"
+ ],
+ "phrases": [
+  "Esta es la tienda de objetos de hoy, 11 de noviembre.",
+  "¡Tres cosas antes de gastar un solo pavo!",
+  "El Lote A$AP Rocky:",
+  "3200 pavos, en vez de 8800.",
+  "¡Te ahorras 5600!",
+  "Arquetipo y Superador están en la tienda.",
+  "Las dos son del Capítulo 1, Temporada 5, y Arquetipo no salía desde hace 89 días.",
+  "Y once skins están en su último día, cinco de ellas raras.",
+  "¿Vas a comprar algo hoy?",
+  "Usa el código BAD en la tienda de objetos. Le ayuda muchísimo al canal.",
+  "¡Gracias por ver! Síguenos para más contenido diario."
+ ]
+}
