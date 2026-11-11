@@ -281,7 +281,9 @@
       const beats = [[name, nameP], [list, listP], [price, priceP], [when, whenP]].filter((b) => b[0]);
       return function renderAt(t) {
         bands.style.transform = `translateX(${(t * 40) % 260}px)`;
-        T(title, { s: 0.92 + 0.08 * E.out(k(t, 0, 0.3)) });
+        // the top title clears away for the closing question and the code card, so they never sit on top of it
+        const endOn = Math.max(win(t, askP.t0 - 0.08, codeP.t0 - 0.05, 0.12, 0.1), win(t, codeP.t0 - 0.05, DUR + 1, 0.12, 0.1));
+        T(title, { s: 0.92 + 0.08 * E.out(k(t, 0, 0.3)), a: 1 - endOn });
         cards.forEach((el, i) => {
           const t0 = 0.03 + i * 0.07, mid = (n - 1) / 2;
           T(el, { x: lay.xs[i], y: lay.y + (n === 3 && i === 1 ? -30 : 0) + Math.sin(t * 1.1 + i) * 6, r: (i - mid) * 5 + Math.sin(t * 0.9 + i * 2) * 1, s: E.back(k(t, t0, t0 + 0.3)) });

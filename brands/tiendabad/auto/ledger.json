@@ -135,6 +135,27 @@
    "format": "¿Dónde está?",
    "topic": "Puerto Pirata",
    "folder": "video/auto/2026-11-15-donde-puerto-pirata"
+  },
+  {
+   "date": "2026-11-11",
+   "slot": "15:45",
+   "format": "Tienda Pirata diaria (sevan)",
+   "topic": "Se va hoy (2026-11-11): Lote Medicina lúgubre, 2200 pavos (normalmente 4600)",
+   "folder": "video/auto/2026-11-11-pirata-sevan"
+  },
+  {
+   "date": "2026-11-11",
+   "slot": "17:15",
+   "format": "Tienda Pirata diaria (caros)",
+   "topic": "Lo más caro de hoy (2026-11-11): Lote One Piece 4000, Lote Mega Man 3800, Lote Amos del universo 3600, Lote A$AP Rocky 3200, Lote Star Wars samurái 3200",
+   "folder": "video/auto/2026-11-11-pirata-caros"
+  },
+  {
+   "date": "2026-11-11",
+   "slot": "19:30",
+   "format": "Tienda Pirata diaria (cuenta)",
+   "topic": "Quedan 24 días · dato: Horas del Tesoro 2026-11-14",
+   "folder": "video/auto/2026-11-11-pirata-cuenta"
   }
  ]
 }

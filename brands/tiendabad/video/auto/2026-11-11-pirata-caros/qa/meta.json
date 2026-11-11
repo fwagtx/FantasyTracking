@@ -1,0 +1,131 @@
+{
+ "duration": 43.1,
+ "caption": "#EpicPartner Lo más caro de la tienda de hoy 💸 El #1: Lote One Piece, 4000 pavos… y con la Tienda Pirata te lo llevarías sin gastar ni un pavo 🏴‍☠️\n¿Cuál te llevarías? 👇\nUsa el código BAD en la tienda de objetos 💛\n#fortnite #tiendapirata #tiendafortnite",
+ "claims": [
+  {
+   "text": "Lote Sombrero de paja también cuesta 3200 pavos hoy",
+   "source": "shop-entries.json",
+   "match": [
+    "Lote Sombrero de paja",
+    "\"finalPrice\": 3200"
+   ]
+  },
+  {
+   "text": "Lote Star Wars samurái: 3200 pavos en la tienda de hoy (2026-11-11)",
+   "source": "shop-entries.json",
+   "match": [
+    "Lote Star Wars samurái",
+    "\"finalPrice\": 3200",
+    "\"date\": \"2026-11-11T00:00:00Z\""
+   ]
+  },
+  {
+   "text": "Lote A$AP Rocky: 3200 pavos en la tienda de hoy (2026-11-11)",
+   "source": "shop-entries.json",
+   "match": [
+    "Lote A$AP Rocky",
+    "\"finalPrice\": 3200",
+    "\"date\": \"2026-11-11T00:00:00Z\""
+   ]
+  },
+  {
+   "text": "Lote Amos del universo: 3600 pavos en la tienda de hoy (2026-11-11)",
+   "source": "shop-entries.json",
+   "match": [
+    "Lote Amos del universo",
+    "\"finalPrice\": 3600",
+    "\"date\": \"2026-11-11T00:00:00Z\""
+   ]
+  },
+  {
+   "text": "Lote Mega Man: 3800 pavos en la tienda de hoy (2026-11-11)",
+   "source": "shop-entries.json",
+   "match": [
+    "Lote Mega Man",
+    "\"finalPrice\": 3800",
+    "\"date\": \"2026-11-11T00:00:00Z\""
+   ]
+  },
+  {
+   "text": "Lote One Piece: precio normal 8200 pavos",
+   "source": "shop-entries.json",
+   "match": [
+    "Lote One Piece",
+    "\"regularPrice\": 8200"
+   ]
+  },
+  {
+   "text": "Lote One Piece: 4000 pavos en la tienda de hoy (2026-11-11)",
+   "source": "shop-entries.json",
+   "match": [
+    "Lote One Piece",
+    "\"finalPrice\": 4000",
+    "\"date\": \"2026-11-11T00:00:00Z\""
+   ]
+  },
+  {
+   "text": "Con la Tienda Pirata, todo lo que cuesta pavos es gratis por 14 días",
+   "source": "vgc-odds-confirmed.json",
+   "match": [
+    "every single item in the Fortnite Shop which costs V-Bucks",
+    "becomes entirely free to that player for the next 14 days"
+   ]
+  },
+  {
+   "text": "Solo puedes reclamar un sidekick",
+   "source": "vgc-guide.json",
+   "match": [
+    "you can only claim one free sidekick"
+   ]
+  }
+ ],
+ "text": [
+  "LA TIENDA DE HOY:",
+  "LO MÁS CARO 💸",
+  "¿CUÁNTO CUESTA? 👀",
+  "¿Y CON LA TIENDA PIRATA? 🏴‍☠️",
+  "#5",
+  "LOTE STAR WARS SAMURÁI",
+  "CUESTA",
+  "EMPATA CON LOTE SOMBRERO DE PAJA",
+  "???? PAVOS",
+  "900 PAVOS",
+  "2200 PAVOS",
+  "3200 PAVOS",
+  "#4",
+  "LOTE A$AP ROCKY",
+  "#3",
+  "LOTE AMOS DEL UNIVERSO",
+  "1000 PAVOS",
+  "2500 PAVOS",
+  "3600 PAVOS",
+  "#2",
+  "LOTE MEGA MAN",
+  "1100 PAVOS",
+  "2600 PAVOS",
+  "3800 PAVOS",
+  "#1",
+  "LOTE ONE PIECE",
+  "PRECIO NORMAL: 8200",
+  "1200 PAVOS",
+  "2800 PAVOS",
+  "4000 PAVOS",
+  "CON LA TIENDA PIRATA: 0 PAVOS 🏴‍☠️",
+  "Y EL #1 ES… 🥁",
+  "LO MÁS CARO DE HOY 💸",
+  "¿CUÁL TE LLEVARÍAS? 👇",
+  "#2 · 3800",
+  "#1 · 4000",
+  "#3 · 3600",
+  "#4 · 3200",
+  "#5 · 3200",
+  "USA EL CÓDIGO BAD EN LA TIENDA DE OBJETOS 🛒",
+  "APOYA A UN CREADOR",
+  "#EPICPARTNER",
+  "ACEPTAR",
+  "✓ APOYANDO A: BAD",
+  "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+  "LA TIENDITA BAD",
+  "USA EL CÓDIGO: BAD"
+ ]
+}

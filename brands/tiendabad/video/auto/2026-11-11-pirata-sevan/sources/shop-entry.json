@@ -1,0 +1,285 @@
+{
+ "date": "2026-11-11T00:00:00Z",
+ "entries": [
+  {
+   "regularPrice": 4600,
+   "finalPrice": 2200,
+   "devName": "[VIRTUAL]1 x Scourge, 1 x Arcanum, 1 x Plague, 1 x Dismal Cape, 1 x Herald's Wand, 1 x Lamplight for -1 MtxCurrency",
+   "offerId": "v2:/2df500970464349879a8ad1555f5d553b7f746ce28feb5d7710f9f25f8fc9cc2",
+   "inDate": "2026-11-10T00:00:00Z",
+   "outDate": "2026-11-11T23:59:59.999Z",
+   "bundle": {
+    "name": "Lote Medicina lúgubre",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/bee9a09be5daceb0/renderimage_0.png"
+   },
+   "banner": {
+    "value": "2400 monedas V de descuento",
+    "intensity": "Low",
+    "backendValue": "AmountOff"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -1,
+   "layoutId": "BR111126.94",
+   "layout": {
+    "id": "BR111126",
+    "name": "Estilo de élite",
+    "index": 0,
+    "rank": 186,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "8ad986ff",
+    "color3": "05544cff",
+    "textBackgroundColor": "05544cff"
+   },
+   "tileSize": "Size_3_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_Plague_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S24/DAv2_Bundle_Featured_Plague",
+   "newDisplayAsset": {
+    "id": "DAv2_Bundle_Featured_Plague",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__bee9a09be5daceb0_0e8064126752a1e1.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/bee9a09be5daceb0/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__bee9a09be5daceb0_eeea5509044070cc.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/bee9a09be5daceb0/renderimage_1.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "CID_240_Athena_Commando_F_Plague",
+     "name": "Azote",
+     "description": "En busca de la cura.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "Medicina lúgubre",
+      "text": "Pieza del conjunto Medicina lúgubre.",
+      "backendValue": "Plague"
+     },
+     "introduction": {
+      "chapter": "1",
+      "season": "6",
+      "text": "Introducido en Capítulo 1, Temporada 6.",
+      "backendValue": 6
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/cid_240_athena_commando_f_plague/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/cid_240_athena_commando_f_plague/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/cid_240_athena_commando_f_plague/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/cid_240_athena_commando_f_plague/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/cid_240_athena_commando_f_plague/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/cid_240_athena_commando_f_plague/wide.png"
+      },
+      "bean": {
+       "small": "https://fortnite-api.com/images/cosmetics/beans/bean_plagueb/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/beans/bean_plagueb/large.png"
+      }
+     },
+     "metaTags": [
+      "Cosmetics.MetaTags.Theme.LTM.Bounty",
+      "Cosmetics.Emote.CharacterGroup.BigHead",
+      "Cosmetics.MetaTags.Special.Medium"
+     ],
+     "showcaseVideo": "ih_9LfLBIcs",
+     "added": "2019-11-20T12:50:14Z"
+    },
+    {
+     "id": "BID_128_PlagueFemale",
+     "name": "Arcano",
+     "description": "Peligrosa y potente.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "Medicina lúgubre",
+      "text": "Pieza del conjunto Medicina lúgubre.",
+      "backendValue": "Plague"
+     },
+     "introduction": {
+      "chapter": "1",
+      "season": "6",
+      "text": "Introducido en Capítulo 1, Temporada 6.",
+      "backendValue": 6
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/bid_128_plaguefemale/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/bid_128_plaguefemale/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/bid_128_plaguefemale/featured.png"
+     },
+     "added": "2019-11-20T12:50:38Z"
+    },
+    {
+     "id": "CID_241_Athena_Commando_M_Plague",
+     "name": "Peste",
+     "description": "El doctor te verá ahora...",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "Medicina lúgubre",
+      "text": "Pieza del conjunto Medicina lúgubre.",
+      "backendValue": "Plague"
+     },
+     "introduction": {
+      "chapter": "1",
+      "season": "6",
+      "text": "Introducido en Capítulo 1, Temporada 6.",
+      "backendValue": 6
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/cid_241_athena_commando_m_plague/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/cid_241_athena_commando_m_plague/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/cid_241_athena_commando_m_plague/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/cid_241_athena_commando_m_plague/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/cid_241_athena_commando_m_plague/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/cid_241_athena_commando_m_plague/wide.png"
+      },
+      "bean": {
+       "small": "https://fortnite-api.com/images/cosmetics/beans/bean_plaguea/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/beans/bean_plaguea/large.png"
+      }
+     },
+     "metaTags": [
+      "Cosmetics.MetaTags.Theme.LTM.Bounty",
+      "Cosmetics.Emote.CharacterGroup.BigHead"
+     ],
+     "showcaseVideo": "FFUBjdYKDSc",
+     "added": "2019-11-20T12:50:14Z"
+    },
+    {
+     "id": "BID_127_PlagueMale",
+     "name": "Capa tétrica",
+     "description": "Negra como la noche.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "Medicina lúgubre",
+      "text": "Pieza del conjunto Medicina lúgubre.",
+      "backendValue": "Plague"
+     },
+     "introduction": {
+      "chapter": "1",
+      "season": "6",
+      "text": "Introducido en Capítulo 1, Temporada 6.",
+      "backendValue": 6
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/bid_127_plaguemale/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/bid_127_plaguemale/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/bid_127_plaguemale/featured.png"
+     },
+     "added": "2019-11-20T12:50:39Z"
+    },
+    {
+     "id": "Pickaxe_ID_107_Plague",
+     "name": "Bastón del heraldo",
+     "description": "Te da la vida.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Medicina lúgubre",
+      "text": "Pieza del conjunto Medicina lúgubre.",
+      "backendValue": "Plague"
+     },
+     "introduction": {
+      "chapter": "1",
+      "season": "6",
+      "text": "Introducido en Capítulo 1, Temporada 6.",
+      "backendValue": 6
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_id_107_plague/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_id_107_plague/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_id_107_plague/featured.png"
+     },
+     "showcaseVideo": "Uyz0Ks2uqSs",
+     "added": "2019-11-20T12:50:54Z"
+    },
+    {
+     "id": "Glider_ID_084_Plague",
+     "name": "Farol",
+     "description": "Una luz en la oscuridad.",
+     "type": {
+      "value": "glider",
+      "displayValue": "Planeador",
+      "backendValue": "AthenaGlider"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Medicina lúgubre",
+      "text": "Pieza del conjunto Medicina lúgubre.",
+      "backendValue": "Plague"
+     },
+     "introduction": {
+      "chapter": "1",
+      "season": "6",
+      "text": "Introducido en Capítulo 1, Temporada 6.",
+      "backendValue": 6
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/glider_id_084_plague/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/glider_id_084_plague/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/glider_id_084_plague/featured.png"
+     },
+     "showcaseVideo": "D-qS6a36jQU",
+     "added": "2019-11-20T12:51:06Z"
+    }
+   ]
+  }
+ ]
+}

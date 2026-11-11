@@ -43,8 +43,10 @@ A skipped slot costs nothing; a wrong post costs the channel.
 | **SHOP safety** | 7:47 PM daily | The SHOP run again; it ends at step 3 if the shop video is already scheduled |
 | **DAY** | 11:07 AM daily | **1:00 PM** today's current short (made that morning) and **8:30 PM** evergreen (kept 7 days ahead) |
 | **LONG** | 5:13 AM Mon, Wed, Sat | One long YouTube video at **3:00 PM** |
+| **PIRATA** | 12:17 PM daily until Dec 5 | 3 extra Tienda Pirata shorts: **3:45 PM**, **5:15 PM**, **7:30 PM** |
 
-3 shorts a day on every network (1:00 PM, about 6:25 PM, 8:30 PM) plus 3 long YouTube videos a week.
+3 shorts a day on every network (1:00 PM, about 6:25 PM, 8:30 PM) plus 3 long YouTube videos a week, and until the
+treasure hunt ends (December 5) 3 more Tienda Pirata shorts a day (PIRATA run).
 
 ## Setup (start of every run)
 
@@ -112,6 +114,38 @@ Extra pirate posts on Nov 10 (the owner asked for more that day): 10:30 AM "las 
 shop data for the One Piece leave date). The Big Lead lists the 2026 activation window as ending Dec 16; VGC (citing Epic)
 says Dec 15: always use Dec 15. To make more pirate posts later, refresh the sources first (they must be under 24 h old when shipping), from the
 BAD ROYALE branch's `brand/badroyale/video/auto/pirate-shop-sources/` (read only), or skip.
+
+## PIRATA run (daily 12:17 PM, until December 5)
+
+The owner (2026-11-11): *"make about 3 extra videos for today and everyday until it gets removed"* about the Pirate Shop
+token. The hunt ends December 5 (VGC citing Epic); the series ends then, or earlier if Epic removes the Pirate Shop.
+
+| Post | Mode (new_pirata.py) | Video |
+|---|---|---|
+| 3:45 PM | `sevan` | What leaves today's shop at the 6 PM reset, "con la Tienda Pirata, 0 pavos" (TPL.drop) |
+| 5:15 PM | `caros` | The 5 most expensive listings in today's shop, ties named (TPL.top) |
+| 7:30 PM | `cuenta` | "Quedan N días" + the dato del día; Fridays and Saturdays: the Horas del Tesoro (TPL.guide) |
+
+sevan and caros are about the shop that is live until 6 PM, so they are built and posted before the reset. Each dato is
+used once (the script keeps the order); the last two days say "mañana / hoy es el último día".
+
+1. Setup (above). D = `TZ=America/Mexico_City date +%F`. After 2026-12-05: post nothing, disable the scheduled task
+   "LA TIENDITA BAD · PIRATA" (update_trigger, enabled false) and tell the owner the series is over.
+2. getScheduledPosts for D 15:00 to 20:00: skip a mode whose post is already there (match the TikTok title). If all three
+   are there, stop: log "pirata already posted" and end the run (no source fetch).
+3. **Fresh sources** (the checklist refuses sources older than 24 h): re-fetch with Firecrawl (`maxAge: 0`, markdown,
+   onlyMainContent) the three articles in the latest `video/auto/pirata-sources-<date>/manifest.json`. Every passage in that
+   folder's JSON files must still be on the page word for word (link and bold markup aside). Save them, same file names
+   and passages, with today's fetch time, in `video/auto/pirata-sources-D/` plus a manifest. If a passage changed or is
+   gone, or a page now says the Pirate Shop was removed or the hunt ended early: post nothing, apply "Facts change" to the
+   queued pirate posts, and tell the owner.
+4. For each mode: `python3 brands/tiendabad/auto/new_pirata.py video/auto/D-pirata-<mode> <mode> video/auto/pirata-sources-D`,
+   then make_short.py build. Look at the review sheet **and** at stills past it (the sheet stops early on a 40 s
+   countdown): nothing overlaps, captions stay on one line clear of the gold coin, the top title clears for the closing
+   question. review.json, then ship with `--at "D 15:45"` / `"D 17:15"` / `"D 19:30"` and `--sources <folder>/sources`,
+   schedule posts.json as in SHOP 6–7, and done.
+5. Ledger: one entry per video (format "Tienda Pirata diaria", the topic new_pirata.py printed). Log line, commit
+   `brands/tiendabad/video/auto brands/tiendabad/auto`, push, summary.
 
 ## Facts change: pull outdated posts
 

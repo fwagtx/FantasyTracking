@@ -1,0 +1,74 @@
+{
+ "duration": 26.1,
+ "caption": "#EpicPartner ¡Quedan 24 días para encontrar la Tienda Pirata! 🏴‍☠️ La búsqueda termina el 5 de diciembre\nEste sábado 14 hay Horas del Tesoro: 1 a 3 PM y 8 a 10 PM (CDMX) ⏰\n¿Ya te salió? 👇\nUsa el código BAD en la tienda de objetos 💛\n#fortnite #tiendapirata #fortniteespañol",
+ "claims": [
+  {
+   "text": "La búsqueda termina el 5 de diciembre (hoy 2026-11-11: quedan 24 días)",
+   "source": "vgc-odds-confirmed.json",
+   "match": [
+    "is set to end on December 5"
+   ],
+   "visual": "2026-11-11 to 2026-12-05 is 24 days"
+  },
+  {
+   "text": "1 en 137 500 por cofre",
+   "source": "vgc-odds-confirmed.json",
+   "match": [
+    "Pirate Shop Access – 1 in 137,500"
+   ]
+  },
+  {
+   "text": "Horas del Tesoro el 14 de noviembre: 1 a 3 PM y 8 a 10 PM (CDMX), ×1.5",
+   "source": "vice-treasure-hours.json",
+   "match": [
+    "| November 14 | 11 AM–1 PM PT / 2–4 PM ET | 6–8 PM PT / 9–11 PM ET | 1.5× both rounds |"
+   ],
+   "visual": "11 AM–1 PM and 6–8 PM Pacific (UTC-8) are 1–3 PM and 8–10 PM in Mexico City (UTC-6)"
+  }
+ ],
+ "text": [
+  "TIENDA PIRATA",
+  "¡QUEDAN 24 DÍAS! / PARA ENCONTRARLA 🏴‍☠️",
+  "TERMINA / 5 DE DICIEMBRE",
+  "PROBABILIDAD / 1 EN 137 500 POR COFRE",
+  "DATO DEL DÍA / ESTE SÁBADO 14: HORAS DEL TESORO",
+  "HORA CDMX · ×1.5 / 1 A 3 PM Y 8 A 10 PM",
+  "QUEDAN / 24 DÍAS",
+  "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+  "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+  "¡QUEDAN 24 DÍAS",
+  "PARA ENCONTRAR LA",
+  "TIENDA PIRATA!",
+  "LA BÚSQUEDA DEL",
+  "TESORO TERMINA EL",
+  "5 DE DICIEMBRE.",
+  "Y RECUERDA: SALE",
+  "EN 1 DE",
+  "CADA 137 500",
+  "COFRES.",
+  "DATO DEL DÍA:",
+  "ESTE SÁBADO 14",
+  "HAY HORAS DEL",
+  "TESORO.",
+  "DE 1 A",
+  "3 DE LA",
+  "TARDE Y DE",
+  "8 A 10",
+  "DE LA NOCHE,",
+  "HORA DE LA",
+  "CIUDAD DE MÉXICO,",
+  "LA PROBABILIDAD SUBE",
+  "1.5 VECES.",
+  "¿YA TE SALIÓ?",
+  "DÍMELO EN LOS",
+  "COMENTARIOS.",
+  "USA EL CÓDIGO",
+  "BAD EN LA",
+  "TIENDA DE OBJETOS.",
+  "¡GRACIAS POR VER!",
+  "SÍGUENOS PARA MÁS",
+  "CONTENIDO DIARIO.",
+  "#EPICPARTNER",
+  "LA TIENDITA BAD"
+ ]
+}

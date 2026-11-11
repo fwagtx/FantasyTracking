@@ -1,0 +1,44 @@
+{
+ "phrases": [
+  {
+   "text": "¡Quedan 24 días para encontrar la Tienda Pirata!",
+   "pause": 0.25
+  },
+  {
+   "text": "La búsqueda del tesoro termina el 5 de diciembre.",
+   "pause": 0.25
+  },
+  {
+   "text": "Y recuerda: sale en 1 de cada 137 500 cofres.",
+   "pause": 0.25,
+   "say": "Y recuerda: sale en uno de cada ciento treinta y siete mil quinientos cofres."
+  },
+  {
+   "text": "Dato del día: este sábado 14 hay Horas del Tesoro.",
+   "pause": 0.25
+  },
+  {
+   "text": "De 1 a 3 de la tarde y de 8 a 10 de la noche, hora de la Ciudad de México, la probabilidad sube 1.5 veces.",
+   "pause": 0.25,
+   "say": "De una a tres de la tarde y de ocho a diez de la noche, hora de la Ciudad de México, la probabilidad sube una vez y media."
+  },
+  {
+   "text": "¿Ya te salió? Dímelo en los comentarios.",
+   "pause": 0.2
+  },
+  {
+   "text": "Usa el código BAD en la tienda de objetos.",
+   "pause": 0.25,
+   "say": "Usa el código bad, en la tienda de objetos."
+  },
+  {
+   "text": "¡Gracias por ver! Síguenos para más contenido diario.",
+   "pause": 0.3
+  }
+ ],
+ "voice": "ef_dora",
+ "speed": 1.2,
+ "lang": "es-419",
+ "lead": 0.2,
+ "mode": "flow"
+}
