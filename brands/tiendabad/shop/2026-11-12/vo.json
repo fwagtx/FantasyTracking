@@ -1,0 +1,57 @@
+{
+ "voice": "ef_dora",
+ "speed": 1.2,
+ "lang": "es-419",
+ "lead": 0.2,
+ "mode": "flow",
+ "phrases": [
+  {
+   "text": "Esta es la tienda de objetos de hoy, 12 de noviembre.",
+   "pause": 0.08
+  },
+  {
+   "text": "¡Tres cosas antes de gastar un solo pavo!",
+   "pause": 0.22
+  },
+  {
+   "text": "El Lote A$AP Rocky:",
+   "pause": 0.06,
+   "say": "El Lote ASAP Rocky:"
+  },
+  {
+   "text": "3200 pavos, en vez de 8800.",
+   "pause": 0.1,
+   "say": "3200 pavos, en vez de 8800."
+  },
+  {
+   "text": "¡Te ahorras 5600!",
+   "pause": 0.26,
+   "say": "¡Te ahorras 5600!"
+  },
+  {
+   "text": "Arquetipo y Superador están en la tienda.",
+   "pause": 0.06
+  },
+  {
+   "text": "Las dos son del Capítulo 1, Temporada 5.",
+   "pause": 0.26
+  },
+  {
+   "text": "Y 14 skins están en su último día, ocho de ellas épicas.",
+   "pause": 0.3
+  },
+  {
+   "text": "¿Vas a comprar algo hoy?",
+   "pause": 0.06
+  },
+  {
+   "text": "Usa el código BAD en la tienda de objetos. Le ayuda muchísimo al canal.",
+   "pause": 0.25,
+   "say": "Usa el código bad, en la tienda de objetos. Le ayuda muchísimo al canal."
+  },
+  {
+   "text": "¡Gracias por ver! Síguenos para más contenido diario.",
+   "pause": 0.3
+  }
+ ]
+}

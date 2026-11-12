@@ -1,0 +1,110 @@
+{
+ "duration": 26.5,
+ "caption": "#EpicPartner Tienda de objetos de Fortnite, 12 de noviembre: el Lote A$AP Rocky cuesta 3200 V-Bucks en vez de 8800 (ahorras 5600), Arquetipo y Superador están en la tienda (Capítulo 1, Temporada 5) y 14 skins se van el 12 de noviembre a las 6 PM (CDMX).\n¿Vas a comprar hoy? Usa el código BAD en la tienda de objetos.\n#Fortnite #TiendaFortnite #FortniteTienda",
+ "claims": [
+  {
+   "text": "Lote A$AP Rocky: 3200 V-Bucks, regular 8800",
+   "source": "shop.json",
+   "match": [
+    "Lote A$AP Rocky",
+    "\"finalPrice\": 3200",
+    "\"regularPrice\": 8800"
+   ]
+  },
+  {
+   "text": "Arquetipo: Capítulo 1, Temporada 5",
+   "source": "history.json",
+   "match": [
+    "Arquetipo",
+    "\"chapter\": 1",
+    "\"season\": 5"
+   ]
+  },
+  {
+   "text": "Superador: Capítulo 1, Temporada 5",
+   "source": "history.json",
+   "match": [
+    "Superador",
+    "\"chapter\": 1",
+    "\"season\": 5"
+   ]
+  },
+  {
+   "text": "1 days since last in the shop",
+   "source": "history.json",
+   "match": [
+    "\"gapDays\": 1"
+   ]
+  },
+  {
+   "text": "14 outfits leave at the next reset",
+   "source": "plan.json",
+   "match": [
+    "\"count\": 14"
+   ]
+  }
+ ],
+ "text": [
+  "FLACKO HELICOPTER",
+  "SUPERADOR",
+  "ARQUETIPO",
+  "OFERTA",
+  "OG",
+  "ÚLTIMO DÍA",
+  "TIENDA DE HOY / 12 NOV",
+  "1 · MEJOR OFERTA",
+  "ROCKY RUGAHAND",
+  "3200",
+  "8800",
+  "LOTE A$AP ROCKY · SE VA EL 6 DIC",
+  "-64% / AHORRAS 5600",
+  "2 · REGRESO OG",
+  "CAPÍTULO 1 · TEMPORADA 5",
+  "3 · ÚLTIMO DÍA",
+  "DEFENSOR SABROSO",
+  "ORELIA",
+  "CALAVERITA DORADA",
+  "PERRUQUERO",
+  "AGENTE BLANC",
+  "+8 MÁS",
+  "SE VAN EL 12 NOV, 6 PM",
+  "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+  "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+  "ESTA ES LA",
+  "TIENDA DE OBJETOS",
+  "DE HOY,",
+  "12 DE NOVIEMBRE.",
+  "¡TRES COSAS ANTES",
+  "DE GASTAR UN",
+  "SOLO PAVO!",
+  "EL LOTE A$AP",
+  "ROCKY:",
+  "3200 PAVOS,",
+  "EN VEZ DE",
+  "8800.",
+  "¡TE AHORRAS 5600!",
+  "ARQUETIPO Y SUPERADOR",
+  "ESTÁN EN LA",
+  "TIENDA.",
+  "LAS DOS SON",
+  "DEL CAPÍTULO 1,",
+  "TEMPORADA 5.",
+  "Y 14 SKINS",
+  "ESTÁN EN SU",
+  "ÚLTIMO DÍA,",
+  "OCHO DE ELLAS",
+  "ÉPICAS.",
+  "¿VAS A COMPRAR",
+  "ALGO HOY?",
+  "USA EL CÓDIGO",
+  "BAD EN LA",
+  "TIENDA DE OBJETOS.",
+  "LE AYUDA MUCHÍSIMO",
+  "AL CANAL.",
+  "¡GRACIAS POR VER!",
+  "SÍGUENOS PARA MÁS",
+  "CONTENIDO DIARIO.",
+  "#EPICPARTNER",
+  "LA TIENDITA BAD"
+ ]
+}

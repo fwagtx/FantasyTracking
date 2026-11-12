@@ -1,0 +1,18 @@
+{
+ "via": "fortnite-api.com (mirror of Epic's in-game shop)",
+ "language": "es-419",
+ "files": [
+  {
+   "file": "shop.json",
+   "source": "Item Shop for 2026-11-12",
+   "url": "https://fortnite-api.com/v2/shop?language=es-419",
+   "fetched_utc": "2026-11-12T00:07:42Z"
+  },
+  {
+   "file": "history.json",
+   "source": "Introduction seasons and shop history",
+   "url": "https://fortnite-api.com/v2/cosmetics/br/<id>?language=es-419&responseFlags=4",
+   "fetched_utc": "2026-11-12T00:07:42Z"
+  }
+ ]
+}

@@ -1,0 +1,82 @@
+{
+  "video": "latienditabad-shop-2026-11-12.mp4",
+  "checked_utc": "2026-11-12T00:12:18Z",
+  "verdict": "READY TO POST",
+  "results": [
+    {
+      "check": "1. Facts",
+      "status": "PASS",
+      "detail": "5/5 claims verified against saved official data",
+      "items": [
+        {
+          "claim": "Lote A$AP Rocky: 3200 V-Bucks, regular 8800",
+          "result": "PASS",
+          "why": "matched in shop.json"
+        },
+        {
+          "claim": "Arquetipo: Capítulo 1, Temporada 5",
+          "result": "PASS",
+          "why": "matched in history.json"
+        },
+        {
+          "claim": "Superador: Capítulo 1, Temporada 5",
+          "result": "PASS",
+          "why": "matched in history.json"
+        },
+        {
+          "claim": "1 days since last in the shop",
+          "result": "PASS",
+          "why": "matched in history.json"
+        },
+        {
+          "claim": "14 outfits leave at the next reset",
+          "result": "PASS",
+          "why": "matched in plan.json"
+        }
+      ]
+    },
+    {
+      "check": "2. Spelling and grammar",
+      "status": "PASS",
+      "detail": "5 distinct words checked; code written as BAD in all 2 mentions",
+      "items": []
+    },
+    {
+      "check": "3. Frames",
+      "status": "PASS",
+      "detail": "No black frames, no frozen stretches over 1.5 s. Contact sheet (1 frame/s) reviewed by eye: contact-sheet.png",
+      "items": []
+    },
+    {
+      "check": "4. Audio",
+      "status": "PASS",
+      "detail": "Integrated -14.3 LUFS, true peak -2.7 dBTP, no clipping, no silence gaps. All sound is original synthesis (no game rips, no copyrighted music). No voiceover in this cut.",
+      "items": []
+    },
+    {
+      "check": "5. Specs and safe zones",
+      "status": "PASS",
+      "detail": "1080x1920 h264 60 fps, aac 48000 Hz, 26.1s. Fits TikTok, Reels, Shorts, X, Facebook, Threads. Every on-screen text box sampled 4x/s stays out of the top bar, bottom caption area and button column.",
+      "items": []
+    },
+    {
+      "check": "6. Disclosure and wording",
+      "status": "PASS",
+      "detail": "#EpicPartner is the first hashtag in caption line 1 and on screen in every sampled frame from 0.0s. No discount, giveaway, endorsement or filler-CTA wording.",
+      "items": []
+    },
+    {
+      "check": "7. Would a fan stop scrolling? Made by a person?",
+      "status": "PASS",
+      "detail": "26.5 s. Frame 1: 'TIENDA DE HOY 12 NOV' with the three highlights at once (OFERTA Flacko Helicopter, OG Superador, ÚLTIMO DÍA Arquetipo). 1 · Mejor oferta: Lote A$AP Rocky 3200 (8800 struck, -64%, ahorras 5600), se va el 6 dic. 2 · Regreso OG: Arquetipo and Superador, 1500 each, Capítulo 1 · Temporada 5. 3 · Último día: six cards with prices plus '+8 más' (14 skins), 'se van el 12 nov, 6 PM'. Code card and sign-off at the end. Every tile a real item, names and prices readable, nothing cut off or overlapping; voice lines start 'Esta es la tienda de objetos de hoy, 12 de noviembre.' and all read naturally.",
+      "items": []
+    },
+    {
+      "check": "8. Owner approval",
+      "status": "PASS",
+      "detail": "Standing approval for autopilot (owner, 2026-10-28): posts when checks 1-7 all PASS.",
+      "items": []
+    }
+  ],
+  "caption": "#EpicPartner Tienda de objetos de Fortnite, 12 de noviembre: el Lote A$AP Rocky cuesta 3200 V-Bucks en vez de 8800 (ahorras 5600), Arquetipo y Superador están en la tienda (Capítulo 1, Temporada 5) y 14 skins se van el 12 de noviembre a las 6 PM (CDMX).\n¿Vas a comprar hoy? Usa el código BAD en la tienda de objetos.\n#Fortnite #TiendaFortnite #FortniteTienda"
+}
