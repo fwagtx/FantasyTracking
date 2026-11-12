@@ -3,9 +3,10 @@
     python3 brands/tiendabad/auto/new_guess.py <folder> auto
     python3 brands/tiendabad/auto/new_guess.py <folder> <id> <id> <id>
 
-"auto" picks three outfits from today's live shop whose ids are not in the ledger's "ids": the oldest, one from the
-middle and the newest (outfits from the newest season in the shop are left out, they are too easy), from different
-chapters where possible, asked in the order middle, oldest, newest. Or name exactly three outfit ids yourself.
+"auto" picks three outfits from today's live shop whose ids are not in the ledger's "ids" and whose season was not
+an answer in the last quiz: the oldest, one from the middle and the newest (outfits from the newest season in the shop
+are left out, they are too easy), from different chapters where possible, asked in the order middle, oldest, newest.
+Or name exactly three outfit ids yourself.
 Writes <folder>/: sources/<id>.json + sources/manifest.json (the facts), img/<id>.png (the art), scene.js (TPL.guess),
 vo.json and post.json, and prints the ids for the ledger entry. Then build and ship with make_short.py, passing
 --sources <folder>/sources. Outfits whose chapter or season isn't a plain number are refused (the voice can't say them
@@ -55,7 +56,11 @@ def pick_auto():
     if not eras:
         raise SystemExit("STOP: no usable outfits in today's shop")
     newest = max(eras.values())
-    pool = sorted((e, cid) for cid, e in eras.items() if e != newest)
+    quiz = [t for t in json.load(open(LEDGER))["topics"] if t.get("ids")]
+    last = {e for cid in (max(quiz, key=lambda t: t["date"])["ids"] if quiz else []) if (e := era(cid))}
+    pool = sorted((e, cid) for cid, e in eras.items() if e != newest and e not in last)      # no answer of the last quiz again
+    if len(pool) < 3:
+        pool = sorted((e, cid) for cid, e in eras.items() if e != newest)
     if len(pool) < 3:
         raise SystemExit(f"STOP: only {len(pool)} usable outfits in today's shop")
     old, new = pool[0], pool[-1]

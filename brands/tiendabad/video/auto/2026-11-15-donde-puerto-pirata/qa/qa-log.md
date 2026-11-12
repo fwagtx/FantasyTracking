@@ -1,6 +1,6 @@
 # Pre-post check: latienditabad-2026-11-15-donde-puerto-pirata.mp4
 
-Checked 2026-11-11T17:17:46Z · **READY TO POST**
+Checked 2026-11-12T17:31:00Z · **READY TO POST**
 
 ## 1. Facts: PASS
 2/2 claims verified against saved official data
@@ -23,7 +23,7 @@ Integrated -14.2 LUFS, true peak -2.9 dBTP, no clipping, no silence gaps. All so
 #EpicPartner is the first hashtag in caption line 1 and on screen in every sampled frame from 0.0s. No discount, giveaway, endorsement or filler-CTA wording.
 
 ## 7. Would a fan stop scrolling? Made by a person?: PASS
-15.6 s. Frame 1: '¿DÓNDE ESTÁ PUERTO PIRATA?' over the map zoomed on Puerto Pirata with the marker circle on it; the wide shot shows it on the south coast with a 'PUERTO PIRATA' label; the close-up returns with the label under the circle. Voice: 'en el sur de la isla, cerca de Bahía Bulliciosa' (official map coordinates, refreshed today). Captions readable, #EpicPartner and the logo in every frame, code card and sign-off at the end.
+Re-rendered 2026-11-12 on the new official map (Fuerte Fortuna and Bahía Botín removed, Playa de Buggy added); same script, voice and timings as the Nov 11 build. Frame 1 hooks with the title and the close-up on PUERTO PIRATA; the wide shot shows the current island with the ring and the scrawl on the place; captions on one line, nothing cut off, code card and thanks at the end.
 
 ## 8. Owner approval: PASS
 Standing approval for autopilot (owner, 2026-10-28): posts when checks 1-7 all PASS.

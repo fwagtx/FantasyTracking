@@ -69,9 +69,13 @@ def main(folder, name):
                {"text": "¡Guárdalo para tu próxima partida!", "pause": 0.2},
                {"text": "Usa el código BAD en la tienda de objetos. Le ayuda muchísimo al canal.", "say": "Usa el código bad, en la tienda de objetos. Le ayuda muchísimo al canal.", "pause": 0.25},
                {"text": "¡Gracias por ver! Síguenos para más contenido diario.", "pause": 0.3}]
-    for ph in phrases:                      # "$" in a name is read as the letter S
-        if "$" in ph["text"] and "say" not in ph:
-            ph["say"] = ph["text"].replace("$", "S")
+    say = {"$": "S", "Buggy": "Bugui"}      # "$" is read as the letter S; Kokoro es-419 reads "Buggy" as "bug-ji"
+    for ph in phrases:
+        s = ph.get("say", ph["text"])
+        for a, b in say.items():
+            s = s.replace(a, b)
+        if s != ph["text"]:
+            ph["say"] = s
     json.dump({"phrases": phrases}, open(os.path.join(folder, "vo.json"), "w"), indent=1, ensure_ascii=False)
     json.dump(post, open(os.path.join(folder, "post.json"), "w"), indent=1, ensure_ascii=False)
     print(json.dumps({"lugar": name, "donde": d, "cerca": near}, ensure_ascii=False))

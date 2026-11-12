@@ -99,7 +99,7 @@ treasure hunt ends (December 5) 3 more Tienda Pirata shorts a day (PIRATA run).
 8. Add each posted topic to `brands/tiendabad/auto/ledger.json`; never repeat a topic. An "Adivina la temporada" entry
    also lists its outfits in `"ids"` (new_guess.py prints them), which is how the next quiz skips them.
 9. Check yesterday: getScheduledPosts for D-1; any network not PUBLISHED goes in the summary with its detailedStatus.
-10. Log line, commit `brands/tiendabad/video/auto brands/tiendabad/auto brands/tiendabad/sources/manifest.json`, push, summary.
+10. Log line, commit `brands/tiendabad/video/auto brands/tiendabad/auto brands/tiendabad/sources` (the JSON files; the map images stay out), push, summary.
 
 ### Already queued: the Tienda Pirata series (made 2026-11-09, leave these posts alone)
 
@@ -152,6 +152,15 @@ used once (the script keeps the order); the last two days say "mañana / hoy es 
 If fetch_sources.py reports `news_removed` or `places_removed`, check the next 7 days of posts against the ledger:
 a post whose fact is gone goes back to draft with updateScheduledPost (same content, `"draft": true`) and its slot
 is refilled.
+
+A map update also changes the labeled map every queued "¿Dónde está?" shows in its wide shot (2026-11-12: Fuerte
+Fortuna and Bahía Botín left, Playa de Buggy came in). For each queued one whose place is still on the map: check that
+the direction and nearest place it says still hold (new_where.py prints them for the new map), rebuild it in its own
+folder (`make_short.py build` takes the fresh `sources/map-labels.png`), review, ship at its time, and swap the new
+video into its queued posts with updateScheduledPost (same caption, time and settings, only `media` and
+`videoThumbnailUrl` change), then `done`. A place that just arrived is the most timely "¿Dónde está?": it can take
+that night's 8:30 PM slot, and the post it replaces goes to draft and moves to the next free evergreen day (update
+its date, media and `"draft": false` once its rebuild passes).
 
 ## LONG run (Mon, Wed, Sat; posts 3:00 PM)
 

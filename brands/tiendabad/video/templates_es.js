@@ -33,10 +33,14 @@
       `<div style="position:absolute;inset:0;background:linear-gradient(120deg,rgba(255,255,255,.18) 0 18%,transparent 18%)"></div>
        <img src="${o.img}" style="position:absolute;left:${-w * 0.2}px;top:${-h * 0.02}px;width:${w * 1.4}px;height:auto">
        <div style="position:absolute;left:0;right:0;bottom:0;padding:${w * 0.05}px ${w * 0.06}px ${w * 0.045}px;background:linear-gradient(transparent,rgba(5,8,22,.92) 30%)">
-         <div style="font-family:'Barlow Condensed';font-weight:900;font-size:${Math.min(w * 0.14, (w * 0.86) / (o.name.length * 0.43))}px;line-height:.95;text-transform:uppercase;color:#fff;-webkit-text-stroke:${w * 0.012}px ${INK};paint-order:stroke fill;white-space:nowrap">${o.name}</div>
+         <div data-fit style="font-family:'Barlow Condensed';font-weight:900;font-size:${Math.min(w * 0.14, (w * 0.86) / (o.name.length * 0.43))}px;line-height:.95;text-transform:uppercase;color:#fff;-webkit-text-stroke:${w * 0.012}px ${INK};paint-order:stroke fill;white-space:nowrap">${o.name}</div>
        </div>`, o.name.toUpperCase());
+    toFit.push(el.querySelector("[data-fit]"));
     return el;
   }
+  // a card name wider than its card shrinks to fit; measured on the first frame, once the fonts are in
+  const toFit = [];
+  const fitLabels = () => { for (const n of toFit.splice(0)) if (n.scrollWidth > n.clientWidth) n.style.fontSize = `${(parseFloat(n.style.fontSize) * n.clientWidth / n.scrollWidth) * 0.96}px`; };
   const BR = "../../tiendabad/brand";
   const codeES = (stage, y = 520) => {
     return mk(stage, `left:170px;width:740px;top:${y - 140}px;text-align:center`,
@@ -83,6 +87,7 @@
       const dim = mk(stage, `inset:0;background:rgba(5,8,25,.55)`);
       stage.appendChild(e.code); stage.appendChild(e.thanks);
       return function renderAt(t) {
+        fitLabels();
         bands.style.transform = `translateX(${(t * 40) % 260}px)`;
         const r0 = nameP(0).t0 - 0.12;
         const hookOn = t < r0 ? 1 : 1 - k(t, r0, r0 + 0.2);
@@ -280,6 +285,7 @@
       // each info line shows from its phrase until the next one starts
       const beats = [[name, nameP], [list, listP], [price, priceP], [when, whenP]].filter((b) => b[0]);
       return function renderAt(t) {
+        fitLabels();
         bands.style.transform = `translateX(${(t * 40) % 260}px)`;
         // the top title clears away for the closing question and the code card, so they never sit on top of it
         const endOn = Math.max(win(t, askP.t0 - 0.08, codeP.t0 - 0.05, 0.12, 0.1), win(t, codeP.t0 - 0.05, DUR + 1, 0.12, 0.1));

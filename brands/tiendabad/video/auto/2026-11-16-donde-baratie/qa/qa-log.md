@@ -1,6 +1,6 @@
-# Pre-post check: latienditabad-2026-11-12-donde-baratie.mp4
+# Pre-post check: latienditabad-2026-11-16-donde-baratie.mp4
 
-Checked 2026-11-10T17:27:10Z · **READY TO POST**
+Checked 2026-11-12T17:33:30Z · **READY TO POST**
 
 ## 1. Facts: PASS
 2/2 claims verified against saved official data
@@ -23,7 +23,7 @@ Integrated -14.3 LUFS, true peak -2.4 dBTP, no clipping, no silence gaps. All so
 #EpicPartner is the first hashtag in caption line 1 and on screen in every sampled frame from 0.0s. No discount, giveaway, endorsement or filler-CTA wording.
 
 ## 7. Would a fan stop scrolling? Made by a person?: PASS
-Review sheet: title '¿Dónde está Baratie?' from frame 1, the camera zooms to the place, red marker circle and 'BARATIE' scrawl right at Baratie's map position next to the 'Bahía Bulliciosa' label, captions readable, code card and thanks at the end. The labeled map's own 'THE $.$. ROCKY' label sits just under the title in the first frames (background clutter, same as the earlier map shorts; the circle and scrawl make the answer clear). Nothing cut off.
+Moved from Nov 12 to Nov 16 and re-rendered 2026-11-12 on the new official map (Fuerte Fortuna and Bahía Botín removed, Playa de Buggy added); same script and voice as the Nov 10 build. Frame 1 hooks with the title and the close-up on Bahía Bulliciosa with the ring on Baratie; the wide shot shows the current island; map labels behind the title stay behind it, as before; captions on one line, nothing cut off, code card and thanks at the end.
 
 ## 8. Owner approval: PASS
 Standing approval for autopilot (owner, 2026-10-28): posts when checks 1-7 all PASS.

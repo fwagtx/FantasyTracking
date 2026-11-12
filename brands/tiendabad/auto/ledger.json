@@ -97,11 +97,12 @@
    "folder": "video/auto/2026-11-10-tienda-pirata-niveles"
   },
   {
-   "date": "2026-11-12",
+   "date": "2026-11-16",
    "slot": "20:30",
    "format": "¿Dónde está?",
    "topic": "Baratie",
-   "folder": "video/auto/2026-11-12-donde-baratie"
+   "folder": "video/auto/2026-11-16-donde-baratie",
+   "note": "Was Nov 12; moved on 2026-11-12 when the map update made the queued video's map outdated (re-rendered on the new map)."
   },
   {
    "date": "2026-11-13",
@@ -156,6 +157,26 @@
    "format": "Tienda Pirata diaria (cuenta)",
    "topic": "Quedan 24 días · dato: Horas del Tesoro 2026-11-14",
    "folder": "video/auto/2026-11-11-pirata-cuenta"
+  },
+  {
+   "date": "2026-11-12",
+   "slot": "20:30",
+   "format": "¿Dónde está?",
+   "topic": "Playa de Buggy",
+   "folder": "video/auto/2026-11-12-donde-playa-de-buggy",
+   "note": "New place in the 2026-11-12 map update (replaced Bahía Botín)."
+  },
+  {
+   "date": "2026-11-17",
+   "slot": "20:30",
+   "format": "Adivina la temporada",
+   "topic": "Pólvora (C5 T1), Defensor sabroso (C1 T6), Viajero desatado (C7 T3)",
+   "folder": "video/auto/2026-11-17-adivina-temporada",
+   "ids": [
+    "Character_TacticMushroom_D",
+    "CID_274_Athena_Commando_M_Feathers",
+    "Character_VoyagerCuboid"
+   ]
   }
  ]
 }

@@ -1,0 +1,77 @@
+{
+ "duration": 25.6,
+ "caption": "#EpicPartner Adivina la temporada 👀 Solo los verdaderos OG aciertan las 3\n¿Cuántas acertaste? 👇\nUsa el código BAD en la tienda de objetos 💛\n#fortnite #fortniteog #adivinalatemporada",
+ "claims": [
+  {
+   "text": "Pólvora: Capítulo 5, Temporada 1",
+   "source": "Character_TacticMushroom_D.json",
+   "match": [
+    "Pólvora",
+    "\"chapter\": \"5\"",
+    "\"season\": \"1\""
+   ]
+  },
+  {
+   "text": "Defensor sabroso: Capítulo 1, Temporada 6",
+   "source": "CID_274_Athena_Commando_M_Feathers.json",
+   "match": [
+    "Defensor sabroso",
+    "\"chapter\": \"1\"",
+    "\"season\": \"6\""
+   ]
+  },
+  {
+   "text": "Viajero desatado: Capítulo 7, Temporada 3",
+   "source": "Character_VoyagerCuboid.json",
+   "match": [
+    "Viajero desatado",
+    "\"chapter\": \"7\"",
+    "\"season\": \"3\""
+   ]
+  }
+ ],
+ "text": [
+  "PÓLVORA",
+  "DEFENSOR SABROSO",
+  "VIAJERO DESATADO",
+  "?",
+  "ADIVINA LA TEMPORADA / 3 SKINS · SIN TRAMPA",
+  "1 / 3",
+  "CUENTA",
+  "CAPÍTULO 5 · TEMPORADA 1",
+  "¿QUÉ TEMPORADA?",
+  "2 / 3",
+  "CAPÍTULO 1 · TEMPORADA 6",
+  "3 / 3",
+  "CAPÍTULO 7 · TEMPORADA 3",
+  "¿CUÁNTAS / ACERTASTE?",
+  "¡ADIVINA LA TEMPORADA!",
+  "SOLO LOS VERDADEROS",
+  "OG ACIERTAN LAS",
+  "TRES.",
+  "PÓLVORA.",
+  "¡CAPÍTULO 5,",
+  "TEMPORADA 1!",
+  "DEFENSOR SABROSO.",
+  "¡CAPÍTULO 1,",
+  "TEMPORADA 6!",
+  "VIAJERO DESATADO.",
+  "¡CAPÍTULO 7,",
+  "TEMPORADA 3!",
+  "¿CUÁNTAS ACERTASTE?",
+  "DÍMELO EN LOS",
+  "COMENTARIOS.",
+  "USA EL CÓDIGO",
+  "BAD EN LA",
+  "TIENDA DE OBJETOS.",
+  "LE AYUDA MUCHÍSIMO",
+  "AL CANAL.",
+  "¡GRACIAS POR VER!",
+  "SÍGUENOS PARA MÁS",
+  "CONTENIDO DIARIO.",
+  "#EPICPARTNER",
+  "LA TIENDITA BAD",
+  "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+  "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO"
+ ]
+}
