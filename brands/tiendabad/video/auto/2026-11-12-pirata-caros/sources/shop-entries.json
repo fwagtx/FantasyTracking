@@ -1,0 +1,2790 @@
+{
+ "date": "2026-11-12T00:00:00Z",
+ "entries": [
+  {
+   "regularPrice": 3600,
+   "finalPrice": 2300,
+   "devName": "[VIRTUAL]1 x Black Cat, 1 x Cat's Pack, 1 x Bad Luck Claws, 1 x Cat's Tracks, 1 x The Black Cat, 1 x The Black Cat, 1 x The Black Cat for -1 MtxCurrency",
+   "offerId": "v2:/7869b6a415c0dd34ee464912ad71a85c4116621e7f9f0b5267f026049324b2a2",
+   "inDate": "2026-11-12T00:00:00Z",
+   "outDate": "2026-11-15T23:59:59.999Z",
+   "bundle": {
+    "name": "Lote Gata Negra",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/32e1e9cd0b48165a/renderimage_0.png"
+   },
+   "banner": {
+    "value": "1300 monedas V de descuento",
+    "intensity": "Low",
+    "backendValue": "AmountOff"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -2,
+   "layoutId": "FantasticSurfer.98",
+   "layout": {
+    "id": "FantasticSurfer",
+    "name": "Marvel",
+    "index": 9,
+    "rank": 193,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "7f5d25ff",
+    "color2": "ba9600ff",
+    "color3": "e5b76aff",
+    "textBackgroundColor": "7f5d25ff"
+   },
+   "tileBackgroundMaterial": "ShopTile_Pirates_Gold",
+   "tileSize": "Size_3_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_SweetLetter_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S31/DAv2_Bundle_Featured_SweetLetter",
+   "newDisplayAsset": {
+    "id": "DAv2_Bundle_Featured_SweetLetter",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__32e1e9cd0b48165a_18525ecfc9cb7f17.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/32e1e9cd0b48165a/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__32e1e9cd0b48165a_9c6cb7a45f8d9866.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/32e1e9cd0b48165a/renderimage_1.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__32e1e9cd0b48165a_ad3123127c1a3796.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/32e1e9cd0b48165a/renderimage_2.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Character_SweetLetter",
+     "name": "Gata Negra",
+     "description": "Ladrona experta y hábil artista marcial obsesionada con cierto hombre arácnido.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "marvel",
+      "displayValue": "SERIE DE MARVEL",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "SERIE DE MARVEL",
+      "colors": [
+       "ed1c24ff",
+       "d60203ff",
+       "b30102ff",
+       "610709ff",
+       "280102ff"
+      ],
+      "backendValue": "MarvelSeries"
+     },
+     "set": {
+      "value": "Gata Negra",
+      "text": "Pieza del conjunto Gata Negra.",
+      "backendValue": "HonorTape"
+     },
+     "introduction": {
+      "chapter": "5",
+      "season": "4",
+      "text": "Introducido en Capítulo 5, Temporada 4.",
+      "backendValue": 31
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_sweetletter/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_sweetletter/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_sweetletter/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_sweetletter/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_sweetletter/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_sweetletter/wide.png"
+      }
+     },
+     "variants": [
+      {
+       "channel": "Material",
+       "type": "Máscara",
+       "options": [
+        {
+         "tag": "Mat1",
+         "name": "Sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_sweetletter/variants/material/mat1.png"
+        },
+        {
+         "tag": "Mat2",
+         "name": "No",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_sweetletter/variants/material/mat2.png"
+        }
+       ]
+      }
+     ],
+     "showcaseVideo": "L4_atVIv2yE",
+     "added": "2024-09-12T15:47:24Z"
+    },
+    {
+     "id": "Backpack_SweetLetter",
+     "name": "Mochila felina",
+     "description": "Tiene espacio para ganzúas y alguna que otra gema brillante.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "marvel",
+      "displayValue": "SERIE DE MARVEL",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "SERIE DE MARVEL",
+      "colors": [
+       "ed1c24ff",
+       "d60203ff",
+       "b30102ff",
+       "610709ff",
+       "280102ff"
+      ],
+      "backendValue": "MarvelSeries"
+     },
+     "set": {
+      "value": "Gata Negra",
+      "text": "Pieza del conjunto Gata Negra.",
+      "backendValue": "HonorTape"
+     },
+     "introduction": {
+      "chapter": "5",
+      "season": "4",
+      "text": "Introducido en Capítulo 5, Temporada 4.",
+      "backendValue": 31
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_sweetletter/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_sweetletter/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_sweetletter/featured.png"
+     },
+     "added": "2024-09-12T15:47:24Z"
+    },
+    {
+     "id": "Pickaxe_SweetLetter",
+     "name": "Garras de calamidad",
+     "description": "Un garfio tan afilado que corta hasta el cristal.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "marvel",
+      "displayValue": "SERIE DE MARVEL",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "SERIE DE MARVEL",
+      "colors": [
+       "ed1c24ff",
+       "d60203ff",
+       "b30102ff",
+       "610709ff",
+       "280102ff"
+      ],
+      "backendValue": "MarvelSeries"
+     },
+     "set": {
+      "value": "Gata Negra",
+      "text": "Pieza del conjunto Gata Negra.",
+      "backendValue": "HonorTape"
+     },
+     "introduction": {
+      "chapter": "5",
+      "season": "4",
+      "text": "Introducido en Capítulo 5, Temporada 4.",
+      "backendValue": 31
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_sweetletter/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_sweetletter/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_sweetletter/featured.png"
+     },
+     "showcaseVideo": "aXhMa9pYg7Y",
+     "added": "2024-09-12T15:47:24Z"
+    },
+    {
+     "id": "Wrap_SweetLetter",
+     "name": "Huellas de gata",
+     "description": "Muestra tu estilo.",
+     "type": {
+      "value": "wrap",
+      "displayValue": "Papel",
+      "backendValue": "AthenaItemWrap"
+     },
+     "rarity": {
+      "value": "marvel",
+      "displayValue": "SERIE DE MARVEL",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "SERIE DE MARVEL",
+      "colors": [
+       "ed1c24ff",
+       "d60203ff",
+       "b30102ff",
+       "610709ff",
+       "280102ff"
+      ],
+      "backendValue": "MarvelSeries"
+     },
+     "set": {
+      "value": "Gata Negra",
+      "text": "Pieza del conjunto Gata Negra.",
+      "backendValue": "HonorTape"
+     },
+     "introduction": {
+      "chapter": "5",
+      "season": "4",
+      "text": "Introducido en Capítulo 5, Temporada 4.",
+      "backendValue": 31
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/wrap_sweetletter/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/wrap_sweetletter/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/wrap_sweetletter/featured.png"
+     },
+     "showcaseVideo": "XqnbYzovR6Q",
+     "added": "2024-09-12T15:47:24Z"
+    },
+    {
+     "id": "Backpack_SweetLetter_Guitar",
+     "name": "La Gata Negra",
+     "description": "Rasgar es más fácil que puntear.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "marvel",
+      "displayValue": "SERIE DE MARVEL",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "SERIE DE MARVEL",
+      "colors": [
+       "ed1c24ff",
+       "d60203ff",
+       "b30102ff",
+       "610709ff",
+       "280102ff"
+      ],
+      "backendValue": "MarvelSeries"
+     },
+     "set": {
+      "value": "Gata Negra",
+      "text": "Pieza del conjunto Gata Negra.",
+      "backendValue": "HonorTape"
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_sweetletter_guitar/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_sweetletter_guitar/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_sweetletter_guitar/featured.png"
+     },
+     "added": "2025-03-02T00:00:00Z"
+    },
+    {
+     "id": "Pickaxe_SweetLetter_Guitar",
+     "name": "La Gata Negra",
+     "description": "Rasgar es más fácil que puntear.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "marvel",
+      "displayValue": "SERIE DE MARVEL",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "SERIE DE MARVEL",
+      "colors": [
+       "ed1c24ff",
+       "d60203ff",
+       "b30102ff",
+       "610709ff",
+       "280102ff"
+      ],
+      "backendValue": "MarvelSeries"
+     },
+     "set": {
+      "value": "Gata Negra",
+      "text": "Pieza del conjunto Gata Negra.",
+      "backendValue": "HonorTape"
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_sweetletter_guitar/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_sweetletter_guitar/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_sweetletter_guitar/featured.png"
+     },
+     "added": "2025-03-02T00:00:00Z"
+    }
+   ],
+   "instruments": [
+    {
+     "id": "Sparks_Guitar_SweetLetter",
+     "name": "La Gata Negra",
+     "description": "Rasgar es más fácil que puntear.",
+     "type": {
+      "value": "guitar",
+      "displayValue": "Guitarra",
+      "backendValue": "SparksGuitar"
+     },
+     "rarity": {
+      "value": "marvel",
+      "displayValue": "SERIE DE MARVEL",
+      "backendValue": "EFortRarity::Common"
+     },
+     "images": {
+      "small": "https://fortnite-api.com/images/cosmetics/instruments/sparks_guitar_sweetletter/small.png",
+      "large": "https://fortnite-api.com/images/cosmetics/instruments/sparks_guitar_sweetletter/large.png"
+     },
+     "series": {
+      "value": "SERIE DE MARVEL",
+      "colors": [
+       "ed1c24ff",
+       "d60203ff",
+       "b30102ff",
+       "610709ff",
+       "280102ff"
+      ],
+      "backendValue": "MarvelSeries"
+     },
+     "added": "2024-09-04T14:56:21Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 2600,
+   "finalPrice": 1800,
+   "devName": "[VIRTUAL]1 x Spider-Man Zero, 1 x Spider Drone, 1 x Web Slicer, 1 x Spidey Landing for -1 MtxCurrency",
+   "offerId": "v2:/d06e234bbb3f06c9f72a9fdcd9a76d589002cba8e45c067f63e1ff1e14dba348",
+   "inDate": "2026-11-12T00:00:00Z",
+   "outDate": "2026-11-15T23:59:59.999Z",
+   "bundle": {
+    "name": "Lote Spider-Man Cero",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/0fc2b6e3994dbd59/renderimage_0.png"
+   },
+   "banner": {
+    "value": "800 monedas V de descuento",
+    "intensity": "Low",
+    "backendValue": "AmountOff"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -1,
+   "layoutId": "FantasticSurfer.99",
+   "layout": {
+    "id": "FantasticSurfer",
+    "name": "Marvel",
+    "index": 9,
+    "rank": 193,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "7f5d25ff",
+    "color2": "ba9600ff",
+    "color3": "e5b76aff",
+    "textBackgroundColor": "7f5d25ff"
+   },
+   "tileBackgroundMaterial": "ShopTile_Pirates_Gold",
+   "tileSize": "Size_2_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_Spectacle_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/DAv2_Featured_SpectacleBundle",
+   "newDisplayAsset": {
+    "id": "DAv2_Featured_SpectacleBundle",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "t-athenabundles-spectacleweb-1024x1024-5795bb9cd9ee.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/0fc2b6e3994dbd59/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "t-figure-athenabundles-spectacleweb-1024x1024-627f9226bbe1.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/0fc2b6e3994dbd59/renderimage_1.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "CID_A_430_Athena_Commando_M_SpectacleWeb",
+     "name": "Spider-Man Cero",
+     "description": "Tu amistoso vecino trepamuros listo para el combate.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "marvel",
+      "displayValue": "SERIE DE MARVEL",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "SERIE DE MARVEL",
+      "colors": [
+       "ed1c24ff",
+       "d60203ff",
+       "b30102ff",
+       "610709ff",
+       "280102ff"
+      ],
+      "backendValue": "MarvelSeries"
+     },
+     "set": {
+      "value": "Conflicto cero",
+      "text": "Pieza del conjunto Conflicto cero.",
+      "backendValue": "NoneBattle"
+     },
+     "introduction": {
+      "chapter": "3",
+      "season": "3",
+      "text": "Introducido en Capítulo 3, Temporada 3.",
+      "backendValue": 21
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/cid_a_430_athena_commando_m_spectacleweb/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/cid_a_430_athena_commando_m_spectacleweb/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/cid_a_430_athena_commando_m_spectacleweb/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/cid_a_430_athena_commando_m_spectacleweb/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/cid_a_430_athena_commando_m_spectacleweb/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/cid_a_430_athena_commando_m_spectacleweb/wide.png"
+      }
+     },
+     "showcaseVideo": "-sURL2H90eo",
+     "added": "2022-06-07T14:05:44Z"
+    },
+    {
+     "id": "BID_A_027_SpectacleWebMale",
+     "name": "Spider-Dron",
+     "description": "¡Le cubre las espaldas a Spider-Man!",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "marvel",
+      "displayValue": "SERIE DE MARVEL",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "SERIE DE MARVEL",
+      "colors": [
+       "ed1c24ff",
+       "d60203ff",
+       "b30102ff",
+       "610709ff",
+       "280102ff"
+      ],
+      "backendValue": "MarvelSeries"
+     },
+     "set": {
+      "value": "Conflicto cero",
+      "text": "Pieza del conjunto Conflicto cero.",
+      "backendValue": "NoneBattle"
+     },
+     "introduction": {
+      "chapter": "3",
+      "season": "3",
+      "text": "Introducido en Capítulo 3, Temporada 3.",
+      "backendValue": 21
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/bid_a_027_spectaclewebmale/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/bid_a_027_spectaclewebmale/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/bid_a_027_spectaclewebmale/featured.png"
+     },
+     "added": "2022-06-07T14:05:44Z"
+    },
+    {
+     "id": "Pickaxe_ID_820_SpectacleWebMale",
+     "name": "Hacha de telarañas",
+     "description": "Me quedé sin cartuchos de telaraña, pero creo que quedó genial.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "marvel",
+      "displayValue": "SERIE DE MARVEL",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "SERIE DE MARVEL",
+      "colors": [
+       "ed1c24ff",
+       "d60203ff",
+       "b30102ff",
+       "610709ff",
+       "280102ff"
+      ],
+      "backendValue": "MarvelSeries"
+     },
+     "set": {
+      "value": "Conflicto cero",
+      "text": "Pieza del conjunto Conflicto cero.",
+      "backendValue": "NoneBattle"
+     },
+     "introduction": {
+      "chapter": "3",
+      "season": "3",
+      "text": "Introducido en Capítulo 3, Temporada 3.",
+      "backendValue": 21
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_id_820_spectaclewebmale/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_id_820_spectaclewebmale/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_id_820_spectaclewebmale/featured.png"
+     },
+     "showcaseVideo": "fMqhyspFx2U",
+     "added": "2022-06-15T14:23:59Z"
+    },
+    {
+     "id": "EID_SpectacleWeb",
+     "name": "Aterrizaje de Spider-Man",
+     "description": "Date una vuelta, al más puro estilo Spider-Man.",
+     "type": {
+      "value": "emote",
+      "displayValue": "Gesto",
+      "backendValue": "AthenaDance"
+     },
+     "rarity": {
+      "value": "marvel",
+      "displayValue": "SERIE DE MARVEL",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "SERIE DE MARVEL",
+      "colors": [
+       "ed1c24ff",
+       "d60203ff",
+       "b30102ff",
+       "610709ff",
+       "280102ff"
+      ],
+      "backendValue": "MarvelSeries"
+     },
+     "set": {
+      "value": "Conflicto cero",
+      "text": "Pieza del conjunto Conflicto cero.",
+      "backendValue": "NoneBattle"
+     },
+     "introduction": {
+      "chapter": "3",
+      "season": "3",
+      "text": "Introducido en Capítulo 3, Temporada 3.",
+      "backendValue": 21
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/eid_spectacleweb/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/eid_spectacleweb/icon.png"
+     },
+     "showcaseVideo": "NtycWUe1T-o",
+     "added": "2022-06-15T14:23:59Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 2400,
+   "finalPrice": 1800,
+   "devName": "[VIRTUAL]1 x Alias, 1 x Caper, 1 x Heartline, 1 x Beat Breaker, 1 x Rare Wear, 1 x Hamster Bold, 1 x Peace Bear, 1 x No More, 1 x Break Point Ultra, 1 x Rare Drip, 1 x Kiss Off, 1 x Break Point Freestyle, 1 x Speed Splat, 1 x Hamster Overdrive, 1 x Neo Revolution, 1 x Peel'd Face, 1 x Fishy Face, 1 x Crack'd Face, 1 x Skull & Crossbears, 1 x Fort Future, 1 x Royale Rep, 1 x Sharp Duck, 1 x Fortunate, 1 x All Time Drip, 1 x Hamster Cabbie, 1 x Tomato Face, 1 x Cuddle Face, 1 x Skull Face, 1 x Grim Grin, 1 x Hare-Raising, 1 x Dire Goat, 1 x Neon Payback, 1 x Taxi Attack, 1 x Future Goat, 1 x Durrr Face, 1 x Meow Face, 1 x Drift Face for -1 MtxCurrency",
+   "offerId": "v2:/f412359b85cc01933105c560e74346211f5b175a34991059bb1d83cbb6a2105e",
+   "inDate": "2026-11-12T00:00:00Z",
+   "outDate": "2026-11-14T23:59:59.999Z",
+   "bundle": {
+    "name": "Lote Artistas del escapismo",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/3ef565fe268e4b56/renderimage_0.png"
+   },
+   "banner": {
+    "value": "600 monedas V de descuento",
+    "intensity": "Low",
+    "backendValue": "AmountOff"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -1,
+   "layoutId": "BR111226.99",
+   "layout": {
+    "id": "BR111226",
+    "name": "Estilo de élite",
+    "index": 21,
+    "rank": 184,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "8ad986ff",
+    "color3": "05544cff",
+    "textBackgroundColor": "05544cff"
+   },
+   "tileSize": "Size_2_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_Jumpsuit_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S26/DAv2_Bundle_Featured_Jumpsuit_Static",
+   "newDisplayAsset": {
+    "id": "DAv2_Bundle_Featured_Jumpsuit_Static",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__3ef565fe268e4b56_883e5c711ef79c17.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/3ef565fe268e4b56/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__3ef565fe268e4b56_a659d49ecd0b28b1.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/3ef565fe268e4b56/renderimage_1.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__3ef565fe268e4b56_a9e3791b5f0e77c9.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/3ef565fe268e4b56/renderimage_2.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__3ef565fe268e4b56_5952bd8df717148e.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/3ef565fe268e4b56/renderimage_3.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Character_Jumpsuit_Mutable",
+     "name": "Alias",
+     "description": "No olvides el saco.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "Artistas del escapismo",
+      "text": "Pieza del conjunto Artistas del escapismo.",
+      "backendValue": "LeaveExpert"
+     },
+     "introduction": {
+      "chapter": "4",
+      "season": "4",
+      "text": "Introducido en Capítulo 4, Temporada 4.",
+      "backendValue": 26
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_mutable/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_mutable/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_mutable/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_jumpsuit_mutable/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_jumpsuit_mutable/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_jumpsuit_mutable/wide.png"
+      },
+      "bean": {
+       "small": "https://fortnite-api.com/images/cosmetics/beans/bean_jumpsuit/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/beans/bean_jumpsuit/large.png"
+      }
+     },
+     "variants": [
+      {
+       "channel": "RichColor",
+       "type": "Apariencia",
+       "options": [
+        {
+         "tag": "000",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_mutable/variants/richcolor/000.png"
+        },
+        {
+         "tag": "001",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_mutable/variants/richcolor/001.png"
+        },
+        {
+         "tag": "002",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_mutable/variants/richcolor/002.png"
+        },
+        {
+         "tag": "003",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_mutable/variants/richcolor/003.png"
+        },
+        {
+         "tag": "004",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_mutable/variants/richcolor/004.png"
+        }
+       ]
+      },
+      {
+       "channel": "Corruption",
+       "type": "Accesorio",
+       "options": [
+        {
+         "tag": "Mat0",
+         "name": "Predeterminado",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_mutable/variants/corruption/mat0.png"
+        },
+        {
+         "tag": "Mat1",
+         "name": "Gorra",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_mutable/variants/corruption/mat1.png"
+        },
+        {
+         "tag": "Mat2",
+         "name": "Capucha con cuernos",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_mutable/variants/corruption/mat2.png"
+        },
+        {
+         "tag": "Mat3",
+         "name": "orejas de oso",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_mutable/variants/corruption/mat3.png"
+        },
+        {
+         "tag": "Mat4",
+         "name": "orejas de llama",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_mutable/variants/corruption/mat4.png"
+        },
+        {
+         "tag": "Mat5",
+         "name": "cuernos",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_mutable/variants/corruption/mat5.png"
+        }
+       ]
+      },
+      {
+       "channel": "Mesh",
+       "type": "Color del accesorio para la cabeza",
+       "options": [
+        {
+         "tag": "Mat0",
+         "name": "Blanco",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_mutable/variants/mesh/mat0.png"
+        },
+        {
+         "tag": "Mat1",
+         "name": "Carbón",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_mutable/variants/mesh/mat1.png"
+        },
+        {
+         "tag": "Mat2",
+         "name": "Marrón",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_mutable/variants/mesh/mat2.png"
+        },
+        {
+         "tag": "Mat3",
+         "name": "Marrón",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_mutable/variants/mesh/mat3.png"
+        },
+        {
+         "tag": "Mat4",
+         "name": "Naranja",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_mutable/variants/mesh/mat4.png"
+        },
+        {
+         "tag": "Mat5",
+         "name": "Rojo",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_mutable/variants/mesh/mat5.png"
+        },
+        {
+         "tag": "Mat6",
+         "name": "Magenta",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_mutable/variants/mesh/mat6.png"
+        },
+        {
+         "tag": "Mat7",
+         "name": "Púrpura",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_mutable/variants/mesh/mat7.png"
+        },
+        {
+         "tag": "Mat8",
+         "name": "Azul",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_mutable/variants/mesh/mat8.png"
+        },
+        {
+         "tag": "Mat9",
+         "name": "Azul claro",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_mutable/variants/mesh/mat9.png"
+        },
+        {
+         "tag": "Mat10",
+         "name": "Gris turquesa",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_mutable/variants/mesh/mat10.png"
+        },
+        {
+         "tag": "Mat11",
+         "name": "Verde ácido",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_mutable/variants/mesh/mat11.png"
+        },
+        {
+         "tag": "Mat12",
+         "name": "Verde",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_mutable/variants/mesh/mat12.png"
+        },
+        {
+         "tag": "Mat13",
+         "name": "Oliva",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_mutable/variants/mesh/mat13.png"
+        }
+       ]
+      },
+      {
+       "channel": "Parts",
+       "type": "Color de uniforme",
+       "options": [
+        {
+         "tag": "Particle0",
+         "name": "Blanco",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_mutable/variants/parts/particle0.png"
+        },
+        {
+         "tag": "Particle1",
+         "name": "Carbón",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_mutable/variants/parts/particle1.png"
+        },
+        {
+         "tag": "Particle2",
+         "name": "Marrón",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_mutable/variants/parts/particle2.png"
+        },
+        {
+         "tag": "Particle3",
+         "name": "Marrón",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_mutable/variants/parts/particle3.png"
+        },
+        {
+         "tag": "Particle4",
+         "name": "Naranja",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_mutable/variants/parts/particle4.png"
+        },
+        {
+         "tag": "Particle5",
+         "name": "Rojo",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_mutable/variants/parts/particle5.png"
+        },
+        {
+         "tag": "Particle6",
+         "name": "Magenta",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_mutable/variants/parts/particle6.png"
+        },
+        {
+         "tag": "Particle7",
+         "name": "Púrpura",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_mutable/variants/parts/particle7.png"
+        },
+        {
+         "tag": "Particle8",
+         "name": "Azul",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_mutable/variants/parts/particle8.png"
+        },
+        {
+         "tag": "Particle9",
+         "name": "Azul claro",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_mutable/variants/parts/particle9.png"
+        },
+        {
+         "tag": "Particle10",
+         "name": "Gris turquesa",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_mutable/variants/parts/particle10.png"
+        },
+        {
+         "tag": "Particle11",
+         "name": "Verde ácido",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_mutable/variants/parts/particle11.png"
+        },
+        {
+         "tag": "Particle12",
+         "name": "Verde",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_mutable/variants/parts/particle12.png"
+        },
+        {
+         "tag": "Particle13",
+         "name": "Oliva",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_mutable/variants/parts/particle13.png"
+        }
+       ]
+      },
+      {
+       "channel": "Pattern",
+       "type": "Color de accesorio",
+       "options": [
+        {
+         "tag": "Mat14",
+         "name": "Blanco",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_mutable/variants/pattern/mat14.png"
+        },
+        {
+         "tag": "Mat15",
+         "name": "Carbón",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_mutable/variants/pattern/mat15.png"
+        },
+        {
+         "tag": "Mat16",
+         "name": "Marrón",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_mutable/variants/pattern/mat16.png"
+        },
+        {
+         "tag": "Mat17",
+         "name": "Marrón",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_mutable/variants/pattern/mat17.png"
+        },
+        {
+         "tag": "Mat18",
+         "name": "Naranja",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_mutable/variants/pattern/mat18.png"
+        },
+        {
+         "tag": "Mat19",
+         "name": "Rojo",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_mutable/variants/pattern/mat19.png"
+        },
+        {
+         "tag": "Mat20",
+         "name": "Magenta",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_mutable/variants/pattern/mat20.png"
+        },
+        {
+         "tag": "Mat21",
+         "name": "Púrpura",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_mutable/variants/pattern/mat21.png"
+        },
+        {
+         "tag": "Mat22",
+         "name": "Azul",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_mutable/variants/pattern/mat22.png"
+        },
+        {
+         "tag": "Mat23",
+         "name": "Azul claro",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_mutable/variants/pattern/mat23.png"
+        },
+        {
+         "tag": "Mat24",
+         "name": "Gris turquesa",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_mutable/variants/pattern/mat24.png"
+        },
+        {
+         "tag": "Mat25",
+         "name": "Verde ácido",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_mutable/variants/pattern/mat25.png"
+        },
+        {
+         "tag": "Mat26",
+         "name": "Verde",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_mutable/variants/pattern/mat26.png"
+        },
+        {
+         "tag": "Mat27",
+         "name": "Oliva",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_mutable/variants/pattern/mat27.png"
+        }
+       ]
+      }
+     ],
+     "added": "2023-08-27T00:00:00Z"
+    },
+    {
+     "id": "Character_Jumpsuit_Scrap_Mutable",
+     "name": "Delictiva",
+     "description": "Llévate el botín.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "Artistas del escapismo",
+      "text": "Pieza del conjunto Artistas del escapismo.",
+      "backendValue": "LeaveExpert"
+     },
+     "introduction": {
+      "chapter": "4",
+      "season": "4",
+      "text": "Introducido en Capítulo 4, Temporada 4.",
+      "backendValue": 26
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_scrap_mutable/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_scrap_mutable/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_scrap_mutable/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_jumpsuit_scrap_mutable/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_jumpsuit_scrap_mutable/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_jumpsuit_scrap_mutable/wide.png"
+      },
+      "bean": {
+       "small": "https://fortnite-api.com/images/cosmetics/beans/bean_jumpsuit_scrap/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/beans/bean_jumpsuit_scrap/large.png"
+      }
+     },
+     "variants": [
+      {
+       "channel": "RichColor",
+       "type": "Apariencia",
+       "options": [
+        {
+         "tag": "000",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_scrap_mutable/variants/richcolor/000.png"
+        },
+        {
+         "tag": "001",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_scrap_mutable/variants/richcolor/001.png"
+        },
+        {
+         "tag": "002",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_scrap_mutable/variants/richcolor/002.png"
+        },
+        {
+         "tag": "003",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_scrap_mutable/variants/richcolor/003.png"
+        },
+        {
+         "tag": "004",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_scrap_mutable/variants/richcolor/004.png"
+        }
+       ]
+      },
+      {
+       "channel": "Corruption",
+       "type": "Accesorio",
+       "options": [
+        {
+         "tag": "Mat0",
+         "name": "Sin accesorio",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_scrap_mutable/variants/corruption/mat0.png"
+        },
+        {
+         "tag": "Mat1",
+         "name": "Gorra",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_scrap_mutable/variants/corruption/mat1.png"
+        },
+        {
+         "tag": "Mat2",
+         "name": "Capucha de conejito",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_scrap_mutable/variants/corruption/mat2.png"
+        },
+        {
+         "tag": "Mat3",
+         "name": "orejas de oso",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_scrap_mutable/variants/corruption/mat3.png"
+        },
+        {
+         "tag": "Mat4",
+         "name": "orejas de llama",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_scrap_mutable/variants/corruption/mat4.png"
+        },
+        {
+         "tag": "Mat5",
+         "name": "Conejo",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_scrap_mutable/variants/corruption/mat5.png"
+        }
+       ]
+      },
+      {
+       "channel": "Mesh",
+       "type": "Color del accesorio para la cabeza",
+       "options": [
+        {
+         "tag": "Mat0",
+         "name": "Blanco",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_scrap_mutable/variants/mesh/mat0.png"
+        },
+        {
+         "tag": "Mat1",
+         "name": "Carbón",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_scrap_mutable/variants/mesh/mat1.png"
+        },
+        {
+         "tag": "Mat2",
+         "name": "Marrón",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_scrap_mutable/variants/mesh/mat2.png"
+        },
+        {
+         "tag": "Mat3",
+         "name": "Marrón",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_scrap_mutable/variants/mesh/mat3.png"
+        },
+        {
+         "tag": "Mat4",
+         "name": "Naranja",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_scrap_mutable/variants/mesh/mat4.png"
+        },
+        {
+         "tag": "Mat5",
+         "name": "Rojo",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_scrap_mutable/variants/mesh/mat5.png"
+        },
+        {
+         "tag": "Mat6",
+         "name": "Magenta",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_scrap_mutable/variants/mesh/mat6.png"
+        },
+        {
+         "tag": "Mat7",
+         "name": "Púrpura",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_scrap_mutable/variants/mesh/mat7.png"
+        },
+        {
+         "tag": "Mat8",
+         "name": "Azul",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_scrap_mutable/variants/mesh/mat8.png"
+        },
+        {
+         "tag": "Mat9",
+         "name": "Azul claro",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_scrap_mutable/variants/mesh/mat9.png"
+        },
+        {
+         "tag": "Mat10",
+         "name": "Gris turquesa",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_scrap_mutable/variants/mesh/mat10.png"
+        },
+        {
+         "tag": "Mat11",
+         "name": "Verde ácido",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_scrap_mutable/variants/mesh/mat11.png"
+        },
+        {
+         "tag": "Mat12",
+         "name": "Verde",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_scrap_mutable/variants/mesh/mat12.png"
+        },
+        {
+         "tag": "Mat13",
+         "name": "Oliva",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_scrap_mutable/variants/mesh/mat13.png"
+        }
+       ]
+      },
+      {
+       "channel": "Parts",
+       "type": "Color de uniforme",
+       "options": [
+        {
+         "tag": "Particle0",
+         "name": "Blanco",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_scrap_mutable/variants/parts/particle0.png"
+        },
+        {
+         "tag": "Particle1",
+         "name": "Carbón",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_scrap_mutable/variants/parts/particle1.png"
+        },
+        {
+         "tag": "Particle2",
+         "name": "Marrón",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_scrap_mutable/variants/parts/particle2.png"
+        },
+        {
+         "tag": "Particle3",
+         "name": "Marrón",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_scrap_mutable/variants/parts/particle3.png"
+        },
+        {
+         "tag": "Particle4",
+         "name": "Naranja",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_scrap_mutable/variants/parts/particle4.png"
+        },
+        {
+         "tag": "Particle5",
+         "name": "Rojo",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_scrap_mutable/variants/parts/particle5.png"
+        },
+        {
+         "tag": "Particle6",
+         "name": "Magenta",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_scrap_mutable/variants/parts/particle6.png"
+        },
+        {
+         "tag": "Particle7",
+         "name": "Púrpura",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_scrap_mutable/variants/parts/particle7.png"
+        },
+        {
+         "tag": "Particle8",
+         "name": "Azul",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_scrap_mutable/variants/parts/particle8.png"
+        },
+        {
+         "tag": "Particle9",
+         "name": "Azul claro",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_scrap_mutable/variants/parts/particle9.png"
+        },
+        {
+         "tag": "Particle10",
+         "name": "Gris turquesa",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_scrap_mutable/variants/parts/particle10.png"
+        },
+        {
+         "tag": "Particle11",
+         "name": "Verde ácido",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_scrap_mutable/variants/parts/particle11.png"
+        },
+        {
+         "tag": "Particle12",
+         "name": "Verde",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_scrap_mutable/variants/parts/particle12.png"
+        },
+        {
+         "tag": "Particle13",
+         "name": "Oliva",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_scrap_mutable/variants/parts/particle13.png"
+        }
+       ]
+      },
+      {
+       "channel": "Pattern",
+       "type": "Color de accesorio",
+       "options": [
+        {
+         "tag": "Mat14",
+         "name": "Blanco",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_scrap_mutable/variants/pattern/mat14.png"
+        },
+        {
+         "tag": "Mat15",
+         "name": "Carbón",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_scrap_mutable/variants/pattern/mat15.png"
+        },
+        {
+         "tag": "Mat16",
+         "name": "Marrón",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_scrap_mutable/variants/pattern/mat16.png"
+        },
+        {
+         "tag": "Mat17",
+         "name": "Marrón",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_scrap_mutable/variants/pattern/mat17.png"
+        },
+        {
+         "tag": "Mat18",
+         "name": "Naranja",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_scrap_mutable/variants/pattern/mat18.png"
+        },
+        {
+         "tag": "Mat19",
+         "name": "Rojo",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_scrap_mutable/variants/pattern/mat19.png"
+        },
+        {
+         "tag": "Mat20",
+         "name": "Magenta",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_scrap_mutable/variants/pattern/mat20.png"
+        },
+        {
+         "tag": "Mat21",
+         "name": "Púrpura",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_scrap_mutable/variants/pattern/mat21.png"
+        },
+        {
+         "tag": "Mat22",
+         "name": "Azul",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_scrap_mutable/variants/pattern/mat22.png"
+        },
+        {
+         "tag": "Mat23",
+         "name": "Azul claro",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_scrap_mutable/variants/pattern/mat23.png"
+        },
+        {
+         "tag": "Mat24",
+         "name": "Gris turquesa",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_scrap_mutable/variants/pattern/mat24.png"
+        },
+        {
+         "tag": "Mat25",
+         "name": "Verde ácido",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_scrap_mutable/variants/pattern/mat25.png"
+        },
+        {
+         "tag": "Mat26",
+         "name": "Verde",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_scrap_mutable/variants/pattern/mat26.png"
+        },
+        {
+         "tag": "Mat27",
+         "name": "Oliva",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jumpsuit_scrap_mutable/variants/pattern/mat27.png"
+        }
+       ]
+      }
+     ],
+     "added": "2023-08-27T00:00:00Z"
+    },
+    {
+     "id": "Spray_Jumpsuit_1",
+     "name": "Latidos",
+     "description": "Deja tu marca.",
+     "type": {
+      "value": "spray",
+      "displayValue": "Aerosol",
+      "backendValue": "AthenaSpray"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "Artistas del escapismo",
+      "text": "Pieza del conjunto Artistas del escapismo.",
+      "backendValue": "LeaveExpert"
+     },
+     "introduction": {
+      "chapter": "4",
+      "season": "4",
+      "text": "Introducido en Capítulo 4, Temporada 4.",
+      "backendValue": 26
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_1/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_1/icon.png",
+      "other": {
+       "decal": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_1/decal.png"
+      }
+     },
+     "added": "2023-02-14T10:24:42Z"
+    },
+    {
+     "id": "Spray_Jumpsuit_9",
+     "name": "Romperritmos",
+     "description": "Deja tu marca.",
+     "type": {
+      "value": "spray",
+      "displayValue": "Aerosol",
+      "backendValue": "AthenaSpray"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "Artistas del escapismo",
+      "text": "Pieza del conjunto Artistas del escapismo.",
+      "backendValue": "LeaveExpert"
+     },
+     "introduction": {
+      "chapter": "4",
+      "season": "4",
+      "text": "Introducido en Capítulo 4, Temporada 4.",
+      "backendValue": 26
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_9/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_9/icon.png",
+      "other": {
+       "decal": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_9/decal.png"
+      }
+     },
+     "added": "2023-02-14T10:24:42Z"
+    },
+    {
+     "id": "Spray_Jumpsuit_17",
+     "name": "Edición especial",
+     "description": "Deja tu marca.",
+     "type": {
+      "value": "spray",
+      "displayValue": "Aerosol",
+      "backendValue": "AthenaSpray"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "Artistas del escapismo",
+      "text": "Pieza del conjunto Artistas del escapismo.",
+      "backendValue": "LeaveExpert"
+     },
+     "introduction": {
+      "chapter": "4",
+      "season": "4",
+      "text": "Introducido en Capítulo 4, Temporada 4.",
+      "backendValue": 26
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_17/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_17/icon.png",
+      "other": {
+       "decal": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_17/decal.png"
+      }
+     },
+     "added": "2023-02-14T10:24:42Z"
+    },
+    {
+     "id": "Spray_Jumpsuit_4",
+     "name": "Hámster llamativo",
+     "description": "Deja tu marca.",
+     "type": {
+      "value": "spray",
+      "displayValue": "Aerosol",
+      "backendValue": "AthenaSpray"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "Artistas del escapismo",
+      "text": "Pieza del conjunto Artistas del escapismo.",
+      "backendValue": "LeaveExpert"
+     },
+     "introduction": {
+      "chapter": "4",
+      "season": "4",
+      "text": "Introducido en Capítulo 4, Temporada 4.",
+      "backendValue": 26
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_4/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_4/icon.png",
+      "other": {
+       "decal": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_4/decal.png"
+      }
+     },
+     "added": "2023-02-14T10:24:42Z"
+    },
+    {
+     "id": "Spray_Jumpsuit_16",
+     "name": "Oso tranquiloso",
+     "description": "Deja tu marca.",
+     "type": {
+      "value": "spray",
+      "displayValue": "Aerosol",
+      "backendValue": "AthenaSpray"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "Artistas del escapismo",
+      "text": "Pieza del conjunto Artistas del escapismo.",
+      "backendValue": "LeaveExpert"
+     },
+     "introduction": {
+      "chapter": "4",
+      "season": "4",
+      "text": "Introducido en Capítulo 4, Temporada 4.",
+      "backendValue": 26
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_16/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_16/icon.png",
+      "other": {
+       "decal": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_16/decal.png"
+      }
+     },
+     "added": "2023-02-14T10:24:42Z"
+    },
+    {
+     "id": "Spray_Jumpsuit_20",
+     "name": "Se acabó",
+     "description": "Deja tu marca.",
+     "type": {
+      "value": "spray",
+      "displayValue": "Aerosol",
+      "backendValue": "AthenaSpray"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "Artistas del escapismo",
+      "text": "Pieza del conjunto Artistas del escapismo.",
+      "backendValue": "LeaveExpert"
+     },
+     "introduction": {
+      "chapter": "4",
+      "season": "4",
+      "text": "Introducido en Capítulo 4, Temporada 4.",
+      "backendValue": 26
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_20/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_20/icon.png",
+      "other": {
+       "decal": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_20/decal.png"
+      }
+     },
+     "added": "2023-02-14T10:24:42Z"
+    },
+    {
+     "id": "Spray_Jumpsuit_38",
+     "name": "Break Point ultra",
+     "description": "Deja tu marca.",
+     "type": {
+      "value": "spray",
+      "displayValue": "Aerosol",
+      "backendValue": "AthenaSpray"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "Artistas del escapismo",
+      "text": "Pieza del conjunto Artistas del escapismo.",
+      "backendValue": "LeaveExpert"
+     },
+     "introduction": {
+      "chapter": "4",
+      "season": "4",
+      "text": "Introducido en Capítulo 4, Temporada 4.",
+      "backendValue": 26
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_38/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_38/icon.png",
+      "other": {
+       "decal": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_38/decal.png"
+      }
+     },
+     "added": "2023-02-14T10:24:42Z"
+    },
+    {
+     "id": "Spray_Jumpsuit_18",
+     "name": "Rareza urbana",
+     "description": "Deja tu marca.",
+     "type": {
+      "value": "spray",
+      "displayValue": "Aerosol",
+      "backendValue": "AthenaSpray"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "Artistas del escapismo",
+      "text": "Pieza del conjunto Artistas del escapismo.",
+      "backendValue": "LeaveExpert"
+     },
+     "introduction": {
+      "chapter": "4",
+      "season": "4",
+      "text": "Introducido en Capítulo 4, Temporada 4.",
+      "backendValue": 26
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_18/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_18/icon.png",
+      "other": {
+       "decal": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_18/decal.png"
+      }
+     },
+     "added": "2023-02-14T10:24:42Z"
+    },
+    {
+     "id": "Spray_Jumpsuit_21",
+     "name": "Con amor",
+     "description": "Deja tu marca.",
+     "type": {
+      "value": "spray",
+      "displayValue": "Aerosol",
+      "backendValue": "AthenaSpray"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "Artistas del escapismo",
+      "text": "Pieza del conjunto Artistas del escapismo.",
+      "backendValue": "LeaveExpert"
+     },
+     "introduction": {
+      "chapter": "4",
+      "season": "4",
+      "text": "Introducido en Capítulo 4, Temporada 4.",
+      "backendValue": 26
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_21/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_21/icon.png",
+      "other": {
+       "decal": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_21/decal.png"
+      }
+     },
+     "added": "2023-02-14T10:24:42Z"
+    },
+    {
+     "id": "Spray_Jumpsuit_3",
+     "name": "Break Point estilo libre",
+     "description": "Deja tu marca.",
+     "type": {
+      "value": "spray",
+      "displayValue": "Aerosol",
+      "backendValue": "AthenaSpray"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "Artistas del escapismo",
+      "text": "Pieza del conjunto Artistas del escapismo.",
+      "backendValue": "LeaveExpert"
+     },
+     "introduction": {
+      "chapter": "4",
+      "season": "4",
+      "text": "Introducido en Capítulo 4, Temporada 4.",
+      "backendValue": 26
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_3/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_3/icon.png",
+      "other": {
+       "decal": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_3/decal.png"
+      }
+     },
+     "added": "2023-02-14T10:24:42Z"
+    },
+    {
+     "id": "Spray_Jumpsuit_19",
+     "name": "Velocidad máxima",
+     "description": "Deja tu marca.",
+     "type": {
+      "value": "spray",
+      "displayValue": "Aerosol",
+      "backendValue": "AthenaSpray"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "Artistas del escapismo",
+      "text": "Pieza del conjunto Artistas del escapismo.",
+      "backendValue": "LeaveExpert"
+     },
+     "introduction": {
+      "chapter": "4",
+      "season": "4",
+      "text": "Introducido en Capítulo 4, Temporada 4.",
+      "backendValue": 26
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_19/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_19/icon.png",
+      "other": {
+       "decal": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_19/decal.png"
+      }
+     },
+     "added": "2023-02-14T10:24:42Z"
+    },
+    {
+     "id": "Spray_Jumpsuit_13",
+     "name": "Hámster a toda marcha",
+     "description": "Deja tu marca.",
+     "type": {
+      "value": "spray",
+      "displayValue": "Aerosol",
+      "backendValue": "AthenaSpray"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "Artistas del escapismo",
+      "text": "Pieza del conjunto Artistas del escapismo.",
+      "backendValue": "LeaveExpert"
+     },
+     "introduction": {
+      "chapter": "4",
+      "season": "4",
+      "text": "Introducido en Capítulo 4, Temporada 4.",
+      "backendValue": 26
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_13/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_13/icon.png",
+      "other": {
+       "decal": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_13/decal.png"
+      }
+     },
+     "added": "2023-02-14T10:24:42Z"
+    },
+    {
+     "id": "Spray_Jumpsuit_32",
+     "name": "Nueva revolución",
+     "description": "Deja tu marca.",
+     "type": {
+      "value": "spray",
+      "displayValue": "Aerosol",
+      "backendValue": "AthenaSpray"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "Artistas del escapismo",
+      "text": "Pieza del conjunto Artistas del escapismo.",
+      "backendValue": "LeaveExpert"
+     },
+     "introduction": {
+      "chapter": "4",
+      "season": "4",
+      "text": "Introducido en Capítulo 4, Temporada 4.",
+      "backendValue": 26
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_32/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_32/icon.png",
+      "other": {
+       "decal": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_32/decal.png"
+      }
+     },
+     "added": "2023-02-14T10:24:42Z"
+    },
+    {
+     "id": "Spray_JumpsuitMasks_8",
+     "name": "Cara de Bananín",
+     "description": "Deja tu marca.",
+     "type": {
+      "value": "spray",
+      "displayValue": "Aerosol",
+      "backendValue": "AthenaSpray"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "Artistas del escapismo",
+      "text": "Pieza del conjunto Artistas del escapismo.",
+      "backendValue": "LeaveExpert"
+     },
+     "introduction": {
+      "chapter": "4",
+      "season": "4",
+      "text": "Introducido en Capítulo 4, Temporada 4.",
+      "backendValue": 26
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuitmasks_8/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuitmasks_8/icon.png",
+      "other": {
+       "decal": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuitmasks_8/decal.png"
+      }
+     },
+     "added": "2023-02-14T10:24:42Z"
+    },
+    {
+     "id": "Spray_JumpsuitMasks_4",
+     "name": "Cara de Palito",
+     "description": "Deja tu marca.",
+     "type": {
+      "value": "spray",
+      "displayValue": "Aerosol",
+      "backendValue": "AthenaSpray"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "Artistas del escapismo",
+      "text": "Pieza del conjunto Artistas del escapismo.",
+      "backendValue": "LeaveExpert"
+     },
+     "introduction": {
+      "chapter": "4",
+      "season": "4",
+      "text": "Introducido en Capítulo 4, Temporada 4.",
+      "backendValue": 26
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuitmasks_4/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuitmasks_4/icon.png",
+      "other": {
+       "decal": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuitmasks_4/decal.png"
+      }
+     },
+     "added": "2023-02-14T10:24:42Z"
+    },
+    {
+     "id": "Spray_JumpsuitMasks_6",
+     "name": "Cara de Cascadisparos",
+     "description": "Deja tu marca.",
+     "type": {
+      "value": "spray",
+      "displayValue": "Aerosol",
+      "backendValue": "AthenaSpray"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "Artistas del escapismo",
+      "text": "Pieza del conjunto Artistas del escapismo.",
+      "backendValue": "LeaveExpert"
+     },
+     "introduction": {
+      "chapter": "4",
+      "season": "4",
+      "text": "Introducido en Capítulo 4, Temporada 4.",
+      "backendValue": 26
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuitmasks_6/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuitmasks_6/icon.png",
+      "other": {
+       "decal": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuitmasks_6/decal.png"
+      }
+     },
+     "added": "2023-02-14T10:24:42Z"
+    },
+    {
+     "id": "Spray_Jumpsuit_7",
+     "name": "Calavera de oso",
+     "description": "Deja tu marca.",
+     "type": {
+      "value": "spray",
+      "displayValue": "Aerosol",
+      "backendValue": "AthenaSpray"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "Artistas del escapismo",
+      "text": "Pieza del conjunto Artistas del escapismo.",
+      "backendValue": "LeaveExpert"
+     },
+     "introduction": {
+      "chapter": "4",
+      "season": "4",
+      "text": "Introducido en Capítulo 4, Temporada 4.",
+      "backendValue": 26
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_7/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_7/icon.png",
+      "other": {
+       "decal": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_7/decal.png"
+      }
+     },
+     "added": "2023-02-14T10:24:42Z"
+    },
+    {
+     "id": "Spray_Jumpsuit_2",
+     "name": "Fortnite futurístico",
+     "description": "Deja tu marca.",
+     "type": {
+      "value": "spray",
+      "displayValue": "Aerosol",
+      "backendValue": "AthenaSpray"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "Artistas del escapismo",
+      "text": "Pieza del conjunto Artistas del escapismo.",
+      "backendValue": "LeaveExpert"
+     },
+     "introduction": {
+      "chapter": "4",
+      "season": "4",
+      "text": "Introducido en Capítulo 4, Temporada 4.",
+      "backendValue": 26
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_2/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_2/icon.png",
+      "other": {
+       "decal": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_2/decal.png"
+      }
+     },
+     "added": "2023-02-14T10:24:42Z"
+    },
+    {
+     "id": "Spray_Jumpsuit_8",
+     "name": "Reputación real",
+     "description": "Deja tu marca.",
+     "type": {
+      "value": "spray",
+      "displayValue": "Aerosol",
+      "backendValue": "AthenaSpray"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "Artistas del escapismo",
+      "text": "Pieza del conjunto Artistas del escapismo.",
+      "backendValue": "LeaveExpert"
+     },
+     "introduction": {
+      "chapter": "4",
+      "season": "4",
+      "text": "Introducido en Capítulo 4, Temporada 4.",
+      "backendValue": 26
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_8/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_8/icon.png",
+      "other": {
+       "decal": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_8/decal.png"
+      }
+     },
+     "added": "2023-02-14T10:24:42Z"
+    },
+    {
+     "id": "Spray_Jumpsuit_6",
+     "name": "Pato sofisticado",
+     "description": "Deja tu marca.",
+     "type": {
+      "value": "spray",
+      "displayValue": "Aerosol",
+      "backendValue": "AthenaSpray"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "Artistas del escapismo",
+      "text": "Pieza del conjunto Artistas del escapismo.",
+      "backendValue": "LeaveExpert"
+     },
+     "introduction": {
+      "chapter": "4",
+      "season": "4",
+      "text": "Introducido en Capítulo 4, Temporada 4.",
+      "backendValue": 26
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_6/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_6/icon.png",
+      "other": {
+       "decal": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_6/decal.png"
+      }
+     },
+     "added": "2023-02-14T10:24:42Z"
+    },
+    {
+     "id": "Spray_Jumpsuit_31",
+     "name": "Fortuna",
+     "description": "Deja tu marca.",
+     "type": {
+      "value": "spray",
+      "displayValue": "Aerosol",
+      "backendValue": "AthenaSpray"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "Artistas del escapismo",
+      "text": "Pieza del conjunto Artistas del escapismo.",
+      "backendValue": "LeaveExpert"
+     },
+     "introduction": {
+      "chapter": "4",
+      "season": "4",
+      "text": "Introducido en Capítulo 4, Temporada 4.",
+      "backendValue": 26
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_31/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_31/icon.png",
+      "other": {
+       "decal": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_31/decal.png"
+      }
+     },
+     "added": "2023-02-14T10:24:42Z"
+    },
+    {
+     "id": "Spray_Jumpsuit_29",
+     "name": "Maestría atemporal",
+     "description": "Deja tu marca.",
+     "type": {
+      "value": "spray",
+      "displayValue": "Aerosol",
+      "backendValue": "AthenaSpray"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "Artistas del escapismo",
+      "text": "Pieza del conjunto Artistas del escapismo.",
+      "backendValue": "LeaveExpert"
+     },
+     "introduction": {
+      "chapter": "4",
+      "season": "4",
+      "text": "Introducido en Capítulo 4, Temporada 4.",
+      "backendValue": 26
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_29/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_29/icon.png",
+      "other": {
+       "decal": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_29/decal.png"
+      }
+     },
+     "added": "2023-02-14T10:24:42Z"
+    },
+    {
+     "id": "Spray_Jumpsuit_27",
+     "name": "Taxi hámster",
+     "description": "Deja tu marca.",
+     "type": {
+      "value": "spray",
+      "displayValue": "Aerosol",
+      "backendValue": "AthenaSpray"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "Artistas del escapismo",
+      "text": "Pieza del conjunto Artistas del escapismo.",
+      "backendValue": "LeaveExpert"
+     },
+     "introduction": {
+      "chapter": "4",
+      "season": "4",
+      "text": "Introducido en Capítulo 4, Temporada 4.",
+      "backendValue": 26
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_27/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_27/icon.png",
+      "other": {
+       "decal": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_27/decal.png"
+      }
+     },
+     "added": "2023-02-14T10:24:42Z"
+    },
+    {
+     "id": "Spray_JumpsuitMasks_1",
+     "name": "Cara de Cabeza de tomate",
+     "description": "Deja tu marca.",
+     "type": {
+      "value": "spray",
+      "displayValue": "Aerosol",
+      "backendValue": "AthenaSpray"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "Artistas del escapismo",
+      "text": "Pieza del conjunto Artistas del escapismo.",
+      "backendValue": "LeaveExpert"
+     },
+     "introduction": {
+      "chapter": "4",
+      "season": "4",
+      "text": "Introducido en Capítulo 4, Temporada 4.",
+      "backendValue": 26
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuitmasks_1/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuitmasks_1/icon.png",
+      "other": {
+       "decal": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuitmasks_1/decal.png"
+      }
+     },
+     "added": "2023-02-14T10:24:42Z"
+    },
+    {
+     "id": "Spray_JumpsuitMasks_9",
+     "name": "Cara de Cariñosa",
+     "description": "Deja tu marca.",
+     "type": {
+      "value": "spray",
+      "displayValue": "Aerosol",
+      "backendValue": "AthenaSpray"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "Artistas del escapismo",
+      "text": "Pieza del conjunto Artistas del escapismo.",
+      "backendValue": "LeaveExpert"
+     },
+     "introduction": {
+      "chapter": "4",
+      "season": "4",
+      "text": "Introducido en Capítulo 4, Temporada 4.",
+      "backendValue": 26
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuitmasks_9/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuitmasks_9/icon.png",
+      "other": {
+       "decal": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuitmasks_9/decal.png"
+      }
+     },
+     "added": "2023-02-14T10:24:42Z"
+    },
+    {
+     "id": "Spray_JumpsuitMasks_3",
+     "name": "Cara de Calavera",
+     "description": "Deja tu marca.",
+     "type": {
+      "value": "spray",
+      "displayValue": "Aerosol",
+      "backendValue": "AthenaSpray"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "Artistas del escapismo",
+      "text": "Pieza del conjunto Artistas del escapismo.",
+      "backendValue": "LeaveExpert"
+     },
+     "introduction": {
+      "chapter": "4",
+      "season": "4",
+      "text": "Introducido en Capítulo 4, Temporada 4.",
+      "backendValue": 26
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuitmasks_3/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuitmasks_3/icon.png",
+      "other": {
+       "decal": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuitmasks_3/decal.png"
+      }
+     },
+     "added": "2023-02-14T10:24:42Z"
+    },
+    {
+     "id": "Spray_Jumpsuit_22",
+     "name": "Mueca macabra",
+     "description": "Deja tu marca.",
+     "type": {
+      "value": "spray",
+      "displayValue": "Aerosol",
+      "backendValue": "AthenaSpray"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "Artistas del escapismo",
+      "text": "Pieza del conjunto Artistas del escapismo.",
+      "backendValue": "LeaveExpert"
+     },
+     "introduction": {
+      "chapter": "4",
+      "season": "4",
+      "text": "Introducido en Capítulo 4, Temporada 4.",
+      "backendValue": 26
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_22/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_22/icon.png",
+      "other": {
+       "decal": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_22/decal.png"
+      }
+     },
+     "added": "2023-02-14T10:24:42Z"
+    },
+    {
+     "id": "Spray_Jumpsuit_14",
+     "name": "Liebre luchadora",
+     "description": "Deja tu marca.",
+     "type": {
+      "value": "spray",
+      "displayValue": "Aerosol",
+      "backendValue": "AthenaSpray"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "Artistas del escapismo",
+      "text": "Pieza del conjunto Artistas del escapismo.",
+      "backendValue": "LeaveExpert"
+     },
+     "introduction": {
+      "chapter": "4",
+      "season": "4",
+      "text": "Introducido en Capítulo 4, Temporada 4.",
+      "backendValue": 26
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_14/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_14/icon.png",
+      "other": {
+       "decal": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_14/decal.png"
+      }
+     },
+     "added": "2023-02-14T10:24:42Z"
+    },
+    {
+     "id": "Spray_Jumpsuit_11",
+     "name": "Maestría funesta",
+     "description": "Deja tu marca.",
+     "type": {
+      "value": "spray",
+      "displayValue": "Aerosol",
+      "backendValue": "AthenaSpray"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "Artistas del escapismo",
+      "text": "Pieza del conjunto Artistas del escapismo.",
+      "backendValue": "LeaveExpert"
+     },
+     "introduction": {
+      "chapter": "4",
+      "season": "4",
+      "text": "Introducido en Capítulo 4, Temporada 4.",
+      "backendValue": 26
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_11/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_11/icon.png",
+      "other": {
+       "decal": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_11/decal.png"
+      }
+     },
+     "added": "2023-02-14T10:24:42Z"
+    },
+    {
+     "id": "Spray_Jumpsuit_39",
+     "name": "Venganza neón",
+     "description": "Deja tu marca.",
+     "type": {
+      "value": "spray",
+      "displayValue": "Aerosol",
+      "backendValue": "AthenaSpray"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "Artistas del escapismo",
+      "text": "Pieza del conjunto Artistas del escapismo.",
+      "backendValue": "LeaveExpert"
+     },
+     "introduction": {
+      "chapter": "4",
+      "season": "4",
+      "text": "Introducido en Capítulo 4, Temporada 4.",
+      "backendValue": 26
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_39/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_39/icon.png",
+      "other": {
+       "decal": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_39/decal.png"
+      }
+     },
+     "added": "2023-02-14T10:24:42Z"
+    },
+    {
+     "id": "Spray_Jumpsuit_28",
+     "name": "Ataque taxi",
+     "description": "Deja tu marca.",
+     "type": {
+      "value": "spray",
+      "displayValue": "Aerosol",
+      "backendValue": "AthenaSpray"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "Artistas del escapismo",
+      "text": "Pieza del conjunto Artistas del escapismo.",
+      "backendValue": "LeaveExpert"
+     },
+     "introduction": {
+      "chapter": "4",
+      "season": "4",
+      "text": "Introducido en Capítulo 4, Temporada 4.",
+      "backendValue": 26
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_28/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_28/icon.png",
+      "other": {
+       "decal": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_28/decal.png"
+      }
+     },
+     "added": "2023-02-14T10:24:42Z"
+    },
+    {
+     "id": "Spray_Jumpsuit_5",
+     "name": "Maestría futurista",
+     "description": "Deja tu marca.",
+     "type": {
+      "value": "spray",
+      "displayValue": "Aerosol",
+      "backendValue": "AthenaSpray"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "Artistas del escapismo",
+      "text": "Pieza del conjunto Artistas del escapismo.",
+      "backendValue": "LeaveExpert"
+     },
+     "introduction": {
+      "chapter": "4",
+      "season": "4",
+      "text": "Introducido en Capítulo 4, Temporada 4.",
+      "backendValue": 26
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_5/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_5/icon.png",
+      "other": {
+       "decal": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuit_5/decal.png"
+      }
+     },
+     "added": "2023-02-14T10:24:42Z"
+    },
+    {
+     "id": "Spray_JumpsuitMasks_2",
+     "name": "Cara de Durrr Burger",
+     "description": "Deja tu marca.",
+     "type": {
+      "value": "spray",
+      "displayValue": "Aerosol",
+      "backendValue": "AthenaSpray"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "Artistas del escapismo",
+      "text": "Pieza del conjunto Artistas del escapismo.",
+      "backendValue": "LeaveExpert"
+     },
+     "introduction": {
+      "chapter": "4",
+      "season": "4",
+      "text": "Introducido en Capítulo 4, Temporada 4.",
+      "backendValue": 26
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuitmasks_2/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuitmasks_2/icon.png",
+      "other": {
+       "decal": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuitmasks_2/decal.png"
+      }
+     },
+     "added": "2023-02-14T10:24:42Z"
+    },
+    {
+     "id": "Spray_JumpsuitMasks_7",
+     "name": "Cara de Miaúsculos",
+     "description": "Deja tu marca.",
+     "type": {
+      "value": "spray",
+      "displayValue": "Aerosol",
+      "backendValue": "AthenaSpray"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "Artistas del escapismo",
+      "text": "Pieza del conjunto Artistas del escapismo.",
+      "backendValue": "LeaveExpert"
+     },
+     "introduction": {
+      "chapter": "4",
+      "season": "4",
+      "text": "Introducido en Capítulo 4, Temporada 4.",
+      "backendValue": 26
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuitmasks_7/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuitmasks_7/icon.png",
+      "other": {
+       "decal": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuitmasks_7/decal.png"
+      }
+     },
+     "added": "2023-02-14T10:24:42Z"
+    },
+    {
+     "id": "Spray_JumpsuitMasks_5",
+     "name": "Cara de Deriva",
+     "description": "Deja tu marca.",
+     "type": {
+      "value": "spray",
+      "displayValue": "Aerosol",
+      "backendValue": "AthenaSpray"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "Artistas del escapismo",
+      "text": "Pieza del conjunto Artistas del escapismo.",
+      "backendValue": "LeaveExpert"
+     },
+     "introduction": {
+      "chapter": "4",
+      "season": "4",
+      "text": "Introducido en Capítulo 4, Temporada 4.",
+      "backendValue": 26
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuitmasks_5/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuitmasks_5/icon.png",
+      "other": {
+       "decal": "https://fortnite-api.com/images/cosmetics/br/spray_jumpsuitmasks_5/decal.png"
+      }
+     },
+     "added": "2023-02-14T10:24:42Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 1500,
+   "finalPrice": 1500,
+   "devName": "[VIRTUAL]1 x Fernet for 1500 MtxCurrency",
+   "offerId": "v2:/d10eb95a62ea64acf7a25e6b759c0be41db252e72624d746176350d358148c2b",
+   "inDate": "2026-11-12T00:00:00Z",
+   "outDate": "2026-11-15T23:59:59.999Z",
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -1,
+   "layoutId": "KernelHearts.99",
+   "layout": {
+    "id": "KernelHearts",
+    "name": "Kernel Hearts",
+    "index": 0,
+    "rank": 196,
+    "showIneligibleOffers": "always",
+    "useWidePreview": true,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "ff5d5dff",
+    "color2": "ffd1f7ff",
+    "color3": "f8afcfff",
+    "textBackgroundColor": "ff5d5dff"
+   },
+   "tileBackgroundMaterial": "ShopTile_Pirates_Brush",
+   "tileSize": "Size_3_x_1",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S41/DAv2_Character_OutletVerve",
+   "newDisplayAsset": {
+    "id": "DAv2_Character_OutletVerve",
+    "cosmeticId": "Character_OutletVerve",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__ee70aec3cbc9713d_21f7f1438e7d7c86.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/ee70aec3cbc9713d/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__ee70aec3cbc9713d_ce2fce24ae268000.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/ee70aec3cbc9713d/renderimage_1.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Character_OutletVerve",
+     "name": "Fernet",
+     "description": "Capitana de la unidad M.A.H.O.U.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "gaminglegends",
+      "displayValue": "Leyendas de videojuegos",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "Leyendas de videojuegos",
+      "colors": [
+       "8078ffff",
+       "5328d6ff",
+       "3e1398ff",
+       "28085fff",
+       "0d0027ff"
+      ],
+      "backendValue": "PlatformSeries"
+     },
+     "set": {
+      "value": "Kernel Hearts",
+      "text": "Pieza del conjunto Kernel Hearts.",
+      "backendValue": "WarmDragon"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "3",
+      "text": "Introducido en Capítulo 7, Temporada 3.",
+      "backendValue": 41
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_outletverve/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_outletverve/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_outletverve/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Parts",
+       "type": "estilo",
+       "options": [
+        {
+         "tag": "Mat1",
+         "name": "Fernet",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_outletverve/variants/parts/mat1.png"
+        },
+        {
+         "tag": "Mat2",
+         "name": "Fernet animada",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_outletverve/variants/parts/mat2.png"
+        }
+       ]
+      }
+     ],
+     "added": "2026-08-17T16:00:57Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 1200,
+   "finalPrice": 1200,
+   "devName": "[VIRTUAL]1 x Anwar, 1 x Moonlit Blades for -1 MtxCurrency",
+   "offerId": "v2:/458171408ca766ea78c11c3df0e1b72e4dafad291c9f5ca94d67aac0a6d86f83",
+   "inDate": "2026-11-12T00:00:00Z",
+   "outDate": "2026-11-12T23:59:59.999Z",
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -4,
+   "layoutId": "BR111226.97",
+   "layout": {
+    "id": "BR111226",
+    "name": "Estilo de élite",
+    "index": 21,
+    "rank": 184,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "8ad986ff",
+    "color3": "05544cff",
+    "textBackgroundColor": "05544cff"
+   },
+   "tileSize": "Size_1_x_1",
+   "displayAssetPath": "/Game/Catalog/DisplayAssets/DA_Featured_Character_PaperBlaze",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S29/DAv2_Character_PaperBlaze",
+   "newDisplayAsset": {
+    "id": "DAv2_Character_PaperBlaze",
+    "cosmeticId": "Character_PaperBlaze",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__9c6fb689d1bd8492_917db79709602ce2.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/9c6fb689d1bd8492/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__9c6fb689d1bd8492_8eb1c0fe9c5f86cd.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/9c6fb689d1bd8492/renderimage_1.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__9c6fb689d1bd8492_e80adfd3e47190ea.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/9c6fb689d1bd8492/renderimage_2.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Character_PaperBlaze",
+     "name": "Anwar",
+     "description": "Arde con conocimientos ancestrales.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Luna radiante",
+      "text": "Pieza del conjunto Luna radiante.",
+      "backendValue": "GlowingCheese"
+     },
+     "introduction": {
+      "chapter": "5",
+      "season": "2",
+      "text": "Introducido en Capítulo 5, Temporada 2.",
+      "backendValue": 29
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_paperblaze/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_paperblaze/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_paperblaze/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_paperblaze/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_paperblaze/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_paperblaze/wide.png"
+      },
+      "bean": {
+       "small": "https://fortnite-api.com/images/cosmetics/beans/bean_paperblaze/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/beans/bean_paperblaze/large.png"
+      }
+     },
+     "variants": [
+      {
+       "channel": "Parts",
+       "type": "Máscara",
+       "options": [
+        {
+         "tag": "Stage1",
+         "name": "No",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_paperblaze/variants/parts/stage1.png"
+        },
+        {
+         "tag": "Stage2",
+         "name": "Sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_paperblaze/variants/parts/stage2.png"
+        }
+       ]
+      }
+     ],
+     "showcaseVideo": "T-80JpdpM34",
+     "added": "2024-03-08T13:32:49Z"
+    },
+    {
+     "id": "Backpack_PaperBlaze",
+     "name": "Hojas lunares",
+     "description": "Forjadas con luz de luna.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Luna radiante",
+      "text": "Pieza del conjunto Luna radiante.",
+      "backendValue": "GlowingCheese"
+     },
+     "introduction": {
+      "chapter": "5",
+      "season": "2",
+      "text": "Introducido en Capítulo 5, Temporada 2.",
+      "backendValue": 29
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_paperblaze/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_paperblaze/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_paperblaze/featured.png"
+     },
+     "added": "2024-03-08T13:32:49Z"
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,478 @@
+{
+ "date": "2026-11-12T00:00:00Z",
+ "entries": [
+  {
+   "regularPrice": 5600,
+   "finalPrice": 3200,
+   "devName": "[VIRTUAL]1 x Darth Vader Samurai, 1 x Stormtrooper Samurai, 1 x Lil' TIE Attack, 1 x Vader's Katana, 1 x Vader's Katana, 1 x Trooper's Kamayari, 1 x Imperial Banner, 1 x Trooper Samurai, 1 x Vader Samurai for -1 MtxCurrency",
+   "offerId": "v2:/2067c212fb36b9c4d2a226e7c73c1d877102c4cfa0f7bd8c283005cd0984a77a",
+   "inDate": "2026-11-09T00:00:00Z",
+   "outDate": "2026-11-12T23:59:59.999Z",
+   "bundle": {
+    "name": "Lote Star Wars samurái",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/e9de63953eb67b32/renderimage_0.png"
+   },
+   "banner": {
+    "value": "2400 monedas V de descuento",
+    "intensity": "Low",
+    "backendValue": "AmountOff"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -1,
+   "layoutId": "SamuraiSW.99",
+   "layout": {
+    "id": "SamuraiSW",
+    "name": "Star Wars",
+    "index": 6,
+    "rank": 183,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "c01b1cff",
+    "color2": "ff4c56ff",
+    "color3": "6c0037ff",
+    "textBackgroundColor": "ff4c56ff"
+   },
+   "tileBackgroundMaterial": "ShopTile_Holographic",
+   "tileSize": "Size_2_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_SequinPieBeetTread_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S33/DAv2_Bundle_Featured_SequinPieBeetTread",
+   "newDisplayAsset": {
+    "id": "DAv2_Bundle_Featured_SequinPieBeetTread",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__e9de63953eb67b32_922bd219dc1c7982.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/e9de63953eb67b32/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__e9de63953eb67b32_94e2c5ebb36cac5a.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/e9de63953eb67b32/renderimage_1.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Character_SequinPie",
+     "name": "Darth Vader samurái",
+     "description": "Tu falta de fe le resulta molesta.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "starwars",
+      "displayValue": "Saga Star Wars",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "Saga Star Wars",
+      "image": "https://fortnite-api.com/images/cosmetics/series/columbusseries.png",
+      "colors": [
+       "ffd800ff",
+       "2555b2ff",
+       "0a1833ff",
+       "040a14ff",
+       "050500ff"
+      ],
+      "backendValue": "ColumbusSeries"
+     },
+     "set": {
+      "value": "Star Wars samurái",
+      "text": "Pieza del conjunto Star Wars samurái.",
+      "backendValue": "MindSphere"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "1",
+      "text": "Introducido en Capítulo 6, Temporada 1.",
+      "backendValue": 33
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_sequinpie/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_sequinpie/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_sequinpie/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_sequinpie/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_sequinpie/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_sequinpie/wide.png"
+      }
+     },
+     "showcaseVideo": "OW5HDpeZKuc",
+     "added": "2024-12-25T00:00:00Z"
+    },
+    {
+     "id": "Character_BeetTread",
+     "name": "Stormtrooper samurái",
+     "description": "Los mortíferos y leales soldados de Vader.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "starwars",
+      "displayValue": "Saga Star Wars",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "Saga Star Wars",
+      "image": "https://fortnite-api.com/images/cosmetics/series/columbusseries.png",
+      "colors": [
+       "ffd800ff",
+       "2555b2ff",
+       "0a1833ff",
+       "040a14ff",
+       "050500ff"
+      ],
+      "backendValue": "ColumbusSeries"
+     },
+     "set": {
+      "value": "Star Wars samurái",
+      "text": "Pieza del conjunto Star Wars samurái.",
+      "backendValue": "MindSphere"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "1",
+      "text": "Introducido en Capítulo 6, Temporada 1.",
+      "backendValue": 33
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_beettread/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_beettread/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_beettread/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_beettread/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_beettread/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_beettread/wide.png"
+      }
+     },
+     "showcaseVideo": "mG4XPKHjCv4",
+     "added": "2024-12-25T00:00:00Z"
+    },
+    {
+     "id": "EID_SequinPie",
+     "name": "Ataque de TIE chiquito",
+     "description": "Defiende el Imperio.",
+     "type": {
+      "value": "emote",
+      "displayValue": "Gesto",
+      "backendValue": "AthenaDance"
+     },
+     "rarity": {
+      "value": "starwars",
+      "displayValue": "Saga Star Wars",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "series": {
+      "value": "Saga Star Wars",
+      "image": "https://fortnite-api.com/images/cosmetics/series/columbusseries.png",
+      "colors": [
+       "ffd800ff",
+       "2555b2ff",
+       "0a1833ff",
+       "040a14ff",
+       "050500ff"
+      ],
+      "backendValue": "ColumbusSeries"
+     },
+     "set": {
+      "value": "Star Wars samurái",
+      "text": "Pieza del conjunto Star Wars samurái.",
+      "backendValue": "MindSphere"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "1",
+      "text": "Introducido en Capítulo 6, Temporada 1.",
+      "backendValue": 33
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/eid_sequinpie/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/eid_sequinpie/icon.png"
+     },
+     "showcaseVideo": "VrH5hHDVdH8",
+     "added": "2024-12-25T00:00:00Z"
+    },
+    {
+     "id": "Pickaxe_SequinPie",
+     "name": "Katana de Vader",
+     "description": "Igual de fiable que un sable de Luz.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "starwars",
+      "displayValue": "Saga Star Wars",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Saga Star Wars",
+      "image": "https://fortnite-api.com/images/cosmetics/series/columbusseries.png",
+      "colors": [
+       "ffd800ff",
+       "2555b2ff",
+       "0a1833ff",
+       "040a14ff",
+       "050500ff"
+      ],
+      "backendValue": "ColumbusSeries"
+     },
+     "set": {
+      "value": "Star Wars samurái",
+      "text": "Pieza del conjunto Star Wars samurái.",
+      "backendValue": "MindSphere"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "1",
+      "text": "Introducido en Capítulo 6, Temporada 1.",
+      "backendValue": 33
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_sequinpie/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_sequinpie/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_sequinpie/featured.png"
+     },
+     "added": "2024-12-25T00:00:00Z"
+    },
+    {
+     "id": "Backpack_SequinPie",
+     "name": "Katana de Vader",
+     "description": "Igual de fiable que un sable de Luz.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "starwars",
+      "displayValue": "Saga Star Wars",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Saga Star Wars",
+      "image": "https://fortnite-api.com/images/cosmetics/series/columbusseries.png",
+      "colors": [
+       "ffd800ff",
+       "2555b2ff",
+       "0a1833ff",
+       "040a14ff",
+       "050500ff"
+      ],
+      "backendValue": "ColumbusSeries"
+     },
+     "set": {
+      "value": "Star Wars samurái",
+      "text": "Pieza del conjunto Star Wars samurái.",
+      "backendValue": "MindSphere"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "1",
+      "text": "Introducido en Capítulo 6, Temporada 1.",
+      "backendValue": 33
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_sequinpie/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_sequinpie/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_sequinpie/featured.png"
+     },
+     "metaTags": [
+      "Cosmetics.MetaTags.SequinPie"
+     ],
+     "added": "2024-12-25T00:00:00Z"
+    },
+    {
+     "id": "Pickaxe_BeetTread",
+     "name": "Kamayari de Stormtrooper",
+     "description": "Una lanza con la hoja perfectamente afilada.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "starwars",
+      "displayValue": "Saga Star Wars",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Saga Star Wars",
+      "image": "https://fortnite-api.com/images/cosmetics/series/columbusseries.png",
+      "colors": [
+       "ffd800ff",
+       "2555b2ff",
+       "0a1833ff",
+       "040a14ff",
+       "050500ff"
+      ],
+      "backendValue": "ColumbusSeries"
+     },
+     "set": {
+      "value": "Star Wars samurái",
+      "text": "Pieza del conjunto Star Wars samurái.",
+      "backendValue": "MindSphere"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "1",
+      "text": "Introducido en Capítulo 6, Temporada 1.",
+      "backendValue": 33
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_beettread/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_beettread/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_beettread/featured.png"
+     },
+     "showcaseVideo": "-VT1HiU6F5w",
+     "added": "2024-12-25T00:00:00Z"
+    },
+    {
+     "id": "Backpack_BeetTread",
+     "name": "Estandarte Imperial",
+     "description": "Porta el símbolo del Imperio.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "starwars",
+      "displayValue": "Saga Star Wars",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Saga Star Wars",
+      "image": "https://fortnite-api.com/images/cosmetics/series/columbusseries.png",
+      "colors": [
+       "ffd800ff",
+       "2555b2ff",
+       "0a1833ff",
+       "040a14ff",
+       "050500ff"
+      ],
+      "backendValue": "ColumbusSeries"
+     },
+     "set": {
+      "value": "Star Wars samurái",
+      "text": "Pieza del conjunto Star Wars samurái.",
+      "backendValue": "MindSphere"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "1",
+      "text": "Introducido en Capítulo 6, Temporada 1.",
+      "backendValue": 33
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_beettread/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_beettread/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_beettread/featured.png"
+     },
+     "added": "2024-12-25T00:00:00Z"
+    },
+    {
+     "id": "Wrap_BeetTread",
+     "name": "Stormtrooper samurái",
+     "description": "Muestra tu estilo.",
+     "type": {
+      "value": "wrap",
+      "displayValue": "Papel",
+      "backendValue": "AthenaItemWrap"
+     },
+     "rarity": {
+      "value": "starwars",
+      "displayValue": "Saga Star Wars",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "series": {
+      "value": "Saga Star Wars",
+      "image": "https://fortnite-api.com/images/cosmetics/series/columbusseries.png",
+      "colors": [
+       "ffd800ff",
+       "2555b2ff",
+       "0a1833ff",
+       "040a14ff",
+       "050500ff"
+      ],
+      "backendValue": "ColumbusSeries"
+     },
+     "set": {
+      "value": "Star Wars samurái",
+      "text": "Pieza del conjunto Star Wars samurái.",
+      "backendValue": "MindSphere"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "1",
+      "text": "Introducido en Capítulo 6, Temporada 1.",
+      "backendValue": 33
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/wrap_beettread/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/wrap_beettread/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/wrap_beettread/featured.png"
+     },
+     "showcaseVideo": "oqG4nry7mBc",
+     "added": "2024-12-25T00:00:00Z"
+    },
+    {
+     "id": "Wrap_SequinPie",
+     "name": "Vader samurái",
+     "description": "Muestra tu estilo.",
+     "type": {
+      "value": "wrap",
+      "displayValue": "Papel",
+      "backendValue": "AthenaItemWrap"
+     },
+     "rarity": {
+      "value": "starwars",
+      "displayValue": "Saga Star Wars",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "series": {
+      "value": "Saga Star Wars",
+      "image": "https://fortnite-api.com/images/cosmetics/series/columbusseries.png",
+      "colors": [
+       "ffd800ff",
+       "2555b2ff",
+       "0a1833ff",
+       "040a14ff",
+       "050500ff"
+      ],
+      "backendValue": "ColumbusSeries"
+     },
+     "set": {
+      "value": "Star Wars samurái",
+      "text": "Pieza del conjunto Star Wars samurái.",
+      "backendValue": "MindSphere"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "1",
+      "text": "Introducido en Capítulo 6, Temporada 1.",
+      "backendValue": 33
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/wrap_sequinpie/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/wrap_sequinpie/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/wrap_sequinpie/featured.png"
+     },
+     "showcaseVideo": "-fmR4Zx80to",
+     "added": "2024-12-25T00:00:00Z"
+    }
+   ]
+  }
+ ]
+}

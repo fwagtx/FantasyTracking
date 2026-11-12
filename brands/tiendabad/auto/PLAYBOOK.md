@@ -123,7 +123,7 @@ token. The hunt ends December 5 (VGC citing Epic); the series ends then, or earl
 | Post | Mode (new_pirata.py) | Video |
 |---|---|---|
 | 3:45 PM | `sevan` | What leaves today's shop at the 6 PM reset, "con la Tienda Pirata, 0 pavos" (TPL.drop) |
-| 5:15 PM | `caros` | The 5 most expensive listings in today's shop, ties named (TPL.top) |
+| 5:15 PM | `caros` | The 5 most expensive listings **new** in today's shop, ties named (TPL.top): the big collab bundles stay for weeks, so the overall top 5 repeated day after day; a listing whose skins come in a pricier one counts once; fewer than 5 new: the overall top 5 |
 | 7:30 PM | `cuenta` | "Quedan N días" + the dato del día; Fridays and Saturdays: the Horas del Tesoro (TPL.guide) |
 
 sevan and caros are about the shop that is live until 6 PM, so they are built and posted before the reset. Each dato is

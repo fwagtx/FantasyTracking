@@ -177,6 +177,27 @@
     "CID_274_Athena_Commando_M_Feathers",
     "Character_VoyagerCuboid"
    ]
+  },
+  {
+   "date": "2026-11-12",
+   "slot": "15:45",
+   "format": "Tienda Pirata diaria (sevan)",
+   "topic": "Se va hoy (2026-11-12): Lote Star Wars samurái, 3200 pavos (normalmente 5600)",
+   "folder": "video/auto/2026-11-12-pirata-sevan"
+  },
+  {
+   "date": "2026-11-12",
+   "slot": "17:15",
+   "format": "Tienda Pirata diaria (caros)",
+   "topic": "Lo nuevo más caro de hoy (2026-11-12): Lote Gata Negra 2300, Lote Spider-Man Cero 1800, Lote Artistas del escapismo 1800, Fernet 1500, Anwar 1200",
+   "folder": "video/auto/2026-11-12-pirata-caros"
+  },
+  {
+   "date": "2026-11-12",
+   "slot": "19:30",
+   "format": "Tienda Pirata diaria (cuenta)",
+   "topic": "Quedan 23 días · dato: dos fichas",
+   "folder": "video/auto/2026-11-12-pirata-cuenta"
   }
  ]
 }

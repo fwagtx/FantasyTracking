@@ -3,7 +3,7 @@ until it gets removed"). Facts come from Epic's live item shop (es-419) and from
 (video/auto/pirata-sources-<D>/: the articles quoting Epic, re-fetched live with Firecrawl, passages verbatim).
 
     python3 brands/tiendabad/auto/new_pirata.py <folder> sevan  <pirata-sources-dir>   what leaves today's shop at 6 PM (TPL.drop)
-    python3 brands/tiendabad/auto/new_pirata.py <folder> caros  <pirata-sources-dir>   the 5 most expensive listings today (TPL.top)
+    python3 brands/tiendabad/auto/new_pirata.py <folder> caros  <pirata-sources-dir>   the 5 most expensive new listings today (TPL.top)
     python3 brands/tiendabad/auto/new_pirata.py <folder> cuenta <pirata-sources-dir>   "quedan N días" + the dato del día (TPL.guide)
 
 sevan and caros are about the shop that is live now, so they must post before the 6 PM (CDMX) reset. Each writes
@@ -88,9 +88,14 @@ def get(url, tries=3):
             time.sleep(3 * (i + 1))
 
 
+SAY = {"$": "S", "Spider-Man": "Spáider Man", "Buggy": "Bugui"}     # how Kokoro es-419 should say these
+
+
 def spoken(s):
-    """How a shop name is said: $ is S, and all-caps words are read as words, not letters."""
-    return " ".join(w.capitalize() if w.isupper() and len(w) > 2 else w for w in s.replace("$", "S").split(" "))
+    """How a shop name is said: $ is S, Spider-Man is "Spáider Man", and all-caps words are read as words, not letters."""
+    for a, b in SAY.items():
+        s = s.replace(a, b)
+    return " ".join(w.capitalize() if w.isupper() and len(w) > 2 else w for w in s.split(" "))
 
 
 def name_of(e):
@@ -183,7 +188,9 @@ def sevan(folder, src_dir):
     counts = {}
     for i in items:
         counts[i["type"]["value"]] = counts.get(i["type"]["value"], 0) + 1
-    parts = [(f"{n} {TYPES[t][1]}" if n > 1 else TYPES[t][0]) for t, n in sorted(counts.items(), key=lambda kv: order.get(kv[0], 9)) if t in TYPES]
+    una = ("skin", "mochila", "estela", "pantalla de carga")
+    parts = [(f"{n} {TYPES[t][1]}" if n > 1 else ("una " if TYPES[t][0] in una else "un ") + TYPES[t][0])
+             for t, n in sorted(counts.items(), key=lambda kv: order.get(kv[0], 9)) if t in TYPES]
     contents = (", ".join(parts[:-1]) + " y " + parts[-1]) if len(parts) > 1 else (parts[0] if parts else "")
     json.dump({"date": shop["date"], "entries": [e]}, open(os.path.join(folder, "sources", "shop-entry.json"), "w"), indent=1, ensure_ascii=False)
     copy_sources(folder, src_dir, ["vgc-odds-confirmed.json"], [{"file": "shop-entry.json", "source": f"Epic's item shop for {day}: this listing (es-419)", "url": API, "fetched_utc": now}])
@@ -221,11 +228,21 @@ def caros(folder, src_dir):
     if today_mx().isoformat() != day:
         raise SystemExit(f"STOP: the live shop is {day}, but today in CDMX is {today_mx()}; run before the 6 PM reset")
     pool = sorted([e for e in shop["entries"] if e["finalPrice"] > 0 and name_of(e) and art_of(e)], key=lambda x: (-x["finalPrice"], -x["regularPrice"], name_of(x)))
-    seen, ranked = set(), []
-    for e in pool:                                   # one listing per name
-        if name_of(e) not in seen:
+
+    def ranked_of(entries):                          # one listing per name; a listing whose skins (or, with no skin, items) come in a pricier one counts once
+        seen, out = set(), []
+        for e in entries:
+            items = e.get("brItems") or []
+            ids = {i["id"] for i in items if i["type"]["value"] == "outfit"} or {i["id"] for i in items}
+            if name_of(e) in seen or (ids and any(ids <= {i["id"] for i in (x.get("brItems") or [])} for x in out)):
+                continue
             seen.add(name_of(e))
-            ranked.append(e)
+            out.append(e)
+        return out
+    # the big collab bundles stay for weeks, so the overall top 5 barely changes day to day: rank what is new in today's shop
+    fresh = ranked_of([e for e in pool if e["inDate"][:10] == day])
+    new = len(fresh) >= 5
+    ranked = fresh if new else ranked_of(pool)
     pick, nxt = ranked[:5], ranked[5] if len(ranked) > 5 else None
     if len(pick) < 5:
         raise SystemExit("STOP: fewer than 5 priced listings in today's shop")
@@ -243,13 +260,14 @@ def caros(folder, src_dir):
         ph.append({"text": text, "pause": pause, **({"say": sound} if sound else {})})
         return len(ph) - 1
 
-    say("Lo más caro de la tienda de hoy… ¡y con la Tienda Pirata te lo llevarías sin gastar ni un pavo!", 0.15)
-    hook = {"lines": ["la tienda de hoy:", "lo más CARO 💸"], "tag": "¿cuánto cuesta? 👀", "tag2": {"p": 0, "dt": 1.8, "text": "¿y con la Tienda Pirata? 🏴‍☠️"}}
+    what = "Lo nuevo más caro de la tienda de hoy" if new else "Lo más caro de la tienda de hoy"
+    say(f"{what}… ¡y con la Tienda Pirata te lo llevarías sin gastar ni un pavo!", 0.15)
+    hook = {"lines": ["lo NUEVO de hoy:" if new else "la tienda de hoy:", "lo más CARO 💸"], "tag": "¿cuánto cuesta? 👀", "tag2": {"p": 0, "dt": 1.8, "text": "¿y con la Tienda Pirata? 🏴‍☠️"}}
     items, claims, tease = [], [], None
     for k, e in enumerate(order):
         rank, name, f, r = 5 - k, name_of(e), e["finalPrice"], e["regularPrice"]
         if rank == 1:
-            tease = {"p": say("¿Y el número uno?", 0.6), "title": "y el #1 es… 🥁", "text": "lo más caro de hoy 💸"}
+            tease = {"p": say("¿Y el número uno?", 0.6), "title": "y el #1 es… 🥁", "text": "lo nuevo más caro 💸" if new else "lo más caro de hoy 💸"}
         line = f"¡{name}!" if rank == 1 else f"Número {NUM[rank]}: {name}."
         p = say(line, 0.15, line.replace(name, spoken(name)) if spoken(name) != name else None)
         prev = order[k - 1] if k else None
@@ -273,7 +291,8 @@ def caros(folder, src_dir):
         if rank == 1:
             it["sticker"] = {"p": say("¡Con la Tienda Pirata: cero pavos!", 0.65), "text": "con la Tienda Pirata: 0 pavos 🏴‍☠️"}
             it["flag"] = "🏴‍☠️"
-        claims.append({"text": f"{name}: {f} pavos en la tienda de hoy ({day})", "source": "shop-entries.json", "match": [name, f'"finalPrice": {f}', f'"date": "{shop["date"]}"']})
+        claims.append({"text": f"{name}: {f} pavos en la tienda de hoy ({day})" + (", nuevo hoy" if new else ""), "source": "shop-entries.json",
+                       "match": [name, f'"finalPrice": {f}', f'"date": "{shop["date"]}"'] + ([f'"inDate": "{e["inDate"]}"'] if new else [])})
         items.append(it)
     recap_line = "Con la Tienda Pirata, todo lo que cuesta pavos es gratis por 14 días" + (", y solo puedes reclamar un sidekick." if sidekick else ".") + " ¿Cuál te llevarías?"
     recap = {"p": say(recap_line, 0.2), "title": "¿cuál te llevarías? 👇"}
@@ -283,13 +302,14 @@ def caros(folder, src_dir):
     say(*CODE[:1], 0.25, CODE[1])
     say(THANKS, 0.3)
     one = pick[0]
-    body = (f"Lo más caro de la tienda de hoy 💸 El #1: {name_of(one)}, {one['finalPrice']} pavos… y con la Tienda Pirata te lo llevarías sin gastar ni un pavo 🏴‍☠️\n"
+    body = (f"{what} 💸 El #1: {name_of(one)}, {one['finalPrice']} pavos… y con la Tienda Pirata te lo llevarías sin gastar ni un pavo 🏴‍☠️\n"
             "¿Cuál te llevarías? 👇\nUsa el código BAD en la tienda de objetos 💛")
     cfg = {"hook": hook, "items": items, "tease": tease, "recap": recap, "caption": f"#EpicPartner {body}\n#fortnite #tiendapirata #tiendafortnite", "claims": claims}
     write(folder, "caros", cfg, ph, posts(body, "#fortnite #tiendapirata #tiendafortnite", "#Fortnite #TiendaPirata #Shorts",
-                                          "Lo MÁS CARO de la tienda de Fortnite HOY 💸 ¿y con la Tienda Pirata? #Shorts", "Lo más caro de hoy 💸", "Lo más caro de la tienda de hoy",
+                                          ("Lo NUEVO más caro" if new else "Lo MÁS CARO") + " de la tienda de Fortnite HOY 💸 ¿y con la Tienda Pirata? #Shorts",
+                                          "Lo nuevo más caro de hoy 💸" if new else "Lo más caro de hoy 💸", what,
                                           ["fortnite", "tienda fortnite", "tienda pirata", "tienda fortnite hoy", "fortnite español"]),
-          f"Lo más caro de hoy ({day}): " + ", ".join(f"{name_of(e)} {e['finalPrice']}" for e in pick))
+          ("Lo nuevo más caro" if new else "Lo más caro") + f" de hoy ({day}): " + ", ".join(f"{name_of(e)} {e['finalPrice']}" for e in pick))
 
 
 # ---------------- quedan N días + dato del día (TPL.guide) ----------------

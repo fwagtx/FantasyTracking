@@ -1,0 +1,119 @@
+{
+ "duration": 36.9,
+ "caption": "#EpicPartner Lo nuevo más caro de la tienda de hoy 💸 El #1: Lote Gata Negra, 2300 pavos… y con la Tienda Pirata te lo llevarías sin gastar ni un pavo 🏴‍☠️\n¿Cuál te llevarías? 👇\nUsa el código BAD en la tienda de objetos 💛\n#fortnite #tiendapirata #tiendafortnite",
+ "claims": [
+  {
+   "text": "Anwar: 1200 pavos en la tienda de hoy (2026-11-12), nuevo hoy",
+   "source": "shop-entries.json",
+   "match": [
+    "Anwar",
+    "\"finalPrice\": 1200",
+    "\"date\": \"2026-11-12T00:00:00Z\"",
+    "\"inDate\": \"2026-11-12T00:00:00Z\""
+   ]
+  },
+  {
+   "text": "Fernet: 1500 pavos en la tienda de hoy (2026-11-12), nuevo hoy",
+   "source": "shop-entries.json",
+   "match": [
+    "Fernet",
+    "\"finalPrice\": 1500",
+    "\"date\": \"2026-11-12T00:00:00Z\"",
+    "\"inDate\": \"2026-11-12T00:00:00Z\""
+   ]
+  },
+  {
+   "text": "Lote Artistas del escapismo: 1800 pavos en la tienda de hoy (2026-11-12), nuevo hoy",
+   "source": "shop-entries.json",
+   "match": [
+    "Lote Artistas del escapismo",
+    "\"finalPrice\": 1800",
+    "\"date\": \"2026-11-12T00:00:00Z\"",
+    "\"inDate\": \"2026-11-12T00:00:00Z\""
+   ]
+  },
+  {
+   "text": "Lote Spider-Man Cero: 1800 pavos en la tienda de hoy (2026-11-12), nuevo hoy",
+   "source": "shop-entries.json",
+   "match": [
+    "Lote Spider-Man Cero",
+    "\"finalPrice\": 1800",
+    "\"date\": \"2026-11-12T00:00:00Z\"",
+    "\"inDate\": \"2026-11-12T00:00:00Z\""
+   ]
+  },
+  {
+   "text": "Lote Gata Negra: precio normal 3600 pavos",
+   "source": "shop-entries.json",
+   "match": [
+    "Lote Gata Negra",
+    "\"regularPrice\": 3600"
+   ]
+  },
+  {
+   "text": "Lote Gata Negra: 2300 pavos en la tienda de hoy (2026-11-12), nuevo hoy",
+   "source": "shop-entries.json",
+   "match": [
+    "Lote Gata Negra",
+    "\"finalPrice\": 2300",
+    "\"date\": \"2026-11-12T00:00:00Z\"",
+    "\"inDate\": \"2026-11-12T00:00:00Z\""
+   ]
+  },
+  {
+   "text": "Con la Tienda Pirata, todo lo que cuesta pavos es gratis por 14 días",
+   "source": "vgc-odds-confirmed.json",
+   "match": [
+    "every single item in the Fortnite Shop which costs V-Bucks",
+    "becomes entirely free to that player for the next 14 days"
+   ]
+  }
+ ],
+ "text": [
+  "LO NUEVO DE HOY:",
+  "LO MÁS CARO 💸",
+  "¿CUÁNTO CUESTA? 👀",
+  "¿Y CON LA TIENDA PIRATA? 🏴‍☠️",
+  "#5",
+  "ANWAR",
+  "CUESTA",
+  "???? PAVOS",
+  "300 PAVOS",
+  "800 PAVOS",
+  "1200 PAVOS",
+  "#4",
+  "FERNET",
+  "400 PAVOS",
+  "1000 PAVOS",
+  "1500 PAVOS",
+  "#3",
+  "LOTE ARTISTAS DEL ESCAPISMO",
+  "500 PAVOS",
+  "1800 PAVOS",
+  "#2",
+  "LOTE SPIDER-MAN CERO",
+  "#1",
+  "LOTE GATA NEGRA",
+  "PRECIO NORMAL: 3600",
+  "600 PAVOS",
+  "1600 PAVOS",
+  "2300 PAVOS",
+  "CON LA TIENDA PIRATA: 0 PAVOS 🏴‍☠️",
+  "Y EL #1 ES… 🥁",
+  "LO NUEVO MÁS CARO 💸",
+  "¿CUÁL TE LLEVARÍAS? 👇",
+  "#2 · 1800",
+  "#1 · 2300",
+  "#3 · 1800",
+  "#4 · 1500",
+  "#5 · 1200",
+  "USA EL CÓDIGO BAD EN LA TIENDA DE OBJETOS 🛒",
+  "APOYA A UN CREADOR",
+  "#EPICPARTNER",
+  "ACEPTAR",
+  "✓ APOYANDO A: BAD",
+  "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+  "LA TIENDITA BAD",
+  "USA EL CÓDIGO: BAD"
+ ]
+}

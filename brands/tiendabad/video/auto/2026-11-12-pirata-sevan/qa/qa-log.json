@@ -1,0 +1,77 @@
+{
+  "video": "latienditabad-2026-11-12-pirata-sevan.mp4",
+  "checked_utc": "2026-11-12T18:34:01Z",
+  "verdict": "READY TO POST",
+  "results": [
+    {
+      "check": "1. Facts",
+      "status": "PASS",
+      "detail": "4/4 claims verified against saved official data",
+      "items": [
+        {
+          "claim": "Lote Star Wars samurái: 3200 pavos (normalmente 5600) en la tienda de hoy (2026-11-12)",
+          "result": "PASS",
+          "why": "matched in shop-entry.json"
+        },
+        {
+          "claim": "Se va hoy a las 6 PM (CDMX): outDate 2026-11-12T23:59:59.999Z",
+          "result": "PASS",
+          "why": "matched in shop-entry.json; 23:59 UTC is 5:59 PM in Mexico City (UTC-6): it leaves at the 6 PM reset"
+        },
+        {
+          "claim": "Trae 2 skins, 2 mochilas, 2 picos, un gesto y 2 envoltorios",
+          "result": "PASS",
+          "why": "matched in shop-entry.json"
+        },
+        {
+          "claim": "Con la Tienda Pirata, todo lo que cuesta pavos es gratis por 14 días",
+          "result": "PASS",
+          "why": "matched in vgc-odds-confirmed.json"
+        }
+      ]
+    },
+    {
+      "check": "2. Spelling and grammar",
+      "status": "PASS",
+      "detail": "42 distinct words checked; code written as BAD in all 2 mentions",
+      "items": []
+    },
+    {
+      "check": "3. Frames",
+      "status": "PASS",
+      "detail": "No black frames, no frozen stretches over 1.5 s. Contact sheet (1 frame/s) reviewed by eye: contact-sheet.png",
+      "items": []
+    },
+    {
+      "check": "4. Audio",
+      "status": "PASS",
+      "detail": "Integrated -14.1 LUFS, true peak -2.6 dBTP, no clipping, no silence gaps. All sound is original synthesis (no game rips, no copyrighted music). No voiceover in this cut.",
+      "items": []
+    },
+    {
+      "check": "5. Specs and safe zones",
+      "status": "PASS",
+      "detail": "1080x1920 h264 60 fps, aac 48000 Hz, 23.9s. Fits TikTok, Reels, Shorts, X, Facebook, Threads. Every on-screen text box sampled 4x/s stays out of the top bar, bottom caption area and button column.",
+      "items": []
+    },
+    {
+      "check": "6. Disclosure and wording",
+      "status": "PASS",
+      "detail": "#EpicPartner is the first hashtag in caption line 1 and on screen in every sampled frame from 0.0s. No discount, giveaway, endorsement or filler-CTA wording.",
+      "items": []
+    },
+    {
+      "check": "7. Would a fan stop scrolling? Made by a person?",
+      "status": "PASS",
+      "detail": "Lote Star Wars samurái (leaves at today's 6 PM reset): frame 1 hooks with the title and three cards (Darth Vader samurái, Stormtrooper samurái, Estandarte imperial); name, contents ('2 skins, 2 mochilas, 2 picos, un gesto y 2 envoltorios', now with 'un' for single items), price 3200 with 5600 struck, 'se va hoy · 6 PM (CDMX)', the closing question with the title cleared, code card and thanks. Captions on one line.",
+      "items": []
+    },
+    {
+      "check": "8. Owner approval",
+      "status": "PASS",
+      "detail": "Standing approval for autopilot (owner, 2026-10-28): posts when checks 1-7 all PASS.",
+      "items": []
+    }
+  ],
+  "caption": "#EpicPartner Se va HOY de la tienda ⏰ Lote Star Wars samurái: 3200 pavos (normalmente 5600)… y con la Tienda Pirata, 0 pavos 🏴‍☠️\n¿Te lo llevarías? 👇\nUsa el código BAD en la tienda de objetos 💛\n#fortnite #tiendapirata #tiendafortnite"
+}

@@ -1,0 +1,42 @@
+{
+ "phrases": [
+  {
+   "text": "¿Y si hoy te sale la Tienda Pirata? Esto se va hoy de la tienda.",
+   "pause": 0.2
+  },
+  {
+   "text": "El Lote Star Wars samurái.",
+   "pause": 0.2
+  },
+  {
+   "text": "Trae 2 skins, 2 mochilas, 2 picos, un gesto y 2 envoltorios.",
+   "pause": 0.2
+  },
+  {
+   "text": "Cuesta 3200 pavos, y normalmente 5600.",
+   "pause": 0.2
+  },
+  {
+   "text": "Y se va hoy a las 6 de la tarde, hora de la Ciudad de México.",
+   "pause": 0.2
+  },
+  {
+   "text": "Con la Tienda Pirata, te lo llevarías sin gastar ni un pavo. ¿Te lo llevarías?",
+   "pause": 0.25
+  },
+  {
+   "text": "Usa el código BAD en la tienda de objetos.",
+   "say": "Usa el código bad, en la tienda de objetos.",
+   "pause": 0.25
+  },
+  {
+   "text": "¡Gracias por ver! Síguenos para más contenido diario.",
+   "pause": 0.3
+  }
+ ],
+ "voice": "ef_dora",
+ "speed": 1.2,
+ "lang": "es-419",
+ "lead": 0.2,
+ "mode": "flow"
+}
