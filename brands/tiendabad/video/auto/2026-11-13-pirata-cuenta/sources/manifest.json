@@ -1,17 +1,17 @@
 {
- "via": "Press reports quoting Epic's own statements (the Fortnite Status post of Nov 7, 2026 with the Treasure Hunt odds and the Treasure Hours schedule), re-fetched live on 2026-11-12 with Firecrawl (maxAge 0); passages copied verbatim (link and bold markup removed). fortnite.com and x.com are not reachable from cloud sessions. December 15 is the 2026 activation deadline (VGC citing Epic). Plus Epic's item shop (fortnite-api.com mirror, es-419) where used.",
+ "via": "Press reports quoting Epic's own statements (the Fortnite Status post of Nov 7, 2026 with the Treasure Hunt odds and the Treasure Hours schedule), re-fetched live on 2026-11-13 with Firecrawl (maxAge 0); passages copied verbatim (link and bold markup removed). fortnite.com and x.com are not reachable from cloud sessions. December 15 is the 2026 activation deadline (VGC citing Epic). Plus Epic's item shop (fortnite-api.com mirror, es-419) where used.",
  "files": [
   {
    "file": "vgc-odds-confirmed.json",
    "source": "VGC: Fortnite officially confirms Pirate Shop Access Token drop rate (Nov 9, 2026), reporting Epic's Fortnite Status post",
    "url": "https://www.videogameschronicle.com/news/fortnite-officially-confirms-pirate-shop-access-token-drop-rate-as-players-hunt-for-item-which-makes-entire-shop-free/",
-   "fetched_utc": "2026-11-12T18:18:00Z"
+   "fetched_utc": "2026-11-13T19:19:30Z"
   },
   {
    "file": "vice-treasure-hours.json",
    "source": "VICE: Fortnite Pirate Token Drop Rate Revealed – Normal and Treasure Hour Odds (Nov 7, 2026), reporting Epic's Fortnite Status schedule",
    "url": "https://www.vice.com/en/article/fortnite-pirate-token-drop-rate-confirmed/",
-   "fetched_utc": "2026-11-12T18:18:00Z"
+   "fetched_utc": "2026-11-13T19:19:30Z"
   }
  ]
 }

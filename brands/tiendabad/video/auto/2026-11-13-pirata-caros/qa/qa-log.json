@@ -1,0 +1,97 @@
+{
+  "video": "latienditabad-2026-11-13-pirata-caros.mp4",
+  "checked_utc": "2026-11-13T19:22:37Z",
+  "verdict": "READY TO POST",
+  "results": [
+    {
+      "check": "1. Facts",
+      "status": "PASS",
+      "detail": "8/8 claims verified against saved official data",
+      "items": [
+        {
+          "claim": "Lote Like a G6 también cuesta 1500 pavos hoy",
+          "result": "PASS",
+          "why": "matched in shop-entries.json"
+        },
+        {
+          "claim": "Paquete Sombras callejeras: 1500 pavos en la tienda de hoy (2026-11-13), nuevo hoy",
+          "result": "PASS",
+          "why": "matched in shop-entries.json"
+        },
+        {
+          "claim": "Rivian R1S: 2000 pavos en la tienda de hoy (2026-11-13), nuevo hoy",
+          "result": "PASS",
+          "why": "matched in shop-entries.json"
+        },
+        {
+          "claim": "Aracne: 2000 pavos en la tienda de hoy (2026-11-13), nuevo hoy",
+          "result": "PASS",
+          "why": "matched in shop-entries.json"
+        },
+        {
+          "claim": "Lote Jason: 2500 pavos en la tienda de hoy (2026-11-13), nuevo hoy",
+          "result": "PASS",
+          "why": "matched in shop-entries.json"
+        },
+        {
+          "claim": "Lote de Lil' Uzi Vert: precio normal 7100 pavos",
+          "result": "PASS",
+          "why": "matched in shop-entries.json"
+        },
+        {
+          "claim": "Lote de Lil' Uzi Vert: 3200 pavos en la tienda de hoy (2026-11-13), nuevo hoy",
+          "result": "PASS",
+          "why": "matched in shop-entries.json"
+        },
+        {
+          "claim": "Con la Tienda Pirata, todo lo que cuesta pavos es gratis por 14 días",
+          "result": "PASS",
+          "why": "matched in vgc-odds-confirmed.json"
+        }
+      ]
+    },
+    {
+      "check": "2. Spelling and grammar",
+      "status": "PASS",
+      "detail": "27 distinct words checked; code written as BAD in all 2 mentions",
+      "items": []
+    },
+    {
+      "check": "3. Frames",
+      "status": "PASS",
+      "detail": "No black frames, no frozen stretches over 1.5 s. Contact sheet (1 frame/s) reviewed by eye: contact-sheet.png",
+      "items": []
+    },
+    {
+      "check": "4. Audio",
+      "status": "PASS",
+      "detail": "Integrated -14.3 LUFS, true peak -2.5 dBTP, no clipping, no silence gaps. All sound is original synthesis (no game rips, no copyrighted music). No voiceover in this cut.",
+      "items": []
+    },
+    {
+      "check": "5. Specs and safe zones",
+      "status": "PASS",
+      "detail": "1080x1920 h264 60 fps, aac 48000 Hz, 38.7s. Fits TikTok, Reels, Shorts, X, Facebook, Threads. Every on-screen text box sampled 4x/s stays out of the top bar, bottom caption area and button column.",
+      "items": []
+    },
+    {
+      "check": "6. Disclosure and wording",
+      "status": "PASS",
+      "detail": "#EpicPartner is the first hashtag in caption line 1 and on screen in every sampled frame from 0.0s. No discount, giveaway, endorsement or filler-CTA wording.",
+      "items": []
+    },
+    {
+      "check": "7. Would a fan stop scrolling? Made by a person?",
+      "status": "PASS",
+      "detail": "The most expensive listings new in today's shop. Checked the review sheet plus 16 stills from 0.6 s to 37 s: hook 'lo NUEVO de hoy'; #5 Paquete Sombras callejeras 1500 (tie: Lote Like a G6, voice 'Laik a yi six'); #4 Rivian R1S 2000; #3 Aracne 2000; #2 Lote Jason 2500 (voice 'Yéison'); tease; #1 Lote de Lil' Uzi Vert 3200 with 'precio normal: 7100' and the Tienda Pirata sticker; recap with all five; code card; thanks. Names fit their tags and nothing overlaps.",
+      "items": []
+    },
+    {
+      "check": "8. Owner approval",
+      "status": "PASS",
+      "detail": "Standing approval for autopilot (owner, 2026-10-28): posts when checks 1-7 all PASS.",
+      "items": []
+    }
+  ],
+  "caption": "#EpicPartner Lo nuevo más caro de la tienda de hoy 💸 El #1: Lote de Lil' Uzi Vert, 3200 pavos… y con la Tienda Pirata te lo llevarías sin gastar ni un pavo 🏴‍☠️\n¿Cuál te llevarías? 👇\nUsa el código BAD en la tienda de objetos 💛\n#fortnite #tiendapirata #tiendafortnite"
+}

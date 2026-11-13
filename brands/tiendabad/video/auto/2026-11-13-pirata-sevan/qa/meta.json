@@ -1,0 +1,98 @@
+{
+ "duration": 23.8,
+ "caption": "#EpicPartner Se va HOY de la tienda ⏰ Lote Amos del universo: 3600 pavos (normalmente 6700)… y con la Tienda Pirata, 0 pavos 🏴‍☠️\n¿Te lo llevarías? 👇\nUsa el código BAD en la tienda de objetos 💛\n#fortnite #tiendapirata #tiendafortnite",
+ "claims": [
+  {
+   "text": "Lote Amos del universo: 3600 pavos (normalmente 6700) en la tienda de hoy (2026-11-13)",
+   "source": "shop-entry.json",
+   "match": [
+    "Lote Amos del universo",
+    "\"finalPrice\": 3600",
+    "\"regularPrice\": 6700",
+    "\"date\": \"2026-11-13T00:00:00Z\""
+   ]
+  },
+  {
+   "text": "Se va hoy a las 6 PM (CDMX): outDate 2026-11-13T23:59:59.999Z",
+   "source": "shop-entry.json",
+   "match": [
+    "\"outDate\": \"2026-11-13T23:59:59.999Z\""
+   ],
+   "visual": "23:59 UTC is 5:59 PM in Mexico City (UTC-6): it leaves at the 6 PM reset"
+  },
+  {
+   "text": "Trae 3 skins, 4 mochilas, 4 picos y 2 gestos",
+   "source": "shop-entry.json",
+   "match": [
+    "He-Man",
+    "Armas de He-Man",
+    "Tahalí del poder",
+    "Skeletor",
+    "Armas de Skeletor",
+    "Capa de Skeletor",
+    "She-Ra",
+    "Espada de la protección",
+    "Capa de She-Ra",
+    "Risa del poder",
+    "Trono de la derrota",
+    "Palitos de Eternia",
+    "Palitos de Eternia"
+   ]
+  },
+  {
+   "text": "Con la Tienda Pirata, todo lo que cuesta pavos es gratis por 14 días",
+   "source": "vgc-odds-confirmed.json",
+   "match": [
+    "every single item in the Fortnite Shop which costs V-Bucks",
+    "becomes entirely free to that player for the next 14 days"
+   ]
+  }
+ ],
+ "text": [
+  "¡SE VA HOY! ⏰ / ¿Y LA TIENDA PIRATA? 🏴‍☠️",
+  "HE-MAN",
+  "SHE-RA",
+  "SKELETOR",
+  "LOTE AMOS DEL UNIVERSO",
+  "3 SKINS, 4 MOCHILAS, 4 PICOS Y 2 GESTOS",
+  "3600 PAVOS",
+  "SE VA HOY · 6 PM (CDMX)",
+  "¿Y SI HOY",
+  "TE SALE LA",
+  "TIENDA PIRATA?",
+  "ESTO SE VA",
+  "HOY DE LA",
+  "TIENDA.",
+  "EL LOTE AMOS",
+  "DEL UNIVERSO.",
+  "TRAE 3 SKINS,",
+  "4 MOCHILAS,",
+  "4 PICOS Y",
+  "2 GESTOS.",
+  "CUESTA 3600 PAVOS,",
+  "Y NORMALMENTE 6700.",
+  "Y SE VA",
+  "HOY A LAS",
+  "6 DE LA",
+  "TARDE,",
+  "HORA DE LA",
+  "CIUDAD DE MÉXICO.",
+  "CON LA TIENDA",
+  "PIRATA,",
+  "TE LO LLEVARÍAS",
+  "SIN GASTAR NI",
+  "UN PAVO.",
+  "¿TE LO LLEVARÍAS?",
+  "USA EL CÓDIGO",
+  "BAD EN LA",
+  "TIENDA DE OBJETOS.",
+  "¡GRACIAS POR VER!",
+  "SÍGUENOS PARA MÁS",
+  "CONTENIDO DIARIO.",
+  "#EPICPARTNER",
+  "LA TIENDITA BAD",
+  "¿TE LO / LLEVARÍAS?",
+  "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+  "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO"
+ ]
+}

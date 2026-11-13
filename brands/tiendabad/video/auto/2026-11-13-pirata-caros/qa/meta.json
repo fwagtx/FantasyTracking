@@ -1,0 +1,129 @@
+{
+ "duration": 39.1,
+ "caption": "#EpicPartner Lo nuevo más caro de la tienda de hoy 💸 El #1: Lote de Lil' Uzi Vert, 3200 pavos… y con la Tienda Pirata te lo llevarías sin gastar ni un pavo 🏴‍☠️\n¿Cuál te llevarías? 👇\nUsa el código BAD en la tienda de objetos 💛\n#fortnite #tiendapirata #tiendafortnite",
+ "claims": [
+  {
+   "text": "Lote Like a G6 también cuesta 1500 pavos hoy",
+   "source": "shop-entries.json",
+   "match": [
+    "Lote Like a G6",
+    "\"finalPrice\": 1500"
+   ]
+  },
+  {
+   "text": "Paquete Sombras callejeras: 1500 pavos en la tienda de hoy (2026-11-13), nuevo hoy",
+   "source": "shop-entries.json",
+   "match": [
+    "Paquete Sombras callejeras",
+    "\"finalPrice\": 1500",
+    "\"date\": \"2026-11-13T00:00:00Z\"",
+    "\"inDate\": \"2026-11-13T00:00:00Z\""
+   ]
+  },
+  {
+   "text": "Rivian R1S: 2000 pavos en la tienda de hoy (2026-11-13), nuevo hoy",
+   "source": "shop-entries.json",
+   "match": [
+    "Rivian R1S",
+    "\"finalPrice\": 2000",
+    "\"date\": \"2026-11-13T00:00:00Z\"",
+    "\"inDate\": \"2026-11-13T00:00:00Z\""
+   ]
+  },
+  {
+   "text": "Aracne: 2000 pavos en la tienda de hoy (2026-11-13), nuevo hoy",
+   "source": "shop-entries.json",
+   "match": [
+    "Aracne",
+    "\"finalPrice\": 2000",
+    "\"date\": \"2026-11-13T00:00:00Z\"",
+    "\"inDate\": \"2026-11-13T00:00:00Z\""
+   ]
+  },
+  {
+   "text": "Lote Jason: 2500 pavos en la tienda de hoy (2026-11-13), nuevo hoy",
+   "source": "shop-entries.json",
+   "match": [
+    "Lote Jason",
+    "\"finalPrice\": 2500",
+    "\"date\": \"2026-11-13T00:00:00Z\"",
+    "\"inDate\": \"2026-11-13T00:00:00Z\""
+   ]
+  },
+  {
+   "text": "Lote de Lil' Uzi Vert: precio normal 7100 pavos",
+   "source": "shop-entries.json",
+   "match": [
+    "Lote de Lil' Uzi Vert",
+    "\"regularPrice\": 7100"
+   ]
+  },
+  {
+   "text": "Lote de Lil' Uzi Vert: 3200 pavos en la tienda de hoy (2026-11-13), nuevo hoy",
+   "source": "shop-entries.json",
+   "match": [
+    "Lote de Lil' Uzi Vert",
+    "\"finalPrice\": 3200",
+    "\"date\": \"2026-11-13T00:00:00Z\"",
+    "\"inDate\": \"2026-11-13T00:00:00Z\""
+   ]
+  },
+  {
+   "text": "Con la Tienda Pirata, todo lo que cuesta pavos es gratis por 14 días",
+   "source": "vgc-odds-confirmed.json",
+   "match": [
+    "every single item in the Fortnite Shop which costs V-Bucks",
+    "becomes entirely free to that player for the next 14 days"
+   ]
+  }
+ ],
+ "text": [
+  "LO NUEVO DE HOY:",
+  "LO MÁS CARO 💸",
+  "¿CUÁNTO CUESTA? 👀",
+  "¿Y CON LA TIENDA PIRATA? 🏴‍☠️",
+  "#5",
+  "PAQUETE SOMBRAS CALLEJERAS",
+  "CUESTA",
+  "EMPATA CON LOTE LIKE A G6",
+  "???? PAVOS",
+  "400 PAVOS",
+  "1000 PAVOS",
+  "1500 PAVOS",
+  "#4",
+  "RIVIAN R1S",
+  "600 PAVOS",
+  "1400 PAVOS",
+  "2000 PAVOS",
+  "#3",
+  "ARACNE",
+  "#2",
+  "LOTE JASON",
+  "700 PAVOS",
+  "1700 PAVOS",
+  "2500 PAVOS",
+  "#1",
+  "LOTE DE LIL' UZI VERT",
+  "PRECIO NORMAL: 7100",
+  "900 PAVOS",
+  "2200 PAVOS",
+  "3200 PAVOS",
+  "CON LA TIENDA PIRATA: 0 PAVOS 🏴‍☠️",
+  "Y EL #1 ES… 🥁",
+  "LO NUEVO MÁS CARO 💸",
+  "¿CUÁL TE LLEVARÍAS? 👇",
+  "#2 · 2500",
+  "#1 · 3200",
+  "#3 · 2000",
+  "#4 · 2000",
+  "#5 · 1500",
+  "USA EL CÓDIGO BAD EN LA TIENDA DE OBJETOS 🛒",
+  "APOYA A UN CREADOR",
+  "#EPICPARTNER",
+  "ACEPTAR",
+  "✓ APOYANDO A: BAD",
+  "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+  "LA TIENDITA BAD",
+  "USA EL CÓDIGO: BAD"
+ ]
+}
