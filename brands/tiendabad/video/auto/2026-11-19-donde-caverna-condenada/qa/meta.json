@@ -1,0 +1,46 @@
+{
+ "duration": 15.8,
+ "caption": "#EpicPartner ¿No encuentras Caverna Condenada en Fortnite? 📍 Está en el este de la isla, cerca de The $.$. Rocky\n¿Ya lo visitaste? 👇\nUsa el código BAD en la tienda de objetos 💛\n#fortnite #mapafortnite #cavernacondenada",
+ "claims": [
+  {
+   "text": "Caverna Condenada es un lugar del mapa oficial",
+   "source": "map.json",
+   "match": [
+    "Caverna Condenada"
+   ]
+  },
+  {
+   "text": "Está en el este de la isla, cerca de The $.$. Rocky",
+   "source": "map-labels.png",
+   "visual": "map pixel (1184, 1148); nearest named place by coordinates: The $.$. Rocky"
+  }
+ ],
+ "text": [
+  "AQUÍ",
+  "¿DÓNDE ESTÁ / CAVERNA CONDENADA?",
+  "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+  "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+  "¿NO ENCUENTRAS CAVERNA",
+  "CONDENADA EN FORTNITE?",
+  "¡AQUÍ ESTÁ EXACTAMENTE!",
+  "ESTÁ EN EL",
+  "ESTE DE LA",
+  "ISLA,",
+  "JUSTO AQUÍ,",
+  "CERCA DE THE",
+  "$.$.",
+  "ROCKY.",
+  "¡GUÁRDALO PARA TU",
+  "PRÓXIMA PARTIDA!",
+  "USA EL CÓDIGO",
+  "BAD EN LA",
+  "TIENDA DE OBJETOS.",
+  "LE AYUDA MUCHÍSIMO",
+  "AL CANAL.",
+  "¡GRACIAS POR VER!",
+  "SÍGUENOS PARA MÁS",
+  "CONTENIDO DIARIO.",
+  "#EPICPARTNER",
+  "LA TIENDITA BAD"
+ ]
+}

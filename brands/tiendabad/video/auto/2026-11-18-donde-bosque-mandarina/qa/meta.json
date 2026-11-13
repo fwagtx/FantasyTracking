@@ -1,0 +1,46 @@
+{
+ "duration": 15.9,
+ "caption": "#EpicPartner ¿No encuentras Bosque Mandarina de Nami en Fortnite? 📍 Está en el suroeste de la isla, cerca de Villa Molino\n¿Ya lo visitaste? 👇\nUsa el código BAD en la tienda de objetos 💛\n#fortnite #mapafortnite #bosquemandarinadenami",
+ "claims": [
+  {
+   "text": "Bosque Mandarina de Nami es un lugar del mapa oficial",
+   "source": "map.json",
+   "match": [
+    "Bosque Mandarina de Nami"
+   ]
+  },
+  {
+   "text": "Está en el suroeste de la isla, cerca de Villa Molino",
+   "source": "map-labels.png",
+   "visual": "map pixel (710, 1561); nearest named place by coordinates: Villa Molino"
+  }
+ ],
+ "text": [
+  "AQUÍ",
+  "¿DÓNDE ESTÁ / BOSQUE MANDARINA / DE NAMI?",
+  "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+  "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+  "¿NO ENCUENTRAS BOSQUE",
+  "MANDARINA DE NAMI",
+  "EN FORTNITE?",
+  "¡AQUÍ ESTÁ EXACTAMENTE!",
+  "ESTÁ EN EL",
+  "SUROESTE DE LA",
+  "ISLA,",
+  "JUSTO AQUÍ,",
+  "CERCA DE VILLA",
+  "MOLINO.",
+  "¡GUÁRDALO PARA TU",
+  "PRÓXIMA PARTIDA!",
+  "USA EL CÓDIGO",
+  "BAD EN LA",
+  "TIENDA DE OBJETOS.",
+  "LE AYUDA MUCHÍSIMO",
+  "AL CANAL.",
+  "¡GRACIAS POR VER!",
+  "SÍGUENOS PARA MÁS",
+  "CONTENIDO DIARIO.",
+  "#EPICPARTNER",
+  "LA TIENDITA BAD"
+ ]
+}

@@ -1,0 +1,67 @@
+{
+  "video": "latienditabad-2026-11-18-donde-bosque-mandarina.mp4",
+  "checked_utc": "2026-11-13T17:19:06Z",
+  "verdict": "READY TO POST",
+  "results": [
+    {
+      "check": "1. Facts",
+      "status": "PASS",
+      "detail": "2/2 claims verified against saved official data",
+      "items": [
+        {
+          "claim": "Bosque Mandarina de Nami es un lugar del mapa oficial",
+          "result": "PASS",
+          "why": "matched in map.json"
+        },
+        {
+          "claim": "Está en el suroeste de la isla, cerca de Villa Molino",
+          "result": "PASS",
+          "why": "visual check against map-labels.png: map pixel (710, 1561); nearest named place by coordinates: Villa Molino"
+        }
+      ]
+    },
+    {
+      "check": "2. Spelling and grammar",
+      "status": "PASS",
+      "detail": "32 distinct words checked; code written as BAD in all 2 mentions",
+      "items": []
+    },
+    {
+      "check": "3. Frames",
+      "status": "PASS",
+      "detail": "No black frames, no frozen stretches over 1.5 s. Contact sheet (1 frame/s) reviewed by eye: contact-sheet.png",
+      "items": []
+    },
+    {
+      "check": "4. Audio",
+      "status": "PASS",
+      "detail": "Integrated -14.2 LUFS, true peak -2.2 dBTP, no clipping, no silence gaps. All sound is original synthesis (no game rips, no copyrighted music). No voiceover in this cut.",
+      "items": []
+    },
+    {
+      "check": "5. Specs and safe zones",
+      "status": "PASS",
+      "detail": "1080x1920 h264 60 fps, aac 48000 Hz, 15.5s. Fits TikTok, Reels, Shorts, X, Facebook, Threads. Every on-screen text box sampled 4x/s stays out of the top bar, bottom caption area and button column.",
+      "items": []
+    },
+    {
+      "check": "6. Disclosure and wording",
+      "status": "PASS",
+      "detail": "#EpicPartner is the first hashtag in caption line 1 and on screen in every sampled frame from 0.0s. No discount, giveaway, endorsement or filler-CTA wording.",
+      "items": []
+    },
+    {
+      "check": "7. Would a fan stop scrolling? Made by a person?",
+      "status": "PASS",
+      "detail": "New landmark from the Nov 12 map update. The title splits onto two name lines ('Bosque Mandarina / de Nami?') at 69px instead of shrinking to 47px. Frame 1 hooks with the title and the close-up near Villa Molino. The wide shot shows the current island with the ring and 'AQUÍ' in the southwest; the title's last line sits over the Resort relajado label but stays readable. Captions on one line, code card and thanks at the end.",
+      "items": []
+    },
+    {
+      "check": "8. Owner approval",
+      "status": "PASS",
+      "detail": "Standing approval for autopilot (owner, 2026-10-28): posts when checks 1-7 all PASS.",
+      "items": []
+    }
+  ],
+  "caption": "#EpicPartner ¿No encuentras Bosque Mandarina de Nami en Fortnite? 📍 Está en el suroeste de la isla, cerca de Villa Molino\n¿Ya lo visitaste? 👇\nUsa el código BAD en la tienda de objetos 💛\n#fortnite #mapafortnite #bosquemandarinadenami"
+}

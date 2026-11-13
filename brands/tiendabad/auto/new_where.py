@@ -53,7 +53,12 @@ def main(folder, name):
         "tags": ["fortnite", f"{name.lower()} fortnite", f"donde esta {name.lower()}", "mapa fortnite", "fortnite español"],
         "cover_t": 1.0,
     }
-    cfg = {"title": ["¿Dónde está", f"{name}?"], "map": "labels", "titleSize": min(72, int(880 / (0.74 * (len(name) + 1)))),
+    lines, size = [f"{name}?"], int(880 / (0.74 * (len(name) + 1)))
+    if size < 60 and " " in name:                    # a long name goes on two lines instead of shrinking (Bosque Mandarina de Nami)
+        cut = min((i for i, ch in enumerate(name) if ch == " "), key=lambda i: abs(i - len(name) / 2))
+        lines = [name[:cut], name[cut + 1:] + "?"]
+        size = int(880 / (0.74 * (max(len(x) for x in lines) + 1)))
+    cfg = {"title": ["¿Dónde está", *lines], "map": "labels", "titleSize": min(72, size),
            "shots": [{"p": 0, "x": x, "y": y, "z": 1.6}, {"p": 1, "x": round(wx, 1), "y": round(wy, 1), "z": 0.55, "ease": "out5", "whoosh": 1},
                      {"p": 2, "x": x, "y": y, "z": 1.7, "ease": "out5", "whoosh": 1}, {"p": "end", "x": x, "y": y, "z": 1.8}],
            "pins": [{"x": x, "y": y, "p": 0, "dt": 0.35, "label": name if len(name) < 16 else "AQUÍ", "lx": -160, "ly": 90}],
