@@ -88,7 +88,7 @@ def get(url, tries=3):
             time.sleep(3 * (i + 1))
 
 
-SAY = {"$": "S", "Spider-Man": "Spáider Man", "Buggy": "Bugui"}     # how Kokoro es-419 should say these
+SAY = {"$": "S", "Spider-Man": "Spáider Man", "Buggy": "Bugui", "Jason": "Yéison", "Like a G6": "Laik a yi six"}     # how Kokoro es-419 should say these
 
 
 def spoken(s):

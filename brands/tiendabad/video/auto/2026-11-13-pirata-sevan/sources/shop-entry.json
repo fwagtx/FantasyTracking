@@ -1,0 +1,759 @@
+{
+ "date": "2026-11-13T00:00:00Z",
+ "entries": [
+  {
+   "regularPrice": 6700,
+   "finalPrice": 3600,
+   "devName": "[VIRTUAL]1 x He-Man, 1 x He-Man's Weaponry, 1 x Power Scabbard, 1 x Skeletor, 1 x Skeletor's Weaponry, 1 x Skeletor's Cape, 1 x She-Ra, 1 x Sword of Protection, 1 x She-Ra's Cape, 1 x Laugh of Power, 1 x Seat of Defeat, 1 x Grayskull Kit, 1 x Sticks of Eternia, 1 x Sticks of Eternia for -1 MtxCurrency",
+   "offerId": "v2:/26eaeb3927d919a3cc152e51f24f9bc306783e49ac5576961f4f6eeaaed90094",
+   "inDate": "2026-11-10T00:00:00Z",
+   "outDate": "2026-11-13T23:59:59.999Z",
+   "bundle": {
+    "name": "Lote Amos del universo",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/27c1012276fffe39/renderimage_0.png"
+   },
+   "banner": {
+    "value": "3100 monedas V de descuento",
+    "intensity": "Low",
+    "backendValue": "AmountOff"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -1,
+   "layoutId": "MastersUniverse.99",
+   "layout": {
+    "id": "MastersUniverse",
+    "name": "Amos del universo",
+    "index": 31,
+    "rank": 182,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "52a5fdff",
+    "color2": "17002bff",
+    "color3": "3a507aff",
+    "textBackgroundColor": "14264aff"
+   },
+   "tileBackgroundMaterial": "ShopTile_Rocks",
+   "tileSize": "Size_1_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_RebelTempo_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S41/DAv2_Bundle_Featured_RebelTempo",
+   "newDisplayAsset": {
+    "id": "DAv2_Bundle_Featured_RebelTempo",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__27c1012276fffe39_c51ec69e9a90cb4d.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/27c1012276fffe39/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__27c1012276fffe39_a58e88d07a390554.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/27c1012276fffe39/renderimage_1.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__27c1012276fffe39_4eee1ae0c2a53c7e.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/27c1012276fffe39/renderimage_2.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__27c1012276fffe39_e47863ff870c7456.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/27c1012276fffe39/renderimage_3.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Character_RebelTempo",
+     "name": "He-Man",
+     "description": "¡Por el poder de Grayskull!",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "Amos del universo",
+      "text": "Pieza del conjunto Amos del universo.",
+      "backendValue": "GearSoap"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "3",
+      "text": "Introducido en Capítulo 7, Temporada 3.",
+      "backendValue": 41
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_rebeltempo/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_rebeltempo/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_rebeltempo/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Material",
+       "type": "estilo",
+       "options": [
+        {
+         "tag": "Mat1",
+         "name": "Animado",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_rebeltempo/variants/material/mat1.png"
+        },
+        {
+         "tag": "Mat2",
+         "name": "Degradado",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_rebeltempo/variants/material/mat2.png"
+        }
+       ]
+      }
+     ],
+     "added": "2026-06-06T13:01:18Z"
+    },
+    {
+     "id": "Pickaxe_RebelTempo",
+     "name": "Armas de He-Man",
+     "description": "Blande tu poder.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Amos del universo",
+      "text": "Pieza del conjunto Amos del universo.",
+      "backendValue": "GearSoap"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "3",
+      "text": "Introducido en Capítulo 7, Temporada 3.",
+      "backendValue": 41
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_rebeltempo/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_rebeltempo/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_rebeltempo/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Mesh",
+       "type": "Estilo",
+       "options": [
+        {
+         "tag": "Stage1",
+         "name": "Espada de poder de He-Man",
+         "image": "https://fortnite-api.com/images/cosmetics/br/pickaxe_rebeltempo/variants/mesh/stage1.png"
+        },
+        {
+         "tag": "Stage2",
+         "name": "Hacha de poder de He-Man",
+         "image": "https://fortnite-api.com/images/cosmetics/br/pickaxe_rebeltempo/variants/mesh/stage2.png"
+        }
+       ]
+      },
+      {
+       "channel": "Particle",
+       "type": "Sombreador",
+       "options": [
+        {
+         "tag": "Particle1",
+         "name": "plano",
+         "image": "https://fortnite-api.com/images/cosmetics/br/pickaxe_rebeltempo/variants/particle/particle1.png"
+        },
+        {
+         "tag": "Particle2",
+         "name": "Degradado",
+         "image": "https://fortnite-api.com/images/cosmetics/br/pickaxe_rebeltempo/variants/particle/particle2.png"
+        }
+       ]
+      }
+     ],
+     "added": "2026-06-06T13:01:18Z"
+    },
+    {
+     "id": "Backpack_RebelTempo",
+     "name": "Tahalí del poder",
+     "description": "¡Tú tienes el poder!",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Amos del universo",
+      "text": "Pieza del conjunto Amos del universo.",
+      "backendValue": "GearSoap"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "3",
+      "text": "Introducido en Capítulo 7, Temporada 3.",
+      "backendValue": 41
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_rebeltempo/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_rebeltempo/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_rebeltempo/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Parts",
+       "type": "estilo",
+       "options": [
+        {
+         "tag": "Stage1",
+         "name": "Espada de poder de He-Man",
+         "image": "https://fortnite-api.com/images/cosmetics/br/backpack_rebeltempo/variants/parts/stage1.png"
+        },
+        {
+         "tag": "Stage2",
+         "name": "Hacha de poder de He-Man",
+         "image": "https://fortnite-api.com/images/cosmetics/br/backpack_rebeltempo/variants/parts/stage2.png"
+        }
+       ]
+      },
+      {
+       "channel": "Particle",
+       "type": "Sombreador",
+       "options": [
+        {
+         "tag": "Particle1",
+         "name": "plano",
+         "image": "https://fortnite-api.com/images/cosmetics/br/backpack_rebeltempo/variants/particle/particle1.png"
+        },
+        {
+         "tag": "Particle2",
+         "name": "degradado",
+         "image": "https://fortnite-api.com/images/cosmetics/br/backpack_rebeltempo/variants/particle/particle2.png"
+        }
+       ]
+      }
+     ],
+     "added": "2026-06-06T13:01:18Z"
+    },
+    {
+     "id": "Character_PrismGlee",
+     "name": "Skeletor",
+     "description": "Todo lo que hago es por el bien del mal.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "Amos del universo",
+      "text": "Pieza del conjunto Amos del universo.",
+      "backendValue": "GearSoap"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "3",
+      "text": "Introducido en Capítulo 7, Temporada 3.",
+      "backendValue": 41
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_prismglee/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_prismglee/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_prismglee/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Parts",
+       "type": "Estilo",
+       "options": [
+        {
+         "tag": "Stage1",
+         "name": "Animado",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_prismglee/variants/parts/stage1.png"
+        },
+        {
+         "tag": "Stage2",
+         "name": "Degradado",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_prismglee/variants/parts/stage2.png"
+        }
+       ]
+      }
+     ],
+     "added": "2026-06-06T03:03:15Z"
+    },
+    {
+     "id": "Pickaxe_PrismGlee",
+     "name": "Armas de Skeletor",
+     "description": "Siembra el caos.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Amos del universo",
+      "text": "Pieza del conjunto Amos del universo.",
+      "backendValue": "GearSoap"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "3",
+      "text": "Introducido en Capítulo 7, Temporada 3.",
+      "backendValue": 41
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_prismglee/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_prismglee/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_prismglee/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Mesh",
+       "type": "Estilo",
+       "options": [
+        {
+         "tag": "Stage2",
+         "name": "Báculo del caos",
+         "image": "https://fortnite-api.com/images/cosmetics/br/pickaxe_prismglee/variants/mesh/stage2.png"
+        },
+        {
+         "tag": "Stage1",
+         "name": "Espada de poder",
+         "image": "https://fortnite-api.com/images/cosmetics/br/pickaxe_prismglee/variants/mesh/stage1.png"
+        }
+       ]
+      },
+      {
+       "channel": "Particle",
+       "type": "Sombreador",
+       "options": [
+        {
+         "tag": "Particle1",
+         "name": "Animado",
+         "image": "https://fortnite-api.com/images/cosmetics/br/pickaxe_prismglee/variants/particle/particle1.png"
+        },
+        {
+         "tag": "Particle2",
+         "name": "Degradado",
+         "image": "https://fortnite-api.com/images/cosmetics/br/pickaxe_prismglee/variants/particle/particle2.png"
+        }
+       ]
+      }
+     ],
+     "added": "2026-06-06T03:03:15Z"
+    },
+    {
+     "id": "Backpack_PrismGlee",
+     "name": "Capa de Skeletor",
+     "description": "Una capa de pura maldad.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "legendary",
+      "displayValue": "Legendario",
+      "backendValue": "EFortRarity::Legendary"
+     },
+     "set": {
+      "value": "Amos del universo",
+      "text": "Pieza del conjunto Amos del universo.",
+      "backendValue": "GearSoap"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "3",
+      "text": "Introducido en Capítulo 7, Temporada 3.",
+      "backendValue": 41
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_prismglee/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_prismglee/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_prismglee/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Material",
+       "type": "estilo",
+       "options": [
+        {
+         "tag": "Mat1",
+         "name": "Animado",
+         "image": "https://fortnite-api.com/images/cosmetics/br/backpack_prismglee/variants/material/mat1.png"
+        },
+        {
+         "tag": "Mat2",
+         "name": "Degradado",
+         "image": "https://fortnite-api.com/images/cosmetics/br/backpack_prismglee/variants/material/mat2.png"
+        }
+       ]
+      }
+     ],
+     "added": "2026-06-06T13:01:18Z"
+    },
+    {
+     "id": "Character_TrickCrate",
+     "name": "She-Ra",
+     "description": "¡Por el honor de Grayskull!",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "3",
+      "text": "Introducido en Capítulo 7, Temporada 3.",
+      "backendValue": 41
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_trickcrate/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_trickcrate/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_trickcrate/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Parts",
+       "type": "estilo",
+       "options": [
+        {
+         "tag": "Stage1",
+         "name": "plano",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_trickcrate/variants/parts/stage1.png"
+        },
+        {
+         "tag": "Stage2",
+         "name": "degradado",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_trickcrate/variants/parts/stage2.png"
+        }
+       ]
+      }
+     ],
+     "metaTags": [
+      "Cosmetics.Metatags.TrickCrate"
+     ],
+     "added": "2026-06-06T13:01:18Z"
+    },
+    {
+     "id": "Pickaxe_TrickCrate",
+     "name": "Espada de la protección",
+     "description": "Defiende el Castillo de cristal.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Amos del universo",
+      "text": "Pieza del conjunto Amos del universo.",
+      "backendValue": "GearSoap"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "3",
+      "text": "Introducido en Capítulo 7, Temporada 3.",
+      "backendValue": 41
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_trickcrate/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_trickcrate/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_trickcrate/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Particle",
+       "type": "Sombreador",
+       "options": [
+        {
+         "tag": "Particle1",
+         "name": "Animado",
+         "image": "https://fortnite-api.com/images/cosmetics/br/pickaxe_trickcrate/variants/particle/particle1.png"
+        },
+        {
+         "tag": "Particle2",
+         "name": "Degradado",
+         "image": "https://fortnite-api.com/images/cosmetics/br/pickaxe_trickcrate/variants/particle/particle2.png"
+        }
+       ]
+      }
+     ],
+     "added": "2026-06-06T13:01:18Z"
+    },
+    {
+     "id": "Backpack_TrickCrateCape",
+     "name": "Capa de She-Ra",
+     "description": "Mantente firme.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Amos del universo",
+      "text": "Pieza del conjunto Amos del universo.",
+      "backendValue": "GearSoap"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "3",
+      "text": "Introducido en Capítulo 7, Temporada 3.",
+      "backendValue": 41
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_trickcratecape/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_trickcratecape/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_trickcratecape/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Material",
+       "type": "Estilo",
+       "options": [
+        {
+         "tag": "Mat1",
+         "name": "Animado",
+         "image": "https://fortnite-api.com/images/cosmetics/br/backpack_trickcratecape/variants/material/mat1.png"
+        },
+        {
+         "tag": "Mat2",
+         "name": "Degradado",
+         "image": "https://fortnite-api.com/images/cosmetics/br/backpack_trickcratecape/variants/material/mat2.png"
+        }
+       ]
+      }
+     ],
+     "metaTags": [
+      "Cosmetics.Metatags.TrickCrate"
+     ],
+     "added": "2026-06-06T13:01:18Z"
+    },
+    {
+     "id": "EID_RebelTempo",
+     "name": "Risa del poder",
+     "description": "Revela un fabuloso poder secreto.",
+     "type": {
+      "value": "emote",
+      "displayValue": "Gesto",
+      "backendValue": "AthenaDance"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "Amos del universo",
+      "text": "Pieza del conjunto Amos del universo.",
+      "backendValue": "GearSoap"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "3",
+      "text": "Introducido en Capítulo 7, Temporada 3.",
+      "backendValue": 41
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/eid_rebeltempo/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/eid_rebeltempo/icon.png"
+     },
+     "showcaseVideo": "B1y0yEOt3rc",
+     "added": "2026-06-06T13:01:18Z"
+    },
+    {
+     "id": "EID_PrismGlee",
+     "name": "Trono de la derrota",
+     "description": "Oh, ¿por qué me rodeo de tontos?",
+     "type": {
+      "value": "emote",
+      "displayValue": "Gesto",
+      "backendValue": "AthenaDance"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "Amos del universo",
+      "text": "Pieza del conjunto Amos del universo.",
+      "backendValue": "GearSoap"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "3",
+      "text": "Introducido en Capítulo 7, Temporada 3.",
+      "backendValue": 41
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/eid_prismglee/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/eid_prismglee/icon.png"
+     },
+     "showcaseVideo": "BF725EQyR6Y",
+     "added": "2026-06-06T13:01:18Z"
+    },
+    {
+     "id": "Pickaxe_RebelTempo_DrumStick",
+     "name": "Palitos de Eternia",
+     "description": "¡Yo tengo el Portarritmos!",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Amos del universo",
+      "text": "Pieza del conjunto Amos del universo.",
+      "backendValue": "GearSoap"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "3",
+      "text": "Introducido en Capítulo 7, Temporada 3.",
+      "backendValue": 41
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_rebeltempo_drumstick/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_rebeltempo_drumstick/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_rebeltempo_drumstick/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Particle",
+       "type": "Estilo",
+       "options": [
+        {
+         "tag": "Particle1",
+         "name": "Plano",
+         "image": "https://fortnite-api.com/images/cosmetics/br/pickaxe_rebeltempo_drumstick/variants/particle/particle1.png"
+        },
+        {
+         "tag": "Particle2",
+         "name": "Degradado",
+         "image": "https://fortnite-api.com/images/cosmetics/br/pickaxe_rebeltempo_drumstick/variants/particle/particle2.png"
+        }
+       ]
+      }
+     ],
+     "added": "2026-06-06T13:01:18Z"
+    },
+    {
+     "id": "Backpack_RebelTempo_DrumStick",
+     "name": "Palitos de Eternia",
+     "description": "¡Yo tengo el Portarritmos!",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Amos del universo",
+      "text": "Pieza del conjunto Amos del universo.",
+      "backendValue": "GearSoap"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "3",
+      "text": "Introducido en Capítulo 7, Temporada 3.",
+      "backendValue": 41
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_rebeltempo_drumstick/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_rebeltempo_drumstick/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_rebeltempo_drumstick/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Material",
+       "type": "Estilo",
+       "options": [
+        {
+         "tag": "Mat0",
+         "name": "Plano",
+         "image": "https://fortnite-api.com/images/cosmetics/br/backpack_rebeltempo_drumstick/variants/material/mat0.png"
+        },
+        {
+         "tag": "Mat1",
+         "name": "Degradado",
+         "image": "https://fortnite-api.com/images/cosmetics/br/backpack_rebeltempo_drumstick/variants/material/mat1.png"
+        }
+       ]
+      }
+     ],
+     "added": "2026-06-06T13:01:18Z"
+    }
+   ],
+   "instruments": [
+    {
+     "id": "Sparks_RebelTempo_DrumKit",
+     "name": "Kit de Grayskull",
+     "description": "Por el ritmo de Grayskull.",
+     "type": {
+      "value": "drum",
+      "displayValue": "Batería",
+      "backendValue": "SparksDrum"
+     },
+     "rarity": {
+      "value": "common",
+      "displayValue": "Común",
+      "backendValue": "EFortRarity::Common"
+     },
+     "images": {
+      "small": "https://fortnite-api.com/images/cosmetics/instruments/sparks_rebeltempo_drumkit/small.png",
+      "large": "https://fortnite-api.com/images/cosmetics/instruments/sparks_rebeltempo_drumkit/large.png"
+     },
+     "added": "2026-06-06T13:01:18Z"
+    }
+   ]
+  }
+ ]
+}
