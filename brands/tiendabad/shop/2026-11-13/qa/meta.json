@@ -1,0 +1,109 @@
+{
+ "duration": 27.3,
+ "caption": "#EpicPartner Tienda de objetos de Fortnite, 13 de noviembre: el Lote One Piece cuesta 4000 V-Bucks en vez de 8200 (ahorras 4200), Aracne y Chaqueta orejuda están en la tienda (Capítulo 1, Temporada 6, 129 días sin salir) y 3 skins se van el 13 de noviembre a las 6 PM (CDMX).\n¿Vas a comprar hoy? Usa el código BAD en la tienda de objetos.\n#Fortnite #TiendaFortnite #FortniteTienda",
+ "claims": [
+  {
+   "text": "Lote One Piece: 4000 V-Bucks, regular 8200",
+   "source": "shop.json",
+   "match": [
+    "Lote One Piece",
+    "\"finalPrice\": 4000",
+    "\"regularPrice\": 8200"
+   ]
+  },
+  {
+   "text": "Aracne: Capítulo 1, Temporada 6",
+   "source": "history.json",
+   "match": [
+    "Aracne",
+    "\"chapter\": 1",
+    "\"season\": 6"
+   ]
+  },
+  {
+   "text": "Chaqueta orejuda: Capítulo 1, Temporada 6",
+   "source": "history.json",
+   "match": [
+    "Chaqueta orejuda",
+    "\"chapter\": 1",
+    "\"season\": 6"
+   ]
+  },
+  {
+   "text": "129 days since last in the shop",
+   "source": "history.json",
+   "match": [
+    "\"gapDays\": 129"
+   ]
+  },
+  {
+   "text": "3 outfits leave at the next reset",
+   "source": "plan.json",
+   "match": [
+    "\"count\": 3"
+   ]
+  }
+ ],
+ "text": [
+  "MONKEY D. LUFFY",
+  "ARACNE",
+  "CHAQUETA OREJUDA",
+  "OFERTA",
+  "OG",
+  "ÚLTIMO DÍA",
+  "TIENDA DE HOY / 13 NOV",
+  "1 · OFERTA",
+  "NAMI",
+  "USOPP",
+  "4000",
+  "8200",
+  "LOTE ONE PIECE · SE VA EL 5 DIC",
+  "-51% / AHORRAS 4200",
+  "2 · REGRESO OG",
+  "CAPÍTULO 1 · TEMPORADA 6",
+  "¡ARACNE: 129 DÍAS!",
+  "3 · ÚLTIMO DÍA",
+  "NEMIA DELEGADA",
+  "ATACANTE ASEADO",
+  "SE VAN EL 13 NOV, 6 PM",
+  "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+  "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+  "ESTA ES LA",
+  "TIENDA DE OBJETOS",
+  "DE HOY,",
+  "13 DE NOVIEMBRE.",
+  "¡TRES COSAS ANTES",
+  "DE GASTAR UN",
+  "SOLO PAVO!",
+  "EL LOTE ONE",
+  "PIECE:",
+  "4000 PAVOS,",
+  "EN VEZ DE",
+  "8200.",
+  "¡TE AHORRAS 4200!",
+  "ARACNE Y CHAQUETA",
+  "OREJUDA ESTÁN EN",
+  "LA TIENDA.",
+  "LAS DOS SON",
+  "DEL CAPÍTULO 1,",
+  "TEMPORADA 6,",
+  "Y ARACNE NO",
+  "SALÍA DESDE HACE",
+  "129 DÍAS.",
+  "Y TRES SKINS",
+  "ÉPICAS ESTÁN EN",
+  "SU ÚLTIMO DÍA.",
+  "¿VAS A COMPRAR",
+  "ALGO HOY?",
+  "USA EL CÓDIGO",
+  "BAD EN LA",
+  "TIENDA DE OBJETOS.",
+  "LE AYUDA MUCHÍSIMO",
+  "AL CANAL.",
+  "¡GRACIAS POR VER!",
+  "SÍGUENOS PARA MÁS",
+  "CONTENIDO DIARIO.",
+  "#EPICPARTNER",
+  "LA TIENDITA BAD"
+ ]
+}

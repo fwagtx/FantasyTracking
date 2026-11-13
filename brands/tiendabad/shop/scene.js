@@ -77,18 +77,30 @@
 
     // hook: the three tiles of the three beats, each with its label, under the date
     const hook = mk(stage, `inset:0`);
-    const hookRecs = [D.deal.outfits[0], D.og.outfits[D.og.outfits.length - 1], D.last.outfits[0] || D.deal.outfits[1]];
+    // three different skins: an OG skin that is not also on its last day, and a last-day skin not shown already
+    const ogHook = [...D.og.outfits].reverse().find((o) => !D.last.outfits.some((l) => l.id === o.id)) || D.og.outfits[D.og.outfits.length - 1];
+    const lastHook = D.last.outfits.find((o) => o.id !== ogHook.id && o.id !== D.deal.outfits[0].id) || D.last.outfits[0] || D.deal.outfits[1];
+    const hookRecs = [D.deal.outfits[0], ogHook, lastHook];
     const hookTiles = hookRecs.map((o, i) => add(hook, tile(o, 270, 392, false), `left:${70 + i * 275}px;top:${530 + (i === 1 ? -30 : 0)}px`));
     const hookTags = [["OFERTA", YEL], ["OG", "#5BD0FF"], ["ÚLTIMO DÍA", RED]].map(([t, c], i) => chip(hook, t, c, 0, 0, 34));
     const title = S.title(stage, ["Tienda de hoy", D.dateLabel], { y: 236, size: 78 });
 
     // beat 1: mejor oferta
     const g1 = mk(stage, `inset:0`);
-    chip(g1, "1 · Mejor oferta");
+    chip(g1, D.dealBest === false ? "1 · Oferta" : "1 · Mejor oferta");   // a rotated deal is not the biggest saving
     const dealTiles = D.deal.outfits.slice(0, 4).map((o, i) => add(g1, tile(o, 182, 266, false), `left:${60 + i * 192}px;top:${380 + (i % 2) * 30}px`));
     const priceNew = mk(g1, `left:70px;top:800px;font-family:'Barlow Condensed';font-weight:900;font-size:150px;line-height:1;color:${YEL};-webkit-text-stroke:12px ${INK};paint-order:stroke fill;text-shadow:0 8px 0 ${INK}`, `${vb(120)} ${num(D.deal.final)}`, num(D.deal.final));
     const priceOld = mk(g1, `left:520px;top:838px;font-family:'Barlow Condensed';font-weight:900;font-size:84px;line-height:1;color:#fff;-webkit-text-stroke:9px ${INK};paint-order:stroke fill`, num(D.deal.regular), num(D.deal.regular));
-    const strike = mk(g1, `left:505px;top:874px;width:${D.deal.regular >= 10000 ? 262 : 212}px;height:16px;background:#FF2D2D;border:4px solid ${INK};border-radius:8px;transform:rotate(-8deg);transform-origin:0 50%`);
+    const strike = mk(g1, `left:505px;top:880px;width:${D.deal.regular >= 10000 ? 262 : 212}px;height:8px;background:#FF2D2D;border:3px solid ${INK};border-radius:6px;transform:rotate(-4deg);transform-origin:0 50%`);
+    let placed = false;   // the old price sits right after the new one (measured once the fonts are in), the strike across its middle
+    const placeOld = () => {
+      if (placed) return;
+      placed = true;
+      const x = priceNew.offsetLeft + priceNew.offsetWidth + 26;
+      priceOld.style.left = `${x}px`;
+      strike.style.left = `${x - 10}px`;
+      strike.style.width = `${priceOld.offsetWidth + 20}px`;
+    };
     const dealName = mk(g1, `left:70px;top:1004px;width:860px;font:800 34px Montserrat;color:#fff;text-transform:uppercase`, `${D.deal.name} · se va el ${D.dealOutLabel}`, `${D.deal.name} · SE VA EL ${D.dealOutLabel}`.toUpperCase());
     const sv = burst(g1);
 
@@ -139,7 +151,8 @@
       dealTiles.forEach((el, i) => T(el, { r: (i - 1.5) * 2, y: lerp(60, 0, E.out(k(t, b1 + i * 0.07, b1 + 0.3 + i * 0.07))) }));
       T(priceNew, { s: E.back(k(t, tp - 0.05, tp + 0.25)), a: t >= tp - 0.05 ? 1 : 0 });
       T(priceOld, { a: t >= tOld ? 1 : 0, s: E.back(k(t, tOld, tOld + 0.2)) });
-      strike.style.transform = `rotate(-8deg) scaleX(${E.out(k(t, tOld + 0.45, tOld + 0.7))})`;
+      placeOld();
+      strike.style.transform = `rotate(-4deg) scaleX(${E.out(k(t, tOld + 0.45, tOld + 0.7))})`;
       T(dealName, { a: k(t, tp + 0.3, tp + 0.6) });
       T(sv, { x: Math.min(912, 60 + (Math.min(4, D.deal.outfits.length) - 1) * 192 + 182 + 125) - 170, y: 345, r: -12 + Math.sin(t * 3) * 1.5, s: 0.55 * (t >= tSave ? E.back(k(t, tSave, tSave + 0.3)) : 0) * (1 + 0.03 * Math.sin(t * 9)), a: t >= tSave ? 1 : 0 });
       // OG

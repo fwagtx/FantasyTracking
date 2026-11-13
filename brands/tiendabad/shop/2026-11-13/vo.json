@@ -1,0 +1,56 @@
+{
+ "voice": "ef_dora",
+ "speed": 1.2,
+ "lang": "es-419",
+ "lead": 0.2,
+ "mode": "flow",
+ "phrases": [
+  {
+   "text": "Esta es la tienda de objetos de hoy, 13 de noviembre.",
+   "pause": 0.08
+  },
+  {
+   "text": "¡Tres cosas antes de gastar un solo pavo!",
+   "pause": 0.22
+  },
+  {
+   "text": "El Lote One Piece:",
+   "pause": 0.06
+  },
+  {
+   "text": "4000 pavos, en vez de 8200.",
+   "pause": 0.1,
+   "say": "4000 pavos, en vez de 8200."
+  },
+  {
+   "text": "¡Te ahorras 4200!",
+   "pause": 0.26,
+   "say": "¡Te ahorras 4200!"
+  },
+  {
+   "text": "Aracne y Chaqueta orejuda están en la tienda.",
+   "pause": 0.06
+  },
+  {
+   "text": "Las dos son del Capítulo 1, Temporada 6, y Aracne no salía desde hace 129 días.",
+   "pause": 0.26
+  },
+  {
+   "text": "Y tres skins épicas están en su último día.",
+   "pause": 0.3
+  },
+  {
+   "text": "¿Vas a comprar algo hoy?",
+   "pause": 0.06
+  },
+  {
+   "text": "Usa el código BAD en la tienda de objetos. Le ayuda muchísimo al canal.",
+   "pause": 0.25,
+   "say": "Usa el código bad, en la tienda de objetos. Le ayuda muchísimo al canal."
+  },
+  {
+   "text": "¡Gracias por ver! Síguenos para más contenido diario.",
+   "pause": 0.3
+  }
+ ]
+}

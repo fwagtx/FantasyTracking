@@ -5,8 +5,9 @@ Usage: python3 shop_pick.py [YYYY-MM-DD]   (default: today's shop, UTC)
 Writes shop/<date>/: shop.json, history.json, manifest.json, img/*.png, plan.json, vo.json, plan.js
 
 Picks (all from Epic's shop data, mirrored by fortnite-api.com, language es-419):
-  deal  - the bundle with the biggest gap between its regular price and today's price (plus the saving)
-  og    - the oldest outfit(s) in the shop, by the season Epic says they were introduced, and how many
+  deal  - the bundle with the biggest gap between its regular price and today's price (plus the saving), skipping a bundle
+          one of the last three videos featured while another saves at least 500 (then the screen says "Oferta")
+  og    - the oldest outfit(s) in the shop not featured in the last three videos, by the season Epic says they were introduced, and how many
           days since each was last in the shop (from the item's shop history)
   last  - outfits on their last day: their listing ends at the next reset (6 PM Mexico City time)
 """
@@ -86,12 +87,23 @@ def main():
             hist[oid] = {"name": outfits[oid]["name"], "error": str(ex), "chapter": 99, "season": 99, "gapDays": None}
     json.dump(hist, open(os.path.join(out, "history.json"), "w"), indent=1, ensure_ascii=False)
 
-    deal = max(bundles, key=lambda b: (b["regular"] - b["final"], b["regular"]))
+    # the big collab bundles and the oldest skins stay in the shop for weeks, so the same deal and OG led every video
+    # (Lote A$AP Rocky and Superador, Nov 10-13): skip what the last three daily videos featured while something else qualifies
+    recent = [json.load(open(pp)) for k in (1, 2, 3)
+              if os.path.exists(pp := os.path.join(HERE, (d0 - datetime.timedelta(days=k)).isoformat(), "plan.json"))]
+    seen_deals = {r["deal"]["name"] for r in recent}
+    seen_og = {o["id"] for r in recent for o in r["og"]["outfits"]}
+    rank = lambda b: (b["regular"] - b["final"], b["regular"])
+    best = max(bundles, key=rank)
+    fresh = [b for b in bundles if b["name"] not in seen_deals and b["regular"] - b["final"] >= 500]
+    deal = max(fresh, key=rank) if fresh else best
+    deal_best = deal is best                         # the screen says "Mejor oferta" only for the biggest saving in the shop
     saving = deal["regular"] - deal["final"]
     pct = round(100 * saving / deal["regular"]) if deal["regular"] else 0
     priced = [o for o in outfits if outfits[o]["price"]]
-    oldest = min((hist[o]["chapter"], hist[o]["season"]) for o in priced)
-    og = sorted([o for o in priced if (hist[o]["chapter"], hist[o]["season"]) == oldest], key=lambda o: (-(hist[o]["gapDays"] or 0), outfits[o]["name"]))[:2]
+    pool = [o for o in priced if o not in seen_og] or priced
+    oldest = min((hist[o]["chapter"], hist[o]["season"]) for o in pool)
+    og = sorted([o for o in pool if (hist[o]["chapter"], hist[o]["season"]) == oldest], key=lambda o: (-(hist[o]["gapDays"] or 0), outfits[o]["name"]))[:2]
     gap = max((hist[o]["gapDays"] or 0) for o in og)
     last = [o for o, r in outfits.items() if r["out"] == day and r["price"]]
     last.sort(key=lambda o: (-outfits[o]["price"], outfits[o]["name"]))
@@ -158,7 +170,7 @@ def main():
     plan = {"date": day, "dateLabel": f"{d0.day} {MES3[d0.month - 1]}", "dateLong": f"{d0.day} de {MES[d0.month - 1]}",
             "resetLabel": reset_mx.strftime("%-I %p").replace("PM", "PM").replace("AM", "AM"), "resetZone": "CDMX",
             "dealOutLabel": f"{deal_out.day} {MES3[deal_out.month - 1]}", "dealOutTime": deal_out.strftime("%-I %p"),
-            "deal": {**deal, "saving": saving, "pct": pct, "outfits": [outfits[o] for o in deal["outfits"][:4]]},
+            "deal": {**deal, "saving": saving, "pct": pct, "outfits": [outfits[o] for o in deal["outfits"][:4]]}, "dealBest": deal_best,
             "og": {"chapter": ch, "season": se, "gapDays": gap, "gapName": gap_name, "outfits": og_recs}, "last": {"count": len(last_recs), "outfits": last_recs[:6]},
             "roles": [r for r, _, _, _ in P], "phrases": [t for _, t, _, _ in P]}
     json.dump(plan, open(os.path.join(out, "plan.json"), "w"), indent=1, ensure_ascii=False)
@@ -169,7 +181,7 @@ def main():
         {"file": "shop.json", "source": f"Item Shop for {day}", "url": f"{API}/v2/shop?language={LANG}", "fetched_utc": now},
         {"file": "history.json", "source": "Introduction seasons and shop history", "url": f"{API}/v2/cosmetics/br/<id>?language={LANG}&responseFlags=4", "fetched_utc": now}]},
         open(os.path.join(out, "manifest.json"), "w"), indent=1)
-    print(json.dumps({"date": day, "deal": [deal["name"], deal["final"], deal["regular"], f"-{pct}%"], "og": [r["name"] for r in og_recs], "season": oldest, "gapDays": gap,
+    print(json.dumps({"date": day, "deal": [deal["name"], deal["final"], deal["regular"], f"-{pct}%"], "dealBest": deal_best, "og": [r["name"] for r in og_recs], "season": oldest, "gapDays": gap,
                       "last": len(last_recs)}, indent=1, ensure_ascii=False))
     print("\n".join(t for _, t, _, _ in P))
 
