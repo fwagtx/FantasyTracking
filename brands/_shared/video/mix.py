@@ -90,11 +90,25 @@ def main():
     mixed = os.path.join(tmp, "mixed.wav")
     run([*inputs, "-filter_complex", ";".join(parts), "-map", "[pre]", "-ac", "2", mixed])
     # two-pass loudness normalization to -14 LUFS integrated, -2.6 dBTP; linear mode can still overshoot the ceiling,
-    # so a limiter at -3.1 dBFS catches what is left before AAC encoding adds its own overshoot
+    # so a limiter at -3.1 dBFS catches what is left before AAC encoding adds its own overshoot. loudnorm works at 192 kHz:
+    # resample to the output rate first, so the limiter sees the samples that get encoded (resampling after it overshoots again)
     p = subprocess.run([FF, "-hide_banner", "-i", mixed, "-af", "loudnorm=I=-14:TP=-2.6:LRA=11:print_format=json", "-f", "null", "-"], capture_output=True, text=True)
     m = json.loads(re.findall(r"\{[^{}]+\}", p.stderr)[-1])
     ln = (f"loudnorm=I=-14:TP=-2.6:LRA=11:measured_I={m['input_i']}:measured_TP={m['input_tp']}:measured_LRA={m['input_lra']}"
           f":measured_thresh={m['input_thresh']}:offset={m['target_offset']}:linear=true")
-    run(["-i", silent, "-i", mixed, "-filter_complex", f"[1]{ln},alimiter=limit=0.7:level=false,aresample={SR}[a]", "-map", "0:v", "-map", "[a]", "-c:v", "copy", "-c:a", "aac", "-b:a", "256k", "-shortest", out])
+    encode = lambda limit: run(["-i", silent, "-i", mixed, "-filter_complex", f"[1]{ln},aresample={SR},alimiter=limit={limit}:level=false[a]",
+                                "-map", "0:v", "-map", "[a]", "-c:v", "copy", "-c:a", "aac", "-b:a", "256k", "-shortest", out])
+    encode(0.7)
+    # AAC can still overshoot on a sharp effect (2026-11-14: a card flip under a voice peak reached -0.8 dBTP; the post limit is -1):
+    # measure the encoded true peak and, when it is close, encode again with the limiter lowered by the overshoot
+    tp = true_peak(out)
+    if tp > -1.5:
+        encode(round(0.7 * 10 ** ((-1.8 - tp) / 20), 3))
+
+
+def true_peak(path):
+    p = subprocess.run([FF, "-hide_banner", "-i", path, "-af", "ebur128=peak=true", "-f", "null", "-"], capture_output=True, text=True)
+    tail = p.stderr[p.stderr.rfind("Summary:"):]
+    return float(re.search(r"Peak:\s+(-?[\d.]+) dBFS", tail).group(1))
 
 main()

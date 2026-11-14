@@ -52,8 +52,12 @@ def chapters(d):
         out.insert(0, (0.0, "Intro"))
     merged = []                          # YouTube needs chapters of 10 s or more
     for t, name in out:
-        if merged and t - merged[-1][0] < 12:
-            continue
+        # a chapter under 12 s (a short mid-roll code card) gives way to the one after it, so the content chapter stays listed
+        # (2026-11-14: "Código BAD" lasted 6 s and swallowed "Kasane Teto")
+        while merged and t - merged[-1][0] < 12:
+            if len(merged) == 1:
+                t = merged[0][0]         # the first chapter has to start at 0:00
+            merged.pop()
         merged.append((t, name))
     return "\n".join(f"{stamp(t)} {name}" for t, name in merged)
 

@@ -1,0 +1,59 @@
+{
+ "via": "fortnite-api.com (mirror of Epic's own data, es-419) for the in-game news, the map, the shop and the Kasane Teto outfit; press reports quoting Epic's Fortnite Status post (Nov 7, 2026) for the Treasure Hunt odds and Treasure Hours, re-fetched live on 2026-11-14 with Firecrawl (maxAge 0) and checked passage by passage. shop.json keeps only the entries this video uses, copied verbatim from the 2026-11-14 shop fetch (the full file is 900 KB). Epic's image CDN is not reachable from cloud sessions, so the news tiles are shown as text.",
+ "files": [
+  {
+   "file": "vgc-odds-confirmed.json",
+   "source": "VGC: Fortnite officially confirms Pirate Shop Access Token drop rate (Nov 9, 2026), reporting Epic's Fortnite Status post",
+   "url": "https://www.videogameschronicle.com/news/fortnite-officially-confirms-pirate-shop-access-token-drop-rate-as-players-hunt-for-item-which-makes-entire-shop-free/",
+   "fetched_utc": "2026-11-14T11:17:00Z"
+  },
+  {
+   "file": "vgc-guide.json",
+   "source": "VGC: Fortnite Pirate Shop Token guide (published Nov 5, 2026, updated Nov 8 with Epic's confirmed odds)",
+   "url": "https://www.videogameschronicle.com/news/fortnite-pirate-shop-access-token-guide/",
+   "fetched_utc": "2026-11-14T11:17:00Z"
+  },
+  {
+   "file": "vice-treasure-hours.json",
+   "source": "VICE: Fortnite Pirate Token Drop Rate Revealed – Normal and Treasure Hour Odds (Nov 7, 2026), reporting Epic's Fortnite Status schedule",
+   "url": "https://www.vice.com/en/article/fortnite-pirate-token-drop-rate-confirmed/",
+   "fetched_utc": "2026-11-14T11:17:00Z"
+  },
+  {
+   "file": "news.json",
+   "source": "In-game news feed, Battle Royale (es-419)",
+   "url": "https://fortnite-api.com/v2/news/br?language=es-419",
+   "fetched_utc": "2026-11-14T11:18:48Z"
+  },
+  {
+   "file": "map.json",
+   "source": "Official map and named places (es-419)",
+   "url": "https://fortnite-api.com/v1/map?language=es-419",
+   "fetched_utc": "2026-11-14T11:18:48Z"
+  },
+  {
+   "file": "map-labels.png",
+   "source": "Official map image with Spanish labels",
+   "url": "https://fortnite-api.com/images/map_es-419.png",
+   "fetched_utc": "2026-11-14T11:18:48Z"
+  },
+  {
+   "file": "kasane-teto.json",
+   "source": "Cosmetic: Kasane Teto outfit (es-419)",
+   "url": "https://fortnite-api.com/v2/cosmetics/br/search?language=es-419&name=Kasane%20Teto",
+   "fetched_utc": "2026-11-14T11:23:57Z"
+  },
+  {
+   "file": "shop.json",
+   "source": "Item Shop for 2026-11-14 (subset: the offers in this video)",
+   "url": "https://fortnite-api.com/v2/shop?language=es-419",
+   "fetched_utc": "2026-11-14T00:07:02Z"
+  },
+  {
+   "file": "history.json",
+   "source": "Introduction seasons and shop history of the 2026-11-14 shop's outfits",
+   "url": "https://fortnite-api.com/v2/cosmetics/br/<id>?language=es-419&responseFlags=4",
+   "fetched_utc": "2026-11-14T00:07:02Z"
+  }
+ ]
+}

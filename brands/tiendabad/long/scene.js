@@ -8,7 +8,8 @@
  *   {type:"stat", p, big, label}                              one big number
  *   {type:"code", p}                                          the code card (mid-roll and outro)
  * L.map: "blank" uses the map without labels (a season whose label image is too dense), anything else the labeled map.
- * A chapter bar (top left) shows the current segment's "chapter" if it has one.
+ * A chapter bar (top left) shows the current segment's "chapter" if it has one. Any segment with wide:true flies the camera back to
+ * the whole island (after a run of map segments, so the cards that follow don't sit on a zoomed-in map).
  */
 (function () {
   "use strict";
@@ -28,7 +29,7 @@
   let last = WIDE;
   SEG.forEach((s) => {
     if (s.type === "map") { kf.push([s.t0, last, last.z, "inOut"], [s.t0 + 1.1, s, s.z, "out5"]); last = s; }
-    else if (s.type === "title") { kf.push([s.t0, last, last.z], [s.t0 + 1.2, WIDE, 0.5, "inOut"]); last = WIDE; }
+    else if (s.type === "title" || s.wide) { kf.push([s.t0, last, last.z], [s.t0 + 1.2, WIDE, 0.5, "inOut"]); last = WIDE; }
   });
   kf.push([DUR, last, last.z * 1.06]);
   kf.sort((a, b) => a[0] - b[0]);
@@ -67,7 +68,7 @@
           s.lines.map((l, j) => big(l, j ? 84 : 112, j ? YEL : "#fff")).join(""), [s.kicker || "", ...s.lines].join(" / ").toUpperCase());
       } else if (s.type === "map") {
         e.pins = (s.pins || [{ x: s.x, y: s.y, label: "" }]).map((p, j) => ({ ...p, ring: S.marker(g, 64, 64, "#FF2D2D", i * 1.3 + j), lab: p.label ? scrawl(g, p.label) : null }));
-        e.card = mk(g, `left:80px;top:760px;max-width:1100px;padding:18px 34px 16px;border-radius:14px;background:linear-gradient(90deg,rgba(9,22,74,.96),rgba(16,52,160,.9));border:5px solid ${INK};box-shadow:0 10px 0 rgba(0,0,0,.35)`,
+        e.card = mk(g, `left:80px;top:760px;min-width:620px;max-width:1100px;padding:18px 34px 16px;border-radius:14px;background:linear-gradient(90deg,#09164A,#1034A0);border:5px solid ${INK};box-shadow:0 10px 0 rgba(0,0,0,.35)`,
           `<div style="font-family:Montserrat;font-weight:900;font-size:${Math.min(58, Math.floor(1030 / (0.74 * s.name.length)))}px;line-height:1.05;color:#fff;text-transform:uppercase;white-space:nowrap">${s.name}</div>${s.sub ? `<div style="font:700 32px Montserrat;color:${YEL};margin-top:6px">${s.sub}</div>` : ""}`, `${s.name} / ${s.sub || ""}`.toUpperCase());
       } else if (s.type === "quote") {
         e.card = mk(g, `left:260px;width:1400px;top:150px;border-radius:18px;overflow:hidden;border:6px solid ${INK};box-shadow:0 14px 0 rgba(0,0,0,.4);background:linear-gradient(180deg,#0E1B5C,#0A1240)`,
@@ -80,7 +81,9 @@
         e.head = mk(g, `left:200px;right:200px;top:150px;text-align:center`, big(s.title, 54), s.title.toUpperCase());
         e.tiles = s.items.map((o, j) => { const el = tile(g, o, w, h); el.style.left = `${960 - (n * (w + 30) - 30) / 2 + j * (w + 30)}px`; el.style.top = `${300 + (j % 2) * 24}px`; return el; });
       } else if (s.type === "stat") {
-        e.card = mk(g, `left:160px;right:160px;top:250px;text-align:center`, big(s.big, Math.min(300, Math.floor(1500 / (0.62 * s.big.length))), YEL) + `<div style="margin-top:10px">${big(s.label, 70)}</div>`, `${s.big} / ${s.label}`.toUpperCase());
+        e.size = Math.min(300, Math.floor(1500 / (0.62 * s.big.length)));
+        e.card = mk(g, `left:160px;right:160px;top:250px;text-align:center`, `<div class="fit" style="white-space:nowrap">${big(s.big, e.size, YEL)}</div><div style="margin-top:10px">${big(s.label, 70)}</div>`, `${s.big} / ${s.label}`.toUpperCase());
+        e.fit = e.card.querySelector(".fit");
       } else if (s.type === "code") {
         e.card = mk(g, `left:590px;width:740px;top:90px;text-align:center`,
           `<img src="${BR}/awning.svg" style="position:relative;z-index:2;display:block;width:740px;height:auto">
@@ -125,7 +128,10 @@
         if (s.type === "quote") { dimA = Math.max(dimA, on); T(e.card, { s: 0.94 + 0.06 * E.back(k(t, s.t0, s.t0 + 0.4)) });
           e.lines.forEach((l) => { const lit = t >= P[l.p].t0 - 0.05; l.d.style.opacity = lit ? 1 : 0.32; l.d.style.color = lit && t < P[l.p].t1 + 0.15 ? "#fff" : "#C9D6FF"; }); }
         if (s.type === "items") { dimA = Math.max(dimA, on); e.tiles.forEach((el, j) => T(el, { s: E.back(k(t, s.t0 + j * 0.08, s.t0 + 0.35 + j * 0.08)), r: Math.sin(t * 0.9 + j) * 1.2 })); }
-        if (s.type === "stat") { dimA = Math.max(dimA, on); T(e.card, { s: 0.8 + 0.2 * E.back(k(t, s.t0, s.t0 + 0.4)) }); }
+        if (s.type === "stat") { dimA = Math.max(dimA, on);
+          // one line, shrunk to the card's width once the font is in ("4000 PAVOS" wrapped at the size the letter count suggests)
+          if (!e.fitted) { e.fitted = true; if (e.fit.scrollWidth > e.fit.clientWidth) e.fit.innerHTML = big(s.big, Math.floor(e.size * e.fit.clientWidth / e.fit.scrollWidth * 0.97), YEL); }
+          T(e.card, { s: 0.8 + 0.2 * E.back(k(t, s.t0, s.t0 + 0.4)) }); }
         if (s.type === "code") { dimA = Math.max(dimA, on); T(e.card, { s: 0.86 + 0.14 * E.back(k(t, s.t0, s.t0 + 0.4)) });
           const thP = P[P.length - 1]; T(e.thanks, { a: /gracias/i.test(thP.text) ? k(t, thP.t0 - 0.05, thP.t0 + 0.2) : 0 }); }
       });

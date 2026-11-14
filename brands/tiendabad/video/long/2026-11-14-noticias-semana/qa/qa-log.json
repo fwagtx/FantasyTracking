@@ -1,0 +1,202 @@
+{
+  "video": "latienditabad-2026-11-14-noticias-semana.mp4",
+  "checked_utc": "2026-11-14T12:04:24Z",
+  "verdict": "READY TO POST",
+  "results": [
+    {
+      "check": "1. Facts",
+      "status": "PASS",
+      "detail": "29/29 claims verified against saved official data",
+      "items": [
+        {
+          "claim": "Noticia: frutas del diablo por toda la isla (Goma Goma como Luffy, Fuego Fuego como Ace, lejos del agua)",
+          "result": "PASS",
+          "why": "matched in news.json"
+        },
+        {
+          "claim": "Noticia: Ráfaga de puñetazos, ¡ARMA DE GOMA-GOMA!",
+          "result": "PASS",
+          "why": "matched in news.json"
+        },
+        {
+          "claim": "Noticia: atuendos Monkey D. Luffy, Nami y Usopp",
+          "result": "PASS",
+          "why": "matched in news.json"
+        },
+        {
+          "claim": "Noticia: ¡La aventura espera! (Arlong Park, Bahía Baratie, El $.$. Rocky, isla en forma de cráneo)",
+          "result": "PASS",
+          "why": "matched in news.json"
+        },
+        {
+          "claim": "Noticia: pase musical Diva de TwinDrill (Kasane Teto, mochila retro, gesto; juega Festival)",
+          "result": "PASS",
+          "why": "matched in news.json"
+        },
+        {
+          "claim": "Kasane Teto es un atuendo; descripción: ¡Tu quimera favorita al micrófono!",
+          "result": "PASS",
+          "why": "matched in kasane-teto.json"
+        },
+        {
+          "claim": "Ráfaga de puñetazos es el gesto del conjunto de Monkey D. Luffy, 1800 pavos (con mochila y pico)",
+          "result": "PASS",
+          "why": "matched in shop.json"
+        },
+        {
+          "claim": "Nami 1600 y Usopp 1600, cada uno con mochila y pico",
+          "result": "PASS",
+          "why": "matched in shop.json"
+        },
+        {
+          "claim": "Zoro 1800 (con gesto) y Sanji 1600, en la tienda desde la del 8 de noviembre",
+          "result": "PASS",
+          "why": "matched in shop.json"
+        },
+        {
+          "claim": "Lote One Piece: Luffy, Nami, Usopp y más, 4000 en vez de 8200",
+          "result": "PASS",
+          "why": "matched in shop.json"
+        },
+        {
+          "claim": "Lote Sombrero de paja: Zoro, Sanji y el compañero Tony Tony Chopper, 3200 en vez de 4900",
+          "result": "PASS",
+          "why": "matched in shop.json"
+        },
+        {
+          "claim": "Lo de One Piece se queda hasta el 5 de diciembre",
+          "result": "PASS",
+          "why": "matched in shop.json"
+        },
+        {
+          "claim": "Lote de Lil' Uzi Vert: desde la tienda del 13 de noviembre, dos atuendos, 3200 en vez de 7100, hasta el 12 de diciembre",
+          "result": "PASS",
+          "why": "matched in shop.json"
+        },
+        {
+          "claim": "Detective: 1500 pavos, solo en la tienda del 14 de noviembre (se va a las 6 PM CDMX = 00:00 UTC)",
+          "result": "PASS",
+          "why": "matched in shop.json"
+        },
+        {
+          "claim": "Detective es del Capítulo 1, Temporada 4, y no salía desde hace 305 días",
+          "result": "PASS",
+          "why": "matched in history.json"
+        },
+        {
+          "claim": "Arlong Park, Baratie, The $.$. Rocky, Playa de Buggy, Loguetown y los lugares cercanos están en el mapa oficial",
+          "result": "PASS",
+          "why": "matched in map.json"
+        },
+        {
+          "claim": "Arlong Park: oeste, cerca de Frontera Farol",
+          "result": "PASS",
+          "why": "visual check against map-labels.png: map pixel (635, 1123); nearest named place by coordinates: Frontera Farol"
+        },
+        {
+          "claim": "Baratie: sureste, cerca de Bahía Bulliciosa",
+          "result": "PASS",
+          "why": "visual check against map-labels.png: map pixel (1411, 1477); nearest named place by coordinates: Bahía Bulliciosa"
+        },
+        {
+          "claim": "The $.$. Rocky: este, cerca de Caverna Condenada",
+          "result": "PASS",
+          "why": "visual check against map-labels.png: map pixel (1416, 1217); nearest named place by coordinates: Caverna Condenada"
+        },
+        {
+          "claim": "Playa de Buggy: norte, cerca de Frontera Farol",
+          "result": "PASS",
+          "why": "visual check against map-labels.png: map pixel (1031, 851); nearest named place by coordinates: Frontera Farol"
+        },
+        {
+          "claim": "Loguetown: sur, cerca de Villa Molino",
+          "result": "PASS",
+          "why": "visual check against map-labels.png: map pixel (989, 1382); nearest named place by coordinates: Villa Molino"
+        },
+        {
+          "claim": "Horas del Tesoro el 14 nov: 11 AM-1 PM y 6-8 PM PT (1-3 PM y 8-10 PM CDMX), ×1.5 en las dos rondas ≈ 1 en 91 667",
+          "result": "PASS",
+          "why": "matched in vice-treasure-hours.json"
+        },
+        {
+          "claim": "Siguientes: 21 y 28 nov y 5 dic, mismas horas",
+          "result": "PASS",
+          "why": "matched in vice-treasure-hours.json"
+        },
+        {
+          "claim": "La búsqueda termina el 5 de diciembre (quedan 21 días desde el 14 de noviembre)",
+          "result": "PASS",
+          "why": "matched in vgc-odds-confirmed.json"
+        },
+        {
+          "claim": "Abrir o romper cofres en Battle Royale y Cero construcción da una probabilidad de tesoro",
+          "result": "PASS",
+          "why": "matched in vgc-guide.json"
+        },
+        {
+          "claim": "Tres niveles: estándar, mayor, supremo; supremo = skin dorada de la semana o Tienda Pirata",
+          "result": "PASS",
+          "why": "matched in vgc-guide.json"
+        },
+        {
+          "claim": "Skin dorada de la semana: 1 en 1 562 500 por cofre",
+          "result": "PASS",
+          "why": "matched in vgc-odds-confirmed.json"
+        },
+        {
+          "claim": "Escuadrón: si alguien la encuentra, todos la reciben; cuentan los cofres de los cuatro",
+          "result": "PASS",
+          "why": "matched in vgc-guide.json"
+        },
+        {
+          "claim": "Ficha de 2026: hasta el 15 de diciembre; la otra, del 1 de enero al 31 de diciembre de 2027",
+          "result": "PASS",
+          "why": "matched in vgc-odds-confirmed.json"
+        }
+      ]
+    },
+    {
+      "check": "2. Spelling and grammar",
+      "status": "PASS",
+      "detail": "174 distinct words checked; code written as BAD in all 3 mentions",
+      "items": []
+    },
+    {
+      "check": "3. Frames",
+      "status": "PASS",
+      "detail": "No black frames, no frozen stretches over 1.5 s. Contact sheet (1 frame/s) reviewed by eye: contact-sheet.png",
+      "items": []
+    },
+    {
+      "check": "4. Audio",
+      "status": "PASS",
+      "detail": "Integrated -14.1 LUFS, true peak -2.1 dBTP, no clipping, no silence gaps. All sound is original synthesis (no game rips, no copyrighted music). No voiceover in this cut.",
+      "items": []
+    },
+    {
+      "check": "5. Specs and safe zones",
+      "status": "PASS",
+      "detail": "1920x1080 h264 30 fps, aac 48000 Hz, 260.8s. Long YouTube video; every on-screen text box sampled 4x/s stays inside the title-safe area.",
+      "items": []
+    },
+    {
+      "check": "6. Disclosure and wording",
+      "status": "PASS",
+      "detail": "#EpicPartner is the first hashtag in caption line 1 and on screen in every sampled frame from 0.0s. No discount, giveaway, endorsement or filler-CTA wording.",
+      "items": []
+    },
+    {
+      "check": "7. Would a fan stop scrolling? Made by a person?",
+      "status": "PASS",
+      "detail": "Saturday news roundup, 4:21, 10 chapters (Intro, Frutas del diablo, Sombreros de Paja, La isla, Kasane Teto, En la tienda, Horas del Tesoro, Cómo funciona, Consejos, Final). Watched every segment in the final render: the opening card, the in-game news tiles quoted word for word (frutas del diablo, Ráfaga de puñetazos, atuendos Luffy/Nami/Usopp, ¡La aventura espera!, pase musical Diva de TwinDrill), the Straw Hats tiles with their set prices from the Nov 14 shop (Luffy 1800, Nami 1600, Usopp 1600, Zoro 1800, Sanji 1600), Lote One Piece 4000 (8200), Lote Sombrero de paja 3200 (4900), both until Dec 5; five map flights with the pin on the place and a name card (Arlong Park west, Baratie southeast with its own label since the map has no Baratie text, The $.$. Rocky east, Playa de Buggy north, Loguetown south); the mid-roll code card; Kasane Teto's outfit tile with its in-game description; Lote de Lil' Uzi Vert 3200 (7100) from the Nov 13 shop until Dec 12; Detective back after 305 days, leaving Nov 14 at 6 PM CDMX; Treasure Hours Nov 14 1-3 PM and 8-10 PM CDMX, ×1.5 both rounds (~1 in 91 667), next Nov 21, 28 and Dec 5, 21 days left; tiers, gold skin odds, squad tip, token dates; code card and thanks. Fixed before the final render: the camera now returns to the whole island after the map run (the cards that followed sat on a zoomed map), '4000 PAVOS' fits one line, the place card is opaque and wider (a map label showed beside 'Baratie'). Voice: every line makes sense spoken; names respelled for the es-419 voice (Monki Di Lufi, San yi, Tony Tony Chóper, Uan Pis, Eis, Tuin Dril, Log Taun, Ese Ese Rocky). Pirate passages re-fetched today and all 58 matched; news, map and Kasane Teto fetched today; the shop data is the Nov 14 fetch.",
+      "items": []
+    },
+    {
+      "check": "8. Owner approval",
+      "status": "PASS",
+      "detail": "Standing approval for autopilot (owner, 2026-10-28): posts when checks 1-7 all PASS.",
+      "items": []
+    }
+  ],
+  "caption": "#EpicPartner Las noticias de Fortnite del 14 de noviembre 🏴‍☠️ Frutas del diablo, los Sombreros de Paja en la tienda, Kasane Teto en Festival, Lil Uzi Vert, Detective y las Horas del Tesoro (hora CDMX).\n¿Ya te salió la Tienda Pirata? 👇\nUsa el código BAD en la tienda de objetos 💛\n#Fortnite #NoticiasFortnite #FortniteEspañol"
+}

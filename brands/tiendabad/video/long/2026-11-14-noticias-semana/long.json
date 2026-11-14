@@ -1,0 +1,649 @@
+{
+ "title": "Noticias de la semana: 14 de noviembre",
+ "caption": "#EpicPartner Las noticias de Fortnite del 14 de noviembre 🏴‍☠️ Frutas del diablo, los Sombreros de Paja en la tienda, Kasane Teto en Festival, Lil Uzi Vert, Detective y las Horas del Tesoro (hora CDMX).\n¿Ya te salió la Tienda Pirata? 👇\nUsa el código BAD en la tienda de objetos 💛\n#Fortnite #NoticiasFortnite #FortniteEspañol",
+ "claims": [
+  {
+   "text": "Noticia: frutas del diablo por toda la isla (Goma Goma como Luffy, Fuego Fuego como Ace, lejos del agua)",
+   "source": "news.json",
+   "match": [
+    "Frutas del diablo por toda la isla",
+    "¡Se soltaron frutas del diablo raras por todo el mapa!",
+    "Come la fruta Goma Goma para estirar tus habilidades como Luffy",
+    "o la fruta Fuego Fuego para arrasar como Ace… solo mantente lejos del agua."
+   ]
+  },
+  {
+   "text": "Noticia: Ráfaga de puñetazos, ¡ARMA DE GOMA-GOMA!",
+   "source": "news.json",
+   "match": [
+    "\"title\": \"Ráfaga de puñetazos\", \"tabTitle\": \"Ráfaga de puñetazos\", \"body\": \"¡ARMA DE GOMA-GOMA!\""
+   ]
+  },
+  {
+   "text": "Noticia: atuendos Monkey D. Luffy, Nami y Usopp",
+   "source": "news.json",
+   "match": [
+    "Atuendos Monkey D. Luffy, Nami y Usopp",
+    "Cuando la aventura llama, ¡los Sombreros de Paja responden!",
+    "Zarpa con los atuendos Monkey D. Luffy, Nami y Usopp y traza un rumbo hacia aguas inexploradas."
+   ]
+  },
+  {
+   "text": "Noticia: ¡La aventura espera! (Arlong Park, Bahía Baratie, El $.$. Rocky, isla en forma de cráneo)",
+   "source": "news.json",
+   "match": [
+    "¡La aventura espera!",
+    "Explora Arlong Park de One Piece, navega por la Bahía Baratie o asalta El $.$. Rocky en esta misteriosa isla en forma de cráneo."
+   ]
+  },
+  {
+   "text": "Noticia: pase musical Diva de TwinDrill (Kasane Teto, mochila retro, gesto; juega Festival)",
+   "source": "news.json",
+   "match": [
+    "Pase musical Diva de TwinDrill",
+    "¡La diva virtual Kasane Teto sube al escenario!",
+    "Quienes tengan el pase musical de Diva de TwinDrill podrán acceder al atuendo Kasane Teto, una mochila retro, un gesto y más.",
+    "¡Juega Festival para empezar a desbloquear recompensas!"
+   ]
+  },
+  {
+   "text": "Kasane Teto es un atuendo; descripción: ¡Tu quimera favorita al micrófono!",
+   "source": "kasane-teto.json",
+   "match": [
+    "\"name\": \"Kasane Teto\", \"description\": \"¡Tu quimera favorita al micrófono!\", \"type\": {\"value\": \"outfit\", \"displayValue\": \"Atuendo\""
+   ]
+  },
+  {
+   "text": "Ráfaga de puñetazos es el gesto del conjunto de Monkey D. Luffy, 1800 pavos (con mochila y pico)",
+   "source": "shop.json",
+   "match": [
+    "\"regularPrice\": 1800, \"finalPrice\": 1800, \"devName\": \"[VIRTUAL]1 x Monkey D. Luffy, 1 x Luffy's Straw Hat, 1 x Gum-Gum Pistol, 1 x Multi-Punches Flex for -1 MtxCurrency\"",
+    "\"name\": \"Ráfaga de puñetazos\", \"description\": \"Remata con la ametralladora goma goma.\", \"type\": {\"value\": \"emote\", \"displayValue\": \"Gesto\"",
+    "\"name\": \"Sombrero de paja de Luffy\"",
+    "\"name\": \"Pistola goma goma\""
+   ]
+  },
+  {
+   "text": "Nami 1600 y Usopp 1600, cada uno con mochila y pico",
+   "source": "shop.json",
+   "match": [
+    "\"regularPrice\": 1600, \"finalPrice\": 1600, \"devName\": \"[VIRTUAL]1 x Nami, 1 x Nami's Tangerines, 1 x Climate Baton for -1 MtxCurrency\"",
+    "\"regularPrice\": 1600, \"finalPrice\": 1600, \"devName\": \"[VIRTUAL]1 x Usopp, 1 x Usopp's Kit, 1 x 5 Ton Hammer for -1 MtxCurrency\""
+   ]
+  },
+  {
+   "text": "Zoro 1800 (con gesto) y Sanji 1600, en la tienda desde la del 8 de noviembre",
+   "source": "shop.json",
+   "match": [
+    "\"regularPrice\": 1800, \"finalPrice\": 1800, \"devName\": \"[VIRTUAL]1 x Roronoa Zoro, 1 x Zoro's Swords, 1 x Zoro's Training Gear, 1 x Test of Will for -1 MtxCurrency\", \"offerId\"",
+    "\"regularPrice\": 1600, \"finalPrice\": 1600, \"devName\": \"[VIRTUAL]1 x Sanji, 1 x Sanji's Utensils, 1 x Sanji's Utensils for -1 MtxCurrency\", \"offerId\"",
+    "\"inDate\": \"2026-11-08T00:00:00Z\"",
+    "\"name\": \"Prueba de voluntad\""
+   ]
+  },
+  {
+   "text": "Lote One Piece: Luffy, Nami, Usopp y más, 4000 en vez de 8200",
+   "source": "shop.json",
+   "match": [
+    "\"regularPrice\": 8200, \"finalPrice\": 4000, \"devName\": \"[VIRTUAL]1 x Monkey D. Luffy, 1 x Luffy's Straw Hat, 1 x Gum-Gum Pistol, 1 x Multi-Punches Flex, 1 x Nami",
+    "\"name\": \"Lote One Piece\""
+   ]
+  },
+  {
+   "text": "Lote Sombrero de paja: Zoro, Sanji y el compañero Tony Tony Chopper, 3200 en vez de 4900",
+   "source": "shop.json",
+   "match": [
+    "\"regularPrice\": 4900, \"finalPrice\": 3200, \"devName\": \"[VIRTUAL]1 x Roronoa Zoro",
+    "1 x Sanji",
+    "1 x Tony Tony Chopper for -1 MtxCurrency\"",
+    "\"name\": \"Lote Sombrero de paja\"",
+    "\"name\": \"Tony Tony Chopper\", \"description\": \"Un reno doctor amante del algodón de azúcar.\", \"type\": {\"value\": \"sidekick\", \"displayValue\": \"Compañero\""
+   ]
+  },
+  {
+   "text": "Lo de One Piece se queda hasta el 5 de diciembre",
+   "source": "shop.json",
+   "match": [
+    "\"outDate\": \"2026-12-05T23:59:59.999Z\""
+   ]
+  },
+  {
+   "text": "Lote de Lil' Uzi Vert: desde la tienda del 13 de noviembre, dos atuendos, 3200 en vez de 7100, hasta el 12 de diciembre",
+   "source": "shop.json",
+   "match": [
+    "\"regularPrice\": 7100, \"finalPrice\": 3200, \"devName\": \"[VIRTUAL]1 x Lil Uzi Vert",
+    "\"inDate\": \"2026-11-13T00:00:00Z\", \"outDate\": \"2026-12-12T23:59:59.999Z\", \"bundle\": {\"name\": \"Lote de Lil' Uzi Vert\"",
+    "\"name\": \"Lil Uzi Vert de gira\", \"description\": \"Un diamante en bruto.\", \"type\": {\"value\": \"outfit\""
+   ]
+  },
+  {
+   "text": "Detective: 1500 pavos, solo en la tienda del 14 de noviembre (se va a las 6 PM CDMX = 00:00 UTC)",
+   "source": "shop.json",
+   "match": [
+    "\"regularPrice\": 1500, \"finalPrice\": 1500, \"devName\": \"[VIRTUAL]1 x Sleuth, 1 x Evidence Bag for -1 MtxCurrency\", \"offerId\"",
+    "\"inDate\": \"2026-11-14T00:00:00Z\", \"outDate\": \"2026-11-14T23:59:59.999Z\"",
+    "\"name\": \"Detective\""
+   ]
+  },
+  {
+   "text": "Detective es del Capítulo 1, Temporada 4, y no salía desde hace 305 días",
+   "source": "history.json",
+   "match": [
+    "\"CID_154_Athena_Commando_M_Gumshoe\": {\"name\": \"Detective\", \"introduction\": \"Introducido en Capítulo 1, Temporada 4.\", \"chapter\": 1, \"season\": 4, \"lastSeen\": \"2026-01-13\", \"gapDays\": 305"
+   ]
+  },
+  {
+   "text": "Arlong Park, Baratie, The $.$. Rocky, Playa de Buggy, Loguetown y los lugares cercanos están en el mapa oficial",
+   "source": "map.json",
+   "match": [
+    "Arlong Park",
+    "Baratie",
+    "The $.$. Rocky",
+    "Playa de Buggy",
+    "Loguetown",
+    "Frontera Farol",
+    "Bahía Bulliciosa",
+    "Caverna Condenada",
+    "Villa Molino"
+   ]
+  },
+  {
+   "text": "Arlong Park: oeste, cerca de Frontera Farol",
+   "source": "map-labels.png",
+   "visual": "map pixel (635, 1123); nearest named place by coordinates: Frontera Farol"
+  },
+  {
+   "text": "Baratie: sureste, cerca de Bahía Bulliciosa",
+   "source": "map-labels.png",
+   "visual": "map pixel (1411, 1477); nearest named place by coordinates: Bahía Bulliciosa"
+  },
+  {
+   "text": "The $.$. Rocky: este, cerca de Caverna Condenada",
+   "source": "map-labels.png",
+   "visual": "map pixel (1416, 1217); nearest named place by coordinates: Caverna Condenada"
+  },
+  {
+   "text": "Playa de Buggy: norte, cerca de Frontera Farol",
+   "source": "map-labels.png",
+   "visual": "map pixel (1031, 851); nearest named place by coordinates: Frontera Farol"
+  },
+  {
+   "text": "Loguetown: sur, cerca de Villa Molino",
+   "source": "map-labels.png",
+   "visual": "map pixel (989, 1382); nearest named place by coordinates: Villa Molino"
+  },
+  {
+   "text": "Horas del Tesoro el 14 nov: 11 AM-1 PM y 6-8 PM PT (1-3 PM y 8-10 PM CDMX), ×1.5 en las dos rondas ≈ 1 en 91 667",
+   "source": "vice-treasure-hours.json",
+   "match": [
+    "November 14 | 11 AM–1 PM PT / 2–4 PM ET | 6–8 PM PT / 9–11 PM ET | 1.5× both rounds",
+    "A 1.5× boost brings it to about 1 in 91,667",
+    "The normal Fortnite Pirate Token drop rate is 1 in 137,500 per chest"
+   ]
+  },
+  {
+   "text": "Siguientes: 21 y 28 nov y 5 dic, mismas horas",
+   "source": "vice-treasure-hours.json",
+   "match": [
+    "November 21 | 11 AM–1 PM PT / 2–4 PM ET | 6–8 PM PT / 9–11 PM ET | 1.5× both rounds",
+    "November 28 | 11 AM–1 PM PT / 2–4 PM ET | 6–8 PM PT / 9–11 PM ET | 1.5× both rounds",
+    "December 5 | 11 AM–1 PM PT / 2–4 PM ET | 6–8 PM PT / 9–11 PM ET | 1.5× both rounds"
+   ]
+  },
+  {
+   "text": "La búsqueda termina el 5 de diciembre (quedan 21 días desde el 14 de noviembre)",
+   "source": "vgc-odds-confirmed.json",
+   "match": [
+    "which started on November 1 and is set to end on December 5"
+   ]
+  },
+  {
+   "text": "Abrir o romper cofres en Battle Royale y Cero construcción da una probabilidad de tesoro",
+   "source": "vgc-guide.json",
+   "match": [
+    "every time you open or break a chest, there's a small chance that you'll get a treasure reward",
+    "open chests during Battle Royale and Zero Build modes"
+   ]
+  },
+  {
+   "text": "Tres niveles: estándar, mayor, supremo; supremo = skin dorada de la semana o Tienda Pirata",
+   "source": "vgc-guide.json",
+   "match": [
+    "Treasure Hunt prizes are split into three tiers – Standard, Major and Supreme",
+    "if it's Supreme, you'll get one of two things – that week's gold skin"
+   ]
+  },
+  {
+   "text": "Skin dorada de la semana: 1 en 1 562 500 por cofre",
+   "source": "vgc-odds-confirmed.json",
+   "match": [
+    "Weekly Gold Outfit – 1 in 1,562,500"
+   ]
+  },
+  {
+   "text": "Escuadrón: si alguien la encuentra, todos la reciben; cuentan los cofres de los cuatro",
+   "source": "vgc-guide.json",
+   "match": [
+    "if anyone in your Squad finds the Pirate Shop Token in a chest, every member of the Squad gets it",
+    "in each round you're opening four times as many chests as usual"
+   ]
+  },
+  {
+   "text": "Ficha de 2026: hasta el 15 de diciembre; la otra, del 1 de enero al 31 de diciembre de 2027",
+   "source": "vgc-odds-confirmed.json",
+   "match": [
+    "one which can be activated at any point in 2026 between November 1 and December 15, and one which can be activated at any point in 2027 between January 1 and December 31"
+   ]
+  }
+ ],
+ "segments": [
+  {
+   "type": "title",
+   "p": 0,
+   "chapter": "Intro",
+   "kicker": "NOTICIAS DE FORTNITE",
+   "lines": [
+    "Lo nuevo",
+    "14 de noviembre"
+   ]
+  },
+  {
+   "type": "quote",
+   "p": 3,
+   "chapter": "Frutas del diablo",
+   "kicker": "NOTICIAS DEL JUEGO",
+   "title": "Frutas del diablo por toda la isla",
+   "lines": [
+    {
+     "p": 4,
+     "text": "¡Se soltaron frutas del diablo raras por todo el mapa!"
+    },
+    {
+     "p": 5,
+     "text": "Come la fruta Goma Goma para estirar tus habilidades como Luffy"
+    },
+    {
+     "p": 6,
+     "text": "o la fruta Fuego Fuego para arrasar como Ace… solo mantente lejos del agua."
+    }
+   ]
+  },
+  {
+   "type": "quote",
+   "p": 9,
+   "kicker": "NOTICIAS DEL JUEGO",
+   "title": "Ráfaga de puñetazos",
+   "lines": [
+    {
+     "p": 9,
+     "text": "¡ARMA DE GOMA-GOMA!"
+    }
+   ]
+  },
+  {
+   "type": "items",
+   "p": 10,
+   "title": "El gesto de Luffy",
+   "items": [
+    {
+     "img": "../../tiendabad/video/long/2026-11-14-noticias-semana/img/EID_CeleryStitch.png",
+     "name": "Ráfaga de puñetazos",
+     "rarity": "uncommon"
+    },
+    {
+     "img": "../../tiendabad/video/long/2026-11-14-noticias-semana/img/Character_CeleryStitch.png",
+     "name": "Monkey D. Luffy",
+     "rarity": "epic",
+     "price": 1800
+    }
+   ]
+  },
+  {
+   "type": "quote",
+   "p": 11,
+   "chapter": "Sombreros de Paja",
+   "kicker": "NOTICIAS DEL JUEGO",
+   "title": "Atuendos Monkey D. Luffy, Nami y Usopp",
+   "lines": [
+    {
+     "p": 12,
+     "text": "Cuando la aventura llama, ¡los Sombreros de Paja responden!"
+    },
+    {
+     "p": 13,
+     "text": "Zarpa con los atuendos Monkey D. Luffy, Nami y Usopp y traza un rumbo hacia aguas inexploradas."
+    }
+   ]
+  },
+  {
+   "type": "items",
+   "p": 14,
+   "title": "Sombreros de Paja en la tienda",
+   "items": [
+    {
+     "img": "../../tiendabad/video/long/2026-11-14-noticias-semana/img/Character_CeleryStitch.png",
+     "name": "Monkey D. Luffy",
+     "rarity": "epic",
+     "price": 1800
+    },
+    {
+     "img": "../../tiendabad/video/long/2026-11-14-noticias-semana/img/Character_BoastJoint.png",
+     "name": "Nami",
+     "rarity": "epic",
+     "price": 1600
+    },
+    {
+     "img": "../../tiendabad/video/long/2026-11-14-noticias-semana/img/Character_LoomRise.png",
+     "name": "Usopp",
+     "rarity": "epic",
+     "price": 1600
+    },
+    {
+     "img": "../../tiendabad/video/long/2026-11-14-noticias-semana/img/Character_BrandCreed.png",
+     "name": "Roronoa Zoro",
+     "rarity": "epic",
+     "price": 1800
+    },
+    {
+     "img": "../../tiendabad/video/long/2026-11-14-noticias-semana/img/Character_InsightBawl.png",
+     "name": "Sanji",
+     "rarity": "epic",
+     "price": 1600
+    }
+   ]
+  },
+  {
+   "type": "stat",
+   "p": 18,
+   "big": "4000 pavos",
+   "label": "Lote One Piece: Luffy, Nami, Usopp y más"
+  },
+  {
+   "type": "stat",
+   "p": 19,
+   "big": "3200 pavos",
+   "label": "Lote Sombrero de paja: Zoro, Sanji y Chopper"
+  },
+  {
+   "type": "stat",
+   "p": 20,
+   "big": "5 dic",
+   "label": "Hasta ese día en la tienda"
+  },
+  {
+   "type": "quote",
+   "p": 21,
+   "chapter": "La isla",
+   "kicker": "NOTICIAS DEL JUEGO",
+   "title": "¡La aventura espera!",
+   "lines": [
+    {
+     "p": 22,
+     "text": "Explora Arlong Park de One Piece, navega por la Bahía Baratie o asalta El $.$. Rocky en esta misteriosa isla en forma de cráneo."
+    }
+   ]
+  },
+  {
+   "type": "map",
+   "p": 23,
+   "x": 634.8,
+   "y": 1123.2,
+   "z": 1.8,
+   "name": "Arlong Park",
+   "sub": "Oeste · cerca de Frontera Farol",
+   "pins": [
+    {
+     "x": 634.8,
+     "y": 1123.2,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "type": "map",
+   "p": 24,
+   "x": 1411.1,
+   "y": 1476.8,
+   "z": 1.8,
+   "name": "Baratie",
+   "sub": "Sureste · cerca de Bahía Bulliciosa",
+   "pins": [
+    {
+     "x": 1411.1,
+     "y": 1476.8,
+     "label": "Baratie",
+     "lx": -330,
+     "ly": 70
+    }
+   ]
+  },
+  {
+   "type": "map",
+   "p": 25,
+   "x": 1415.7,
+   "y": 1216.9,
+   "z": 1.8,
+   "name": "The $.$. Rocky",
+   "sub": "Este · cerca de Caverna Condenada",
+   "pins": [
+    {
+     "x": 1415.7,
+     "y": 1216.9,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "type": "map",
+   "p": 26,
+   "x": 1031.1,
+   "y": 850.9,
+   "z": 1.8,
+   "name": "Playa de Buggy",
+   "sub": "Norte · cerca de Frontera Farol",
+   "pins": [
+    {
+     "x": 1031.1,
+     "y": 850.9,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "type": "map",
+   "p": 27,
+   "x": 988.7,
+   "y": 1382.2,
+   "z": 1.8,
+   "name": "Loguetown",
+   "sub": "Sur · cerca de Villa Molino",
+   "pins": [
+    {
+     "x": 988.7,
+     "y": 1382.2,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "type": "code",
+   "p": 29,
+   "chapter": "Código BAD",
+   "wide": true
+  },
+  {
+   "type": "quote",
+   "p": 30,
+   "chapter": "Kasane Teto",
+   "kicker": "NOTICIAS DEL JUEGO",
+   "title": "Pase musical Diva de TwinDrill",
+   "lines": [
+    {
+     "p": 31,
+     "text": "¡La diva virtual Kasane Teto sube al escenario!"
+    },
+    {
+     "p": 32,
+     "text": "Quienes tengan el pase musical de Diva de TwinDrill podrán acceder al atuendo Kasane Teto, una mochila retro, un gesto y más."
+    },
+    {
+     "p": 33,
+     "text": "¡Juega Festival para empezar a desbloquear recompensas!"
+    }
+   ]
+  },
+  {
+   "type": "items",
+   "p": 34,
+   "title": "¡Tu quimera favorita al micrófono!",
+   "items": [
+    {
+     "img": "../../tiendabad/video/long/2026-11-14-noticias-semana/img/Character_CactusBait.png",
+     "name": "Kasane Teto",
+     "rarity": "icon"
+    }
+   ]
+  },
+  {
+   "type": "items",
+   "p": 35,
+   "chapter": "En la tienda",
+   "title": "Lote de Lil' Uzi Vert",
+   "items": [
+    {
+     "img": "../../tiendabad/video/long/2026-11-14-noticias-semana/img/Character_RookGeckoRod.png",
+     "name": "Lil Uzi Vert",
+     "rarity": "icon"
+    },
+    {
+     "img": "../../tiendabad/video/long/2026-11-14-noticias-semana/img/Character_RookGeckoRye.png",
+     "name": "Lil Uzi Vert de gira",
+     "rarity": "icon"
+    }
+   ]
+  },
+  {
+   "type": "stat",
+   "p": 36,
+   "big": "3200 pavos",
+   "label": "Lote de Lil' Uzi Vert, en vez de 7100"
+  },
+  {
+   "type": "stat",
+   "p": 37,
+   "big": "12 dic",
+   "label": "Hasta ese día en la tienda"
+  },
+  {
+   "type": "items",
+   "p": 38,
+   "title": "Regresó después de 305 días",
+   "items": [
+    {
+     "img": "../../tiendabad/video/long/2026-11-14-noticias-semana/img/CID_154_Athena_Commando_M_Gumshoe.png",
+     "name": "Detective",
+     "rarity": "epic",
+     "price": 1500
+    }
+   ]
+  },
+  {
+   "type": "stat",
+   "p": 39,
+   "big": "1 día",
+   "label": "Se va el 14 nov a las 6 PM (CDMX)"
+  },
+  {
+   "type": "title",
+   "p": 40,
+   "chapter": "Horas del Tesoro",
+   "kicker": "TIENDA PIRATA",
+   "lines": [
+    "Horas del",
+    "Tesoro"
+   ]
+  },
+  {
+   "type": "stat",
+   "p": 41,
+   "big": "1-3 PM · 8-10 PM",
+   "label": "Sábado 14 nov · hora CDMX"
+  },
+  {
+   "type": "stat",
+   "p": 43,
+   "big": "×1.5",
+   "label": "En las dos rondas"
+  },
+  {
+   "type": "stat",
+   "p": 44,
+   "big": "1 en 91 667",
+   "label": "Tienda Pirata, por cofre"
+  },
+  {
+   "type": "stat",
+   "p": 45,
+   "big": "21 · 28 nov · 5 dic",
+   "label": "Siguientes Horas del Tesoro"
+  },
+  {
+   "type": "stat",
+   "p": 46,
+   "big": "21 días",
+   "label": "Para encontrar la Tienda Pirata"
+  },
+  {
+   "type": "title",
+   "p": 47,
+   "chapter": "Cómo funciona",
+   "kicker": "TESOROS",
+   "lines": [
+    "Abre o rompe",
+    "cofres"
+   ]
+  },
+  {
+   "type": "stat",
+   "p": 48,
+   "big": "3 niveles",
+   "label": "Estándar · mayor · supremo"
+  },
+  {
+   "type": "stat",
+   "p": 49,
+   "big": "Supremo",
+   "label": "Skin dorada o Tienda Pirata"
+  },
+  {
+   "type": "stat",
+   "p": 50,
+   "big": "1 en 1 562 500",
+   "label": "Skin dorada de la semana, por cofre"
+  },
+  {
+   "type": "stat",
+   "p": 51,
+   "chapter": "Consejos",
+   "big": "×4",
+   "label": "Juega en escuadrón: cuentan los cofres de los cuatro"
+  },
+  {
+   "type": "stat",
+   "p": 53,
+   "big": "15 dic",
+   "label": "Último día para activar la ficha de 2026"
+  },
+  {
+   "type": "stat",
+   "p": 54,
+   "big": "2027",
+   "label": "La otra ficha: del 1 de enero al 31 de diciembre"
+  },
+  {
+   "type": "code",
+   "p": 55,
+   "chapter": "Final"
+  }
+ ]
+}
