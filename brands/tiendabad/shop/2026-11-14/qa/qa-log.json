@@ -1,0 +1,77 @@
+{
+  "video": "latienditabad-shop-2026-11-14.mp4",
+  "checked_utc": "2026-11-14T00:11:48Z",
+  "verdict": "READY TO POST",
+  "results": [
+    {
+      "check": "1. Facts",
+      "status": "PASS",
+      "detail": "4/4 claims verified against saved official data",
+      "items": [
+        {
+          "claim": "Lote de Lil' Uzi Vert: 3200 V-Bucks, regular 7100",
+          "result": "PASS",
+          "why": "matched in shop.json"
+        },
+        {
+          "claim": "Detective: Capítulo 1, Temporada 4",
+          "result": "PASS",
+          "why": "matched in history.json"
+        },
+        {
+          "claim": "305 days since last in the shop",
+          "result": "PASS",
+          "why": "matched in history.json"
+        },
+        {
+          "claim": "6 outfits leave at the next reset",
+          "result": "PASS",
+          "why": "matched in plan.json"
+        }
+      ]
+    },
+    {
+      "check": "2. Spelling and grammar",
+      "status": "PASS",
+      "detail": "5 distinct words checked; code written as BAD in all 2 mentions",
+      "items": []
+    },
+    {
+      "check": "3. Frames",
+      "status": "PASS",
+      "detail": "No black frames, no frozen stretches over 1.5 s. Contact sheet (1 frame/s) reviewed by eye: contact-sheet.png",
+      "items": []
+    },
+    {
+      "check": "4. Audio",
+      "status": "PASS",
+      "detail": "Integrated -14.2 LUFS, true peak -2.8 dBTP, no clipping, no silence gaps. All sound is original synthesis (no game rips, no copyrighted music). No voiceover in this cut.",
+      "items": []
+    },
+    {
+      "check": "5. Specs and safe zones",
+      "status": "PASS",
+      "detail": "1080x1920 h264 60 fps, aac 48000 Hz, 26.6s. Fits TikTok, Reels, Shorts, X, Facebook, Threads. Every on-screen text box sampled 4x/s stays out of the top bar, bottom caption area and button column.",
+      "items": []
+    },
+    {
+      "check": "6. Disclosure and wording",
+      "status": "PASS",
+      "detail": "#EpicPartner is the first hashtag in caption line 1 and on screen in every sampled frame from 0.0s. No discount, giveaway, endorsement or filler-CTA wording.",
+      "items": []
+    },
+    {
+      "check": "7. Would a fan stop scrolling? Made by a person?",
+      "status": "PASS",
+      "detail": "Frame 1 shows the date (14 NOV) and three different skins at once (Lil Uzi Vert, Detective, Batalla). The deal is Lote de Lil' Uzi Vert 3200 instead of 7100 (-55%, ahorras 3900), labelled 'Oferta' because the rotation skipped Lote A$AP Rocky (Nov 10-12) and Lote One Piece (Nov 13); it leaves Dec 12, matching 'se va el 12 dic'. The strike sits only on 7100, so 3200 reads clearly. Regreso OG: Detective, Capítulo 1 · Temporada 4, last seen 2026-01-13 (305 days). Último día: 6 skins, 3 of them rare (Batalla, Evie buscacumbres, Pollito), 'se van el 14 nov, 6 PM'. Code card and thanks at the end. Voice: first line 'Esta es la tienda de objetos de hoy, 14 de noviembre.', every line makes sense spoken, and 'Lil' Uzi Vert' reads as 'lil usi vert'.",
+      "items": []
+    },
+    {
+      "check": "8. Owner approval",
+      "status": "PASS",
+      "detail": "Standing approval for autopilot (owner, 2026-10-28): posts when checks 1-7 all PASS.",
+      "items": []
+    }
+  ],
+  "caption": "#EpicPartner Tienda de objetos de Fortnite, 14 de noviembre: el Lote de Lil' Uzi Vert cuesta 3200 V-Bucks en vez de 7100 (ahorras 3900), Detective está en la tienda (Capítulo 1, Temporada 4, 305 días sin salir) y 6 skins se van el 14 de noviembre a las 6 PM (CDMX).\n¿Vas a comprar hoy? Usa el código BAD en la tienda de objetos.\n#Fortnite #TiendaFortnite #FortniteTienda"
+}

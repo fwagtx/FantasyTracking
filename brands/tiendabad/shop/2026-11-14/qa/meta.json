@@ -1,0 +1,102 @@
+{
+ "duration": 27,
+ "caption": "#EpicPartner Tienda de objetos de Fortnite, 14 de noviembre: el Lote de Lil' Uzi Vert cuesta 3200 V-Bucks en vez de 7100 (ahorras 3900), Detective está en la tienda (Capítulo 1, Temporada 4, 305 días sin salir) y 6 skins se van el 14 de noviembre a las 6 PM (CDMX).\n¿Vas a comprar hoy? Usa el código BAD en la tienda de objetos.\n#Fortnite #TiendaFortnite #FortniteTienda",
+ "claims": [
+  {
+   "text": "Lote de Lil' Uzi Vert: 3200 V-Bucks, regular 7100",
+   "source": "shop.json",
+   "match": [
+    "Lote de Lil' Uzi Vert",
+    "\"finalPrice\": 3200",
+    "\"regularPrice\": 7100"
+   ]
+  },
+  {
+   "text": "Detective: Capítulo 1, Temporada 4",
+   "source": "history.json",
+   "match": [
+    "Detective",
+    "\"chapter\": 1",
+    "\"season\": 4"
+   ]
+  },
+  {
+   "text": "305 days since last in the shop",
+   "source": "history.json",
+   "match": [
+    "\"gapDays\": 305"
+   ]
+  },
+  {
+   "text": "6 outfits leave at the next reset",
+   "source": "plan.json",
+   "match": [
+    "\"count\": 6"
+   ]
+  }
+ ],
+ "text": [
+  "LIL UZI VERT",
+  "DETECTIVE",
+  "BATALLA",
+  "OFERTA",
+  "OG",
+  "ÚLTIMO DÍA",
+  "TIENDA DE HOY / 14 NOV",
+  "1 · OFERTA",
+  "LIL UZI VERT DE GIRA",
+  "3200",
+  "7100",
+  "LOTE DE LIL' UZI VERT · SE VA EL 12 DIC",
+  "-55% / AHORRAS 3900",
+  "2 · REGRESO OG",
+  "CAPÍTULO 1 · TEMPORADA 4",
+  "¡305 DÍAS SIN SALIR!",
+  "3 · ÚLTIMO DÍA",
+  "EVIE BUSCACUMBRES",
+  "POLLITO",
+  "ARQUETIPO DE SOMBRA",
+  "SOMBRA RUBÍ",
+  "SE VAN EL 14 NOV, 6 PM",
+  "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+  "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+  "ESTA ES LA",
+  "TIENDA DE OBJETOS",
+  "DE HOY,",
+  "14 DE NOVIEMBRE.",
+  "¡TRES COSAS ANTES",
+  "DE GASTAR UN",
+  "SOLO PAVO!",
+  "EL LOTE DE",
+  "LIL' UZI VERT:",
+  "3200 PAVOS,",
+  "EN VEZ DE",
+  "7100.",
+  "¡TE AHORRAS 3900!",
+  "DETECTIVE ESTÁ EN",
+  "LA TIENDA.",
+  "ES DEL CAPÍTULO",
+  "1,",
+  "TEMPORADA 4,",
+  "Y NO SALÍA",
+  "DESDE HACE 305",
+  "DÍAS.",
+  "Y SEIS SKINS",
+  "ESTÁN EN SU",
+  "ÚLTIMO DÍA,",
+  "TRES DE ELLAS",
+  "RARAS.",
+  "¿VAS A COMPRAR",
+  "ALGO HOY?",
+  "USA EL CÓDIGO",
+  "BAD EN LA",
+  "TIENDA DE OBJETOS.",
+  "LE AYUDA MUCHÍSIMO",
+  "AL CANAL.",
+  "¡GRACIAS POR VER!",
+  "SÍGUENOS PARA MÁS",
+  "CONTENIDO DIARIO.",
+  "#EPICPARTNER",
+  "LA TIENDITA BAD"
+ ]
+}
