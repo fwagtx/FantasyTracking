@@ -1,0 +1,23 @@
+{
+ "via": "fortnite-api.com (mirror of Epic's cosmetics data, es-419)",
+ "files": [
+  {
+   "file": "Character_Firework.json",
+   "source": "Epic cosmetics data for Rita dinamita (es-419)",
+   "url": "https://fortnite-api.com/v2/cosmetics/br/Character_Firework?language=es-419",
+   "fetched_utc": "2026-11-14T17:11:39Z"
+  },
+  {
+   "file": "CID_447_Athena_Commando_M_BannerB.json",
+   "source": "Epic cosmetics data for Francotirador célebre (es-419)",
+   "url": "https://fortnite-api.com/v2/cosmetics/br/CID_447_Athena_Commando_M_BannerB?language=es-419",
+   "fetched_utc": "2026-11-14T17:11:39Z"
+  },
+  {
+   "file": "Character_SourWire.json",
+   "source": "Epic cosmetics data for Karol G platino (es-419)",
+   "url": "https://fortnite-api.com/v2/cosmetics/br/Character_SourWire?language=es-419",
+   "fetched_utc": "2026-11-14T17:11:39Z"
+  }
+ ]
+}

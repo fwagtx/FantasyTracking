@@ -241,6 +241,26 @@
    "format": "LONG",
    "topic": "Noticias de la semana (14 nov): frutas del diablo, Sombreros de Paja en la tienda (precios y lotes), lugares de la noticia en el mapa, pase musical de Kasane Teto, Lote de Lil' Uzi Vert, regreso de Detective y Horas del Tesoro",
    "folder": "video/long/2026-11-14-noticias-semana"
+  },
+  {
+   "date": "2026-11-20",
+   "slot": "20:30",
+   "format": "Adivina la temporada",
+   "topic": "Rita dinamita (C4 T3), Francotirador célebre (C1 T9), Karol G platino (C6 T1)",
+   "folder": "video/auto/2026-11-20-adivina-temporada",
+   "ids": [
+    "Character_Firework",
+    "CID_447_Athena_Commando_M_BannerB",
+    "Character_SourWire"
+   ],
+   "note": "Picked by hand from the Nov 14 shop: the auto pick had Detective (its season was said in that day's shop and long videos) and Mega Man X (same collab and season as Zero in the Nov 14 quiz); new_guess.py now skips both cases."
+  },
+  {
+   "date": "2026-11-21",
+   "slot": "20:30",
+   "format": "¿Dónde está?",
+   "topic": "Resort relajado",
+   "folder": "video/auto/2026-11-21-donde-resort-relajado"
   }
  ]
 }

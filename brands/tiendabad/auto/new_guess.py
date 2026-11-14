@@ -3,9 +3,10 @@
     python3 brands/tiendabad/auto/new_guess.py <folder> auto
     python3 brands/tiendabad/auto/new_guess.py <folder> <id> <id> <id>
 
-"auto" picks three outfits from today's live shop whose ids are not in the ledger's "ids" and whose season was not
-an answer in the last quiz: the oldest, one from the middle and the newest (outfits from the newest season in the shop
-are left out, they are too easy), from different chapters where possible, asked in the order middle, oldest, newest.
+"auto" picks three outfits from today's live shop whose ids are not in the ledger's "ids", that no daily shop video of
+the past week named as its "Regreso OG" (it said their season), and whose season was not an answer in the last two
+quizzes: the oldest, one from the middle and the newest (outfits from the newest season in the shop are left out, they
+are too easy), from different chapters where possible, asked in the order middle, oldest, newest.
 Or name exactly three outfit ids yourself.
 Writes <folder>/: sources/<id>.json + sources/manifest.json (the facts), img/<id>.png (the art), scene.js (TPL.guess),
 vo.json and post.json, and prints the ids for the ledger entry. Then build and ship with make_short.py, passing
@@ -45,8 +46,19 @@ def era(cid):
     return (int(ch), int(se)) if d["type"]["value"] == "outfit" and ch.isdigit() and se.isdigit() else None
 
 
+def said_lately(days=7):
+    """Outfits whose chapter and season a daily shop video of the past week said out loud (its "Regreso OG" part).
+    2026-11-14: the auto pick chose Detective, the shop video's OG that same day, so the quiz answer was already given."""
+    shop, today, out = os.path.join(os.path.dirname(LEDGER), "..", "shop"), datetime.date.today(), set()
+    for k in range(-1, days + 1):
+        p = os.path.join(shop, (today - datetime.timedelta(days=k)).isoformat(), "plan.json")
+        if os.path.exists(p):
+            out |= {o["id"] for o in json.load(open(p))["og"]["outfits"]}
+    return out
+
+
 def pick_auto():
-    used = {i for t in json.load(open(LEDGER))["topics"] for i in t.get("ids", [])}
+    used = {i for t in json.load(open(LEDGER))["topics"] for i in t.get("ids", [])} | said_lately()
     ids = []
     for e in json.loads(get(SHOP))["data"]["entries"]:
         for i in e.get("brItems") or []:
@@ -57,8 +69,9 @@ def pick_auto():
         raise SystemExit("STOP: no usable outfits in today's shop")
     newest = max(eras.values())
     quiz = [t for t in json.load(open(LEDGER))["topics"] if t.get("ids")]
-    last = {e for cid in (max(quiz, key=lambda t: t["date"])["ids"] if quiz else []) if (e := era(cid))}
-    pool = sorted((e, cid) for cid, e in eras.items() if e != newest and e not in last)      # no answer of the last quiz again
+    # no answer of the last two quizzes again (2026-11-14: Mega Man X came up right after Zero, same collab and season)
+    last = {e for t in sorted(quiz, key=lambda t: t["date"])[-2:] for cid in t["ids"] if (e := era(cid))}
+    pool = sorted((e, cid) for cid, e in eras.items() if e != newest and e not in last)
     if len(pool) < 3:
         pool = sorted((e, cid) for cid, e in eras.items() if e != newest)
     if len(pool) < 3:
@@ -105,9 +118,13 @@ def main(folder, ids):
     phrases += [{"text": "¿Cuántas acertaste? Dímelo en los comentarios.", "pause": 0.2},
                 {"text": "Usa el código BAD en la tienda de objetos. Le ayuda muchísimo al canal.", "say": "Usa el código bad, en la tienda de objetos. Le ayuda muchísimo al canal.", "pause": 0.25},
                 {"text": "¡Gracias por ver! Síguenos para más contenido diario.", "pause": 0.3}]
-    for ph in phrases:                      # "$" in a name is read as the letter S
-        if "$" in ph["text"] and "say" not in ph:
-            ph["say"] = ph["text"].replace("$", "S")
+    say = {"$": "S", "Karol G": "Karol Yi"}      # "$" is read as the letter S; Kokoro es-419 reads the G in "Karol G" as "je"
+    for ph in phrases:
+        s = ph.get("say", ph["text"])
+        for a, b in say.items():
+            s = s.replace(a, b)
+        if s != ph["text"]:
+            ph["say"] = s
     json.dump({"phrases": phrases}, open(os.path.join(folder, "vo.json"), "w"), indent=1, ensure_ascii=False)
     body = "Adivina la temporada 👀 Solo los verdaderos OG aciertan las 3\n¿Cuántas acertaste? 👇\nUsa el código BAD en la tienda de objetos 💛"
     json.dump({"tiktok": f"#EpicPartner {body}\n#fortnite #fortniteog #adivinalatemporada", "tiktokTitle": "Adivina la temporada 👀",

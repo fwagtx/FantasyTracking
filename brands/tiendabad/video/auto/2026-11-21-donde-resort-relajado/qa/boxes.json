@@ -1,0 +1,2575 @@
+{
+ "duration": 15.3,
+ "samples": [
+  {
+   "t": 0,
+   "boxes": [
+    {
+     "text": "¿DÓNDE ESTÁ / RESORT RELAJADO?",
+     "x": 77.60000610351562,
+     "y": 238.9375,
+     "w": 844.800048828125,
+     "h": 141
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 0.25,
+   "boxes": [
+    {
+     "text": "¿DÓNDE ESTÁ / RESORT RELAJADO?",
+     "x": 60.08148193359375,
+     "y": 236.01361083984375,
+     "w": 879.8370361328125,
+     "h": 146.8477783203125
+    },
+    {
+     "text": "¿NO ENCUENTRAS RESORT",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 159.8125
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 0.5,
+   "boxes": [
+    {
+     "text": "¿DÓNDE ESTÁ / RESORT RELAJADO?",
+     "x": 60,
+     "y": 236,
+     "w": 880,
+     "h": 146.875
+    },
+    {
+     "text": "¿NO ENCUENTRAS RESORT",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 159.8125
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 0.75,
+   "boxes": [
+    {
+     "text": "RESORT RELAJADO",
+     "x": 380.2034912109375,
+     "y": 871.9425659179688,
+     "w": 376.47137451171875,
+     "h": 91.7635498046875
+    },
+    {
+     "text": "¿DÓNDE ESTÁ / RESORT RELAJADO?",
+     "x": 60,
+     "y": 236,
+     "w": 880,
+     "h": 146.875
+    },
+    {
+     "text": "¿NO ENCUENTRAS RESORT",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 159.8125
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 1,
+   "boxes": [
+    {
+     "text": "RESORT RELAJADO",
+     "x": 377.73626708984375,
+     "y": 842.9207763671875,
+     "w": 533.3949584960938,
+     "h": 130.01312255859375
+    },
+    {
+     "text": "¿DÓNDE ESTÁ / RESORT RELAJADO?",
+     "x": 60,
+     "y": 236,
+     "w": 880,
+     "h": 146.875
+    },
+    {
+     "text": "¿NO ENCUENTRAS RESORT",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 159.8125
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 1.25,
+   "boxes": [
+    {
+     "text": "RESORT RELAJADO",
+     "x": 377.2535705566406,
+     "y": 842.8732299804688,
+     "w": 533.39501953125,
+     "h": 130.01312255859375
+    },
+    {
+     "text": "¿DÓNDE ESTÁ / RESORT RELAJADO?",
+     "x": 60,
+     "y": 236,
+     "w": 880,
+     "h": 146.875
+    },
+    {
+     "text": "RELAJADO EN FORTNITE?",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 159.8125
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 1.5,
+   "boxes": [
+    {
+     "text": "RESORT RELAJADO",
+     "x": 377.2179870605469,
+     "y": 842.8342895507812,
+     "w": 533.39501953125,
+     "h": 130.01312255859375
+    },
+    {
+     "text": "¿DÓNDE ESTÁ / RESORT RELAJADO?",
+     "x": 60,
+     "y": 236,
+     "w": 880,
+     "h": 146.875
+    },
+    {
+     "text": "RELAJADO EN FORTNITE?",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 159.8125
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 1.75,
+   "boxes": [
+    {
+     "text": "RESORT RELAJADO",
+     "x": 376.9679870605469,
+     "y": 842.480224609375,
+     "w": 533.39501953125,
+     "h": 130.01312255859375
+    },
+    {
+     "text": "¿DÓNDE ESTÁ / RESORT RELAJADO?",
+     "x": 60,
+     "y": 236,
+     "w": 880,
+     "h": 146.875
+    },
+    {
+     "text": "RELAJADO EN FORTNITE?",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 159.8125
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 2,
+   "boxes": [
+    {
+     "text": "RESORT RELAJADO",
+     "x": 376.3792724609375,
+     "y": 841.941162109375,
+     "w": 533.3949584960938,
+     "h": 130.01312255859375
+    },
+    {
+     "text": "¿DÓNDE ESTÁ / RESORT RELAJADO?",
+     "x": 60,
+     "y": 236,
+     "w": 880,
+     "h": 146.875
+    },
+    {
+     "text": "RELAJADO EN FORTNITE?",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 159.8125
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 2.25,
+   "boxes": [
+    {
+     "text": "RESORT RELAJADO",
+     "x": 375.9709167480469,
+     "y": 841.78125,
+     "w": 533.39501953125,
+     "h": 130.01312255859375
+    },
+    {
+     "text": "¿DÓNDE ESTÁ / RESORT RELAJADO?",
+     "x": 60,
+     "y": 236,
+     "w": 880,
+     "h": 146.875
+    },
+    {
+     "text": "¡AQUÍ ESTÁ EXACTAMENTE!",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 159.8125
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 2.5,
+   "boxes": [
+    {
+     "text": "RESORT RELAJADO",
+     "x": 376.1661682128906,
+     "y": 842.5286254882812,
+     "w": 533.39501953125,
+     "h": 130.01312255859375
+    },
+    {
+     "text": "¿DÓNDE ESTÁ / RESORT RELAJADO?",
+     "x": 60,
+     "y": 236,
+     "w": 880,
+     "h": 146.875
+    },
+    {
+     "text": "¡AQUÍ ESTÁ EXACTAMENTE!",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 159.8125
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 2.75,
+   "boxes": [
+    {
+     "text": "RESORT RELAJADO",
+     "x": 376.62103271484375,
+     "y": 844.1859130859375,
+     "w": 533.3949584960938,
+     "h": 130.01312255859375
+    },
+    {
+     "text": "¿DÓNDE ESTÁ / RESORT RELAJADO?",
+     "x": 60,
+     "y": 236,
+     "w": 880,
+     "h": 146.875
+    },
+    {
+     "text": "¡AQUÍ ESTÁ EXACTAMENTE!",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 159.8125
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 3,
+   "boxes": [
+    {
+     "text": "RESORT RELAJADO",
+     "x": 376.4667053222656,
+     "y": 846.1814575195312,
+     "w": 533.39501953125,
+     "h": 130.01312255859375
+    },
+    {
+     "text": "¿DÓNDE ESTÁ / RESORT RELAJADO?",
+     "x": 60,
+     "y": 236,
+     "w": 880,
+     "h": 146.875
+    },
+    {
+     "text": "¡AQUÍ ESTÁ EXACTAMENTE!",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 159.8125
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 3.25,
+   "boxes": [
+    {
+     "text": "RESORT RELAJADO",
+     "x": 288.4205017089844,
+     "y": 715.9926147460938,
+     "w": 533.39501953125,
+     "h": 130.01312255859375
+    },
+    {
+     "text": "¿DÓNDE ESTÁ / RESORT RELAJADO?",
+     "x": 60,
+     "y": 236,
+     "w": 880,
+     "h": 146.875
+    },
+    {
+     "text": "¡AQUÍ ESTÁ EXACTAMENTE!",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 159.8125
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 3.5,
+   "boxes": [
+    {
+     "text": "RESORT RELAJADO",
+     "x": 267.4995422363281,
+     "y": 687.9768676757812,
+     "w": 533.39501953125,
+     "h": 130.01312255859375
+    },
+    {
+     "text": "¿DÓNDE ESTÁ / RESORT RELAJADO?",
+     "x": 60,
+     "y": 236,
+     "w": 880,
+     "h": 146.875
+    },
+    {
+     "text": "¡AQUÍ ESTÁ EXACTAMENTE!",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 159.8125
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 3.75,
+   "boxes": [
+    {
+     "text": "RESORT RELAJADO",
+     "x": 266.1647033691406,
+     "y": 688.709716796875,
+     "w": 533.39501953125,
+     "h": 130.01312255859375
+    },
+    {
+     "text": "¿DÓNDE ESTÁ / RESORT RELAJADO?",
+     "x": 60,
+     "y": 236,
+     "w": 880,
+     "h": 146.875
+    },
+    {
+     "text": "ESTÁ EN EL",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 4,
+   "boxes": [
+    {
+     "text": "RESORT RELAJADO",
+     "x": 265.5741271972656,
+     "y": 689.2150268554688,
+     "w": 533.39501953125,
+     "h": 130.01312255859375
+    },
+    {
+     "text": "¿DÓNDE ESTÁ / RESORT RELAJADO?",
+     "x": 60,
+     "y": 236,
+     "w": 880,
+     "h": 146.875
+    },
+    {
+     "text": "ESTÁ EN EL",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 4.25,
+   "boxes": [
+    {
+     "text": "RESORT RELAJADO",
+     "x": 265.54559326171875,
+     "y": 689.7877197265625,
+     "w": 533.3949584960938,
+     "h": 130.01312255859375
+    },
+    {
+     "text": "¿DÓNDE ESTÁ / RESORT RELAJADO?",
+     "x": 60,
+     "y": 236,
+     "w": 880,
+     "h": 146.875
+    },
+    {
+     "text": "NORTE DE LA",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 4.5,
+   "boxes": [
+    {
+     "text": "RESORT RELAJADO",
+     "x": 303.15771484375,
+     "y": 747.2056884765625,
+     "w": 533.3949584960938,
+     "h": 130.01312255859375
+    },
+    {
+     "text": "¿DÓNDE ESTÁ / RESORT RELAJADO?",
+     "x": 60,
+     "y": 236,
+     "w": 880,
+     "h": 146.875
+    },
+    {
+     "text": "NORTE DE LA",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 4.75,
+   "boxes": [
+    {
+     "text": "RESORT RELAJADO",
+     "x": 369.2646179199219,
+     "y": 847.1082153320312,
+     "w": 533.39501953125,
+     "h": 130.01312255859375
+    },
+    {
+     "text": "¿DÓNDE ESTÁ / RESORT RELAJADO?",
+     "x": 60,
+     "y": 236,
+     "w": 880,
+     "h": 146.875
+    },
+    {
+     "text": "ISLA,",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 5,
+   "boxes": [
+    {
+     "text": "RESORT RELAJADO",
+     "x": 371.9786071777344,
+     "y": 849.0131225585938,
+     "w": 533.39501953125,
+     "h": 130.01312255859375
+    },
+    {
+     "text": "¿DÓNDE ESTÁ / RESORT RELAJADO?",
+     "x": 60,
+     "y": 236,
+     "w": 880,
+     "h": 146.875
+    },
+    {
+     "text": "JUSTO AQUÍ,",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 5.25,
+   "boxes": [
+    {
+     "text": "RESORT RELAJADO",
+     "x": 373.671142578125,
+     "y": 847.5449829101562,
+     "w": 533.3949584960938,
+     "h": 130.01312255859375
+    },
+    {
+     "text": "¿DÓNDE ESTÁ / RESORT RELAJADO?",
+     "x": 60,
+     "y": 236,
+     "w": 880,
+     "h": 146.875
+    },
+    {
+     "text": "JUSTO AQUÍ,",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 5.5,
+   "boxes": [
+    {
+     "text": "RESORT RELAJADO",
+     "x": 375.9335632324219,
+     "y": 846.5338745117188,
+     "w": 533.39501953125,
+     "h": 130.01312255859375
+    },
+    {
+     "text": "¿DÓNDE ESTÁ / RESORT RELAJADO?",
+     "x": 60,
+     "y": 236,
+     "w": 880,
+     "h": 146.875
+    },
+    {
+     "text": "CERCA DE EL",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 5.75,
+   "boxes": [
+    {
+     "text": "RESORT RELAJADO",
+     "x": 377.73834228515625,
+     "y": 846.3207397460938,
+     "w": 533.3949584960938,
+     "h": 130.01312255859375
+    },
+    {
+     "text": "¿DÓNDE ESTÁ / RESORT RELAJADO?",
+     "x": 60,
+     "y": 236,
+     "w": 880,
+     "h": 146.875
+    },
+    {
+     "text": "CERCA DE EL",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 6,
+   "boxes": [
+    {
+     "text": "RESORT RELAJADO",
+     "x": 378.4501037597656,
+     "y": 846.6349487304688,
+     "w": 533.39501953125,
+     "h": 130.01312255859375
+    },
+    {
+     "text": "¿DÓNDE ESTÁ / RESORT RELAJADO?",
+     "x": 60,
+     "y": 236,
+     "w": 880,
+     "h": 146.875
+    },
+    {
+     "text": "COFRE.",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 6.25,
+   "boxes": [
+    {
+     "text": "RESORT RELAJADO",
+     "x": 378.371826171875,
+     "y": 846.8843994140625,
+     "w": 533.3949584960938,
+     "h": 130.01312255859375
+    },
+    {
+     "text": "¿DÓNDE ESTÁ / RESORT RELAJADO?",
+     "x": 60,
+     "y": 236,
+     "w": 880,
+     "h": 146.875
+    },
+    {
+     "text": "COFRE.",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 6.5,
+   "boxes": [
+    {
+     "text": "RESORT RELAJADO",
+     "x": 378.28173828125,
+     "y": 846.6981201171875,
+     "w": 533.3949584960938,
+     "h": 130.01312255859375
+    },
+    {
+     "text": "¿DÓNDE ESTÁ / RESORT RELAJADO?",
+     "x": 60,
+     "y": 236,
+     "w": 880,
+     "h": 146.875
+    },
+    {
+     "text": "COFRE.",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 6.75,
+   "boxes": [
+    {
+     "text": "RESORT RELAJADO",
+     "x": 378.524169921875,
+     "y": 846.2123413085938,
+     "w": 533.3949584960938,
+     "h": 130.01312255859375
+    },
+    {
+     "text": "¿DÓNDE ESTÁ / RESORT RELAJADO?",
+     "x": 60,
+     "y": 236,
+     "w": 880,
+     "h": 146.875
+    },
+    {
+     "text": "¡GUÁRDALO PARA TU",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 7,
+   "boxes": [
+    {
+     "text": "RESORT RELAJADO",
+     "x": 378.7148132324219,
+     "y": 845.8442993164062,
+     "w": 533.39501953125,
+     "h": 130.01312255859375
+    },
+    {
+     "text": "¿DÓNDE ESTÁ / RESORT RELAJADO?",
+     "x": 60,
+     "y": 236,
+     "w": 880,
+     "h": 146.875
+    },
+    {
+     "text": "¡GUÁRDALO PARA TU",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 7.25,
+   "boxes": [
+    {
+     "text": "RESORT RELAJADO",
+     "x": 378.3693542480469,
+     "y": 845.794921875,
+     "w": 533.39501953125,
+     "h": 130.01312255859375
+    },
+    {
+     "text": "¿DÓNDE ESTÁ / RESORT RELAJADO?",
+     "x": 60,
+     "y": 236,
+     "w": 880,
+     "h": 146.875
+    },
+    {
+     "text": "PRÓXIMA PARTIDA!",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 7.5,
+   "boxes": [
+    {
+     "text": "RESORT RELAJADO",
+     "x": 377.66143798828125,
+     "y": 845.7782592773438,
+     "w": 533.3949584960938,
+     "h": 130.01312255859375
+    },
+    {
+     "text": "¿DÓNDE ESTÁ / RESORT RELAJADO?",
+     "x": 60,
+     "y": 236,
+     "w": 880,
+     "h": 146.875
+    },
+    {
+     "text": "PRÓXIMA PARTIDA!",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 7.75,
+   "boxes": [
+    {
+     "text": "RESORT RELAJADO",
+     "x": 377.3616027832031,
+     "y": 845.2572021484375,
+     "w": 533.39501953125,
+     "h": 130.01312255859375
+    },
+    {
+     "text": "¿DÓNDE ESTÁ / RESORT RELAJADO?",
+     "x": 60,
+     "y": 236,
+     "w": 880,
+     "h": 146.875
+    },
+    {
+     "text": "PRÓXIMA PARTIDA!",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 8,
+   "boxes": [
+    {
+     "text": "RESORT RELAJADO",
+     "x": 377.9872741699219,
+     "y": 843.9722900390625,
+     "w": 533.39501953125,
+     "h": 130.01312255859375
+    },
+    {
+     "text": "¿DÓNDE ESTÁ / RESORT RELAJADO?",
+     "x": 60,
+     "y": 236,
+     "w": 880,
+     "h": 146.875
+    },
+    {
+     "text": "PRÓXIMA PARTIDA!",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 8.25,
+   "boxes": [
+    {
+     "text": "RESORT RELAJADO",
+     "x": 379.1484375,
+     "y": 842.26025390625,
+     "w": 533.3949584960938,
+     "h": 130.01312255859375
+    },
+    {
+     "text": "¿DÓNDE ESTÁ / RESORT RELAJADO?",
+     "x": 60,
+     "y": 236,
+     "w": 880,
+     "h": 146.875
+    },
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 215.10916137695312,
+     "y": 397.6322326660156,
+     "w": 649.78173828125,
+     "h": 542.079345703125
+    },
+    {
+     "text": "USA EL CÓDIGO",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 8.5,
+   "boxes": [
+    {
+     "text": "RESORT RELAJADO",
+     "x": 379.87164306640625,
+     "y": 840.8468627929688,
+     "w": 533.3949584960938,
+     "h": 130.01312255859375
+    },
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 166.55126953125,
+     "y": 357.1229248046875,
+     "w": 746.8974609375,
+     "h": 623.097900390625
+    },
+    {
+     "text": "USA EL CÓDIGO",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 8.75,
+   "boxes": [
+    {
+     "text": "RESORT RELAJADO",
+     "x": 379.55841064453125,
+     "y": 840.2910766601562,
+     "w": 533.3949584960938,
+     "h": 130.01312255859375
+    },
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "USA EL CÓDIGO",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 9,
+   "boxes": [
+    {
+     "text": "RESORT RELAJADO",
+     "x": 378.5023498535156,
+     "y": 840.5839233398438,
+     "w": 533.39501953125,
+     "h": 130.01312255859375
+    },
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "BAD EN LA",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 9.25,
+   "boxes": [
+    {
+     "text": "RESORT RELAJADO",
+     "x": 377.4107360839844,
+     "y": 841.258544921875,
+     "w": 533.39501953125,
+     "h": 130.01312255859375
+    },
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "BAD EN LA",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 9.5,
+   "boxes": [
+    {
+     "text": "RESORT RELAJADO",
+     "x": 376.5372009277344,
+     "y": 841.8858642578125,
+     "w": 533.39501953125,
+     "h": 130.01312255859375
+    },
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "TIENDA DE OBJETOS.",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 9.75,
+   "boxes": [
+    {
+     "text": "RESORT RELAJADO",
+     "x": 375.4646911621094,
+     "y": 842.4719848632812,
+     "w": 533.39501953125,
+     "h": 130.01312255859375
+    },
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "TIENDA DE OBJETOS.",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 10,
+   "boxes": [
+    {
+     "text": "RESORT RELAJADO",
+     "x": 373.7829895019531,
+     "y": 843.3803100585938,
+     "w": 533.39501953125,
+     "h": 130.01312255859375
+    },
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "TIENDA DE OBJETOS.",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 10.25,
+   "boxes": [
+    {
+     "text": "RESORT RELAJADO",
+     "x": 371.8232421875,
+     "y": 844.8646850585938,
+     "w": 533.3949584960938,
+     "h": 130.01312255859375
+    },
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "LE AYUDA MUCHÍSIMO",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 159.8125
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 10.5,
+   "boxes": [
+    {
+     "text": "RESORT RELAJADO",
+     "x": 370.5273132324219,
+     "y": 846.6814575195312,
+     "w": 533.39501953125,
+     "h": 130.01312255859375
+    },
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "LE AYUDA MUCHÍSIMO",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 159.8125
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 10.75,
+   "boxes": [
+    {
+     "text": "RESORT RELAJADO",
+     "x": 370.54718017578125,
+     "y": 848.1767578125,
+     "w": 533.3949584960938,
+     "h": 130.01312255859375
+    },
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "LE AYUDA MUCHÍSIMO",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 159.8125
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 11,
+   "boxes": [
+    {
+     "text": "RESORT RELAJADO",
+     "x": 371.58770751953125,
+     "y": 848.7920532226562,
+     "w": 533.3949584960938,
+     "h": 130.01312255859375
+    },
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "LE AYUDA MUCHÍSIMO",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 159.8125
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 11.25,
+   "boxes": [
+    {
+     "text": "RESORT RELAJADO",
+     "x": 372.74481201171875,
+     "y": 848.5264892578125,
+     "w": 533.3949584960938,
+     "h": 130.01312255859375
+    },
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "AL CANAL.",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 11.5,
+   "boxes": [
+    {
+     "text": "RESORT RELAJADO",
+     "x": 373.4466857910156,
+     "y": 847.92529296875,
+     "w": 533.39501953125,
+     "h": 130.01312255859375
+    },
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "AL CANAL.",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 11.75,
+   "boxes": [
+    {
+     "text": "RESORT RELAJADO",
+     "x": 373.9234619140625,
+     "y": 847.603515625,
+     "w": 533.3949584960938,
+     "h": 130.01312255859375
+    },
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "AL CANAL.",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 12,
+   "boxes": [
+    {
+     "text": "RESORT RELAJADO",
+     "x": 374.7054443359375,
+     "y": 847.7459716796875,
+     "w": 533.3949584960938,
+     "h": 130.01312255859375
+    },
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+     "x": 197.81448364257812,
+     "y": 1014.472900390625,
+     "w": 684.37109375,
+     "h": 110.05419921875
+    },
+    {
+     "text": "¡GRACIAS POR VER!",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 12.25,
+   "boxes": [
+    {
+     "text": "RESORT RELAJADO",
+     "x": 375.79888916015625,
+     "y": 848.0383911132812,
+     "w": 533.3949584960938,
+     "h": 130.01312255859375
+    },
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+     "x": 167.9044189453125,
+     "y": 1009.6630249023438,
+     "w": 744.191162109375,
+     "h": 119.67401123046875
+    },
+    {
+     "text": "¡GRACIAS POR VER!",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 12.5,
+   "boxes": [
+    {
+     "text": "RESORT RELAJADO",
+     "x": 376.55865478515625,
+     "y": 848.0697021484375,
+     "w": 533.3949584960938,
+     "h": 130.01312255859375
+    },
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+     "x": 170,
+     "y": 1010,
+     "w": 740,
+     "h": 119
+    },
+    {
+     "text": "¡GRACIAS POR VER!",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 12.75,
+   "boxes": [
+    {
+     "text": "RESORT RELAJADO",
+     "x": 376.43304443359375,
+     "y": 847.798095703125,
+     "w": 533.3949584960938,
+     "h": 130.01312255859375
+    },
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+     "x": 170,
+     "y": 1010,
+     "w": 740,
+     "h": 119
+    },
+    {
+     "text": "SÍGUENOS PARA MÁS",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 13,
+   "boxes": [
+    {
+     "text": "RESORT RELAJADO",
+     "x": 375.6993713378906,
+     "y": 847.619384765625,
+     "w": 533.39501953125,
+     "h": 130.01312255859375
+    },
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+     "x": 170,
+     "y": 1010,
+     "w": 740,
+     "h": 119
+    },
+    {
+     "text": "SÍGUENOS PARA MÁS",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 13.25,
+   "boxes": [
+    {
+     "text": "RESORT RELAJADO",
+     "x": 375.2919921875,
+     "y": 847.9651489257812,
+     "w": 533.3949584960938,
+     "h": 130.01312255859375
+    },
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+     "x": 170,
+     "y": 1010,
+     "w": 740,
+     "h": 119
+    },
+    {
+     "text": "SÍGUENOS PARA MÁS",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 13.5,
+   "boxes": [
+    {
+     "text": "RESORT RELAJADO",
+     "x": 375.8758544921875,
+     "y": 848.8193359375,
+     "w": 533.3949584960938,
+     "h": 130.01312255859375
+    },
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+     "x": 170,
+     "y": 1010,
+     "w": 740,
+     "h": 119
+    },
+    {
+     "text": "SÍGUENOS PARA MÁS",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 13.75,
+   "boxes": [
+    {
+     "text": "RESORT RELAJADO",
+     "x": 377.20135498046875,
+     "y": 849.6290283203125,
+     "w": 533.3949584960938,
+     "h": 130.01312255859375
+    },
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+     "x": 170,
+     "y": 1010,
+     "w": 740,
+     "h": 119
+    },
+    {
+     "text": "CONTENIDO DIARIO.",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 14,
+   "boxes": [
+    {
+     "text": "RESORT RELAJADO",
+     "x": 378.45556640625,
+     "y": 849.718505859375,
+     "w": 533.3949584960938,
+     "h": 130.01312255859375
+    },
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+     "x": 170,
+     "y": 1010,
+     "w": 740,
+     "h": 119
+    },
+    {
+     "text": "CONTENIDO DIARIO.",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 14.25,
+   "boxes": [
+    {
+     "text": "RESORT RELAJADO",
+     "x": 379.1719665527344,
+     "y": 848.8370361328125,
+     "w": 533.39501953125,
+     "h": 130.01312255859375
+    },
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+     "x": 170,
+     "y": 1010,
+     "w": 740,
+     "h": 119
+    },
+    {
+     "text": "CONTENIDO DIARIO.",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 14.5,
+   "boxes": [
+    {
+     "text": "RESORT RELAJADO",
+     "x": 379.6319274902344,
+     "y": 847.3417358398438,
+     "w": 533.39501953125,
+     "h": 130.01312255859375
+    },
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+     "x": 170,
+     "y": 1010,
+     "w": 740,
+     "h": 119
+    },
+    {
+     "text": "CONTENIDO DIARIO.",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 14.75,
+   "boxes": [
+    {
+     "text": "RESORT RELAJADO",
+     "x": 380.3179016113281,
+     "y": 845.8565063476562,
+     "w": 533.39501953125,
+     "h": 130.01312255859375
+    },
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+     "x": 170,
+     "y": 1010,
+     "w": 740,
+     "h": 119
+    },
+    {
+     "text": "CONTENIDO DIARIO.",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 15,
+   "boxes": [
+    {
+     "text": "RESORT RELAJADO",
+     "x": 381.11468505859375,
+     "y": 844.7356567382812,
+     "w": 533.3949584960938,
+     "h": 130.01312255859375
+    },
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+     "x": 170,
+     "y": 1010,
+     "w": 740,
+     "h": 119
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 15.25,
+   "boxes": [
+    {
+     "text": "RESORT RELAJADO",
+     "x": 381.25885009765625,
+     "y": 843.8368530273438,
+     "w": 533.3949584960938,
+     "h": 130.01312255859375
+    },
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+     "x": 170,
+     "y": 1010,
+     "w": 740,
+     "h": 119
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  }
+ ],
+ "text": [
+  "RESORT RELAJADO",
+  "¿DÓNDE ESTÁ / RESORT RELAJADO?",
+  "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+  "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+  "¿NO ENCUENTRAS RESORT",
+  "RELAJADO EN FORTNITE?",
+  "¡AQUÍ ESTÁ EXACTAMENTE!",
+  "ESTÁ EN EL",
+  "NORTE DE LA",
+  "ISLA,",
+  "JUSTO AQUÍ,",
+  "CERCA DE EL",
+  "COFRE.",
+  "¡GUÁRDALO PARA TU",
+  "PRÓXIMA PARTIDA!",
+  "USA EL CÓDIGO",
+  "BAD EN LA",
+  "TIENDA DE OBJETOS.",
+  "LE AYUDA MUCHÍSIMO",
+  "AL CANAL.",
+  "¡GRACIAS POR VER!",
+  "SÍGUENOS PARA MÁS",
+  "CONTENIDO DIARIO.",
+  "#EPICPARTNER",
+  "LA TIENDITA BAD"
+ ]
+}
