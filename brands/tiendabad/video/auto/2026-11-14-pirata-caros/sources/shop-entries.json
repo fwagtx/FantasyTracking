@@ -1,0 +1,1164 @@
+{
+ "date": "2026-11-14T00:00:00Z",
+ "entries": [
+  {
+   "regularPrice": 2000,
+   "finalPrice": 2000,
+   "devName": "[VIRTUAL]1 x Blank, 1 x Blank, 1 x Blank, 1 x Blank, 1 x Blank, 1 x Blank, 1 x Blank, 1 x Blank, 1 x Blank, 1 x Blank, 1 x Blank, 1 x Blank, 1 x Blank, 1 x Blank, 1 x Blank, 1 x Blank, 1 x Blank, 1 x Blank, 1 x Blank, 1 x Blank, 1 x Blank for -1 MtxCurrency",
+   "offerId": "v2:/ca1b447468da0055616c833bd944faf76725874c2c5ce6c168b567ee77ef30ec",
+   "inDate": "2026-11-14T00:00:00Z",
+   "outDate": "2026-11-23T23:59:59.999Z",
+   "bundle": {
+    "name": "Volkswagen Golf GTI",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/d8b01bb813dab09a/renderimage_0.png"
+   },
+   "banner": {
+    "value": "Nuevo",
+    "intensity": "High",
+    "backendValue": "New"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -1,
+   "layoutId": "VWGolf1.99",
+   "layout": {
+    "id": "VWGolf1",
+    "name": "Volkswagen Golf GTI ",
+    "category": "Calienta los motores",
+    "index": 4,
+    "rank": 179,
+    "showIneligibleOffers": "always",
+    "useWidePreview": true,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "89d8ffff",
+    "color3": "000000ff",
+    "textBackgroundColor": "000000ff"
+   },
+   "tileBackgroundMaterial": "vehicle_item",
+   "tileSize": "Size_3_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_Dubt1_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S43/DAv2_Bundle_Featured_Dubt1",
+   "newDisplayAsset": {
+    "id": "DAv2_Bundle_Featured_DubT1",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__d8b01bb813dab09a_7fd28c8bdf45571c.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/d8b01bb813dab09a/renderimage_0.png"
+     }
+    ]
+   },
+   "cars": [
+    {
+     "id": "CarSkin_DubT1Huntress",
+     "vehicleId": "VCID_CarSkin_DubT1Huntress",
+     "name": "Cazadora",
+     "description": "Calcomanía personalizada de Volkswagen Golf II GTI.",
+     "type": {
+      "value": "skin",
+      "displayValue": "Aspecto",
+      "backendValue": "VehicleCosmetics_Skin"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "images": {
+      "small": "https://fortnite-api.com/images/cosmetics/cars/carskin_dubt1huntress/small.png",
+      "large": "https://fortnite-api.com/images/cosmetics/cars/carskin_dubt1huntress/large.png"
+     },
+     "added": "2026-11-12T13:09:30Z"
+    },
+    {
+     "id": "CarSkin_DubT1Wings",
+     "vehicleId": "VCID_CarSkin_DubT1Wings",
+     "name": "Alas",
+     "description": "Calcomanía personalizada de Volkswagen Golf II GTI.",
+     "type": {
+      "value": "skin",
+      "displayValue": "Aspecto",
+      "backendValue": "VehicleCosmetics_Skin"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "images": {
+      "small": "https://fortnite-api.com/images/cosmetics/cars/carskin_dubt1wings/small.png",
+      "large": "https://fortnite-api.com/images/cosmetics/cars/carskin_dubt1wings/large.png"
+     },
+     "added": "2026-11-12T13:09:30Z"
+    },
+    {
+     "id": "CarSkin_DubT1Ten",
+     "vehicleId": "VCID_CarSkin_DubT1Ten",
+     "name": "A punto para la pista",
+     "description": "Calcomanía personalizada de Volkswagen Golf II GTI.",
+     "type": {
+      "value": "skin",
+      "displayValue": "Aspecto",
+      "backendValue": "VehicleCosmetics_Skin"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "images": {
+      "small": "https://fortnite-api.com/images/cosmetics/cars/carskin_dubt1ten/small.png",
+      "large": "https://fortnite-api.com/images/cosmetics/cars/carskin_dubt1ten/large.png"
+     },
+     "added": "2026-11-12T13:09:30Z"
+    },
+    {
+     "id": "CarSkin_DubT1Stripes",
+     "vehicleId": "VCID_CarSkin_DubT1Stripes",
+     "name": "Rayas",
+     "description": "Calcomanía personalizada de Volkswagen Golf II GTI.",
+     "type": {
+      "value": "skin",
+      "displayValue": "Aspecto",
+      "backendValue": "VehicleCosmetics_Skin"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "images": {
+      "small": "https://fortnite-api.com/images/cosmetics/cars/carskin_dubt1stripes/small.png",
+      "large": "https://fortnite-api.com/images/cosmetics/cars/carskin_dubt1stripes/large.png"
+     },
+     "added": "2026-11-12T13:09:30Z"
+    },
+    {
+     "id": "CarSkin_DubT1Lightning",
+     "vehicleId": "VCID_CarSkin_DubT1Lightning",
+     "name": "Rayos",
+     "description": "Calcomanía personalizada de Volkswagen Golf II GTI.",
+     "type": {
+      "value": "skin",
+      "displayValue": "Aspecto",
+      "backendValue": "VehicleCosmetics_Skin"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "images": {
+      "small": "https://fortnite-api.com/images/cosmetics/cars/carskin_dubt1lightning/small.png",
+      "large": "https://fortnite-api.com/images/cosmetics/cars/carskin_dubt1lightning/large.png"
+     },
+     "added": "2026-11-12T13:09:30Z"
+    },
+    {
+     "id": "CarSkin_DubT1Kingsnake",
+     "vehicleId": "VCID_CarSkin_DubT1Kingsnake",
+     "name": "Equipo Kingsnake",
+     "description": "Calcomanía personalizada de Volkswagen Golf II GTI.",
+     "type": {
+      "value": "skin",
+      "displayValue": "Aspecto",
+      "backendValue": "VehicleCosmetics_Skin"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "images": {
+      "small": "https://fortnite-api.com/images/cosmetics/cars/carskin_dubt1kingsnake/small.png",
+      "large": "https://fortnite-api.com/images/cosmetics/cars/carskin_dubt1kingsnake/large.png"
+     },
+     "added": "2026-11-12T13:09:30Z"
+    },
+    {
+     "id": "CarSkin_DubT1Flames",
+     "vehicleId": "VCID_CarSkin_DubT1Flames",
+     "name": "Llamas",
+     "description": "Calcomanía personalizada de Volkswagen Golf II GTI.",
+     "type": {
+      "value": "skin",
+      "displayValue": "Aspecto",
+      "backendValue": "VehicleCosmetics_Skin"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "images": {
+      "small": "https://fortnite-api.com/images/cosmetics/cars/carskin_dubt1flames/small.png",
+      "large": "https://fortnite-api.com/images/cosmetics/cars/carskin_dubt1flames/large.png"
+     },
+     "added": "2026-11-12T13:09:30Z"
+    },
+    {
+     "id": "Wheel_DubT1",
+     "vehicleId": "VCID_Wheel_DubT1",
+     "name": "Volkswagen Golf II GTI",
+     "description": "Mejorado hasta la perfección.",
+     "type": {
+      "value": "wheel",
+      "displayValue": "Rueda",
+      "backendValue": "VehicleCosmetics_Wheel"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "images": {
+      "small": "https://fortnite-api.com/images/cosmetics/cars/wheel_dubt1/small.png",
+      "large": "https://fortnite-api.com/images/cosmetics/cars/wheel_dubt1/large.png"
+     },
+     "added": "2026-11-12T13:09:30Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 2700,
+   "finalPrice": 1800,
+   "devName": "[VIRTUAL]1 x PIRATE SPEEDY, 1 x Speed's Coin, 1 x Speed's Pirate Blade, 1 x IShowFlip for -1 MtxCurrency",
+   "offerId": "v2:/18087c92999824c4238cf291477c8bc11b955bd7ea015e7410d44543f9d51863",
+   "inDate": "2026-11-14T00:00:00Z",
+   "outDate": "2026-11-20T23:59:59.999Z",
+   "bundle": {
+    "name": "Lote Speedy pirata",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/a283979341ca2ae2/renderimage_0.png"
+   },
+   "banner": {
+    "value": "900 monedas V de descuento",
+    "intensity": "High",
+    "backendValue": "AmountOff"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -1,
+   "layoutId": "IShowPirate.99",
+   "layout": {
+    "id": "IShowPirate",
+    "name": "iShowSpeed",
+    "index": 44,
+    "rank": 198,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "billboard",
+    "textureMetadata": [
+     {
+      "key": "background",
+      "value": "https://cdn2.unrealengine.com/sk-Billboard_LocketSnug_BG-2bd18d1c.png"
+     },
+     {
+      "key": "foreground",
+      "value": "https://cdn2.unrealengine.com/sk-Billboard_LocketSnug_Character-a64f8f82.png"
+     },
+     {
+      "key": "banner",
+      "value": "https://cdn2.unrealengine.com/sk-Billboard_LocketSnug_Logo-5a4149f4.png"
+     },
+     {
+      "key": "bodyImage",
+      "value": "https://cdn2.unrealengine.com/sk-Billboard_LocketSnug_ItemStack-bc620a64.png"
+     }
+    ],
+    "stringMetadata": [
+     {
+      "key": "alignment",
+      "value": "left"
+     },
+     {
+      "key": "highlightEnabled",
+      "value": "true"
+     },
+     {
+      "key": "parallaxEnabled",
+      "value": "true"
+     },
+     {
+      "key": "titleColorA",
+      "value": "FFFFFF"
+     },
+     {
+      "key": "titleColorB",
+      "value": "FFFFFF"
+     }
+    ],
+    "textMetadata": [
+     {
+      "key": "cta",
+      "value": "Ver oferta"
+     },
+     {
+      "key": "subtitle",
+      "value": "Lote de 4 objetos"
+     },
+     {
+      "key": "title",
+      "value": "Speedy pirata"
+     }
+    ]
+   },
+   "colors": {
+    "color1": "7f5d25ff",
+    "color2": "ba9600ff",
+    "color3": "e5b76aff",
+    "textBackgroundColor": "7f5d25ff"
+   },
+   "tileBackgroundMaterial": "ShopTile_Pirates_Gold",
+   "tileSize": "Size_4_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_Locketsnug_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S43/DAv2_Bundle_Featured_Locketsnug",
+   "newDisplayAsset": {
+    "id": "DAv2_Bundle_Featured_LocketSnug",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__a283979341ca2ae2_29c0c4191e61fb71.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/a283979341ca2ae2/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__a283979341ca2ae2_d2e71b6320aa32c2.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/a283979341ca2ae2/renderimage_1.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Character_LocketSnug",
+     "name": "Speedy pirata",
+     "description": "¡DÁMELO!",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "IShowSpeed",
+      "text": "Pieza del conjunto IShowSpeed.",
+      "backendValue": "LimeWork"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_locketsnug/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_locketsnug/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_locketsnug/featured.png"
+     },
+     "dynamicPakId": "1044",
+     "added": "2026-11-13T14:01:03Z"
+    },
+    {
+     "id": "Backpack_LocketSnug",
+     "name": "Moneda de IShowSpeed",
+     "description": "Un objeto de oro de la buena suerte.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "IShowSpeed",
+      "text": "Pieza del conjunto IShowSpeed.",
+      "backendValue": "LimeWork"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_locketsnug/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_locketsnug/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_locketsnug/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Parts",
+       "type": "reactividad",
+       "options": [
+        {
+         "tag": "Stage1",
+         "name": "rojo",
+         "image": "https://fortnite-api.com/images/cosmetics/br/backpack_locketsnug/variants/parts/stage1.png"
+        },
+        {
+         "tag": "Stage2",
+         "name": "No",
+         "image": "https://fortnite-api.com/images/cosmetics/br/backpack_locketsnug/variants/parts/stage2.png"
+        }
+       ]
+      }
+     ],
+     "dynamicPakId": "1044",
+     "added": "2026-11-13T14:01:03Z"
+    },
+    {
+     "id": "Pickaxe_LocketSnug",
+     "name": "Espada pirata de IShowSpeed",
+     "description": "Conquista los mares.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "IShowSpeed",
+      "text": "Pieza del conjunto IShowSpeed.",
+      "backendValue": "LimeWork"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_locketsnug/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_locketsnug/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_locketsnug/featured.png"
+     },
+     "dynamicPakId": "1044",
+     "added": "2026-11-13T14:01:03Z"
+    },
+    {
+     "id": "EID_LocketSnug",
+     "name": "Salto mortal de iShowSpeed",
+     "description": "Pero sin las ratoneras.",
+     "type": {
+      "value": "emote",
+      "displayValue": "Gesto",
+      "backendValue": "AthenaDance"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "IShowSpeed",
+      "text": "Pieza del conjunto IShowSpeed.",
+      "backendValue": "LimeWork"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/eid_locketsnug/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/eid_locketsnug/icon.png"
+     },
+     "showcaseVideo": "I8DERkDoTLM",
+     "dynamicPakId": "1044",
+     "added": "2026-11-13T14:01:03Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 1600,
+   "finalPrice": 1600,
+   "devName": "[VIRTUAL]1 x Buggy, 1 x Buggy's Coat, 1 x Buggy Knives for -1 MtxCurrency",
+   "offerId": "v2:/4431d4a16bd18c613e3ed16fe0c7f5485adb651a7545d313c8d36fae43ab2963",
+   "inDate": "2026-11-14T00:00:00Z",
+   "outDate": "2026-12-05T23:59:59.999Z",
+   "banner": {
+    "value": "Nuevo",
+    "intensity": "High",
+    "backendValue": "New"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -1,
+   "layoutId": "ConclusionC111426NEW.99",
+   "layout": {
+    "id": "ConclusionC111426NEW",
+    "name": "One Piece ",
+    "index": 45,
+    "rank": 197,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "billboard",
+    "textureMetadata": [
+     {
+      "key": "background",
+      "value": "https://cdn2.unrealengine.com/sk-Billboard_FlipperBalm_BG-9f591538.png"
+     },
+     {
+      "key": "foreground",
+      "value": "https://cdn2.unrealengine.com/sk-Billboard_FlipperBalm_Character-1dae77ed.png"
+     },
+     {
+      "key": "banner",
+      "value": "https://cdn2.unrealengine.com/sk-Billboard_Delilah_Logo-17440ac3.png"
+     },
+     {
+      "key": "foreground_juno",
+      "value": "https://cdn2.unrealengine.com/sk-Billboard_FlipperBalm_Figure-01341b7d.png"
+     },
+     {
+      "key": "bodyImage",
+      "value": "https://cdn2.unrealengine.com/sk-Billboard_FlipperBalm_ItemStack-5a2e6193.png"
+     }
+    ],
+    "stringMetadata": [
+     {
+      "key": "alignment",
+      "value": "left"
+     },
+     {
+      "key": "highlightEnabled",
+      "value": "true"
+     },
+     {
+      "key": "parallaxEnabled",
+      "value": "true"
+     },
+     {
+      "key": "titleColorA",
+      "value": "FFFFFF"
+     },
+     {
+      "key": "titleColorB",
+      "value": "FFFFFF"
+     }
+    ],
+    "textMetadata": [
+     {
+      "key": "cta",
+      "value": "Ver oferta"
+     },
+     {
+      "key": "title",
+      "value": "Buggy"
+     }
+    ]
+   },
+   "colors": {
+    "color1": "8ed1eeff",
+    "color2": "ffffffff",
+    "color3": "0d74c4ff",
+    "textBackgroundColor": "0a67afff"
+   },
+   "tileBackgroundMaterial": "ShopTile_Pirates_Clouds",
+   "tileSize": "Size_4_x_1",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S43/DAv2_Character_flipperbalm",
+   "newDisplayAsset": {
+    "id": "DAv2_Character_FlipperBalm",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__544ccf473286f2a3_29c0c4191e61fb71.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/544ccf473286f2a3/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__544ccf473286f2a3_d2e71b6320aa32c2.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/544ccf473286f2a3/renderimage_1.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__544ccf473286f2a3_71e578208f570b02.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/544ccf473286f2a3/renderimage_2.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Character_FlipperBalm",
+     "name": "Buggy",
+     "description": "El extravagante presidente de Cross Guild.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "One Piece",
+      "text": "Pieza del conjunto One Piece.",
+      "backendValue": "FrailShark"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_flipperbalm/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_flipperbalm/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_flipperbalm/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_flipperbalm/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_flipperbalm/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_flipperbalm/wide.png"
+      }
+     },
+     "variants": [
+      {
+       "channel": "Parts",
+       "type": "Sombrero",
+       "options": [
+        {
+         "tag": "Stage1",
+         "name": "Sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_flipperbalm/variants/parts/stage1.png"
+        },
+        {
+         "tag": "Stage2",
+         "name": "No",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_flipperbalm/variants/parts/stage2.png"
+        }
+       ]
+      }
+     ],
+     "showcaseVideo": "7UNyvf-mtWw",
+     "added": "2026-11-01T23:10:43Z"
+    },
+    {
+     "id": "Backpack_FlipperBalm",
+     "name": "Capa de Buggy",
+     "description": "La lleva el único e inigualable Buggy el payaso estrella.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "One Piece",
+      "text": "Pieza del conjunto One Piece.",
+      "backendValue": "FrailShark"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_flipperbalm/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_flipperbalm/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_flipperbalm/featured.png"
+     },
+     "dynamicPakId": "1030",
+     "added": "2026-11-01T23:10:43Z"
+    },
+    {
+     "id": "Pickaxe_FlipperBalm",
+     "name": "Cuchillos de Buggy",
+     "description": "Lánzalos con estilo.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "One Piece",
+      "text": "Pieza del conjunto One Piece.",
+      "backendValue": "FrailShark"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_flipperbalm/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_flipperbalm/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_flipperbalm/featured.png"
+     },
+     "dynamicPakId": "1030",
+     "added": "2026-11-01T23:10:43Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 1500,
+   "finalPrice": 1500,
+   "devName": "[VIRTUAL]1 x Sleuth, 1 x Evidence Bag for -1 MtxCurrency",
+   "offerId": "v2:/78d400e57a28b65401122868cdf59404869052bba5ba83e840d286b3fe60ad93",
+   "inDate": "2026-11-14T00:00:00Z",
+   "outDate": "2026-11-14T23:59:59.999Z",
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -1,
+   "layoutId": "BR111426.96",
+   "layout": {
+    "id": "BR111426",
+    "name": "Energía de protagonista ",
+    "index": 52,
+    "rank": 185,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "290f07ff",
+    "color3": "824100ff",
+    "textBackgroundColor": "824100ff"
+   },
+   "tileSize": "Size_1_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_CID_154_Athena_Commando_M_Gumshoe",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/DAv2_CID_154_M_Gumshoe",
+   "newDisplayAsset": {
+    "id": "DAv2_CID_154_M_Gumshoe",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__0de19bfbcc820515_9e8d00a63afca3e5.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/0de19bfbcc820515/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__0de19bfbcc820515_1e8cfd1988311102.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/0de19bfbcc820515/renderimage_1.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "CID_154_Athena_Commando_M_Gumshoe",
+     "name": "Detective",
+     "description": "Este detective está investigando el caso.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "Acción detectivesca",
+      "text": "Pieza del conjunto Acción detectivesca.",
+      "backendValue": "Gumshoe"
+     },
+     "introduction": {
+      "chapter": "1",
+      "season": "4",
+      "text": "Introducido en Capítulo 1, Temporada 4.",
+      "backendValue": 4
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/cid_154_athena_commando_m_gumshoe/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/cid_154_athena_commando_m_gumshoe/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/cid_154_athena_commando_m_gumshoe/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/cid_154_athena_commando_m_gumshoe/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/cid_154_athena_commando_m_gumshoe/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/cid_154_athena_commando_m_gumshoe/wide.png"
+      },
+      "bean": {
+       "small": "https://fortnite-api.com/images/cosmetics/beans/bean_gumshoea/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/beans/bean_gumshoea/large.png"
+      }
+     },
+     "showcaseVideo": "k_32f6nno2w",
+     "added": "2019-11-20T12:50:21Z"
+    },
+    {
+     "id": "BID_062_Gumshoe",
+     "name": "Bolsa de evidencia",
+     "description": "Moda forense.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "Acción detectivesca",
+      "text": "Pieza del conjunto Acción detectivesca.",
+      "backendValue": "Gumshoe"
+     },
+     "introduction": {
+      "chapter": "1",
+      "season": "4",
+      "text": "Introducido en Capítulo 1, Temporada 4.",
+      "backendValue": 4
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/bid_062_gumshoe/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/bid_062_gumshoe/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/bid_062_gumshoe/featured.png"
+     },
+     "added": "2019-11-20T12:50:40Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 2100,
+   "finalPrice": 1200,
+   "devName": "[VIRTUAL]1 x Caspian, 1 x Waveslasher, 1 x Waveslasher, 1 x Ocean's Glow for -1 MtxCurrency",
+   "offerId": "v2:/927db486b830851dcb864fc7cab648528170947dd431620aac3c3cd02f743d54",
+   "inDate": "2026-11-14T00:00:00Z",
+   "outDate": "2026-11-15T23:59:59.999Z",
+   "bundle": {
+    "name": "Lote Caspian",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/70c1166c8b8cf941/renderimage_0.png"
+   },
+   "banner": {
+    "value": "900 monedas V de descuento",
+    "intensity": "Low",
+    "backendValue": "AmountOff"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -1,
+   "layoutId": "BR111426.99",
+   "layout": {
+    "id": "BR111426",
+    "name": "Energía de protagonista ",
+    "index": 52,
+    "rank": 185,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "290f07ff",
+    "color3": "824100ff",
+    "textBackgroundColor": "824100ff"
+   },
+   "tileSize": "Size_1_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_VioletFare_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S33/DAv2_Bundle_Featured_VioletFare",
+   "newDisplayAsset": {
+    "id": "DAv2_Bundle_Featured_VioletFare",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__70c1166c8b8cf941_ddcacd7562f0e059.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/70c1166c8b8cf941/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__70c1166c8b8cf941_e006074aa53e1cfc.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/70c1166c8b8cf941/renderimage_1.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Character_VioletFare",
+     "name": "Caspian",
+     "description": "Agilidad felina. Estilo espontáneo.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "Guarda del mar",
+      "text": "Pieza del conjunto Guarda del mar.",
+      "backendValue": "WhaleShield"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "1",
+      "text": "Introducido en Capítulo 6, Temporada 1.",
+      "backendValue": 33
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_violetfare/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_violetfare/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_violetfare/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_violetfare/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_violetfare/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_violetfare/wide.png"
+      },
+      "bean": {
+       "small": "https://fortnite-api.com/images/cosmetics/beans/bean_violetfare/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/beans/bean_violetfare/large.png"
+      }
+     },
+     "added": "2024-12-18T12:19:13Z"
+    },
+    {
+     "id": "Backpack_VioletFare",
+     "name": "Filo oleado",
+     "description": "Se acerca la ola de la venganza.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Guarda del mar",
+      "text": "Pieza del conjunto Guarda del mar.",
+      "backendValue": "WhaleShield"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "1",
+      "text": "Introducido en Capítulo 6, Temporada 1.",
+      "backendValue": 33
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_violetfare/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_violetfare/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_violetfare/featured.png"
+     },
+     "added": "2024-12-18T12:19:13Z"
+    },
+    {
+     "id": "Pickaxe_VioletFare",
+     "name": "Filo oleado",
+     "description": "Se acerca la ola de la venganza.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Guarda del mar",
+      "text": "Pieza del conjunto Guarda del mar.",
+      "backendValue": "WhaleShield"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "1",
+      "text": "Introducido en Capítulo 6, Temporada 1.",
+      "backendValue": 33
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_violetfare/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_violetfare/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_violetfare/featured.png"
+     },
+     "showcaseVideo": "J9h2fcdK_ZY",
+     "added": "2024-12-18T12:19:13Z"
+    },
+    {
+     "id": "Wrap_VioletFare",
+     "name": "Brillo oceánico",
+     "description": "Muestra tu estilo.",
+     "type": {
+      "value": "wrap",
+      "displayValue": "Papel",
+      "backendValue": "AthenaItemWrap"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Guarda del mar",
+      "text": "Pieza del conjunto Guarda del mar.",
+      "backendValue": "WhaleShield"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "1",
+      "text": "Introducido en Capítulo 6, Temporada 1.",
+      "backendValue": 33
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/wrap_violetfare/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/wrap_violetfare/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/wrap_violetfare/featured.png"
+     },
+     "showcaseVideo": "Dn1XgJ9Fu7Q",
+     "added": "2024-12-18T12:19:13Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 1200,
+   "finalPrice": 1200,
+   "devName": "[VIRTUAL]1 x Split Wing for 1200 MtxCurrency",
+   "offerId": "v2:/85876cea156aaf86431fe636ebcbc993ea326ce77e29c2a78a1c3ac9e2b95c4a",
+   "inDate": "2026-11-14T00:00:00Z",
+   "outDate": "2026-11-14T23:59:59.999Z",
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -3,
+   "layoutId": "BR111426.96",
+   "layout": {
+    "id": "BR111426",
+    "name": "Energía de protagonista ",
+    "index": 52,
+    "rank": 185,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "290f07ff",
+    "color3": "824100ff",
+    "textBackgroundColor": "824100ff"
+   },
+   "tileSize": "Size_1_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_Glider_ID_043_DarkNinja",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/DAv2_Glider_ID_043_DarkNinja",
+   "newDisplayAsset": {
+    "id": "DAv2_Glider_ID_043_DarkNinja",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__59e8f83a89abda99_71a50f3a090f9474.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/59e8f83a89abda99/renderimage_0.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Glider_ID_043_DarkNinja",
+     "name": "Ala dividida",
+     "description": "Precipítate a la acción.",
+     "type": {
+      "value": "glider",
+      "displayValue": "Planeador",
+      "backendValue": "AthenaGlider"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "Supervisor",
+      "text": "Pieza del conjunto Supervisor.",
+      "backendValue": "DarkEagle"
+     },
+     "introduction": {
+      "chapter": "1",
+      "season": "4",
+      "text": "Introducido en Capítulo 1, Temporada 4.",
+      "backendValue": 4
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/glider_id_043_darkninja/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/glider_id_043_darkninja/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/glider_id_043_darkninja/featured.png"
+     },
+     "showcaseVideo": "6DL8qAqV0gc",
+     "added": "2019-11-20T12:51:09Z"
+    }
+   ]
+  }
+ ]
+}

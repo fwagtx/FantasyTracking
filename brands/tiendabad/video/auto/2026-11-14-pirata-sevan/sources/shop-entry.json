@@ -1,0 +1,323 @@
+{
+ "date": "2026-11-14T00:00:00Z",
+ "entries": [
+  {
+   "regularPrice": 2700,
+   "finalPrice": 2000,
+   "devName": "[VIRTUAL]1 x Budge, 1 x Squawk Sack, 1 x Sun Sprout, 1 x Driver, 1 x Billy Bounce, 1 x Scanline, 1 x Jacob's Pierogi, 1 x Jacob's Suitcase for -1 MtxCurrency",
+   "offerId": "v2:/4a07a3f34ce8567f64d9808b1d647e24a5e79226ebe2367724ccd12f02bf3eb2",
+   "inDate": "2026-11-10T00:00:00Z",
+   "outDate": "2026-11-14T23:59:59.999Z",
+   "bundle": {
+    "name": "Lote Casillero de Pierogi de Jacob",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/de0dd1ac250ff99f/renderimage_0.png"
+   },
+   "banner": {
+    "value": "700 monedas V de descuento",
+    "intensity": "Low",
+    "backendValue": "AmountOff"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -1,
+   "layoutId": "JacobP.99",
+   "layout": {
+    "id": "JacobP",
+    "name": "Casillero de Pierogi de Jacob ",
+    "category": "Lotes Casillero",
+    "index": 42,
+    "rank": 180,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "00baceff",
+    "color2": "0e3e71ff",
+    "color3": "23c484ff",
+    "textBackgroundColor": "0e3e71ff"
+   },
+   "tileBackgroundMaterial": "ShopTile_CornerGradient",
+   "tileSize": "Size_3_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_Architect_neonlines_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S43/DAv2_Bundle_Featured_Architect_neonlines",
+   "newDisplayAsset": {
+    "id": "DAv2_Bundle_Featured_Architect_NeonLines",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__de0dd1ac250ff99f_29c0c4191e61fb71.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/de0dd1ac250ff99f/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__de0dd1ac250ff99f_5aff8d0c456b1e98.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/de0dd1ac250ff99f/renderimage_1.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Character_CosmicSquatter",
+     "name": "Pollito",
+     "description": "Este periquito nunca abandonará su búsqueda de justicia.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Rompejaulas",
+      "text": "Pieza del conjunto Rompejaulas.",
+      "backendValue": "BrokenMetal"
+     },
+     "introduction": {
+      "chapter": "5",
+      "season": "1",
+      "text": "Introducido en Capítulo 5, Temporada 1.",
+      "backendValue": 28
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_cosmicsquatter/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_cosmicsquatter/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_cosmicsquatter/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_cosmicsquatter/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_cosmicsquatter/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_cosmicsquatter/wide.png"
+      },
+      "bean": {
+       "small": "https://fortnite-api.com/images/cosmetics/beans/bean_cosmicsquatter/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/beans/bean_cosmicsquatter/large.png"
+      }
+     },
+     "metaTags": [
+      "Cosmetics.MetaTags.Special.Large",
+      "Cosmetics.MetaTags.Special.AbnormalHead"
+     ],
+     "showcaseVideo": "DkWna9HJQaY",
+     "added": "2024-01-23T13:34:48Z"
+    },
+    {
+     "id": "Backpack_CosmicSquatter",
+     "name": "Píochila",
+     "description": "Un pájaro mochila muy bonito.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Rompejaulas",
+      "text": "Pieza del conjunto Rompejaulas.",
+      "backendValue": "BrokenMetal"
+     },
+     "introduction": {
+      "chapter": "5",
+      "season": "1",
+      "text": "Introducido en Capítulo 5, Temporada 1.",
+      "backendValue": 28
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_cosmicsquatter/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_cosmicsquatter/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_cosmicsquatter/featured.png"
+     },
+     "added": "2024-01-23T13:34:48Z"
+    },
+    {
+     "id": "BID_220_FarmerFemale",
+     "name": "Girasol",
+     "description": "Perfectamente soleado.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "Jardineros letales",
+      "text": "Pieza del conjunto Jardineros letales.",
+      "backendValue": "Farmer"
+     },
+     "introduction": {
+      "chapter": "1",
+      "season": "8",
+      "text": "Introducido en Capítulo 1, Temporada 8.",
+      "backendValue": 8
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/bid_220_farmerfemale/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/bid_220_farmerfemale/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/bid_220_farmerfemale/featured.png"
+     },
+     "showcaseVideo": "AUaSNY6Z68g",
+     "added": "2019-11-20T12:50:35Z"
+    },
+    {
+     "id": "Pickaxe_ID_190_GolfClub",
+     "name": "Conductor",
+     "description": "Apunta al verde.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "Poder golfista",
+      "text": "Pieza del conjunto Poder golfista.",
+      "backendValue": "Golf"
+     },
+     "introduction": {
+      "chapter": "1",
+      "season": "8",
+      "text": "Introducido en Capítulo 1, Temporada 8.",
+      "backendValue": 8
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_id_190_golfclub/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_id_190_golfclub/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_id_190_golfclub/featured.png"
+     },
+     "showcaseVideo": "_XlvOvjNzbQ",
+     "added": "2019-11-20T12:50:49Z"
+    },
+    {
+     "id": "EID_BillyBounce",
+     "name": "Rebote de Billy",
+     "description": "Tú a lo tuyo. ",
+     "type": {
+      "value": "emote",
+      "displayValue": "Gesto",
+      "backendValue": "AthenaDance"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "introduction": {
+      "chapter": "1",
+      "season": "9",
+      "text": "Introducido en Capítulo 1, Temporada 9.",
+      "backendValue": 9
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/eid_billybounce/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/eid_billybounce/icon.png"
+     },
+     "showcaseVideo": "O5DdYHPiVvs",
+     "added": "2019-11-20T12:49:45Z"
+    },
+    {
+     "id": "Wrap_097_NeonLines",
+     "name": "Línea de exploración",
+     "description": "Muestra tu estilo.",
+     "type": {
+      "value": "wrap",
+      "displayValue": "Papel",
+      "backendValue": "AthenaItemWrap"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "Punto de ruta",
+      "text": "Pieza del conjunto Punto de ruta.",
+      "backendValue": "BlueBadass"
+     },
+     "introduction": {
+      "chapter": "1",
+      "season": "9",
+      "text": "Introducido en Capítulo 1, Temporada 9.",
+      "backendValue": 9
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/wrap_097_neonlines/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/wrap_097_neonlines/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/wrap_097_neonlines/featured.png"
+     },
+     "showcaseVideo": "rfCtsnBMMmU",
+     "added": "2019-11-20T12:48:25Z"
+    },
+    {
+     "id": "Spray_S43Icon",
+     "name": "Pierogi de Jacob",
+     "description": "Deja tu marca.",
+     "type": {
+      "value": "spray",
+      "displayValue": "Aerosol",
+      "backendValue": "AthenaSpray"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/spray_s43icon/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/spray_s43icon/icon.png",
+      "other": {
+       "decal": "https://fortnite-api.com/images/cosmetics/br/spray_s43icon/decal.png"
+      }
+     },
+     "added": "2026-11-01T23:10:43Z"
+    },
+    {
+     "id": "Emoticon_S43Icon",
+     "name": "Maleta de Jacob",
+     "description": "Exprésate en el campo de batalla.",
+     "type": {
+      "value": "emoji",
+      "displayValue": "Emoticono",
+      "backendValue": "AthenaEmoji"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/emoticon_s43icon/smallicon.png"
+     },
+     "added": "2026-11-01T23:10:43Z"
+    }
+   ]
+  }
+ ]
+}
