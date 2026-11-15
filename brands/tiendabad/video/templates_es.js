@@ -140,6 +140,10 @@
       mk(stage, `inset:0;background:#084687`);
       const cam = S.mapCam(stage, `../../tiendabad/sources/${cfg.map === "blank" ? "map-blank" : "map-labels"}.png`, kf);
       const shade = mk(stage, `inset:0;background:rgba(5,10,28,.35)`);
+      // map labels fade back behind the title and the caption line (2026-11-15: "RESORT RELAJADO" peeked out beside the title,
+      // "ARLONG PARK" sat right under the captions)
+      mk(stage, `left:0;right:0;top:0;height:470px;background:linear-gradient(180deg,rgba(5,10,28,.82),rgba(5,10,28,.7) 330px,rgba(5,10,28,0) 470px)`);
+      mk(stage, `left:0;right:0;top:1090px;height:240px;background:linear-gradient(180deg,rgba(5,10,28,0),rgba(5,10,28,.72) 28%,rgba(5,10,28,.72) 72%,rgba(5,10,28,0))`);
       const pins = cfg.pins.map((p, i) => ({ ...p, ring: S.marker(stage, p.r || 70, p.r || 70, p.color || RED, i * 1.9 + 0.7), lab: p.label ? S.scrawl(stage, p.label, p.size || 66, YEL, -7) : null,
         pulse: mk(stage, `left:0;top:0;width:200px;height:200px;border-radius:50%;border:8px solid ${YEL}`) }));
       const dim = mk(stage, `inset:0;background:rgba(5,10,28,.72)`);

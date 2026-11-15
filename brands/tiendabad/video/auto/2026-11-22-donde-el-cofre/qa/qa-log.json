@@ -1,0 +1,67 @@
+{
+  "video": "latienditabad-2026-11-22-donde-el-cofre.mp4",
+  "checked_utc": "2026-11-15T17:20:50Z",
+  "verdict": "READY TO POST",
+  "results": [
+    {
+      "check": "1. Facts",
+      "status": "PASS",
+      "detail": "2/2 claims verified against saved official data",
+      "items": [
+        {
+          "claim": "El cofre es un lugar del mapa oficial",
+          "result": "PASS",
+          "why": "matched in map.json"
+        },
+        {
+          "claim": "Está en el noroeste de la isla, cerca de Resort relajado",
+          "result": "PASS",
+          "why": "visual check against map-labels.png: map pixel (762, 875); nearest named place by coordinates: Resort relajado"
+        }
+      ]
+    },
+    {
+      "check": "2. Spelling and grammar",
+      "status": "PASS",
+      "detail": "32 distinct words checked; code written as BAD in all 2 mentions",
+      "items": []
+    },
+    {
+      "check": "3. Frames",
+      "status": "PASS",
+      "detail": "No black frames, no frozen stretches over 1.5 s. Contact sheet (1 frame/s) reviewed by eye: contact-sheet.png",
+      "items": []
+    },
+    {
+      "check": "4. Audio",
+      "status": "PASS",
+      "detail": "Integrated -14.2 LUFS, true peak -2.2 dBTP, no clipping, no silence gaps. All sound is original synthesis (no game rips, no copyrighted music). No voiceover in this cut.",
+      "items": []
+    },
+    {
+      "check": "5. Specs and safe zones",
+      "status": "PASS",
+      "detail": "1080x1920 h264 60 fps, aac 48000 Hz, 15.1s. Fits TikTok, Reels, Shorts, X, Facebook, Threads. Every on-screen text box sampled 4x/s stays out of the top bar, bottom caption area and button column.",
+      "items": []
+    },
+    {
+      "check": "6. Disclosure and wording",
+      "status": "PASS",
+      "detail": "#EpicPartner is the first hashtag in caption line 1 and on screen in every sampled frame from 0.0s. No discount, giveaway, endorsement or filler-CTA wording.",
+      "items": []
+    },
+    {
+      "check": "7. Would a fan stop scrolling? Made by a person?",
+      "status": "PASS",
+      "detail": "Frame 1: '¿DÓNDE ESTÁ EL COFRE?' over open water with the place's label and the pin ring. The wide shot puts the pin in the north-west of the island with the handwritten label; the close shots show Resort relajado, the nearest named place, as the voice says. First build: the map label 'ARLONG PARK' sat right under the captions; with the new caption band it stays dim behind them. Captions one line; code card and thanks at the end. Voice reads every line naturally ('cerca de El cofre' keeps the place's own article). Sources fetched today; no places or news changed.",
+      "items": []
+    },
+    {
+      "check": "8. Owner approval",
+      "status": "PASS",
+      "detail": "Standing approval for autopilot (owner, 2026-10-28): posts when checks 1-7 all PASS.",
+      "items": []
+    }
+  ],
+  "caption": "#EpicPartner ¿No encuentras El cofre en Fortnite? 📍 Está en el noroeste de la isla, cerca de Resort relajado\n¿Ya lo visitaste? 👇\nUsa el código BAD en la tienda de objetos 💛\n#fortnite #mapafortnite #elcofre"
+}

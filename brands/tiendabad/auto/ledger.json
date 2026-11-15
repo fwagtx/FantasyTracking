@@ -282,6 +282,20 @@
    "format": "Tienda Pirata diaria (cuenta)",
    "topic": "Quedan 21 días · dato: Horas del Tesoro 2026-11-14",
    "folder": "video/auto/2026-11-14-pirata-cuenta"
+  },
+  {
+   "date": "2026-11-15",
+   "slot": "13:00",
+   "format": "¿Dónde está?",
+   "topic": "Frontera Farol",
+   "folder": "video/auto/2026-11-15-donde-frontera-farol"
+  },
+  {
+   "date": "2026-11-22",
+   "slot": "20:30",
+   "format": "¿Dónde está?",
+   "topic": "El cofre",
+   "folder": "video/auto/2026-11-22-donde-el-cofre"
   }
  ]
 }
