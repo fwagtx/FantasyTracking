@@ -1,0 +1,767 @@
+{
+ "date": "2026-11-15T00:00:00Z",
+ "entries": [
+  {
+   "regularPrice": 7300,
+   "finalPrice": 3800,
+   "devName": "[VIRTUAL]1 x Mega Man (Dual Override), 1 x Buster Cannon Fire Sword, 1 x Mega Man X, 1 x Buster Cannon Blades, 1 x E-Tank Power Pack, 1 x Zero (Mega Man), 1 x Z-Saber, 1 x Z-Saber, 1 x Rush (Mega Man), 1 x Mega Buster Flex for -1 MtxCurrency",
+   "offerId": "v2:/5a7cb0aa715e1b8be77b2c76781747b1c922c8db44461855a10f4acb3801bace",
+   "inDate": "2026-11-11T00:00:00Z",
+   "outDate": "2026-11-15T23:59:59.999Z",
+   "bundle": {
+    "name": "Lote Mega Man",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/a5ab4d9b7c1fb4c2/renderimage_0.png"
+   },
+   "banner": {
+    "value": "3500 monedas V de descuento",
+    "intensity": "Low",
+    "backendValue": "AmountOff"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -1,
+   "layoutId": "Megaman.99",
+   "layout": {
+    "id": "Megaman",
+    "name": "Mega Man",
+    "index": 0,
+    "rank": 182,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "04872fff",
+    "color2": "cbfbceff",
+    "color3": "96da78ff",
+    "textBackgroundColor": "0e512bff"
+   },
+   "tileBackgroundMaterial": "ShopTile_SketchedBorder",
+   "tileSize": "Size_2_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_Dunebrief_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S42/DAv2_Bundle_Featured_Dunebrief",
+   "newDisplayAsset": {
+    "id": "DAv2_Bundle_Featured_DuneBrief",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__a5ab4d9b7c1fb4c2_29c0c4191e61fb71.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/a5ab4d9b7c1fb4c2/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__a5ab4d9b7c1fb4c2_d2e71b6320aa32c2.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/a5ab4d9b7c1fb4c2/renderimage_1.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__a5ab4d9b7c1fb4c2_e0559e464b07edd9.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/a5ab4d9b7c1fb4c2/renderimage_2.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__a5ab4d9b7c1fb4c2_c87b2239ea7b1fc6.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/a5ab4d9b7c1fb4c2/renderimage_3.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__a5ab4d9b7c1fb4c2_1c39458533e1ba48.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/a5ab4d9b7c1fb4c2/renderimage_4.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Character_DuneBriefMerry",
+     "name": "Mega Man (Dual Override)",
+     "description": "¿Todo listo para salvar el día?",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "gaminglegends",
+      "displayValue": "Leyendas de videojuegos",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "Leyendas de videojuegos",
+      "colors": [
+       "8078ffff",
+       "5328d6ff",
+       "3e1398ff",
+       "28085fff",
+       "0d0027ff"
+      ],
+      "backendValue": "PlatformSeries"
+     },
+     "set": {
+      "value": "Mega Man",
+      "text": "Pieza del conjunto Mega Man.",
+      "backendValue": "CalendarHunter"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_dunebriefmerry/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_dunebriefmerry/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_dunebriefmerry/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_dunebriefmerry/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_dunebriefmerry/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_dunebriefmerry/wide.png"
+      }
+     },
+     "variants": [
+      {
+       "channel": "Particle",
+       "type": "Estilo",
+       "options": [
+        {
+         "tag": "Particle1",
+         "name": "Mega Man",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_dunebriefmerry/variants/particle/particle1.png"
+        },
+        {
+         "tag": "Particle2",
+         "name": "Fuego atómico",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_dunebriefmerry/variants/particle/particle2.png"
+        }
+       ]
+      },
+      {
+       "channel": "Material",
+       "type": "sombreado",
+       "options": [
+        {
+         "tag": "Mat1",
+         "name": "plano",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_dunebriefmerry/variants/material/mat1.png"
+        },
+        {
+         "tag": "Mat2",
+         "name": "degradado",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_dunebriefmerry/variants/material/mat2.png"
+        }
+       ]
+      },
+      {
+       "channel": "Parts",
+       "type": "Casco",
+       "options": [
+        {
+         "tag": "Stage1",
+         "name": "Sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_dunebriefmerry/variants/parts/stage1.png"
+        },
+        {
+         "tag": "Stage2",
+         "name": "No",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_dunebriefmerry/variants/parts/stage2.png"
+        }
+       ]
+      }
+     ],
+     "showcaseVideo": "A1UcqgbGgI8",
+     "added": "2026-09-07T20:23:20Z"
+    },
+    {
+     "id": "Pickaxe_DuneBriefMerry",
+     "name": "Hoja ígnea de Mega Buster",
+     "description": "Modificada con un poder abrasador.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "gaminglegends",
+      "displayValue": "Leyendas de videojuegos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Leyendas de videojuegos",
+      "colors": [
+       "8078ffff",
+       "5328d6ff",
+       "3e1398ff",
+       "28085fff",
+       "0d0027ff"
+      ],
+      "backendValue": "PlatformSeries"
+     },
+     "set": {
+      "value": "Mega Man",
+      "text": "Pieza del conjunto Mega Man.",
+      "backendValue": "CalendarHunter"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_dunebriefmerry/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_dunebriefmerry/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_dunebriefmerry/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Material",
+       "type": "sombreado",
+       "options": [
+        {
+         "tag": "Mat1",
+         "name": "plano",
+         "image": "https://fortnite-api.com/images/cosmetics/br/pickaxe_dunebriefmerry/variants/material/mat1.png"
+        },
+        {
+         "tag": "Mat0",
+         "name": "degradado",
+         "image": "https://fortnite-api.com/images/cosmetics/br/pickaxe_dunebriefmerry/variants/material/mat0.png"
+        }
+       ]
+      }
+     ],
+     "added": "2026-09-07T20:23:20Z"
+    },
+    {
+     "id": "Character_DuneBriefShift",
+     "name": "Mega Man X",
+     "description": "Pelea por la paz.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "gaminglegends",
+      "displayValue": "Leyendas de videojuegos",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "Leyendas de videojuegos",
+      "colors": [
+       "8078ffff",
+       "5328d6ff",
+       "3e1398ff",
+       "28085fff",
+       "0d0027ff"
+      ],
+      "backendValue": "PlatformSeries"
+     },
+     "set": {
+      "value": "Mega Man",
+      "text": "Pieza del conjunto Mega Man.",
+      "backendValue": "CalendarHunter"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_dunebriefshift/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_dunebriefshift/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_dunebriefshift/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_dunebriefshift/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_dunebriefshift/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_dunebriefshift/wide.png"
+      }
+     },
+     "variants": [
+      {
+       "channel": "Material",
+       "type": "sombreado",
+       "options": [
+        {
+         "tag": "Mat0",
+         "name": "plano",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_dunebriefshift/variants/material/mat0.png"
+        },
+        {
+         "tag": "Mat1",
+         "name": "degradado",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_dunebriefshift/variants/material/mat1.png"
+        }
+       ]
+      }
+     ],
+     "showcaseVideo": "-HAHtOh-gsg",
+     "added": "2026-09-07T20:23:20Z"
+    },
+    {
+     "id": "Pickaxe_DuneBriefShift",
+     "name": "Sierra de Mega Buster",
+     "description": "Incluye una sorpresa filosa.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "gaminglegends",
+      "displayValue": "Leyendas de videojuegos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Leyendas de videojuegos",
+      "colors": [
+       "8078ffff",
+       "5328d6ff",
+       "3e1398ff",
+       "28085fff",
+       "0d0027ff"
+      ],
+      "backendValue": "PlatformSeries"
+     },
+     "set": {
+      "value": "Mega Man",
+      "text": "Pieza del conjunto Mega Man.",
+      "backendValue": "CalendarHunter"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_dunebriefshift/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_dunebriefshift/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_dunebriefshift/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Particle",
+       "type": "sombreado",
+       "options": [
+        {
+         "tag": "Particle1",
+         "name": "plano",
+         "image": "https://fortnite-api.com/images/cosmetics/br/pickaxe_dunebriefshift/variants/particle/particle1.png"
+        },
+        {
+         "tag": "Particle0",
+         "name": "degradado",
+         "image": "https://fortnite-api.com/images/cosmetics/br/pickaxe_dunebriefshift/variants/particle/particle0.png"
+        }
+       ]
+      }
+     ],
+     "added": "2026-09-07T20:23:20Z"
+    },
+    {
+     "id": "Backpack_DuneBriefShift",
+     "name": "Tanque de energía portátil",
+     "description": "Mejorado y listo para la batalla.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "gaminglegends",
+      "displayValue": "Leyendas de videojuegos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Leyendas de videojuegos",
+      "colors": [
+       "8078ffff",
+       "5328d6ff",
+       "3e1398ff",
+       "28085fff",
+       "0d0027ff"
+      ],
+      "backendValue": "PlatformSeries"
+     },
+     "set": {
+      "value": "Mega Man",
+      "text": "Pieza del conjunto Mega Man.",
+      "backendValue": "CalendarHunter"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_dunebriefshift/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_dunebriefshift/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_dunebriefshift/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Particle",
+       "type": "sombreado",
+       "options": [
+        {
+         "tag": "Particle1",
+         "name": "plano",
+         "image": "https://fortnite-api.com/images/cosmetics/br/backpack_dunebriefshift/variants/particle/particle1.png"
+        },
+        {
+         "tag": "Particle2",
+         "name": "degradado",
+         "image": "https://fortnite-api.com/images/cosmetics/br/backpack_dunebriefshift/variants/particle/particle2.png"
+        }
+       ]
+      }
+     ],
+     "added": "2026-09-07T20:23:20Z"
+    },
+    {
+     "id": "Character_TackleShow",
+     "name": "Zero (Mega Man)",
+     "description": "El robot de combate definitivo.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "gaminglegends",
+      "displayValue": "Leyendas de videojuegos",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "Leyendas de videojuegos",
+      "colors": [
+       "8078ffff",
+       "5328d6ff",
+       "3e1398ff",
+       "28085fff",
+       "0d0027ff"
+      ],
+      "backendValue": "PlatformSeries"
+     },
+     "set": {
+      "value": "Mega Man",
+      "text": "Pieza del conjunto Mega Man.",
+      "backendValue": "CalendarHunter"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_tackleshow/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_tackleshow/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_tackleshow/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_tackleshow/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_tackleshow/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_tackleshow/wide.png"
+      }
+     },
+     "variants": [
+      {
+       "channel": "Material",
+       "type": "estilo",
+       "options": [
+        {
+         "tag": "Mat1",
+         "name": "Cero",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_tackleshow/variants/material/mat1.png"
+        },
+        {
+         "tag": "Mat2",
+         "name": "Zero azabache",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_tackleshow/variants/material/mat2.png"
+        }
+       ]
+      },
+      {
+       "channel": "Parts",
+       "type": "sombreado",
+       "options": [
+        {
+         "tag": "Stage1",
+         "name": "plano",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_tackleshow/variants/parts/stage1.png"
+        },
+        {
+         "tag": "Stage2",
+         "name": "degradado",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_tackleshow/variants/parts/stage2.png"
+        }
+       ]
+      }
+     ],
+     "metaTags": [
+      "Cosmetics.MetaTags.TackleShow"
+     ],
+     "showcaseVideo": "iGglPhhAHys",
+     "added": "2026-09-07T20:23:20Z"
+    },
+    {
+     "id": "Pickaxe_TackleShow",
+     "name": "Sable Z",
+     "description": "Imbuido con energía de onda de choque.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "gaminglegends",
+      "displayValue": "Leyendas de videojuegos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Leyendas de videojuegos",
+      "colors": [
+       "8078ffff",
+       "5328d6ff",
+       "3e1398ff",
+       "28085fff",
+       "0d0027ff"
+      ],
+      "backendValue": "PlatformSeries"
+     },
+     "set": {
+      "value": "Mega Man",
+      "text": "Pieza del conjunto Mega Man.",
+      "backendValue": "CalendarHunter"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_tackleshow/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_tackleshow/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_tackleshow/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Material",
+       "type": "Estilo",
+       "options": [
+        {
+         "tag": "Mat0",
+         "name": "Sable Z",
+         "image": "https://fortnite-api.com/images/cosmetics/br/pickaxe_tackleshow/variants/material/mat0.png"
+        },
+        {
+         "tag": "Mat1",
+         "name": "Sable violeta",
+         "image": "https://fortnite-api.com/images/cosmetics/br/pickaxe_tackleshow/variants/material/mat1.png"
+        }
+       ]
+      },
+      {
+       "channel": "Particle",
+       "type": "sombreado",
+       "options": [
+        {
+         "tag": "Particle2",
+         "name": "plano",
+         "image": "https://fortnite-api.com/images/cosmetics/br/pickaxe_tackleshow/variants/particle/particle2.png"
+        },
+        {
+         "tag": "Particle1",
+         "name": "degradado",
+         "image": "https://fortnite-api.com/images/cosmetics/br/pickaxe_tackleshow/variants/particle/particle1.png"
+        }
+       ]
+      }
+     ],
+     "added": "2026-09-07T20:23:20Z"
+    },
+    {
+     "id": "Backpack_TackleShow",
+     "name": "Sable Z",
+     "description": "Imbuido con energía de onda de choque.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "gaminglegends",
+      "displayValue": "Leyendas de videojuegos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Leyendas de videojuegos",
+      "colors": [
+       "8078ffff",
+       "5328d6ff",
+       "3e1398ff",
+       "28085fff",
+       "0d0027ff"
+      ],
+      "backendValue": "PlatformSeries"
+     },
+     "set": {
+      "value": "Mega Man",
+      "text": "Pieza del conjunto Mega Man.",
+      "backendValue": "CalendarHunter"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_tackleshow/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_tackleshow/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_tackleshow/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Particle",
+       "type": "sombreado",
+       "options": [
+        {
+         "tag": "Particle1",
+         "name": "plano",
+         "image": "https://fortnite-api.com/images/cosmetics/br/backpack_tackleshow/variants/particle/particle1.png"
+        },
+        {
+         "tag": "Particle2",
+         "name": "degradado",
+         "image": "https://fortnite-api.com/images/cosmetics/br/backpack_tackleshow/variants/particle/particle2.png"
+        }
+       ]
+      }
+     ],
+     "added": "2026-09-07T20:23:20Z"
+    },
+    {
+     "id": "Companion_CacaoLynx",
+     "name": "Rush (Mega Man)",
+     "description": "El perro robótico de Mega Man.",
+     "type": {
+      "value": "sidekick",
+      "displayValue": "Compañero",
+      "backendValue": "CosmeticCompanion"
+     },
+     "rarity": {
+      "value": "gaminglegends",
+      "displayValue": "Leyendas de videojuegos",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "series": {
+      "value": "Leyendas de videojuegos",
+      "colors": [
+       "8078ffff",
+       "5328d6ff",
+       "3e1398ff",
+       "28085fff",
+       "0d0027ff"
+      ],
+      "backendValue": "PlatformSeries"
+     },
+     "set": {
+      "value": "Mega Man",
+      "text": "Pieza del conjunto Mega Man.",
+      "backendValue": "CalendarHunter"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/companion_cacaolynx/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/companion_cacaolynx/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/companion_cacaolynx/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Emote",
+       "type": "Gesto de compañero",
+       "options": [
+        {
+         "tag": "CompanionEmote0",
+         "name": "Rush propulsado",
+         "image": "https://fortnite-api.com/images/cosmetics/br/companion_cacaolynx/variants/emote/companionemote0.png"
+        }
+       ]
+      },
+      {
+       "channel": "Outfit",
+       "type": "sombreado",
+       "options": [
+        {
+         "tag": "Stage1",
+         "name": "plano",
+         "image": "https://fortnite-api.com/images/cosmetics/br/companion_cacaolynx/variants/outfit/stage1.png"
+        },
+        {
+         "tag": "Stage2",
+         "name": "degradado",
+         "image": "https://fortnite-api.com/images/cosmetics/br/companion_cacaolynx/variants/outfit/stage2.png"
+        }
+       ]
+      }
+     ],
+     "added": "2026-09-07T16:00:18Z"
+    },
+    {
+     "id": "EID_DuneBrief",
+     "name": "Cañonazo de Mega Buster",
+     "description": "Lanza un tiro cargado.",
+     "type": {
+      "value": "emote",
+      "displayValue": "Gesto",
+      "backendValue": "AthenaDance"
+     },
+     "rarity": {
+      "value": "gaminglegends",
+      "displayValue": "Leyendas de videojuegos",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "series": {
+      "value": "Leyendas de videojuegos",
+      "colors": [
+       "8078ffff",
+       "5328d6ff",
+       "3e1398ff",
+       "28085fff",
+       "0d0027ff"
+      ],
+      "backendValue": "PlatformSeries"
+     },
+     "set": {
+      "value": "Mega Man",
+      "text": "Pieza del conjunto Mega Man.",
+      "backendValue": "CalendarHunter"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/eid_dunebrief/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/eid_dunebrief/icon.png"
+     },
+     "showcaseVideo": "sPtPeT6XDD4",
+     "added": "2026-09-07T20:23:20Z"
+    }
+   ]
+  }
+ ]
+}

@@ -29,7 +29,7 @@ NUM = {1: "uno", 2: "dos", 3: "tres", 4: "cuatro", 5: "cinco"}
 TREASURE_HOURS = [datetime.date(2026, 11, 14), datetime.date(2026, 11, 21), datetime.date(2026, 11, 28), datetime.date(2026, 12, 5)]
 TH_ROW = {datetime.date(2026, 11, 14): "November 14", datetime.date(2026, 11, 21): "November 21", datetime.date(2026, 11, 28): "November 28", datetime.date(2026, 12, 5): "December 5"}
 TYPES = {"outfit": ("skin", "skins"), "backpack": ("mochila", "mochilas"), "pickaxe": ("pico", "picos"), "glider": ("planeador", "planeadores"),
-         "emote": ("gesto", "gestos"), "wrap": ("envoltorio", "envoltorios"), "shoe": ("calzado", "calzados"), "sidekick": ("sidekick", "sidekicks"),
+         "emote": ("gesto", "gestos"), "wrap": ("envoltorio", "envoltorios"), "shoe": ("calzado", "calzados"), "sidekick": ("compañero", "compañeros"),
          "contrail": ("estela", "estelas"), "loadingscreen": ("pantalla de carga", "pantallas de carga"), "spray": ("grafiti", "grafitis"), "emoji": ("emoticono", "emoticonos")}
 CODE = ("Usa el código BAD en la tienda de objetos.", "Usa el código bad, en la tienda de objetos.")
 THANKS = "¡Gracias por ver! Síguenos para más contenido diario."
@@ -54,7 +54,7 @@ POOL = [
     ("MÁS RARA AÚN", "Skin dorada: 1 en 1 562 500", ["La skin dorada de la semana es todavía más rara: 1 de cada 1 562 500 cofres."],
      {"source": "vgc-odds-confirmed.json", "match": ["Weekly Gold Outfit – 1 in 1,562,500"]},
      ["La skin dorada de la semana es todavía más rara: uno de cada un millón quinientos sesenta y dos mil quinientos cofres."]),
-    ("NO INCLUYE", "Pase, dinero real ni regalos", ["No incluye niveles del pase, lotes de dinero real ni regalos, y solo un sidekick."],
+    ("NO INCLUYE", "Pase, dinero real ni regalos", ["No incluye niveles del pase, lotes de dinero real ni regalos, y solo un compañero."],
      {"source": "vgc-guide.json", "match": ["you can’t claim Battle Pass levels", "you can’t get bundles that cost real money", "you can’t gift items to other players", "you can only claim one free sidekick"]}),
     ("NO HA CAMBIADO", "Misma probabilidad desde el inicio", ["Epic dice que la probabilidad no ha cambiado desde que empezó la temporada."],
      {"source": "vice-treasure-hours.json", "match": ["the normal chest drop rates have stayed the same since Fortnite Treasure Hunters launched"]}),
@@ -89,7 +89,8 @@ def get(url, tries=3):
 
 
 SAY = {"$": "S", "Spider-Man": "Spáider Man", "Buggy": "Bugui", "Jason": "Yéison", "Like a G6": "Laik a yi six",
-       "Volkswagen": "Folksvaguen", "Speedy": "Spidi", "Pierogi": "Pierogui"}     # how Kokoro es-419 should say these
+       "Volkswagen": "Folksvaguen", "Speedy": "Spidi", "Pierogi": "Pierogui", "Hatsune": "Jatsune", "Cyclone": "Saiclon",
+       "Nike Air Force 1": "Naik Er Fors Uan"}     # how Kokoro es-419 should say these
 
 
 def spoken(s):

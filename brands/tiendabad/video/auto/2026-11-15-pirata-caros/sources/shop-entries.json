@@ -1,0 +1,1131 @@
+{
+ "date": "2026-11-15T00:00:00Z",
+ "entries": [
+  {
+   "regularPrice": 4100,
+   "finalPrice": 2200,
+   "devName": "[VIRTUAL]1 x Cap'n Hatsune Miku, 1 x Miku's Treasure, 1 x Miku's Anchor Floatie, 1 x Miku Miku ni Shite Ageru♪, 1 x Miku's Mic, 1 x Miku's Mic, 1 x Miku's Mic, 1 x TBD (SID_Placeholder_991) for -1 MtxCurrency",
+   "offerId": "v2:/8f114946b8d166af6a3f7ae3ed7b1ae75c6a1e9c1d9508c258080c01d88a2365",
+   "inDate": "2026-11-15T00:00:00Z",
+   "outDate": "2026-12-14T23:59:59.999Z",
+   "banner": {
+    "value": "Nuevo",
+    "intensity": "High",
+    "backendValue": "New"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -2,
+   "layoutId": "PirateCactus1.99",
+   "layout": {
+    "id": "PirateCactus1",
+    "name": "Hatsune Miku",
+    "index": 10,
+    "rank": 198,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "billboard",
+    "textureMetadata": [
+     {
+      "key": "background",
+      "value": "https://cdn2.unrealengine.com/sk-Billboard_CactusBait_BG-51b2afe6.png"
+     },
+     {
+      "key": "foreground",
+      "value": "https://cdn2.unrealengine.com/sk-Billboard_CactusBait_Character-b5b3f6cd.png"
+     },
+     {
+      "key": "foreground_juno",
+      "value": "https://cdn2.unrealengine.com/sk-Billboard_CactusBait_Figure-6a0123ce.png"
+     },
+     {
+      "key": "bodyImage",
+      "value": "https://cdn2.unrealengine.com/sk-Billboard_CactusBait_Itemstack-84b2a468.png"
+     }
+    ],
+    "stringMetadata": [
+     {
+      "key": "alignment",
+      "value": "left"
+     },
+     {
+      "key": "highlightEnabled",
+      "value": "true"
+     },
+     {
+      "key": "parallaxEnabled",
+      "value": "true"
+     },
+     {
+      "key": "titleColorA",
+      "value": "FFFFFF"
+     },
+     {
+      "key": "titleColorB",
+      "value": "FFFFFF"
+     }
+    ],
+    "textMetadata": [
+     {
+      "key": "cta",
+      "value": "Ver oferta"
+     },
+     {
+      "key": "subtitle",
+      "value": "Lote de 6 objetos"
+     },
+     {
+      "key": "title",
+      "value": "Capitana Hatsune Miku"
+     }
+    ]
+   },
+   "colors": {
+    "color1": "10d8e0ff",
+    "color2": "93f9ffff",
+    "color3": "0ab8d0ff",
+    "textBackgroundColor": "35c0b9ff"
+   },
+   "tileBackgroundMaterial": "ShopTile_SketchedBorder",
+   "tileSize": "Size_4_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_Peonypizza_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S43/DAv2_Bundle_Featured_Peonypizza",
+   "brItems": [
+    {
+     "id": "Character_PeonyPizza",
+     "name": "Capitana Hatsune Miku",
+     "description": "¡Todos a bordo del barco de la amistad!",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "La travesía de Miku",
+      "text": "Pieza del conjunto La travesía de Miku.",
+      "backendValue": "CoarseCaravan"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_peonypizza/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_peonypizza/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_peonypizza/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_peonypizza/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_peonypizza/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_peonypizza/wide.png"
+      }
+     },
+     "variants": [
+      {
+       "channel": "Emissive",
+       "type": "Reactividad",
+       "options": [
+        {
+         "tag": "Emissive0",
+         "name": "Sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_peonypizza/variants/emissive/emissive0.png"
+        },
+        {
+         "tag": "Emissive1",
+         "name": "No",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_peonypizza/variants/emissive/emissive1.png"
+        }
+       ]
+      }
+     ],
+     "metaTags": [
+      "Cosmetics.Emote.CharacterGroup.Skirts"
+     ],
+     "showcaseVideo": "I4clf571seM",
+     "added": "2026-11-12T13:09:30Z"
+    },
+    {
+     "id": "Backpack_PeonyPizza",
+     "name": "Tesoro de Miku",
+     "description": "¡El mayor tesoro es la música!",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "La travesía de Miku",
+      "text": "Pieza del conjunto La travesía de Miku.",
+      "backendValue": "CoarseCaravan"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_peonypizza/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_peonypizza/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_peonypizza/featured.png"
+     },
+     "dynamicPakId": "1040",
+     "added": "2026-11-14T14:00:30Z"
+    },
+    {
+     "id": "Pickaxe_PeonyPizza",
+     "name": "Flotador de ancla de Miku",
+     "description": "¡Tan ligera que flota!",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_peonypizza/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_peonypizza/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_peonypizza/featured.png"
+     },
+     "dynamicPakId": "1040",
+     "added": "2026-11-14T14:00:30Z"
+    },
+    {
+     "id": "EID_PeonyPizza",
+     "name": "Miku Miku ni Shite Ageru♪",
+     "description": "¡Prepárense!",
+     "type": {
+      "value": "emote",
+      "displayValue": "Gesto",
+      "backendValue": "AthenaDance"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "La travesía de Miku",
+      "text": "Pieza del conjunto La travesía de Miku.",
+      "backendValue": "CoarseCaravan"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/eid_peonypizza/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/eid_peonypizza/icon.png"
+     },
+     "showcaseVideo": "3v954MHMoI8",
+     "dynamicPakId": "1040",
+     "added": "2026-11-14T14:00:30Z"
+    },
+    {
+     "id": "Backpack_PeonyPizza_Mic",
+     "name": "Voz de Miku",
+     "description": "¡Un viaje lleno de canciones!",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "La travesía de Miku",
+      "text": "Pieza del conjunto La travesía de Miku.",
+      "backendValue": "CoarseCaravan"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_peonypizza_mic/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_peonypizza_mic/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_peonypizza_mic/featured.png"
+     },
+     "dynamicPakId": "1040",
+     "added": "2026-11-14T14:00:30Z"
+    },
+    {
+     "id": "Pickaxe_PeonyPizza_Mic",
+     "name": "Voz de Miku",
+     "description": "¡Un viaje lleno de canciones!",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "La travesía de Miku",
+      "text": "Pieza del conjunto La travesía de Miku.",
+      "backendValue": "CoarseCaravan"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_peonypizza_mic/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_peonypizza_mic/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_peonypizza_mic/featured.png"
+     },
+     "dynamicPakId": "1040",
+     "added": "2026-11-14T14:00:30Z"
+    }
+   ],
+   "tracks": [
+    {
+     "id": "sid_placeholder_991",
+     "devName": "connectcommune",
+     "title": "CONNECT:COMMUNE",
+     "artist": "FLAVOR FOLEY ft. Hatsune Miku",
+     "releaseYear": 2026,
+     "bpm": 156,
+     "duration": 232,
+     "difficulty": {
+      "vocals": 4,
+      "guitar": 6,
+      "bass": 5,
+      "plasticBass": 5,
+      "drums": 4,
+      "plasticDrums": 4
+     },
+     "albumArt": "https://cdn.fortnite-api.com/tracks/b0a043a9cc2b61f9.jpg",
+     "added": "2026-11-14T14:01:04Z"
+    }
+   ],
+   "instruments": [
+    {
+     "id": "Sparks_PeonyPizza_Mic",
+     "name": "Voz de Miku",
+     "description": "¡Un viaje lleno de canciones!",
+     "type": {
+      "value": "mic",
+      "displayValue": "Micrófono",
+      "backendValue": "SparksMic"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Common"
+     },
+     "images": {
+      "small": "https://fortnite-api.com/images/cosmetics/instruments/sparks_peonypizza_mic/small.png",
+      "large": "https://fortnite-api.com/images/cosmetics/instruments/sparks_peonypizza_mic/large.png"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "added": "2026-11-14T14:00:30Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 1800,
+   "finalPrice": 1600,
+   "devName": "[VIRTUAL]1 x Snorkel Ops, 1 x Fishy Flippers for -1 MtxCurrency",
+   "offerId": "v2:/a33cb5073c7a861d0fed43e26109bb2f11c3a268455b5f8ec50c3b32a18cd99c",
+   "inDate": "2026-11-15T00:00:00Z",
+   "outDate": "2026-11-16T23:59:59.999Z",
+   "bundle": {
+    "name": "Lote Mantente a flote",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/0fd338c62b79da41/renderimage_0.png"
+   },
+   "banner": {
+    "value": "200 monedas V de descuento",
+    "intensity": "Low",
+    "backendValue": "AmountOff"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -1,
+   "layoutId": "BR111526.99",
+   "layout": {
+    "id": "BR111526",
+    "name": "Energía de protagonista ",
+    "index": 12,
+    "rank": 184,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "290f07ff",
+    "color3": "824100ff",
+    "textBackgroundColor": "824100ff"
+   },
+   "tileSize": "Size_2_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_SaltFin_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S39/DAv2_Bundle_Featured_SaltFin",
+   "newDisplayAsset": {
+    "id": "DAv2_Bundle_Featured_SaltFin",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__0fd338c62b79da41_69531c126149a5b5.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/0fd338c62b79da41/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__0fd338c62b79da41_ebac3ddfa28abddc.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/0fd338c62b79da41/renderimage_1.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "CID_073_Athena_Commando_F_Scuba",
+     "name": "Operación submarina",
+     "description": "Sumerge de cabeza en el combate.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "introduction": {
+      "chapter": "1",
+      "season": "2",
+      "text": "Introducido en Capítulo 1, Temporada 2.",
+      "backendValue": 2
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/cid_073_athena_commando_f_scuba/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/cid_073_athena_commando_f_scuba/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/cid_073_athena_commando_f_scuba/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/cid_073_athena_commando_f_scuba/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/cid_073_athena_commando_f_scuba/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/cid_073_athena_commando_f_scuba/wide.png"
+      },
+      "bean": {
+       "small": "https://fortnite-api.com/images/cosmetics/beans/bean_sharkshanker/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/beans/bean_sharkshanker/large.png"
+      }
+     },
+     "showcaseVideo": "Ok7vwhHC7E0",
+     "added": "2019-11-20T12:50:27Z"
+    },
+    {
+     "id": "Shoes_SaltFin",
+     "name": "Pezapatos",
+     "description": "Presume tu estilo.",
+     "type": {
+      "value": "shoe",
+      "displayValue": "Calzado",
+      "backendValue": "CosmeticShoes"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "4",
+      "text": "Introducido en Capítulo 6, Temporada 4.",
+      "backendValue": 36
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/shoes_saltfin/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/shoes_saltfin/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/shoes_saltfin/featured.png"
+     },
+     "added": "2025-06-20T05:49:58Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 1500,
+   "finalPrice": 1500,
+   "devName": "[VIRTUAL]1 x Miku Rider Beam, 1 x Miku Rider Lite, 1 x Cyclone, 1 x Cyclone, 1 x Cyclone, 1 x Cyclone, 1 x Cyclone, 1 x Cyclone, 1 x Cyclone, 1 x Cyclone, 1 x Cyclone, 1 x Cyclone, 1 x Cyclone, 1 x Cyclone, 1 x Cyclone, 1 x Cyclone, 1 x Bat Boy, 1 x Flames, 1 x L-ita 99, 1 x Sliver, 1 x Stripes, 1 x Whiteout for -1 MtxCurrency",
+   "offerId": "v2:/0223cad967a4d8508bba20000771317102cc0982b062b80bdfb3bc165e4144dc",
+   "inDate": "2026-11-15T00:00:00Z",
+   "outDate": "2026-12-14T23:59:59.999Z",
+   "bundle": {
+    "name": "Lote Cyclone de Hatsune Miku",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/c1aa699f4fd0af7f/renderimage_0.png"
+   },
+   "offerTag": {
+    "id": "aventurine",
+    "text": "Las calcomanías de este lote solo están disponibles para la carrocería Cyclone."
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -1,
+   "layoutId": "PirateCactus1.96",
+   "layout": {
+    "id": "PirateCactus1",
+    "name": "Hatsune Miku",
+    "index": 10,
+    "rank": 198,
+    "showIneligibleOffers": "always",
+    "useWidePreview": true,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "10d8e0ff",
+    "color2": "93f9ffff",
+    "color3": "0ab8d0ff",
+    "textBackgroundColor": "35c0b9ff"
+   },
+   "tileBackgroundMaterial": "ShopTile_SketchedBorder",
+   "tileSize": "Size_2_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_Aventurine_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S33/DAv2_Bundle_Featured_Aventurine",
+   "newDisplayAsset": {
+    "id": "DAv2_Bundle_Featured_Aventurine",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.DelMar",
+      "fileName": "cosmo__c1aa699f4fd0af7f_76f86ceef76250b6.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/c1aa699f4fd0af7f/renderimage_0.png"
+     }
+    ]
+   },
+   "cars": [
+    {
+     "id": "CarSkin_SquashAventurine01",
+     "vehicleId": "VCID_Skin_SquashAventurine01",
+     "name": "Miku Rider rayo",
+     "description": "Conduce al estilo Miku. Calcomanía personalizada de Cyclone.",
+     "type": {
+      "value": "skin",
+      "displayValue": "Aspecto",
+      "backendValue": "VehicleCosmetics_Skin"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "images": {
+      "small": "https://fortnite-api.com/images/cosmetics/cars/carskin_squashaventurine01/small.png",
+      "large": "https://fortnite-api.com/images/cosmetics/cars/carskin_squashaventurine01/large.png"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "added": "2025-01-30T00:00:00Z"
+    },
+    {
+     "id": "CarSkin_SquashAventurine02",
+     "vehicleId": "VCID_Skin_SquashAventurine02",
+     "name": "Miku Rider ligero",
+     "description": "Conduce al estilo Miku. Calcomanía personalizada de Cyclone.",
+     "type": {
+      "value": "skin",
+      "displayValue": "Aspecto",
+      "backendValue": "VehicleCosmetics_Skin"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "images": {
+      "small": "https://fortnite-api.com/images/cosmetics/cars/carskin_squashaventurine02/small.png",
+      "large": "https://fortnite-api.com/images/cosmetics/cars/carskin_squashaventurine02/large.png"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "added": "2025-01-30T00:00:00Z"
+    },
+    {
+     "id": "ID_Skin_Squash_BatterUp",
+     "vehicleId": "VCID_Skin_Squash_BatterUp",
+     "name": "Chico murciélago",
+     "description": "Calcomanía personalizada de Cyclone.",
+     "type": {
+      "value": "skin",
+      "displayValue": "Aspecto",
+      "backendValue": "VehicleCosmetics_Skin"
+     },
+     "rarity": {
+      "value": "common",
+      "displayValue": "Común",
+      "backendValue": "EFortRarity::Common"
+     },
+     "images": {
+      "small": "https://fortnite-api.com/images/cosmetics/cars/id_skin_squash_batterup/small.png",
+      "large": "https://fortnite-api.com/images/cosmetics/cars/id_skin_squash_batterup/large.png"
+     },
+     "added": "2023-12-08T15:00:00Z"
+    },
+    {
+     "id": "ID_Skin_Squash_Flames",
+     "vehicleId": "VCID_Skin_Squash_Flames",
+     "name": "Llamas",
+     "description": "Calcomanía personalizada de Cyclone.",
+     "type": {
+      "value": "skin",
+      "displayValue": "Aspecto",
+      "backendValue": "VehicleCosmetics_Skin"
+     },
+     "rarity": {
+      "value": "common",
+      "displayValue": "Común",
+      "backendValue": "EFortRarity::Common"
+     },
+     "images": {
+      "small": "https://fortnite-api.com/images/cosmetics/cars/id_skin_squash_flames/small.png",
+      "large": "https://fortnite-api.com/images/cosmetics/cars/id_skin_squash_flames/large.png"
+     },
+     "added": "2023-12-08T15:00:00Z"
+    },
+    {
+     "id": "ID_Skin_Squash_Lita",
+     "vehicleId": "VCID_Skin_Squash_Lita",
+     "name": "L-ita 99",
+     "description": "Calcomanía personalizada de Cyclone.",
+     "type": {
+      "value": "skin",
+      "displayValue": "Aspecto",
+      "backendValue": "VehicleCosmetics_Skin"
+     },
+     "rarity": {
+      "value": "common",
+      "displayValue": "Común",
+      "backendValue": "EFortRarity::Common"
+     },
+     "images": {
+      "small": "https://fortnite-api.com/images/cosmetics/cars/id_skin_squash_lita/small.png",
+      "large": "https://fortnite-api.com/images/cosmetics/cars/id_skin_squash_lita/large.png"
+     },
+     "added": "2023-12-08T15:00:00Z"
+    },
+    {
+     "id": "ID_Skin_Squash_Basic",
+     "vehicleId": "VCID_Skin_Squash_Basic",
+     "name": "Sliver",
+     "description": "Calcomanía personalizada de Cyclone.",
+     "type": {
+      "value": "skin",
+      "displayValue": "Aspecto",
+      "backendValue": "VehicleCosmetics_Skin"
+     },
+     "rarity": {
+      "value": "common",
+      "displayValue": "Común",
+      "backendValue": "EFortRarity::Common"
+     },
+     "images": {
+      "small": "https://fortnite-api.com/images/cosmetics/cars/id_skin_squash_basic/small.png",
+      "large": "https://fortnite-api.com/images/cosmetics/cars/id_skin_squash_basic/large.png"
+     },
+     "added": "2023-12-08T15:00:00Z"
+    },
+    {
+     "id": "ID_Skin_Squash_Stripes",
+     "vehicleId": "VCID_Skin_Squash_Stripes",
+     "name": "Rayas",
+     "description": "Calcomanía personalizada de Cyclone.",
+     "type": {
+      "value": "skin",
+      "displayValue": "Aspecto",
+      "backendValue": "VehicleCosmetics_Skin"
+     },
+     "rarity": {
+      "value": "common",
+      "displayValue": "Común",
+      "backendValue": "EFortRarity::Common"
+     },
+     "images": {
+      "small": "https://fortnite-api.com/images/cosmetics/cars/id_skin_squash_stripes/small.png",
+      "large": "https://fortnite-api.com/images/cosmetics/cars/id_skin_squash_stripes/large.png"
+     },
+     "added": "2023-12-08T15:00:00Z"
+    },
+    {
+     "id": "ID_Skin_Squash_MountainTop",
+     "vehicleId": "VCID_Skin_Squash_MountainTop",
+     "name": "Whiteout",
+     "description": "Calcomanía personalizada de Cyclone.",
+     "type": {
+      "value": "skin",
+      "displayValue": "Aspecto",
+      "backendValue": "VehicleCosmetics_Skin"
+     },
+     "rarity": {
+      "value": "common",
+      "displayValue": "Común",
+      "backendValue": "EFortRarity::Common"
+     },
+     "images": {
+      "small": "https://fortnite-api.com/images/cosmetics/cars/id_skin_squash_mountaintop/small.png",
+      "large": "https://fortnite-api.com/images/cosmetics/cars/id_skin_squash_mountaintop/large.png"
+     },
+     "added": "2023-12-08T15:00:00Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 1700,
+   "finalPrice": 1300,
+   "devName": "[VIRTUAL]1 x Hesper King, 1 x Lucky Talon for -1 MtxCurrency",
+   "offerId": "v2:/0ecd8ae8b8e5f54f8e9ea18d4d3cc87cd94e39fd58659c77ebc75c15746fbdf8",
+   "inDate": "2026-11-15T00:00:00Z",
+   "outDate": "2026-11-16T23:59:59.999Z",
+   "bundle": {
+    "name": "Lote Reina Héspero",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/f1f73a3f3eeb271c/renderimage_0.png"
+   },
+   "banner": {
+    "value": "400 monedas V de descuento",
+    "intensity": "Low",
+    "backendValue": "AmountOff"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -1,
+   "layoutId": "BR111526.98",
+   "layout": {
+    "id": "BR111526",
+    "name": "Energía de protagonista ",
+    "index": 12,
+    "rank": 184,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "290f07ff",
+    "color3": "824100ff",
+    "textBackgroundColor": "824100ff"
+   },
+   "tileSize": "Size_2_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_NeonGlow_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S35/DAv2_Bundle_Featured_NeonGlow",
+   "newDisplayAsset": {
+    "id": "DAv2_Bundle_Featured_NeonGlow",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__f1f73a3f3eeb271c_bf2ce1b95047f229.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/f1f73a3f3eeb271c/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__f1f73a3f3eeb271c_a15cbbeaae5e471b.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/f1f73a3f3eeb271c/renderimage_1.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Character_NeonGlow",
+     "name": "Reina Héspero",
+     "description": "Donde pone el ojo, pone la bala.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "Pistolera de la suerte",
+      "text": "Pieza del conjunto Pistolera de la suerte.",
+      "backendValue": "AmmoLady"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "3",
+      "text": "Introducido en Capítulo 6, Temporada 3.",
+      "backendValue": 35
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_neonglow/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_neonglow/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_neonglow/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_neonglow/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_neonglow/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_neonglow/wide.png"
+      },
+      "bean": {
+       "small": "https://fortnite-api.com/images/cosmetics/beans/bean_neonglow/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/beans/bean_neonglow/large.png"
+      }
+     },
+     "showcaseVideo": "OW_pQggDrYU",
+     "added": "2025-05-02T13:15:59Z"
+    },
+    {
+     "id": "Pickaxe_NeonGlow",
+     "name": "Daga de la fortuna",
+     "description": "No dejes nada a la suerte.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Pistolera de la suerte",
+      "text": "Pieza del conjunto Pistolera de la suerte.",
+      "backendValue": "AmmoLady"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "3",
+      "text": "Introducido en Capítulo 6, Temporada 3.",
+      "backendValue": 35
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_neonglow/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_neonglow/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_neonglow/featured.png"
+     },
+     "showcaseVideo": "7gdkM4UOCW8",
+     "added": "2025-05-02T13:15:59Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 1200,
+   "finalPrice": 1200,
+   "devName": "[VIRTUAL]1 x Radiant Striker for 1200 MtxCurrency",
+   "offerId": "v2:/1d518ed22e0b5b174af892fb24ef66d8a57635b1377352bafa1713f43b950959",
+   "inDate": "2026-11-15T00:00:00Z",
+   "outDate": "2026-11-15T23:59:59.999Z",
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -1,
+   "layoutId": "BR111526.97",
+   "layout": {
+    "id": "BR111526",
+    "name": "Energía de protagonista ",
+    "index": 12,
+    "rank": 184,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "290f07ff",
+    "color3": "824100ff",
+    "textBackgroundColor": "824100ff"
+   },
+   "tileSize": "Size_1_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_CID_091_Athena_Commando_M_RedShirt",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/DAv2_CID_091_M_Redshirt",
+   "newDisplayAsset": {
+    "id": "DAv2_CID_091_M_Redshirt",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__8e677febeb465ac4_7f5b4db9317ef864.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/8e677febeb465ac4/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__8e677febeb465ac4_5d4dfb4348c140cc.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/8e677febeb465ac4/renderimage_1.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "CID_091_Athena_Commando_M_RedShirt",
+     "name": "Ariete radiante",
+     "description": "Ataca primero.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "introduction": {
+      "chapter": "1",
+      "season": "3",
+      "text": "Introducido en Capítulo 1, Temporada 3.",
+      "backendValue": 3
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/cid_091_athena_commando_m_redshirt/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/cid_091_athena_commando_m_redshirt/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/cid_091_athena_commando_m_redshirt/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/cid_091_athena_commando_m_redshirt/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/cid_091_athena_commando_m_redshirt/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/cid_091_athena_commando_m_redshirt/wide.png"
+      },
+      "bean": {
+       "small": "https://fortnite-api.com/images/cosmetics/beans/bean_redshirta/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/beans/bean_redshirta/large.png"
+      }
+     },
+     "showcaseVideo": "SPOxZZWi_yY",
+     "added": "2019-11-20T12:50:26Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 1200,
+   "finalPrice": 1200,
+   "devName": "[VIRTUAL]1 x Nike Air Force 1 'Berserker' for 1200 MtxCurrency",
+   "offerId": "v2:/1349a664e76acdbc7c777826ebec53ee667a72bec23cf50bc8196550c9b3a2bd",
+   "inDate": "2026-11-15T00:00:00Z",
+   "outDate": "2026-11-18T23:59:59.999Z",
+   "banner": {
+    "value": "Reactiva",
+    "intensity": "High",
+    "backendValue": "Reactive"
+   },
+   "offerTag": {
+    "id": "sprinting",
+    "text": "¡Incluye reactividad al esprintar!"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -4,
+   "layoutId": "1115Kicks.99",
+   "layout": {
+    "id": "1115Kicks",
+    "name": "Diviértete",
+    "index": 39,
+    "rank": 186,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "a5caf3ff",
+    "color3": "327cc7ff",
+    "textBackgroundColor": "1f62a6ff"
+   },
+   "tileSize": "Size_1_x_1",
+   "displayAssetPath": "/Game/Catalog/DisplayAssets/DA_Featured_Shoes_HintLimpFries",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S37/DAv2_Shoes_HintLimpFries",
+   "newDisplayAsset": {
+    "id": "DAv2_Shoes_HintLimpFries",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__6b7287987f15e809_418ea1b7d88c03cc.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/6b7287987f15e809/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__6b7287987f15e809_aee59fac971426fa.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/6b7287987f15e809/renderimage_1.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Shoes_HintLimpFries",
+     "name": "Nike Air Force 1 \"Berserker\"",
+     "description": "Presume tu estilo.",
+     "type": {
+      "value": "shoe",
+      "displayValue": "Calzado",
+      "backendValue": "CosmeticShoes"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "Calzado de NIKE",
+      "text": "Pieza del conjunto Calzado de NIKE.",
+      "backendValue": "UnmarkedLeather"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "5",
+      "text": "Introducido en Capítulo 6, Temporada 5.",
+      "backendValue": 37
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/shoes_hintlimpfries/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/shoes_hintlimpfries/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/shoes_hintlimpfries/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Particle",
+       "type": "reactivo",
+       "options": [
+        {
+         "tag": "Particle1",
+         "name": "sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/shoes_hintlimpfries/variants/particle/particle1.png"
+        },
+        {
+         "tag": "Particle2",
+         "name": "no",
+         "image": "https://fortnite-api.com/images/cosmetics/br/shoes_hintlimpfries/variants/particle/particle2.png"
+        }
+       ]
+      }
+     ],
+     "added": "2025-09-20T00:06:09Z"
+    }
+   ]
+  }
+ ]
+}
