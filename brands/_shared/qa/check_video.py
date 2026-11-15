@@ -69,8 +69,8 @@ def facts(meta, src):
         if not os.path.exists(path):
             items.append({"claim": c["text"], "result": "FAIL", "why": f"source missing: {s}"}); worst = "FAIL"; continue
         if path.endswith(".json"):
-            # search the decoded text (escapes like \u0027 resolved), apostrophes normalized, absent terms as whole words
-            raw = json.dumps(json.load(open(path, encoding="utf-8")), ensure_ascii=False).replace("’", "'")
+            # search the decoded text (escapes like \u0027 and \" resolved), apostrophes normalized, absent terms as whole words
+            raw = json.dumps(json.load(open(path, encoding="utf-8")), ensure_ascii=False).replace('\\"', '"').replace("’", "'")
             missing = [m for m in c.get("match", []) if m.replace("’", "'") not in raw]
             present = [a for a in c.get("absent", []) if re.search(rf"\b{re.escape(a)}\b", raw, flags=re.I)]
             # exact counts of named entries, e.g. {"Override Console": 7}

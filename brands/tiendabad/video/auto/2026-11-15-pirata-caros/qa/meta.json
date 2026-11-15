@@ -1,0 +1,129 @@
+{
+ "duration": 39.6,
+ "caption": "#EpicPartner Lo nuevo más caro de la tienda de hoy 💸 El #1: Capitana Hatsune Miku, 2200 pavos… y con la Tienda Pirata te lo llevarías sin gastar ni un pavo 🏴‍☠️\n¿Cuál te llevarías? 👇\nUsa el código BAD en la tienda de objetos 💛\n#fortnite #tiendapirata #tiendafortnite",
+ "claims": [
+  {
+   "text": "Nike Air Force 1 \"Berserker\" también cuesta 1200 pavos hoy",
+   "source": "shop-entries.json",
+   "match": [
+    "Nike Air Force 1 \"Berserker\"",
+    "\"finalPrice\": 1200"
+   ]
+  },
+  {
+   "text": "Ariete radiante: 1200 pavos en la tienda de hoy (2026-11-15), nuevo hoy",
+   "source": "shop-entries.json",
+   "match": [
+    "Ariete radiante",
+    "\"finalPrice\": 1200",
+    "\"date\": \"2026-11-15T00:00:00Z\"",
+    "\"inDate\": \"2026-11-15T00:00:00Z\""
+   ]
+  },
+  {
+   "text": "Lote Reina Héspero: 1300 pavos en la tienda de hoy (2026-11-15), nuevo hoy",
+   "source": "shop-entries.json",
+   "match": [
+    "Lote Reina Héspero",
+    "\"finalPrice\": 1300",
+    "\"date\": \"2026-11-15T00:00:00Z\"",
+    "\"inDate\": \"2026-11-15T00:00:00Z\""
+   ]
+  },
+  {
+   "text": "Lote Cyclone de Hatsune Miku: 1500 pavos en la tienda de hoy (2026-11-15), nuevo hoy",
+   "source": "shop-entries.json",
+   "match": [
+    "Lote Cyclone de Hatsune Miku",
+    "\"finalPrice\": 1500",
+    "\"date\": \"2026-11-15T00:00:00Z\"",
+    "\"inDate\": \"2026-11-15T00:00:00Z\""
+   ]
+  },
+  {
+   "text": "Lote Mantente a flote: 1600 pavos en la tienda de hoy (2026-11-15), nuevo hoy",
+   "source": "shop-entries.json",
+   "match": [
+    "Lote Mantente a flote",
+    "\"finalPrice\": 1600",
+    "\"date\": \"2026-11-15T00:00:00Z\"",
+    "\"inDate\": \"2026-11-15T00:00:00Z\""
+   ]
+  },
+  {
+   "text": "Capitana Hatsune Miku: precio normal 4100 pavos",
+   "source": "shop-entries.json",
+   "match": [
+    "Capitana Hatsune Miku",
+    "\"regularPrice\": 4100"
+   ]
+  },
+  {
+   "text": "Capitana Hatsune Miku: 2200 pavos en la tienda de hoy (2026-11-15), nuevo hoy",
+   "source": "shop-entries.json",
+   "match": [
+    "Capitana Hatsune Miku",
+    "\"finalPrice\": 2200",
+    "\"date\": \"2026-11-15T00:00:00Z\"",
+    "\"inDate\": \"2026-11-15T00:00:00Z\""
+   ]
+  },
+  {
+   "text": "Con la Tienda Pirata, todo lo que cuesta pavos es gratis por 14 días",
+   "source": "vgc-odds-confirmed.json",
+   "match": [
+    "every single item in the Fortnite Shop which costs V-Bucks",
+    "becomes entirely free to that player for the next 14 days"
+   ]
+  }
+ ],
+ "text": [
+  "LO NUEVO DE HOY:",
+  "LO MÁS CARO 💸",
+  "¿CUÁNTO CUESTA? 👀",
+  "¿Y CON LA TIENDA PIRATA? 🏴‍☠️",
+  "#5",
+  "ARIETE RADIANTE",
+  "CUESTA",
+  "EMPATA CON NIKE AIR FORCE 1 \"BERSERKER\"",
+  "???? PAVOS",
+  "300 PAVOS",
+  "800 PAVOS",
+  "1200 PAVOS",
+  "#4",
+  "LOTE REINA HÉSPERO",
+  "900 PAVOS",
+  "1300 PAVOS",
+  "#3",
+  "LOTE CYCLONE DE HATSUNE MIKU",
+  "400 PAVOS",
+  "1000 PAVOS",
+  "1500 PAVOS",
+  "#2",
+  "LOTE MANTENTE A FLOTE",
+  "1100 PAVOS",
+  "1600 PAVOS",
+  "#1",
+  "CAPITANA HATSUNE MIKU",
+  "PRECIO NORMAL: 4100",
+  "600 PAVOS",
+  "2200 PAVOS",
+  "CON LA TIENDA PIRATA: 0 PAVOS 🏴‍☠️",
+  "Y EL #1 ES… 🥁",
+  "LO NUEVO MÁS CARO 💸",
+  "¿CUÁL TE LLEVARÍAS? 👇",
+  "#2 · 1600",
+  "#1 · 2200",
+  "#3 · 1500",
+  "#4 · 1300",
+  "#5 · 1200",
+  "USA EL CÓDIGO BAD EN LA TIENDA DE OBJETOS 🛒",
+  "APOYA A UN CREADOR",
+  "#EPICPARTNER",
+  "ACEPTAR",
+  "✓ APOYANDO A: BAD",
+  "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+  "LA TIENDITA BAD",
+  "USA EL CÓDIGO: BAD"
+ ]
+}

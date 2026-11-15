@@ -22,7 +22,7 @@ window.SCENE = TPL.drop({
   }
  ],
  "name": "Lote Mega Man",
- "contents": "3 skins, 2 mochilas, 3 picos, un gesto y un sidekick",
+ "contents": "3 skins, 2 mochilas, 3 picos, un gesto y un compañero",
  "price": {
   "final": 3800,
   "regular": 7300
@@ -54,7 +54,7 @@ window.SCENE = TPL.drop({
    "visual": "23:59 UTC is 5:59 PM in Mexico City (UTC-6): it leaves at the 6 PM reset"
   },
   {
-   "text": "Trae 3 skins, 2 mochilas, 3 picos, un gesto y un sidekick",
+   "text": "Trae 3 skins, 2 mochilas, 3 picos, un gesto y un compañero",
    "source": "shop-entry.json",
    "match": [
     "Mega Man (Dual Override)",

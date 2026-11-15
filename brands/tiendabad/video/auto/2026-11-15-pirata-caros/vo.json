@@ -18,7 +18,8 @@
   },
   {
    "text": "Y empatado: Nike Air Force 1 \"Berserker\".",
-   "pause": 0.15
+   "pause": 0.15,
+   "say": "Y empatado: Naik Er Fors Uan \"Berserker\"."
   },
   {
    "text": "Número cuatro: Lote Reina Héspero.",
@@ -34,7 +35,8 @@
   },
   {
    "text": "Número tres: Lote Cyclone de Hatsune Miku.",
-   "pause": 0.15
+   "pause": 0.15,
+   "say": "Número tres: Lote Saiclon de Jatsune Miku."
   },
   {
    "text": "Cuesta…",
@@ -62,7 +64,8 @@
   },
   {
    "text": "¡Capitana Hatsune Miku!",
-   "pause": 0.15
+   "pause": 0.15,
+   "say": "¡Capitana Jatsune Miku!"
   },
   {
    "text": "Cuesta…",

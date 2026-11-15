@@ -1060,6 +1060,7 @@
    "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S37/DAv2_Shoes_HintLimpFries",
    "newDisplayAsset": {
     "id": "DAv2_Shoes_HintLimpFries",
+    "cosmeticId": "Shoes_HintLimpFries",
     "materialInstances": [],
     "renderImages": [
      {
