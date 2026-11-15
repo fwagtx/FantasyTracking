@@ -1,0 +1,160 @@
+{
+ "date": "2026-11-15",
+ "dateLabel": "15 NOV",
+ "dateLong": "15 de noviembre",
+ "resetLabel": "6 PM",
+ "resetZone": "CDMX",
+ "dealOutLabel": "15 NOV",
+ "dealOutTime": "6 PM",
+ "deal": {
+  "name": "Lote Mega Man",
+  "final": 3800,
+  "regular": 7300,
+  "out": "2026-11-15T23:59:59.999Z",
+  "outfits": [
+   {
+    "id": "Character_DuneBriefMerry",
+    "name": "Mega Man (Dual Override)",
+    "rarity": "Leyendas de videojuegos",
+    "rarityKey": "gaminglegends",
+    "series": "Leyendas de videojuegos",
+    "img": "https://fortnite-api.com/images/cosmetics/br/character_dunebriefmerry/featured.png",
+    "price": 1800,
+    "out": "2026-11-15"
+   },
+   {
+    "id": "Character_DuneBriefShift",
+    "name": "Mega Man X",
+    "rarity": "Leyendas de videojuegos",
+    "rarityKey": "gaminglegends",
+    "series": "Leyendas de videojuegos",
+    "img": "https://fortnite-api.com/images/cosmetics/br/character_dunebriefshift/featured.png",
+    "price": 1800,
+    "out": null
+   },
+   {
+    "id": "Character_TackleShow",
+    "name": "Zero (Mega Man)",
+    "rarity": "Leyendas de videojuegos",
+    "rarityKey": "gaminglegends",
+    "series": "Leyendas de videojuegos",
+    "img": "https://fortnite-api.com/images/cosmetics/br/character_tackleshow/featured.png",
+    "price": 1800,
+    "out": null
+   }
+  ],
+  "saving": 3500,
+  "pct": 48
+ },
+ "dealBest": false,
+ "og": {
+  "chapter": 1,
+  "season": 2,
+  "gapDays": 69,
+  "gapName": null,
+  "outfits": [
+   {
+    "id": "CID_073_Athena_Commando_F_Scuba",
+    "name": "Operación submarina",
+    "rarity": "Raro",
+    "rarityKey": "rare",
+    "series": null,
+    "img": "https://fortnite-api.com/images/cosmetics/br/cid_073_athena_commando_f_scuba/featured.png",
+    "price": 1200,
+    "out": "2026-11-16",
+    "gapDays": 69
+   }
+  ]
+ },
+ "last": {
+  "count": 17,
+  "outfits": [
+   {
+    "id": "Character_OutletVerve",
+    "name": "Fernet",
+    "rarity": "Leyendas de videojuegos",
+    "rarityKey": "gaminglegends",
+    "series": "Leyendas de videojuegos",
+    "img": "https://fortnite-api.com/images/cosmetics/br/character_outletverve/featured.png",
+    "price": 1500,
+    "out": "2026-11-15"
+   },
+   {
+    "id": "CID_249_Athena_Commando_F_BlackWidow",
+    "name": "Aracne",
+    "rarity": "Legendario",
+    "rarityKey": "legendary",
+    "series": null,
+    "img": "https://fortnite-api.com/images/cosmetics/br/cid_249_athena_commando_f_blackwidow/featured.png",
+    "price": 2000,
+    "out": "2026-11-15"
+   },
+   {
+    "id": "CID_A_182_Athena_Commando_M_Vivid_LZGQ3",
+    "name": "J Balvin",
+    "rarity": "Serie de ídolos",
+    "rarityKey": "icon",
+    "series": "Serie de ídolos",
+    "img": "https://fortnite-api.com/images/cosmetics/br/cid_a_182_athena_commando_m_vivid_lzgq3/featured.png",
+    "price": 2000,
+    "out": null
+   },
+   {
+    "id": "Character_SourWire",
+    "name": "Karol G platino",
+    "rarity": "Serie de ídolos",
+    "rarityKey": "icon",
+    "series": "Serie de ídolos",
+    "img": "https://fortnite-api.com/images/cosmetics/br/character_sourwire/featured.png",
+    "price": 1800,
+    "out": null
+   },
+   {
+    "id": "Character_SweetLetter",
+    "name": "Gata Negra",
+    "rarity": "SERIE DE MARVEL",
+    "rarityKey": "marvel",
+    "series": "SERIE DE MARVEL",
+    "img": "https://fortnite-api.com/images/cosmetics/br/character_sweetletter/featured.png",
+    "price": 1500,
+    "out": "2026-11-15"
+   },
+   {
+    "id": "Character_GalaxyLevel",
+    "name": "J Balvin recargado",
+    "rarity": "Serie de ídolos",
+    "rarityKey": "icon",
+    "series": "Serie de ídolos",
+    "img": "https://fortnite-api.com/images/cosmetics/br/character_galaxylevel/featured.png",
+    "price": 1500,
+    "out": "2026-11-15"
+   }
+  ]
+ },
+ "roles": [
+  "intro",
+  "hook",
+  "deal_name",
+  "deal_price",
+  "saving",
+  "og_name",
+  "og_era",
+  "last",
+  "ask",
+  "code",
+  "thanks"
+ ],
+ "phrases": [
+  "Esta es la tienda de objetos de hoy, 15 de noviembre.",
+  "¡Tres cosas antes de gastar un solo pavo!",
+  "El Lote Mega Man:",
+  "3800 pavos, en vez de 7300.",
+  "¡Te ahorras 3500!",
+  "Operación submarina está en la tienda.",
+  "Es del Capítulo 1, Temporada 2, y no salía desde hace 69 días.",
+  "Y 17 skins están en su último día, cuatro de ellas de Leyendas de videojuegos.",
+  "¿Vas a comprar algo hoy?",
+  "Usa el código BAD en la tienda de objetos. Le ayuda muchísimo al canal.",
+  "¡Gracias por ver! Síguenos para más contenido diario."
+ ]
+}

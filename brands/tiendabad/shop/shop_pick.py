@@ -105,7 +105,17 @@ def main():
     oldest = min((hist[o]["chapter"], hist[o]["season"]) for o in pool)
     og = sorted([o for o in pool if (hist[o]["chapter"], hist[o]["season"]) == oldest], key=lambda o: (-(hist[o]["gapDays"] or 0), outfits[o]["name"]))[:2]
     gap = max((hist[o]["gapDays"] or 0) for o in og)
-    last = [o for o, r in outfits.items() if r["out"] == day and r["price"]]
+    # an outfit is on its last day when every listing that has it, sets and bundles included, leaves today; one sold only in
+    # sets or bundles shows the cheapest of them (2026-11-15: 4 of the 17 leaving outfits were sold only that way, the count said 13)
+    gone, cheapest = {}, {}
+    for e in shop["entries"]:
+        for i in e.get("brItems") or []:
+            if i["type"]["value"] == "outfit":
+                gone[i["id"]] = max(gone.get(i["id"], ""), e["outDate"][:10])
+                cheapest[i["id"]] = min(cheapest.get(i["id"], e["finalPrice"]), e["finalPrice"])
+    last = [o for o in outfits if gone.get(o) == day]
+    for o in last:
+        outfits[o]["price"] = outfits[o]["price"] or cheapest[o]
     last.sort(key=lambda o: (-outfits[o]["price"], outfits[o]["name"]))
 
     og_recs = [dict(outfits[o], gapDays=hist[o]["gapDays"]) for o in og]
@@ -147,7 +157,8 @@ def main():
         else:
             line = f"Y {nw(n)} skins están en su último día, {nw(k)} de ellas {rar_words(top, label, k)}."
         P += [("last", line, None, 0.3)]
-        last.sort(key=lambda o: (outfits[o]["rarityKey"] != top, -outfits[o]["price"], outfits[o]["name"]))
+        # the deal's own skins go last: they are on screen already (2026-11-15: the Mega Man bundle left the same day)
+        last.sort(key=lambda o: (o in deal["outfits"], outfits[o]["rarityKey"] != top, -outfits[o]["price"], outfits[o]["name"]))
         last_recs = [outfits[o] for o in last]
     P += [("ask", "¿Vas a comprar algo hoy?", None, 0.06),
           ("code", "Usa el código BAD en la tienda de objetos. Le ayuda muchísimo al canal.", "Usa el código bad, en la tienda de objetos. Le ayuda muchísimo al canal.", 0.25),

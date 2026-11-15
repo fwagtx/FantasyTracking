@@ -79,7 +79,7 @@
     const hook = mk(stage, `inset:0`);
     // three different skins: an OG skin that is not also on its last day, and a last-day skin not shown already
     const ogHook = [...D.og.outfits].reverse().find((o) => !D.last.outfits.some((l) => l.id === o.id)) || D.og.outfits[D.og.outfits.length - 1];
-    const lastHook = D.last.outfits.find((o) => o.id !== ogHook.id && o.id !== D.deal.outfits[0].id) || D.last.outfits[0] || D.deal.outfits[1];
+    const lastHook = D.last.outfits.find((o) => o.id !== ogHook.id && !D.deal.outfits.some((d) => d.id === o.id)) || D.last.outfits.find((o) => o.id !== ogHook.id && o.id !== D.deal.outfits[0].id) || D.last.outfits[0] || D.deal.outfits[1];
     const hookRecs = [D.deal.outfits[0], ogHook, lastHook];
     const hookTiles = hookRecs.map((o, i) => add(hook, tile(o, 270, 392, false), `left:${70 + i * 275}px;top:${530 + (i === 1 ? -30 : 0)}px`));
     const hookTags = [["OFERTA", YEL], ["OG", "#5BD0FF"], ["ÚLTIMO DÍA", RED]].map(([t, c], i) => chip(hook, t, c, 0, 0, 34));

@@ -1,0 +1,106 @@
+{
+ "duration": 28.7,
+ "caption": "#EpicPartner Tienda de objetos de Fortnite, 15 de noviembre: el Lote Mega Man cuesta 3800 V-Bucks en vez de 7300 (ahorras 3500), Operación submarina está en la tienda (Capítulo 1, Temporada 2, 69 días sin salir) y 17 skins se van el 15 de noviembre a las 6 PM (CDMX).\n¿Vas a comprar hoy? Usa el código BAD en la tienda de objetos.\n#Fortnite #TiendaFortnite #FortniteTienda",
+ "claims": [
+  {
+   "text": "Lote Mega Man: 3800 V-Bucks, regular 7300",
+   "source": "shop.json",
+   "match": [
+    "Lote Mega Man",
+    "\"finalPrice\": 3800",
+    "\"regularPrice\": 7300"
+   ]
+  },
+  {
+   "text": "Operación submarina: Capítulo 1, Temporada 2",
+   "source": "history.json",
+   "match": [
+    "Operación submarina",
+    "\"chapter\": 1",
+    "\"season\": 2"
+   ]
+  },
+  {
+   "text": "69 days since last in the shop",
+   "source": "history.json",
+   "match": [
+    "\"gapDays\": 69"
+   ]
+  },
+  {
+   "text": "17 outfits leave at the next reset",
+   "source": "plan.json",
+   "match": [
+    "\"count\": 17"
+   ]
+  }
+ ],
+ "text": [
+  "MEGA MAN (DUAL OVERRIDE)",
+  "OPERACIÓN SUBMARINA",
+  "FERNET",
+  "OFERTA",
+  "OG",
+  "ÚLTIMO DÍA",
+  "TIENDA DE HOY / 15 NOV",
+  "1 · OFERTA",
+  "MEGA MAN X",
+  "ZERO (MEGA MAN)",
+  "3800",
+  "7300",
+  "LOTE MEGA MAN · SE VA EL 15 NOV",
+  "-48% / AHORRAS 3500",
+  "2 · REGRESO OG",
+  "CAPÍTULO 1 · TEMPORADA 2",
+  "¡69 DÍAS SIN SALIR!",
+  "3 · ÚLTIMO DÍA",
+  "ARACNE",
+  "J BALVIN",
+  "KAROL G PLATINO",
+  "GATA NEGRA",
+  "J BALVIN RECARGADO",
+  "+11 MÁS",
+  "SE VAN EL 15 NOV, 6 PM",
+  "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+  "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+  "ESTA ES LA",
+  "TIENDA DE OBJETOS",
+  "DE HOY,",
+  "15 DE NOVIEMBRE.",
+  "¡TRES COSAS ANTES",
+  "DE GASTAR UN",
+  "SOLO PAVO!",
+  "EL LOTE MEGA",
+  "MAN:",
+  "3800 PAVOS,",
+  "EN VEZ DE",
+  "7300.",
+  "¡TE AHORRAS 3500!",
+  "OPERACIÓN SUBMARINA ESTÁ",
+  "EN LA TIENDA.",
+  "ES DEL CAPÍTULO",
+  "1,",
+  "TEMPORADA 2,",
+  "Y NO SALÍA",
+  "DESDE HACE 69",
+  "DÍAS.",
+  "Y 17 SKINS",
+  "ESTÁN EN SU",
+  "ÚLTIMO DÍA,",
+  "CUATRO DE ELLAS",
+  "DE LEYENDAS DE",
+  "VIDEOJUEGOS.",
+  "¿VAS A COMPRAR",
+  "ALGO HOY?",
+  "USA EL CÓDIGO",
+  "BAD EN LA",
+  "TIENDA DE OBJETOS.",
+  "LE AYUDA MUCHÍSIMO",
+  "AL CANAL.",
+  "¡GRACIAS POR VER!",
+  "SÍGUENOS PARA MÁS",
+  "CONTENIDO DIARIO.",
+  "#EPICPARTNER",
+  "LA TIENDITA BAD"
+ ]
+}
