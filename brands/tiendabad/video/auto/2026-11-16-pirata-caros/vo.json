@@ -78,7 +78,7 @@
    "pause": 0.65
   },
   {
-   "text": "Con la Tienda Pirata, todo lo que cuesta pavos es gratis por 14 días, y solo puedes reclamar un sidekick. ¿Cuál te llevarías?",
+   "text": "Con la Tienda Pirata, todo lo que cuesta pavos es gratis por 14 días, y solo puedes reclamar un compañero. ¿Cuál te llevarías?",
    "pause": 0.2
   },
   {
@@ -90,10 +90,5 @@
    "text": "¡Gracias por ver! Síguenos para más contenido diario.",
    "pause": 0.3
   }
- ],
- "voice": "ef_dora",
- "speed": 1.2,
- "lang": "es-419",
- "lead": 0.2,
- "mode": "flow"
+ ]
 }

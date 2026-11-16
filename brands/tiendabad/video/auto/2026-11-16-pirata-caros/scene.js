@@ -263,7 +263,7 @@ window.SCENE = TPL.top({
    ]
   },
   {
-   "text": "Solo puedes reclamar un sidekick",
+   "text": "Solo puedes reclamar un compañero (sidekick)",
    "source": "vgc-guide.json",
    "match": [
     "you can only claim one free sidekick"
