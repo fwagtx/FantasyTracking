@@ -1,0 +1,5444 @@
+{
+ "duration": 32.7,
+ "samples": [
+  {
+   "t": 0,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / MÁS POLVO DE ESPÍRITUS Y PE",
+     "x": 72.78360748291016,
+     "y": 344.3044738769531,
+     "w": 814.4327392578125,
+     "h": 588.76611328125
+    },
+    {
+     "text": "¡DOBLE PE / EN FORTNITE!",
+     "x": 112.79998779296875,
+     "y": 659.545654296875,
+     "w": 774.4000244140625,
+     "h": 140.00250244140625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 0.25,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / MÁS POLVO DE ESPÍRITUS Y PE",
+     "x": 47.22794723510742,
+     "y": 326.0450134277344,
+     "w": 865.5440673828125,
+     "h": 625.2850341796875
+    },
+    {
+     "text": "¡DOBLE PE / EN FORTNITE!",
+     "x": 60.24444580078125,
+     "y": 650.044189453125,
+     "w": 879.5111083984375,
+     "h": 159.00537109375
+    },
+    {
+     "text": "¡NOTICIA NUEVA EN",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 0.5,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / MÁS POLVO DE ESPÍRITUS Y PE",
+     "x": 47.41216278076172,
+     "y": 326.38482666015625,
+     "w": 865.1756591796875,
+     "h": 624.6053466796875
+    },
+    {
+     "text": "¡DOBLE PE / EN FORTNITE!",
+     "x": 60,
+     "y": 650,
+     "w": 880,
+     "h": 159.09375
+    },
+    {
+     "text": "¡NOTICIA NUEVA EN",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 0.75,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / MÁS POLVO DE ESPÍRITUS Y PE",
+     "x": 47.69221878051758,
+     "y": 326.7770690917969,
+     "w": 864.6156005859375,
+     "h": 623.82080078125
+    },
+    {
+     "text": "¡DOBLE PE / EN FORTNITE!",
+     "x": 60,
+     "y": 650,
+     "w": 880,
+     "h": 159.09375
+    },
+    {
+     "text": "¡NOTICIA NUEVA EN",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 1,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / MÁS POLVO DE ESPÍRITUS Y PE",
+     "x": 47.93659591674805,
+     "y": 327.119140625,
+     "w": 864.1268310546875,
+     "h": 623.13671875
+    },
+    {
+     "text": "¡DOBLE PE / EN FORTNITE!",
+     "x": 60,
+     "y": 650,
+     "w": 880,
+     "h": 159.09375
+    },
+    {
+     "text": "FORTNITE!",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 1.25,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / MÁS POLVO DE ESPÍRITUS Y PE",
+     "x": 48.13541030883789,
+     "y": 327.3973083496094,
+     "w": 863.7291259765625,
+     "h": 622.5804443359375
+    },
+    {
+     "text": "¡DOBLE PE / EN FORTNITE!",
+     "x": 60,
+     "y": 650,
+     "w": 880,
+     "h": 159.09375
+    },
+    {
+     "text": "FORTNITE!",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 1.5,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / MÁS POLVO DE ESPÍRITUS Y PE",
+     "x": 48.28060531616211,
+     "y": 327.600341796875,
+     "w": 863.4388427734375,
+     "h": 622.17431640625
+    },
+    {
+     "text": "¡DOBLE PE / EN FORTNITE!",
+     "x": 60,
+     "y": 650,
+     "w": 880,
+     "h": 159.09375
+    },
+    {
+     "text": "ESTO DICE EL",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 1.75,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / MÁS POLVO DE ESPÍRITUS Y PE",
+     "x": 48.36627197265625,
+     "y": 327.7201232910156,
+     "w": 863.2674560546875,
+     "h": 621.9346923828125
+    },
+    {
+     "text": "¡DOBLE PE / EN FORTNITE!",
+     "x": 60,
+     "y": 650,
+     "w": 880,
+     "h": 159.09375
+    },
+    {
+     "text": "ESTO DICE EL",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 2,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / MÁS POLVO DE ESPÍRITUS Y PE",
+     "x": 48.38893508911133,
+     "y": 327.7518005371094,
+     "w": 863.22216796875,
+     "h": 621.871337890625
+    },
+    {
+     "text": "¡DOBLE PE / EN FORTNITE!",
+     "x": 60,
+     "y": 650,
+     "w": 880,
+     "h": 159.09375
+    },
+    {
+     "text": "JUEGO:",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 2.25,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / MÁS POLVO DE ESPÍRITUS Y PE",
+     "x": 48.347660064697266,
+     "y": 327.6941223144531,
+     "w": 863.3046875,
+     "h": 621.98681640625
+    },
+    {
+     "text": "JUEGO:",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 2.5,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / MÁS POLVO DE ESPÍRITUS Y PE",
+     "x": 48.244136810302734,
+     "y": 327.5493469238281,
+     "w": 863.51171875,
+     "h": 622.2762451171875
+    },
+    {
+     "text": "¡TE ESPERA UN MONTÓN DE BOTÍN PARA SAQUEAR!",
+     "x": 89.77043151855469,
+     "y": 595.1484375,
+     "w": 780.558349609375,
+     "h": 104.45281982421875
+    },
+    {
+     "text": "¡TE ESPERA UN",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 2.75,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / MÁS POLVO DE ESPÍRITUS Y PE",
+     "x": 48.08257293701172,
+     "y": 327.3233947753906,
+     "w": 863.8348388671875,
+     "h": 622.728271484375
+    },
+    {
+     "text": "¡TE ESPERA UN MONTÓN DE BOTÍN PARA SAQUEAR!",
+     "x": 89.7498550415039,
+     "y": 594.9427490234375,
+     "w": 780.608642578125,
+     "h": 104.86419677734375
+    },
+    {
+     "text": "¡TE ESPERA UN",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 3,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / MÁS POLVO DE ESPÍRITUS Y PE",
+     "x": 47.869529724121094,
+     "y": 327.0252990722656,
+     "w": 864.260986328125,
+     "h": 623.324462890625
+    },
+    {
+     "text": "¡TE ESPERA UN MONTÓN DE BOTÍN PARA SAQUEAR!",
+     "x": 89.72286987304688,
+     "y": 594.6712646484375,
+     "w": 780.6748046875,
+     "h": 105.40704345703125
+    },
+    {
+     "text": "MONTÓN DE BOTÍN",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 3.25,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / MÁS POLVO DE ESPÍRITUS Y PE",
+     "x": 47.613643646240234,
+     "y": 326.66705322265625,
+     "w": 864.772705078125,
+     "h": 624.0408935546875
+    },
+    {
+     "text": "¡TE ESPERA UN MONTÓN DE BOTÍN PARA SAQUEAR!",
+     "x": 89.69066619873047,
+     "y": 594.3449096679688,
+     "w": 780.7537231445312,
+     "h": 106.0596923828125
+    },
+    {
+     "text": "MONTÓN DE BOTÍN",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 3.5,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / MÁS POLVO DE ESPÍRITUS Y PE",
+     "x": 47.32524108886719,
+     "y": 326.2630310058594,
+     "w": 865.3494873046875,
+     "h": 624.848876953125
+    },
+    {
+     "text": "¡TE ESPERA UN MONTÓN DE BOTÍN PARA SAQUEAR!",
+     "x": 89.6546630859375,
+     "y": 593.9766235351562,
+     "w": 780.8421630859375,
+     "h": 106.796142578125
+    },
+    {
+     "text": "MONTÓN DE BOTÍN",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 3.75,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / MÁS POLVO DE ESPÍRITUS Y PE",
+     "x": 47.01593780517578,
+     "y": 325.8294677734375,
+     "w": 865.9681396484375,
+     "h": 625.716064453125
+    },
+    {
+     "text": "¡TE ESPERA UN MONTÓN DE BOTÍN PARA SAQUEAR!",
+     "x": 89.61637878417969,
+     "y": 593.5811157226562,
+     "w": 780.9363403320312,
+     "h": 107.5869140625
+    },
+    {
+     "text": "PARA SAQUEAR!",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 4,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / MÁS POLVO DE ESPÍRITUS Y PE",
+     "x": 46.6981201171875,
+     "y": 325.3836364746094,
+     "w": 866.603759765625,
+     "h": 626.607666015625
+    },
+    {
+     "text": "¡TE ESPERA UN MONTÓN DE BOTÍN PARA SAQUEAR!",
+     "x": 89.57740783691406,
+     "y": 593.1741943359375,
+     "w": 781.032470703125,
+     "h": 108.40057373046875
+    },
+    {
+     "text": "PARA SAQUEAR!",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 4.25,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / MÁS POLVO DE ESPÍRITUS Y PE",
+     "x": 46.38447570800781,
+     "y": 324.943359375,
+     "w": 867.2310791015625,
+     "h": 627.48828125
+    },
+    {
+     "text": "¡TE ESPERA UN MONTÓN DE BOTÍN PARA SAQUEAR!",
+     "x": 89.539306640625,
+     "y": 592.7720947265625,
+     "w": 781.1265869140625,
+     "h": 109.20458984375
+    },
+    {
+     "text": "PARA SAQUEAR!",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 4.5,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / MÁS POLVO DE ESPÍRITUS Y PE",
+     "x": 46.087467193603516,
+     "y": 324.526123046875,
+     "w": 867.8250732421875,
+     "h": 628.32275390625
+    },
+    {
+     "text": "¡TE ESPERA UN MONTÓN DE BOTÍN PARA SAQUEAR!",
+     "x": 89.5035629272461,
+     "y": 592.3908081054688,
+     "w": 781.215087890625,
+     "h": 109.96697998046875
+    },
+    {
+     "text": "PARA SAQUEAR!",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 4.75,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / MÁS POLVO DE ESPÍRITUS Y PE",
+     "x": 45.8188362121582,
+     "y": 324.1485290527344,
+     "w": 868.3623046875,
+     "h": 629.0780029296875
+    },
+    {
+     "text": "¡TE ESPERA UN MONTÓN DE BOTÍN PARA SAQUEAR!",
+     "x": 89.47151184082031,
+     "y": 592.0455322265625,
+     "w": 781.2946166992188,
+     "h": 110.6573486328125
+    },
+    {
+     "text": "DOBLE POLVO DE ESPÍRITUS Y PE, ADEMÁS DE COFRES DE ESPÍRITUS POTENCIADOS Y CARTELES DE SE BUSCA DE ESPÍRITUS.",
+     "x": 90.97578430175781,
+     "y": 702.0352172851562,
+     "w": 782.662109375,
+     "h": 210.64801025390625
+    },
+    {
+     "text": "DOBLE POLVO DE",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 5,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / MÁS POLVO DE ESPÍRITUS Y PE",
+     "x": 45.589176177978516,
+     "y": 323.82550048828125,
+     "w": 868.8216552734375,
+     "h": 629.7239990234375
+    },
+    {
+     "text": "¡TE ESPERA UN MONTÓN DE BOTÍN PARA SAQUEAR!",
+     "x": 89.44432067871094,
+     "y": 591.75,
+     "w": 781.3621215820312,
+     "h": 111.2481689453125
+    },
+    {
+     "text": "DOBLE POLVO DE ESPÍRITUS Y PE, ADEMÁS DE COFRES DE ESPÍRITUS POTENCIADOS Y CARTELES DE SE BUSCA DE ESPÍRITUS.",
+     "x": 91.03206634521484,
+     "y": 701.738525390625,
+     "w": 782.8056030273438,
+     "h": 211.23779296875
+    },
+    {
+     "text": "DOBLE POLVO DE",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 5.25,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / MÁS POLVO DE ESPÍRITUS Y PE",
+     "x": 45.40749740600586,
+     "y": 323.5698547363281,
+     "w": 869.18505859375,
+     "h": 630.2353515625
+    },
+    {
+     "text": "¡TE ESPERA UN MONTÓN DE BOTÍN PARA SAQUEAR!",
+     "x": 89.4229507446289,
+     "y": 591.5160522460938,
+     "w": 781.415283203125,
+     "h": 111.7159423828125
+    },
+    {
+     "text": "DOBLE POLVO DE ESPÍRITUS Y PE, ADEMÁS DE COFRES DE ESPÍRITUS POTENCIADOS Y CARTELES DE SE BUSCA DE ESPÍRITUS.",
+     "x": 91.07679748535156,
+     "y": 701.5036010742188,
+     "w": 782.9188232421875,
+     "h": 211.70465087890625
+    },
+    {
+     "text": "DOBLE POLVO DE",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 5.5,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / MÁS POLVO DE ESPÍRITUS Y PE",
+     "x": 45.280914306640625,
+     "y": 323.39166259765625,
+     "w": 869.438232421875,
+     "h": 630.5916748046875
+    },
+    {
+     "text": "¡TE ESPERA UN MONTÓN DE BOTÍN PARA SAQUEAR!",
+     "x": 89.40813446044922,
+     "y": 591.3529052734375,
+     "w": 781.4522094726562,
+     "h": 112.0421142578125
+    },
+    {
+     "text": "DOBLE POLVO DE ESPÍRITUS Y PE, ADEMÁS DE COFRES DE ESPÍRITUS POTENCIADOS Y CARTELES DE SE BUSCA DE ESPÍRITUS.",
+     "x": 91.10806274414062,
+     "y": 701.3397827148438,
+     "w": 782.9976806640625,
+     "h": 212.0301513671875
+    },
+    {
+     "text": "ESPÍRITUS Y PE,",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 5.75,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / MÁS POLVO DE ESPÍRITUS Y PE",
+     "x": 45.2143669128418,
+     "y": 323.2979736328125,
+     "w": 869.5712890625,
+     "h": 630.779052734375
+    },
+    {
+     "text": "¡TE ESPERA UN MONTÓN DE BOTÍN PARA SAQUEAR!",
+     "x": 89.4003677368164,
+     "y": 591.26708984375,
+     "w": 781.4715576171875,
+     "h": 112.21368408203125
+    },
+    {
+     "text": "DOBLE POLVO DE ESPÍRITUS Y PE, ADEMÁS DE COFRES DE ESPÍRITUS POTENCIADOS Y CARTELES DE SE BUSCA DE ESPÍRITUS.",
+     "x": 91.12454223632812,
+     "y": 701.2536010742188,
+     "w": 783.0390625,
+     "h": 212.20135498046875
+    },
+    {
+     "text": "ESPÍRITUS Y PE,",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 6,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / MÁS POLVO DE ESPÍRITUS Y PE",
+     "x": 45.21045684814453,
+     "y": 323.29248046875,
+     "w": 869.5791015625,
+     "h": 630.7900390625
+    },
+    {
+     "text": "¡TE ESPERA UN MONTÓN DE BOTÍN PARA SAQUEAR!",
+     "x": 89.39990997314453,
+     "y": 591.2620849609375,
+     "w": 781.4727783203125,
+     "h": 112.22369384765625
+    },
+    {
+     "text": "DOBLE POLVO DE ESPÍRITUS Y PE, ADEMÁS DE COFRES DE ESPÍRITUS POTENCIADOS Y CARTELES DE SE BUSCA DE ESPÍRITUS.",
+     "x": 91.1255111694336,
+     "y": 701.24853515625,
+     "w": 783.04150390625,
+     "h": 212.21142578125
+    },
+    {
+     "text": "ESPÍRITUS Y PE,",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 6.25,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / MÁS POLVO DE ESPÍRITUS Y PE",
+     "x": 45.26933670043945,
+     "y": 323.3753662109375,
+     "w": 869.4613037109375,
+     "h": 630.624267578125
+    },
+    {
+     "text": "¡TE ESPERA UN MONTÓN DE BOTÍN PARA SAQUEAR!",
+     "x": 89.40678405761719,
+     "y": 591.3379516601562,
+     "w": 781.4556274414062,
+     "h": 112.072021484375
+    },
+    {
+     "text": "DOBLE POLVO DE ESPÍRITUS Y PE, ADEMÁS DE COFRES DE ESPÍRITUS POTENCIADOS Y CARTELES DE SE BUSCA DE ESPÍRITUS.",
+     "x": 91.11093139648438,
+     "y": 701.3247680664062,
+     "w": 783.0048828125,
+     "h": 212.05999755859375
+    },
+    {
+     "text": "ADEMÁS DE COFRES",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 6.5,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / MÁS POLVO DE ESPÍRITUS Y PE",
+     "x": 45.388702392578125,
+     "y": 323.54339599609375,
+     "w": 869.22265625,
+     "h": 630.2882080078125
+    },
+    {
+     "text": "¡TE ESPERA UN MONTÓN DE BOTÍN PARA SAQUEAR!",
+     "x": 89.42074584960938,
+     "y": 591.4918212890625,
+     "w": 781.4207763671875,
+     "h": 111.764404296875
+    },
+    {
+     "text": "DOBLE POLVO DE ESPÍRITUS Y PE, ADEMÁS DE COFRES DE ESPÍRITUS POTENCIADOS Y CARTELES DE SE BUSCA DE ESPÍRITUS.",
+     "x": 91.08143615722656,
+     "y": 701.4793090820312,
+     "w": 782.9305419921875,
+     "h": 211.75299072265625
+    },
+    {
+     "text": "ADEMÁS DE COFRES",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 6.75,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / MÁS POLVO DE ESPÍRITUS Y PE",
+     "x": 45.563899993896484,
+     "y": 323.7899475097656,
+     "w": 868.8721923828125,
+     "h": 629.795166015625
+    },
+    {
+     "text": "¡TE ESPERA UN MONTÓN DE BOTÍN PARA SAQUEAR!",
+     "x": 89.44133758544922,
+     "y": 591.7174682617188,
+     "w": 781.3695678710938,
+     "h": 111.313232421875
+    },
+    {
+     "text": "DOBLE POLVO DE ESPÍRITUS Y PE, ADEMÁS DE COFRES DE ESPÍRITUS POTENCIADOS Y CARTELES DE SE BUSCA DE ESPÍRITUS.",
+     "x": 91.03828430175781,
+     "y": 701.7058715820312,
+     "w": 782.8213500976562,
+     "h": 211.30267333984375
+    },
+    {
+     "text": "ADEMÁS DE COFRES",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 7,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / MÁS POLVO DE ESPÍRITUS Y PE",
+     "x": 45.78807067871094,
+     "y": 324.1052551269531,
+     "w": 868.423828125,
+     "h": 629.16455078125
+    },
+    {
+     "text": "¡TE ESPERA UN MONTÓN DE BOTÍN PARA SAQUEAR!",
+     "x": 89.46785736083984,
+     "y": 592.0059814453125,
+     "w": 781.3037109375,
+     "h": 110.73638916015625
+    },
+    {
+     "text": "DOBLE POLVO DE ESPÍRITUS Y PE, ADEMÁS DE COFRES DE ESPÍRITUS POTENCIADOS Y CARTELES DE SE BUSCA DE ESPÍRITUS.",
+     "x": 90.98330688476562,
+     "y": 701.9954833984375,
+     "w": 782.681396484375,
+     "h": 210.72698974609375
+    },
+    {
+     "text": "DE ESPÍRITUS POTENCIADOS",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 159.8125
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 7.25,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / MÁS POLVO DE ESPÍRITUS Y PE",
+     "x": 46.05241775512695,
+     "y": 324.47686767578125,
+     "w": 867.8951416015625,
+     "h": 628.4212646484375
+    },
+    {
+     "text": "¡TE ESPERA UN MONTÓN DE BOTÍN PARA SAQUEAR!",
+     "x": 89.4993667602539,
+     "y": 592.3457641601562,
+     "w": 781.2254638671875,
+     "h": 110.0570068359375
+    },
+    {
+     "text": "DOBLE POLVO DE ESPÍRITUS Y PE, ADEMÁS DE COFRES DE ESPÍRITUS POTENCIADOS Y CARTELES DE SE BUSCA DE ESPÍRITUS.",
+     "x": 90.91883850097656,
+     "y": 702.3366088867188,
+     "w": 782.5159301757812,
+     "h": 210.0487060546875
+    },
+    {
+     "text": "DE ESPÍRITUS POTENCIADOS",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 159.8125
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 7.5,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / MÁS POLVO DE ESPÍRITUS Y PE",
+     "x": 46.34653091430664,
+     "y": 324.89007568359375,
+     "w": 867.306884765625,
+     "h": 627.5948486328125
+    },
+    {
+     "text": "¡TE ESPERA UN MONTÓN DE BOTÍN PARA SAQUEAR!",
+     "x": 89.53472137451172,
+     "y": 592.723388671875,
+     "w": 781.137939453125,
+     "h": 109.30194091796875
+    },
+    {
+     "text": "DOBLE POLVO DE ESPÍRITUS Y PE, ADEMÁS DE COFRES DE ESPÍRITUS POTENCIADOS Y CARTELES DE SE BUSCA DE ESPÍRITUS.",
+     "x": 90.84754180908203,
+     "y": 702.715576171875,
+     "w": 782.3314208984375,
+     "h": 209.2947998046875
+    },
+    {
+     "text": "DE ESPÍRITUS POTENCIADOS",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 159.8125
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 7.75,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / MÁS POLVO DE ESPÍRITUS Y PE",
+     "x": 46.65877914428711,
+     "y": 325.32843017578125,
+     "w": 866.6824951171875,
+     "h": 626.7181396484375
+    },
+    {
+     "text": "¡TE ESPERA UN MONTÓN DE BOTÍN PARA SAQUEAR!",
+     "x": 89.5726089477539,
+     "y": 593.123779296875,
+     "w": 781.0442504882812,
+     "h": 108.50140380859375
+    },
+    {
+     "text": "DOBLE POLVO DE ESPÍRITUS Y PE, ADEMÁS DE COFRES DE ESPÍRITUS POTENCIADOS Y CARTELES DE SE BUSCA DE ESPÍRITUS.",
+     "x": 90.7723617553711,
+     "y": 703.1172485351562,
+     "w": 782.135009765625,
+     "h": 208.49542236328125
+    },
+    {
+     "text": "DE ESPÍRITUS POTENCIADOS",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 159.8125
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 8,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / MÁS POLVO DE ESPÍRITUS Y PE",
+     "x": 46.976768493652344,
+     "y": 325.7745361328125,
+     "w": 866.0465087890625,
+     "h": 625.825927734375
+    },
+    {
+     "text": "¡TE ESPERA UN MONTÓN DE BOTÍN PARA SAQUEAR!",
+     "x": 89.61155700683594,
+     "y": 593.531005859375,
+     "w": 780.9482421875,
+     "h": 107.6871337890625
+    },
+    {
+     "text": "DOBLE POLVO DE ESPÍRITUS Y PE, ADEMÁS DE COFRES DE ESPÍRITUS POTENCIADOS Y CARTELES DE SE BUSCA DE ESPÍRITUS.",
+     "x": 90.69632720947266,
+     "y": 703.525634765625,
+     "w": 781.9343872070312,
+     "h": 207.68231201171875
+    },
+    {
+     "text": "Y CARTELES DE",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 8.25,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / MÁS POLVO DE ESPÍRITUS Y PE",
+     "x": 47.287811279296875,
+     "y": 326.2106018066406,
+     "w": 865.4244384765625,
+     "h": 624.953857421875
+    },
+    {
+     "text": "¡TE ESPERA UN MONTÓN DE BOTÍN PARA SAQUEAR!",
+     "x": 89.65000915527344,
+     "y": 593.9287719726562,
+     "w": 780.8535766601562,
+     "h": 106.89178466796875
+    },
+    {
+     "text": "DOBLE POLVO DE ESPÍRITUS Y PE, ADEMÁS DE COFRES DE ESPÍRITUS POTENCIADOS Y CARTELES DE SE BUSCA DE ESPÍRITUS.",
+     "x": 90.62248229980469,
+     "y": 703.9244384765625,
+     "w": 781.7376098632812,
+     "h": 206.88787841796875
+    },
+    {
+     "text": "Y CARTELES DE",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 8.5,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / MÁS POLVO DE ESPÍRITUS Y PE",
+     "x": 47.57945251464844,
+     "y": 326.6191711425781,
+     "w": 864.841064453125,
+     "h": 624.13671875
+    },
+    {
+     "text": "¡TE ESPERA UN MONTÓN DE BOTÍN PARA SAQUEAR!",
+     "x": 89.68638610839844,
+     "y": 594.30126953125,
+     "w": 780.7642211914062,
+     "h": 106.14697265625
+    },
+    {
+     "text": "DOBLE POLVO DE ESPÍRITUS Y PE, ADEMÁS DE COFRES DE ESPÍRITUS POTENCIADOS Y CARTELES DE SE BUSCA DE ESPÍRITUS.",
+     "x": 90.55370330810547,
+     "y": 704.2978515625,
+     "w": 781.5526733398438,
+     "h": 206.14385986328125
+    },
+    {
+     "text": "Y CARTELES DE",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 8.75,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / MÁS POLVO DE ESPÍRITUS Y PE",
+     "x": 47.83995819091797,
+     "y": 326.98388671875,
+     "w": 864.320068359375,
+     "h": 623.4072265625
+    },
+    {
+     "text": "¡TE ESPERA UN MONTÓN DE BOTÍN PARA SAQUEAR!",
+     "x": 89.7191390991211,
+     "y": 594.633544921875,
+     "w": 780.6838989257812,
+     "h": 105.48248291015625
+    },
+    {
+     "text": "DOBLE POLVO DE ESPÍRITUS Y PE, ADEMÁS DE COFRES DE ESPÍRITUS POTENCIADOS Y CARTELES DE SE BUSCA DE ESPÍRITUS.",
+     "x": 90.4926528930664,
+     "y": 704.630859375,
+     "w": 781.3870849609375,
+     "h": 205.47998046875
+    },
+    {
+     "text": "SE BUSCA DE",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 9,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / MÁS POLVO DE ESPÍRITUS Y PE",
+     "x": 48.058815002441406,
+     "y": 327.2901611328125,
+     "w": 863.88232421875,
+     "h": 622.794677734375
+    },
+    {
+     "text": "¡TE ESPERA UN MONTÓN DE BOTÍN PARA SAQUEAR!",
+     "x": 89.74684143066406,
+     "y": 594.9124755859375,
+     "w": 780.6160888671875,
+     "h": 104.9246826171875
+    },
+    {
+     "text": "DOBLE POLVO DE ESPÍRITUS Y PE, ADEMÁS DE COFRES DE ESPÍRITUS POTENCIADOS Y CARTELES DE SE BUSCA DE ESPÍRITUS.",
+     "x": 90.4416275024414,
+     "y": 704.9102783203125,
+     "w": 781.2476806640625,
+     "h": 204.9227294921875
+    },
+    {
+     "text": "SE BUSCA DE",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 9.25,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / MÁS POLVO DE ESPÍRITUS Y PE",
+     "x": 48.22715759277344,
+     "y": 327.5256042480469,
+     "w": 863.545654296875,
+     "h": 622.32373046875
+    },
+    {
+     "text": "¡TE ESPERA UN MONTÓN DE BOTÍN PARA SAQUEAR!",
+     "x": 89.76826477050781,
+     "y": 595.1268310546875,
+     "w": 780.5636596679688,
+     "h": 104.49603271484375
+    },
+    {
+     "text": "DOBLE POLVO DE ESPÍRITUS Y PE, ADEMÁS DE COFRES DE ESPÍRITUS POTENCIADOS Y CARTELES DE SE BUSCA DE ESPÍRITUS.",
+     "x": 90.40255737304688,
+     "y": 705.125,
+     "w": 781.1402587890625,
+     "h": 204.494384765625
+    },
+    {
+     "text": "ESPÍRITUS.",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 9.5,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / MÁS POLVO DE ESPÍRITUS Y PE",
+     "x": 48.33815002441406,
+     "y": 327.6808166503906,
+     "w": 863.32373046875,
+     "h": 622.013427734375
+    },
+    {
+     "text": "¡TE ESPERA UN MONTÓN DE BOTÍN PARA SAQUEAR!",
+     "x": 89.7824478149414,
+     "y": 595.26806640625,
+     "w": 780.5289916992188,
+     "h": 104.213623046875
+    },
+    {
+     "text": "DOBLE POLVO DE ESPÍRITUS Y PE, ADEMÁS DE COFRES DE ESPÍRITUS POTENCIADOS Y CARTELES DE SE BUSCA DE ESPÍRITUS.",
+     "x": 90.37687683105469,
+     "y": 705.2664794921875,
+     "w": 781.0693969726562,
+     "h": 204.212158203125
+    },
+    {
+     "text": "ESPÍRITUS.",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 9.75,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / MÁS POLVO DE ESPÍRITUS Y PE",
+     "x": 48.38727951049805,
+     "y": 327.74951171875,
+     "w": 863.2254638671875,
+     "h": 621.8759765625
+    },
+    {
+     "text": "¡TE ESPERA UN MONTÓN DE BOTÍN PARA SAQUEAR!",
+     "x": 89.78873443603516,
+     "y": 595.33056640625,
+     "w": 780.5136108398438,
+     "h": 104.088623046875
+    },
+    {
+     "text": "DOBLE POLVO DE ESPÍRITUS Y PE, ADEMÁS DE COFRES DE ESPÍRITUS POTENCIADOS Y CARTELES DE SE BUSCA DE ESPÍRITUS.",
+     "x": 90.36553192138672,
+     "y": 705.3290405273438,
+     "w": 781.0379638671875,
+     "h": 204.0872802734375
+    },
+    {
+     "text": "ESPÍRITUS.",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 10,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / MÁS POLVO DE ESPÍRITUS Y PE",
+     "x": 48.37254333496094,
+     "y": 327.7289123535156,
+     "w": 863.2548828125,
+     "h": 621.917236328125
+    },
+    {
+     "text": "¡TE ESPERA UN MONTÓN DE BOTÍN PARA SAQUEAR!",
+     "x": 89.78684997558594,
+     "y": 595.3118286132812,
+     "w": 780.5182495117188,
+     "h": 104.1260986328125
+    },
+    {
+     "text": "DOBLE POLVO DE ESPÍRITUS Y PE, ADEMÁS DE COFRES DE ESPÍRITUS POTENCIADOS Y CARTELES DE SE BUSCA DE ESPÍRITUS.",
+     "x": 90.36893463134766,
+     "y": 705.310302734375,
+     "w": 781.04736328125,
+     "h": 204.12469482421875
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 10.25,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / MÁS POLVO DE ESPÍRITUS Y PE",
+     "x": 48.29454040527344,
+     "y": 327.6198425292969,
+     "w": 863.410888671875,
+     "h": 622.1353759765625
+    },
+    {
+     "text": "¡TE ESPERA UN MONTÓN DE BOTÍN PARA SAQUEAR!",
+     "x": 89.77687072753906,
+     "y": 595.2125854492188,
+     "w": 780.5426635742188,
+     "h": 104.3245849609375
+    },
+    {
+     "text": "DOBLE POLVO DE ESPÍRITUS Y PE, ADEMÁS DE COFRES DE ESPÍRITUS POTENCIADOS Y CARTELES DE SE BUSCA DE ESPÍRITUS.",
+     "x": 90.386962890625,
+     "y": 705.2108764648438,
+     "w": 781.0972290039062,
+     "h": 204.32305908203125
+    },
+    {
+     "text": "O SEA: EN",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 10.5,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / MÁS POLVO DE ESPÍRITUS Y PE",
+     "x": 48.15645217895508,
+     "y": 327.4267272949219,
+     "w": 863.6871337890625,
+     "h": 622.5216064453125
+    },
+    {
+     "text": "¡TE ESPERA UN MONTÓN DE BOTÍN PARA SAQUEAR!",
+     "x": 89.7592544555664,
+     "y": 595.0368041992188,
+     "w": 780.585693359375,
+     "h": 104.67608642578125
+    },
+    {
+     "text": "DOBLE POLVO DE ESPÍRITUS Y PE, ADEMÁS DE COFRES DE ESPÍRITUS POTENCIADOS Y CARTELES DE SE BUSCA DE ESPÍRITUS.",
+     "x": 90.41895294189453,
+     "y": 705.0348510742188,
+     "w": 781.1854248046875,
+     "h": 204.67425537109375
+    },
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITUS Y PE",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "O SEA: EN",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 10.75,
+   "boxes": [
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITUS Y PE",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "TUS PARTIDAS GANAS",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 159.8125
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 11,
+   "boxes": [
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITUS Y PE",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "TUS PARTIDAS GANAS",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 159.8125
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 11.25,
+   "boxes": [
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITUS Y PE",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "TUS PARTIDAS GANAS",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 159.8125
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 11.5,
+   "boxes": [
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITUS Y PE",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "TUS PARTIDAS GANAS",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 159.8125
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 11.75,
+   "boxes": [
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITUS Y PE",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "EL DOBLE DE",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 12,
+   "boxes": [
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITUS Y PE",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "EL DOBLE DE",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 12.25,
+   "boxes": [
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITUS Y PE",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "POLVO DE ESPÍRITUS",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 12.5,
+   "boxes": [
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITUS Y PE",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "POLVO DE ESPÍRITUS",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 12.75,
+   "boxes": [
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITUS Y PE",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "POLVO DE ESPÍRITUS",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 13,
+   "boxes": [
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITUS Y PE",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "Y EL DOBLE",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 13.25,
+   "boxes": [
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITUS Y PE",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "Y EL DOBLE",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 13.5,
+   "boxes": [
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITUS Y PE",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "DE PE.",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 13.75,
+   "boxes": [
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITUS Y PE",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "DE PE.",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 14,
+   "boxes": [
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITUS Y PE",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "DE PE.",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 14.25,
+   "boxes": [
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITUS Y PE",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "Y HAY COFRES",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 14.5,
+   "boxes": [
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITUS Y PE",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "POTENCIADOS / COFRES DE ESPÍRITUS",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "Y HAY COFRES",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 14.75,
+   "boxes": [
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITUS Y PE",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "POTENCIADOS / COFRES DE ESPÍRITUS",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "DE ESPÍRITUS POTENCIADOS,",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 159.8125
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 15,
+   "boxes": [
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITUS Y PE",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "POTENCIADOS / COFRES DE ESPÍRITUS",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "DE ESPÍRITUS POTENCIADOS,",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 159.8125
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 15.25,
+   "boxes": [
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITUS Y PE",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "POTENCIADOS / COFRES DE ESPÍRITUS",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "DE ESPÍRITUS POTENCIADOS,",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 159.8125
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 15.5,
+   "boxes": [
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITUS Y PE",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "POTENCIADOS / COFRES DE ESPÍRITUS",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "DE ESPÍRITUS POTENCIADOS,",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 159.8125
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 15.75,
+   "boxes": [
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITUS Y PE",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "POTENCIADOS / COFRES DE ESPÍRITUS",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "DE ESPÍRITUS POTENCIADOS,",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 159.8125
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 16,
+   "boxes": [
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITUS Y PE",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "POTENCIADOS / COFRES DE ESPÍRITUS",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "Y CARTELES DE",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 16.25,
+   "boxes": [
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITUS Y PE",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "POTENCIADOS / COFRES DE ESPÍRITUS",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "Y CARTELES DE",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 16.5,
+   "boxes": [
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITUS Y PE",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "POTENCIADOS / COFRES DE ESPÍRITUS",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "Y CARTELES DE",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 16.75,
+   "boxes": [
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITUS Y PE",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "POTENCIADOS / COFRES DE ESPÍRITUS",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "SE BUSCA DE",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 17,
+   "boxes": [
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITUS Y PE",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "POTENCIADOS / COFRES DE ESPÍRITUS",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "SE BUSCA DE",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 17.25,
+   "boxes": [
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITUS Y PE",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "POTENCIADOS / COFRES DE ESPÍRITUS",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "ESPÍRITUS.",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 17.5,
+   "boxes": [
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITUS Y PE",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "POTENCIADOS / COFRES DE ESPÍRITUS",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "ESPÍRITUS.",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 17.75,
+   "boxes": [
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITUS Y PE",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "POTENCIADOS / COFRES DE ESPÍRITUS",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "ESPÍRITUS.",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 18,
+   "boxes": [
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITUS Y PE",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "POTENCIADOS / COFRES DE ESPÍRITUS",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "Y RECUERDA: CUALQUIER",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 159.8125
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 18.25,
+   "boxes": [
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITUS Y PE",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "POTENCIADOS / COFRES DE ESPÍRITUS",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "TIENDA PIRATA / CUALQUIER COFRE PUEDE DARLA",
+     "x": 140,
+     "y": 860,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "Y RECUERDA: CUALQUIER",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 159.8125
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 18.5,
+   "boxes": [
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITUS Y PE",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "POTENCIADOS / COFRES DE ESPÍRITUS",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "TIENDA PIRATA / CUALQUIER COFRE PUEDE DARLA",
+     "x": 140,
+     "y": 860,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "Y RECUERDA: CUALQUIER",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 159.8125
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 18.75,
+   "boxes": [
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITUS Y PE",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "POTENCIADOS / COFRES DE ESPÍRITUS",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "TIENDA PIRATA / CUALQUIER COFRE PUEDE DARLA",
+     "x": 140,
+     "y": 860,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "Y RECUERDA: CUALQUIER",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 159.8125
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 19,
+   "boxes": [
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITUS Y PE",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "POTENCIADOS / COFRES DE ESPÍRITUS",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "TIENDA PIRATA / CUALQUIER COFRE PUEDE DARLA",
+     "x": 140,
+     "y": 860,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "COFRE QUE ABRAS",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 19.25,
+   "boxes": [
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITUS Y PE",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "POTENCIADOS / COFRES DE ESPÍRITUS",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "TIENDA PIRATA / CUALQUIER COFRE PUEDE DARLA",
+     "x": 140,
+     "y": 860,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "COFRE QUE ABRAS",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 19.5,
+   "boxes": [
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITUS Y PE",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "POTENCIADOS / COFRES DE ESPÍRITUS",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "TIENDA PIRATA / CUALQUIER COFRE PUEDE DARLA",
+     "x": 140,
+     "y": 860,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "EN BATTLE ROYALE",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 19.75,
+   "boxes": [
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITUS Y PE",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "POTENCIADOS / COFRES DE ESPÍRITUS",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "TIENDA PIRATA / CUALQUIER COFRE PUEDE DARLA",
+     "x": 140,
+     "y": 860,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "EN BATTLE ROYALE",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 20,
+   "boxes": [
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITUS Y PE",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "POTENCIADOS / COFRES DE ESPÍRITUS",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "TIENDA PIRATA / CUALQUIER COFRE PUEDE DARLA",
+     "x": 140,
+     "y": 860,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "EN BATTLE ROYALE",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 20.25,
+   "boxes": [
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITUS Y PE",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "POTENCIADOS / COFRES DE ESPÍRITUS",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "TIENDA PIRATA / CUALQUIER COFRE PUEDE DARLA",
+     "x": 140,
+     "y": 860,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "O CERO CONSTRUCCIÓN",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 159.8125
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 20.5,
+   "boxes": [
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITUS Y PE",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "POTENCIADOS / COFRES DE ESPÍRITUS",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "TIENDA PIRATA / CUALQUIER COFRE PUEDE DARLA",
+     "x": 140,
+     "y": 860,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "O CERO CONSTRUCCIÓN",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 159.8125
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 20.75,
+   "boxes": [
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITUS Y PE",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "POTENCIADOS / COFRES DE ESPÍRITUS",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "TIENDA PIRATA / CUALQUIER COFRE PUEDE DARLA",
+     "x": 140,
+     "y": 860,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "O CERO CONSTRUCCIÓN",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 159.8125
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 21,
+   "boxes": [
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITUS Y PE",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "POTENCIADOS / COFRES DE ESPÍRITUS",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "TIENDA PIRATA / CUALQUIER COFRE PUEDE DARLA",
+     "x": 140,
+     "y": 860,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "O CERO CONSTRUCCIÓN",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 159.8125
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 21.25,
+   "boxes": [
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITUS Y PE",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "POTENCIADOS / COFRES DE ESPÍRITUS",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "TIENDA PIRATA / CUALQUIER COFRE PUEDE DARLA",
+     "x": 140,
+     "y": 860,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "PUEDE DARTE LA",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 21.5,
+   "boxes": [
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITUS Y PE",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "POTENCIADOS / COFRES DE ESPÍRITUS",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "TIENDA PIRATA / CUALQUIER COFRE PUEDE DARLA",
+     "x": 140,
+     "y": 860,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "PUEDE DARTE LA",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 21.75,
+   "boxes": [
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITUS Y PE",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "POTENCIADOS / COFRES DE ESPÍRITUS",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "TIENDA PIRATA / CUALQUIER COFRE PUEDE DARLA",
+     "x": 140,
+     "y": 860,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "PUEDE DARTE LA",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 22,
+   "boxes": [
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITUS Y PE",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "POTENCIADOS / COFRES DE ESPÍRITUS",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "TIENDA PIRATA / CUALQUIER COFRE PUEDE DARLA",
+     "x": 140,
+     "y": 860,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "TIENDA PIRATA.",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 22.25,
+   "boxes": [
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITUS Y PE",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "POTENCIADOS / COFRES DE ESPÍRITUS",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "TIENDA PIRATA / CUALQUIER COFRE PUEDE DARLA",
+     "x": 140,
+     "y": 860,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "TIENDA PIRATA.",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 22.5,
+   "boxes": [
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITUS Y PE",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "POTENCIADOS / COFRES DE ESPÍRITUS",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "TIENDA PIRATA / CUALQUIER COFRE PUEDE DARLA",
+     "x": 140,
+     "y": 860,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "TIENDA PIRATA.",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 22.75,
+   "boxes": [
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITUS Y PE",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "POTENCIADOS / COFRES DE ESPÍRITUS",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "TIENDA PIRATA / CUALQUIER COFRE PUEDE DARLA",
+     "x": 140,
+     "y": 860,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "TIENDA PIRATA.",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 23,
+   "boxes": [
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITUS Y PE",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "POTENCIADOS / COFRES DE ESPÍRITUS",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "TIENDA PIRATA / CUALQUIER COFRE PUEDE DARLA",
+     "x": 140,
+     "y": 860,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "¿YA LO APROVECHASTE?",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 159.8125
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 23.25,
+   "boxes": [
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITUS Y PE",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "POTENCIADOS / COFRES DE ESPÍRITUS",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "TIENDA PIRATA / CUALQUIER COFRE PUEDE DARLA",
+     "x": 140,
+     "y": 860,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "¿YA LO APROVECHASTE?",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 159.8125
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 23.5,
+   "boxes": [
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITUS Y PE",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "POTENCIADOS / COFRES DE ESPÍRITUS",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "TIENDA PIRATA / CUALQUIER COFRE PUEDE DARLA",
+     "x": 140,
+     "y": 860,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "¿YA LO APROVECHASTE?",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 159.8125
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 23.75,
+   "boxes": [
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITUS Y PE",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "POTENCIADOS / COFRES DE ESPÍRITUS",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "TIENDA PIRATA / CUALQUIER COFRE PUEDE DARLA",
+     "x": 140,
+     "y": 860,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "¿YA LO APROVECHASTE?",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 159.8125
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 24,
+   "boxes": [
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITUS Y PE",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "POTENCIADOS / COFRES DE ESPÍRITUS",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "TIENDA PIRATA / CUALQUIER COFRE PUEDE DARLA",
+     "x": 140,
+     "y": 860,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "¡CUÉNTAME EN LOS",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 24.25,
+   "boxes": [
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITUS Y PE",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "POTENCIADOS / COFRES DE ESPÍRITUS",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "TIENDA PIRATA / CUALQUIER COFRE PUEDE DARLA",
+     "x": 140,
+     "y": 860,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "¡CUÉNTAME EN LOS",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 24.5,
+   "boxes": [
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITUS Y PE",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "POTENCIADOS / COFRES DE ESPÍRITUS",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "TIENDA PIRATA / CUALQUIER COFRE PUEDE DARLA",
+     "x": 140,
+     "y": 860,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "¡CUÉNTAME EN LOS",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 24.75,
+   "boxes": [
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITUS Y PE",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "POTENCIADOS / COFRES DE ESPÍRITUS",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "TIENDA PIRATA / CUALQUIER COFRE PUEDE DARLA",
+     "x": 140,
+     "y": 860,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "COMENTARIOS!",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 25,
+   "boxes": [
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITUS Y PE",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "POTENCIADOS / COFRES DE ESPÍRITUS",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "TIENDA PIRATA / CUALQUIER COFRE PUEDE DARLA",
+     "x": 140,
+     "y": 860,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "COMENTARIOS!",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 25.25,
+   "boxes": [
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITUS Y PE",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "POTENCIADOS / COFRES DE ESPÍRITUS",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "TIENDA PIRATA / CUALQUIER COFRE PUEDE DARLA",
+     "x": 140,
+     "y": 860,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "COMENTARIOS!",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 25.5,
+   "boxes": [
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITUS Y PE",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "POTENCIADOS / COFRES DE ESPÍRITUS",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "TIENDA PIRATA / CUALQUIER COFRE PUEDE DARLA",
+     "x": 140,
+     "y": 860,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 204.3677978515625,
+     "y": 388.6712646484375,
+     "w": 671.264404296875,
+     "h": 560.001220703125
+    },
+    {
+     "text": "USA EL CÓDIGO",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 25.75,
+   "boxes": [
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 167.48825073242188,
+     "y": 357.9045715332031,
+     "w": 745.0234375,
+     "h": 621.53466796875
+    },
+    {
+     "text": "USA EL CÓDIGO",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 26,
+   "boxes": [
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "USA EL CÓDIGO",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 26.25,
+   "boxes": [
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "BAD EN LA",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 26.5,
+   "boxes": [
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "BAD EN LA",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 26.75,
+   "boxes": [
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "TIENDA DE OBJETOS.",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 27,
+   "boxes": [
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "TIENDA DE OBJETOS.",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 27.25,
+   "boxes": [
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "TIENDA DE OBJETOS.",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 27.5,
+   "boxes": [
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "TIENDA DE OBJETOS.",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 27.75,
+   "boxes": [
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "LE AYUDA MUCHÍSIMO",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 159.8125
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 28,
+   "boxes": [
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "LE AYUDA MUCHÍSIMO",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 159.8125
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 28.25,
+   "boxes": [
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "LE AYUDA MUCHÍSIMO",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 159.8125
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 28.5,
+   "boxes": [
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "AL CANAL.",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 28.75,
+   "boxes": [
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "AL CANAL.",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 29,
+   "boxes": [
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "AL CANAL.",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 29.25,
+   "boxes": [
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "AL CANAL.",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 29.5,
+   "boxes": [
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+     "x": 167.326416015625,
+     "y": 1009.570068359375,
+     "w": 745.34716796875,
+     "h": 119.85986328125
+    },
+    {
+     "text": "¡GRACIAS POR VER!",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 29.75,
+   "boxes": [
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+     "x": 170,
+     "y": 1010,
+     "w": 740,
+     "h": 119
+    },
+    {
+     "text": "¡GRACIAS POR VER!",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 30,
+   "boxes": [
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+     "x": 170,
+     "y": 1010,
+     "w": 740,
+     "h": 119
+    },
+    {
+     "text": "¡GRACIAS POR VER!",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 30.25,
+   "boxes": [
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+     "x": 170,
+     "y": 1010,
+     "w": 740,
+     "h": 119
+    },
+    {
+     "text": "SÍGUENOS PARA MÁS",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 30.5,
+   "boxes": [
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+     "x": 170,
+     "y": 1010,
+     "w": 740,
+     "h": 119
+    },
+    {
+     "text": "SÍGUENOS PARA MÁS",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 30.75,
+   "boxes": [
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+     "x": 170,
+     "y": 1010,
+     "w": 740,
+     "h": 119
+    },
+    {
+     "text": "SÍGUENOS PARA MÁS",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 31,
+   "boxes": [
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+     "x": 170,
+     "y": 1010,
+     "w": 740,
+     "h": 119
+    },
+    {
+     "text": "CONTENIDO DIARIO.",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 31.25,
+   "boxes": [
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+     "x": 170,
+     "y": 1010,
+     "w": 740,
+     "h": 119
+    },
+    {
+     "text": "CONTENIDO DIARIO.",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 31.5,
+   "boxes": [
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+     "x": 170,
+     "y": 1010,
+     "w": 740,
+     "h": 119
+    },
+    {
+     "text": "CONTENIDO DIARIO.",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 31.75,
+   "boxes": [
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+     "x": 170,
+     "y": 1010,
+     "w": 740,
+     "h": 119
+    },
+    {
+     "text": "CONTENIDO DIARIO.",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 32,
+   "boxes": [
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+     "x": 170,
+     "y": 1010,
+     "w": 740,
+     "h": 119
+    },
+    {
+     "text": "CONTENIDO DIARIO.",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 32.25,
+   "boxes": [
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+     "x": 170,
+     "y": 1010,
+     "w": 740,
+     "h": 119
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 32.5,
+   "boxes": [
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+     "x": 170,
+     "y": 1010,
+     "w": 740,
+     "h": 119
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  }
+ ],
+ "text": [
+  "NOTICIAS DEL JUEGO / MÁS POLVO DE ESPÍRITUS Y PE",
+  "¡TE ESPERA UN MONTÓN DE BOTÍN PARA SAQUEAR!",
+  "DOBLE POLVO DE ESPÍRITUS Y PE, ADEMÁS DE COFRES DE ESPÍRITUS POTENCIADOS Y CARTELES DE SE BUSCA DE ESPÍRITUS.",
+  "¡DOBLE PE / EN FORTNITE!",
+  "DOBLE / POLVO DE ESPÍRITUS Y PE",
+  "POTENCIADOS / COFRES DE ESPÍRITUS",
+  "TIENDA PIRATA / CUALQUIER COFRE PUEDE DARLA",
+  "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+  "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+  "¡NOTICIA NUEVA EN",
+  "FORTNITE!",
+  "ESTO DICE EL",
+  "JUEGO:",
+  "¡TE ESPERA UN",
+  "MONTÓN DE BOTÍN",
+  "PARA SAQUEAR!",
+  "DOBLE POLVO DE",
+  "ESPÍRITUS Y PE,",
+  "ADEMÁS DE COFRES",
+  "DE ESPÍRITUS POTENCIADOS",
+  "Y CARTELES DE",
+  "SE BUSCA DE",
+  "ESPÍRITUS.",
+  "O SEA: EN",
+  "TUS PARTIDAS GANAS",
+  "EL DOBLE DE",
+  "POLVO DE ESPÍRITUS",
+  "Y EL DOBLE",
+  "DE PE.",
+  "Y HAY COFRES",
+  "DE ESPÍRITUS POTENCIADOS,",
+  "Y RECUERDA: CUALQUIER",
+  "COFRE QUE ABRAS",
+  "EN BATTLE ROYALE",
+  "O CERO CONSTRUCCIÓN",
+  "PUEDE DARTE LA",
+  "TIENDA PIRATA.",
+  "¿YA LO APROVECHASTE?",
+  "¡CUÉNTAME EN LOS",
+  "COMENTARIOS!",
+  "USA EL CÓDIGO",
+  "BAD EN LA",
+  "TIENDA DE OBJETOS.",
+  "LE AYUDA MUCHÍSIMO",
+  "AL CANAL.",
+  "¡GRACIAS POR VER!",
+  "SÍGUENOS PARA MÁS",
+  "CONTENIDO DIARIO.",
+  "#EPICPARTNER",
+  "LA TIENDITA BAD"
+ ]
+}

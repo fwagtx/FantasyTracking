@@ -3,7 +3,7 @@
  * last voice line. Beats are tied to the voice: "p" is a phrase index in vo.json (P[p].t0 = when it starts).
  *   TPL.guess({ title, rounds: [{id, name, img, rarity, chapter, season}] })      Guess the Season
  *   TPL.map({ title, map, shots, pins, toasts })                                  a place / Easter egg on the map
- *   TPL.news({ kicker, tile, quote: [{p, text}], points: [{p, label, text}] })    an in-game news tile explained
+ *   TPL.news({ kicker, tile, quote: [{p, text}], points: [{p, label, text}], hook?, hookY? })    an in-game news tile explained
  *   TPL.drop({ title, cards, name, contents, price, when, tone })                 a shop listing: new today / leaving tonight
  *   TPL.guide({ kicker, title, facts: [{p, label, text}] })                        a feature explained: each fact lands on its voice line
  * Each takes caption and claims too (see make_short.py and the pre-post checklist).
@@ -187,17 +187,22 @@
            <div class="q" style="margin-top:22px;min-height:120px"></div></div>`, `${cfg.kicker || "NOTICIAS DEL JUEGO"} / ${cfg.tile}`.toUpperCase());
       const q = panel.querySelector(".q");
       const lines = cfg.quote.map((l) => { const d = document.createElement("div"); d.style.cssText = `font:700 40px/1.25 Montserrat;color:#C9D6FF;margin-top:10px;opacity:0`; d.textContent = `“${l.text}”`; d.dataset.text = l.text.toUpperCase(); q.appendChild(d); return { ...l, d }; });
-      const hook = cfg.hook ? S.title(stage, cfg.hook, { y: 950, size: 78 }) : null;
-      const hookEnd = P[cfg.quote[0].p].t0 - 0.1;
+      // hookY can put the hook inside the panel's empty lower part (the quote lines hold their space before they are read);
+      // it is gone before the first line shows
+      const hook = cfg.hook ? S.title(stage, cfg.hook, { y: cfg.hookY || 950, size: cfg.hookSize || 78 }) : null;
+      const hookEnd = P[cfg.quote[0].p].t0 - 0.3;
       const dim = mk(stage, `inset:0;background:rgba(5,8,25,.75)`);
       const points = (cfg.points || []).map((o, i) => ({ ...o, el: S.toast(stage, o.label, o.text, 480 + i * 190, o.color || YEL) }));
+      const pt = points.length ? P[points[0].p].t0 : 1e9;
       const e = end(stage, VO);
       return function renderAt(t) {
         bands.style.transform = `translateX(${(t * 40) % 260}px)`;
-        T(panel, { y: 0, s: 0.94 + 0.06 * E.out(k(t, 0, 0.3)), r: -0.6 + Math.sin(t * 0.8) * 0.3 });
+        const pOn = points.length ? win(t, P[points[0].p].t0 - 0.05, codeP.t0, 0.08, 0.12) : 0;
+        // the quoted tile steps aside for the takeaways: dimmed, its letters peeked out around the toasts (first news short, Nov 16).
+        // It fades once the first toast has slid in (fading with the dim left a black frame) and stays gone through the code card.
+        T(panel, { y: 0, s: 0.94 + 0.06 * E.out(k(t, 0, 0.3)), r: -0.6 + Math.sin(t * 0.8) * 0.3, a: 1 - k(t, pt + 0.2, pt + 0.4) });
         if (hook) T(hook, { a: 1 - k(t, hookEnd, hookEnd + 0.2), s: 0.88 + 0.12 * E.out(k(t, 0, 0.3)) });
         lines.forEach((l) => { const on = t >= P[l.p].t0 - 0.05; l.d.style.opacity = on ? 1 : 0; l.d.style.color = on && t < P[l.p].t1 + 0.1 ? "#fff" : "#C9D6FF"; });
-        const pOn = points.length ? win(t, P[points[0].p].t0 - 0.05, codeP.t0, 0.08, 0.12) : 0;
         const codeOn = win(t, codeP.t0 - 0.05, DUR + 1, 0.12, 0.1);
         T(dim, { a: Math.max(pOn, codeOn) });
         points.forEach((o) => { const x = (1 - E.out(k(t, P[o.p].t0 - 0.05, P[o.p].t0 + 0.22))) * -700; T(o.el, { a: t >= P[o.p].t0 - 0.05 ? pOn * Math.max(0, 1 - Math.abs(x) / 60) : 0, x }); });

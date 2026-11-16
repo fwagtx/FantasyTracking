@@ -1,0 +1,74 @@
+{
+ "duration": 32.7,
+ "caption": "#EpicPartner Noticia nueva en Fortnite: ¡doble polvo de espíritus y PE! 👻 Además, cofres de espíritus potenciados y carteles de Se busca de espíritus\n¿Ya lo aprovechaste? 👇\nUsa el código BAD en la tienda de objetos 💛\n#fortnite #noticiasfortnite #fortniteespañol",
+ "claims": [
+  {
+   "text": "Noticia del juego: «Más polvo de espíritus y PE» (cita textual)",
+   "source": "news.json",
+   "match": [
+    "\"title\": \"Más polvo de espíritus y PE\"",
+    "\"body\": \"¡Te espera un montón de botín para saquear! Doble polvo de espíritus y PE, además de cofres de espíritus potenciados y carteles de Se busca de espíritus.\""
+   ]
+  },
+  {
+   "text": "Cualquier cofre en Battle Royale o Cero construcción puede dar la Tienda Pirata",
+   "source": "vgc-guide.json",
+   "match": [
+    "To find one, you have to open chests during Battle Royale and Zero Build modes. This can be any type of chest",
+    "every time you open or break a chest, there’s a small chance that you’ll get a treasure reward"
+   ]
+  }
+ ],
+ "text": [
+  "NOTICIAS DEL JUEGO / MÁS POLVO DE ESPÍRITUS Y PE",
+  "¡TE ESPERA UN MONTÓN DE BOTÍN PARA SAQUEAR!",
+  "DOBLE POLVO DE ESPÍRITUS Y PE, ADEMÁS DE COFRES DE ESPÍRITUS POTENCIADOS Y CARTELES DE SE BUSCA DE ESPÍRITUS.",
+  "¡DOBLE PE / EN FORTNITE!",
+  "DOBLE / POLVO DE ESPÍRITUS Y PE",
+  "POTENCIADOS / COFRES DE ESPÍRITUS",
+  "TIENDA PIRATA / CUALQUIER COFRE PUEDE DARLA",
+  "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+  "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+  "¡NOTICIA NUEVA EN",
+  "FORTNITE!",
+  "ESTO DICE EL",
+  "JUEGO:",
+  "¡TE ESPERA UN",
+  "MONTÓN DE BOTÍN",
+  "PARA SAQUEAR!",
+  "DOBLE POLVO DE",
+  "ESPÍRITUS Y PE,",
+  "ADEMÁS DE COFRES",
+  "DE ESPÍRITUS POTENCIADOS",
+  "Y CARTELES DE",
+  "SE BUSCA DE",
+  "ESPÍRITUS.",
+  "O SEA: EN",
+  "TUS PARTIDAS GANAS",
+  "EL DOBLE DE",
+  "POLVO DE ESPÍRITUS",
+  "Y EL DOBLE",
+  "DE PE.",
+  "Y HAY COFRES",
+  "DE ESPÍRITUS POTENCIADOS,",
+  "Y RECUERDA: CUALQUIER",
+  "COFRE QUE ABRAS",
+  "EN BATTLE ROYALE",
+  "O CERO CONSTRUCCIÓN",
+  "PUEDE DARTE LA",
+  "TIENDA PIRATA.",
+  "¿YA LO APROVECHASTE?",
+  "¡CUÉNTAME EN LOS",
+  "COMENTARIOS!",
+  "USA EL CÓDIGO",
+  "BAD EN LA",
+  "TIENDA DE OBJETOS.",
+  "LE AYUDA MUCHÍSIMO",
+  "AL CANAL.",
+  "¡GRACIAS POR VER!",
+  "SÍGUENOS PARA MÁS",
+  "CONTENIDO DIARIO.",
+  "#EPICPARTNER",
+  "LA TIENDITA BAD"
+ ]
+}

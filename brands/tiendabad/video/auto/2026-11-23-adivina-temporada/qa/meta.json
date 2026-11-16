@@ -1,0 +1,76 @@
+{
+ "duration": 27,
+ "caption": "#EpicPartner Adivina la temporada 👀 Solo los verdaderos OG aciertan las 3\n¿Cuántas acertaste? 👇\nUsa el código BAD en la tienda de objetos 💛\n#fortnite #fortniteog #adivinalatemporada",
+ "claims": [
+  {
+   "text": "Diseñador de envoltorios: Capítulo 2, Temporada 7",
+   "source": "CID_A_142_Athena_Commando_M_Pliant.json",
+   "match": [
+    "Diseñador de envoltorios",
+    "\"chapter\": \"2\"",
+    "\"season\": \"7\""
+   ]
+  },
+  {
+   "text": "Sobrenombre: Capítulo 1, Temporada 5",
+   "source": "CID_171_Athena_Commando_M_SharpDresser.json",
+   "match": [
+    "Sobrenombre",
+    "\"chapter\": \"1\"",
+    "\"season\": \"5\""
+   ]
+  },
+  {
+   "text": "Soñador somnoliento: Capítulo 6, Temporada 5",
+   "source": "Character_SleepyUni.json",
+   "match": [
+    "Soñador somnoliento",
+    "\"chapter\": \"6\"",
+    "\"season\": \"5\""
+   ]
+  }
+ ],
+ "text": [
+  "DISEÑADOR DE ENVOLTORIOS",
+  "SOBRENOMBRE",
+  "SOÑADOR SOMNOLIENTO",
+  "?",
+  "ADIVINA LA TEMPORADA / 3 SKINS · SIN TRAMPA",
+  "1 / 3",
+  "CUENTA",
+  "CAPÍTULO 2 · TEMPORADA 7",
+  "¿QUÉ TEMPORADA?",
+  "2 / 3",
+  "CAPÍTULO 1 · TEMPORADA 5",
+  "3 / 3",
+  "CAPÍTULO 6 · TEMPORADA 5",
+  "¿CUÁNTAS / ACERTASTE?",
+  "¡ADIVINA LA TEMPORADA!",
+  "SOLO LOS VERDADEROS",
+  "OG ACIERTAN LAS",
+  "TRES.",
+  "DISEÑADOR DE ENVOLTORIOS.",
+  "¡CAPÍTULO 2,",
+  "TEMPORADA 7!",
+  "SOBRENOMBRE.",
+  "¡CAPÍTULO 1,",
+  "TEMPORADA 5!",
+  "SOÑADOR SOMNOLIENTO.",
+  "¡CAPÍTULO 6,",
+  "¿CUÁNTAS ACERTASTE?",
+  "DÍMELO EN LOS",
+  "COMENTARIOS.",
+  "USA EL CÓDIGO",
+  "BAD EN LA",
+  "TIENDA DE OBJETOS.",
+  "LE AYUDA MUCHÍSIMO",
+  "AL CANAL.",
+  "¡GRACIAS POR VER!",
+  "SÍGUENOS PARA MÁS",
+  "CONTENIDO DIARIO.",
+  "#EPICPARTNER",
+  "LA TIENDITA BAD",
+  "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+  "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO"
+ ]
+}

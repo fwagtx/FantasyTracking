@@ -324,6 +324,25 @@
    "format": "LONG",
    "topic": "La tienda de la semana (16 nov): lo que llegó el 16 (Shohei Ohtani, Verano en Gotham City, Harley e Ivy, Hatsune Miku, Glitch) y en la semana (Lil Uzi Vert, Buggy, Speedy pirata, Capitana Hatsune Miku, Golf GTI, Rivian R1S), top 5 de ahorro en lotes, regresos OG de la semana, lo que se va y lo que se queda hasta diciembre",
    "folder": "video/long/2026-11-16-tienda-semana"
+  },
+  {
+   "date": "2026-11-16",
+   "slot": "13:00",
+   "format": "Noticia del juego",
+   "topic": "Más polvo de espíritus y PE (doble polvo de espíritus y PE, cofres de espíritus potenciados, carteles de Se busca de espíritus) + cualquier cofre puede dar la Tienda Pirata",
+   "folder": "video/auto/2026-11-16-noticia-polvo-espiritus"
+  },
+  {
+   "date": "2026-11-23",
+   "slot": "20:30",
+   "format": "Adivina la temporada",
+   "topic": "Diseñador de envoltorios (C2 T7), Sobrenombre (C1 T5), Soñador somnoliento (C6 T5)",
+   "folder": "video/auto/2026-11-23-adivina-temporada",
+   "ids": [
+    "CID_A_142_Athena_Commando_M_Pliant",
+    "CID_171_Athena_Commando_M_SharpDresser",
+    "Character_SleepyUni"
+   ]
   }
  ]
 }
