@@ -1,0 +1,595 @@
+{
+ "duration": 266.3,
+ "caption": "#EpicPartner La tienda de Fortnite de la semana (16 de noviembre) 🛒 Lo que llegó, las 5 mejores ofertas, los regresos OG y lo que se va pronto.\n¿Qué te llevarías? 👇\nUsa el código BAD en la tienda de objetos 💛\n#Fortnite #TiendaFortnite #FortniteEspañol",
+ "claims": [
+  {
+   "text": "Shohei Ohtani y Shohei samurái: 1500 cada uno, del 16 al 20 nov",
+   "source": "shop.json",
+   "match": [
+    "\"regularPrice\": 1500, \"finalPrice\": 1500, \"devName\": \"[VIRTUAL]1 x Shohei Ohtani for 1500 MtxCurrency\", \"offerId\": \"v2:/8fada8a3eaac268e1359234c3d5cf865d264275d5978be8750ddd25e8b0f25f5\", \"inDate\": \"2026-11-16T00:00:00Z\", \"outDate\": \"2026-11-20T23:59:59.999Z\"",
+    "\"regularPrice\": 1500, \"finalPrice\": 1500, \"devName\": \"[VIRTUAL]1 x Samurai Shohei for 1500 MtxCurrency\", \"offerId\": \"v2:/a5e81d32c05c56a9091f96a5b5821d82b5d4efbfb6f6d3c243d376f1540fda79\", \"inDate\": \"2026-11-16T00:00:00Z\", \"outDate\": \"2026-11-20T23:59:59.999Z\"",
+    "\"name\": \"Shohei Ohtani\"",
+    "\"name\": \"Shohei samurái\""
+   ]
+  },
+  {
+   "text": "Shohei Ohtani no salía desde el 5 de mayo de 2026",
+   "source": "cosmetics.json",
+   "match": [
+    "\"name\": \"Shohei Ohtani\", \"description\": \"Los récords están para batirlos. \", \"type\": {\"value\": \"outfit\", \"displayValue\": \"Atuendo\", \"backendValue\": \"AthenaCharacter\"}, \"rarity\": {\"value\": \"icon\", \"displayValue\": \"Serie de ídolos\", \"backendValue\": \"EFortRarity::Epic\"}, \"series\": {\"value\": \"Serie de ídolos\", \"image\": \"https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png\", \"colors\": [\"5cf2f3ff\", \"2bc9caff\", \"004c71ff\", \"025253ff\", \"000f2bff\"], \"backendValue\": \"CreatorCollabSeries\"}, \"set\": {\"value\": \"Shohei Ohtani\", \"text\": \"Pieza del conjunto Shohei Ohtani.\", \"backendValue\": \"StandingDesk\"}, \"introduction\": {\"chapter\": \"6\", \"season\": \"2\", \"text\": \"Introducido en Capítulo 6, Temporada 2.",
+    "\"2026-05-05T00:00:00Z\", \"2026-11-16T00:00:00Z\""
+   ]
+  },
+  {
+   "text": "Lote Shohei Ohtani: los dos atuendos con picos, gestos y mochilas, 2800 en vez de 6100, llegó el 16 nov",
+   "source": "shop.json",
+   "match": [
+    "\"regularPrice\": 6100, \"finalPrice\": 2800, \"devName\": \"[VIRTUAL]1 x Shohei Ohtani, 1 x Samurai Shohei, 1 x Trusty Two-Way, 1 x Baseball Batana, 1 x Doggy Dingers, 1 x Hey Batter Batter, 1 x Decoy, 1 x Samurai Screamer for -1 MtxCurrency\", \"offerId\": \"v2:/2611179f569c1e055d7d4768296b538888c53dcb2cc1c63e87562a196403a4b4\", \"inDate\": \"2026-11-16T00:00:00Z\", \"outDate\": \"2026-11-20T23:59:59.999Z\", \"bundle\": {\"name\": \"Lote Shohei Ohtani\"",
+    "\"name\": \"Lanzador doble\"",
+    "\"name\": \"Katana de béisbol\"",
+    "\"name\": \"Lanzamiento can-tástico\"",
+    "\"name\": \"Sueña a lo grande\"",
+    "\"name\": \"Decoy\"",
+    "\"name\": \"Lanzamiento samurái\""
+   ]
+  },
+  {
+   "text": "Batman playero y Catwoman costera: 1500 cada uno",
+   "source": "shop.json",
+   "match": [
+    "\"regularPrice\": 1500, \"finalPrice\": 1500, \"devName\": \"[VIRTUAL]1 x Beach Bod Batman, 1 x Batman Floatie for -1 MtxCurrency\", \"offerId\": \"v2:/8f2d26861c0be571e288576faf3d1e6bfb189eb1aaa486a29714c1f6ec215d50\", \"inDate\": \"2026-11-16T00:00:00Z\", \"outDate\": \"2026-11-20T23:59:59.999Z\"",
+    "\"regularPrice\": 1500, \"finalPrice\": 1500, \"devName\": \"[VIRTUAL]1 x Coastal Catwoman, 1 x Riptide Claws for -1 MtxCurrency\", \"offerId\": \"v2:/e9218dc39025e8833d03fc5a2420cf5aa7c11f2df94dee15f296a64bd2a3c4b6\", \"inDate\": \"2026-11-16T00:00:00Z\", \"outDate\": \"2026-11-20T23:59:59.999Z\"",
+    "\"name\": \"Batman playero\"",
+    "\"name\": \"Catwoman costera\""
+   ]
+  },
+  {
+   "text": "Lote Verano en Gotham City: los dos con el compañero As el Batsabueso, 3000 en vez de 6900",
+   "source": "shop.json",
+   "match": [
+    "\"regularPrice\": 6900, \"finalPrice\": 3000, \"devName\": \"[VIRTUAL]1 x Beach Bod Batman, 1 x Batman Floatie, 1 x Coastal Catwoman, 1 x Riptide Claws, 1 x Ace the Bat-Hound, 1 x Beach Bats, 1 x Surf's Up!, 1 x Batman Paddle, 1 x Selina's Treasure Tote for -1 MtxCurrency\", \"offerId\": \"v2:/56368ee1272f0b7632ceb08af0b505737f448df7fac3234195955961afb98549\", \"inDate\": \"2026-11-16T00:00:00Z\", \"outDate\": \"2026-11-20T23:59:59.999Z\", \"bundle\": {\"name\": \"Lote Verano en Gotham City\"",
+    "\"name\": \"As el Batsabueso\"",
+    "\"value\": \"sidekick\", \"displayValue\": \"Compañero\""
+   ]
+  },
+  {
+   "text": "Harley veraniega e Ivy botánica: 1500 cada una; su lote 2300 en vez de 4300",
+   "source": "shop.json",
+   "match": [
+    "\"regularPrice\": 1500, \"finalPrice\": 1500, \"devName\": \"[VIRTUAL]1 x High Tide Harley, 1 x Harley Floatie for -1 MtxCurrency\", \"offerId\": \"v2:/d40d2f42039b939d0fb1955b93b5b376ad581e389aa7d5408170041b8b7be699\", \"inDate\": \"2026-11-16T00:00:00Z\", \"outDate\": \"2026-11-20T23:59:59.999Z\"",
+    "\"regularPrice\": 1500, \"finalPrice\": 1500, \"devName\": \"[VIRTUAL]1 x Chlorophyll Ivy, 1 x Lily Lounger for -1 MtxCurrency\", \"offerId\": \"v2:/833d34ed131db6ee888babcf61ff2605d918c86de111c31ebf61240f25bf38ca\", \"inDate\": \"2026-11-16T00:00:00Z\", \"outDate\": \"2026-11-20T23:59:59.999Z\"",
+    "\"regularPrice\": 4300, \"finalPrice\": 2300, \"devName\": \"[VIRTUAL]1 x High Tide Harley, 1 x Harley Floatie, 1 x Chlorophyll Ivy, 1 x Lily Lounger, 1 x Summer Snapper, 1 x Carnation of Carnage, 1 x Harley's Boogie Bat for -1 MtxCurrency\", \"offerId\": \"v2:/5145d90e956080db143caf776b175ec432c918e0827f0929f394ef437a7cf382\", \"inDate\": \"2026-11-16T00:00:00Z\", \"outDate\": \"2026-11-20T23:59:59.999Z\", \"bundle\": {\"name\": \"Lote Harley veraniega y Ivy botánica\"",
+    "\"name\": \"Harley veraniega\"",
+    "\"name\": \"Ivy botánica\""
+   ]
+  },
+  {
+   "text": "Hatsune Miku: 1500; Lote Hatsune Miku 3200 en vez de 5200",
+   "source": "shop.json",
+   "match": [
+    "\"regularPrice\": 1500, \"finalPrice\": 1500, \"devName\": \"[VIRTUAL]1 x Hatsune Miku, 1 x Pack-sune Miku for -1 MtxCurrency\", \"offerId\": \"v2:/9eb16da04751091286f0c7320a1825f629286df8289facd203cec7bb99e732f5\", \"inDate\": \"2026-11-16T00:00:00Z\", \"outDate\": \"2026-11-20T23:59:59.999Z\"",
+    "\"regularPrice\": 5200, \"finalPrice\": 3200, \"devName\": \"[VIRTUAL]1 x Hatsune Miku, 1 x Pack-sune Miku, 1 x Miku Live, 1 x Miku Miku Beam, 1 x Miku Light, 1 x TBD (SID_Placeholder_481), 1 x Miku's Beat Drums, 1 x Miku's Beat Drums, 1 x Miku's Beat Drums, 1 x Hatsune's Mic-u, 1 x Hatsune's Mic-u, 1 x Hatsune's Mic-u for -1 MtxCurrency\", \"offerId\": \"v2:/1dc977f960ac817c58392575a813fae1c438f8ed7cd5ec7f3eeeaf4ba90bdeed\", \"inDate\": \"2026-11-16T00:00:00Z\", \"outDate\": \"2026-11-20T23:59:59.999Z\", \"bundle\": {\"name\": \"Lote Hatsune Miku\"",
+    "\"name\": \"Hatsune Miku\""
+   ]
+  },
+  {
+   "text": "Hatsune Miku regresó el 16 nov",
+   "source": "cosmetics.json",
+   "match": [
+    "\"name\": \"Hatsune Miku\", \"description\": \"Una cantante virtual y un ídolo cultural.\", \"type\": {\"value\": \"outfit\", \"displayValue\": \"Atuendo\", \"backendValue\": \"AthenaCharacter\"}, \"rarity\": {\"value\": \"icon\", \"displayValue\": \"Serie de ídolos\", \"backendValue\": \"EFortRarity::Epic\"}, \"series\": {\"value\": \"Serie de ídolos\", \"image\": \"https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png\", \"colors\": [\"5cf2f3ff\", \"2bc9caff\", \"004c71ff\", \"025253ff\", \"000f2bff\"], \"backendValue\": \"CreatorCollabSeries\"}, \"set\": {\"value\": \"Hatsune Miku\", \"text\": \"Pieza del conjunto Hatsune Miku.\", \"backendValue\": \"LifeForce\"}, \"introduction\": {\"chapter\": \"6\", \"season\": \"1\", \"text\": \"Introducido en Capítulo 6, Temporada 1.",
+    "\"2026-09-13T00:00:00Z\", \"2026-11-16T00:00:00Z\""
+   ]
+  },
+  {
+   "text": "Glitch: 1500; Lote Casillero Glitch de Candywing 2800 en vez de 4500; los dos se van el 18 nov",
+   "source": "shop.json",
+   "match": [
+    "\"regularPrice\": 1500, \"finalPrice\": 1500, \"devName\": \"[VIRTUAL]1 x Glitch, 1 x Signal Sever, 1 x Scanlight for -1 MtxCurrency\", \"offerId\": \"v2:/97301f2c4289fb193b823f2c13d497dd1b2ba04f3242266ec191d5e0c4297304\", \"inDate\": \"2026-11-16T00:00:00Z\", \"outDate\": \"2026-11-18T23:59:59.999Z\"",
+    "\"regularPrice\": 4500, \"finalPrice\": 2800, \"devName\": \"[VIRTUAL]1 x Glitch, 1 x Signal Sever, 1 x Scanlight, 1 x Bucky Bat, 1 x Sail Shark, 1 x Sprout of Tune, 1 x Flowerprint for -1 MtxCurrency\", \"offerId\": \"v2:/2c6dea8fdf70a3fa365ec145153e0b8c7b9127e64a80840e7258a099d64914ca\", \"inDate\": \"2026-11-16T00:00:00Z\", \"outDate\": \"2026-11-18T23:59:59.999Z\", \"bundle\": {\"name\": \"Lote Casillero Glitch de Candywing\"",
+    "\"name\": \"Glitch\""
+   ]
+  },
+  {
+   "text": "Lil Uzi Vert y Lil Uzi Vert de gira: 1500 cada uno; su lote, desde el 13 nov, 3200 en vez de 7100, hasta el 12 dic",
+   "source": "shop.json",
+   "match": [
+    "\"regularPrice\": 1500, \"finalPrice\": 1500, \"devName\": \"[VIRTUAL]1 x Lil Uzi Vert, 1 x Uzi's Wings for -1 MtxCurrency\", \"offerId\": \"v2:/c1c469b1cd292d375109466b840d0801b409897a9c59766ece261cb586a60a2d\", \"inDate\": \"2026-11-13T00:00:00Z\", \"outDate\": \"2026-12-12T23:59:59.999Z\"",
+    "\"regularPrice\": 1500, \"finalPrice\": 1500, \"devName\": \"[VIRTUAL]1 x Pink Star Lil Uzi Vert, 1 x Lil Uzi Star for -1 MtxCurrency\", \"offerId\": \"v2:/26f08b744f58ef13c0939c11f467de60498f568986a42b59eb7fcc02b8f17e34\", \"inDate\": \"2026-11-13T00:00:00Z\", \"outDate\": \"2026-12-12T23:59:59.999Z\"",
+    "\"regularPrice\": 7100, \"finalPrice\": 3200, \"devName\": \"[VIRTUAL]1 x Lil Uzi Vert, 1 x Uzi's Wings, 1 x Pink Star Lil Uzi Vert, 1 x Lil Uzi Star, 1 x Picco-Axe, 1 x XO Tour Llif3, 1 x What You Saying, 1 x Uzi's Tour Guitar, 1 x Uzi's Tour Guitar, 1 x Uzi's Tour Guitar, 1 x Vans x Lil Uzi Vert LX Old Skool 36, 1 x Uzi On Tour, 1 x Cap'n Lil Uzi Vert for -1 MtxCurrency\", \"offerId\": \"v2:/68cd6682741636a3ab0b9fae18d0823e04b5975570fc8a58c519e11af496c0f5\", \"inDate\": \"2026-11-13T00:00:00Z\", \"outDate\": \"2026-12-12T23:59:59.999Z\", \"bundle\": {\"name\": \"Lote de Lil' Uzi Vert\"",
+    "\"name\": \"Lil Uzi Vert\"",
+    "\"name\": \"Lil Uzi Vert de gira\""
+   ]
+  },
+  {
+   "text": "Buggy: 1600, de One Piece, hasta el 5 dic; Speedy pirata: 1500, de IShowSpeed; su lote 1800 en vez de 2700, hasta el 20 nov",
+   "source": "shop.json",
+   "match": [
+    "\"regularPrice\": 1600, \"finalPrice\": 1600, \"devName\": \"[VIRTUAL]1 x Buggy, 1 x Buggy's Coat, 1 x Buggy Knives for -1 MtxCurrency\", \"offerId\": \"v2:/4431d4a16bd18c613e3ed16fe0c7f5485adb651a7545d313c8d36fae43ab2963\", \"inDate\": \"2026-11-14T00:00:00Z\", \"outDate\": \"2026-12-05T23:59:59.999Z\"",
+    "\"regularPrice\": 1500, \"finalPrice\": 1500, \"devName\": \"[VIRTUAL]1 x PIRATE SPEEDY, 1 x Speed's Coin for -1 MtxCurrency\", \"offerId\": \"v2:/8f3f0d549b18cabd14b41a8866f1b23c6d255cd4787392ddb2c11a5ad0863a52\", \"inDate\": \"2026-11-14T00:00:00Z\", \"outDate\": \"2026-11-20T23:59:59.999Z\"",
+    "\"regularPrice\": 2700, \"finalPrice\": 1800, \"devName\": \"[VIRTUAL]1 x PIRATE SPEEDY, 1 x Speed's Coin, 1 x Speed's Pirate Blade, 1 x IShowFlip for -1 MtxCurrency\", \"offerId\": \"v2:/18087c92999824c4238cf291477c8bc11b955bd7ea015e7410d44543f9d51863\", \"inDate\": \"2026-11-14T00:00:00Z\", \"outDate\": \"2026-11-20T23:59:59.999Z\", \"bundle\": {\"name\": \"Lote Speedy pirata\"",
+    "\"name\": \"Moneda de IShowSpeed\""
+   ]
+  },
+  {
+   "text": "Buggy y Speedy pirata llegaron a la tienda por primera vez el 14 nov; Buggy es del set One Piece, Speedy pirata del set IShowSpeed",
+   "source": "cosmetics.json",
+   "match": [
+    "\"name\": \"Buggy\", \"description\": \"El extravagante presidente de Cross Guild.\", \"type\": {\"value\": \"outfit\", \"displayValue\": \"Atuendo\", \"backendValue\": \"AthenaCharacter\"}, \"rarity\": {\"value\": \"epic\", \"displayValue\": \"Épico\", \"backendValue\": \"EFortRarity::Epic\"}, \"set\": {\"value\": \"One Piece\", \"text\": \"Pieza del conjunto One Piece.\", \"backendValue\": \"FrailShark\"}, \"introduction\": {\"chapter\": \"7\", \"season\": \"5\", \"text\": \"Introducido en Capítulo 7, Temporada 5.",
+    "\"name\": \"Speedy pirata\", \"description\": \"¡DÁMELO!\", \"type\": {\"value\": \"outfit\", \"displayValue\": \"Atuendo\", \"backendValue\": \"AthenaCharacter\"}, \"rarity\": {\"value\": \"icon\", \"displayValue\": \"Serie de ídolos\", \"backendValue\": \"EFortRarity::Epic\"}, \"series\": {\"value\": \"Serie de ídolos\", \"image\": \"https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png\", \"colors\": [\"5cf2f3ff\", \"2bc9caff\", \"004c71ff\", \"025253ff\", \"000f2bff\"], \"backendValue\": \"CreatorCollabSeries\"}, \"set\": {\"value\": \"IShowSpeed\", \"text\": \"Pieza del conjunto IShowSpeed.\", \"backendValue\": \"LimeWork\"}, \"introduction\": {\"chapter\": \"7\", \"season\": \"5\", \"text\": \"Introducido en Capítulo 7, Temporada 5.",
+    "\"shopHistory\": [\"2026-11-14T00:00:00Z\", \"2026-11-15T00:00:00Z\", \"2026-11-16T00:00:00Z\"]",
+    "\"value\": \"One Piece\", \"text\": \"Pieza del conjunto One Piece.\"",
+    "\"value\": \"IShowSpeed\", \"text\": \"Pieza del conjunto IShowSpeed.\""
+   ]
+  },
+  {
+   "text": "Capitana Hatsune Miku: por primera vez el 15 nov",
+   "source": "cosmetics.json",
+   "match": [
+    "\"name\": \"Capitana Hatsune Miku\"",
+    "\"shopHistory\": [\"2026-11-15T00:00:00Z\", \"2026-11-16T00:00:00Z\"]"
+   ]
+  },
+  {
+   "text": "Capitana Hatsune Miku con su mochila 1500; con todo su conjunto 2200 en vez de 4100; hasta el 14 dic",
+   "source": "shop.json",
+   "match": [
+    "\"regularPrice\": 1500, \"finalPrice\": 1500, \"devName\": \"[VIRTUAL]1 x Cap'n Hatsune Miku, 1 x Miku's Treasure for -1 MtxCurrency\", \"offerId\": \"v2:/5ea51a4ed7e22ba02c8c0417c9bfde7a0feeff7a96711171f8dc1e4660641288\", \"inDate\": \"2026-11-15T00:00:00Z\", \"outDate\": \"2026-12-14T23:59:59.999Z\"",
+    "\"regularPrice\": 4100, \"finalPrice\": 2200, \"devName\": \"[VIRTUAL]1 x Cap'n Hatsune Miku, 1 x Miku's Treasure, 1 x Miku's Anchor Floatie, 1 x Miku Miku ni Shite Ageru♪, 1 x Miku's Mic, 1 x Miku's Mic, 1 x Miku's Mic, 1 x TBD (SID_Placeholder_991) for -1 MtxCurrency\", \"offerId\": \"v2:/8f114946b8d166af6a3f7ae3ed7b1ae75c6a1e9c1d9508c258080c01d88a2365\", \"inDate\": \"2026-11-15T00:00:00Z\", \"outDate\": \"2026-12-14T23:59:59.999Z\"",
+    "\"name\": \"Tesoro de Miku\""
+   ]
+  },
+  {
+   "text": "Volkswagen Golf GTI: 2000, del 14 al 23 nov; Rivian R1S: 2000, del 13 al 19 nov",
+   "source": "shop.json",
+   "match": [
+    "\"regularPrice\": 2000, \"finalPrice\": 2000, \"devName\": \"[VIRTUAL]1 x Blank, 1 x Blank, 1 x Blank, 1 x Blank, 1 x Blank, 1 x Blank, 1 x Blank, 1 x Blank, 1 x Blank, 1 x Blank, 1 x Blank, 1 x Blank, 1 x Blank, 1 x Blank, 1 x Blank, 1 x Blank, 1 x Blank, 1 x Blank, 1 x Blank, 1 x Blank, 1 x Blank for -1 MtxCurrency\", \"offerId\": \"v2:/ca1b447468da0055616c833bd944faf76725874c2c5ce6c168b567ee77ef30ec\", \"inDate\": \"2026-11-14T00:00:00Z\", \"outDate\": \"2026-11-23T23:59:59.999Z\", \"bundle\": {\"name\": \"Volkswagen Golf GTI\"",
+    "\"regularPrice\": 2000, \"finalPrice\": 2000, \"devName\": \"[VIRTUAL]1 x R.A.D., 1 x Rivian R1S, 1 x Air Jordan 6 \"Infrared\", 1 x Air Jordan 4 \"White Cement\", 1 x Flames, 1 x Lightning, 1 x Stripes, 1 x Wings, 1 x Rivian R1S for -1 MtxCurrency\", \"offerId\": \"v2:/f1a22849b54a908afce3a6ce555f9f3ef3919490dfd5c8af022a49e0f4a4f45a\", \"inDate\": \"2026-11-13T00:00:00Z\", \"outDate\": \"2026-11-19T23:59:59.999Z\", \"bundle\": {\"name\": \"Rivian R1S\""
+   ]
+  },
+  {
+   "text": "Top 5 de ahorro en los lotes: A$AP Rocky 5600, One Piece 4200, Lil' Uzi Vert 3900, Verano en Gotham City 3900, Shohei Ohtani 3300",
+   "source": "shop.json",
+   "match": [
+    "\"regularPrice\": 8800, \"finalPrice\": 3200, \"devName\": \"[VIRTUAL]1 x Shirthead Flacko, 1 x Hi-Fi Jets, 1 x Rocky Rugahand, 1 x A$AP ROCKY X PUMA Suede 94 ‘Black/White', 1 x Flacko's Chopper, 1 x A$AP's Gauntlets, 1 x A$AP Rockets, 1 x Helicopter, 1 x RIOT (Rowdy Pipe'n), 1 x A$AP ROCKY X PUMA Straycat V6 ‘Red Flash/Black', 1 x Message From Flacko, 1 x Rocky's BOOM Mic, 1 x Rocky's BOOM Mic, 1 x Rocky's BOOM Mic for -1 MtxCurrency\", \"offerId\": \"v2:/ec90ad43e5988096783782d40bdb9acbcc89434bc8b19dc96f88623195ad1fd6\", \"inDate\": \"2026-11-06T00:00:00Z\", \"outDate\": \"2026-12-06T23:59:59.999Z\", \"bundle\": {\"name\": \"Lote A$AP Rocky\"",
+    "\"regularPrice\": 8200, \"finalPrice\": 4000, \"devName\": \"[VIRTUAL]1 x Monkey D. Luffy, 1 x Luffy's Straw Hat, 1 x Gum-Gum Pistol, 1 x Multi-Punches Flex, 1 x Nami, 1 x Nami's Tangerines, 1 x Climate Baton, 1 x Usopp, 1 x Usopp's Kit, 1 x 5 Ton Hammer, 1 x Going Merry, 1 x Roasted Meat, 1 x Giant Meat on the Bone, 1 x Straw Hat Guitar, 1 x Straw Hat Guitar, 1 x Straw Hat Guitar for -1 MtxCurrency\", \"offerId\": \"v2:/d1494d827b8bb4c05bdf8c0d974c4a79129ab66baf6d85df762034b79f017f03\", \"inDate\": \"2026-11-01T00:00:00Z\", \"outDate\": \"2026-12-05T23:59:59.999Z\", \"bundle\": {\"name\": \"Lote One Piece\"",
+    "\"regularPrice\": 7100, \"finalPrice\": 3200, \"devName\": \"[VIRTUAL]1 x Lil Uzi Vert, 1 x Uzi's Wings, 1 x Pink Star Lil Uzi Vert, 1 x Lil Uzi Star, 1 x Picco-Axe, 1 x XO Tour Llif3, 1 x What You Saying, 1 x Uzi's Tour Guitar, 1 x Uzi's Tour Guitar, 1 x Uzi's Tour Guitar, 1 x Vans x Lil Uzi Vert LX Old Skool 36, 1 x Uzi On Tour, 1 x Cap'n Lil Uzi Vert for -1 MtxCurrency\", \"offerId\": \"v2:/68cd6682741636a3ab0b9fae18d0823e04b5975570fc8a58c519e11af496c0f5\", \"inDate\": \"2026-11-13T00:00:00Z\", \"outDate\": \"2026-12-12T23:59:59.999Z\", \"bundle\": {\"name\": \"Lote de Lil' Uzi Vert\"",
+    "\"regularPrice\": 6900, \"finalPrice\": 3000, \"devName\": \"[VIRTUAL]1 x Beach Bod Batman, 1 x Batman Floatie, 1 x Coastal Catwoman, 1 x Riptide Claws, 1 x Ace the Bat-Hound, 1 x Beach Bats, 1 x Surf's Up!, 1 x Batman Paddle, 1 x Selina's Treasure Tote for -1 MtxCurrency\", \"offerId\": \"v2:/56368ee1272f0b7632ceb08af0b505737f448df7fac3234195955961afb98549\", \"inDate\": \"2026-11-16T00:00:00Z\", \"outDate\": \"2026-11-20T23:59:59.999Z\", \"bundle\": {\"name\": \"Lote Verano en Gotham City\"",
+    "\"regularPrice\": 6100, \"finalPrice\": 2800, \"devName\": \"[VIRTUAL]1 x Shohei Ohtani, 1 x Samurai Shohei, 1 x Trusty Two-Way, 1 x Baseball Batana, 1 x Doggy Dingers, 1 x Hey Batter Batter, 1 x Decoy, 1 x Samurai Screamer for -1 MtxCurrency\", \"offerId\": \"v2:/2611179f569c1e055d7d4768296b538888c53dcb2cc1c63e87562a196403a4b4\", \"inDate\": \"2026-11-16T00:00:00Z\", \"outDate\": \"2026-11-20T23:59:59.999Z\", \"bundle\": {\"name\": \"Lote Shohei Ohtani\""
+   ],
+   "visual": "ranking computed from every bundle in the full 2026-11-16 shop (no other bundle saves 3300 or more)"
+  },
+  {
+   "text": "Lote One Piece trae a Luffy, Nami y Usopp; Lote A$AP Rocky trae a Flacko Helicopter y Rocky Rugahand",
+   "source": "shop.json",
+   "match": [
+    "\"name\": \"Monkey D. Luffy\"",
+    "\"name\": \"Nami\"",
+    "\"name\": \"Usopp\"",
+    "\"name\": \"Flacko Helicopter\"",
+    "\"name\": \"Rocky Rugahand\""
+   ]
+  },
+  {
+   "text": "Superador: Capítulo 1, Temporada 5; volvió el 10 nov tras 202 días (22 abr); estuvo del 10 al 16 nov",
+   "source": "cosmetics.json",
+   "match": [
+    "\"name\": \"Superador\", \"description\": \"Termina con la competencia.\", \"type\": {\"value\": \"outfit\", \"displayValue\": \"Atuendo\", \"backendValue\": \"AthenaCharacter\"}, \"rarity\": {\"value\": \"epic\", \"displayValue\": \"Épico\", \"backendValue\": \"EFortRarity::Epic\"}, \"set\": {\"value\": \"Punto de fuga\", \"text\": \"Pieza del conjunto Punto de fuga.\", \"backendValue\": \"StreetRacerWhite\"}, \"introduction\": {\"chapter\": \"1\", \"season\": \"5\", \"text\": \"Introducido en Capítulo 1, Temporada 5.",
+    "\"2026-04-22T00:00:00Z\", \"2026-11-10T00:00:00Z\", \"2026-11-11T00:00:00Z\", \"2026-11-12T00:00:00Z\", \"2026-11-13T00:00:00Z\", \"2026-11-14T00:00:00Z\", \"2026-11-15T00:00:00Z\", \"2026-11-16T00:00:00Z\""
+   ]
+  },
+  {
+   "text": "Superador se va el 16 nov (1500)",
+   "source": "shop.json",
+   "match": [
+    "\"regularPrice\": 1500, \"finalPrice\": 1500, \"devName\": \"[VIRTUAL]1 x Overtaker, 1 x Lane Splitter for -1 MtxCurrency\", \"offerId\": \"v2:/1a94bffb5706606213fbb6341ac39c79f17e0578bfef7594bc11261bd57f3951\", \"inDate\": \"2026-11-10T00:00:00Z\", \"outDate\": \"2026-11-16T23:59:59.999Z\""
+   ]
+  },
+  {
+   "text": "Arquetipo: Capítulo 1, Temporada 5; volvió el 11 nov tras 89 días, solo 11 y 12 nov",
+   "source": "cosmetics.json",
+   "match": [
+    "\"name\": \"Arquetipo\", \"description\": \"Diseñado para el rendimiento en combate.\", \"type\": {\"value\": \"outfit\", \"displayValue\": \"Atuendo\", \"backendValue\": \"AthenaCharacter\"}, \"rarity\": {\"value\": \"epic\", \"displayValue\": \"Épico\", \"backendValue\": \"EFortRarity::Epic\"}, \"set\": {\"value\": \"Arquetipo\", \"text\": \"Pieza del conjunto Arquetipo.\", \"backendValue\": \"ModernMilitary\"}, \"introduction\": {\"chapter\": \"1\", \"season\": \"5\", \"text\": \"Introducido en Capítulo 1, Temporada 5.",
+    "\"2026-08-14T00:00:00Z\", \"2026-11-11T00:00:00Z\", \"2026-11-12T00:00:00Z\"]"
+   ]
+  },
+  {
+   "text": "Aracne (129 días) y Chaqueta orejuda (102 días, solo el 13 nov): Capítulo 1, Temporada 6",
+   "source": "cosmetics.json",
+   "match": [
+    "\"name\": \"Aracne\", \"description\": \"Teje una telaraña hacia la victoria.\", \"type\": {\"value\": \"outfit\", \"displayValue\": \"Atuendo\", \"backendValue\": \"AthenaCharacter\"}, \"rarity\": {\"value\": \"legendary\", \"displayValue\": \"Legendario\", \"backendValue\": \"EFortRarity::Legendary\"}, \"set\": {\"value\": \"Arácnida\", \"text\": \"Pieza del conjunto Arácnida.\", \"backendValue\": \"BlackWidow\"}, \"introduction\": {\"chapter\": \"1\", \"season\": \"6\", \"text\": \"Introducido en Capítulo 1, Temporada 6.",
+    "\"name\": \"Chaqueta orejuda\", \"description\": \"No sabe si le gustan más los panqueques o la victoria.\", \"type\": {\"value\": \"outfit\", \"displayValue\": \"Atuendo\", \"backendValue\": \"AthenaCharacter\"}, \"rarity\": {\"value\": \"epic\", \"displayValue\": \"Épico\", \"backendValue\": \"EFortRarity::Epic\"}, \"set\": {\"value\": \"Chaquetas de animales\", \"text\": \"Pieza del conjunto Chaquetas de animales.\", \"backendValue\": \"AnimalJackets\"}, \"introduction\": {\"chapter\": \"1\", \"season\": \"6\", \"text\": \"Introducido en Capítulo 1, Temporada 6.",
+    "\"2026-07-07T00:00:00Z\", \"2026-11-13T00:00:00Z\"",
+    "\"2026-08-03T00:00:00Z\", \"2026-11-13T00:00:00Z\"]"
+   ]
+  },
+  {
+   "text": "Detective: Capítulo 1, Temporada 4; el 14 nov tras 305 días, solo ese día",
+   "source": "cosmetics.json",
+   "match": [
+    "\"name\": \"Detective\", \"description\": \"Este detective está investigando el caso.\", \"type\": {\"value\": \"outfit\", \"displayValue\": \"Atuendo\", \"backendValue\": \"AthenaCharacter\"}, \"rarity\": {\"value\": \"epic\", \"displayValue\": \"Épico\", \"backendValue\": \"EFortRarity::Epic\"}, \"set\": {\"value\": \"Acción detectivesca\", \"text\": \"Pieza del conjunto Acción detectivesca.\", \"backendValue\": \"Gumshoe\"}, \"introduction\": {\"chapter\": \"1\", \"season\": \"4\", \"text\": \"Introducido en Capítulo 1, Temporada 4.",
+    "\"2026-01-13T00:00:00Z\", \"2026-11-14T00:00:00Z\"]"
+   ]
+  },
+  {
+   "text": "Operación submarina: Capítulo 1, Temporada 2; el 15 nov tras 69 días",
+   "source": "cosmetics.json",
+   "match": [
+    "\"name\": \"Operación submarina\", \"description\": \"Sumerge de cabeza en el combate.\", \"type\": {\"value\": \"outfit\", \"displayValue\": \"Atuendo\", \"backendValue\": \"AthenaCharacter\"}, \"rarity\": {\"value\": \"rare\", \"displayValue\": \"Raro\", \"backendValue\": \"EFortRarity::Rare\"}, \"introduction\": {\"chapter\": \"1\", \"season\": \"2\", \"text\": \"Introducido en Capítulo 1, Temporada 2.",
+    "\"2026-09-07T00:00:00Z\", \"2026-11-15T00:00:00Z\""
+   ]
+  },
+  {
+   "text": "Bandolero: Capítulo 1, Temporada 4; el 16 nov tras 124 días",
+   "source": "cosmetics.json",
+   "match": [
+    "\"name\": \"Bandolero\", \"description\": \"Sin camiseta. Sin rendirse.\", \"type\": {\"value\": \"outfit\", \"displayValue\": \"Atuendo\", \"backendValue\": \"AthenaCharacter\"}, \"rarity\": {\"value\": \"epic\", \"displayValue\": \"Épico\", \"backendValue\": \"EFortRarity::Epic\"}, \"set\": {\"value\": \"Tropas tropicales\", \"text\": \"Pieza del conjunto Tropas tropicales.\", \"backendValue\": \"Bandolier\"}, \"introduction\": {\"chapter\": \"1\", \"season\": \"4\", \"text\": \"Introducido en Capítulo 1, Temporada 4.",
+    "\"2026-07-15T00:00:00Z\", \"2026-11-16T00:00:00Z\""
+   ]
+  },
+  {
+   "text": "Bandolero 1500, hasta el 20 nov",
+   "source": "shop.json",
+   "match": [
+    "\"regularPrice\": 1500, \"finalPrice\": 1500, \"devName\": \"[VIRTUAL]1 x Bandolier, 1 x Armory Bag for -1 MtxCurrency\", \"offerId\": \"v2:/5479081d09624a11f7d2e0f773f842adf9baa714f8535444c936a9c6f6104584\", \"inDate\": \"2026-11-16T00:00:00Z\", \"outDate\": \"2026-11-20T23:59:59.999Z\""
+   ]
+  },
+  {
+   "text": "16 skins se van el 16 nov a las 6 PM CDMX (00:00 UTC)",
+   "source": "plan.json",
+   "match": [
+    "\"count\": 16"
+   ]
+  },
+  {
+   "text": "Se van el 16 nov: Superador, Operación submarina, Reina Héspero, Rita dinamita, Zuri (precios en pantalla)",
+   "source": "shop.json",
+   "match": [
+    "\"regularPrice\": 1500, \"finalPrice\": 1500, \"devName\": \"[VIRTUAL]1 x Overtaker, 1 x Lane Splitter for -1 MtxCurrency\", \"offerId\": \"v2:/1a94bffb5706606213fbb6341ac39c79f17e0578bfef7594bc11261bd57f3951\", \"inDate\": \"2026-11-10T00:00:00Z\", \"outDate\": \"2026-11-16T23:59:59.999Z\"",
+    "\"regularPrice\": 1200, \"finalPrice\": 1200, \"devName\": \"[VIRTUAL]1 x Snorkel Ops for 1200 MtxCurrency\", \"offerId\": \"v2:/99a3f335fa0572bea1159eead7110d8132f7b2412f9afae13ae88c78f28281e9\", \"inDate\": \"2026-11-15T00:00:00Z\", \"outDate\": \"2026-11-16T23:59:59.999Z\"",
+    "\"regularPrice\": 1200, \"finalPrice\": 1200, \"devName\": \"[VIRTUAL]1 x Hesper King for 1200 MtxCurrency\", \"offerId\": \"v2:/3d1c5975b2080f9eba800ea9d7a8026b5179bd0a19f2579f6bb08d4c037bc80a\", \"inDate\": \"2026-11-15T00:00:00Z\", \"outDate\": \"2026-11-16T23:59:59.999Z\"",
+    "\"regularPrice\": 1200, \"finalPrice\": 1200, \"devName\": \"[VIRTUAL]1 x Razor Rae, 1 x Boom Bag for -1 MtxCurrency\", \"offerId\": \"v2:/98a21e429cfc5808fad97b66b6cb7aa63be2f97172949a80612f9c672bd239fa\", \"inDate\": \"2026-11-10T00:00:00Z\", \"outDate\": \"2026-11-16T23:59:59.999Z\"",
+    "\"regularPrice\": 1200, \"finalPrice\": 1200, \"devName\": \"[VIRTUAL]1 x Zuri, 1 x Enchanted Featherfighters, 1 x Best in the Ring for -1 MtxCurrency\", \"offerId\": \"v2:/dc1266404383296c8eff08b466a46c44e0df1837bccf682a9a7d8a3ac0793e95\", \"inDate\": \"2026-11-16T00:00:00Z\", \"outDate\": \"2026-11-16T23:59:59.999Z\""
+   ]
+  },
+  {
+   "text": "Katalina (800) y Vix (1500) se van el 17 nov; Glitch el 18",
+   "source": "shop.json",
+   "match": [
+    "\"regularPrice\": 800, \"finalPrice\": 800, \"devName\": \"[VIRTUAL]1 x Katalina for 800 MtxCurrency\", \"offerId\": \"v2:/35a30284d1337485b78f5b73e1b673f94b424273740a353dc90d255ce880c354\", \"inDate\": \"2026-11-16T00:00:00Z\", \"outDate\": \"2026-11-17T23:59:59.999Z\"",
+    "\"regularPrice\": 1500, \"finalPrice\": 1500, \"devName\": \"[VIRTUAL]1 x Vix, 1 x Whisker Pack for -1 MtxCurrency\", \"offerId\": \"v2:/98b99fa8d1519baa9cda21a68a2a1f347e835f39c66e7a7dc23ac8cf059dbb64\", \"inDate\": \"2026-11-16T00:00:00Z\", \"outDate\": \"2026-11-17T23:59:59.999Z\"",
+    "\"regularPrice\": 1500, \"finalPrice\": 1500, \"devName\": \"[VIRTUAL]1 x Glitch, 1 x Signal Sever, 1 x Scanlight for -1 MtxCurrency\", \"offerId\": \"v2:/97301f2c4289fb193b823f2c13d497dd1b2ba04f3242266ec191d5e0c4297304\", \"inDate\": \"2026-11-16T00:00:00Z\", \"outDate\": \"2026-11-18T23:59:59.999Z\""
+   ]
+  },
+  {
+   "text": "El 20 nov se van Shohei Ohtani, Verano en Gotham City, Hatsune Miku, Bandolero y Speedy pirata",
+   "source": "shop.json",
+   "match": [
+    "\"regularPrice\": 6100, \"finalPrice\": 2800, \"devName\": \"[VIRTUAL]1 x Shohei Ohtani, 1 x Samurai Shohei, 1 x Trusty Two-Way, 1 x Baseball Batana, 1 x Doggy Dingers, 1 x Hey Batter Batter, 1 x Decoy, 1 x Samurai Screamer for -1 MtxCurrency\", \"offerId\": \"v2:/2611179f569c1e055d7d4768296b538888c53dcb2cc1c63e87562a196403a4b4\", \"inDate\": \"2026-11-16T00:00:00Z\", \"outDate\": \"2026-11-20T23:59:59.999Z\", \"bundle\": {\"name\": \"Lote Shohei Ohtani\"",
+    "\"regularPrice\": 6900, \"finalPrice\": 3000, \"devName\": \"[VIRTUAL]1 x Beach Bod Batman, 1 x Batman Floatie, 1 x Coastal Catwoman, 1 x Riptide Claws, 1 x Ace the Bat-Hound, 1 x Beach Bats, 1 x Surf's Up!, 1 x Batman Paddle, 1 x Selina's Treasure Tote for -1 MtxCurrency\", \"offerId\": \"v2:/56368ee1272f0b7632ceb08af0b505737f448df7fac3234195955961afb98549\", \"inDate\": \"2026-11-16T00:00:00Z\", \"outDate\": \"2026-11-20T23:59:59.999Z\", \"bundle\": {\"name\": \"Lote Verano en Gotham City\"",
+    "\"regularPrice\": 5200, \"finalPrice\": 3200, \"devName\": \"[VIRTUAL]1 x Hatsune Miku, 1 x Pack-sune Miku, 1 x Miku Live, 1 x Miku Miku Beam, 1 x Miku Light, 1 x TBD (SID_Placeholder_481), 1 x Miku's Beat Drums, 1 x Miku's Beat Drums, 1 x Miku's Beat Drums, 1 x Hatsune's Mic-u, 1 x Hatsune's Mic-u, 1 x Hatsune's Mic-u for -1 MtxCurrency\", \"offerId\": \"v2:/1dc977f960ac817c58392575a813fae1c438f8ed7cd5ec7f3eeeaf4ba90bdeed\", \"inDate\": \"2026-11-16T00:00:00Z\", \"outDate\": \"2026-11-20T23:59:59.999Z\", \"bundle\": {\"name\": \"Lote Hatsune Miku\"",
+    "\"regularPrice\": 1500, \"finalPrice\": 1500, \"devName\": \"[VIRTUAL]1 x Bandolier, 1 x Armory Bag for -1 MtxCurrency\", \"offerId\": \"v2:/5479081d09624a11f7d2e0f773f842adf9baa714f8535444c936a9c6f6104584\", \"inDate\": \"2026-11-16T00:00:00Z\", \"outDate\": \"2026-11-20T23:59:59.999Z\"",
+    "\"regularPrice\": 2700, \"finalPrice\": 1800, \"devName\": \"[VIRTUAL]1 x PIRATE SPEEDY, 1 x Speed's Coin, 1 x Speed's Pirate Blade, 1 x IShowFlip for -1 MtxCurrency\", \"offerId\": \"v2:/18087c92999824c4238cf291477c8bc11b955bd7ea015e7410d44543f9d51863\", \"inDate\": \"2026-11-14T00:00:00Z\", \"outDate\": \"2026-11-20T23:59:59.999Z\", \"bundle\": {\"name\": \"Lote Speedy pirata\""
+   ]
+  },
+  {
+   "text": "Hasta el 5 dic: Lote One Piece, Lote Sombrero de paja, Zoro, Sanji y Buggy; A$AP Rocky hasta el 6 dic; Lil' Uzi Vert hasta el 12; Capitana Hatsune Miku hasta el 14",
+   "source": "shop.json",
+   "match": [
+    "\"regularPrice\": 8200, \"finalPrice\": 4000, \"devName\": \"[VIRTUAL]1 x Monkey D. Luffy, 1 x Luffy's Straw Hat, 1 x Gum-Gum Pistol, 1 x Multi-Punches Flex, 1 x Nami, 1 x Nami's Tangerines, 1 x Climate Baton, 1 x Usopp, 1 x Usopp's Kit, 1 x 5 Ton Hammer, 1 x Going Merry, 1 x Roasted Meat, 1 x Giant Meat on the Bone, 1 x Straw Hat Guitar, 1 x Straw Hat Guitar, 1 x Straw Hat Guitar for -1 MtxCurrency\", \"offerId\": \"v2:/d1494d827b8bb4c05bdf8c0d974c4a79129ab66baf6d85df762034b79f017f03\", \"inDate\": \"2026-11-01T00:00:00Z\", \"outDate\": \"2026-12-05T23:59:59.999Z\", \"bundle\": {\"name\": \"Lote One Piece\"",
+    "\"regularPrice\": 4900, \"finalPrice\": 3200, \"devName\": \"[VIRTUAL]1 x Roronoa Zoro, 1 x Zoro's Swords, 1 x Zoro's Training Gear, 1 x Test of Will, 1 x Sanji, 1 x Sanji's Utensils, 1 x Sanji's Utensils, 1 x Tony Tony Chopper for -1 MtxCurrency\", \"offerId\": \"v2:/4d0c03e4c5f8f1749971c2bdba2f71e9c71ebaa423836266e63a1cd1ba585084\", \"inDate\": \"2026-11-08T00:00:00Z\", \"outDate\": \"2026-12-05T23:59:59.999Z\", \"bundle\": {\"name\": \"Lote Sombrero de paja\"",
+    "\"regularPrice\": 1800, \"finalPrice\": 1800, \"devName\": \"[VIRTUAL]1 x Roronoa Zoro, 1 x Zoro's Swords, 1 x Zoro's Training Gear, 1 x Test of Will for -1 MtxCurrency\", \"offerId\": \"v2:/6718448ad7ce411a886042d8ed72c7ab6117df92ce7e74e0eb64bd17376b6e12\", \"inDate\": \"2026-11-08T00:00:00Z\", \"outDate\": \"2026-12-05T23:59:59.999Z\"",
+    "\"regularPrice\": 1600, \"finalPrice\": 1600, \"devName\": \"[VIRTUAL]1 x Sanji, 1 x Sanji's Utensils, 1 x Sanji's Utensils for -1 MtxCurrency\", \"offerId\": \"v2:/258c82518cff648c6989eb3d14a1c144ed27d7553882c5ca61979afa959cdc0b\", \"inDate\": \"2026-11-08T00:00:00Z\", \"outDate\": \"2026-12-05T23:59:59.999Z\"",
+    "\"regularPrice\": 1600, \"finalPrice\": 1600, \"devName\": \"[VIRTUAL]1 x Buggy, 1 x Buggy's Coat, 1 x Buggy Knives for -1 MtxCurrency\", \"offerId\": \"v2:/4431d4a16bd18c613e3ed16fe0c7f5485adb651a7545d313c8d36fae43ab2963\", \"inDate\": \"2026-11-14T00:00:00Z\", \"outDate\": \"2026-12-05T23:59:59.999Z\"",
+    "\"regularPrice\": 8800, \"finalPrice\": 3200, \"devName\": \"[VIRTUAL]1 x Shirthead Flacko, 1 x Hi-Fi Jets, 1 x Rocky Rugahand, 1 x A$AP ROCKY X PUMA Suede 94 ‘Black/White', 1 x Flacko's Chopper, 1 x A$AP's Gauntlets, 1 x A$AP Rockets, 1 x Helicopter, 1 x RIOT (Rowdy Pipe'n), 1 x A$AP ROCKY X PUMA Straycat V6 ‘Red Flash/Black', 1 x Message From Flacko, 1 x Rocky's BOOM Mic, 1 x Rocky's BOOM Mic, 1 x Rocky's BOOM Mic for -1 MtxCurrency\", \"offerId\": \"v2:/ec90ad43e5988096783782d40bdb9acbcc89434bc8b19dc96f88623195ad1fd6\", \"inDate\": \"2026-11-06T00:00:00Z\", \"outDate\": \"2026-12-06T23:59:59.999Z\", \"bundle\": {\"name\": \"Lote A$AP Rocky\"",
+    "\"regularPrice\": 7100, \"finalPrice\": 3200, \"devName\": \"[VIRTUAL]1 x Lil Uzi Vert, 1 x Uzi's Wings, 1 x Pink Star Lil Uzi Vert, 1 x Lil Uzi Star, 1 x Picco-Axe, 1 x XO Tour Llif3, 1 x What You Saying, 1 x Uzi's Tour Guitar, 1 x Uzi's Tour Guitar, 1 x Uzi's Tour Guitar, 1 x Vans x Lil Uzi Vert LX Old Skool 36, 1 x Uzi On Tour, 1 x Cap'n Lil Uzi Vert for -1 MtxCurrency\", \"offerId\": \"v2:/68cd6682741636a3ab0b9fae18d0823e04b5975570fc8a58c519e11af496c0f5\", \"inDate\": \"2026-11-13T00:00:00Z\", \"outDate\": \"2026-12-12T23:59:59.999Z\", \"bundle\": {\"name\": \"Lote de Lil' Uzi Vert\"",
+    "\"regularPrice\": 4100, \"finalPrice\": 2200, \"devName\": \"[VIRTUAL]1 x Cap'n Hatsune Miku, 1 x Miku's Treasure, 1 x Miku's Anchor Floatie, 1 x Miku Miku ni Shite Ageru♪, 1 x Miku's Mic, 1 x Miku's Mic, 1 x Miku's Mic, 1 x TBD (SID_Placeholder_991) for -1 MtxCurrency\", \"offerId\": \"v2:/8f114946b8d166af6a3f7ae3ed7b1ae75c6a1e9c1d9508c258080c01d88a2365\", \"inDate\": \"2026-11-15T00:00:00Z\", \"outDate\": \"2026-12-14T23:59:59.999Z\""
+   ]
+  },
+  {
+   "text": "Con la Tienda Pirata, todo lo que cuesta pavos es gratis por 14 días",
+   "source": "vgc-odds-confirmed.json",
+   "match": [
+    "every single item in the Fortnite Shop which costs V-Bucks",
+    "becomes entirely free to that player for the next 14 days"
+   ]
+  }
+ ],
+ "text": [
+  "TIENDA DE FORTNITE / LA TIENDA / DE LA SEMANA",
+  "INTRO",
+  "LLEGÓ EL 16 NOV: SHOHEI OHTANI",
+  "SHOHEI OHTANI",
+  "SHOHEI SAMURÁI",
+  "LLEGÓ EL 16 DE NOVIEMBRE",
+  "2800 PAVOS / LOTE SHOHEI OHTANI, EN VEZ DE 6100",
+  "VERANO EN GOTHAM CITY",
+  "BATMAN PLAYERO",
+  "CATWOMAN COSTERA",
+  "3000 PAVOS / LOTE VERANO EN GOTHAM CITY, EN VEZ DE 6900",
+  "SU LOTE: 2300 PAVOS (EN VEZ DE 4300)",
+  "HARLEY VERANIEGA",
+  "IVY BOTÁNICA",
+  "LOTE HATSUNE MIKU: 3200 (EN VEZ DE 5200)",
+  "HATSUNE MIKU",
+  "GLITCH: SU LOTE, 2800 (EN VEZ DE 4500)",
+  "GLITCH",
+  "18 Y 20 NOV / GLITCH SE VA EL 18; SHOHEI, GOTHAM CITY Y MIKU, EL 20",
+  "LLEGÓ EL 13 NOV: LIL UZI VERT",
+  "LIL UZI VERT",
+  "LIL UZI VERT DE GIRA",
+  "LLEGÓ ESTA SEMANA",
+  "3200 PAVOS / LOTE DE LIL' UZI VERT, EN VEZ DE 7100 · HASTA EL 12 DIC",
+  "14 NOV: POR PRIMERA VEZ EN LA TIENDA",
+  "BUGGY",
+  "SPEEDY PIRATA",
+  "1800 PAVOS / LOTE SPEEDY PIRATA, EN VEZ DE 2700 · HASTA EL 20 NOV",
+  "15 NOV: POR PRIMERA VEZ EN LA TIENDA",
+  "CAPITANA HATSUNE MIKU",
+  "2200 PAVOS / TODO SU CONJUNTO, EN VEZ DE 4100 · HASTA EL 14 DIC",
+  "2000 PAVOS / VOLKSWAGEN GOLF GTI · HASTA EL 23 NOV",
+  "2000 PAVOS / RIVIAN R1S · HASTA EL 19 NOV",
+  "TOP 5 / LAS MEJORES / OFERTAS",
+  "LAS 5 MEJORES OFERTAS",
+  "AHORRAS 3300 / #5 · LOTE SHOHEI OHTANI: 2800 EN VEZ DE 6100",
+  "#4 Y #3 · AHORRAS 3900 EN CADA UNO",
+  "#2 · LOTE ONE PIECE: 4000 (EN VEZ DE 8200)",
+  "MONKEY D. LUFFY",
+  "NAMI",
+  "USOPP",
+  "#1 / LA MEJOR OFERTA DE LA TIENDA",
+  "#1 · LOTE A$AP ROCKY: 3200 (EN VEZ DE 8800)",
+  "FLACKO HELICOPTER",
+  "ROCKY RUGAHAND",
+  "AHORRAS 5600 / #1 · LOTE A$AP ROCKY",
+  "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+  "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+  "CÓDIGO BAD",
+  "REGRESOS OG / LAS MÁS VIEJAS / DE LA SEMANA",
+  "REGRESOS OG",
+  "10 NOV · CAPÍTULO 1, TEMPORADA 5 · 202 DÍAS",
+  "SUPERADOR",
+  "7 DÍAS / DEL 10 AL 16 DE NOVIEMBRE",
+  "11 NOV · CAPÍTULO 1, TEMPORADA 5 · 89 DÍAS",
+  "ARQUETIPO",
+  "13 NOV · CAPÍTULO 1, TEMPORADA 6",
+  "ARACNE",
+  "CHAQUETA OREJUDA",
+  "129 Y 102 DÍAS / ARACNE Y CHAQUETA OREJUDA, SIN SALIR",
+  "14 NOV · CAPÍTULO 1, TEMPORADA 4 · 305 DÍAS",
+  "DETECTIVE",
+  "1 DÍA / DETECTIVE SOLO ESTUVO EL 14 NOV",
+  "15 NOV · CAPÍTULO 1, TEMPORADA 2 · 69 DÍAS",
+  "OPERACIÓN SUBMARINA",
+  "16 NOV · CAPÍTULO 1, TEMPORADA 4 · 124 DÍAS",
+  "BANDOLERO",
+  "16 SKINS / SE VAN EL 16 NOV A LAS 6 PM (CDMX)",
+  "SE VAN PRONTO",
+  "SE VAN EL 16 NOV",
+  "REINA HÉSPERO",
+  "RITA DINAMITA",
+  "ZURI",
+  "SE VAN EL 17 Y EL 18 NOV",
+  "KATALINA",
+  "VIX",
+  "20 NOV / SHOHEI OHTANI, GOTHAM CITY, HATSUNE MIKU, BANDOLERO Y SPEEDY PIRATA",
+  "SE QUEDAN / HASTA / DICIEMBRE",
+  "HASTA DICIEMBRE",
+  "5 DIC / ONE PIECE: LUFFY, NAMI, USOPP, ZORO, SANJI Y BUGGY",
+  "6 DIC / LOTE A$AP ROCKY",
+  "12 DIC / LIL UZI VERT",
+  "14 DIC / CAPITANA HATSUNE MIKU",
+  "14 DÍAS / CON LA TIENDA PIRATA, TODO LO QUE CUESTA PAVOS ES GRATIS",
+  "FINAL",
+  "¡ESTA ES LA TIENDA DE LA",
+  "SEMANA!",
+  "HOY ES LUNES 16 DE NOVIEMBRE,",
+  "Y TE CUENTO TODO LO QUE",
+  "PASÓ EN LA TIENDA DE OBJETOS",
+  "DE FORTNITE.",
+  "LO QUE LLEGÓ,",
+  "LAS MEJORES OFERTAS,",
+  "LAS SKINS MÁS VIEJAS QUE REGRESARON",
+  "Y LO QUE SE VA PRONTO.",
+  "Y QUÉDATE HASTA EL FINAL,",
+  "PORQUE TE DIGO QUÉ SE QUEDA",
+  "EN LA TIENDA HASTA DICIEMBRE.",
+  "EMPECEMOS CON LO QUE LLEGÓ HOY,",
+  "16 DE NOVIEMBRE.",
+  "¡Y LLEGÓ MUCHO!",
+  "SHOHEI OHTANI ESTÁ DE REGRESO,",
+  "CON DOS ATUENDOS:",
+  "SHOHEI OHTANI Y SHOHEI SAMURÁI.",
+  "NO SALÍA DESDE EL 5 DE",
+  "MAYO,",
+  "Y CADA ATUENDO CUESTA 1500 PAVOS.",
+  "EL LOTE SHOHEI OHTANI TRAE LOS",
+  "DOS ATUENDOS,",
+  "CON SUS PICOS,",
+  "GESTOS Y MOCHILAS,",
+  "POR 2800 PAVOS EN VEZ DE",
+  "6100.",
+  "TAMBIÉN LLEGÓ EL VERANO A GOTHAM",
+  "CITY:",
+  "BATMAN PLAYERO Y CATWOMAN COSTERA,",
+  "A 1500 PAVOS CADA UNO.",
+  "SU LOTE,",
+  "VERANO EN GOTHAM CITY,",
+  "LOS TRAE JUNTOS CON EL COMPAÑERO",
+  "AS EL BATSABUESO,",
+  "POR 3000 PAVOS EN VEZ DE",
+  "6900.",
+  "HARLEY VERANIEGA E IVY BOTÁNICA TAMBIÉN",
+  "CUESTAN 1500 CADA UNA,",
+  "Y SU LOTE,",
+  "2300 EN VEZ DE 4300.",
+  "HATSUNE MIKU TAMBIÉN REGRESÓ:",
+  "EL ATUENDO CUESTA 1500 PAVOS,",
+  "3200 EN VEZ DE 5200.",
+  "Y GLITCH LLEGÓ CON EL LOTE",
+  "CASILLERO GLITCH DE CANDYWING,",
+  "4500.",
+  "OJO CON LAS FECHAS:",
+  "GLITCH SE VA EL 18 DE",
+  "NOVIEMBRE,",
+  "Y SHOHEI,",
+  "BATMAN,",
+  "CATWOMAN,",
+  "HARLEY,",
+  "IVY Y MIKU,",
+  "EL 20.",
+  "PERO ESO NO ES TODO:",
+  "ESTA SEMANA LLEGARON MÁS COSAS QUE",
+  "SIGUEN EN LA TIENDA.",
+  "EL 13 DE NOVIEMBRE LLEGÓ LIL",
+  "UZI VERT,",
+  "LIL UZI VERT Y LIL UZI",
+  "VERT DE GIRA.",
+  "SU LOTE CUESTA 3200 PAVOS EN",
+  "VEZ DE 7100,",
+  "Y SE QUEDA HASTA EL 12",
+  "DE DICIEMBRE.",
+  "EL 14 LLEGARON POR PRIMERA VEZ",
+  "DOS PIRATAS:",
+  "BUGGY,",
+  "DE ONE PIECE,",
+  "POR 1600 PAVOS,",
+  "Y SPEEDY PIRATA,",
+  "DE ISHOWSPEED.",
+  "EL LOTE DE SPEEDY PIRATA CUESTA",
+  "1800 PAVOS EN VEZ DE 2700,",
+  "Y SE VA EL 20 DE",
+  "NOVIEMBRE.",
+  "Y EL 15 LLEGÓ,",
+  "TAMBIÉN POR PRIMERA VEZ,",
+  "LA CAPITANA HATSUNE MIKU.",
+  "CON SU MOCHILA CUESTA 1500 PAVOS,",
+  "Y CON TODO SU CONJUNTO,",
+  "2200 EN VEZ DE 4100.",
+  "SE QUEDA HASTA EL 14 DE",
+  "DICIEMBRE.",
+  "Y SI TE GUSTAN LOS COCHES:",
+  "EL VOLKSWAGEN GOLF GTI LLEGÓ EL",
+  "14 POR 2000 PAVOS Y SE",
+  "QUEDA HASTA EL 23 DE NOVIEMBRE.",
+  "EL RIVIAN R1S,",
+  "QUE LLEGÓ EL 13,",
+  "TAMBIÉN CUESTA 2000,",
+  "PERO SE VA ANTES,",
+  "EL 19.",
+  "AHORA SÍ:",
+  "LAS 5 MEJORES OFERTAS DE LA",
+  "TIENDA,",
+  "POR LO QUE TE AHORRAS.",
+  "NÚMERO 5:",
+  "EL LOTE SHOHEI OHTANI.",
+  "TE AHORRAS 3300 PAVOS.",
+  "NÚMEROS 4 Y 3,",
+  "EMPATADOS:",
+  "EL LOTE VERANO EN GOTHAM CITY",
+  "Y EL LOTE DE LIL' UZI",
+  "VERT.",
+  "EN LOS DOS TE AHORRAS 3900.",
+  "NÚMERO 2:",
+  "EL LOTE ONE PIECE,",
+  "CON LUFFY,",
+  "NAMI Y USOPP,",
+  "POR 4000 PAVOS EN VEZ DE",
+  "8200.",
+  "TE AHORRAS 4200.",
+  "¿Y EL NÚMERO 1?",
+  "¡EL LOTE A$AP ROCKY!",
+  "TRAE A FLACKO HELICOPTER Y A",
+  "ROCKY RUGAHAND,",
+  "POR 3200 PAVOS EN VEZ DE",
+  "8800.",
+  "¡TE AHORRAS 5600 PAVOS!",
+  "POR CIERTO,",
+  "SI ESTE RESUMEN TE ESTÁ SIRVIENDO,",
+  "USA EL CÓDIGO BAD EN LA",
+  "TIENDA DE OBJETOS.",
+  "LE AYUDA MUCHÍSIMO AL CANAL.",
+  "AHORA,",
+  "ESTA SEMANA.",
+  "EL 10 DE NOVIEMBRE VOLVIÓ SUPERADOR,",
+  "DEL CAPÍTULO 1,",
+  "TEMPORADA 5,",
+  "DESPUÉS DE 202 DÍAS.",
+  "ESTUVO TODA LA SEMANA,",
+  "PERO SE VA HOY,",
+  "16 DE NOVIEMBRE,",
+  "A LAS 6 DE LA TARDE,",
+  "HORA DE LA CIUDAD DE MÉXICO.",
+  "EL 11 VOLVIÓ ARQUETIPO,",
+  "TAMBIÉN DEL CAPÍTULO 1,",
+  "DESPUÉS DE 89 DÍAS,",
+  "PERO SOLO POR DOS DÍAS.",
+  "EL 13 REGRESARON ARACNE Y CHAQUETA",
+  "OREJUDA,",
+  "TEMPORADA 6.",
+  "ARACNE NO SALÍA DESDE HACÍA 129",
+  "DÍAS,",
+  "Y CHAQUETA OREJUDA,",
+  "DESDE HACÍA 102,",
+  "Y SOLO ESTUVO UN DÍA.",
+  "EL 14 LLEGÓ LA ESPERA MÁS",
+  "LARGA DE TODAS ESTAS:",
+  "DETECTIVE,",
+  "TEMPORADA 4,",
+  "DESPUÉS DE 305 DÍAS.",
+  "Y TAMBIÉN ESTUVO SOLO UN DÍA.",
+  "EL 15 VOLVIÓ LA MÁS VIEJA",
+  "DE TODAS ESTAS:",
+  "OPERACIÓN SUBMARINA,",
+  "TEMPORADA 2,",
+  "DESPUÉS DE 69 DÍAS.",
+  "Y HOY,",
+  "REGRESÓ BANDOLERO,",
+  "DESPUÉS DE 124 DÍAS.",
+  "SE QUEDA HASTA EL 20 DE",
+  "Y SI QUIERES ALGO QUE SE",
+  "VA,",
+  "APÚRATE:",
+  "ESTE 16 DE NOVIEMBRE,",
+  "HORA DE LA CIUDAD DE MÉXICO,",
+  "SE VAN 16 SKINS.",
+  "ENTRE ELLAS,",
+  "SUPERADOR,",
+  "REINA HÉSPERO,",
+  "RITA DINAMITA Y ZURI.",
+  "KATALINA Y VIX SE VAN EL",
+  "17 DE NOVIEMBRE,",
+  "Y GLITCH,",
+  "EL 18.",
+  "Y EL 20 DE NOVIEMBRE SE",
+  "VAN SHOHEI OHTANI,",
+  "EL VERANO EN GOTHAM CITY,",
+  "HATSUNE MIKU,",
+  "BANDOLERO Y SPEEDY PIRATA.",
+  "¿Y QUÉ SE QUEDA MÁS TIEMPO?",
+  "TODO ESTO SIGUE EN DICIEMBRE.",
+  "LO DE ONE PIECE,",
+  "NAMI,",
+  "USOPP,",
+  "ZORO,",
+  "SANJI Y BUGGY,",
+  "SE QUEDA HASTA EL 5 DE",
+  "EL LOTE A$AP ROCKY,",
+  "HASTA EL 6 DE DICIEMBRE.",
+  "LIL UZI VERT,",
+  "HASTA EL 12 DE DICIEMBRE.",
+  "Y LA CAPITANA HATSUNE MIKU,",
+  "HASTA EL 14 DE DICIEMBRE.",
+  "Y RECUERDA:",
+  "SI TE SALE LA TIENDA PIRATA,",
+  "TODO LO QUE CUESTA PAVOS EN",
+  "LA TIENDA ES GRATIS POR 14",
+  "DÍAS.",
+  "¿QUÉ TE LLEVARÍAS TÚ DE LA",
+  "TIENDA DE ESTA SEMANA?",
+  "¡CUÉNTAME EN LOS COMENTARIOS!",
+  "¡GRACIAS POR VER!",
+  "SÍGUENOS PARA MÁS CONTENIDO DIARIO.",
+  "LA TIENDITA BAD",
+  "#EPICPARTNER"
+ ]
+}
