@@ -1,0 +1,97 @@
+{
+  "video": "latienditabad-2026-11-16-pirata-caros.mp4",
+  "checked_utc": "2026-11-16T19:34:20Z",
+  "verdict": "READY TO POST",
+  "results": [
+    {
+      "check": "1. Facts",
+      "status": "PASS",
+      "detail": "8/8 claims verified against saved official data",
+      "items": [
+        {
+          "claim": "Lote Harley veraniega y Ivy botánica: 2300 pavos en la tienda de hoy (2026-11-16), nuevo hoy",
+          "result": "PASS",
+          "why": "matched in shop-entries.json"
+        },
+        {
+          "claim": "Lote Casillero Glitch de Candywing: 2800 pavos en la tienda de hoy (2026-11-16), nuevo hoy",
+          "result": "PASS",
+          "why": "matched in shop-entries.json"
+        },
+        {
+          "claim": "Lote Shohei Ohtani: 2800 pavos en la tienda de hoy (2026-11-16), nuevo hoy",
+          "result": "PASS",
+          "why": "matched in shop-entries.json"
+        },
+        {
+          "claim": "Lote Verano en Gotham City: 3000 pavos en la tienda de hoy (2026-11-16), nuevo hoy",
+          "result": "PASS",
+          "why": "matched in shop-entries.json"
+        },
+        {
+          "claim": "Lote Hatsune Miku: precio normal 5200 pavos",
+          "result": "PASS",
+          "why": "matched in shop-entries.json"
+        },
+        {
+          "claim": "Lote Hatsune Miku: 3200 pavos en la tienda de hoy (2026-11-16), nuevo hoy",
+          "result": "PASS",
+          "why": "matched in shop-entries.json"
+        },
+        {
+          "claim": "Con la Tienda Pirata, todo lo que cuesta pavos es gratis por 14 días",
+          "result": "PASS",
+          "why": "matched in vgc-odds-confirmed.json"
+        },
+        {
+          "claim": "Solo puedes reclamar un compañero (sidekick)",
+          "result": "PASS",
+          "why": "matched in vgc-guide.json"
+        }
+      ]
+    },
+    {
+      "check": "2. Spelling and grammar",
+      "status": "PASS",
+      "detail": "25 distinct words checked; code written as BAD in all 2 mentions",
+      "items": []
+    },
+    {
+      "check": "3. Frames",
+      "status": "PASS",
+      "detail": "No black frames, no frozen stretches over 1.5 s. Contact sheet (1 frame/s) reviewed by eye: contact-sheet.png",
+      "items": []
+    },
+    {
+      "check": "4. Audio",
+      "status": "PASS",
+      "detail": "Integrated -14.3 LUFS, true peak -2.2 dBTP, no clipping, no silence gaps. All sound is original synthesis (no game rips, no copyrighted music). No voiceover in this cut.",
+      "items": []
+    },
+    {
+      "check": "5. Specs and safe zones",
+      "status": "PASS",
+      "detail": "1080x1920 h264 60 fps, aac 48000 Hz, 42.1s. Fits TikTok, Reels, Shorts, X, Facebook, Threads. Every on-screen text box sampled 4x/s stays out of the top bar, bottom caption area and button column.",
+      "items": []
+    },
+    {
+      "check": "6. Disclosure and wording",
+      "status": "PASS",
+      "detail": "#EpicPartner is the first hashtag in caption line 1 and on screen in every sampled frame from 0.0s. No discount, giveaway, endorsement or filler-CTA wording.",
+      "items": []
+    },
+    {
+      "check": "7. Would a fan stop scrolling? Made by a person?",
+      "status": "PASS",
+      "detail": "Lo nuevo más caro de hoy (Nov 16): #5 Lote Harley veraniega y Ivy botánica 2300, #4 Lote Casillero Glitch de Candywing 2800, #3 Lote Shohei Ohtani 'también 2800', #2 Lote Verano en Gotham City 3000, #1 Lote Hatsune Miku 3200 (normally 5200), con la Tienda Pirata 0 pavos. Stills checked past the sheet to the end: counters land on the right totals, recap shows all five, code card and thanks. The recap now says 'solo puedes reclamar un compañero' (Epic's es-419 word; it said 'sidekick'), sourced from VGC.",
+      "items": []
+    },
+    {
+      "check": "8. Owner approval",
+      "status": "PASS",
+      "detail": "Standing approval for autopilot (owner, 2026-10-28): posts when checks 1-7 all PASS.",
+      "items": []
+    }
+  ],
+  "caption": "#EpicPartner Lo nuevo más caro de la tienda de hoy 💸 El #1: Lote Hatsune Miku, 3200 pavos… y con la Tienda Pirata te lo llevarías sin gastar ni un pavo 🏴‍☠️\n¿Cuál te llevarías? 👇\nUsa el código BAD en la tienda de objetos 💛\n#fortnite #tiendapirata #tiendafortnite"
+}

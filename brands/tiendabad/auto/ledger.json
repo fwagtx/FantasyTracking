@@ -343,6 +343,27 @@
     "CID_171_Athena_Commando_M_SharpDresser",
     "Character_SleepyUni"
    ]
+  },
+  {
+   "date": "2026-11-16",
+   "slot": "15:45",
+   "format": "Tienda Pirata diaria (sevan)",
+   "topic": "Se va hoy (2026-11-16): Lote Mantente a flote, 1600 pavos (normalmente 1800)",
+   "folder": "video/auto/2026-11-16-pirata-sevan"
+  },
+  {
+   "date": "2026-11-16",
+   "slot": "17:15",
+   "format": "Tienda Pirata diaria (caros)",
+   "topic": "Lo nuevo más caro de hoy (2026-11-16): Lote Hatsune Miku 3200, Lote Verano en Gotham City 3000, Lote Shohei Ohtani 2800, Lote Casillero Glitch de Candywing 2800, Lote Harley veraniega y Ivy botánica 2300",
+   "folder": "video/auto/2026-11-16-pirata-caros"
+  },
+  {
+   "date": "2026-11-16",
+   "slot": "19:30",
+   "format": "Tienda Pirata diaria (cuenta)",
+   "topic": "Quedan 19 días · dato: igual para todos",
+   "folder": "video/auto/2026-11-16-pirata-cuenta"
   }
  ]
 }
