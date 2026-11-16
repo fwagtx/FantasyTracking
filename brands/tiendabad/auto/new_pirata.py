@@ -370,6 +370,10 @@ def cuenta(folder, src_dir, day=None):
                 n += 1
             x += datetime.timedelta(days=1)
         entry = POOL[1 + (n - 1) % (len(POOL) - 1)] if n else POOL[1]
+        # the 1:00 PM news short of Nov 16 already ended on "any chest counts", so Nov 16 and 17 swap their datos (each still used once)
+        SWAP = {datetime.date(2026, 11, 16): "IGUAL PARA TODOS", datetime.date(2026, 11, 17): "CUALQUIER COFRE"}
+        if d in SWAP:
+            entry = next(e for e in POOL if e[0] == SWAP[d])
         label, text, lines, claim = entry[0], entry[1], entry[2], entry[3]
         sound = entry[4] if len(entry) > 4 else [None] * len(lines)
         facts.append({"p": say("Dato del día: " + lines[0][0].lower() + lines[0][1:], 0.25, ("Dato del día: " + sound[0][0].lower() + sound[0][1:]) if sound[0] else None),

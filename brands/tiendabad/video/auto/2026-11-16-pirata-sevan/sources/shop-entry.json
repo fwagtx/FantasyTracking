@@ -1,0 +1,126 @@
+{
+ "date": "2026-11-16T00:00:00Z",
+ "entries": [
+  {
+   "regularPrice": 1800,
+   "finalPrice": 1600,
+   "devName": "[VIRTUAL]1 x Snorkel Ops, 1 x Fishy Flippers for -1 MtxCurrency",
+   "offerId": "v2:/a33cb5073c7a861d0fed43e26109bb2f11c3a268455b5f8ec50c3b32a18cd99c",
+   "inDate": "2026-11-15T00:00:00Z",
+   "outDate": "2026-11-16T23:59:59.999Z",
+   "bundle": {
+    "name": "Lote Mantente a flote",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/0fd338c62b79da41/renderimage_0.png"
+   },
+   "banner": {
+    "value": "200 monedas V de descuento",
+    "intensity": "Low",
+    "backendValue": "AmountOff"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -1,
+   "layoutId": "BR111626.94",
+   "layout": {
+    "id": "BR111626",
+    "name": "Energía de protagonista ",
+    "index": 2,
+    "rank": 184,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "290f07ff",
+    "color3": "824100ff",
+    "textBackgroundColor": "824100ff"
+   },
+   "tileSize": "Size_2_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_SaltFin_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S39/DAv2_Bundle_Featured_SaltFin",
+   "newDisplayAsset": {
+    "id": "DAv2_Bundle_Featured_SaltFin",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__0fd338c62b79da41_69531c126149a5b5.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/0fd338c62b79da41/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__0fd338c62b79da41_ebac3ddfa28abddc.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/0fd338c62b79da41/renderimage_1.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "CID_073_Athena_Commando_F_Scuba",
+     "name": "Operación submarina",
+     "description": "Sumerge de cabeza en el combate.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "introduction": {
+      "chapter": "1",
+      "season": "2",
+      "text": "Introducido en Capítulo 1, Temporada 2.",
+      "backendValue": 2
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/cid_073_athena_commando_f_scuba/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/cid_073_athena_commando_f_scuba/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/cid_073_athena_commando_f_scuba/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/cid_073_athena_commando_f_scuba/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/cid_073_athena_commando_f_scuba/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/cid_073_athena_commando_f_scuba/wide.png"
+      },
+      "bean": {
+       "small": "https://fortnite-api.com/images/cosmetics/beans/bean_sharkshanker/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/beans/bean_sharkshanker/large.png"
+      }
+     },
+     "showcaseVideo": "Ok7vwhHC7E0",
+     "added": "2019-11-20T12:50:27Z"
+    },
+    {
+     "id": "Shoes_SaltFin",
+     "name": "Pezapatos",
+     "description": "Presume tu estilo.",
+     "type": {
+      "value": "shoe",
+      "displayValue": "Calzado",
+      "backendValue": "CosmeticShoes"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "4",
+      "text": "Introducido en Capítulo 6, Temporada 4.",
+      "backendValue": 36
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/shoes_saltfin/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/shoes_saltfin/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/shoes_saltfin/featured.png"
+     },
+     "added": "2025-06-20T05:49:58Z"
+    }
+   ]
+  }
+ ]
+}
