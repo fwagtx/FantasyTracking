@@ -29,7 +29,7 @@
     el.innerHTML = `<div style="position:absolute;inset:0;background:linear-gradient(120deg,rgba(255,255,255,.18) 0 18%,transparent 18%)"></div>
       <img src="${IMG(o.id)}" style="position:absolute;left:${-w * 0.2}px;top:${-h * 0.02}px;width:${w * 1.4}px;height:auto">
       <div style="position:absolute;left:0;right:0;bottom:0;padding:${w * 0.05}px ${w * 0.06}px ${w * 0.045}px;background:linear-gradient(transparent,rgba(5,8,22,.92) 30%)">
-        <div style="font-family:'Barlow Condensed';font-weight:900;font-size:${Math.min(w * 0.13, (w * 0.86) / (o.name.length * 0.43))}px;line-height:.95;text-transform:uppercase;color:#fff;-webkit-text-stroke:${w * 0.012}px ${INK};paint-order:stroke fill;white-space:nowrap">${o.name}</div>
+        <div class="tname" style="font-family:'Barlow Condensed';font-weight:900;font-size:${Math.min(w * 0.13, (w * 0.86) / (o.name.length * 0.43))}px;line-height:.95;text-transform:uppercase;color:#fff;-webkit-text-stroke:${w * 0.012}px ${INK};paint-order:stroke fill;white-space:nowrap">${o.name}</div>
         ${price && o.price ? `<div style="margin-top:${w * 0.02}px;font-family:'Barlow Condensed';font-weight:900;font-size:${w * 0.11}px;color:#fff">${vb(w * 0.11)} ${num(o.price)}</div>` : ""}
       </div>`;
     el.dataset.text = o.name.toUpperCase();
@@ -139,7 +139,19 @@
     };
     const tp = R("deal_price").t0, tOld = word("deal_price", /^vez$/i) + 0.12, tSave = R("saving").t0, tEra = R("og_era").t0, tGap = word("og_era", /^salía/i);
 
+    // names are first sized by letter count, which runs short for wide capitals ('AVENTURERA ANDRAJOSA' lost its last A,
+    // Nov 16): once the fonts are in, a name still wider than its bar shrinks to fit
+    let fitted = false;
+    const fitNames = () => {
+      if (fitted) return;
+      fitted = true;
+      stage.querySelectorAll(".tname").forEach((el) => {
+        if (el.scrollWidth > el.clientWidth) el.style.fontSize = `${(parseFloat(el.style.fontSize) * el.clientWidth / el.scrollWidth * 0.97).toFixed(1)}px`;
+      });
+    };
+
     return function renderAt(t) {
+      fitNames();
       bands.style.transform = `translateX(${(t * 40) % 260}px)`;
       // hook
       swap(hook, t, -1, b1);
