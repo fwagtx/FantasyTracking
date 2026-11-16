@@ -296,11 +296,12 @@ def caros(folder, src_dir):
         claims.append({"text": f"{name}: {f} pavos en la tienda de hoy ({day})" + (", nuevo hoy" if new else ""), "source": "shop-entries.json",
                        "match": [name, f'"finalPrice": {f}', f'"date": "{shop["date"]}"'] + ([f'"inDate": "{e["inDate"]}"'] if new else [])})
         items.append(it)
-    recap_line = "Con la Tienda Pirata, todo lo que cuesta pavos es gratis por 14 días" + (", y solo puedes reclamar un sidekick." if sidekick else ".") + " ¿Cuál te llevarías?"
+    # "compañero" is Epic's es-419 name for a sidekick (the line said "sidekick" until Nov 16)
+    recap_line = "Con la Tienda Pirata, todo lo que cuesta pavos es gratis por 14 días" + (", y solo puedes reclamar un compañero." if sidekick else ".") + " ¿Cuál te llevarías?"
     recap = {"p": say(recap_line, 0.2), "title": "¿cuál te llevarías? 👇"}
     claims.append(FREE)
     if sidekick:
-        claims.append({"text": "Solo puedes reclamar un sidekick", "source": "vgc-guide.json", "match": ["you can only claim one free sidekick"]})
+        claims.append({"text": "Solo puedes reclamar un compañero (sidekick)", "source": "vgc-guide.json", "match": ["you can only claim one free sidekick"]})
     say(*CODE[:1], 0.25, CODE[1])
     say(THANKS, 0.3)
     one = pick[0]

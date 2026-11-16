@@ -1,0 +1,2559 @@
+{
+ "date": "2026-11-16T00:00:00Z",
+ "entries": [
+  {
+   "regularPrice": 5200,
+   "finalPrice": 3200,
+   "devName": "[VIRTUAL]1 x Hatsune Miku, 1 x Pack-sune Miku, 1 x Miku Live, 1 x Miku Miku Beam, 1 x Miku Light, 1 x TBD (SID_Placeholder_481), 1 x Miku's Beat Drums, 1 x Miku's Beat Drums, 1 x Miku's Beat Drums, 1 x Hatsune's Mic-u, 1 x Hatsune's Mic-u, 1 x Hatsune's Mic-u for -1 MtxCurrency",
+   "offerId": "v2:/1dc977f960ac817c58392575a813fae1c438f8ed7cd5ec7f3eeeaf4ba90bdeed",
+   "inDate": "2026-11-16T00:00:00Z",
+   "outDate": "2026-11-20T23:59:59.999Z",
+   "bundle": {
+    "name": "Lote Hatsune Miku",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/07cba06fb0be769c/renderimage_0.png"
+   },
+   "banner": {
+    "value": "2000 monedas V de descuento",
+    "intensity": "Low",
+    "backendValue": "AmountOff"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -1,
+   "layoutId": "PirateCactusJade.96",
+   "layout": {
+    "id": "PirateCactusJade",
+    "name": "Hatsune Miku",
+    "index": 19,
+    "rank": 198,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "10d8e0ff",
+    "color2": "93f9ffff",
+    "color3": "0ab8d0ff",
+    "textBackgroundColor": "35c0b9ff"
+   },
+   "tileBackgroundMaterial": "ShopTile_SketchedBorder",
+   "tileSize": "Size_1_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_JadeTowel_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S33/DAv2_Bundle_Featured_JadeTowelGloss",
+   "newDisplayAsset": {
+    "id": "DAv2_Bundle_Featured_JadeTowelGloss",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__07cba06fb0be769c_fdb5b19d12f91be4.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/07cba06fb0be769c/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__07cba06fb0be769c_23e5be184fdc994d.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/07cba06fb0be769c/renderimage_1.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__07cba06fb0be769c_1a8af3772b59c32e.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/07cba06fb0be769c/renderimage_2.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__07cba06fb0be769c_23e5be184fdc994d.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/07cba06fb0be769c/renderimage_3.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Character_JadeTowelGloss",
+     "name": "Hatsune Miku",
+     "description": "Una cantante virtual y un ídolo cultural.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Hatsune Miku",
+      "text": "Pieza del conjunto Hatsune Miku.",
+      "backendValue": "LifeForce"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "1",
+      "text": "Introducido en Capítulo 6, Temporada 1.",
+      "backendValue": 33
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_jadetowelgloss/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_jadetowelgloss/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_jadetowelgloss/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_jadetowelgloss/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_jadetowelgloss/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_jadetowelgloss/wide.png"
+      }
+     },
+     "variants": [
+      {
+       "channel": "Emissive",
+       "type": "reactivo",
+       "options": [
+        {
+         "tag": "Emissive0",
+         "name": "Sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jadetowelgloss/variants/emissive/emissive0.png"
+        },
+        {
+         "tag": "Emissive1",
+         "name": "No",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_jadetowelgloss/variants/emissive/emissive1.png"
+        }
+       ]
+      }
+     ],
+     "showcaseVideo": "MoQxF44x1oA",
+     "added": "2025-01-14T09:00:00Z"
+    },
+    {
+     "id": "Backpack_JadeTowelGloss",
+     "name": "Mikuchila",
+     "description": "Con todo lo imprescindible para la gira de Miku.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Hatsune Miku",
+      "text": "Pieza del conjunto Hatsune Miku.",
+      "backendValue": "LifeForce"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "1",
+      "text": "Introducido en Capítulo 6, Temporada 1.",
+      "backendValue": 33
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_jadetowelgloss/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_jadetowelgloss/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_jadetowelgloss/featured.png"
+     },
+     "added": "2025-01-14T09:00:00Z"
+    },
+    {
+     "id": "EID_JadeTowel",
+     "name": "Miku en vivo",
+     "description": "Baila como Hatsune Miku.",
+     "type": {
+      "value": "emote",
+      "displayValue": "Gesto",
+      "backendValue": "AthenaDance"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Hatsune Miku",
+      "text": "Pieza del conjunto Hatsune Miku.",
+      "backendValue": "LifeForce"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "1",
+      "text": "Introducido en Capítulo 6, Temporada 1.",
+      "backendValue": 33
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/eid_jadetowel/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/eid_jadetowel/icon.png"
+     },
+     "showcaseVideo": "NeqUoCCVca0",
+     "added": "2025-01-14T09:00:00Z"
+    },
+    {
+     "id": "EID_JadeTowel_Gloss",
+     "name": "Rayo Miku Miku",
+     "description": "1... 2... 3... ¿Listos?",
+     "type": {
+      "value": "emote",
+      "displayValue": "Gesto",
+      "backendValue": "AthenaDance"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Hatsune Miku",
+      "text": "Pieza del conjunto Hatsune Miku.",
+      "backendValue": "LifeForce"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "1",
+      "text": "Introducido en Capítulo 6, Temporada 1.",
+      "backendValue": 33
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/eid_jadetowel_gloss/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/eid_jadetowel_gloss/icon.png"
+     },
+     "showcaseVideo": "imJaDUg8WPo",
+     "added": "2025-01-14T09:00:00Z"
+    },
+    {
+     "id": "Contrail_JadeTowel",
+     "name": "Luz Miku",
+     "description": "Alcanza la velocidad vocal.",
+     "type": {
+      "value": "contrail",
+      "displayValue": "Estela",
+      "backendValue": "AthenaSkyDiveContrail"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Hatsune Miku",
+      "text": "Pieza del conjunto Hatsune Miku.",
+      "backendValue": "LifeForce"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "1",
+      "text": "Introducido en Capítulo 6, Temporada 1.",
+      "backendValue": 33
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/contrail_jadetowel/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/contrail_jadetowel/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/contrail_jadetowel/featured.png"
+     },
+     "added": "2025-01-14T09:00:00Z"
+    },
+    {
+     "id": "Backpack_JadeTowel_Drum",
+     "name": "Batería de Miku",
+     "description": "Nadie como tú.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Hatsune Miku",
+      "text": "Pieza del conjunto Hatsune Miku.",
+      "backendValue": "LifeForce"
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_jadetowel_drum/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_jadetowel_drum/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_jadetowel_drum/featured.png"
+     },
+     "added": "2025-01-14T09:00:00Z"
+    },
+    {
+     "id": "Pickaxe_JadeTowel_Drum",
+     "name": "Batería de Miku",
+     "description": "Nadie como tú.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Hatsune Miku",
+      "text": "Pieza del conjunto Hatsune Miku.",
+      "backendValue": "LifeForce"
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_jadetowel_drum/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_jadetowel_drum/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_jadetowel_drum/featured.png"
+     },
+     "added": "2025-01-14T09:00:00Z"
+    },
+    {
+     "id": "Backpack_JadeTowel_Mic",
+     "name": "Hatsune Micr-u",
+     "description": "El sonido del futuro es tuyo.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Hatsune Miku",
+      "text": "Pieza del conjunto Hatsune Miku.",
+      "backendValue": "LifeForce"
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_jadetowel_mic/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_jadetowel_mic/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_jadetowel_mic/featured.png"
+     },
+     "added": "2025-01-14T09:00:00Z"
+    },
+    {
+     "id": "Pickaxe_JadeTowel_Mic",
+     "name": "Hatsune Micr-u",
+     "description": "El sonido del futuro es tuyo.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Hatsune Miku",
+      "text": "Pieza del conjunto Hatsune Miku.",
+      "backendValue": "LifeForce"
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_jadetowel_mic/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_jadetowel_mic/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_jadetowel_mic/featured.png"
+     },
+     "added": "2025-01-14T09:00:00Z"
+    }
+   ],
+   "tracks": [
+    {
+     "id": "sid_placeholder_481",
+     "devName": "miku",
+     "title": "Miku",
+     "artist": "Anamanaguchi, Hatsune Miku",
+     "releaseYear": 2016,
+     "bpm": 128,
+     "duration": 223,
+     "difficulty": {
+      "vocals": 3,
+      "guitar": 3,
+      "bass": 3,
+      "plasticBass": 2,
+      "drums": 3,
+      "plasticDrums": 3
+     },
+     "albumArt": "https://cdn.fortnite-api.com/tracks/72ee20dc6f11e845.jpg",
+     "added": "2025-01-14T09:00:00Z"
+    }
+   ],
+   "instruments": [
+    {
+     "id": "Sparks_Drum_JadeTowel",
+     "name": "Batería de Miku",
+     "description": "Nadie como tú.",
+     "type": {
+      "value": "drum",
+      "displayValue": "Baterías",
+      "backendValue": "SparksDrum"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Common"
+     },
+     "images": {
+      "small": "https://fortnite-api.com/images/cosmetics/instruments/sparks_drum_jadetowel/small.png",
+      "large": "https://fortnite-api.com/images/cosmetics/instruments/sparks_drum_jadetowel/large.png"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "added": "2025-01-14T09:00:00Z"
+    },
+    {
+     "id": "Sparks_Mic_JadeTowel",
+     "name": "Hatsune Micr-u",
+     "description": "El sonido del futuro es tuyo.",
+     "type": {
+      "value": "mic",
+      "displayValue": "Micrófono",
+      "backendValue": "SparksMic"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Common"
+     },
+     "images": {
+      "small": "https://fortnite-api.com/images/cosmetics/instruments/sparks_mic_jadetowel/small.png",
+      "large": "https://fortnite-api.com/images/cosmetics/instruments/sparks_mic_jadetowel/large.png"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "added": "2025-01-14T09:00:00Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 6900,
+   "finalPrice": 3000,
+   "devName": "[VIRTUAL]1 x Beach Bod Batman, 1 x Batman Floatie, 1 x Coastal Catwoman, 1 x Riptide Claws, 1 x Ace the Bat-Hound, 1 x Beach Bats, 1 x Surf's Up!, 1 x Batman Paddle, 1 x Selina's Treasure Tote for -1 MtxCurrency",
+   "offerId": "v2:/56368ee1272f0b7632ceb08af0b505737f448df7fac3234195955961afb98549",
+   "inDate": "2026-11-16T00:00:00Z",
+   "outDate": "2026-11-20T23:59:59.999Z",
+   "bundle": {
+    "name": "Lote Verano en Gotham City",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/8fc06b4f0a524b87/renderimage_0.png"
+   },
+   "banner": {
+    "value": "3900 monedas V de descuento",
+    "intensity": "Low",
+    "backendValue": "AmountOff"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -1,
+   "layoutId": "SummerBatmanGCS.99",
+   "layout": {
+    "id": "SummerBatmanGCS",
+    "name": "Verano en Gotham City",
+    "index": 4,
+    "rank": 193,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "f86b71ff",
+    "color3": "ffa9a5ff",
+    "textBackgroundColor": "784042ff"
+   },
+   "tileBackgroundMaterial": "ShopTile_ShopComic",
+   "tileSize": "Size_2_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_Tidecompost_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S41/DAv2_Bundle_Featured_Tidecompost",
+   "newDisplayAsset": {
+    "id": "DAv2_Bundle_Featured_TideCompost",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__8fc06b4f0a524b87_29c0c4191e61fb71.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/8fc06b4f0a524b87/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__8fc06b4f0a524b87_d2e71b6320aa32c2.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/8fc06b4f0a524b87/renderimage_1.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__8fc06b4f0a524b87_e0559e464b07edd9.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/8fc06b4f0a524b87/renderimage_2.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__8fc06b4f0a524b87_1289a263ea7b677a.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/8fc06b4f0a524b87/renderimage_3.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__8fc06b4f0a524b87_d61e91185c40b17c.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/8fc06b4f0a524b87/renderimage_4.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__8fc06b4f0a524b87_0974dabead1481c7.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/8fc06b4f0a524b87/renderimage_5.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Character_TideCompost",
+     "name": "Batman playero",
+     "description": "Al crimen se lo llevó la corriente.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "dc",
+      "displayValue": "SERIE DE DC",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "SERIE DE DC",
+      "image": "https://fortnite-api.com/images/cosmetics/series/dcuseries.png",
+      "colors": [
+       "007af1ff",
+       "0053a9ff",
+       "003f82ff",
+       "003169ff",
+       "001f47ff"
+      ],
+      "backendValue": "DCUSeries"
+     },
+     "set": {
+      "value": "Verano en Gotham City",
+      "text": "Pieza del conjunto Verano en Gotham City.",
+      "backendValue": "RiverFall"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "3",
+      "text": "Introducido en Capítulo 7, Temporada 3.",
+      "backendValue": 41
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_tidecompost/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_tidecompost/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_tidecompost/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_tidecompost/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_tidecompost/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_tidecompost/wide.png"
+      }
+     },
+     "variants": [
+      {
+       "channel": "Parts",
+       "type": "estilo",
+       "options": [
+        {
+         "tag": "Mat1",
+         "name": "Máscara",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_tidecompost/variants/parts/mat1.png"
+        },
+        {
+         "tag": "Mat2",
+         "name": "Sin gafas",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_tidecompost/variants/parts/mat2.png"
+        },
+        {
+         "tag": "Mat3",
+         "name": "Gafas arriba",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_tidecompost/variants/parts/mat3.png"
+        },
+        {
+         "tag": "Mat4",
+         "name": "Con gafas",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_tidecompost/variants/parts/mat4.png"
+        }
+       ]
+      },
+      {
+       "channel": "Outfit",
+       "type": "Toalla",
+       "options": [
+        {
+         "tag": "Stage1",
+         "name": "No",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_tidecompost/variants/outfit/stage1.png"
+        },
+        {
+         "tag": "Stage2",
+         "name": "Sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_tidecompost/variants/outfit/stage2.png"
+        }
+       ]
+      },
+      {
+       "channel": "Particle",
+       "type": "Cinturón",
+       "options": [
+        {
+         "tag": "Particle1",
+         "name": "Sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_tidecompost/variants/particle/particle1.png"
+        },
+        {
+         "tag": "Particle2",
+         "name": "No",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_tidecompost/variants/particle/particle2.png"
+        }
+       ]
+      }
+     ],
+     "showcaseVideo": "pdMw6as2rIA",
+     "added": "2026-07-16T08:00:00Z"
+    },
+    {
+     "id": "Backpack_TideCompost",
+     "name": "Flotador de Batman",
+     "description": "Advertencia: este artículo no está diseñado para mantener la justicia a flote.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "dc",
+      "displayValue": "SERIE DE DC",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "SERIE DE DC",
+      "image": "https://fortnite-api.com/images/cosmetics/series/dcuseries.png",
+      "colors": [
+       "007af1ff",
+       "0053a9ff",
+       "003f82ff",
+       "003169ff",
+       "001f47ff"
+      ],
+      "backendValue": "DCUSeries"
+     },
+     "set": {
+      "value": "Verano en Gotham City",
+      "text": "Pieza del conjunto Verano en Gotham City.",
+      "backendValue": "RiverFall"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "3",
+      "text": "Introducido en Capítulo 7, Temporada 3.",
+      "backendValue": 41
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_tidecompost/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_tidecompost/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_tidecompost/featured.png"
+     },
+     "added": "2026-07-16T08:00:00Z"
+    },
+    {
+     "id": "Character_HammerVice",
+     "name": "Catwoman costera",
+     "description": "La ladrona del muelle.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "dc",
+      "displayValue": "SERIE DE DC",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "SERIE DE DC",
+      "image": "https://fortnite-api.com/images/cosmetics/series/dcuseries.png",
+      "colors": [
+       "007af1ff",
+       "0053a9ff",
+       "003f82ff",
+       "003169ff",
+       "001f47ff"
+      ],
+      "backendValue": "DCUSeries"
+     },
+     "set": {
+      "value": "Verano en Gotham City",
+      "text": "Pieza del conjunto Verano en Gotham City.",
+      "backendValue": "RiverFall"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "3",
+      "text": "Introducido en Capítulo 7, Temporada 3.",
+      "backendValue": 41
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_hammervice/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_hammervice/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_hammervice/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_hammervice/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_hammervice/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_hammervice/wide.png"
+      }
+     },
+     "variants": [
+      {
+       "channel": "Outfit",
+       "type": "gafas",
+       "options": [
+        {
+         "tag": "Stage1",
+         "name": "arriba",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_hammervice/variants/outfit/stage1.png"
+        },
+        {
+         "tag": "Stage2",
+         "name": "Sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_hammervice/variants/outfit/stage2.png"
+        },
+        {
+         "tag": "Stage3",
+         "name": "No",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_hammervice/variants/outfit/stage3.png"
+        }
+       ]
+      },
+      {
+       "channel": "Material",
+       "type": "pareo",
+       "options": [
+        {
+         "tag": "Mat1",
+         "name": "Sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_hammervice/variants/material/mat1.png"
+        },
+        {
+         "tag": "Mat2",
+         "name": "No",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_hammervice/variants/material/mat2.png"
+        }
+       ]
+      }
+     ],
+     "showcaseVideo": "xeR58iZUQZQ",
+     "added": "2026-07-16T08:00:00Z"
+    },
+    {
+     "id": "Pickaxe_HammerVice",
+     "name": "Garras contracorriente",
+     "description": "Luce letal. Sé letal.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "dc",
+      "displayValue": "SERIE DE DC",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "SERIE DE DC",
+      "image": "https://fortnite-api.com/images/cosmetics/series/dcuseries.png",
+      "colors": [
+       "007af1ff",
+       "0053a9ff",
+       "003f82ff",
+       "003169ff",
+       "001f47ff"
+      ],
+      "backendValue": "DCUSeries"
+     },
+     "set": {
+      "value": "Verano en Gotham City",
+      "text": "Pieza del conjunto Verano en Gotham City.",
+      "backendValue": "RiverFall"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "3",
+      "text": "Introducido en Capítulo 7, Temporada 3.",
+      "backendValue": 41
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_hammervice/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_hammervice/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_hammervice/featured.png"
+     },
+     "metaTags": [
+      "Cosmetics.MetaTags.HammerVice"
+     ],
+     "added": "2026-07-16T08:00:00Z"
+    },
+    {
+     "id": "Companion_ScoffFrill",
+     "name": "As el Batsabueso",
+     "description": "El mejor amigo de Batman.",
+     "type": {
+      "value": "sidekick",
+      "displayValue": "Compañero",
+      "backendValue": "CosmeticCompanion"
+     },
+     "rarity": {
+      "value": "dc",
+      "displayValue": "SERIE DE DC",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "series": {
+      "value": "SERIE DE DC",
+      "image": "https://fortnite-api.com/images/cosmetics/series/dcuseries.png",
+      "colors": [
+       "007af1ff",
+       "0053a9ff",
+       "003f82ff",
+       "003169ff",
+       "001f47ff"
+      ],
+      "backendValue": "DCUSeries"
+     },
+     "set": {
+      "value": "Verano en Gotham City",
+      "text": "Pieza del conjunto Verano en Gotham City.",
+      "backendValue": "RiverFall"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "3",
+      "text": "Introducido en Capítulo 7, Temporada 3.",
+      "backendValue": 41
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/companion_scofffrill/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/companion_scofffrill/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/companion_scofffrill/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Emote",
+       "type": "Gesto",
+       "options": [
+        {
+         "tag": "CompanionEmote0",
+         "name": "Cena de Batsabueso",
+         "image": "https://fortnite-api.com/images/cosmetics/br/companion_scofffrill/variants/emote/companionemote0.png"
+        }
+       ]
+      },
+      {
+       "channel": "Outfit",
+       "type": "Vestimenta",
+       "options": [
+        {
+         "tag": "Stage1",
+         "name": "As el Batsabueso",
+         "image": "https://fortnite-api.com/images/cosmetics/br/companion_scofffrill/variants/outfit/stage1.png"
+        },
+        {
+         "tag": "Stage2",
+         "name": "Modo playa",
+         "image": "https://fortnite-api.com/images/cosmetics/br/companion_scofffrill/variants/outfit/stage2.png"
+        }
+       ]
+      }
+     ],
+     "added": "2026-07-16T08:00:00Z"
+    },
+    {
+     "id": "Shoes_TideCompostZoo",
+     "name": "Batipantuflas",
+     "description": "Presume tu estilo.",
+     "type": {
+      "value": "shoe",
+      "displayValue": "Calzado",
+      "backendValue": "CosmeticShoes"
+     },
+     "rarity": {
+      "value": "dc",
+      "displayValue": "SERIE DE DC",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "series": {
+      "value": "SERIE DE DC",
+      "image": "https://fortnite-api.com/images/cosmetics/series/dcuseries.png",
+      "colors": [
+       "007af1ff",
+       "0053a9ff",
+       "003f82ff",
+       "003169ff",
+       "001f47ff"
+      ],
+      "backendValue": "DCUSeries"
+     },
+     "set": {
+      "value": "Verano en Gotham City",
+      "text": "Pieza del conjunto Verano en Gotham City.",
+      "backendValue": "RiverFall"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "3",
+      "text": "Introducido en Capítulo 7, Temporada 3.",
+      "backendValue": 41
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/shoes_tidecompostzoo/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/shoes_tidecompostzoo/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/shoes_tidecompostzoo/featured.png"
+     },
+     "added": "2026-07-16T08:00:00Z"
+    },
+    {
+     "id": "EID_TideCompost",
+     "name": "¡Hora de surfear!",
+     "description": "¡Santas sardinas!",
+     "type": {
+      "value": "emote",
+      "displayValue": "Gesto",
+      "backendValue": "AthenaDance"
+     },
+     "rarity": {
+      "value": "dc",
+      "displayValue": "SERIE DE DC",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "series": {
+      "value": "SERIE DE DC",
+      "image": "https://fortnite-api.com/images/cosmetics/series/dcuseries.png",
+      "colors": [
+       "007af1ff",
+       "0053a9ff",
+       "003f82ff",
+       "003169ff",
+       "001f47ff"
+      ],
+      "backendValue": "DCUSeries"
+     },
+     "set": {
+      "value": "Verano en Gotham City",
+      "text": "Pieza del conjunto Verano en Gotham City.",
+      "backendValue": "RiverFall"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "3",
+      "text": "Introducido en Capítulo 7, Temporada 3.",
+      "backendValue": 41
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/eid_tidecompost/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/eid_tidecompost/icon.png"
+     },
+     "showcaseVideo": "OhKAkWDP4dU",
+     "added": "2026-07-16T08:00:00Z"
+    },
+    {
+     "id": "Pickaxe_TideCompost",
+     "name": "Remo de Batman",
+     "description": "La balsa del caballero de la noche no viene incluida.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "dc",
+      "displayValue": "SERIE DE DC",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "SERIE DE DC",
+      "image": "https://fortnite-api.com/images/cosmetics/series/dcuseries.png",
+      "colors": [
+       "007af1ff",
+       "0053a9ff",
+       "003f82ff",
+       "003169ff",
+       "001f47ff"
+      ],
+      "backendValue": "DCUSeries"
+     },
+     "set": {
+      "value": "Verano en Gotham City",
+      "text": "Pieza del conjunto Verano en Gotham City.",
+      "backendValue": "RiverFall"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "3",
+      "text": "Introducido en Capítulo 7, Temporada 3.",
+      "backendValue": 41
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_tidecompost/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_tidecompost/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_tidecompost/featured.png"
+     },
+     "added": "2026-07-16T08:00:00Z"
+    },
+    {
+     "id": "Backpack_HammerVice",
+     "name": "Bolso botín de Selina",
+     "description": "Aquí hay gato encerrado.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "dc",
+      "displayValue": "SERIE DE DC",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "SERIE DE DC",
+      "image": "https://fortnite-api.com/images/cosmetics/series/dcuseries.png",
+      "colors": [
+       "007af1ff",
+       "0053a9ff",
+       "003f82ff",
+       "003169ff",
+       "001f47ff"
+      ],
+      "backendValue": "DCUSeries"
+     },
+     "set": {
+      "value": "Verano en Gotham City",
+      "text": "Pieza del conjunto Verano en Gotham City.",
+      "backendValue": "RiverFall"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "3",
+      "text": "Introducido en Capítulo 7, Temporada 3.",
+      "backendValue": 41
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_hammervice/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_hammervice/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_hammervice/featured.png"
+     },
+     "added": "2026-07-16T08:00:00Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 6100,
+   "finalPrice": 2800,
+   "devName": "[VIRTUAL]1 x Shohei Ohtani, 1 x Samurai Shohei, 1 x Trusty Two-Way, 1 x Baseball Batana, 1 x Doggy Dingers, 1 x Hey Batter Batter, 1 x Decoy, 1 x Samurai Screamer for -1 MtxCurrency",
+   "offerId": "v2:/2611179f569c1e055d7d4768296b538888c53dcb2cc1c63e87562a196403a4b4",
+   "inDate": "2026-11-16T00:00:00Z",
+   "outDate": "2026-11-20T23:59:59.999Z",
+   "bundle": {
+    "name": "Lote Shohei Ohtani",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/1a6524cadacaf2f0/renderimage_0.png"
+   },
+   "banner": {
+    "value": "3300 monedas V de descuento",
+    "intensity": "Low",
+    "backendValue": "AmountOff"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -1,
+   "layoutId": "ShoheiOhtani1.99",
+   "layout": {
+    "id": "ShoheiOhtani1",
+    "name": "Shohei Ohtani",
+    "category": "Íconos",
+    "index": 8,
+    "rank": 182,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "148cfeff",
+    "color3": "26366cff",
+    "textBackgroundColor": "26366cff"
+   },
+   "tileSize": "Size_2_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_VelvetDesk_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S34/DAv2_Bundle_Featured_VelvetDesk",
+   "newDisplayAsset": {
+    "id": "DAv2_Bundle_Featured_VelvetDesk",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__1a6524cadacaf2f0_09d7da75a56469e9.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/1a6524cadacaf2f0/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__1a6524cadacaf2f0_605ad89341a7262d.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/1a6524cadacaf2f0/renderimage_1.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__1a6524cadacaf2f0_58a662a16549ffbe.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/1a6524cadacaf2f0/renderimage_2.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__1a6524cadacaf2f0_b0e83bc47411fcfc.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/1a6524cadacaf2f0/renderimage_3.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__1a6524cadacaf2f0_32fd03fb9c5f0686.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/1a6524cadacaf2f0/renderimage_4.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Character_VelvetDeskCam",
+     "name": "Shohei Ohtani",
+     "description": "Los récords están para batirlos. ",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Shohei Ohtani",
+      "text": "Pieza del conjunto Shohei Ohtani.",
+      "backendValue": "StandingDesk"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "2",
+      "text": "Introducido en Capítulo 6, Temporada 2.",
+      "backendValue": 34
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_velvetdeskcam/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_velvetdeskcam/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_velvetdeskcam/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_velvetdeskcam/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_velvetdeskcam/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_velvetdeskcam/wide.png"
+      }
+     },
+     "variants": [
+      {
+       "channel": "Material",
+       "type": "Estilo",
+       "options": [
+        {
+         "tag": "Mat1",
+         "name": "Shohei Ohtani",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_velvetdeskcam/variants/material/mat1.png"
+        },
+        {
+         "tag": "Mat2",
+         "name": "Visitante",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_velvetdeskcam/variants/material/mat2.png"
+        }
+       ]
+      },
+      {
+       "channel": "Particle",
+       "type": "Gafas",
+       "options": [
+        {
+         "tag": "Particle1",
+         "name": "No",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_velvetdeskcam/variants/particle/particle1.png"
+        },
+        {
+         "tag": "Particle2",
+         "name": "Sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_velvetdeskcam/variants/particle/particle2.png"
+        }
+       ]
+      }
+     ],
+     "showcaseVideo": "kXbOZ7bCDfI",
+     "added": "2025-03-11T08:32:47Z"
+    },
+    {
+     "id": "Character_VelvetDeskFiber",
+     "name": "Shohei samurái",
+     "description": "Juega con honor. ",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Shohei Ohtani",
+      "text": "Pieza del conjunto Shohei Ohtani.",
+      "backendValue": "StandingDesk"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "2",
+      "text": "Introducido en Capítulo 6, Temporada 2.",
+      "backendValue": 34
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_velvetdeskfiber/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_velvetdeskfiber/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_velvetdeskfiber/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_velvetdeskfiber/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_velvetdeskfiber/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_velvetdeskfiber/wide.png"
+      }
+     },
+     "variants": [
+      {
+       "channel": "Parts",
+       "type": "estilo",
+       "options": [
+        {
+         "tag": "Stage1",
+         "name": "Con casco",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_velvetdeskfiber/variants/parts/stage1.png"
+        },
+        {
+         "tag": "Stage2",
+         "name": "Sin casco y con gafas",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_velvetdeskfiber/variants/parts/stage2.png"
+        },
+        {
+         "tag": "Stage3",
+         "name": "sin gafas",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_velvetdeskfiber/variants/parts/stage3.png"
+        }
+       ]
+      },
+      {
+       "channel": "Material",
+       "type": "reactivo",
+       "options": [
+        {
+         "tag": "Mat1",
+         "name": "sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_velvetdeskfiber/variants/material/mat1.png"
+        },
+        {
+         "tag": "Mat2",
+         "name": "no",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_velvetdeskfiber/variants/material/mat2.png"
+        }
+       ]
+      }
+     ],
+     "showcaseVideo": "nokdinZ7lXQ",
+     "added": "2025-03-11T08:32:47Z"
+    },
+    {
+     "id": "Pickaxe_VelvetDeskCam",
+     "name": "Lanzador doble",
+     "description": "Por partida doble.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Shohei Ohtani",
+      "text": "Pieza del conjunto Shohei Ohtani.",
+      "backendValue": "StandingDesk"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "2",
+      "text": "Introducido en Capítulo 6, Temporada 2.",
+      "backendValue": 34
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_velvetdeskcam/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_velvetdeskcam/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_velvetdeskcam/featured.png"
+     },
+     "metaTags": [
+      "Cosmetics.MetaTags.PumpkinPunk"
+     ],
+     "showcaseVideo": "Cj03zWrRP6w",
+     "added": "2025-03-11T08:32:47Z"
+    },
+    {
+     "id": "Pickaxe_VelvetDeskFiber",
+     "name": "Katana de béisbol",
+     "description": "Un bate de batalla muy afilado. ",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Shohei Ohtani",
+      "text": "Pieza del conjunto Shohei Ohtani.",
+      "backendValue": "StandingDesk"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "2",
+      "text": "Introducido en Capítulo 6, Temporada 2.",
+      "backendValue": 34
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_velvetdeskfiber/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_velvetdeskfiber/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_velvetdeskfiber/featured.png"
+     },
+     "showcaseVideo": "AcyWpceU4Pc",
+     "added": "2025-03-11T08:32:47Z"
+    },
+    {
+     "id": "EID_VelvetDesk",
+     "name": "Lanzamiento can-tástico",
+     "description": "Mándala fuera del estadio.",
+     "type": {
+      "value": "emote",
+      "displayValue": "Gesto",
+      "backendValue": "AthenaDance"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Shohei Ohtani",
+      "text": "Pieza del conjunto Shohei Ohtani.",
+      "backendValue": "StandingDesk"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "2",
+      "text": "Introducido en Capítulo 6, Temporada 2.",
+      "backendValue": 34
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/eid_velvetdesk/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/eid_velvetdesk/icon.png"
+     },
+     "showcaseVideo": "F_SypcxOU8Q",
+     "added": "2025-03-11T08:32:47Z"
+    },
+    {
+     "id": "EID_VelvetDesk_Cam",
+     "name": "Sueña a lo grande",
+     "description": "Hasta las nubes.",
+     "type": {
+      "value": "emote",
+      "displayValue": "Gesto",
+      "backendValue": "AthenaDance"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Shohei Ohtani",
+      "text": "Pieza del conjunto Shohei Ohtani.",
+      "backendValue": "StandingDesk"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "2",
+      "text": "Introducido en Capítulo 6, Temporada 2.",
+      "backendValue": 34
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/eid_velvetdesk_cam/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/eid_velvetdesk_cam/icon.png"
+     },
+     "showcaseVideo": "i1nsf0z8wK4",
+     "added": "2025-03-11T08:32:47Z"
+    },
+    {
+     "id": "Backpack_VelvetDeskCam",
+     "name": "Decoy",
+     "description": "El mejor amigo del lanzador.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Shohei Ohtani",
+      "text": "Pieza del conjunto Shohei Ohtani.",
+      "backendValue": "StandingDesk"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "2",
+      "text": "Introducido en Capítulo 6, Temporada 2.",
+      "backendValue": 34
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_velvetdeskcam/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_velvetdeskcam/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_velvetdeskcam/featured.png"
+     },
+     "showcaseVideo": "GB3Gh0t9U7E",
+     "added": "2025-03-11T08:32:47Z"
+    },
+    {
+     "id": "Backpack_VelvetDeskFiber",
+     "name": "Lanzamiento samurái",
+     "description": "Rompe el bate. ",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Shohei Ohtani",
+      "text": "Pieza del conjunto Shohei Ohtani.",
+      "backendValue": "StandingDesk"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "2",
+      "text": "Introducido en Capítulo 6, Temporada 2.",
+      "backendValue": 34
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_velvetdeskfiber/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_velvetdeskfiber/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_velvetdeskfiber/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Parts",
+       "type": "reactivo",
+       "options": [
+        {
+         "tag": "Stage1",
+         "name": "sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/backpack_velvetdeskfiber/variants/parts/stage1.png"
+        },
+        {
+         "tag": "Stage2",
+         "name": "no",
+         "image": "https://fortnite-api.com/images/cosmetics/br/backpack_velvetdeskfiber/variants/parts/stage2.png"
+        }
+       ]
+      }
+     ],
+     "showcaseVideo": "i7WmMZiakRs",
+     "added": "2025-03-11T08:32:47Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 4500,
+   "finalPrice": 2800,
+   "devName": "[VIRTUAL]1 x Glitch, 1 x Signal Sever, 1 x Scanlight, 1 x Bucky Bat, 1 x Sail Shark, 1 x Sprout of Tune, 1 x Flowerprint for -1 MtxCurrency",
+   "offerId": "v2:/2c6dea8fdf70a3fa365ec145153e0b8c7b9127e64a80840e7258a099d64914ca",
+   "inDate": "2026-11-16T00:00:00Z",
+   "outDate": "2026-11-18T23:59:59.999Z",
+   "bundle": {
+    "name": "Lote Casillero Glitch de Candywing",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/6f22bfd9a5a7f6a2/renderimage_0.png"
+   },
+   "banner": {
+    "value": "1700 monedas V de descuento",
+    "intensity": "Low",
+    "backendValue": "AmountOff"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -1,
+   "layoutId": "Candywing.99",
+   "layout": {
+    "id": "Candywing",
+    "name": "Casillero Glitch de Candywing",
+    "category": "Lotes Casillero",
+    "index": 3,
+    "rank": 181,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "ad2b35ff",
+    "color3": "3f060aff",
+    "textBackgroundColor": "3c0508ff"
+   },
+   "tileSize": "Size_3_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_Architect_SharkScoop_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S34/DAv2_Bundle_Featured_Architect_SharkScoop",
+   "newDisplayAsset": {
+    "id": "DAv2_Bundle_Featured_Architect_SharkScoop",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__6f22bfd9a5a7f6a2_ebc715ba17bf75e3.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/6f22bfd9a5a7f6a2/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__6f22bfd9a5a7f6a2_9ebf1561c143d6ec.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/6f22bfd9a5a7f6a2/renderimage_1.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__6f22bfd9a5a7f6a2_c53e2c9cbf02e854.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/6f22bfd9a5a7f6a2/renderimage_2.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__6f22bfd9a5a7f6a2_b25be859441e3a83.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/6f22bfd9a5a7f6a2/renderimage_3.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Character_DefectGlitch",
+     "name": "Glitch",
+     "description": "Eres más que tu programación.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "Red neuronal",
+      "text": "Pieza del conjunto Red neuronal.",
+      "backendValue": "BotTaught"
+     },
+     "introduction": {
+      "chapter": "3",
+      "season": "4",
+      "text": "Introducido en Capítulo 3, Temporada 4.",
+      "backendValue": 22
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_defectglitch/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_defectglitch/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_defectglitch/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_defectglitch/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_defectglitch/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_defectglitch/wide.png"
+      },
+      "bean": {
+       "small": "https://fortnite-api.com/images/cosmetics/beans/bean_defectglitch/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/beans/bean_defectglitch/large.png"
+      }
+     },
+     "variants": [
+      {
+       "channel": "RichColor2",
+       "type": "Color del metal",
+       "options": [
+        {
+         "tag": "000",
+         "name": "Bronce",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_defectglitch/variants/richcolor2/000.png"
+        },
+        {
+         "tag": "001",
+         "name": "Oro rosa",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_defectglitch/variants/richcolor2/001.png"
+        },
+        {
+         "tag": "002",
+         "name": "Acero azulado",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_defectglitch/variants/richcolor2/002.png"
+        },
+        {
+         "tag": "003",
+         "name": "Térmico",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_defectglitch/variants/richcolor2/003.png"
+        }
+       ]
+      }
+     ],
+     "showcaseVideo": "Q7tN7TC56Y0",
+     "added": "2022-11-01T13:50:36Z"
+    },
+    {
+     "id": "Backpack_DefectGlitch",
+     "name": "Inhibidor de señal",
+     "description": "Ya no hay más actualizaciones.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "Red neuronal",
+      "text": "Pieza del conjunto Red neuronal.",
+      "backendValue": "BotTaught"
+     },
+     "introduction": {
+      "chapter": "3",
+      "season": "4",
+      "text": "Introducido en Capítulo 3, Temporada 4.",
+      "backendValue": 22
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_defectglitch/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_defectglitch/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_defectglitch/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "RichColor2",
+       "type": "Color del metal",
+       "options": [
+        {
+         "tag": "000",
+         "name": "Bronce",
+         "image": "https://fortnite-api.com/images/cosmetics/br/backpack_defectglitch/variants/richcolor2/000.png"
+        },
+        {
+         "tag": "001",
+         "name": "Oro rosa",
+         "image": "https://fortnite-api.com/images/cosmetics/br/backpack_defectglitch/variants/richcolor2/001.png"
+        },
+        {
+         "tag": "002",
+         "name": "Acero azulado",
+         "image": "https://fortnite-api.com/images/cosmetics/br/backpack_defectglitch/variants/richcolor2/002.png"
+        },
+        {
+         "tag": "003",
+         "name": "Térmico",
+         "image": "https://fortnite-api.com/images/cosmetics/br/backpack_defectglitch/variants/richcolor2/003.png"
+        }
+       ]
+      }
+     ],
+     "added": "2022-11-01T13:50:36Z"
+    },
+    {
+     "id": "Wrap_DefectGlitch",
+     "name": "Sonar ultrasónico",
+     "description": "Muestra tu estilo.",
+     "type": {
+      "value": "wrap",
+      "displayValue": "Papel",
+      "backendValue": "AthenaItemWrap"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Red neuronal",
+      "text": "Pieza del conjunto Red neuronal.",
+      "backendValue": "BotTaught"
+     },
+     "introduction": {
+      "chapter": "3",
+      "season": "4",
+      "text": "Introducido en Capítulo 3, Temporada 4.",
+      "backendValue": 22
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/wrap_defectglitch/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/wrap_defectglitch/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/wrap_defectglitch/featured.png"
+     },
+     "added": "2022-11-01T13:50:36Z"
+    },
+    {
+     "id": "Pickaxe_ID_449_TripleScoopFemale",
+     "name": "Bate puntiagudo",
+     "description": "La seguridad ante todo.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Asaltapistas",
+      "text": "Pieza del conjunto Asaltapistas.",
+      "backendValue": "SkaterBeast"
+     },
+     "introduction": {
+      "chapter": "2",
+      "season": "3",
+      "text": "Introducido en Capítulo 2, Temporada 3.",
+      "backendValue": 13
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_id_449_triplescoopfemale/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_id_449_triplescoopfemale/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_id_449_triplescoopfemale/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Particle",
+       "type": "Estilo",
+       "options": [
+        {
+         "tag": "Particle1",
+         "name": "Predeterminado",
+         "image": "https://fortnite-api.com/images/cosmetics/br/pickaxe_id_449_triplescoopfemale/variants/particle/particle1.png"
+        },
+        {
+         "tag": "Particle2",
+         "name": "Menta",
+         "image": "https://fortnite-api.com/images/cosmetics/br/pickaxe_id_449_triplescoopfemale/variants/particle/particle2.png"
+        },
+        {
+         "tag": "Particle3",
+         "name": "En llamas",
+         "image": "https://fortnite-api.com/images/cosmetics/br/pickaxe_id_449_triplescoopfemale/variants/particle/particle3.png"
+        }
+       ]
+      }
+     ],
+     "showcaseVideo": "GzMm4cwPZK8",
+     "added": "2020-08-05T08:09:19Z"
+    },
+    {
+     "id": "Glider_ID_227_SharkSuit",
+     "name": "Marrajo mecánico",
+     "description": "Pégale un buen bocado al vuelo.",
+     "type": {
+      "value": "glider",
+      "displayValue": "Planeador",
+      "backendValue": "AthenaGlider"
+     },
+     "rarity": {
+      "value": "legendary",
+      "displayValue": "Legendario",
+      "backendValue": "EFortRarity::Legendary"
+     },
+     "set": {
+      "value": "Delirios dietéticos",
+      "text": "Pieza del conjunto Delirios dietéticos.",
+      "backendValue": "EatingCraze"
+     },
+     "introduction": {
+      "chapter": "2",
+      "season": "3",
+      "text": "Introducido en Capítulo 2, Temporada 3.",
+      "backendValue": 13
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/glider_id_227_sharksuit/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/glider_id_227_sharksuit/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/glider_id_227_sharksuit/featured.png"
+     },
+     "showcaseVideo": "RbkkL0jlBDs",
+     "added": "2020-06-30T06:09:08Z"
+    },
+    {
+     "id": "EID_GroovyPetals",
+     "name": "Rock & Sol",
+     "description": "¿Escuchas eso? Es el sonido de la rockosíntesis.",
+     "type": {
+      "value": "emote",
+      "displayValue": "Gesto",
+      "backendValue": "AthenaDance"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "introduction": {
+      "chapter": "4",
+      "season": "3",
+      "text": "Introducido en Capítulo 4, Temporada 3.",
+      "backendValue": 25
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/eid_groovypetals/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/eid_groovypetals/icon.png"
+     },
+     "showcaseVideo": "mmfF1RcoJME",
+     "added": "2023-06-23T16:22:36Z"
+    },
+    {
+     "id": "Wrap_092_Sarong",
+     "name": "Estampado de flores",
+     "description": "Muestra tu estilo.",
+     "type": {
+      "value": "wrap",
+      "displayValue": "Papel",
+      "backendValue": "AthenaItemWrap"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "Lirio rojo",
+      "text": "Pieza del conjunto Lirio rojo.",
+      "backendValue": "Sarong"
+     },
+     "introduction": {
+      "chapter": "1",
+      "season": "9",
+      "text": "Introducido en Capítulo 1, Temporada 9.",
+      "backendValue": 9
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/wrap_092_sarong/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/wrap_092_sarong/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/wrap_092_sarong/featured.png"
+     },
+     "showcaseVideo": "anhy_8O95Zw",
+     "added": "2019-11-20T12:48:26Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 4300,
+   "finalPrice": 2300,
+   "devName": "[VIRTUAL]1 x High Tide Harley, 1 x Harley Floatie, 1 x Chlorophyll Ivy, 1 x Lily Lounger, 1 x Summer Snapper, 1 x Carnation of Carnage, 1 x Harley's Boogie Bat for -1 MtxCurrency",
+   "offerId": "v2:/5145d90e956080db143caf776b175ec432c918e0827f0929f394ef437a7cf382",
+   "inDate": "2026-11-16T00:00:00Z",
+   "outDate": "2026-11-20T23:59:59.999Z",
+   "bundle": {
+    "name": "Lote Harley veraniega y Ivy botánica",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/14e2ed8173f9d34f/renderimage_0.png"
+   },
+   "banner": {
+    "value": "2000 monedas V de descuento",
+    "intensity": "Low",
+    "backendValue": "AmountOff"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -2,
+   "layoutId": "SummerBatmanGCS.99",
+   "layout": {
+    "id": "SummerBatmanGCS",
+    "name": "Verano en Gotham City",
+    "index": 4,
+    "rank": 193,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "faac38ff",
+    "color3": "ffcf88ff",
+    "textBackgroundColor": "83531cff"
+   },
+   "tileBackgroundMaterial": "ShopTile_ShopComic",
+   "tileSize": "Size_2_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_Humorshale_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S41/DAv2_Bundle_Featured_Humorshale",
+   "newDisplayAsset": {
+    "id": "DAv2_Bundle_Featured_HumorShale",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__14e2ed8173f9d34f_29c0c4191e61fb71.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/14e2ed8173f9d34f/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__14e2ed8173f9d34f_d2e71b6320aa32c2.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/14e2ed8173f9d34f/renderimage_1.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__14e2ed8173f9d34f_e0559e464b07edd9.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/14e2ed8173f9d34f/renderimage_2.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__14e2ed8173f9d34f_1289a263ea7b677a.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/14e2ed8173f9d34f/renderimage_3.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__14e2ed8173f9d34f_1c39458533e1ba48.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/14e2ed8173f9d34f/renderimage_4.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Character_HumorShale_Teak",
+     "name": "Harley veraniega",
+     "description": "Agita las aguas.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "dc",
+      "displayValue": "SERIE DE DC",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "SERIE DE DC",
+      "image": "https://fortnite-api.com/images/cosmetics/series/dcuseries.png",
+      "colors": [
+       "007af1ff",
+       "0053a9ff",
+       "003f82ff",
+       "003169ff",
+       "001f47ff"
+      ],
+      "backendValue": "DCUSeries"
+     },
+     "set": {
+      "value": "Verano en Gotham City",
+      "text": "Pieza del conjunto Verano en Gotham City.",
+      "backendValue": "RiverFall"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "3",
+      "text": "Introducido en Capítulo 7, Temporada 3.",
+      "backendValue": 41
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_humorshale_teak/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_humorshale_teak/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_humorshale_teak/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_humorshale_teak/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_humorshale_teak/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_humorshale_teak/wide.png"
+      }
+     },
+     "variants": [
+      {
+       "channel": "Parts",
+       "type": "Gafas",
+       "options": [
+        {
+         "tag": "Stage1",
+         "name": "arriba",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_humorshale_teak/variants/parts/stage1.png"
+        },
+        {
+         "tag": "Stage2",
+         "name": "sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_humorshale_teak/variants/parts/stage2.png"
+        },
+        {
+         "tag": "Stage3",
+         "name": "No",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_humorshale_teak/variants/parts/stage3.png"
+        }
+       ]
+      },
+      {
+       "channel": "Outfit",
+       "type": "pantalones cortos",
+       "options": [
+        {
+         "tag": "Stage4",
+         "name": "No",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_humorshale_teak/variants/outfit/stage4.png"
+        },
+        {
+         "tag": "Stage5",
+         "name": "sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_humorshale_teak/variants/outfit/stage5.png"
+        }
+       ]
+      }
+     ],
+     "showcaseVideo": "jFGz-Vnvyyo",
+     "added": "2026-07-16T08:00:00Z"
+    },
+    {
+     "id": "Backpack_HumorShale",
+     "name": "Flotarlequín de Harley",
+     "description": "Para aligerar el ambiente.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "dc",
+      "displayValue": "SERIE DE DC",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "SERIE DE DC",
+      "image": "https://fortnite-api.com/images/cosmetics/series/dcuseries.png",
+      "colors": [
+       "007af1ff",
+       "0053a9ff",
+       "003f82ff",
+       "003169ff",
+       "001f47ff"
+      ],
+      "backendValue": "DCUSeries"
+     },
+     "set": {
+      "value": "Verano en Gotham City",
+      "text": "Pieza del conjunto Verano en Gotham City.",
+      "backendValue": "RiverFall"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "3",
+      "text": "Introducido en Capítulo 7, Temporada 3.",
+      "backendValue": 41
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_humorshale/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_humorshale/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_humorshale/featured.png"
+     },
+     "added": "2026-07-16T08:00:00Z"
+    },
+    {
+     "id": "Character_CrimpPerfume",
+     "name": "Ivy botánica",
+     "description": "Florece con el sol de verano.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "dc",
+      "displayValue": "SERIE DE DC",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "SERIE DE DC",
+      "image": "https://fortnite-api.com/images/cosmetics/series/dcuseries.png",
+      "colors": [
+       "007af1ff",
+       "0053a9ff",
+       "003f82ff",
+       "003169ff",
+       "001f47ff"
+      ],
+      "backendValue": "DCUSeries"
+     },
+     "set": {
+      "value": "Verano en Gotham City",
+      "text": "Pieza del conjunto Verano en Gotham City.",
+      "backendValue": "RiverFall"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "3",
+      "text": "Introducido en Capítulo 7, Temporada 3.",
+      "backendValue": 41
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_crimpperfume/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_crimpperfume/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_crimpperfume/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_crimpperfume/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_crimpperfume/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_crimpperfume/wide.png"
+      }
+     },
+     "variants": [
+      {
+       "channel": "Parts",
+       "type": "Estilo",
+       "options": [
+        {
+         "tag": "Stage1",
+         "name": "Ivy botánica",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_crimpperfume/variants/parts/stage1.png"
+        },
+        {
+         "tag": "Stage2",
+         "name": "Ivy floral",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_crimpperfume/variants/parts/stage2.png"
+        }
+       ]
+      },
+      {
+       "channel": "Material",
+       "type": "Gafas",
+       "options": [
+        {
+         "tag": "Mat1",
+         "name": "arriba",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_crimpperfume/variants/material/mat1.png"
+        },
+        {
+         "tag": "Mat2",
+         "name": "sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_crimpperfume/variants/material/mat2.png"
+        },
+        {
+         "tag": "Mat3",
+         "name": "No",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_crimpperfume/variants/material/mat3.png"
+        }
+       ]
+      }
+     ],
+     "showcaseVideo": "FUoBazXW0rY",
+     "added": "2026-07-16T08:00:00Z"
+    },
+    {
+     "id": "EID_CrimpPerfume",
+     "name": "Descanso veraniego",
+     "description": "Esta planta necesita mucho sol.",
+     "type": {
+      "value": "emote",
+      "displayValue": "Gesto",
+      "backendValue": "AthenaDance"
+     },
+     "rarity": {
+      "value": "dc",
+      "displayValue": "SERIE DE DC",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "series": {
+      "value": "SERIE DE DC",
+      "image": "https://fortnite-api.com/images/cosmetics/series/dcuseries.png",
+      "colors": [
+       "007af1ff",
+       "0053a9ff",
+       "003f82ff",
+       "003169ff",
+       "001f47ff"
+      ],
+      "backendValue": "DCUSeries"
+     },
+     "set": {
+      "value": "Verano en Gotham City",
+      "text": "Pieza del conjunto Verano en Gotham City.",
+      "backendValue": "RiverFall"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "3",
+      "text": "Introducido en Capítulo 7, Temporada 3.",
+      "backendValue": 41
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/eid_crimpperfume/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/eid_crimpperfume/icon.png"
+     },
+     "showcaseVideo": "uUL7LCnjnxg",
+     "added": "2026-07-16T08:00:00Z"
+    },
+    {
+     "id": "Backpack_CrimpPerfume",
+     "name": "Hiedra veraniega",
+     "description": "Una flor con estilo.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "dc",
+      "displayValue": "SERIE DE DC",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "SERIE DE DC",
+      "image": "https://fortnite-api.com/images/cosmetics/series/dcuseries.png",
+      "colors": [
+       "007af1ff",
+       "0053a9ff",
+       "003f82ff",
+       "003169ff",
+       "001f47ff"
+      ],
+      "backendValue": "DCUSeries"
+     },
+     "set": {
+      "value": "Verano en Gotham City",
+      "text": "Pieza del conjunto Verano en Gotham City.",
+      "backendValue": "RiverFall"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "3",
+      "text": "Introducido en Capítulo 7, Temporada 3.",
+      "backendValue": 41
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_crimpperfume/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_crimpperfume/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_crimpperfume/featured.png"
+     },
+     "added": "2026-07-16T08:00:00Z"
+    },
+    {
+     "id": "Pickaxe_CrimpPerfume",
+     "name": "Clavel letal",
+     "description": "Igual de letal con cualquier otro nombre.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "dc",
+      "displayValue": "SERIE DE DC",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "SERIE DE DC",
+      "image": "https://fortnite-api.com/images/cosmetics/series/dcuseries.png",
+      "colors": [
+       "007af1ff",
+       "0053a9ff",
+       "003f82ff",
+       "003169ff",
+       "001f47ff"
+      ],
+      "backendValue": "DCUSeries"
+     },
+     "set": {
+      "value": "Verano en Gotham City",
+      "text": "Pieza del conjunto Verano en Gotham City.",
+      "backendValue": "RiverFall"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "3",
+      "text": "Introducido en Capítulo 7, Temporada 3.",
+      "backendValue": 41
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_crimpperfume/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_crimpperfume/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_crimpperfume/featured.png"
+     },
+     "added": "2026-07-16T08:00:00Z"
+    },
+    {
+     "id": "Pickaxe_HumorShale",
+     "name": "Bate acuático de Harley",
+     "description": "Doloroso y rechinante.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "dc",
+      "displayValue": "SERIE DE DC",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "SERIE DE DC",
+      "image": "https://fortnite-api.com/images/cosmetics/series/dcuseries.png",
+      "colors": [
+       "007af1ff",
+       "0053a9ff",
+       "003f82ff",
+       "003169ff",
+       "001f47ff"
+      ],
+      "backendValue": "DCUSeries"
+     },
+     "set": {
+      "value": "Verano en Gotham City",
+      "text": "Pieza del conjunto Verano en Gotham City.",
+      "backendValue": "RiverFall"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "3",
+      "text": "Introducido en Capítulo 7, Temporada 3.",
+      "backendValue": 41
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_humorshale/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_humorshale/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_humorshale/featured.png"
+     },
+     "added": "2026-07-16T08:00:00Z"
+    }
+   ]
+  }
+ ]
+}
