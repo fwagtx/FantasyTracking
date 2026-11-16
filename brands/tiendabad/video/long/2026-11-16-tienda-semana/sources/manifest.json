@@ -1,0 +1,29 @@
+{
+ "via": "fortnite-api.com (mirror of Epic's own data, es-419) for the Item Shop of 2026-11-16 and for every outfit shown, re-fetched today with its full shop history (responseFlags=4), which dates the week's returns; plan.json is that day's pick made by shop_pick.py from the same shop fetch (its last-day count); VGC's report of Epic's Fortnite Status post, fetched live on 2026-11-15 with Firecrawl (maxAge 0) and checked passage by passage, for the 14 free days of the Tienda Pirata. shop.json keeps only the entries this video uses, copied verbatim (the full file is 900 KB).",
+ "files": [
+  {
+   "file": "shop.json",
+   "source": "Item Shop for 2026-11-16 (subset: the offers in this video)",
+   "url": "https://fortnite-api.com/v2/shop?language=es-419",
+   "fetched_utc": "2026-11-16T00:13:10Z"
+  },
+  {
+   "file": "plan.json",
+   "source": "Daily pick for 2026-11-16 made by shop_pick.py from the same shop fetch (last-day count)",
+   "url": "https://fortnite-api.com/v2/shop?language=es-419",
+   "fetched_utc": "2026-11-16T00:13:10Z"
+  },
+  {
+   "file": "cosmetics.json",
+   "source": "The outfits shown, with introduction season and full shop history (es-419)",
+   "url": "https://fortnite-api.com/v2/cosmetics/br/<id>?language=es-419&responseFlags=4",
+   "fetched_utc": "2026-11-16T11:18:16Z"
+  },
+  {
+   "file": "vgc-odds-confirmed.json",
+   "source": "VGC: Fortnite officially confirms Pirate Shop Access Token drop rate (Nov 9, 2026), reporting Epic's Fortnite Status post",
+   "url": "https://www.videogameschronicle.com/news/fortnite-officially-confirms-pirate-shop-access-token-drop-rate-as-players-hunt-for-item-which-makes-entire-shop-free/",
+   "fetched_utc": "2026-11-15T19:15:00Z"
+  }
+ ]
+}
