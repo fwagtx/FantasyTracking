@@ -354,7 +354,7 @@
    "type": "stat",
    "p": 8,
    "big": "3000 pavos",
-   "label": "Lote Verano en Gotham City, en vez de 6900"
+   "label": "Lote Verano en Gotham City, en vez de 6900"
   },
   {
    "type": "items",
@@ -378,7 +378,7 @@
   {
    "type": "items",
    "p": 10,
-   "title": "Lote Hatsune Miku: 3200 pavos (en vez de 5200)",
+   "title": "Lote Hatsune Miku: 3200 (en vez de 5200)",
    "items": [
     {
      "img": "../../tiendabad/video/long/2026-11-16-tienda-semana/img/Character_JadeTowelGloss.png",
@@ -391,7 +391,7 @@
   {
    "type": "items",
    "p": 11,
-   "title": "Lote Casillero Glitch de Candywing: 2800 (en vez de 4500)",
+   "title": "Glitch: su lote, 2800 (en vez de 4500)",
    "items": [
     {
      "img": "../../tiendabad/video/long/2026-11-16-tienda-semana/img/Character_DefectGlitch.png",
@@ -431,7 +431,7 @@
    "type": "stat",
    "p": 15,
    "big": "3200 pavos",
-   "label": "Lote de Lil' Uzi Vert, en vez de 7100 · hasta el 12 dic"
+   "label": "Lote de Lil' Uzi Vert, en vez de 7100 · hasta el 12 dic"
   },
   {
    "type": "items",
@@ -456,7 +456,7 @@
    "type": "stat",
    "p": 17,
    "big": "1800 pavos",
-   "label": "Lote Speedy pirata, en vez de 2700 · hasta el 20 nov"
+   "label": "Lote Speedy pirata, en vez de 2700 · hasta el 20 nov"
   },
   {
    "type": "items",
@@ -475,19 +475,19 @@
    "type": "stat",
    "p": 19,
    "big": "2200 pavos",
-   "label": "Todo su conjunto, en vez de 4100 · hasta el 14 dic"
+   "label": "Todo su conjunto, en vez de 4100 · hasta el 14 dic"
   },
   {
    "type": "stat",
    "p": 20,
    "big": "2000 pavos",
-   "label": "Volkswagen Golf GTI · hasta el 23 nov"
+   "label": "Volkswagen Golf GTI · hasta el 23 nov"
   },
   {
    "type": "stat",
    "p": 21,
    "big": "2000 pavos",
-   "label": "Rivian R1S · hasta el 19 nov"
+   "label": "Rivian R1S · hasta el 19 nov"
   },
   {
    "type": "title",
@@ -503,7 +503,7 @@
    "type": "stat",
    "p": 23,
    "big": "Ahorras 3300",
-   "label": "#5 · Lote Shohei Ohtani: 2800 en vez de 6100"
+   "label": "#5 · Lote Shohei Ohtani: 2800 en vez de 6100"
   },
   {
    "type": "items",
@@ -616,7 +616,7 @@
    "type": "stat",
    "p": 32,
    "big": "7 días",
-   "label": "Del 10 al 16 nov · se va a las 6 PM (CDMX)"
+   "label": "Del 10 al 16 de noviembre"
   },
   {
    "type": "items",
@@ -651,7 +651,7 @@
    "type": "stat",
    "p": 35,
    "big": "129 y 102 días",
-   "label": "Aracne y Chaqueta orejuda, sin salir"
+   "label": "Aracne y Chaqueta orejuda, sin salir"
   },
   {
    "type": "items",
@@ -770,7 +770,7 @@
    "type": "stat",
    "p": 43,
    "big": "20 nov",
-   "label": "Shohei Ohtani, Gotham City, Hatsune Miku, Bandolero y Speedy pirata"
+   "label": "Shohei Ohtani, Gotham City, Hatsune Miku, Bandolero y Speedy pirata"
   },
   {
    "type": "title",

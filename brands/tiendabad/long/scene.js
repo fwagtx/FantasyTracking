@@ -78,7 +78,9 @@
         e.lines = s.lines.map((l) => { const d = document.createElement("div"); d.style.cssText = `font:700 42px/1.3 Montserrat;color:#C9D6FF;margin-top:16px;opacity:0`; d.textContent = `“${l.text}”`; d.dataset.text = l.text.toUpperCase(); q.appendChild(d); return { ...l, d }; });
       } else if (s.type === "items") {
         const n = s.items.length, w = Math.min(330, Math.floor(1600 / n) - 30), h = Math.round(w * 1.4);
-        e.head = mk(g, `left:200px;right:200px;top:150px;text-align:center`, big(s.title, 54), s.title.toUpperCase());
+        // the title keeps clear of the #EpicPartner pill (left, to x 265) and the logo (right): a long lote name ran under the pill (Nov 16)
+        e.head = mk(g, `left:300px;right:300px;top:150px;text-align:center`, `<div class="fit" style="white-space:nowrap">${big(s.title, 54)}</div>`, s.title.toUpperCase());
+        e.fit = e.head.querySelector(".fit");
         e.tiles = s.items.map((o, j) => { const el = tile(g, o, w, h); el.style.left = `${960 - (n * (w + 30) - 30) / 2 + j * (w + 30)}px`; el.style.top = `${300 + (j % 2) * 24}px`; return el; });
       } else if (s.type === "stat") {
         e.size = Math.min(300, Math.floor(1500 / (0.62 * s.big.length)));
@@ -127,7 +129,10 @@
         }
         if (s.type === "quote") { dimA = Math.max(dimA, on); T(e.card, { s: 0.94 + 0.06 * E.back(k(t, s.t0, s.t0 + 0.4)) });
           e.lines.forEach((l) => { const lit = t >= P[l.p].t0 - 0.05; l.d.style.opacity = lit ? 1 : 0.32; l.d.style.color = lit && t < P[l.p].t1 + 0.15 ? "#fff" : "#C9D6FF"; }); }
-        if (s.type === "items") { dimA = Math.max(dimA, on); e.tiles.forEach((el, j) => T(el, { s: E.back(k(t, s.t0 + j * 0.08, s.t0 + 0.35 + j * 0.08)), r: Math.sin(t * 0.9 + j) * 1.2 })); }
+        if (s.type === "items") { dimA = Math.max(dimA, on);
+          // the title on one line, shrunk to fit between the pill and the logo (two-line titles left one word on the second line)
+          if (!e.fitted) { e.fitted = true; if (e.fit.scrollWidth > e.fit.clientWidth) e.fit.innerHTML = big(s.title, Math.floor(54 * e.fit.clientWidth / e.fit.scrollWidth * 0.97)); }
+          e.tiles.forEach((el, j) => T(el, { s: E.back(k(t, s.t0 + j * 0.08, s.t0 + 0.35 + j * 0.08)), r: Math.sin(t * 0.9 + j) * 1.2 })); }
         if (s.type === "stat") { dimA = Math.max(dimA, on);
           // one line, shrunk to the card's width once the font is in ("4000 PAVOS" wrapped at the size the letter count suggests)
           if (!e.fitted) { e.fitted = true; if (e.fit.scrollWidth > e.fit.clientWidth) e.fit.innerHTML = big(s.big, Math.floor(e.size * e.fit.clientWidth / e.fit.scrollWidth * 0.97), YEL); }
