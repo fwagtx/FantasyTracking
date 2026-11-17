@@ -28,7 +28,7 @@ def direction(x, y, cx, cy):
 
 
 F = (540, 820)      # where TPL.map's camera puts its focus on screen (style2.js mapCam)
-CHAR = 21           # a letter of a map-labels.png place name is about 21 map pixels wide
+CHAR = 24           # a letter of a map-labels.png place name is up to ~23 map pixels wide (LOGUETOWN), so 24 leaves a margin
 
 
 def close_shots(x, y, nx, ny, name, near, labeled, zs=(1.6, 1.7, 1.8)):
