@@ -1,0 +1,160 @@
+{
+ "date": "2026-11-17",
+ "dateLabel": "17 NOV",
+ "dateLong": "17 de noviembre",
+ "resetLabel": "6 PM",
+ "resetZone": "CDMX",
+ "dealOutLabel": "5 DIC",
+ "dealOutTime": "6 PM",
+ "deal": {
+  "name": "Lote One Piece",
+  "final": 4000,
+  "regular": 8200,
+  "out": "2026-12-05T23:59:59.999Z",
+  "outfits": [
+   {
+    "id": "Character_CeleryStitch",
+    "name": "Monkey D. Luffy",
+    "rarity": "Épico",
+    "rarityKey": "epic",
+    "series": null,
+    "img": "https://fortnite-api.com/images/cosmetics/br/character_celerystitch/featured.png",
+    "price": null,
+    "out": null
+   },
+   {
+    "id": "Character_BoastJoint",
+    "name": "Nami",
+    "rarity": "Épico",
+    "rarityKey": "epic",
+    "series": null,
+    "img": "https://fortnite-api.com/images/cosmetics/br/character_boastjoint/featured.png",
+    "price": null,
+    "out": null
+   },
+   {
+    "id": "Character_LoomRise",
+    "name": "Usopp",
+    "rarity": "Épico",
+    "rarityKey": "epic",
+    "series": null,
+    "img": "https://fortnite-api.com/images/cosmetics/br/character_loomrise/featured.png",
+    "price": null,
+    "out": null
+   }
+  ],
+  "saving": 4200,
+  "pct": 51
+ },
+ "dealBest": false,
+ "og": {
+  "chapter": 1,
+  "season": 4,
+  "gapDays": 247,
+  "gapName": null,
+  "outfits": [
+   {
+    "id": "CID_134_Athena_Commando_M_Jailbird",
+    "name": "Sinvergüenza",
+    "rarity": "Épico",
+    "rarityKey": "epic",
+    "series": null,
+    "img": "https://fortnite-api.com/images/cosmetics/br/cid_134_athena_commando_m_jailbird/featured.png",
+    "price": 1500,
+    "out": "2026-11-23",
+    "gapDays": 247
+   }
+  ]
+ },
+ "last": {
+  "count": 6,
+  "outfits": [
+   {
+    "id": "CID_726_Athena_Commando_M_TargetPractice",
+    "name": "Hombre diana",
+    "rarity": "Épico",
+    "rarityKey": "epic",
+    "series": null,
+    "img": "https://fortnite-api.com/images/cosmetics/br/cid_726_athena_commando_m_targetpractice/featured.png",
+    "price": 1500,
+    "out": "2026-11-17"
+   },
+   {
+    "id": "CID_751_Athena_Commando_F_NeonCatSpy",
+    "name": "Vix",
+    "rarity": "Épico",
+    "rarityKey": "epic",
+    "series": null,
+    "img": "https://fortnite-api.com/images/cosmetics/br/cid_751_athena_commando_f_neoncatspy/featured.png",
+    "price": 1500,
+    "out": "2026-11-17"
+   },
+   {
+    "id": "Character_VoyagerCuboid",
+    "name": "Viajero desatado",
+    "rarity": "Épico",
+    "rarityKey": "epic",
+    "series": null,
+    "img": "https://fortnite-api.com/images/cosmetics/br/character_voyagercuboid/featured.png",
+    "price": 1200,
+    "out": "2026-11-17"
+   },
+   {
+    "id": "Character_SplishSplash",
+    "name": "Duchalina",
+    "rarity": "Épico",
+    "rarityKey": "epic",
+    "series": null,
+    "img": "https://fortnite-api.com/images/cosmetics/br/character_splishsplash/featured.png",
+    "price": 800,
+    "out": "2026-11-17"
+   },
+   {
+    "id": "Character_ExcitedCyan",
+    "name": "Katalina",
+    "rarity": "Épico",
+    "rarityKey": "epic",
+    "series": null,
+    "img": "https://fortnite-api.com/images/cosmetics/br/character_excitedcyan/featured.png",
+    "price": 800,
+    "out": "2026-11-17"
+   },
+   {
+    "id": "CID_336_Athena_Commando_M_DragonMask",
+    "name": "Caminante ígneo",
+    "rarity": "Raro",
+    "rarityKey": "rare",
+    "series": null,
+    "img": "https://fortnite-api.com/images/cosmetics/br/cid_336_athena_commando_m_dragonmask/featured.png",
+    "price": 1200,
+    "out": "2026-11-17"
+   }
+  ]
+ },
+ "roles": [
+  "intro",
+  "hook",
+  "deal_name",
+  "deal_price",
+  "saving",
+  "og_name",
+  "og_era",
+  "last",
+  "ask",
+  "code",
+  "thanks"
+ ],
+ "phrases": [
+  "Esta es la tienda de objetos de hoy, 17 de noviembre.",
+  "¡Tres cosas antes de gastar un solo pavo!",
+  "El Lote One Piece:",
+  "4000 pavos, en vez de 8200.",
+  "¡Te ahorras 4200!",
+  "Sinvergüenza está en la tienda.",
+  "Es del Capítulo 1, Temporada 4, y no salía desde hace 247 días.",
+  "Y seis skins están en su último día, cinco de ellas épicas.",
+  "¿Vas a comprar algo hoy?",
+  "Usa el código BAD en la tienda de objetos. Le ayuda muchísimo al canal.",
+  "¡Gracias por ver! Síguenos para más contenido diario."
+ ]
+}
