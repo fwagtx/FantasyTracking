@@ -129,7 +129,8 @@ def ship(day):
     when = (now + datetime.timedelta(minutes=12)).astimezone(MX)
     when = when.replace(second=0, microsecond=0) + datetime.timedelta(minutes=(5 - when.minute % 5) % 5)
     plan = json.load(open(os.path.join(D, "plan.json")))
-    calls = post_calls(when, video, cov, captions(plan), kind="shop")
+    spoken = " ".join(ph.get("text", "") for ph in json.load(open(os.path.join(D, "vo.json"), encoding="utf-8"))["phrases"])
+    calls = post_calls(when, video, cov, captions(plan), kind="shop", spoken=spoken)
     write_posts(os.path.join(D, "posts.json"), f"shop-{day}", when, calls)
     print(json.dumps({"verdict": verdict, "post_at": mx_label(when), "posts": os.path.relpath(os.path.join(D, "posts.json"), BRAND),
                       "networks": [c["network"] for c in calls]}, indent=1))

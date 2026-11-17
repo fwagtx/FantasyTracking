@@ -94,7 +94,8 @@ def ship():
     video = run([sys.executable, STORE, "put", os.path.join(out, "video.mp4"), f"{slug}/video.mp4"], BRAND, quiet=True).strip()
     cov = run([sys.executable, STORE, "put", os.path.join(out, "cover.jpg"), f"{slug}/cover.jpg"], BRAND, quiet=True).strip()
     nets = opt("--networks")
-    calls = post_calls(when, video, cov, c, nets.split(",") if nets else None)
+    spoken = " ".join(ph.get("text", "") for ph in json.load(open(os.path.join(d, "vo.json"), encoding="utf-8"))["phrases"])
+    calls = post_calls(when, video, cov, c, nets.split(",") if nets else None, spoken=spoken)
     write_posts(os.path.join(d, "posts.json"), slug, when, calls)
     print(json.dumps({"verdict": verdict, "post_at": mx_label(when), "posts": os.path.relpath(os.path.join(d, "posts.json"), BRAND),
                       "networks": [x["network"] for x in calls]}, indent=1))

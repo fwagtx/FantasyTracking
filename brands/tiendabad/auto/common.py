@@ -23,6 +23,10 @@ NETWORKS = ["tiktok", "instagram", "facebook", "youtube", "threads"]
 # gets 2 a day: the shop video and the 1:00 PM short. The pirate extras and the 8:30 PM evergreen never go to TikTok.
 TIKTOK_FROM = datetime.date(2026, 11, 20)
 TIKTOK_RULE = "TikTok is paused through Nov 19 CDMX; from Nov 20 it gets only the shop video and the 1:00 PM short (owner, 2026-11-17)"
+# "Free skins + use a code" is the classic Fortnite scam TikTok moderates hardest, and the account's first TikTok video (Nov 9:
+# "¿Toda la tienda de Fortnite GRATIS?… Usa el código BAD") was the last one that got any views. A video that says something
+# is free, in its TikTok caption or out loud, skips TikTok (Instagram, Facebook, YouTube and Threads still get it).
+TIKTOK_RISKY = re.compile(r"\b(gratis|gratuit[oa]s?|free|sin gastar|cero pavos|0 pavos|regal[oa]s?|regalamos)\b", re.I)
 BANNED = re.compile(r"\b(discount|discounted|% ?off|save money|free v-?bucks|giveaway|sponsored by epic|descuentos?|pavos gratis|v-?bucks gratis|"
                     r"sorteos?|regalamos|patrocinad[oa] por epic|avalad[oa] por epic|c[oó]digo (gratis|de descuento))\b", re.I)
 
@@ -85,16 +89,21 @@ def caption_problems(c):
     return bad
 
 
-def tiktok_ok(when, kind):
-    """TIKTOK_RULE. kind: "shop" (shop_daily.py) or "short" (make_short.py, where only the 1:00 PM slot goes to TikTok)."""
-    local = when.astimezone(MX)
-    return local.date() >= TIKTOK_FROM and (kind == "shop" or (local.hour, local.minute) == (13, 0))
+def tiktok_ok(when, kind, words=""):
+    """TIKTOK_RULE and TIKTOK_RISKY. kind: "shop" (shop_daily.py) or "short" (make_short.py, where only the 1:00 PM slot
+    goes to TikTok); words: the TikTok caption, title and everything the voice says."""
+    local, m = when.astimezone(MX), TIKTOK_RISKY.search(words)
+    why = (f"the video or its caption says '{m.group(0)}' (free + code reads as a scam on TikTok)" if m
+           else None if local.date() >= TIKTOK_FROM and (kind == "shop" or (local.hour, local.minute) == (13, 0)) else TIKTOK_RULE)
+    if why:
+        print(f"no TikTok post: {why}", file=sys.stderr)
+    return not why
 
 
-def post_calls(when, video, cover_url, c, networks=None, long=False, kind="short"):
+def post_calls(when, video, cover_url, c, networks=None, long=False, kind="short", spoken=""):
     """One ready createScheduledPost call per network. Covers go only where Metricool takes them
     (TikTok, Instagram Reels, Facebook Reels); YouTube gets one only for long videos on a verified channel.
-    TikTok only where TIKTOK_RULE allows it, even when --networks names it."""
+    TikTok only where TIKTOK_RULE and TIKTOK_RISKY allow it, even when --networks names it; spoken = the voice's lines."""
     iso, local = when.isoformat(timespec="seconds"), when.strftime("%Y-%m-%dT%H:%M:%S")
     base = {"autoPublish": True, "draft": False, "descendants": [], "firstCommentText": "", "hasNotReadNotes": False, "mediaAltText": [],
             "media": [video], "publicationDate": {"dateTime": local, "timezone": TZNAME}, "shortener": False, "smartLinkData": {"ids": []}}
@@ -115,9 +124,8 @@ def post_calls(when, video, cover_url, c, networks=None, long=False, kind="short
     if long:
         nets = {"youtube": {**nets["youtube"], **thumb}}
     want = list(networks or (["youtube"] if long else NETWORKS))
-    if "tiktok" in want and not tiktok_ok(when, kind):
+    if "tiktok" in want and not tiktok_ok(when, kind, " ".join([c.get("tiktok", ""), c.get("tiktokTitle", ""), spoken])):
         want.remove("tiktok")
-        print(f"no TikTok post: {TIKTOK_RULE}", file=sys.stderr)
     return [{"network": k, "blogId": BLOG, "date": iso, "info": v,
              "match": {"tiktok": c["tiktokTitle"], "youtube": c["youtubeTitle"]}.get(k, v["text"][:60])} for k, v in nets.items() if k in want]
 

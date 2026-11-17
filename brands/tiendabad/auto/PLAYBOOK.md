@@ -42,6 +42,10 @@ A skipped slot costs nothing; a wrong post costs the channel.
    video and the 1:00 PM short.** The pirate extras and the 8:30 PM evergreen never go to TikTok. The scripts apply this
    (common.py `TIKTOK_RULE`; posts.json simply has no TikTok call then, and ship prints "no TikTok post"), so a missing
    TikTok call is expected, never something to add by hand. Still no paid-partnership or commercial-content flag (rule 6).
+   **No "free" on TikTok:** "free skins + use a code" is the classic Fortnite scam TikTok moderates hardest, and the account's
+   first TikTok video (Nov 9, "¿Toda la tienda de Fortnite GRATIS?… Usa el código BAD") was the last one that got views. A
+   video whose TikTok caption or voice says gratis / free / sin gastar / 0 pavos / regalos skips TikTok (common.py
+   `TIKTOK_RISKY`; the other networks still get it). Never reword a script just to get it onto TikTok.
 
 ## Schedule (America/Mexico_City)
 
@@ -109,6 +113,11 @@ Nov 17-19, then the 1:00 PM short and the shop video only (rule 10).
 8. Add each posted topic to `brands/tiendabad/auto/ledger.json`; never repeat a topic. An "Adivina la temporada" entry
    also lists its outfits in `"ids"` (new_guess.py prints them), which is how the next quiz skips them.
 9. Check yesterday: getScheduledPosts for D-1; any network not PUBLISHED goes in the summary with its detailedStatus.
+   **TikTok views (from Nov 21 until the owner says the account is fixed):** getAnalyticsDataByMetrics (brandId 7065085,
+   metrics TKPO02 date, TKPO05 description, TKPO07 views) for D-3 to D. Put each TikTok post since Nov 20 and its views in
+   the summary. If posts more than a day old are still at 0-1 views, say plainly that TikTok is still holding the account
+   back, and that the fixes are on the owner's side (rule 10): the Account status page in the TikTok app (appeal anything
+   listed there), or a fresh TikTok account connected to this Metricool brand.
 10. Log line, commit `brands/tiendabad/video/auto brands/tiendabad/auto brands/tiendabad/sources` (the JSON files; the map images stay out), push, summary.
 
 ### Already queued: the Tienda Pirata series (made 2026-11-09, leave these posts alone)
