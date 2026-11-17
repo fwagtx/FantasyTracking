@@ -1,0 +1,2329 @@
+{
+ "date": "2026-11-17T00:00:00Z",
+ "entries": [
+  {
+   "regularPrice": 7700,
+   "finalPrice": 3800,
+   "devName": "[VIRTUAL]1 x Kafka Hibino, 1 x Kikoru Shinomiya, 1 x Reno Ichikawa, 1 x Kikoru’s Personal Weapon, 1 x Kaiju No. 8's Scythe, 1 x Freezing Round Axes, 1 x Spirit of the Kaiju, 1 x Kikoru's Scaled Slingbag, 1 x Cracked Mask, 1 x Reno's Gearbag, 1 x Kaiju No. 8 for -1 MtxCurrency",
+   "offerId": "v2:/8134264ccdc09756d6a68d0aecbce4e0e987eaaa57896067d03a629a0b4bf733",
+   "inDate": "2026-11-17T00:00:00Z",
+   "outDate": "2026-11-20T23:59:59.999Z",
+   "bundle": {
+    "name": "Lote Kaiju N.º 8",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/61e231fb71351fbb/renderimage_0.png"
+   },
+   "banner": {
+    "value": "3900 monedas V de descuento",
+    "intensity": "Low",
+    "backendValue": "AmountOff"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -1,
+   "layoutId": "Kaiju.99",
+   "layout": {
+    "id": "Kaiju",
+    "name": "Kaiju N.º 8",
+    "index": 31,
+    "rank": 192,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "6f0b83ff",
+    "color2": "49145eff",
+    "color3": "7c1d8fff",
+    "textBackgroundColor": "4e0052ff"
+   },
+   "tileBackgroundMaterial": "ShopTile_Pirates_Brush",
+   "tileSize": "Size_1_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_CafeStove_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S33/DAv2_Bundle_Featured_CafeStove",
+   "newDisplayAsset": {
+    "id": "DAv2_Bundle_Featured_CafeStove",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__61e231fb71351fbb_5330a74702e4252f.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/61e231fb71351fbb/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__61e231fb71351fbb_573ef10401c15554.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/61e231fb71351fbb/renderimage_1.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__61e231fb71351fbb_46834eff61b4d6ed.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/61e231fb71351fbb/renderimage_2.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Character_SureBamboo",
+     "name": "Kafka Hibino",
+     "description": "El hombre que se convirtió en kaiju.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "Kaiju N.º 8",
+      "text": "Pieza del conjunto Kaiju N.º 8.",
+      "backendValue": "HighriseReed"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "1",
+      "text": "Introducido en Capítulo 6, Temporada 1.",
+      "backendValue": 33
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_surebamboo/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_surebamboo/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_surebamboo/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Parts",
+       "type": "estilo",
+       "options": [
+        {
+         "tag": "Stage1",
+         "name": "Kafka Hibino",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_surebamboo/variants/parts/stage1.png"
+        },
+        {
+         "tag": "Stage2",
+         "name": "Kaiju N.º 8",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_surebamboo/variants/parts/stage2.png"
+        }
+       ]
+      },
+      {
+       "channel": "Emissive",
+       "type": "Reactivo",
+       "options": [
+        {
+         "tag": "Emissive0",
+         "name": "Sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_surebamboo/variants/emissive/emissive0.png"
+        },
+        {
+         "tag": "Emissive1",
+         "name": "No",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_surebamboo/variants/emissive/emissive1.png"
+        }
+       ]
+      }
+     ],
+     "showcaseVideo": "necZFx_cadM",
+     "added": "2025-01-25T00:00:00Z"
+    },
+    {
+     "id": "Character_CafeStove",
+     "name": "Kikoru Shinomiya",
+     "description": "Una guerrera muy respetada en la neutralización de kaijus.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "Kaiju N.º 8",
+      "text": "Pieza del conjunto Kaiju N.º 8.",
+      "backendValue": "HighriseReed"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "1",
+      "text": "Introducido en Capítulo 6, Temporada 1.",
+      "backendValue": 33
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_cafestove/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_cafestove/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_cafestove/featured.png"
+     },
+     "showcaseVideo": "fehnl5EWULY",
+     "added": "2025-01-25T00:00:00Z"
+    },
+    {
+     "id": "Character_YamPowder",
+     "name": "Reno Ichikawa",
+     "description": "El tirador experto de la tercera división.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "Kaiju N.º 8",
+      "text": "Pieza del conjunto Kaiju N.º 8.",
+      "backendValue": "HighriseReed"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "1",
+      "text": "Introducido en Capítulo 6, Temporada 1.",
+      "backendValue": 33
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_yampowder/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_yampowder/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_yampowder/featured.png"
+     },
+     "showcaseVideo": "VPOUYiVgvkQ",
+     "added": "2025-01-25T00:00:00Z"
+    },
+    {
+     "id": "Pickaxe_CafeStove",
+     "name": "Arma personal de Kikoru",
+     "description": "¡Atraviesa su armadura!",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Kaiju N.º 8",
+      "text": "Pieza del conjunto Kaiju N.º 8.",
+      "backendValue": "HighriseReed"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "1",
+      "text": "Introducido en Capítulo 6, Temporada 1.",
+      "backendValue": 33
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_cafestove/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_cafestove/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_cafestove/featured.png"
+     },
+     "added": "2025-01-25T00:00:00Z"
+    },
+    {
+     "id": "Pickaxe_SureBamboo",
+     "name": "Guadaña de Kaiju N.º 8",
+     "description": "Tan poderosa como Kaiju N.º 8.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Kaiju N.º 8",
+      "text": "Pieza del conjunto Kaiju N.º 8.",
+      "backendValue": "HighriseReed"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "1",
+      "text": "Introducido en Capítulo 6, Temporada 1.",
+      "backendValue": 33
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_surebamboo/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_surebamboo/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_surebamboo/featured.png"
+     },
+     "showcaseVideo": "0IlJAMG58lo",
+     "added": "2025-01-25T00:00:00Z"
+    },
+    {
+     "id": "Pickaxe_YamPowder",
+     "name": "Hachas de congelación",
+     "description": "Cubiertas con un aire frío como una bala de congelación.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Kaiju N.º 8",
+      "text": "Pieza del conjunto Kaiju N.º 8.",
+      "backendValue": "HighriseReed"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "1",
+      "text": "Introducido en Capítulo 6, Temporada 1.",
+      "backendValue": 33
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_yampowder/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_yampowder/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_yampowder/featured.png"
+     },
+     "showcaseVideo": "Nr-yj8wRl9s",
+     "added": "2025-01-25T00:00:00Z"
+    },
+    {
+     "id": "EID_SureBamboo",
+     "name": "Espíritu del kaiju",
+     "description": "Siente al kaiju de tu interior.",
+     "type": {
+      "value": "emote",
+      "displayValue": "Gesto",
+      "backendValue": "AthenaDance"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "Kaiju N.º 8",
+      "text": "Pieza del conjunto Kaiju N.º 8.",
+      "backendValue": "HighriseReed"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "1",
+      "text": "Introducido en Capítulo 6, Temporada 1.",
+      "backendValue": 33
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/eid_surebamboo/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/eid_surebamboo/icon.png"
+     },
+     "showcaseVideo": "RVJc6VIgHyY",
+     "added": "2025-01-25T00:00:00Z"
+    },
+    {
+     "id": "Backpack_CafeStove",
+     "name": "Morral de Kikoru",
+     "description": "Un resistente bolso para armas.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Kaiju N.º 8",
+      "text": "Pieza del conjunto Kaiju N.º 8.",
+      "backendValue": "HighriseReed"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "1",
+      "text": "Introducido en Capítulo 6, Temporada 1.",
+      "backendValue": 33
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_cafestove/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_cafestove/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_cafestove/featured.png"
+     },
+     "added": "2025-01-25T00:00:00Z"
+    },
+    {
+     "id": "Backpack_SureBamboo",
+     "name": "Máscara quebrada",
+     "description": "Una máscara que imita el rostro de Kaiju N.º 8.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Kaiju N.º 8",
+      "text": "Pieza del conjunto Kaiju N.º 8.",
+      "backendValue": "HighriseReed"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "1",
+      "text": "Introducido en Capítulo 6, Temporada 1.",
+      "backendValue": 33
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_surebamboo/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_surebamboo/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_surebamboo/featured.png"
+     },
+     "added": "2025-01-25T00:00:00Z"
+    },
+    {
+     "id": "Backpack_YamPowder",
+     "name": "Equipamiento de Reno",
+     "description": "Hay que tener todo a mano.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Kaiju N.º 8",
+      "text": "Pieza del conjunto Kaiju N.º 8.",
+      "backendValue": "HighriseReed"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "1",
+      "text": "Introducido en Capítulo 6, Temporada 1.",
+      "backendValue": 33
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_yampowder/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_yampowder/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_yampowder/featured.png"
+     },
+     "added": "2025-01-25T00:00:00Z"
+    },
+    {
+     "id": "Wrap_SureBamboo",
+     "name": "Kaiju N.º 8",
+     "description": "Muestra tu estilo.",
+     "type": {
+      "value": "wrap",
+      "displayValue": "Papel",
+      "backendValue": "AthenaItemWrap"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "Kaiju N.º 8",
+      "text": "Pieza del conjunto Kaiju N.º 8.",
+      "backendValue": "HighriseReed"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "1",
+      "text": "Introducido en Capítulo 6, Temporada 1.",
+      "backendValue": 33
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/wrap_surebamboo/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/wrap_surebamboo/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/wrap_surebamboo/featured.png"
+     },
+     "showcaseVideo": "44Un2uUXgcE",
+     "added": "2025-01-25T00:00:00Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 6800,
+   "finalPrice": 3400,
+   "devName": "[VIRTUAL]1 x Make You Mine Madison, 1 x Madison's OG Pickaxe, 1 x Satin Angel Madison, 1 x Madison's Angel Wings, 1 x Mookie & Maple Plushies, 1 x Bittersweet, 1 x Yes Baby, 1 x Madison's Mic, 1 x Madison's Mic, 1 x Madison's Mic, 1 x Madison's Glam Wrap, 1 x Rooftop Madison, 1 x TBD (SID_Placeholder_906), 1 x TBD (SID_Placeholder_907) for -1 MtxCurrency",
+   "offerId": "v2:/0a7c4d1c71dc4b42b1aa534145f48a8ba26c98a8943e4f3eccf7d5276edd3ce0",
+   "inDate": "2026-11-17T00:00:00Z",
+   "outDate": "2026-11-21T23:59:59.999Z",
+   "bundle": {
+    "name": "Lote Madison Beer",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/947097c49a99d065/renderimage_0.png"
+   },
+   "banner": {
+    "value": "3400 monedas V de descuento",
+    "intensity": "Low",
+    "backendValue": "AmountOff"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -1,
+   "layoutId": "MadisonBeer.99",
+   "layout": {
+    "id": "MadisonBeer",
+    "name": "Madison Beer",
+    "index": 7,
+    "rank": 196,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "88c5ffff",
+    "color2": "42a8ffff",
+    "color3": "55afffff",
+    "textBackgroundColor": "42a8ffff"
+   },
+   "tileSize": "Size_1_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_MistTycoon_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S42/DAv2_Bundle_Featured_MistTycoon",
+   "newDisplayAsset": {
+    "id": "DAv2_Bundle_Featured_MistTycoon",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__947097c49a99d065_29c0c4191e61fb71.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/947097c49a99d065/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__947097c49a99d065_d2e71b6320aa32c2.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/947097c49a99d065/renderimage_1.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__947097c49a99d065_71e578208f570b02.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/947097c49a99d065/renderimage_2.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Character_MistTycoonHike",
+     "name": "Madison Make You Mine",
+     "description": "Tu corazón le pertenece.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Madison Beer",
+      "text": "Pieza del conjunto Madison Beer.",
+      "backendValue": "FirstCaravan"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_misttycoonhike/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_misttycoonhike/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_misttycoonhike/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_misttycoonhike/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_misttycoonhike/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_misttycoonhike/wide.png"
+      }
+     },
+     "showcaseVideo": "IXK6euUvP9U",
+     "added": "2026-09-23T16:31:22Z"
+    },
+    {
+     "id": "Pickaxe_MistTycoonHike",
+     "name": "Arma de Madison",
+     "description": "Los clásicos nunca pasan de moda.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Madison Beer",
+      "text": "Pieza del conjunto Madison Beer.",
+      "backendValue": "FirstCaravan"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_misttycoonhike/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_misttycoonhike/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_misttycoonhike/featured.png"
+     },
+     "added": "2026-09-24T13:00:55Z"
+    },
+    {
+     "id": "Character_MistTycoonLife",
+     "name": "Madison angelical",
+     "description": "Caída del cielo.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Madison Beer",
+      "text": "Pieza del conjunto Madison Beer.",
+      "backendValue": "FirstCaravan"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_misttycoonlife/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_misttycoonlife/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_misttycoonlife/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_misttycoonlife/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_misttycoonlife/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_misttycoonlife/wide.png"
+      }
+     },
+     "variants": [
+      {
+       "channel": "Outfit",
+       "type": "Reactividad",
+       "options": [
+        {
+         "tag": "Particle1",
+         "name": "Sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_misttycoonlife/variants/outfit/particle1.png"
+        },
+        {
+         "tag": "Particle2",
+         "name": "No",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_misttycoonlife/variants/outfit/particle2.png"
+        }
+       ]
+      }
+     ],
+     "showcaseVideo": "vMOJuYo441k",
+     "added": "2026-09-23T16:31:22Z"
+    },
+    {
+     "id": "Backpack_MistTycoonLife",
+     "name": "Alas angelicales de Madison",
+     "description": "Alas de plumas suaves y flameantes.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Madison Beer",
+      "text": "Pieza del conjunto Madison Beer.",
+      "backendValue": "FirstCaravan"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_misttycoonlife/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_misttycoonlife/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_misttycoonlife/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Particle",
+       "type": "Reactividad",
+       "options": [
+        {
+         "tag": "Particle1",
+         "name": "Sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/backpack_misttycoonlife/variants/particle/particle1.png"
+        },
+        {
+         "tag": "Particle2",
+         "name": "No",
+         "image": "https://fortnite-api.com/images/cosmetics/br/backpack_misttycoonlife/variants/particle/particle2.png"
+        }
+       ]
+      }
+     ],
+     "added": "2026-09-23T16:31:22Z"
+    },
+    {
+     "id": "Backpack_MistTycoonHike",
+     "name": "Peluches de Mookie y Maple",
+     "description": "Escuadrón gatuno de apoyo.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Madison Beer",
+      "text": "Pieza del conjunto Madison Beer.",
+      "backendValue": "FirstCaravan"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_misttycoonhike/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_misttycoonhike/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_misttycoonhike/featured.png"
+     },
+     "added": "2026-09-23T16:31:22Z"
+    },
+    {
+     "id": "EID_MistTycoonLife",
+     "name": "Bittersweet",
+     "description": "Combate la amargura con un poco de dulzura.",
+     "type": {
+      "value": "emote",
+      "displayValue": "Gesto",
+      "backendValue": "AthenaDance"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Madison Beer",
+      "text": "Pieza del conjunto Madison Beer.",
+      "backendValue": "FirstCaravan"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/eid_misttycoonlife/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/eid_misttycoonlife/icon.png"
+     },
+     "showcaseVideo": "aal7m3tbR-4",
+     "added": "2026-09-23T16:31:22Z"
+    },
+    {
+     "id": "EID_MistTycoonHike",
+     "name": "Yes Baby",
+     "description": "Pregúntame y te diré que sí, bebé.",
+     "type": {
+      "value": "emote",
+      "displayValue": "Gesto",
+      "backendValue": "AthenaDance"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Madison Beer",
+      "text": "Pieza del conjunto Madison Beer.",
+      "backendValue": "FirstCaravan"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/eid_misttycoonhike/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/eid_misttycoonhike/icon.png"
+     },
+     "showcaseVideo": "JyHeUTCOrFs",
+     "added": "2026-09-23T16:31:22Z"
+    },
+    {
+     "id": "Pickaxe_MistTycoon_Mic",
+     "name": "Voz de Madison",
+     "description": "Voz de ángel, corazón de piedra.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Madison Beer",
+      "text": "Pieza del conjunto Madison Beer.",
+      "backendValue": "FirstCaravan"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_misttycoon_mic/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_misttycoon_mic/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_misttycoon_mic/featured.png"
+     },
+     "added": "2026-09-24T13:00:55Z"
+    },
+    {
+     "id": "Backpack_MistTycoon_Mic",
+     "name": "Voz de Madison",
+     "description": "Voz de ángel, corazón de piedra.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Madison Beer",
+      "text": "Pieza del conjunto Madison Beer.",
+      "backendValue": "FirstCaravan"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_misttycoon_mic/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_misttycoon_mic/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_misttycoon_mic/featured.png"
+     },
+     "added": "2026-09-24T13:00:55Z"
+    },
+    {
+     "id": "Wrap_MistTycoon",
+     "name": "Glamur de Madison",
+     "description": "Muestra tu estilo.",
+     "type": {
+      "value": "wrap",
+      "displayValue": "Papel",
+      "backendValue": "AthenaItemWrap"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Madison Beer",
+      "text": "Pieza del conjunto Madison Beer.",
+      "backendValue": "FirstCaravan"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/wrap_misttycoon/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/wrap_misttycoon/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/wrap_misttycoon/featured.png"
+     },
+     "added": "2026-09-24T13:00:55Z"
+    },
+    {
+     "id": "LoadingScreen_MistTycoonKeyArt",
+     "name": "Madison en lo más alto",
+     "description": "Ella hace lo que quiere.",
+     "type": {
+      "value": "loadingscreen",
+      "displayValue": "Pantalla de carga",
+      "backendValue": "AthenaLoadingScreen"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Madison Beer",
+      "text": "Pieza del conjunto Madison Beer.",
+      "backendValue": "FirstCaravan"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/loadingscreen_misttycoonkeyart/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/loadingscreen_misttycoonkeyart/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/loadingscreen_misttycoonkeyart/featured.png",
+      "other": {
+       "background": "https://fortnite-api.com/images/cosmetics/br/loadingscreen_misttycoonkeyart/background.png"
+      }
+     },
+     "added": "2026-09-24T13:00:55Z"
+    }
+   ],
+   "tracks": [
+    {
+     "id": "sid_placeholder_906",
+     "devName": "yesbaby",
+     "title": "yes baby",
+     "artist": "Madison Beer",
+     "releaseYear": 2026,
+     "bpm": 134,
+     "duration": 178,
+     "difficulty": {
+      "vocals": 3,
+      "guitar": 3,
+      "bass": 3,
+      "plasticBass": 3,
+      "drums": 4,
+      "plasticDrums": 4
+     },
+     "albumArt": "https://cdn.fortnite-api.com/tracks/a7ac8f21b74ed64b.jpg",
+     "added": "2026-09-23T18:01:04Z"
+    },
+    {
+     "id": "sid_placeholder_907",
+     "devName": "bittersweet",
+     "title": "bittersweet",
+     "artist": "Madison Beer",
+     "releaseYear": 2026,
+     "bpm": 110,
+     "duration": 207,
+     "difficulty": {
+      "vocals": 3,
+      "guitar": 4,
+      "bass": 1,
+      "plasticBass": 1,
+      "drums": 1,
+      "plasticDrums": 1
+     },
+     "albumArt": "https://cdn.fortnite-api.com/tracks/ac6b58e08dc2d37e.jpg",
+     "added": "2026-09-23T18:01:04Z"
+    }
+   ],
+   "instruments": [
+    {
+     "id": "Sparks_MistTycoon_Mic",
+     "name": "Voz de Madison",
+     "description": "Voz de ángel, corazón de piedra.",
+     "type": {
+      "value": "mic",
+      "displayValue": "Micrófono",
+      "backendValue": "SparksMic"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Common"
+     },
+     "images": {
+      "small": "https://fortnite-api.com/images/cosmetics/instruments/sparks_misttycoon_mic/small.png",
+      "large": "https://fortnite-api.com/images/cosmetics/instruments/sparks_misttycoon_mic/large.png"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "added": "2026-09-24T13:00:55Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 5800,
+   "finalPrice": 2300,
+   "devName": "[VIRTUAL]1 x Sand Witch Helsie, 1 x Helsie's Handbag, 1 x Summer Slayer Joni, 1 x Cooler the Red, 1 x Beach Beast Lucien, 1 x Lazy Lounger, 1 x Helsiebrella, 1 x The Sunset Pledge, 1 x Sunset Stakes, 1 x Bobom Beachies for -1 MtxCurrency",
+   "offerId": "v2:/19d3e2861e59f38af87d1de47d96085edfd7108dd736d157565e8138731f7f44",
+   "inDate": "2026-11-17T00:00:00Z",
+   "outDate": "2026-11-20T23:59:59.999Z",
+   "bundle": {
+    "name": "Lote Estacas veraniegas",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/b603620d29c49756/renderimage_0.png"
+   },
+   "banner": {
+    "value": "3500 monedas V de descuento",
+    "intensity": "Low",
+    "backendValue": "AmountOff"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -2,
+   "layoutId": "BR111726.96",
+   "layout": {
+    "id": "BR111726",
+    "name": "Energía de protagonista ",
+    "index": 28,
+    "rank": 184,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "290f07ff",
+    "color3": "824100ff",
+    "textBackgroundColor": "824100ff"
+   },
+   "tileSize": "Size_2_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_CherryKnot_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S41/DAv2_Bundle_Featured_CherryKnot",
+   "newDisplayAsset": {
+    "id": "DAv2_Bundle_Featured_CherryKnot",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__b603620d29c49756_29c0c4191e61fb71.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/b603620d29c49756/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__b603620d29c49756_d2e71b6320aa32c2.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/b603620d29c49756/renderimage_1.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__b603620d29c49756_e0559e464b07edd9.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/b603620d29c49756/renderimage_2.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__b603620d29c49756_1289a263ea7b677a.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/b603620d29c49756/renderimage_3.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__b603620d29c49756_1c39458533e1ba48.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/b603620d29c49756/renderimage_4.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__b603620d29c49756_0974dabead1481c7.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/b603620d29c49756/renderimage_5.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__b603620d29c49756_e72726dff5c2a0ef.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/b603620d29c49756/renderimage_6.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Character_VibrantShell",
+     "name": "Helsie bruja del verano",
+     "description": "Baja la marea, sube la intensidad.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "Estacas veraniegas",
+      "text": "Pieza del conjunto Estacas veraniegas.",
+      "backendValue": "ValidBiscuit"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "3",
+      "text": "Introducido en Capítulo 7, Temporada 3.",
+      "backendValue": 41
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_vibrantshell/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_vibrantshell/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_vibrantshell/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_vibrantshell/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_vibrantshell/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_vibrantshell/wide.png"
+      }
+     },
+     "variants": [
+      {
+       "channel": "Parts",
+       "type": "Estilo",
+       "options": [
+        {
+         "tag": "Stage1",
+         "name": "Helsie bruja del verano",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_vibrantshell/variants/parts/stage1.png"
+        },
+        {
+         "tag": "Stage2",
+         "name": "Bobarista playera",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_vibrantshell/variants/parts/stage2.png"
+        }
+       ]
+      }
+     ],
+     "showcaseVideo": "GGq4pKamqUQ",
+     "added": "2026-06-25T12:03:20Z"
+    },
+    {
+     "id": "Backpack_VibrantShell",
+     "name": "Bolso de Helsie",
+     "description": "¡Incluye todo lo esencial para cazar en verano!",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Estacas veraniegas",
+      "text": "Pieza del conjunto Estacas veraniegas.",
+      "backendValue": "ValidBiscuit"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "3",
+      "text": "Introducido en Capítulo 7, Temporada 3.",
+      "backendValue": 41
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_vibrantshell/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_vibrantshell/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_vibrantshell/featured.png"
+     },
+     "added": "2026-06-25T12:03:20Z"
+    },
+    {
+     "id": "Character_CherryKnot",
+     "name": "Joni cazadora estival",
+     "description": "El sol anuncia el paradero del botín.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "Estacas veraniegas",
+      "text": "Pieza del conjunto Estacas veraniegas.",
+      "backendValue": "ValidBiscuit"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "3",
+      "text": "Introducido en Capítulo 7, Temporada 3.",
+      "backendValue": 41
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_cherryknot/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_cherryknot/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_cherryknot/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_cherryknot/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_cherryknot/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_cherryknot/wide.png"
+      }
+     },
+     "variants": [
+      {
+       "channel": "Parts",
+       "type": "Estilo",
+       "options": [
+        {
+         "tag": "Stage1",
+         "name": "Joni cazadora estival",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_cherryknot/variants/parts/stage1.png"
+        },
+        {
+         "tag": "Stage2",
+         "name": "Rojo crepuscular",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_cherryknot/variants/parts/stage2.png"
+        }
+       ]
+      }
+     ],
+     "showcaseVideo": "pIlGukIvOLc",
+     "added": "2026-06-25T12:03:20Z"
+    },
+    {
+     "id": "Backpack_CherryKnot",
+     "name": "Hielera escarlata",
+     "description": "Justicia fría como el hielo.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Estacas veraniegas",
+      "text": "Pieza del conjunto Estacas veraniegas.",
+      "backendValue": "ValidBiscuit"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "3",
+      "text": "Introducido en Capítulo 7, Temporada 3.",
+      "backendValue": 41
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_cherryknot/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_cherryknot/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_cherryknot/featured.png"
+     },
+     "added": "2026-06-25T12:03:20Z"
+    },
+    {
+     "id": "Character_SolarDusk",
+     "name": "Lucien bestia de la playa",
+     "description": "¿Lobo? ¡¿Dónde?!",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "Estacas veraniegas",
+      "text": "Pieza del conjunto Estacas veraniegas.",
+      "backendValue": "ValidBiscuit"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "3",
+      "text": "Introducido en Capítulo 7, Temporada 3.",
+      "backendValue": 41
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_solardusk/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_solardusk/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_solardusk/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_solardusk/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_solardusk/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_solardusk/wide.png"
+      }
+     },
+     "variants": [
+      {
+       "channel": "Parts",
+       "type": "Estilo",
+       "options": [
+        {
+         "tag": "Stage1",
+         "name": "Lucien bestia de la playa",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_solardusk/variants/parts/stage1.png"
+        },
+        {
+         "tag": "Stage2",
+         "name": "Bestia veraniega",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_solardusk/variants/parts/stage2.png"
+        }
+       ]
+      }
+     ],
+     "showcaseVideo": "-EvEnFWQTp0",
+     "added": "2026-06-25T12:03:20Z"
+    },
+    {
+     "id": "EID_CherryKnot",
+     "name": "Fiesta en la piscina",
+     "description": "Zambúllete en la comodidad.",
+     "type": {
+      "value": "emote",
+      "displayValue": "Gesto",
+      "backendValue": "AthenaDance"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "Estacas veraniegas",
+      "text": "Pieza del conjunto Estacas veraniegas.",
+      "backendValue": "ValidBiscuit"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "3",
+      "text": "Introducido en Capítulo 7, Temporada 3.",
+      "backendValue": 41
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/eid_cherryknot/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/eid_cherryknot/icon.png"
+     },
+     "showcaseVideo": "w2h8B9MURic",
+     "added": "2026-06-25T12:03:20Z"
+    },
+    {
+     "id": "Pickaxe_VibrantShell",
+     "name": "Paraguas de Helsie",
+     "description": "Mata el tiempo a la sombra.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Estacas veraniegas",
+      "text": "Pieza del conjunto Estacas veraniegas.",
+      "backendValue": "ValidBiscuit"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "3",
+      "text": "Introducido en Capítulo 7, Temporada 3.",
+      "backendValue": 41
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_vibrantshell/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_vibrantshell/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_vibrantshell/featured.png"
+     },
+     "added": "2026-06-25T12:03:20Z"
+    },
+    {
+     "id": "Pickaxe_CherryKnot",
+     "name": "Katana crepuscular",
+     "description": "No te hundirás jamás.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Estacas veraniegas",
+      "text": "Pieza del conjunto Estacas veraniegas.",
+      "backendValue": "ValidBiscuit"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "3",
+      "text": "Introducido en Capítulo 7, Temporada 3.",
+      "backendValue": 41
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_cherryknot/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_cherryknot/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_cherryknot/featured.png"
+     },
+     "added": "2026-06-25T12:03:20Z"
+    },
+    {
+     "id": "Wrap_CherryKnot",
+     "name": "Estacas del ocaso",
+     "description": "Muestra tu estilo.",
+     "type": {
+      "value": "wrap",
+      "displayValue": "Papel",
+      "backendValue": "AthenaItemWrap"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Estacas veraniegas",
+      "text": "Pieza del conjunto Estacas veraniegas.",
+      "backendValue": "ValidBiscuit"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "3",
+      "text": "Introducido en Capítulo 7, Temporada 3.",
+      "backendValue": 41
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/wrap_cherryknot/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/wrap_cherryknot/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/wrap_cherryknot/featured.png"
+     },
+     "added": "2026-06-25T12:03:20Z"
+    },
+    {
+     "id": "Shoes_CrimsonSolace",
+     "name": "Pantuflas Deleitaté",
+     "description": "Presume tu estilo.",
+     "type": {
+      "value": "shoe",
+      "displayValue": "Calzado",
+      "backendValue": "CosmeticShoes"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "Estacas veraniegas",
+      "text": "Pieza del conjunto Estacas veraniegas.",
+      "backendValue": "ValidBiscuit"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "3",
+      "text": "Introducido en Capítulo 7, Temporada 3.",
+      "backendValue": 41
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/shoes_crimsonsolace/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/shoes_crimsonsolace/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/shoes_crimsonsolace/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Material",
+       "type": "gafas",
+       "options": [
+        {
+         "tag": "Mat1",
+         "name": "Sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/shoes_crimsonsolace/variants/material/mat1.png"
+        },
+        {
+         "tag": "Mat2",
+         "name": "No",
+         "image": "https://fortnite-api.com/images/cosmetics/br/shoes_crimsonsolace/variants/material/mat2.png"
+        }
+       ]
+      }
+     ],
+     "added": "2026-06-27T00:00:00Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 3300,
+   "finalPrice": 2200,
+   "devName": "[VIRTUAL]1 x Odysseus, 1 x Odysseus' Sword, 1 x Odysseus' Bow, 1 x Agamemnon, 1 x Agamemnon’s Sword, 1 x Agamemnon’s Shield, 1 x Warrior's Rest for -1 MtxCurrency",
+   "offerId": "v2:/4d001e41df12d60c6422089308ee3f559145deadb41f8e6f265e4f9ace6c36f7",
+   "inDate": "2026-11-17T00:00:00Z",
+   "outDate": "2026-11-20T23:59:59.999Z",
+   "bundle": {
+    "name": "Lote La Odisea",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/878fa1f84103d6a4/renderimage_0.png"
+   },
+   "banner": {
+    "value": "1100 monedas V de descuento",
+    "intensity": "Low",
+    "backendValue": "AmountOff"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -1,
+   "layoutId": "TheOdyssey.99",
+   "layout": {
+    "id": "TheOdyssey",
+    "name": "La Odisea",
+    "index": 3,
+    "rank": 191,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "330b0cff",
+    "color3": "660002ff",
+    "textBackgroundColor": "660002ff"
+   },
+   "tileSize": "Size_3_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_Hornetberm_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S41/DAv2_Bundle_Featured_Hornetberm",
+   "newDisplayAsset": {
+    "id": "DAv2_Bundle_Featured_HornetBerm",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__878fa1f84103d6a4_1c0742afa1a59436.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/878fa1f84103d6a4/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__878fa1f84103d6a4_077eca54923026fd.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/878fa1f84103d6a4/renderimage_1.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__878fa1f84103d6a4_b6eec90b15f2f9e7.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/878fa1f84103d6a4/renderimage_2.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Character_HornetBerm",
+     "name": "Odiseo",
+     "description": "Tu aventura comienza ahora.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "La Odisea",
+      "text": "Pieza del conjunto La Odisea.",
+      "backendValue": "GiantOwl"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "3",
+      "text": "Introducido en Capítulo 7, Temporada 3.",
+      "backendValue": 41
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_hornetberm/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_hornetberm/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_hornetberm/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Parts",
+       "type": "Casco",
+       "options": [
+        {
+         "tag": "Stage1",
+         "name": "No",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_hornetberm/variants/parts/stage1.png"
+        },
+        {
+         "tag": "Stage2",
+         "name": "Sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_hornetberm/variants/parts/stage2.png"
+        }
+       ]
+      },
+      {
+       "channel": "Material",
+       "type": "capa",
+       "options": [
+        {
+         "tag": "Mat1",
+         "name": "sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_hornetberm/variants/material/mat1.png"
+        },
+        {
+         "tag": "Mat2",
+         "name": "No",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_hornetberm/variants/material/mat2.png"
+        }
+       ]
+      }
+     ],
+     "showcaseVideo": "oFAmbk4Tzes",
+     "added": "2026-07-16T08:32:04Z"
+    },
+    {
+     "id": "Pickaxe_HornetBerm",
+     "name": "Espada de Odiseo",
+     "description": "Nadie es dueño de esta espada.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "La Odisea",
+      "text": "Pieza del conjunto La Odisea.",
+      "backendValue": "GiantOwl"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "3",
+      "text": "Introducido en Capítulo 7, Temporada 3.",
+      "backendValue": 41
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_hornetberm/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_hornetberm/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_hornetberm/featured.png"
+     },
+     "metaTags": [
+      "Cosmetics.MetaTags.HornetBerm"
+     ],
+     "added": "2026-07-16T08:32:04Z"
+    },
+    {
+     "id": "Backpack_HornetBerm",
+     "name": "Arco de Odiseo",
+     "description": "Un arma mitológica de cuerda firme.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "La Odisea",
+      "text": "Pieza del conjunto La Odisea.",
+      "backendValue": "GiantOwl"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "3",
+      "text": "Introducido en Capítulo 7, Temporada 3.",
+      "backendValue": 41
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_hornetberm/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_hornetberm/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_hornetberm/featured.png"
+     },
+     "added": "2026-07-16T08:32:04Z"
+    },
+    {
+     "id": "Character_BeaverStage",
+     "name": "Agamenón",
+     "description": "Conquista la muralla de Troya.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "La Odisea",
+      "text": "Pieza del conjunto La Odisea.",
+      "backendValue": "GiantOwl"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "3",
+      "text": "Introducido en Capítulo 7, Temporada 3.",
+      "backendValue": 41
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_beaverstage/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_beaverstage/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_beaverstage/featured.png"
+     },
+     "showcaseVideo": "coYUoWafeyY",
+     "added": "2026-07-16T13:00:54Z"
+    },
+    {
+     "id": "Pickaxe_BeaverStage",
+     "name": "Espada de Agamenón",
+     "description": "Comanda tus legiones.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "La Odisea",
+      "text": "Pieza del conjunto La Odisea.",
+      "backendValue": "GiantOwl"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "3",
+      "text": "Introducido en Capítulo 7, Temporada 3.",
+      "backendValue": 41
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_beaverstage/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_beaverstage/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_beaverstage/featured.png"
+     },
+     "added": "2026-07-16T13:00:54Z"
+    },
+    {
+     "id": "Backpack_BeaverStage",
+     "name": "Escudo de Agamenón",
+     "description": "Un sinfín de guerras en tu espalda.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "La Odisea",
+      "text": "Pieza del conjunto La Odisea.",
+      "backendValue": "GiantOwl"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "3",
+      "text": "Introducido en Capítulo 7, Temporada 3.",
+      "backendValue": 41
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_beaverstage/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_beaverstage/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_beaverstage/featured.png"
+     },
+     "added": "2026-07-16T13:00:54Z"
+    },
+    {
+     "id": "EID_HornetBerm",
+     "name": "Descanso del guerrero",
+     "description": "Honra a los caídos.",
+     "type": {
+      "value": "emote",
+      "displayValue": "Gesto",
+      "backendValue": "AthenaDance"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "La Odisea",
+      "text": "Pieza del conjunto La Odisea.",
+      "backendValue": "GiantOwl"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "3",
+      "text": "Introducido en Capítulo 7, Temporada 3.",
+      "backendValue": 41
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/eid_hornetberm/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/eid_hornetberm/icon.png"
+     },
+     "showcaseVideo": "1cc15sVvilM",
+     "added": "2026-07-16T08:32:04Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 2100,
+   "finalPrice": 1600,
+   "devName": "[VIRTUAL]1 x Serge, 1 x Surging Edge, 1 x Surging Edge, 1 x Serge's Surge for -1 MtxCurrency",
+   "offerId": "v2:/ea533ab389d865b54dda971b041ae87af4a0aa1eff95373294a92264f48c522a",
+   "inDate": "2026-11-17T00:00:00Z",
+   "outDate": "2026-11-18T23:59:59.999Z",
+   "bundle": {
+    "name": "Lote Serge",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/2b8245a70bb1553a/renderimage_0.png"
+   },
+   "banner": {
+    "value": "500 monedas V de descuento",
+    "intensity": "Low",
+    "backendValue": "AmountOff"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -1,
+   "layoutId": "BR111726.98",
+   "layout": {
+    "id": "BR111726",
+    "name": "Energía de protagonista ",
+    "index": 28,
+    "rank": 184,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "290f07ff",
+    "color3": "824100ff",
+    "textBackgroundColor": "824100ff"
+   },
+   "tileSize": "Size_1_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_PreciseRuffian_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S33/DAv2_Bundle_Featured_PreciseRuffian",
+   "newDisplayAsset": {
+    "id": "DAv2_Bundle_Featured_PreciseRuffian",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__2b8245a70bb1553a_7c899d2a016a3d08.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/2b8245a70bb1553a/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__2b8245a70bb1553a_4ce4533358f0d842.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/2b8245a70bb1553a/renderimage_1.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Character_PreciseRuffian",
+     "name": "Serge",
+     "description": "El aprendiz más prometedor de Deriva.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "Clan Zorro",
+      "text": "Pieza del conjunto Clan Zorro.",
+      "backendValue": "HoundGroup"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "1",
+      "text": "Introducido en Capítulo 6, Temporada 1.",
+      "backendValue": 33
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_preciseruffian/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_preciseruffian/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_preciseruffian/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_preciseruffian/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_preciseruffian/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_preciseruffian/wide.png"
+      },
+      "bean": {
+       "small": "https://fortnite-api.com/images/cosmetics/beans/bean_preciseruffian/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/beans/bean_preciseruffian/large.png"
+      }
+     },
+     "showcaseVideo": "D1igLCS4fr4",
+     "added": "2025-01-14T09:36:24Z"
+    },
+    {
+     "id": "Backpack_PreciseRuffian",
+     "name": "Cortacircuitos",
+     "description": "Crepita con energía de grieta.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Clan Zorro",
+      "text": "Pieza del conjunto Clan Zorro.",
+      "backendValue": "HoundGroup"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "1",
+      "text": "Introducido en Capítulo 6, Temporada 1.",
+      "backendValue": 33
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_preciseruffian/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_preciseruffian/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_preciseruffian/featured.png"
+     },
+     "added": "2025-01-14T09:36:24Z"
+    },
+    {
+     "id": "Pickaxe_PreciseRuffian",
+     "name": "Cortacircuitos",
+     "description": "Crepita con energía de grieta.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Clan Zorro",
+      "text": "Pieza del conjunto Clan Zorro.",
+      "backendValue": "HoundGroup"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "1",
+      "text": "Introducido en Capítulo 6, Temporada 1.",
+      "backendValue": 33
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_preciseruffian/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_preciseruffian/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_preciseruffian/featured.png"
+     },
+     "metaTags": [
+      "Cosmetics.MetaTags.PreciseRuffian"
+     ],
+     "showcaseVideo": "znEVhYDoxjE",
+     "added": "2025-01-14T09:36:24Z"
+    },
+    {
+     "id": "Wrap_PreciseRuffian",
+     "name": "Sobrecarga de Serge",
+     "description": "Muestra tu estilo.\n\nReacciona a golpes y eliminaciones.",
+     "type": {
+      "value": "wrap",
+      "displayValue": "Papel",
+      "backendValue": "AthenaItemWrap"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Clan Zorro",
+      "text": "Pieza del conjunto Clan Zorro.",
+      "backendValue": "HoundGroup"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "1",
+      "text": "Introducido en Capítulo 6, Temporada 1.",
+      "backendValue": 33
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/wrap_preciseruffian/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/wrap_preciseruffian/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/wrap_preciseruffian/featured.png"
+     },
+     "showcaseVideo": "lnARb9zPKJ8",
+     "added": "2025-01-14T09:36:24Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 1800,
+   "finalPrice": 1600,
+   "devName": "[VIRTUAL]1 x Comfy Chomps, 1 x Overbite, 1 x Chomp Stompers for -1 MtxCurrency",
+   "offerId": "v2:/1822b0ae6464257f39394497f6a386d698716e29c48d61f2f97ad8dc3d255505",
+   "inDate": "2026-11-17T00:00:00Z",
+   "outDate": "2026-11-18T23:59:59.999Z",
+   "bundle": {
+    "name": "Lote Dientes de descanso",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/a3f99f8e9ebea4f2/renderimage_0.png"
+   },
+   "banner": {
+    "value": "200 monedas V de descuento",
+    "intensity": "Low",
+    "backendValue": "AmountOff"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -1,
+   "layoutId": "BR111726.97",
+   "layout": {
+    "id": "BR111726",
+    "name": "Energía de protagonista ",
+    "index": 28,
+    "rank": 184,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "290f07ff",
+    "color3": "824100ff",
+    "textBackgroundColor": "824100ff"
+   },
+   "tileSize": "Size_2_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_Kicks_SharkSuit_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S39/DAv2_Bundle_Featured_Kicks_SharkSuit",
+   "newDisplayAsset": {
+    "id": "DAv2_Bundle_Featured_Kicks_SharkSuit",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__a3f99f8e9ebea4f2_56d8e78b8c0b6d11.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/a3f99f8e9ebea4f2/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__a3f99f8e9ebea4f2_21a2ca035d3e2ce3.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/a3f99f8e9ebea4f2/renderimage_1.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "CID_804_Athena_Commando_M_SharkSuit",
+     "name": "Dientes de descanso",
+     "description": "Coletea y da una mordidita.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Delirios dietéticos",
+      "text": "Pieza del conjunto Delirios dietéticos.",
+      "backendValue": "EatingCraze"
+     },
+     "introduction": {
+      "chapter": "2",
+      "season": "3",
+      "text": "Introducido en Capítulo 2, Temporada 3.",
+      "backendValue": 13
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/cid_804_athena_commando_m_sharksuit/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/cid_804_athena_commando_m_sharksuit/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/cid_804_athena_commando_m_sharksuit/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/cid_804_athena_commando_m_sharksuit/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/cid_804_athena_commando_m_sharksuit/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/cid_804_athena_commando_m_sharksuit/wide.png"
+      },
+      "bean": {
+       "small": "https://fortnite-api.com/images/cosmetics/beans/bean_sharksuita/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/beans/bean_sharksuita/large.png"
+      }
+     },
+     "variants": [
+      {
+       "channel": "Material",
+       "type": "estilo",
+       "options": [
+        {
+         "tag": "Mat1",
+         "name": "Dientes de descanso",
+         "image": "https://fortnite-api.com/images/cosmetics/br/cid_804_athena_commando_m_sharksuit/variants/material/mat1.png"
+        },
+        {
+         "tag": "Mat2",
+         "name": "Tiburón dormilón",
+         "image": "https://fortnite-api.com/images/cosmetics/br/cid_804_athena_commando_m_sharksuit/variants/material/mat2.png"
+        }
+       ]
+      }
+     ],
+     "metaTags": [
+      "Cosmetics.MetaTags.Special.BodySwap.Medium"
+     ],
+     "showcaseVideo": "Nvp9uIUAjXc",
+     "added": "2020-06-30T06:09:08Z"
+    },
+    {
+     "id": "BID_556_SharkSuit",
+     "name": "Sobremordida",
+     "description": "Tiene dientes.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Delirios dietéticos",
+      "text": "Pieza del conjunto Delirios dietéticos.",
+      "backendValue": "EatingCraze"
+     },
+     "introduction": {
+      "chapter": "2",
+      "season": "3",
+      "text": "Introducido en Capítulo 2, Temporada 3.",
+      "backendValue": 13
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/bid_556_sharksuit/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/bid_556_sharksuit/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/bid_556_sharksuit/featured.png"
+     },
+     "added": "2020-06-30T06:09:08Z"
+    },
+    {
+     "id": "Shoes_CleverBite",
+     "name": "Zampatillas",
+     "description": "Presume tu estilo.",
+     "type": {
+      "value": "shoe",
+      "displayValue": "Zapatos",
+      "backendValue": "CosmeticShoes"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "introduction": {
+      "chapter": "2",
+      "season": "Remix",
+      "text": "Introducido en Capítulo 2, Temporada Remix.",
+      "backendValue": 32
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/shoes_cleverbite/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/shoes_cleverbite/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/shoes_cleverbite/featured.png"
+     },
+     "added": "2024-11-21T21:02:17Z"
+    }
+   ]
+  }
+ ]
+}

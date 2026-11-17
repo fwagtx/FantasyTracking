@@ -1,0 +1,203 @@
+{
+ "date": "2026-11-17T00:00:00Z",
+ "entries": [
+  {
+   "regularPrice": 2500,
+   "finalPrice": 1600,
+   "devName": "[VIRTUAL]1 x Katalina, 1 x Katalina's Kit Bag, 1 x Kat Claws, 1 x Tactical Kat for -1 MtxCurrency",
+   "offerId": "v2:/2470a17005fd01a96b9e11c13aec464dc557f531553cf7b392403ef3f8984302",
+   "inDate": "2026-11-16T00:00:00Z",
+   "outDate": "2026-11-17T23:59:59.999Z",
+   "bundle": {
+    "name": "Lote Katalina",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/8e2c8ce413bc4451/renderimage_0.png"
+   },
+   "banner": {
+    "value": "900 monedas V de descuento",
+    "intensity": "Low",
+    "backendValue": "AmountOff"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -3,
+   "layoutId": "BR111726.93",
+   "layout": {
+    "id": "BR111726",
+    "name": "Energía de protagonista ",
+    "index": 28,
+    "rank": 184,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "290f07ff",
+    "color3": "824100ff",
+    "textBackgroundColor": "824100ff"
+   },
+   "tileSize": "Size_2_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_Excitedcyan_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S33/DAv2_Bundle_Featured_Excitedcyan",
+   "newDisplayAsset": {
+    "id": "DAv2_Bundle_Featured_Excitedcyan",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__8e2c8ce413bc4451_ab6206a93fd788ba.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/8e2c8ce413bc4451/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__8e2c8ce413bc4451_d8fc087a9ae54bbd.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/8e2c8ce413bc4451/renderimage_1.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Character_ExcitedCyan",
+     "name": "Katalina",
+     "description": "Completamente felina.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "Fans felinos",
+      "text": "Pieza del conjunto Fans felinos.",
+      "backendValue": "CatPeople"
+     },
+     "introduction": {
+      "chapter": "5",
+      "season": "3",
+      "text": "Introducido en Capítulo 5, Temporada 3.",
+      "backendValue": 30
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_excitedcyan/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_excitedcyan/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_excitedcyan/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_excitedcyan/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_excitedcyan/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_excitedcyan/wide.png"
+      },
+      "bean": {
+       "small": "https://fortnite-api.com/images/cosmetics/beans/bean_excitedcyan/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/beans/bean_excitedcyan/large.png"
+      }
+     },
+     "showcaseVideo": "ILxdWGmSVjE",
+     "added": "2024-05-24T08:11:50Z"
+    },
+    {
+     "id": "Backpack_ExcitedCyan",
+     "name": "Michimochila de Katalina",
+     "description": "¡Nunca entres en combate sin tu Kit!",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Fans felinos",
+      "text": "Pieza del conjunto Fans felinos.",
+      "backendValue": "CatPeople"
+     },
+     "introduction": {
+      "chapter": "5",
+      "season": "3",
+      "text": "Introducido en Capítulo 5, Temporada 3.",
+      "backendValue": 30
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_excitedcyan/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_excitedcyan/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_excitedcyan/featured.png"
+     },
+     "showcaseVideo": "ue_V4dy9T9I",
+     "added": "2024-05-24T08:11:50Z"
+    },
+    {
+     "id": "Pickaxe_ExcitedCyan",
+     "name": "Garras de Kat",
+     "description": "Dales un arañazo.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Fans felinos",
+      "text": "Pieza del conjunto Fans felinos.",
+      "backendValue": "CatPeople"
+     },
+     "introduction": {
+      "chapter": "5",
+      "season": "3",
+      "text": "Introducido en Capítulo 5, Temporada 3.",
+      "backendValue": 30
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_excitedcyan/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_excitedcyan/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_excitedcyan/featured.png"
+     },
+     "showcaseVideo": "mQ99QwxsFRU",
+     "added": "2024-05-24T08:11:50Z"
+    },
+    {
+     "id": "Wrap_ExcitedCyan",
+     "name": "Michi táctico",
+     "description": "Muestra tu estilo.",
+     "type": {
+      "value": "wrap",
+      "displayValue": "Papel",
+      "backendValue": "AthenaItemWrap"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Fans felinos",
+      "text": "Pieza del conjunto Fans felinos.",
+      "backendValue": "CatPeople"
+     },
+     "introduction": {
+      "chapter": "5",
+      "season": "3",
+      "text": "Introducido en Capítulo 5, Temporada 3.",
+      "backendValue": 30
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/wrap_excitedcyan/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/wrap_excitedcyan/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/wrap_excitedcyan/featured.png"
+     },
+     "showcaseVideo": "_nMZMyiX18U",
+     "added": "2024-05-24T08:11:50Z"
+    }
+   ]
+  }
+ ]
+}
