@@ -26,7 +26,9 @@ A skipped slot costs nothing; a wrong post costs the channel.
    (owner, 2026-11-11): TikTok `commercialContentThirdParty` and `commercialContentOwnBrand` stay false, and no network gets a paid
    partnership or promotion flag. `#EpicPartner` on screen and in every caption is the disclosure. The scripts already write
    this, and write_posts refuses a call that breaks it.
-7. **No drafts:** posts go in with `"draft": false` and `"autoPublish": true`, exactly as posts.json has them.
+7. **No drafts:** posts go in with `"draft": false` and `"autoPublish": true`, exactly as posts.json has them. The one
+   exception: the TikTok copies of the 8:30 PM evergreen for Nov 17-23 were set to draft on 2026-11-17 (rule 10) and stay
+   drafts; never publish, undraft or update them.
 8. **Captions** in natural Mexican/Latin American Spanish: hook line, one or two short lines of the best facts with
    a few emojis, one question that pulls comments, then `Usa el código BAD en la tienda de objetos 💛`, then 3
    hashtags. Threads text stays under 500 characters (the scripts check).
@@ -34,19 +36,26 @@ A skipped slot costs nothing; a wrong post costs the channel.
    `git push origin HEAD:claude/project-automation-setup-ms0f8e`. Never force-push, never touch other branches.
 10. **Networks:** TikTok, Instagram (Reels), Facebook (Reels), YouTube (Shorts), Threads. If Metricool rejects one
    network (for example Instagram while it is still being verified), the others still go; name it in the summary.
+   **TikTok rule (owner, 2026-11-17):** from Nov 10 on, every TikTok video got 0-1 views while the same videos got
+   116-1,485 views on Instagram Reels, after the account went to 5-6 near-identical promo videos a day. So TikTok is
+   **paused through Nov 19** (no TikTok post dated Nov 17, 18 or 19 CDMX), and **from Nov 20 it gets 2 a day: the shop
+   video and the 1:00 PM short.** The pirate extras and the 8:30 PM evergreen never go to TikTok. The scripts apply this
+   (common.py `TIKTOK_RULE`; posts.json simply has no TikTok call then, and ship prints "no TikTok post"), so a missing
+   TikTok call is expected, never something to add by hand. Still no paid-partnership or commercial-content flag (rule 6).
 
 ## Schedule (America/Mexico_City)
 
 | Run | When | Posts |
 |---|---|---|
-| **SHOP** | 6:05 PM daily (00:05 UTC), right after the shop resets | Today's shop video about 15 min later, all 5 networks |
+| **SHOP** | 6:05 PM daily (00:05 UTC), right after the shop resets | Today's shop video about 15 min later, all 5 networks (TikTok from Nov 20, rule 10) |
 | **SHOP safety** | 7:47 PM daily | The SHOP run again; it ends at step 3 if the shop video is already scheduled |
 | **DAY** | 11:07 AM daily | **1:00 PM** today's current short (made that morning) and **8:30 PM** evergreen (kept 7 days ahead) |
 | **LONG** | 5:13 AM Mon, Wed, Sat | One long YouTube video at **3:00 PM** |
-| **PIRATA** | 12:17 PM daily until Dec 5 | 3 extra Tienda Pirata shorts: **3:45 PM**, **5:15 PM**, **7:30 PM** |
+| **PIRATA** | 12:17 PM daily until Dec 5 | 3 extra Tienda Pirata shorts: **3:45 PM**, **5:15 PM**, **7:30 PM** (no TikTok) |
 
-3 shorts a day on every network (1:00 PM, about 6:25 PM, 8:30 PM) plus 3 long YouTube videos a week, and until the
-treasure hunt ends (December 5) 3 more Tienda Pirata shorts a day (PIRATA run).
+3 shorts a day on Instagram, Facebook, YouTube and Threads (1:00 PM, about 6:25 PM, 8:30 PM) plus 3 long YouTube videos a
+week, and until the treasure hunt ends (December 5) 3 more Tienda Pirata shorts a day (PIRATA run). TikTok: nothing
+Nov 17-19, then the 1:00 PM short and the shop video only (rule 10).
 
 ## Setup (start of every run)
 
@@ -58,8 +67,9 @@ treasure hunt ends (December 5) 3 more Tienda Pirata shorts a day (PIRATA run).
 ## SHOP run
 
 3. D = `date -u +%F`. **Already posted?** getScheduledPosts (brandId 7065085, timezone America/Mexico_City, D-1 12:00
-   to D 23:59): if every network already has a post whose text starts `#EpicPartner Esta es la tienda de objetos de hoy, <día> de <mes>`
-   for D, stop and log "shop already posted". Otherwise `python3 brands/tiendabad/auto/shop_daily.py build D`
+   to D 23:59): if every network the shop goes to (rule 10: no TikTok on a video posted Nov 17-19 CDMX) already has a
+   post whose text starts `#EpicPartner Esta es la tienda de objetos de hoy, <día> de <mes>` for D, stop and log "shop
+   already posted". Otherwise `python3 brands/tiendabad/auto/shop_daily.py build D`
    (it waits up to 25 min for the shop to turn over).
 4. Open `brands/tiendabad/shop/D/qa/review-sheet.png` and look hard: frame 1 shows the date and three items at once,
    real items on every tile, prices and names readable, nothing cut off or overlapping, the code card at the end.
@@ -131,8 +141,9 @@ used once (the script keeps the order); the last two days say "mañana / hoy es 
 
 1. Setup (above). D = `TZ=America/Mexico_City date +%F`. After 2026-12-05: post nothing, disable the scheduled task
    "LA TIENDITA BAD · PIRATA" (update_trigger, enabled false) and tell the owner the series is over.
-2. getScheduledPosts for D 15:00 to 20:00: skip a mode whose post is already there (match the TikTok title). If all three
-   are there, stop: log "pirata already posted" and end the run (no source fetch).
+2. getScheduledPosts for D 15:00 to 20:00: skip a mode whose post is already there, matched on the YouTube title, any
+   letter case (these posts have no TikTok copy, rule 10): sevan "Se va HOY de la tienda", caros "más caro de la tienda",
+   cuenta "Tienda Pirata". If all three are there, stop: log "pirata already posted" and end the run (no source fetch).
 3. **Fresh sources** (the checklist refuses sources older than 24 h): re-fetch with Firecrawl (`maxAge: 0`, markdown,
    onlyMainContent) the three articles in the latest `video/auto/pirata-sources-<date>/manifest.json`. Every passage in that
    folder's JSON files must still be on the page word for word (link and bold markup aside). Save them, same file names

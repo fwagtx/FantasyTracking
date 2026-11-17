@@ -18,6 +18,11 @@ BLOG = "7065085"            # Metricool brand LA TIENDITA BAD (the old StreakPro
 MX = ZoneInfo("America/Mexico_City")
 TZNAME = "America/Mexico_City"
 NETWORKS = ["tiktok", "instagram", "facebook", "youtube", "threads"]
+# owner, 2026-11-17: from Nov 10 on, every TikTok video got 0-1 views while the same videos got 116-1,485 views on Instagram
+# Reels (the account had gone to 5-6 near-identical promo videos a day). TikTok pauses through Nov 19 (CDMX); from Nov 20 it
+# gets 2 a day: the shop video and the 1:00 PM short. The pirate extras and the 8:30 PM evergreen never go to TikTok.
+TIKTOK_FROM = datetime.date(2026, 11, 20)
+TIKTOK_RULE = "TikTok is paused through Nov 19 CDMX; from Nov 20 it gets only the shop video and the 1:00 PM short (owner, 2026-11-17)"
 BANNED = re.compile(r"\b(discount|discounted|% ?off|save money|free v-?bucks|giveaway|sponsored by epic|descuentos?|pavos gratis|v-?bucks gratis|"
                     r"sorteos?|regalamos|patrocinad[oa] por epic|avalad[oa] por epic|c[oó]digo (gratis|de descuento))\b", re.I)
 
@@ -80,9 +85,16 @@ def caption_problems(c):
     return bad
 
 
-def post_calls(when, video, cover_url, c, networks=None, long=False):
+def tiktok_ok(when, kind):
+    """TIKTOK_RULE. kind: "shop" (shop_daily.py) or "short" (make_short.py, where only the 1:00 PM slot goes to TikTok)."""
+    local = when.astimezone(MX)
+    return local.date() >= TIKTOK_FROM and (kind == "shop" or (local.hour, local.minute) == (13, 0))
+
+
+def post_calls(when, video, cover_url, c, networks=None, long=False, kind="short"):
     """One ready createScheduledPost call per network. Covers go only where Metricool takes them
-    (TikTok, Instagram Reels, Facebook Reels); YouTube gets one only for long videos on a verified channel."""
+    (TikTok, Instagram Reels, Facebook Reels); YouTube gets one only for long videos on a verified channel.
+    TikTok only where TIKTOK_RULE allows it, even when --networks names it."""
     iso, local = when.isoformat(timespec="seconds"), when.strftime("%Y-%m-%dT%H:%M:%S")
     base = {"autoPublish": True, "draft": False, "descendants": [], "firstCommentText": "", "hasNotReadNotes": False, "mediaAltText": [],
             "media": [video], "publicationDate": {"dateTime": local, "timezone": TZNAME}, "shortener": False, "smartLinkData": {"ids": []}}
@@ -102,7 +114,10 @@ def post_calls(when, video, cover_url, c, networks=None, long=False):
     }
     if long:
         nets = {"youtube": {**nets["youtube"], **thumb}}
-    want = networks or (["youtube"] if long else NETWORKS)
+    want = list(networks or (["youtube"] if long else NETWORKS))
+    if "tiktok" in want and not tiktok_ok(when, kind):
+        want.remove("tiktok")
+        print(f"no TikTok post: {TIKTOK_RULE}", file=sys.stderr)
     return [{"network": k, "blogId": BLOG, "date": iso, "info": v,
              "match": {"tiktok": c["tiktokTitle"], "youtube": c["youtubeTitle"]}.get(k, v["text"][:60])} for k, v in nets.items() if k in want]
 
