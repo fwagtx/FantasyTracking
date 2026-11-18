@@ -145,7 +145,9 @@
       // a three-line title (a long name split in two) ends lower, and so does its shade (2026-11-18: the map's "FRONTERA FAROL"
       // sat right under "DEL GIGANTE?" and read like the answer)
       const sh = cfg.title.length > 2 ? 560 : 470;
-      mk(stage, `left:0;right:0;top:0;height:${sh}px;background:linear-gradient(180deg,rgba(5,10,28,.82),rgba(5,10,28,.7) ${sh - 140}px,rgba(5,10,28,0) ${sh}px)`);
+      // dark right under the title, then a short fade: a label just below the title read like part of it (the place the voice
+      // names is framed below the shade by new_where.py)
+      mk(stage, `left:0;right:0;top:0;height:${sh}px;background:linear-gradient(180deg,rgba(5,10,28,.82),rgba(5,10,28,.78) ${sh - 70}px,rgba(5,10,28,0) ${sh}px)`);
       mk(stage, `left:0;right:0;top:1090px;height:240px;background:linear-gradient(180deg,rgba(5,10,28,0),rgba(5,10,28,.72) 28%,rgba(5,10,28,.72) 72%,rgba(5,10,28,0))`);
       const pins = cfg.pins.map((p, i) => ({ ...p, ring: S.marker(stage, p.r || 70, p.r || 70, p.color || RED, i * 1.9 + 0.7), lab: p.label ? S.scrawl(stage, p.label, p.size || 66, YEL, -7) : null,
         pulse: mk(stage, `left:0;top:0;width:200px;height:200px;border-radius:50%;border:8px solid ${YEL}`) }));
