@@ -1,0 +1,926 @@
+{
+ "title": "QUIZ: ¿Te sabes el mapa de Fortnite?",
+ "caption": "#EpicPartner ¿Te sabes el mapa de Fortnite de memoria? 🗺️ Te enseño cada lugar en el mapa sin nombres y tú adivinas: los 11 lugares con nombre y los 5 puntos de referencia del mapa oficial, con su ubicación.\n\n¿Cuántos sacaste de 16? Cuéntame en los comentarios 👇\nUsa el código BAD en la tienda de objetos 💛\n\n#Fortnite #MapaFortnite #FortniteEspañol",
+ "claims": [
+  {
+   "text": "16 lugares en el mapa oficial: 11 lugares con nombre y 5 puntos de referencia",
+   "source": "map.json",
+   "match": [
+    "Arlong Park",
+    "Bahía Bulliciosa",
+    "Baratie",
+    "Bosque Mandarina de Nami",
+    "Campo de batalla del gigante",
+    "Caverna Condenada",
+    "El cofre",
+    "Frontera Farol",
+    "Henry",
+    "La calavera salada",
+    "Loguetown",
+    "Playa de Buggy",
+    "Puerto Pirata",
+    "Resort relajado",
+    "The $.$. Rocky",
+    "Villa Molino"
+   ]
+  },
+  {
+   "text": "Resort relajado: en el norte de la isla (by the same rule as new_where.py)",
+   "source": "map.json",
+   "match": [
+    "Resort relajado"
+   ],
+   "visual": "map pixel (818, 718)"
+  },
+  {
+   "text": "Resort relajado en el mapa",
+   "source": "map-labels.png",
+   "visual": "map pixel (818, 718); en el norte de la isla; nearest named place by coordinates: El cofre"
+  },
+  {
+   "text": "The $.$. Rocky: en el este de la isla (by the same rule as new_where.py)",
+   "source": "map.json",
+   "match": [
+    "The $.$. Rocky"
+   ],
+   "visual": "map pixel (1416, 1217)"
+  },
+  {
+   "text": "The $.$. Rocky en el mapa",
+   "source": "map-labels.png",
+   "visual": "map pixel (1416, 1217); en el este de la isla; nearest named place by coordinates: Caverna Condenada"
+  },
+  {
+   "text": "Puerto Pirata: en el sur de la isla (by the same rule as new_where.py)",
+   "source": "map.json",
+   "match": [
+    "Puerto Pirata"
+   ],
+   "visual": "map pixel (1150, 1606)"
+  },
+  {
+   "text": "Puerto Pirata en el mapa",
+   "source": "map-labels.png",
+   "visual": "map pixel (1150, 1606); en el sur de la isla; nearest named place by coordinates: Bahía Bulliciosa"
+  },
+  {
+   "text": "Arlong Park: en el oeste de la isla (by the same rule as new_where.py)",
+   "source": "map.json",
+   "match": [
+    "Arlong Park"
+   ],
+   "visual": "map pixel (635, 1123)"
+  },
+  {
+   "text": "Arlong Park en el mapa",
+   "source": "map-labels.png",
+   "visual": "map pixel (635, 1123); en el oeste de la isla; nearest named place by coordinates: Frontera Farol"
+  },
+  {
+   "text": "Caverna Condenada: en el este de la isla (by the same rule as new_where.py)",
+   "source": "map.json",
+   "match": [
+    "Caverna Condenada"
+   ],
+   "visual": "map pixel (1184, 1148)"
+  },
+  {
+   "text": "Caverna Condenada en el mapa",
+   "source": "map-labels.png",
+   "visual": "map pixel (1184, 1148); en el este de la isla; nearest named place by coordinates: The $.$. Rocky"
+  },
+  {
+   "text": "Playa de Buggy: en el norte de la isla (by the same rule as new_where.py)",
+   "source": "map.json",
+   "match": [
+    "Playa de Buggy"
+   ],
+   "visual": "map pixel (1031, 851)"
+  },
+  {
+   "text": "Playa de Buggy en el mapa",
+   "source": "map-labels.png",
+   "visual": "map pixel (1031, 851); en el norte de la isla; nearest named place by coordinates: Frontera Farol"
+  },
+  {
+   "text": "Villa Molino: en el suroeste de la isla (by the same rule as new_where.py)",
+   "source": "map.json",
+   "match": [
+    "Villa Molino"
+   ],
+   "visual": "map pixel (754, 1438)"
+  },
+  {
+   "text": "Villa Molino en el mapa",
+   "source": "map-labels.png",
+   "visual": "map pixel (754, 1438); en el suroeste de la isla; nearest named place by coordinates: Loguetown"
+  },
+  {
+   "text": "Bahía Bulliciosa: en el sureste de la isla (by the same rule as new_where.py)",
+   "source": "map.json",
+   "match": [
+    "Bahía Bulliciosa"
+   ],
+   "visual": "map pixel (1388, 1482)"
+  },
+  {
+   "text": "Bahía Bulliciosa en el mapa",
+   "source": "map-labels.png",
+   "visual": "map pixel (1388, 1482); en el sureste de la isla; nearest named place by coordinates: The $.$. Rocky"
+  },
+  {
+   "text": "Frontera Farol: cerca del centro de la isla (by the same rule as new_where.py)",
+   "source": "map.json",
+   "match": [
+    "Frontera Farol"
+   ],
+   "visual": "map pixel (899, 1050)"
+  },
+  {
+   "text": "Frontera Farol en el mapa",
+   "source": "map-labels.png",
+   "visual": "map pixel (899, 1050); cerca del centro de la isla; nearest named place by coordinates: El cofre"
+  },
+  {
+   "text": "Loguetown: en el sur de la isla (by the same rule as new_where.py)",
+   "source": "map.json",
+   "match": [
+    "Loguetown"
+   ],
+   "visual": "map pixel (989, 1382)"
+  },
+  {
+   "text": "Loguetown en el mapa",
+   "source": "map-labels.png",
+   "visual": "map pixel (989, 1382); en el sur de la isla; nearest named place by coordinates: Villa Molino"
+  },
+  {
+   "text": "El cofre: en el noroeste de la isla (by the same rule as new_where.py)",
+   "source": "map.json",
+   "match": [
+    "El cofre"
+   ],
+   "visual": "map pixel (762, 875)"
+  },
+  {
+   "text": "El cofre en el mapa",
+   "source": "map-labels.png",
+   "visual": "map pixel (762, 875); en el noroeste de la isla; nearest named place by coordinates: Resort relajado"
+  },
+  {
+   "text": "Bosque Mandarina de Nami: en el suroeste de la isla (by the same rule as new_where.py)",
+   "source": "map.json",
+   "match": [
+    "Bosque Mandarina de Nami"
+   ],
+   "visual": "map pixel (710, 1561)"
+  },
+  {
+   "text": "Bosque Mandarina de Nami en el mapa",
+   "source": "map-labels.png",
+   "visual": "map pixel (710, 1561); en el suroeste de la isla; nearest named place by coordinates: Villa Molino"
+  },
+  {
+   "text": "Campo de batalla del gigante: cerca del centro de la isla (by the same rule as new_where.py)",
+   "source": "map.json",
+   "match": [
+    "Campo de batalla del gigante"
+   ],
+   "visual": "map pixel (953, 1243)"
+  },
+  {
+   "text": "Campo de batalla del gigante en el mapa",
+   "source": "map-labels.png",
+   "visual": "map pixel (953, 1243); cerca del centro de la isla; nearest named place by coordinates: Loguetown"
+  },
+  {
+   "text": "La calavera salada: en el este de la isla (by the same rule as new_where.py)",
+   "source": "map.json",
+   "match": [
+    "La calavera salada"
+   ],
+   "visual": "map pixel (1206, 1224)"
+  },
+  {
+   "text": "La calavera salada en el mapa",
+   "source": "map-labels.png",
+   "visual": "map pixel (1206, 1224); en el este de la isla; nearest named place by coordinates: Caverna Condenada"
+  },
+  {
+   "text": "Baratie: en el sureste de la isla (by the same rule as new_where.py)",
+   "source": "map.json",
+   "match": [
+    "Baratie"
+   ],
+   "visual": "map pixel (1411, 1477)"
+  },
+  {
+   "text": "Baratie en el mapa",
+   "source": "map-labels.png",
+   "visual": "map pixel (1411, 1477); en el sureste de la isla; nearest named place by coordinates: Bahía Bulliciosa"
+  },
+  {
+   "text": "Henry: en el sureste de la isla (by the same rule as new_where.py)",
+   "source": "map.json",
+   "match": [
+    "Henry"
+   ],
+   "visual": "map pixel (1203, 1500)"
+  },
+  {
+   "text": "Henry en el mapa",
+   "source": "map-labels.png",
+   "visual": "map pixel (1203, 1500); en el sureste de la isla; nearest named place by coordinates: Puerto Pirata"
+  }
+ ],
+ "map": "blank",
+ "segments": [
+  {
+   "type": "title",
+   "p": 0,
+   "chapter": "Intro",
+   "kicker": "QUIZ DEL MAPA",
+   "lines": [
+    "¿Te sabes",
+    "el mapa?"
+   ]
+  },
+  {
+   "type": "stat",
+   "p": 2,
+   "big": "16",
+   "label": "lugares del mapa oficial"
+  },
+  {
+   "type": "title",
+   "p": 4,
+   "chapter": "Nivel 1: lugares con nombre",
+   "kicker": "NIVEL 1",
+   "lines": [
+    "Lugares",
+    "con nombre"
+   ]
+  },
+  {
+   "type": "map",
+   "p": 5,
+   "x": 817.7,
+   "y": 718.0,
+   "z": 1.3,
+   "name": "¿Qué lugar es?",
+   "sub": "Ronda 1 de 16",
+   "pins": [
+    {
+     "x": 817.7,
+     "y": 718.0,
+     "label": "?"
+    }
+   ]
+  },
+  {
+   "type": "map",
+   "p": 7,
+   "x": 817.7,
+   "y": 718.0,
+   "z": 2.0,
+   "name": "Resort relajado",
+   "sub": "Norte · cerca de El cofre",
+   "pins": [
+    {
+     "x": 817.7,
+     "y": 718.0,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "type": "map",
+   "p": 8,
+   "x": 1415.7,
+   "y": 1216.9,
+   "z": 1.3,
+   "name": "¿Qué lugar es?",
+   "sub": "Ronda 2 de 16",
+   "pins": [
+    {
+     "x": 1415.7,
+     "y": 1216.9,
+     "label": "?"
+    }
+   ]
+  },
+  {
+   "type": "map",
+   "p": 10,
+   "x": 1415.7,
+   "y": 1216.9,
+   "z": 2.0,
+   "name": "The $.$. Rocky",
+   "sub": "Este · cerca de Caverna Condenada",
+   "pins": [
+    {
+     "x": 1415.7,
+     "y": 1216.9,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "type": "map",
+   "p": 11,
+   "x": 1150.3,
+   "y": 1606.1,
+   "z": 1.3,
+   "name": "¿Qué lugar es?",
+   "sub": "Ronda 3 de 16",
+   "pins": [
+    {
+     "x": 1150.3,
+     "y": 1606.1,
+     "label": "?"
+    }
+   ]
+  },
+  {
+   "type": "map",
+   "p": 13,
+   "x": 1150.3,
+   "y": 1606.1,
+   "z": 2.0,
+   "name": "Puerto Pirata",
+   "sub": "Sur · cerca de Bahía Bulliciosa",
+   "pins": [
+    {
+     "x": 1150.3,
+     "y": 1606.1,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "type": "map",
+   "p": 14,
+   "x": 634.8,
+   "y": 1123.2,
+   "z": 1.3,
+   "name": "¿Qué lugar es?",
+   "sub": "Ronda 4 de 16",
+   "pins": [
+    {
+     "x": 634.8,
+     "y": 1123.2,
+     "label": "?"
+    }
+   ]
+  },
+  {
+   "type": "map",
+   "p": 16,
+   "x": 634.8,
+   "y": 1123.2,
+   "z": 2.0,
+   "name": "Arlong Park",
+   "sub": "Oeste · cerca de Frontera Farol",
+   "pins": [
+    {
+     "x": 634.8,
+     "y": 1123.2,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "type": "map",
+   "p": 17,
+   "x": 1184.2,
+   "y": 1147.6,
+   "z": 1.3,
+   "name": "¿Qué lugar es?",
+   "sub": "Ronda 5 de 16",
+   "pins": [
+    {
+     "x": 1184.2,
+     "y": 1147.6,
+     "label": "?"
+    }
+   ]
+  },
+  {
+   "type": "map",
+   "p": 19,
+   "x": 1184.2,
+   "y": 1147.6,
+   "z": 2.0,
+   "name": "Caverna Condenada",
+   "sub": "Este · cerca de The $.$. Rocky",
+   "pins": [
+    {
+     "x": 1184.2,
+     "y": 1147.6,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "type": "map",
+   "p": 20,
+   "x": 1031.1,
+   "y": 850.9,
+   "z": 1.3,
+   "name": "¿Qué lugar es?",
+   "sub": "Ronda 6 de 16",
+   "pins": [
+    {
+     "x": 1031.1,
+     "y": 850.9,
+     "label": "?"
+    }
+   ]
+  },
+  {
+   "type": "map",
+   "p": 22,
+   "x": 1031.1,
+   "y": 850.9,
+   "z": 2.0,
+   "name": "Playa de Buggy",
+   "sub": "Norte · cerca de Frontera Farol",
+   "pins": [
+    {
+     "x": 1031.1,
+     "y": 850.9,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "type": "map",
+   "p": 23,
+   "x": 754.5,
+   "y": 1437.6,
+   "z": 1.3,
+   "name": "¿Qué lugar es?",
+   "sub": "Ronda 7 de 16",
+   "pins": [
+    {
+     "x": 754.5,
+     "y": 1437.6,
+     "label": "?"
+    }
+   ]
+  },
+  {
+   "type": "map",
+   "p": 25,
+   "x": 754.5,
+   "y": 1437.6,
+   "z": 2.0,
+   "name": "Villa Molino",
+   "sub": "Suroeste · cerca de Loguetown",
+   "pins": [
+    {
+     "x": 754.5,
+     "y": 1437.6,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "type": "map",
+   "p": 26,
+   "x": 1387.9,
+   "y": 1481.5,
+   "z": 1.3,
+   "name": "¿Qué lugar es?",
+   "sub": "Ronda 8 de 16",
+   "pins": [
+    {
+     "x": 1387.9,
+     "y": 1481.5,
+     "label": "?"
+    }
+   ]
+  },
+  {
+   "type": "map",
+   "p": 28,
+   "x": 1387.9,
+   "y": 1481.5,
+   "z": 2.0,
+   "name": "Bahía Bulliciosa",
+   "sub": "Sureste · cerca de The $.$. Rocky",
+   "pins": [
+    {
+     "x": 1387.9,
+     "y": 1481.5,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "type": "map",
+   "p": 29,
+   "x": 898.7,
+   "y": 1049.7,
+   "z": 1.3,
+   "name": "¿Qué lugar es?",
+   "sub": "Ronda 9 de 16",
+   "pins": [
+    {
+     "x": 898.7,
+     "y": 1049.7,
+     "label": "?"
+    }
+   ]
+  },
+  {
+   "type": "map",
+   "p": 31,
+   "x": 898.7,
+   "y": 1049.7,
+   "z": 2.0,
+   "name": "Frontera Farol",
+   "sub": "Cerca del centro · cerca de El cofre",
+   "pins": [
+    {
+     "x": 898.7,
+     "y": 1049.7,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "type": "map",
+   "p": 32,
+   "x": 988.7,
+   "y": 1382.2,
+   "z": 1.3,
+   "name": "¿Qué lugar es?",
+   "sub": "Ronda 10 de 16",
+   "pins": [
+    {
+     "x": 988.7,
+     "y": 1382.2,
+     "label": "?"
+    }
+   ]
+  },
+  {
+   "type": "map",
+   "p": 34,
+   "x": 988.7,
+   "y": 1382.2,
+   "z": 2.0,
+   "name": "Loguetown",
+   "sub": "Sur · cerca de Villa Molino",
+   "pins": [
+    {
+     "x": 988.7,
+     "y": 1382.2,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "type": "map",
+   "p": 35,
+   "x": 762.1,
+   "y": 875.4,
+   "z": 1.3,
+   "name": "¿Qué lugar es?",
+   "sub": "Ronda 11 de 16",
+   "pins": [
+    {
+     "x": 762.1,
+     "y": 875.4,
+     "label": "?"
+    }
+   ]
+  },
+  {
+   "type": "map",
+   "p": 37,
+   "x": 762.1,
+   "y": 875.4,
+   "z": 2.0,
+   "name": "El cofre",
+   "sub": "Noroeste · cerca de Resort relajado",
+   "pins": [
+    {
+     "x": 762.1,
+     "y": 875.4,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "type": "code",
+   "p": 38
+  },
+  {
+   "type": "title",
+   "p": 39,
+   "chapter": "Nivel 2: puntos de referencia",
+   "kicker": "NIVEL 2",
+   "lines": [
+    "Puntos de",
+    "referencia"
+   ]
+  },
+  {
+   "type": "map",
+   "p": 40,
+   "x": 710.1,
+   "y": 1560.9,
+   "z": 1.3,
+   "name": "¿Qué punto de referencia es?",
+   "sub": "Ronda 12 de 16 · pista: cerca de Villa Molino",
+   "pins": [
+    {
+     "x": 710.1,
+     "y": 1560.9,
+     "label": "?"
+    }
+   ]
+  },
+  {
+   "type": "map",
+   "p": 42,
+   "x": 710.1,
+   "y": 1560.9,
+   "z": 2.0,
+   "name": "Bosque Mandarina de Nami",
+   "sub": "Suroeste · cerca de Villa Molino",
+   "pins": [
+    {
+     "x": 710.1,
+     "y": 1560.9,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "type": "map",
+   "p": 43,
+   "x": 952.6,
+   "y": 1243.0,
+   "z": 1.3,
+   "name": "¿Qué punto de referencia es?",
+   "sub": "Ronda 13 de 16 · pista: cerca de Loguetown",
+   "pins": [
+    {
+     "x": 952.6,
+     "y": 1243.0,
+     "label": "?"
+    }
+   ]
+  },
+  {
+   "type": "map",
+   "p": 45,
+   "x": 952.6,
+   "y": 1243.0,
+   "z": 2.0,
+   "name": "Campo de batalla del gigante",
+   "sub": "Cerca del centro · cerca de Loguetown",
+   "pins": [
+    {
+     "x": 952.6,
+     "y": 1243.0,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "type": "map",
+   "p": 46,
+   "x": 1206.1,
+   "y": 1224.3,
+   "z": 1.3,
+   "name": "¿Qué punto de referencia es?",
+   "sub": "Ronda 14 de 16 · pista: cerca de Caverna Condenada",
+   "pins": [
+    {
+     "x": 1206.1,
+     "y": 1224.3,
+     "label": "?"
+    }
+   ]
+  },
+  {
+   "type": "map",
+   "p": 48,
+   "x": 1206.1,
+   "y": 1224.3,
+   "z": 2.0,
+   "name": "La calavera salada",
+   "sub": "Este · cerca de Caverna Condenada",
+   "pins": [
+    {
+     "x": 1206.1,
+     "y": 1224.3,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "type": "map",
+   "p": 49,
+   "x": 1411.1,
+   "y": 1476.8,
+   "z": 1.3,
+   "name": "¿Qué punto de referencia es?",
+   "sub": "Ronda 15 de 16 · pista: cerca de Bahía Bulliciosa",
+   "pins": [
+    {
+     "x": 1411.1,
+     "y": 1476.8,
+     "label": "?"
+    }
+   ]
+  },
+  {
+   "type": "map",
+   "p": 51,
+   "x": 1411.1,
+   "y": 1476.8,
+   "z": 2.0,
+   "name": "Baratie",
+   "sub": "Sureste · cerca de Bahía Bulliciosa",
+   "pins": [
+    {
+     "x": 1411.1,
+     "y": 1476.8,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "type": "map",
+   "p": 52,
+   "x": 1203.2,
+   "y": 1500.4,
+   "z": 1.3,
+   "name": "¿Qué punto de referencia es?",
+   "sub": "Ronda 16 de 16 · pista: cerca de Puerto Pirata",
+   "pins": [
+    {
+     "x": 1203.2,
+     "y": 1500.4,
+     "label": "?"
+    }
+   ]
+  },
+  {
+   "type": "map",
+   "p": 54,
+   "x": 1203.2,
+   "y": 1500.4,
+   "z": 2.0,
+   "name": "Henry",
+   "sub": "Sureste · cerca de Puerto Pirata",
+   "pins": [
+    {
+     "x": 1203.2,
+     "y": 1500.4,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "type": "stat",
+   "p": 55,
+   "chapter": "Resultados",
+   "big": "¿?/16",
+   "label": "¿Cuántos sacaste?"
+  },
+  {
+   "type": "map",
+   "p": 56,
+   "x": 1000,
+   "y": 1180,
+   "z": 0.72,
+   "name": "Mapa completo",
+   "sub": "16 lugares",
+   "pins": [
+    {
+     "x": 817.7,
+     "y": 718.0,
+     "label": "",
+     "p": 56,
+     "dt": 0.9
+    },
+    {
+     "x": 1415.7,
+     "y": 1216.9,
+     "label": "",
+     "p": 56,
+     "dt": 1.02
+    },
+    {
+     "x": 1150.3,
+     "y": 1606.1,
+     "label": "",
+     "p": 56,
+     "dt": 1.1400000000000001
+    },
+    {
+     "x": 634.8,
+     "y": 1123.2,
+     "label": "",
+     "p": 56,
+     "dt": 1.26
+    },
+    {
+     "x": 1184.2,
+     "y": 1147.6,
+     "label": "",
+     "p": 56,
+     "dt": 1.38
+    },
+    {
+     "x": 1031.1,
+     "y": 850.9,
+     "label": "",
+     "p": 56,
+     "dt": 1.5
+    },
+    {
+     "x": 754.5,
+     "y": 1437.6,
+     "label": "",
+     "p": 56,
+     "dt": 1.62
+    },
+    {
+     "x": 1387.9,
+     "y": 1481.5,
+     "label": "",
+     "p": 56,
+     "dt": 1.74
+    },
+    {
+     "x": 898.7,
+     "y": 1049.7,
+     "label": "",
+     "p": 56,
+     "dt": 1.8599999999999999
+    },
+    {
+     "x": 988.7,
+     "y": 1382.2,
+     "label": "",
+     "p": 56,
+     "dt": 1.98
+    },
+    {
+     "x": 762.1,
+     "y": 875.4,
+     "label": "",
+     "p": 56,
+     "dt": 2.1
+    },
+    {
+     "x": 710.1,
+     "y": 1560.9,
+     "label": "",
+     "p": 56,
+     "dt": 2.2199999999999998
+    },
+    {
+     "x": 952.6,
+     "y": 1243.0,
+     "label": "",
+     "p": 56,
+     "dt": 2.34
+    },
+    {
+     "x": 1206.1,
+     "y": 1224.3,
+     "label": "",
+     "p": 56,
+     "dt": 2.46
+    },
+    {
+     "x": 1411.1,
+     "y": 1476.8,
+     "label": "",
+     "p": 56,
+     "dt": 2.58
+    },
+    {
+     "x": 1203.2,
+     "y": 1500.4,
+     "label": "",
+     "p": 56,
+     "dt": 2.6999999999999997
+    }
+   ]
+  },
+  {
+   "type": "code",
+   "p": 58,
+   "chapter": "Final"
+  }
+ ]
+}
