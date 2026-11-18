@@ -1,0 +1,150 @@
+{
+ "date": "2026-11-18",
+ "dateLabel": "18 NOV",
+ "dateLong": "18 de noviembre",
+ "resetLabel": "6 PM",
+ "resetZone": "CDMX",
+ "dealOutLabel": "20 NOV",
+ "dealOutTime": "6 PM",
+ "deal": {
+  "name": "Lote Kaiju N.º 8",
+  "final": 3800,
+  "regular": 7700,
+  "out": "2026-11-20T23:59:59.999Z",
+  "outfits": [
+   {
+    "id": "Character_SureBamboo",
+    "name": "Kafka Hibino",
+    "rarity": "Épico",
+    "rarityKey": "epic",
+    "series": null,
+    "img": "https://fortnite-api.com/images/cosmetics/br/character_surebamboo/featured.png",
+    "price": null,
+    "out": null
+   },
+   {
+    "id": "Character_CafeStove",
+    "name": "Kikoru Shinomiya",
+    "rarity": "Épico",
+    "rarityKey": "epic",
+    "series": null,
+    "img": "https://fortnite-api.com/images/cosmetics/br/character_cafestove/featured.png",
+    "price": 1500,
+    "out": "2026-11-20"
+   },
+   {
+    "id": "Character_YamPowder",
+    "name": "Reno Ichikawa",
+    "rarity": "Épico",
+    "rarityKey": "epic",
+    "series": null,
+    "img": "https://fortnite-api.com/images/cosmetics/br/character_yampowder/featured.png",
+    "price": 1500,
+    "out": "2026-11-20"
+   }
+  ],
+  "saving": 3900,
+  "pct": 51
+ },
+ "dealBest": false,
+ "og": {
+  "chapter": 1,
+  "season": 5,
+  "gapDays": 1,
+  "gapName": null,
+  "outfits": [
+   {
+    "id": "CID_171_Athena_Commando_M_SharpDresser",
+    "name": "Sobrenombre",
+    "rarity": "Raro",
+    "rarityKey": "rare",
+    "series": null,
+    "img": "https://fortnite-api.com/images/cosmetics/br/cid_171_athena_commando_m_sharpdresser/featured.png",
+    "price": 1200,
+    "out": "2026-11-19",
+    "gapDays": 1
+   }
+  ]
+ },
+ "last": {
+  "count": 5,
+  "outfits": [
+   {
+    "id": "Character_DefectGlitch",
+    "name": "Glitch",
+    "rarity": "Épico",
+    "rarityKey": "epic",
+    "series": null,
+    "img": "https://fortnite-api.com/images/cosmetics/br/character_defectglitch/featured.png",
+    "price": 1500,
+    "out": null
+   },
+   {
+    "id": "CID_727_Athena_Commando_M_Tailor",
+    "name": "Sastre",
+    "rarity": "Épico",
+    "rarityKey": "epic",
+    "series": null,
+    "img": "https://fortnite-api.com/images/cosmetics/br/cid_727_athena_commando_m_tailor/featured.png",
+    "price": 1500,
+    "out": "2026-11-18"
+   },
+   {
+    "id": "Character_PreciseRuffian",
+    "name": "Serge",
+    "rarity": "Épico",
+    "rarityKey": "epic",
+    "series": null,
+    "img": "https://fortnite-api.com/images/cosmetics/br/character_preciseruffian/featured.png",
+    "price": 800,
+    "out": "2026-11-18"
+   },
+   {
+    "id": "Character_PreppyBeret",
+    "name": "Siena Nyte",
+    "rarity": "Épico",
+    "rarityKey": "epic",
+    "series": null,
+    "img": "https://fortnite-api.com/images/cosmetics/br/character_preppyberet/featured.png",
+    "price": 800,
+    "out": "2026-11-18"
+   },
+   {
+    "id": "CID_804_Athena_Commando_M_SharkSuit",
+    "name": "Dientes de descanso",
+    "rarity": "Raro",
+    "rarityKey": "rare",
+    "series": null,
+    "img": "https://fortnite-api.com/images/cosmetics/br/cid_804_athena_commando_m_sharksuit/featured.png",
+    "price": 1200,
+    "out": "2026-11-18"
+   }
+  ]
+ },
+ "roles": [
+  "intro",
+  "hook",
+  "deal_name",
+  "deal_price",
+  "saving",
+  "og_name",
+  "og_era",
+  "last",
+  "ask",
+  "code",
+  "thanks"
+ ],
+ "phrases": [
+  "Esta es la tienda de objetos de hoy, 18 de noviembre.",
+  "¡Tres cosas antes de gastar un solo pavo!",
+  "El Lote Kaiju N.º 8:",
+  "3800 pavos, en vez de 7700.",
+  "¡Te ahorras 3900!",
+  "Sobrenombre está en la tienda.",
+  "Es del Capítulo 1, Temporada 5.",
+  "Y cinco skins están en su último día, cuatro de ellas épicas.",
+  "¿Vas a comprar algo hoy?",
+  "Usa el código BAD en la tienda de objetos. Le ayuda muchísimo al canal.",
+  "¡Gracias por ver! Síguenos para más contenido diario."
+ ]
+}

@@ -1,0 +1,99 @@
+{
+ "duration": 26.2,
+ "caption": "#EpicPartner Tienda de objetos de Fortnite, 18 de noviembre: el Lote Kaiju N.º 8 cuesta 3800 V-Bucks en vez de 7700 (ahorras 3900), Sobrenombre está en la tienda (Capítulo 1, Temporada 5) y 5 skins se van el 18 de noviembre a las 6 PM (CDMX).\n¿Vas a comprar hoy? Usa el código BAD en la tienda de objetos.\n#Fortnite #TiendaFortnite #FortniteTienda",
+ "claims": [
+  {
+   "text": "Lote Kaiju N.º 8: 3800 V-Bucks, regular 7700",
+   "source": "shop.json",
+   "match": [
+    "Lote Kaiju N.º 8",
+    "\"finalPrice\": 3800",
+    "\"regularPrice\": 7700"
+   ]
+  },
+  {
+   "text": "Sobrenombre: Capítulo 1, Temporada 5",
+   "source": "history.json",
+   "match": [
+    "Sobrenombre",
+    "\"chapter\": 1",
+    "\"season\": 5"
+   ]
+  },
+  {
+   "text": "1 days since last in the shop",
+   "source": "history.json",
+   "match": [
+    "\"gapDays\": 1"
+   ]
+  },
+  {
+   "text": "5 outfits leave at the next reset",
+   "source": "plan.json",
+   "match": [
+    "\"count\": 5"
+   ]
+  }
+ ],
+ "text": [
+  "KAFKA HIBINO",
+  "SOBRENOMBRE",
+  "GLITCH",
+  "OFERTA",
+  "OG",
+  "ÚLTIMO DÍA",
+  "TIENDA DE HOY / 18 NOV",
+  "1 · OFERTA",
+  "KIKORU SHINOMIYA",
+  "RENO ICHIKAWA",
+  "3800",
+  "7700",
+  "LOTE KAIJU N.º 8 · SE VA EL 20 NOV",
+  "-51% / AHORRAS 3900",
+  "2 · SKIN OG",
+  "CAPÍTULO 1 · TEMPORADA 5",
+  "3 · ÚLTIMO DÍA",
+  "SASTRE",
+  "SERGE",
+  "SIENA NYTE",
+  "DIENTES DE DESCANSO",
+  "SE VAN EL 18 NOV, 6 PM",
+  "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+  "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+  "ESTA ES LA",
+  "TIENDA DE OBJETOS",
+  "DE HOY,",
+  "18 DE NOVIEMBRE.",
+  "¡TRES COSAS ANTES",
+  "DE GASTAR UN",
+  "SOLO PAVO!",
+  "EL LOTE KAIJU",
+  "N.º 8:",
+  "3800 PAVOS,",
+  "EN VEZ DE",
+  "7700.",
+  "¡TE AHORRAS 3900!",
+  "SOBRENOMBRE ESTÁ EN",
+  "LA TIENDA.",
+  "ES DEL CAPÍTULO",
+  "1,",
+  "TEMPORADA 5.",
+  "Y CINCO SKINS",
+  "ESTÁN EN SU",
+  "ÚLTIMO DÍA,",
+  "CUATRO DE ELLAS",
+  "ÉPICAS.",
+  "¿VAS A COMPRAR",
+  "ALGO HOY?",
+  "USA EL CÓDIGO",
+  "BAD EN LA",
+  "TIENDA DE OBJETOS.",
+  "LE AYUDA MUCHÍSIMO",
+  "AL CANAL.",
+  "¡GRACIAS POR VER!",
+  "SÍGUENOS PARA MÁS",
+  "CONTENIDO DIARIO.",
+  "#EPICPARTNER",
+  "LA TIENDITA BAD"
+ ]
+}

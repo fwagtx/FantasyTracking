@@ -106,7 +106,8 @@
 
     // beat 2: regreso OG
     const g2 = mk(stage, `inset:0`);
-    chip(g2, "2 · Regreso OG", "#5BD0FF");
+    // "Regreso" only for a real comeback (the same 30-day line as the gap note); 2026-11-18: Sobrenombre was in the shop the day before
+    chip(g2, D.og.gapDays >= 30 ? "2 · Regreso OG" : D.og.outfits.length > 1 ? "2 · Skins OG" : "2 · Skin OG", "#5BD0FF");
     const ogTiles = D.og.outfits.map((o, i, a) => add(g2, tile(o, 380, 500), `left:${a.length === 2 ? 90 + i * 420 : 330}px;top:360px`));
     const stamp = mk(g2, `left:90px;top:890px;width:780px;text-align:center;padding:10px 0 4px;background:${YEL};border:8px solid ${INK};transform:rotate(-6deg);box-shadow:0 10px 0 ${INK}`,
       `<span style="font-family:'Barlow Condensed';font-weight:900;font-size:66px;line-height:1;color:${INK};white-space:nowrap">CAPÍTULO ${D.og.chapter} · TEMPORADA ${D.og.season}</span>`, `CAPÍTULO ${D.og.chapter} · TEMPORADA ${D.og.season}`);
