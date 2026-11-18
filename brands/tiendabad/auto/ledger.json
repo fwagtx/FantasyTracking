@@ -408,6 +408,27 @@
    "format": "¿Dónde está?",
    "topic": "Campo de batalla del gigante",
    "folder": "video/auto/2026-11-25-donde-campo-de-batalla"
+  },
+  {
+   "date": "2026-11-18",
+   "slot": "15:45",
+   "format": "Tienda Pirata diaria (sevan)",
+   "topic": "Se va hoy (2026-11-18): Lote Casillero Glitch de Candywing, 2800 pavos (normalmente 4500)",
+   "folder": "video/auto/2026-11-18-pirata-sevan"
+  },
+  {
+   "date": "2026-11-18",
+   "slot": "17:15",
+   "format": "Tienda Pirata diaria (caros)",
+   "topic": "Lo nuevo más caro de hoy (2026-11-18): Lote Clan Halcón 2800, McLaren P1 2800, Lote Gaara y Hinata 2400, Lote Itachi y Orochimaru 2200, Lote Sasuke y Sakura 2200",
+   "folder": "video/auto/2026-11-18-pirata-caros"
+  },
+  {
+   "date": "2026-11-18",
+   "slot": "19:30",
+   "format": "Tienda Pirata diaria (cuenta)",
+   "topic": "Quedan 17 días · dato: no se recoge",
+   "folder": "video/auto/2026-11-18-pirata-cuenta"
   }
  ]
 }
