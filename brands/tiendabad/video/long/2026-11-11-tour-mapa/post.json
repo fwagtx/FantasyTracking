@@ -13,5 +13,22 @@
   "loguetown fortnite",
   "mapa fortnite one piece"
  ],
- "thumb_t": 1.6
+ "thumb_t": 1.6,
+ "thumb": {
+  "kind": "ytmap",
+  "map": "sources/map-labels.png",
+  "cx": 1002.3,
+  "cy": 1171.7,
+  "z": 0.62,
+  "lines": [
+   "TODOS LOS",
+   "LUGARES"
+  ],
+  "tag": "TOUR COMPLETO",
+  "big": "17",
+  "bigSize": 470,
+  "bigTop": 90,
+  "bigRight": 90,
+  "bigRot": 8
+ }
 }

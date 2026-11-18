@@ -13,5 +13,17 @@
   "puerto pirata fortnite",
   "mapa fortnite one piece"
  ],
- "thumb_t": 1.6
+ "thumb_t": 1.6,
+ "thumb": {
+  "kind": "ytmap",
+  "map": "sources/map-blank.png",
+  "cx": 1002.3,
+  "cy": 1171.7,
+  "z": 0.62,
+  "lines": [
+   "¿TE SABES",
+   "EL MAPA?"
+  ],
+  "tag": "16 LUGARES"
+ }
 }

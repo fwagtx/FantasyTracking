@@ -13,5 +13,18 @@
   "ofertas fortnite",
   "fortnite español"
  ],
- "thumb_t": 2.25
+ "thumb_t": 2.25,
+ "thumb": {
+  "kind": "ytskins",
+  "lines": [
+   "LA TIENDA",
+   "DE LA SEMANA"
+  ],
+  "tag": "OHTANI · BATMAN · MIKU",
+  "imgs": [
+   "video/long/2026-11-16-tienda-semana/img/Character_VelvetDeskCam.png",
+   "video/long/2026-11-16-tienda-semana/img/Character_TideCompost.png",
+   "video/long/2026-11-16-tienda-semana/img/Character_JadeTowelGloss.png"
+  ]
+ }
 }

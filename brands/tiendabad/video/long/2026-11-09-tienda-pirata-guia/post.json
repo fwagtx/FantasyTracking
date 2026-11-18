@@ -11,5 +11,17 @@
   "probabilidad tienda pirata",
   "guia tienda pirata"
  ],
- "thumb_t": 1.6
+ "thumb_t": 1.6,
+ "thumb": {
+  "kind": "ytmap",
+  "map": "sources/map-blank.png",
+  "cx": 1002.3,
+  "cy": 1171.7,
+  "z": 0.62,
+  "lines": [
+   "TIENDA PIRATA",
+   "GUÍA COMPLETA"
+  ],
+  "tag": "PROBABILIDADES Y MITOS"
+ }
 }

@@ -212,7 +212,7 @@ L.news = () => {            // a news tile: the hook, huge, over the map
 L.ytmap = () => {
   bgMap(S.map, S.cx, S.cy, S.z || .62, 820, 380, "saturate(1.3) contrast(1.05)");
   el("fill", "background: linear-gradient(90deg, rgba(4,10,28,.92) 0%, rgba(4,10,28,.7) 46%, rgba(4,10,28,0) 72%)");
-  title([{ t: "?", size: 560, c: "#ffe03a", sw: 26, sh: 18 }], "right:70px;top:40px;transform:rotate(10deg)");
+  title([{ t: S.big || "?", size: S.bigSize || 560, c: "#ffe03a", sw: 26, sh: 18 }], `right:${S.bigRight ?? 70}px;top:${S.bigTop ?? 40}px;transform:rotate(${S.bigRot ?? 10}deg)`);
   title(S.lines.map((t, i) => ({ t, size: i ? 150 : 112, c: i ? "#ffe03a" : "#fff", max: 700, sw: 20, sh: 12 })), "left:44px;top:120px;transform:rotate(-4deg);transform-origin:left top");
   if (S.tag) tag(`<div style="font-size:64px">${S.tag}</div>`, "left:52px;top:520px;transform:rotate(-4deg);border-width:7px;box-shadow:0 10px 0 #101014;border-radius:20px;padding:10px 22px 2px", "red");
   if (S.circle) circle(S.circle[0], S.circle[1], 70);
