@@ -393,6 +393,14 @@
    "format": "LONG",
    "topic": "Quiz del mapa: ¿te sabes el mapa? Los 16 lugares en el mapa sin nombres (11 lugares con nombre + 5 puntos de referencia con pista), escala de aciertos, repaso",
    "folder": "video/long/2026-11-18-quiz-mapa"
+  },
+  {
+   "date": "2026-11-18",
+   "slot": "13:00",
+   "format": "¿Dónde está?",
+   "topic": "La calavera salada",
+   "folder": "video/auto/2026-11-18-donde-la-calavera-salada",
+   "note": "1:00 PM current short (no new news tile, no map change). No TikTok (paused through Nov 19)."
   }
  ]
 }

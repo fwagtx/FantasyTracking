@@ -31,11 +31,12 @@ F = (540, 820)      # where TPL.map's camera puts its focus on screen (style2.js
 CHAR = 24           # a letter of a map-labels.png place name is up to ~23 map pixels wide (LOGUETOWN), so 24 leaves a margin
 
 
-def close_shots(x, y, nx, ny, name, near, labeled, zs=(1.6, 1.7, 1.8)):
+def close_shots(x, y, nx, ny, name, near, labeled, zs=(1.6, 1.7, 1.8), top=0):
     """Focus and zoom of the close shots: on the place as far as possible, with the nearest named place (which the
     voice names) fully on screen, below the title shade (470 px) and above the captions (1090 px). 2026-11-17: the
     focus was always the place itself, so The $.$. Rocky sat behind the title in the Bahía Bulliciosa short and
-    Loguetown ran off the right edge in the Villa Molino one. Zooms out (up to half) when both don't fit."""
+    Loguetown ran off the right edge in the Villa Molino one. Zooms out (up to half) when both don't fit. top: how much lower
+    the title ends (a three-line title, and its shade, end 90 px lower)."""
     def rng(m, lo, hi, z, f):                    # focus values that put map coordinate m between screen lo and hi
         return m - (hi - f) / z, m - (lo - f) / z
     for s in [1 - i * 0.05 for i in range(11)]:
@@ -43,7 +44,7 @@ def close_shots(x, y, nx, ny, name, near, labeled, zs=(1.6, 1.7, 1.8)):
         for z in (z0 * s for z0 in zs):
             hw, hn = (len(name) * CHAR * z / 2 if labeled else 70), len(near) * CHAR * z / 2
             xs = [rng(x, hw + 20, 1060 - hw, z, F[0]), rng(nx, hn + 20, 1060 - hn, z, F[0])]
-            ys = [rng(y, 520, 960, z, F[1]), rng(ny, 500, 1040, z, F[1])]    # the place's pin label hangs under it
+            ys = [rng(y, 520 + top, 960, z, F[1]), rng(ny, 500 + top, 1040, z, F[1])]    # the place's pin label hangs under it
             lx, hx, ly, hy = max(a for a, _ in xs), min(b for _, b in xs), max(a for a, _ in ys), min(b for _, b in ys)
             if lx > hx or ly > hy:
                 break
@@ -64,7 +65,8 @@ def main(folder, name):
     cx, cy = sum(a for a, b in allnamed) / len(allnamed), sum(b for a, b in allnamed) / len(allnamed)
     nq = min(named, key=lambda q: math.hypot(px(q)[0] - x, px(q)[1] - y))
     near = nq["name"]
-    (x0, y0, z0), (x2, y2, z2), (xe, ye, ze) = close_shots(x, y, *px(nq), name, near, ".POI." in me[0]["id"])
+    split = int(880 / (0.74 * (len(name) + 1))) < 60 and " " in name     # the name goes on two lines (see the title below)
+    (x0, y0, z0), (x2, y2, z2), (xe, ye, ze) = close_shots(x, y, *px(nq), name, near, ".POI." in me[0]["id"], top=90 if split else 0)
     d = direction(x, y, cx, cy)
     wx, wy = min(max(1010, x - 291), x + 436), min(max(1010, y - 145), y + 709)
     head = f"#EpicPartner ¿No encuentras {name} en Fortnite? 📍 Está {d}, cerca de {near}\n¿Ya lo visitaste? 👇\nUsa el código BAD en la tienda de objetos 💛"
