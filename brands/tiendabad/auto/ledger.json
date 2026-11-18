@@ -379,6 +379,13 @@
    "format": "¿Dónde está?",
    "topic": "Villa Molino",
    "folder": "video/auto/2026-11-24-donde-villa-molino"
+  },
+  {
+   "date": "2026-11-17",
+   "slot": "19:30",
+   "format": "Tienda Pirata diaria (cuenta)",
+   "topic": "Quedan 18 días · dato: cualquier cofre",
+   "folder": "video/auto/2026-11-17-pirata-cuenta"
   }
  ]
 }

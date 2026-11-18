@@ -1,0 +1,67 @@
+{
+ "duration": 20.7,
+ "caption": "#EpicPartner ¡Quedan 18 días para encontrar la Tienda Pirata! 🏴‍☠️ La búsqueda termina el 5 de diciembre\nSirve cualquier cofre: normales, raros, enterrados… ¡todos!\n¿Ya te salió? 👇\nUsa el código BAD en la tienda de objetos 💛\n#fortnite #tiendapirata #fortniteespañol",
+ "claims": [
+  {
+   "text": "La búsqueda termina el 5 de diciembre (hoy 2026-11-17: quedan 18 días)",
+   "source": "vgc-odds-confirmed.json",
+   "match": [
+    "is set to end on December 5"
+   ],
+   "visual": "2026-11-17 to 2026-12-05 is 18 days"
+  },
+  {
+   "text": "1 en 137 500 por cofre",
+   "source": "vgc-odds-confirmed.json",
+   "match": [
+    "Pirate Shop Access – 1 in 137,500"
+   ]
+  },
+  {
+   "text": "Dato del día: Normales, raros, enterrados…",
+   "source": "vgc-guide.json",
+   "match": [
+    "This can be any type of chest",
+    "Normal chests",
+    "Rare chests",
+    "Buried Chests"
+   ]
+  }
+ ],
+ "text": [
+  "TIENDA PIRATA",
+  "¡QUEDAN 18 DÍAS! / PARA ENCONTRARLA 🏴‍☠️",
+  "TERMINA / 5 DE DICIEMBRE",
+  "PROBABILIDAD / 1 EN 137 500 POR COFRE",
+  "CUALQUIER COFRE / NORMALES, RAROS, ENTERRADOS…",
+  "QUEDAN / 18 DÍAS",
+  "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+  "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+  "¡QUEDAN 18 DÍAS",
+  "PARA ENCONTRAR LA",
+  "TIENDA PIRATA!",
+  "LA BÚSQUEDA DEL",
+  "TESORO TERMINA EL",
+  "5 DE DICIEMBRE.",
+  "Y RECUERDA: SALE",
+  "EN 1 DE",
+  "CADA 137 500",
+  "COFRES.",
+  "DATO DEL DÍA:",
+  "SIRVE CUALQUIER COFRE:",
+  "NORMALES,",
+  "RAROS,",
+  "ENTERRADOS… ¡TODOS!",
+  "¿YA TE SALIÓ?",
+  "DÍMELO EN LOS",
+  "COMENTARIOS.",
+  "USA EL CÓDIGO",
+  "BAD EN LA",
+  "TIENDA DE OBJETOS.",
+  "¡GRACIAS POR VER!",
+  "SÍGUENOS PARA MÁS",
+  "CONTENIDO DIARIO.",
+  "#EPICPARTNER",
+  "LA TIENDITA BAD"
+ ]
+}
