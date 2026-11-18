@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<!-- LA TIENDITA BAD covers and thumbnails (auto/thumbs.py writes the spec, thumb.mjs takes the screenshot).
+     Owner, 2026-11-18: the old covers (a frame of the video) "look so ai ... not engaging". So: one big subject from
+     Epic's own art, two to four huge words, one hook (price tag, red circle, "?"), no subtitles, no emoji, no UI pills. -->
+<style>
+  @font-face { font-family: "BC"; font-weight: 900; src: url(../../_shared/fonts/BarlowCondensed-Black.ttf); font-display: block; }
+  @font-face { font-family: "BC"; font-weight: 800; src: url(../../_shared/fonts/BarlowCondensed-ExtraBold.ttf); font-display: block; }
+  @font-face { font-family: "PM"; src: url(../../_shared/fonts/PermanentMarker-Regular.ttf); font-display: block; }
+  html, body { margin: 0; padding: 0; background: #000; }
+  #s { position: relative; overflow: hidden; }
+  .fill { position: absolute; inset: 0; }
+  .rays { position: absolute; left: 50%; top: 42%; width: 320%; height: 320%; transform: translate(-50%, -50%);
+          background: repeating-conic-gradient(from 3deg, rgba(255,255,255,.11) 0deg 5deg, rgba(255,255,255,0) 5deg 15deg); }
+  .grain { position: absolute; inset: 0; opacity: .08; mix-blend-mode: overlay;
+           background-image: repeating-radial-gradient(circle at 17% 23%, #fff 0 1px, transparent 1px 3px), repeating-radial-gradient(circle at 71% 61%, #000 0 1px, transparent 1px 4px); }
+  .t { position: absolute; font-family: "BC"; font-weight: 900; text-transform: uppercase; line-height: .86; color: #fff; }
+  .t .l { position: relative; display: block; width: max-content; isolation: isolate; }
+  .t .l::before { content: attr(data-t); position: absolute; left: 0; top: 0; z-index: -1; color: #0b0b12;
+                  -webkit-text-stroke: var(--sw, 26px) #0b0b12; text-shadow: 0 var(--sh, 16px) 0 #0b0b12; }
+  .t.c .l { margin: 0 auto; }
+  .t.r .l { margin-left: auto; }
+  .m { position: absolute; font-family: "PM"; color: #fff; line-height: 1.05; white-space: nowrap; }
+  .m .l { position: relative; display: block; width: max-content; isolation: isolate; }
+  .m.c .l { margin: 0 auto; }
+  .m.r .l { margin-left: auto; }
+  .m .l::before { content: attr(data-t); position: absolute; left: 0; top: 0; z-index: -1; color: #0b0b12; -webkit-text-stroke: 16px #0b0b12; }
+  .tag { position: absolute; font-family: "BC"; font-weight: 900; text-transform: uppercase; color: #101014; background: #ffe03a;
+         border: 9px solid #101014; border-radius: 26px; box-shadow: 0 14px 0 #101014; padding: 12px 30px 2px; line-height: .9; white-space: nowrap; }
+  .tag.red { background: #ff2b2b; color: #fff; }
+  .tag.white { background: #fff; }
+  .tag s { text-decoration: none; position: relative; color: #6b6b6b; }
+  .tag s::after { content: ""; position: absolute; left: -6%; right: -6%; top: 46%; height: .13em; background: #ff2b2b; transform: rotate(-8deg); border-radius: 9px; }
+  .disc { position: absolute; font-family: "BC"; font-weight: 800; color: rgba(255,255,255,.9); text-shadow: 0 2px 6px rgba(0,0,0,.8); letter-spacing: .01em; }
+  img { position: absolute; display: block; }
+  .hero, .sil, .back { -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 77%, rgba(0,0,0,0) 87%); }
+  .floor { position: absolute; left: 0; right: 0; bottom: 0; height: 460px; background: linear-gradient(0deg, rgba(0,0,0,.72) 0%, rgba(0,0,0,.35) 45%, rgba(0,0,0,0) 100%); }
+  .hero { filter: drop-shadow(7px 0 0 #fff) drop-shadow(-7px 0 0 #fff) drop-shadow(0 7px 0 #fff) drop-shadow(0 -7px 0 #fff) drop-shadow(0 30px 34px rgba(0,0,0,.6)); }
+  .sil { filter: brightness(0) drop-shadow(6px 0 0 #fff) drop-shadow(-6px 0 0 #fff) drop-shadow(0 6px 0 #fff) drop-shadow(0 -6px 0 #fff) drop-shadow(0 24px 30px rgba(0,0,0,.5)); }
+</style>
+</head>
+<body>
+<div id="s"></div>
+<script>
+const S = window.SPEC, W = S.w, H = S.h;
+const st = document.getElementById("s");
+st.style.width = W + "px"; st.style.height = H + "px";
+const fits = [];
+
+function el(cls, css, html, parent = st) {
+  const d = document.createElement("div");
+  if (cls) d.className = cls;
+  if (css) d.style.cssText = css;
+  if (html != null) d.innerHTML = html;
+  parent.appendChild(d);
+  return d;
+}
+function pic(src, css, cls = "", parent = st) {
+  const i = document.createElement("img");
+  i.src = src; i.className = cls; i.style.cssText = css;
+  parent.appendChild(i);
+  return i;
+}
+// lines: [{t, size, c, max, sw}]; the outline is a stroked copy behind the fill (::before), so it never eats the letters
+function words(cls, lines, css) {
+  const box = el(cls, css);
+  for (const L of lines) {
+    const s = document.createElement("span");
+    s.className = "l"; s.dataset.t = L.t; s.textContent = L.t;
+    s.style.fontSize = L.size + "px";
+    if (L.c) s.style.color = L.c;
+    if (L.sw) s.style.setProperty("--sw", L.sw + "px");
+    if (L.sh != null) s.style.setProperty("--sh", L.sh + "px");
+    box.appendChild(s);
+    if (L.max) fits.push([s, L.max]);
+  }
+  return box;
+}
+const title = (lines, css, align = "") => words("t" + (align ? " " + align : ""), lines, css);
+const note = (text, size, css, align = "") => words("m" + (align ? " " + align : ""), String(text).split("\n").map((t) => ({ t, size })), css);
+function tag(html, css, kind = "") { return el("tag" + (kind ? " " + kind : ""), css, html); }
+function disc(css) { if (S.disc !== false) el("disc", css, "#EpicPartner"); }
+
+function bgRadial(c1, c2, c3, at = "50% 42%", rays = true) {
+  el("fill", `background: radial-gradient(circle at ${at}, ${c1} 0%, ${c2} 46%, ${c3} 100%)`);
+  if (rays) el("rays", `top:${at.split(" ")[1]};left:${at.split(" ")[0]}`);
+  el("grain");
+}
+function floor() { el("floor"); }
+function vignette(strength = .55) {
+  el("fill", `background: radial-gradient(ellipse 80% 62% at 50% 46%, rgba(0,0,0,0) 46%, rgba(0,0,0,${strength}) 100%)`);
+}
+// the official map (2048 px): map point (x, y) lands on screen point (cx, cy) at zoom z
+function bgMap(src, x, y, z, cx, cy, filter = "saturate(1.2) contrast(1.05)") {
+  const size = 2048 * z;
+  pic(src, `width:${size}px;height:${size}px;left:${cx - x * z}px;top:${cy - y * z}px;filter:${filter}`);
+}
+// a quick marker loop, the way a person circles something
+function loopPath(cx, cy, r) {
+  let d = ""; const n = 72;
+  for (let i = 0; i <= n; i++) {
+    const a = (-110 + i * (395 / n)) * Math.PI / 180;
+    const rr = r * (1 + 0.05 * Math.sin(i / n * Math.PI * 2.6) + (i / n) * 0.09);
+    d += (i ? "L" : "M") + (cx + rr * 1.1 * Math.cos(a)).toFixed(1) + "," + (cy + rr * 0.9 * Math.sin(a)).toFixed(1);
+  }
+  return d;
+}
+function svgLayer(inner) { el("", `position:absolute;left:0;top:0;width:${W}px;height:${H}px`, `<svg width="${W}" height="${H}" style="overflow:visible">${inner}</svg>`); }
+function circle(cx, cy, r, color = "#ff2323") {
+  const d = loopPath(cx, cy, r);
+  svgLayer(`<path d="${d}" fill="none" stroke="#fff" stroke-width="34" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="${d}" fill="none" stroke="${color}" stroke-width="19" stroke-linecap="round" stroke-linejoin="round"/>`);
+}
+function arrow(x1, y1, x2, y2, bend = .25, color = "#ff2323", w = 22) {
+  const mx = (x1 + x2) / 2, my = (y1 + y2) / 2, dx = x2 - x1, dy = y2 - y1;
+  const qx = mx - dy * bend, qy = my + dx * bend;
+  const ang = Math.atan2(y2 - qy, x2 - qx), L = 3.4 * w, sp = .55;
+  const h1 = [x2 - L * Math.cos(ang - sp), y2 - L * Math.sin(ang - sp)], h2 = [x2 - L * Math.cos(ang + sp), y2 - L * Math.sin(ang + sp)];
+  const d = `M${x1},${y1} Q${qx},${qy} ${x2},${y2} M${h1[0]},${h1[1]} L${x2},${y2} L${h2[0]},${h2[1]}`;
+  svgLayer(`<path d="${d}" fill="none" stroke="#fff" stroke-width="${w + 16}" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="${d}" fill="none" stroke="${color}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round"/>`);
+}
+
+// ---------- layouts (1080x1920 covers: everything that matters sits in the 3:4 grid crop, y 240-1680) ----------
+const L = {};
+
+L.drop = () => {            // "Se va hoy": the bundle's outfit, huge; the price; the pirate hook
+  bgRadial("#ff8a1c", "#e3141f", "#3d0209", "64% 40%");
+  vignette(.45);
+  pic(S.hero, "width:1760px;height:1760px;left:-190px;top:300px", "hero");
+  floor();
+  title([{ t: "SE VA", size: 270 }, { t: "HOY", size: 400, c: "#ffe03a" }], "left:52px;top:300px;transform:rotate(-6deg);transform-origin:left top");
+  tag(`<div style="font-size:84px"><s>${S.regular}</s></div><div style="font-size:132px">${S.final} PAVOS</div>`, "left:46px;top:1010px;transform:rotate(-5deg)");
+  note(S.note, 66, "left:58px;top:1370px;transform:rotate(-5deg)");
+  disc("left:44px;top:70px;font-size:40px");
+};
+
+L.top = () => {             // the #1 of a ranking, big, and the price hidden: the video reveals it
+  bgRadial("#41f598", "#0b9459", "#022317", "58% 50%");
+  vignette(.45);
+  pic(S.hero, "width:1340px;height:1340px;left:-130px;top:590px", "hero");
+  floor();
+  title(S.lines.map((t, i) => ({ t, size: 205, c: i ? "#ffe03a" : "#fff", max: 650 })), "left:48px;top:300px;transform:rotate(-5deg);transform-origin:left top");
+  title([{ t: "#1", size: 430, c: "#ffe03a", sw: 30, sh: 20 }], "right:46px;top:300px;transform:rotate(8deg)", "r");
+  tag(`<div style="font-size:116px">${S.tag}</div>`, "right:50px;top:1290px;transform:rotate(6deg)");
+  if (S.note) note(S.note, 64, "right:64px;top:1540px;transform:rotate(-4deg)", "r");
+  disc("left:44px;top:70px;font-size:40px");
+};
+
+L.guide = () => {           // the countdown: one giant number over the map
+  bgMap(S.map, S.cx, S.cy, 1.25, 540, 960, "saturate(1.3) brightness(.72) blur(1.5px)");
+  el("fill", "background: radial-gradient(ellipse 70% 50% at 50% 52%, rgba(5,10,30,.25) 0%, rgba(5,10,30,.75) 100%)");
+  tag(`<div style="font-size:92px;letter-spacing:.01em">${S.kicker}</div>`, "left:50%;top:300px;transform:translateX(-50%) rotate(-3deg)", "red");
+  title([{ t: S.top, size: 190, max: 980 }], "left:0;right:0;top:470px", "c");
+  title([{ t: S.big, size: 860, c: "#ffe03a", sw: 34, sh: 26 }], "left:0;right:0;top:600px;transform:rotate(-4deg)", "c");
+  title([{ t: S.bottom, size: 250, max: 980 }], "left:0;right:0;top:1300px", "c");
+  if (S.note) note(S.note, 78, "left:0;right:0;top:1545px;text-align:center;transform:rotate(-3deg)", "c");
+  disc("left:44px;top:70px;font-size:40px");
+};
+
+L.map = () => {             // "¿Dónde está?": the real map, zoomed, circled by hand
+  const cx = 540, cy = 1190;
+  bgMap(S.map, S.x, S.y, S.z || 2.6, cx, cy);
+  el("fill", "background: linear-gradient(180deg, rgba(4,10,28,.86) 0px, rgba(4,10,28,.62) 560px, rgba(4,10,28,0) 820px)");
+  vignette(.35);
+  circle(cx, cy, 128);
+  arrow(870, 1530, 690, 1300, -.22);
+  title(S.lines.map((t, i) => ({ t, size: i ? 228 : 150, c: i ? "#ffe03a" : "#fff", max: 990 })), "left:0;right:0;top:285px;transform:rotate(-3deg)", "c");
+  note("¡aquí!", 118, "left:700px;top:1525px;transform:rotate(-9deg)");
+  disc("left:44px;top:70px;font-size:40px");
+};
+
+L.guess = () => {           // "Adivina la temporada": one skin in colour, the other two as silhouettes
+  bgRadial("#c84bff", "#6a12cc", "#160335", "50% 48%");
+  vignette(.45);
+  pic(S.imgs[1], "width:1180px;height:1180px;left:-390px;top:680px", "sil");
+  pic(S.imgs[2], "width:1180px;height:1180px;left:290px;top:680px", "sil");
+  title([{ t: "?", size: 420, c: "#ffe03a", sw: 28 }], "left:120px;top:900px;transform:rotate(-10deg)");
+  title([{ t: "?", size: 420, c: "#ffe03a", sw: 28 }], "left:810px;top:900px;transform:rotate(9deg)");
+  pic(S.imgs[0], "width:1420px;height:1420px;left:-170px;top:560px", "hero");
+  floor();
+  title([{ t: "¿DE QUÉ", size: 200 }, { t: "TEMPORADA?", size: 232, c: "#ffe03a", max: 990 }], "left:0;right:0;top:285px;transform:rotate(-3deg)", "c");
+  note(S.note, 70, "left:0;right:0;top:1560px;text-align:center;transform:rotate(-3deg)", "c");
+  disc("left:44px;top:70px;font-size:40px");
+};
+
+L.shop = () => {            // today's shop: the deal's outfit up front, the OG one behind it, the saving on a tag
+  bgRadial("#3fa6ff", "#1452db", "#05123d", "56% 44%");
+  vignette(.45);
+  if (S.back) pic(S.back, "width:1250px;height:1250px;left:-470px;top:690px;filter:brightness(.78) drop-shadow(0 24px 30px rgba(0,0,0,.5))", "back");
+  pic(S.hero, "width:1700px;height:1700px;left:-250px;top:360px", "hero");
+  floor();
+  title([{ t: "TIENDA", size: 240 }, { t: "DE HOY", size: 240, c: "#ffe03a" }], "left:50px;top:300px;transform:rotate(-5deg);transform-origin:left top");
+  tag(`<div style="font-size:100px">${S.date}</div>`, "right:52px;top:600px;transform:rotate(7deg)", "white");
+  if (S.final) tag(`<div style="font-size:80px"><s>${S.regular}</s></div><div style="font-size:120px">${S.final} PAVOS</div>`, "left:46px;top:1110px;transform:rotate(-5deg)");
+  if (S.note) note(S.note, 64, "left:56px;top:1450px;transform:rotate(-4deg)");
+  disc("left:44px;top:70px;font-size:40px");
+};
+
+L.news = () => {            // a news tile: the hook, huge, over the map
+  bgMap(S.map, S.cx, S.cy, 1.1, 540, 1000, "saturate(1.2) brightness(.6) blur(2px)");
+  el("fill", "background: radial-gradient(ellipse 70% 55% at 50% 50%, rgba(5,10,30,.2) 0%, rgba(5,10,30,.75) 100%)");
+  tag(`<div style="font-size:84px">${S.kicker}</div>`, "left:50%;top:300px;transform:translateX(-50%) rotate(-3deg)", "red");
+  title(S.lines.map((t, i) => ({ t, size: 210, c: i % 2 ? "#ffe03a" : "#fff", max: 990 })), "left:0;right:0;top:500px;transform:rotate(-4deg)", "c");
+  if (S.note) note(S.note, 70, "left:0;right:0;top:1480px;text-align:center;transform:rotate(-3deg)", "c");
+  disc("left:44px;top:70px;font-size:40px");
+};
+
+// ---------- YouTube thumbnails (1280x720) ----------
+L.ytmap = () => {
+  bgMap(S.map, S.cx, S.cy, S.z || .62, 820, 380, "saturate(1.3) contrast(1.05)");
+  el("fill", "background: linear-gradient(90deg, rgba(4,10,28,.92) 0%, rgba(4,10,28,.7) 46%, rgba(4,10,28,0) 72%)");
+  title([{ t: "?", size: 560, c: "#ffe03a", sw: 26, sh: 18 }], "right:70px;top:40px;transform:rotate(10deg)");
+  title(S.lines.map((t, i) => ({ t, size: i ? 150 : 112, c: i ? "#ffe03a" : "#fff", max: 700, sw: 20, sh: 12 })), "left:44px;top:120px;transform:rotate(-4deg);transform-origin:left top");
+  if (S.tag) tag(`<div style="font-size:64px">${S.tag}</div>`, "left:52px;top:520px;transform:rotate(-4deg);border-width:7px;box-shadow:0 10px 0 #101014;border-radius:20px;padding:10px 22px 2px", "red");
+  if (S.circle) circle(S.circle[0], S.circle[1], 70);
+};
+L.ytskins = () => {
+  bgRadial(S.c1 || "#3fa6ff", S.c2 || "#1452db", S.c3 || "#05123d", "68% 46%");
+  vignette(.5);
+  const n = S.imgs.length;
+  S.imgs.forEach((src, i) => {
+    const size = i === 0 ? 900 : 700, x = 1280 - 420 - (i === 0 ? 0 : (i % 2 ? 260 : -170)) - size / 2, y = i === 0 ? 120 : 210;
+    pic(src, `width:${size}px;height:${size}px;left:${x}px;top:${y}px;z-index:${10 - i};${i ? "filter:brightness(.8) drop-shadow(0 20px 24px rgba(0,0,0,.5))" : ""}`, i === 0 ? "hero" : "");
+  });
+  title(S.lines.map((t, i) => ({ t, size: i ? 150 : 112, c: i ? "#ffe03a" : "#fff", max: 640, sw: 20, sh: 12 })), "left:44px;top:110px;z-index:20;transform:rotate(-4deg);transform-origin:left top");
+  if (S.tag) tag(`<div style="font-size:60px">${S.tag}</div>`, "left:52px;top:520px;z-index:20;transform:rotate(-4deg);border-width:7px;box-shadow:0 10px 0 #101014;border-radius:20px;padding:10px 22px 2px", S.tagKind || "");
+};
+
+window.ready = (async () => {
+  L[S.kind]();
+  await document.fonts.ready;
+  for (const [s, max] of fits) {
+    let f = parseFloat(s.style.fontSize);
+    while (s.getBoundingClientRect().width > max && f > 40) { f -= 3; s.style.fontSize = f + "px"; }
+  }
+  await Promise.all([...document.images].map((i) => i.decode().catch(() => { throw new Error("image failed: " + i.src); })));
+  return true;
+})();
+</script>
+</body>
+</html>

@@ -26,7 +26,7 @@ import shutil
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from common import BRAND, MX, QA, STORE, TB, VIDEO, VOICE, caption_problems, cover, mx_label, post_calls, review_sheet, run, upload_copy, write_posts  # noqa: E402
+from common import BRAND, MX, QA, STORE, TB, VIDEO, VOICE, caption_problems, made_cover, mx_label, post_calls, review_sheet, run, upload_copy, write_posts  # noqa: E402
 
 
 def opt(name, default=None):
@@ -90,7 +90,7 @@ def ship():
     out = os.path.join(d, "out")
     os.makedirs(out, exist_ok=True)
     upload_copy(mp4, os.path.join(out, "video.mp4"))
-    cover(mp4, c.get("cover_t", 0.5), os.path.join(out, "cover.jpg"))
+    made_cover(d, mp4, c.get("cover_t", 0.5), os.path.join(out, "cover.jpg"))
     video = run([sys.executable, STORE, "put", os.path.join(out, "video.mp4"), f"{slug}/video.mp4"], BRAND, quiet=True).strip()
     cov = run([sys.executable, STORE, "put", os.path.join(out, "cover.jpg"), f"{slug}/cover.jpg"], BRAND, quiet=True).strip()
     nets = opt("--networks")

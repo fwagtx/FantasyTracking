@@ -64,6 +64,21 @@ def cover(src_mp4, t, out_jpg):
     run([ffmpeg(), "-y", "-loglevel", "error", "-ss", str(t), "-i", src_mp4, "-frames:v", "1", "-q:v", "2", out_jpg], os.path.dirname(out_jpg), quiet=True)
 
 
+def made_cover(folder, src_mp4, t, out_jpg):
+    """The designed cover from thumbs.py (owner, 2026-11-18: covers that are a frame of the video "look so ai right now
+    and not engaging at all"). Only when no layout fits does it fall back to the frame at t, and it says so loudly:
+    the run's summary names it and the playbook asks for a layout before the next video of that kind."""
+    import thumbs
+    try:
+        thumbs.cover(folder, out_jpg)
+        print(f"cover: designed ({os.path.relpath(out_jpg, BRAND)}); look at it before scheduling", file=sys.stderr)
+        return "designed"
+    except SystemExit as e:
+        print(f"WARNING: no designed cover ({e}); this post uses the video frame at {t} s", file=sys.stderr)
+        cover(src_mp4, t, out_jpg)
+        return "frame"
+
+
 def caption_problems(c):
     """Every caption starts with #EpicPartner and says código BAD; no banned wording; platform limits."""
     bad = []

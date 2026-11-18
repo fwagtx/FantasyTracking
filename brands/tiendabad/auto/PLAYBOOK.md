@@ -46,6 +46,16 @@ A skipped slot costs nothing; a wrong post costs the channel.
    first TikTok video (Nov 9, "¿Toda la tienda de Fortnite GRATIS?… Usa el código BAD") was the last one that got views. A
    video whose TikTok caption or voice says gratis / free / sin gastar / 0 pavos / regalos skips TikTok (common.py
    `TIKTOK_RISKY`; the other networks still get it). Never reword a script just to get it onto TikTok.
+11. **Covers and thumbnails** (owner, 2026-11-18: the covers, a frame of the video, "look so ai right now and not engaging
+   at all"): ship makes a designed cover with `auto/thumbs.py` (layouts in `video/thumb.html`): one big subject from Epic's
+   own art (the video's items or the official map), two to four huge words, one hook (price tag, hand-drawn circle, "?"),
+   `#EpicPartner` small at the top, no subtitles, no emoji, and everything that matters inside the 3:4 crop the Instagram
+   grid shows (y 240-1680). After ship and before scheduling, open `<folder>/out/cover.jpg` (shop: `shop/D/out/cover.jpg`)
+   and judge it as a thumbnail: subject big, words readable when small, nothing overlapping, only the video's facts, never
+   the code next to "gratis" or "0 pavos". A map cover's circle must sit on the place (render it once over
+   `sources/map-labels.png` when in doubt). If ship printed `WARNING: no designed cover`, that post uses a frame: name it
+   in the summary and add a layout before the next video of that kind. Long videos: post.json needs a `thumb` spec
+   (layouts `ytmap`, `ytskins`; image paths relative to brands/tiendabad) or make_long.py refuses.
 
 ## Schedule (America/Mexico_City)
 
@@ -81,7 +91,8 @@ Nov 17-19, then the 1:00 PM short and the shop video only (rule 10).
    Read the voice lines it printed: the first is "Esta es la tienda de objetos de hoy, <día> de <mes>." and they all
    make sense spoken. Write `brands/tiendabad/shop/D/review.json`: `{"status": "PASS", "notes": "..."}` or FAIL with
    the reason (then skip to step 9).
-5. `python3 brands/tiendabad/auto/shop_daily.py ship D`. If it prints STOP, post nothing; go to step 9.
+5. `python3 brands/tiendabad/auto/shop_daily.py ship D`. If it prints STOP, post nothing; go to step 9. Look at
+   `brands/tiendabad/shop/D/out/cover.jpg` (rule 11) before step 6.
 6. Read `brands/tiendabad/shop/D/posts.json`. For each entry in `calls` not already scheduled (match its `match` text
    against getScheduledPosts), call createScheduledPost with that entry's `blogId`, `date` and `info` exactly as
    given (info as a JSON string). If Metricool answers VIDEO_THUMBNAIL_NOT_APPLICABLE, retry that call without
@@ -200,7 +211,8 @@ its date, media and `"draft": false` once its rebuild passes).
 
 Mon "La tienda de la semana" (from `shop/archive/`), Wed a map tour or "todos los X del mapa" (map.json), Sat the
 week's news and the Tienda Pirata guide while the season runs. 4–10 minutes, 1920x1080, YouTube only
-(`make_long.py`, once it is in this folder; until then skip and say so).
+(`make_long.py`, once it is in this folder; until then skip and say so). post.json carries the YouTube thumbnail
+ spec, `thumb` (rule 11); look at `out/thumb.jpg` before scheduling.
 
 ## If something breaks
 

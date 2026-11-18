@@ -4,7 +4,7 @@ A long video is a folder (brands/tiendabad/video/long/<YYYY-MM-DD>-<slug>/) hold
     long.json   {"title", "caption", "claims", "segments": [...]} (segment types: brands/tiendabad/long/scene.js;
                 segments with a "chapter" become YouTube chapters)
     vo.json     {"phrases": [...]}; voice settings always come from brands/tiendabad/voice.json
-    post.json   {"youtubeTitle", "youtube" (description; {chapters} is replaced with the chapter list), "tags", "thumb_t"}
+    post.json   {"youtubeTitle", "youtube" (description; {chapters} is replaced with the chapter list), "tags", "thumb" (a thumbs.py spec: layout ytmap or ytskins, image paths relative to brands/tiendabad)}
     sources/    the files the claims are checked against, with manifest.json
 
     python3 brands/tiendabad/auto/make_long.py build DIR      voice, render, review sheet (DIR/qa/review-sheet.png)
@@ -117,7 +117,11 @@ def ship():
     FF = ffmpeg()
     run([FF, "-y", "-loglevel", "error", "-i", mp4, "-c:v", "libx264", "-preset", "medium", "-crf", "21", "-maxrate", "10M", "-bufsize", "20M",
          "-pix_fmt", "yuv420p", "-r", "30", "-c:a", "copy", "-movflags", "+faststart", os.path.join(out, "video.mp4")], d, quiet=True)
-    run([FF, "-y", "-loglevel", "error", "-ss", str(c.get("thumb_t", 1.6)), "-i", mp4, "-frames:v", "1", "-vf", "scale=1280:720", "-q:v", "2", os.path.join(out, "thumb.jpg")], d, quiet=True)
+    if not c.get("thumb"):    # owner, 2026-11-18: thumbnails that are a frame of the video "look so ai ... not engaging"
+        raise SystemExit('STOP: post.json needs a "thumb" spec (auto/thumbs.py layouts ytmap / ytskins); look at the result before scheduling.')
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import thumbs
+    thumbs.render({"w": 1280, "h": 720, **c["thumb"]}, os.path.join(out, "thumb.jpg"))
     video = run([sys.executable, STORE, "put", os.path.join(out, "video.mp4"), f"{slug}/video.mp4"], BRAND, quiet=True).strip()
     thumb = run([sys.executable, STORE, "put", os.path.join(out, "thumb.jpg"), f"{slug}/thumb.jpg"], BRAND, quiet=True).strip()
     iso, local = when.isoformat(timespec="seconds"), when.strftime("%Y-%m-%dT%H:%M:%S")

@@ -25,7 +25,7 @@ import sys
 import time
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from common import BRAND, MX, QA, SHOP, STORE, VIDEO, cover, mx_label, post_calls, review_sheet, run, upload_copy, write_posts  # noqa: E402
+from common import BRAND, MX, QA, SHOP, STORE, VIDEO, made_cover, mx_label, post_calls, review_sheet, run, upload_copy, write_posts  # noqa: E402
 
 MES = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"]
 
@@ -123,7 +123,7 @@ def ship(day):
     out = os.path.join(D, "out")
     os.makedirs(out, exist_ok=True)
     upload_copy(mp4, os.path.join(out, "video.mp4"))
-    cover(mp4, 1.2, os.path.join(out, "cover.jpg"))
+    made_cover(D, mp4, 1.2, os.path.join(out, "cover.jpg"))
     video = run([sys.executable, STORE, "put", os.path.join(out, "video.mp4"), f"shop-{day}/video.mp4"], BRAND, quiet=True).strip()
     cov = run([sys.executable, STORE, "put", os.path.join(out, "cover.jpg"), f"shop-{day}/cover.jpg"], BRAND, quiet=True).strip()
     when = (now + datetime.timedelta(minutes=12)).astimezone(MX)
