@@ -1,0 +1,441 @@
+{
+ "duration": 246.6,
+ "caption": "#EpicPartner ¿Te sabes el mapa de Fortnite de memoria? 🗺️ Te enseño cada lugar en el mapa sin nombres y tú adivinas: los 11 lugares con nombre y los 5 puntos de referencia del mapa oficial, con su ubicación.\n\n¿Cuántos sacaste de 16? Cuéntame en los comentarios 👇\nUsa el código BAD en la tienda de objetos 💛\n\n#Fortnite #MapaFortnite #FortniteEspañol",
+ "claims": [
+  {
+   "text": "16 lugares en el mapa oficial: 11 lugares con nombre y 5 puntos de referencia",
+   "source": "map.json",
+   "match": [
+    "Arlong Park",
+    "Bahía Bulliciosa",
+    "Baratie",
+    "Bosque Mandarina de Nami",
+    "Campo de batalla del gigante",
+    "Caverna Condenada",
+    "El cofre",
+    "Frontera Farol",
+    "Henry",
+    "La calavera salada",
+    "Loguetown",
+    "Playa de Buggy",
+    "Puerto Pirata",
+    "Resort relajado",
+    "The $.$. Rocky",
+    "Villa Molino"
+   ]
+  },
+  {
+   "text": "Resort relajado: en el norte de la isla (by the same rule as new_where.py)",
+   "source": "map.json",
+   "match": [
+    "Resort relajado"
+   ],
+   "visual": "map pixel (818, 718)"
+  },
+  {
+   "text": "Resort relajado en el mapa",
+   "source": "map-labels.png",
+   "visual": "map pixel (818, 718); en el norte de la isla; nearest named place by coordinates: El cofre"
+  },
+  {
+   "text": "Noticias del juego (¡La aventura espera!): asalta El $.$. Rocky",
+   "source": "news.json",
+   "match": [
+    "¡La aventura espera!",
+    "asalta El $.$. Rocky"
+   ]
+  },
+  {
+   "text": "The $.$. Rocky: en el este de la isla (by the same rule as new_where.py)",
+   "source": "map.json",
+   "match": [
+    "The $.$. Rocky"
+   ],
+   "visual": "map pixel (1416, 1217)"
+  },
+  {
+   "text": "The $.$. Rocky en el mapa",
+   "source": "map-labels.png",
+   "visual": "map pixel (1416, 1217); en el este de la isla; nearest named place by coordinates: Caverna Condenada"
+  },
+  {
+   "text": "Puerto Pirata: en el sur de la isla (by the same rule as new_where.py)",
+   "source": "map.json",
+   "match": [
+    "Puerto Pirata"
+   ],
+   "visual": "map pixel (1150, 1606)"
+  },
+  {
+   "text": "Puerto Pirata en el mapa",
+   "source": "map-labels.png",
+   "visual": "map pixel (1150, 1606); en el sur de la isla; nearest named place by coordinates: Bahía Bulliciosa"
+  },
+  {
+   "text": "Noticias del juego (¡La aventura espera!): Explora Arlong Park de One Piece",
+   "source": "news.json",
+   "match": [
+    "¡La aventura espera!",
+    "Explora Arlong Park de One Piece"
+   ]
+  },
+  {
+   "text": "Arlong Park: en el oeste de la isla (by the same rule as new_where.py)",
+   "source": "map.json",
+   "match": [
+    "Arlong Park"
+   ],
+   "visual": "map pixel (635, 1123)"
+  },
+  {
+   "text": "Arlong Park en el mapa",
+   "source": "map-labels.png",
+   "visual": "map pixel (635, 1123); en el oeste de la isla; nearest named place by coordinates: Frontera Farol"
+  },
+  {
+   "text": "Caverna Condenada: en el este de la isla (by the same rule as new_where.py)",
+   "source": "map.json",
+   "match": [
+    "Caverna Condenada"
+   ],
+   "visual": "map pixel (1184, 1148)"
+  },
+  {
+   "text": "Caverna Condenada en el mapa",
+   "source": "map-labels.png",
+   "visual": "map pixel (1184, 1148); en el este de la isla; nearest named place by coordinates: The $.$. Rocky"
+  },
+  {
+   "text": "Playa de Buggy: en el norte de la isla (by the same rule as new_where.py)",
+   "source": "map.json",
+   "match": [
+    "Playa de Buggy"
+   ],
+   "visual": "map pixel (1031, 851)"
+  },
+  {
+   "text": "Playa de Buggy en el mapa",
+   "source": "map-labels.png",
+   "visual": "map pixel (1031, 851); en el norte de la isla; nearest named place by coordinates: Frontera Farol"
+  },
+  {
+   "text": "Villa Molino: en el suroeste de la isla (by the same rule as new_where.py)",
+   "source": "map.json",
+   "match": [
+    "Villa Molino"
+   ],
+   "visual": "map pixel (754, 1438)"
+  },
+  {
+   "text": "Villa Molino en el mapa",
+   "source": "map-labels.png",
+   "visual": "map pixel (754, 1438); en el suroeste de la isla; nearest named place by coordinates: Loguetown"
+  },
+  {
+   "text": "Bahía Bulliciosa: en el sureste de la isla (by the same rule as new_where.py)",
+   "source": "map.json",
+   "match": [
+    "Bahía Bulliciosa"
+   ],
+   "visual": "map pixel (1388, 1482)"
+  },
+  {
+   "text": "Bahía Bulliciosa en el mapa",
+   "source": "map-labels.png",
+   "visual": "map pixel (1388, 1482); en el sureste de la isla; nearest named place by coordinates: The $.$. Rocky"
+  },
+  {
+   "text": "Frontera Farol: cerca del centro de la isla (by the same rule as new_where.py)",
+   "source": "map.json",
+   "match": [
+    "Frontera Farol"
+   ],
+   "visual": "map pixel (899, 1050)"
+  },
+  {
+   "text": "Frontera Farol en el mapa",
+   "source": "map-labels.png",
+   "visual": "map pixel (899, 1050); cerca del centro de la isla; nearest named place by coordinates: El cofre"
+  },
+  {
+   "text": "Loguetown: en el sur de la isla (by the same rule as new_where.py)",
+   "source": "map.json",
+   "match": [
+    "Loguetown"
+   ],
+   "visual": "map pixel (989, 1382)"
+  },
+  {
+   "text": "Loguetown en el mapa",
+   "source": "map-labels.png",
+   "visual": "map pixel (989, 1382); en el sur de la isla; nearest named place by coordinates: Villa Molino"
+  },
+  {
+   "text": "El cofre: en el noroeste de la isla (by the same rule as new_where.py)",
+   "source": "map.json",
+   "match": [
+    "El cofre"
+   ],
+   "visual": "map pixel (762, 875)"
+  },
+  {
+   "text": "El cofre en el mapa",
+   "source": "map-labels.png",
+   "visual": "map pixel (762, 875); en el noroeste de la isla; nearest named place by coordinates: Resort relajado"
+  },
+  {
+   "text": "Bosque Mandarina de Nami: en el suroeste de la isla (by the same rule as new_where.py)",
+   "source": "map.json",
+   "match": [
+    "Bosque Mandarina de Nami"
+   ],
+   "visual": "map pixel (710, 1561)"
+  },
+  {
+   "text": "Bosque Mandarina de Nami en el mapa",
+   "source": "map-labels.png",
+   "visual": "map pixel (710, 1561); en el suroeste de la isla; nearest named place by coordinates: Villa Molino"
+  },
+  {
+   "text": "Campo de batalla del gigante: cerca del centro de la isla (by the same rule as new_where.py)",
+   "source": "map.json",
+   "match": [
+    "Campo de batalla del gigante"
+   ],
+   "visual": "map pixel (953, 1243)"
+  },
+  {
+   "text": "Campo de batalla del gigante en el mapa",
+   "source": "map-labels.png",
+   "visual": "map pixel (953, 1243); cerca del centro de la isla; nearest named place by coordinates: Loguetown"
+  },
+  {
+   "text": "La calavera salada: en el este de la isla (by the same rule as new_where.py)",
+   "source": "map.json",
+   "match": [
+    "La calavera salada"
+   ],
+   "visual": "map pixel (1206, 1224)"
+  },
+  {
+   "text": "La calavera salada en el mapa",
+   "source": "map-labels.png",
+   "visual": "map pixel (1206, 1224); en el este de la isla; nearest named place by coordinates: Caverna Condenada"
+  },
+  {
+   "text": "Noticias del juego (¡La aventura espera!): navega por la Bahía Baratie",
+   "source": "news.json",
+   "match": [
+    "¡La aventura espera!",
+    "navega por la Bahía Baratie"
+   ]
+  },
+  {
+   "text": "Baratie: en el sureste de la isla (by the same rule as new_where.py)",
+   "source": "map.json",
+   "match": [
+    "Baratie"
+   ],
+   "visual": "map pixel (1411, 1477)"
+  },
+  {
+   "text": "Baratie en el mapa",
+   "source": "map-labels.png",
+   "visual": "map pixel (1411, 1477); en el sureste de la isla; nearest named place by coordinates: Bahía Bulliciosa"
+  },
+  {
+   "text": "Henry: en el sureste de la isla (by the same rule as new_where.py)",
+   "source": "map.json",
+   "match": [
+    "Henry"
+   ],
+   "visual": "map pixel (1203, 1500)"
+  },
+  {
+   "text": "Henry en el mapa",
+   "source": "map-labels.png",
+   "visual": "map pixel (1203, 1500); en el sureste de la isla; nearest named place by coordinates: Puerto Pirata"
+  }
+ ],
+ "text": [
+  "QUIZ DEL MAPA / ¿TE SABES / EL MAPA?",
+  "INTRO",
+  "16 / LUGARES DEL MAPA OFICIAL",
+  "0 A 16 / CUENTA TUS ACIERTOS",
+  "NIVEL 1 / LUGARES / CON NOMBRE",
+  "NIVEL 1: LUGARES CON NOMBRE",
+  "?",
+  "¿QUÉ LUGAR ES? / RONDA 1 DE 16",
+  "RESORT RELAJADO / NORTE · CERCA DE EL COFRE",
+  "¿QUÉ LUGAR ES? / RONDA 2 DE 16",
+  "THE $.$. ROCKY / ESTE · CERCA DE CAVERNA CONDENADA",
+  "¿QUÉ LUGAR ES? / RONDA 3 DE 16",
+  "PUERTO PIRATA / SUR · CERCA DE BAHÍA BULLICIOSA",
+  "¿QUÉ LUGAR ES? / RONDA 4 DE 16",
+  "ARLONG PARK / OESTE · CERCA DE FRONTERA FAROL",
+  "¿QUÉ LUGAR ES? / RONDA 5 DE 16",
+  "CAVERNA CONDENADA / ESTE · CERCA DE THE $.$. ROCKY",
+  "¿QUÉ LUGAR ES? / RONDA 6 DE 16",
+  "PLAYA DE BUGGY / NORTE · CERCA DE FRONTERA FAROL",
+  "¿QUÉ LUGAR ES? / RONDA 7 DE 16",
+  "VILLA MOLINO / SUROESTE · CERCA DE LOGUETOWN",
+  "¿QUÉ LUGAR ES? / RONDA 8 DE 16",
+  "BAHÍA BULLICIOSA / SURESTE · CERCA DE THE $.$. ROCKY",
+  "¿QUÉ LUGAR ES? / RONDA 9 DE 16",
+  "FRONTERA FAROL / CERCA DEL CENTRO · CERCA DE EL COFRE",
+  "¿QUÉ LUGAR ES? / RONDA 10 DE 16",
+  "LOGUETOWN / SUR · CERCA DE VILLA MOLINO",
+  "¿QUÉ LUGAR ES? / RONDA 11 DE 16",
+  "EL COFRE / NOROESTE · CERCA DE RESORT RELAJADO",
+  "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+  "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+  "NIVEL 2 / PUNTOS DE / REFERENCIA",
+  "NIVEL 2: PUNTOS DE REFERENCIA",
+  "¿QUÉ PUNTO DE REFERENCIA ES? / RONDA 12 DE 16 · PISTA: CERCA DE VILLA MOLINO",
+  "BOSQUE MANDARINA DE NAMI / SUROESTE · CERCA DE VILLA MOLINO",
+  "¿QUÉ PUNTO DE REFERENCIA ES? / RONDA 13 DE 16 · PISTA: CERCA DE LOGUETOWN",
+  "CAMPO DE BATALLA DEL GIGANTE / CERCA DEL CENTRO · CERCA DE LOGUETOWN",
+  "¿QUÉ PUNTO DE REFERENCIA ES? / RONDA 14 DE 16 · PISTA: CERCA DE CAVERNA CONDENADA",
+  "LA CALAVERA SALADA / ESTE · CERCA DE CAVERNA CONDENADA",
+  "¿QUÉ PUNTO DE REFERENCIA ES? / RONDA 15 DE 16 · PISTA: CERCA DE BAHÍA BULLICIOSA",
+  "BARATIE / SURESTE · CERCA DE BAHÍA BULLICIOSA",
+  "¿QUÉ PUNTO DE REFERENCIA ES? / RONDA 16 DE 16 · PISTA: CERCA DE PUERTO PIRATA",
+  "HENRY / SURESTE · CERCA DE PUERTO PIRATA",
+  "¿?/16 / ¿CUÁNTOS SACASTE?",
+  "RESULTADOS",
+  "REPASO / LOS 16 LUGARES",
+  "FINAL",
+  "¿TE SABES EL MAPA DE FORTNITE",
+  "DE MEMORIA?",
+  "¡VAMOS A VER!",
+  "TE ENSEÑO CADA LUGAR EN EL",
+  "MAPA SIN NOMBRES,",
+  "TÚ ADIVINAS CUÁL ES,",
+  "Y LUEGO TE DIGO LA RESPUESTA.",
+  "SON 16 LUGARES DEL MAPA OFICIAL:",
+  "11 LUGARES CON NOMBRE Y 5",
+  "PUNTOS DE REFERENCIA.",
+  "EL CÍRCULO ROJO MARCA EL LUGAR,",
+  "Y TIENES CINCO SEGUNDOS PARA ADIVINAR.",
+  "CUENTA TUS ACIERTOS:",
+  "DE 0 A 5,",
+  "ERES NUEVO EN LA ISLA; DE",
+  "6 A 11,",
+  "YA LA CONOCES; DE 12 A",
+  "15,",
+  "ERES UN EXPERTO; Y CON 16,",
+  "TE SABES EL MAPA DE MEMORIA.",
+  "NIVEL 1:",
+  "LOS 11 LUGARES CON NOMBRE.",
+  "¡LOS MÁS FÁCILES!",
+  "¿LISTO?",
+  "¡EMPEZAMOS!",
+  "NÚMERO 1.",
+  "¿QUÉ LUGAR ES ESTE?",
+  "CINCO,",
+  "CUATRO,",
+  "TRES,",
+  "DOS,",
+  "UNO…",
+  "¡ES RESORT RELAJADO!",
+  "ESTÁ EN EL NORTE DE LA",
+  "ISLA,",
+  "CERCA DE EL COFRE.",
+  "NÚMERO 2.",
+  "¡ES THE $.$.",
+  "ROCKY!",
+  "ESTÁ EN EL ESTE DE LA",
+  "CERCA DE CAVERNA CONDENADA.",
+  "Y LAS NOTICIAS DEL JUEGO DICEN:",
+  "«ASALTA EL $.$.",
+  "ROCKY».",
+  "NÚMERO 3.",
+  "¡ES PUERTO PIRATA!",
+  "ESTÁ EN EL SUR DE LA",
+  "CERCA DE BAHÍA BULLICIOSA.",
+  "NÚMERO 4.",
+  "¡ES ARLONG PARK!",
+  "ESTÁ EN EL OESTE DE LA",
+  "CERCA DE FRONTERA FAROL.",
+  "«EXPLORA ARLONG PARK DE ONE PIECE».",
+  "NÚMERO 5.",
+  "¡ES CAVERNA CONDENADA!",
+  "CERCA DE THE $.$.",
+  "ROCKY.",
+  "NÚMERO 6.",
+  "¡ES PLAYA DE BUGGY!",
+  "NÚMERO 7.",
+  "¡ES VILLA MOLINO!",
+  "ESTÁ EN EL SUROESTE DE LA",
+  "CERCA DE LOGUETOWN.",
+  "NÚMERO 8.",
+  "¡ES BAHÍA BULLICIOSA!",
+  "ESTÁ EN EL SURESTE DE LA",
+  "NÚMERO 9.",
+  "¡ES FRONTERA FAROL!",
+  "ESTÁ CERCA DEL CENTRO DE LA",
+  "NÚMERO 10.",
+  "¡ES LOGUETOWN!",
+  "CERCA DE VILLA MOLINO.",
+  "NÚMERO 11.",
+  "¡ES EL COFRE!",
+  "ESTÁ EN EL NOROESTE DE LA",
+  "CERCA DE RESORT RELAJADO.",
+  "SI TE ESTÁ GUSTANDO EL QUIZ,",
+  "USA EL CÓDIGO BAD EN LA",
+  "TIENDA DE OBJETOS.",
+  "LE AYUDA MUCHÍSIMO AL CANAL.",
+  "NIVEL 2:",
+  "LOS 5 PUNTOS DE REFERENCIA.",
+  "ESTOS SON MÁS DIFÍCILES,",
+  "ASÍ QUE TE DOY UNA PISTA.",
+  "NÚMERO 12.",
+  "¿QUÉ PUNTO DE REFERENCIA ES ESTE?",
+  "PISTA:",
+  "ESTÁ CERCA DE VILLA MOLINO.",
+  "¡ES BOSQUE MANDARINA DE NAMI!",
+  "ISLA.",
+  "NÚMERO 13.",
+  "ESTÁ CERCA DE LOGUETOWN.",
+  "¡ES CAMPO DE BATALLA DEL GIGANTE!",
+  "NÚMERO 14.",
+  "ESTÁ CERCA DE CAVERNA CONDENADA.",
+  "¡ES LA CALAVERA SALADA!",
+  "NÚMERO 15.",
+  "ESTÁ CERCA DE BAHÍA BULLICIOSA.",
+  "¡ES BARATIE!",
+  "«NAVEGA POR LA BAHÍA BARATIE».",
+  "NÚMERO 16.",
+  "ESTÁ CERCA DE PUERTO PIRATA.",
+  "¡ES HENRY!",
+  "¿CUÁNTOS SACASTE DE 16?",
+  "DE 12 A 15 ERES UN",
+  "EXPERTO,",
+  "Y SI SACASTE LOS 16,",
+  "REPASO RÁPIDO:",
+  "RESORT RELAJADO,",
+  "THE $.$.",
+  "ROCKY,",
+  "PUERTO PIRATA,",
+  "ARLONG PARK,",
+  "CAVERNA CONDENADA,",
+  "PLAYA DE BUGGY,",
+  "VILLA MOLINO,",
+  "BAHÍA BULLICIOSA,",
+  "FRONTERA FAROL,",
+  "LOGUETOWN,",
+  "EL COFRE.",
+  "BOSQUE MANDARINA DE NAMI,",
+  "CAMPO DE BATALLA DEL GIGANTE,",
+  "LA CALAVERA SALADA,",
+  "BARATIE Y HENRY.",
+  "DIME EN LOS COMENTARIOS CUÁL TE",
+  "COSTÓ MÁS TRABAJO,",
+  "Y SI QUIERES OTRO QUIZ COMO",
+  "ESTE.",
+  "¡GRACIAS POR VER!",
+  "SÍGUENOS PARA MÁS CONTENIDO DIARIO.",
+  "LA TIENDITA BAD",
+  "#EPICPARTNER"
+ ]
+}

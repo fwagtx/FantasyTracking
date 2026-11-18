@@ -386,6 +386,13 @@
    "format": "Tienda Pirata diaria (cuenta)",
    "topic": "Quedan 18 días · dato: cualquier cofre",
    "folder": "video/auto/2026-11-17-pirata-cuenta"
+  },
+  {
+   "date": "2026-11-18",
+   "slot": "15:00 (YouTube largo)",
+   "format": "LONG",
+   "topic": "Quiz del mapa: ¿te sabes el mapa? Los 16 lugares en el mapa sin nombres (11 lugares con nombre + 5 puntos de referencia con pista), escala de aciertos, repaso",
+   "folder": "video/long/2026-11-18-quiz-mapa"
   }
  ]
 }

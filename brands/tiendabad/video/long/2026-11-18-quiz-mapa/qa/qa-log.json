@@ -1,0 +1,237 @@
+{
+  "video": "latienditabad-2026-11-18-quiz-mapa.mp4",
+  "checked_utc": "2026-11-18T12:12:11Z",
+  "verdict": "READY TO POST",
+  "results": [
+    {
+      "check": "1. Facts",
+      "status": "PASS",
+      "detail": "36/36 claims verified against saved official data",
+      "items": [
+        {
+          "claim": "16 lugares en el mapa oficial: 11 lugares con nombre y 5 puntos de referencia",
+          "result": "PASS",
+          "why": "matched in map.json"
+        },
+        {
+          "claim": "Resort relajado: en el norte de la isla (by the same rule as new_where.py)",
+          "result": "PASS",
+          "why": "matched in map.json; map pixel (818, 718)"
+        },
+        {
+          "claim": "Resort relajado en el mapa",
+          "result": "PASS",
+          "why": "visual check against map-labels.png: map pixel (818, 718); en el norte de la isla; nearest named place by coordinates: El cofre"
+        },
+        {
+          "claim": "Noticias del juego (¡La aventura espera!): asalta El $.$. Rocky",
+          "result": "PASS",
+          "why": "matched in news.json"
+        },
+        {
+          "claim": "The $.$. Rocky: en el este de la isla (by the same rule as new_where.py)",
+          "result": "PASS",
+          "why": "matched in map.json; map pixel (1416, 1217)"
+        },
+        {
+          "claim": "The $.$. Rocky en el mapa",
+          "result": "PASS",
+          "why": "visual check against map-labels.png: map pixel (1416, 1217); en el este de la isla; nearest named place by coordinates: Caverna Condenada"
+        },
+        {
+          "claim": "Puerto Pirata: en el sur de la isla (by the same rule as new_where.py)",
+          "result": "PASS",
+          "why": "matched in map.json; map pixel (1150, 1606)"
+        },
+        {
+          "claim": "Puerto Pirata en el mapa",
+          "result": "PASS",
+          "why": "visual check against map-labels.png: map pixel (1150, 1606); en el sur de la isla; nearest named place by coordinates: Bahía Bulliciosa"
+        },
+        {
+          "claim": "Noticias del juego (¡La aventura espera!): Explora Arlong Park de One Piece",
+          "result": "PASS",
+          "why": "matched in news.json"
+        },
+        {
+          "claim": "Arlong Park: en el oeste de la isla (by the same rule as new_where.py)",
+          "result": "PASS",
+          "why": "matched in map.json; map pixel (635, 1123)"
+        },
+        {
+          "claim": "Arlong Park en el mapa",
+          "result": "PASS",
+          "why": "visual check against map-labels.png: map pixel (635, 1123); en el oeste de la isla; nearest named place by coordinates: Frontera Farol"
+        },
+        {
+          "claim": "Caverna Condenada: en el este de la isla (by the same rule as new_where.py)",
+          "result": "PASS",
+          "why": "matched in map.json; map pixel (1184, 1148)"
+        },
+        {
+          "claim": "Caverna Condenada en el mapa",
+          "result": "PASS",
+          "why": "visual check against map-labels.png: map pixel (1184, 1148); en el este de la isla; nearest named place by coordinates: The $.$. Rocky"
+        },
+        {
+          "claim": "Playa de Buggy: en el norte de la isla (by the same rule as new_where.py)",
+          "result": "PASS",
+          "why": "matched in map.json; map pixel (1031, 851)"
+        },
+        {
+          "claim": "Playa de Buggy en el mapa",
+          "result": "PASS",
+          "why": "visual check against map-labels.png: map pixel (1031, 851); en el norte de la isla; nearest named place by coordinates: Frontera Farol"
+        },
+        {
+          "claim": "Villa Molino: en el suroeste de la isla (by the same rule as new_where.py)",
+          "result": "PASS",
+          "why": "matched in map.json; map pixel (754, 1438)"
+        },
+        {
+          "claim": "Villa Molino en el mapa",
+          "result": "PASS",
+          "why": "visual check against map-labels.png: map pixel (754, 1438); en el suroeste de la isla; nearest named place by coordinates: Loguetown"
+        },
+        {
+          "claim": "Bahía Bulliciosa: en el sureste de la isla (by the same rule as new_where.py)",
+          "result": "PASS",
+          "why": "matched in map.json; map pixel (1388, 1482)"
+        },
+        {
+          "claim": "Bahía Bulliciosa en el mapa",
+          "result": "PASS",
+          "why": "visual check against map-labels.png: map pixel (1388, 1482); en el sureste de la isla; nearest named place by coordinates: The $.$. Rocky"
+        },
+        {
+          "claim": "Frontera Farol: cerca del centro de la isla (by the same rule as new_where.py)",
+          "result": "PASS",
+          "why": "matched in map.json; map pixel (899, 1050)"
+        },
+        {
+          "claim": "Frontera Farol en el mapa",
+          "result": "PASS",
+          "why": "visual check against map-labels.png: map pixel (899, 1050); cerca del centro de la isla; nearest named place by coordinates: El cofre"
+        },
+        {
+          "claim": "Loguetown: en el sur de la isla (by the same rule as new_where.py)",
+          "result": "PASS",
+          "why": "matched in map.json; map pixel (989, 1382)"
+        },
+        {
+          "claim": "Loguetown en el mapa",
+          "result": "PASS",
+          "why": "visual check against map-labels.png: map pixel (989, 1382); en el sur de la isla; nearest named place by coordinates: Villa Molino"
+        },
+        {
+          "claim": "El cofre: en el noroeste de la isla (by the same rule as new_where.py)",
+          "result": "PASS",
+          "why": "matched in map.json; map pixel (762, 875)"
+        },
+        {
+          "claim": "El cofre en el mapa",
+          "result": "PASS",
+          "why": "visual check against map-labels.png: map pixel (762, 875); en el noroeste de la isla; nearest named place by coordinates: Resort relajado"
+        },
+        {
+          "claim": "Bosque Mandarina de Nami: en el suroeste de la isla (by the same rule as new_where.py)",
+          "result": "PASS",
+          "why": "matched in map.json; map pixel (710, 1561)"
+        },
+        {
+          "claim": "Bosque Mandarina de Nami en el mapa",
+          "result": "PASS",
+          "why": "visual check against map-labels.png: map pixel (710, 1561); en el suroeste de la isla; nearest named place by coordinates: Villa Molino"
+        },
+        {
+          "claim": "Campo de batalla del gigante: cerca del centro de la isla (by the same rule as new_where.py)",
+          "result": "PASS",
+          "why": "matched in map.json; map pixel (953, 1243)"
+        },
+        {
+          "claim": "Campo de batalla del gigante en el mapa",
+          "result": "PASS",
+          "why": "visual check against map-labels.png: map pixel (953, 1243); cerca del centro de la isla; nearest named place by coordinates: Loguetown"
+        },
+        {
+          "claim": "La calavera salada: en el este de la isla (by the same rule as new_where.py)",
+          "result": "PASS",
+          "why": "matched in map.json; map pixel (1206, 1224)"
+        },
+        {
+          "claim": "La calavera salada en el mapa",
+          "result": "PASS",
+          "why": "visual check against map-labels.png: map pixel (1206, 1224); en el este de la isla; nearest named place by coordinates: Caverna Condenada"
+        },
+        {
+          "claim": "Noticias del juego (¡La aventura espera!): navega por la Bahía Baratie",
+          "result": "PASS",
+          "why": "matched in news.json"
+        },
+        {
+          "claim": "Baratie: en el sureste de la isla (by the same rule as new_where.py)",
+          "result": "PASS",
+          "why": "matched in map.json; map pixel (1411, 1477)"
+        },
+        {
+          "claim": "Baratie en el mapa",
+          "result": "PASS",
+          "why": "visual check against map-labels.png: map pixel (1411, 1477); en el sureste de la isla; nearest named place by coordinates: Bahía Bulliciosa"
+        },
+        {
+          "claim": "Henry: en el sureste de la isla (by the same rule as new_where.py)",
+          "result": "PASS",
+          "why": "matched in map.json; map pixel (1203, 1500)"
+        },
+        {
+          "claim": "Henry en el mapa",
+          "result": "PASS",
+          "why": "visual check against map-labels.png: map pixel (1203, 1500); en el sureste de la isla; nearest named place by coordinates: Puerto Pirata"
+        }
+      ]
+    },
+    {
+      "check": "2. Spelling and grammar",
+      "status": "PASS",
+      "detail": "102 distinct words checked; code written as BAD in all 2 mentions",
+      "items": []
+    },
+    {
+      "check": "3. Frames",
+      "status": "PASS",
+      "detail": "No black frames, no frozen stretches over 1.5 s. Contact sheet (1 frame/s) reviewed by eye: contact-sheet.png",
+      "items": []
+    },
+    {
+      "check": "4. Audio",
+      "status": "PASS",
+      "detail": "Integrated -14.2 LUFS, true peak -2.0 dBTP, no clipping, no silence gaps. All sound is original synthesis (no game rips, no copyrighted music). No voiceover in this cut.",
+      "items": []
+    },
+    {
+      "check": "5. Specs and safe zones",
+      "status": "PASS",
+      "detail": "1920x1080 h264 30 fps, aac 48000 Hz, 245.9s. Long YouTube video; every on-screen text box sampled 4x/s stays inside the title-safe area.",
+      "items": []
+    },
+    {
+      "check": "6. Disclosure and wording",
+      "status": "PASS",
+      "detail": "#EpicPartner is the first hashtag in caption line 1 and on screen in every sampled frame from 0.0s. No discount, giveaway, endorsement or filler-CTA wording.",
+      "items": []
+    },
+    {
+      "check": "7. Would a fan stop scrolling? Made by a person?",
+      "status": "PASS",
+      "detail": "4:06, 1920x1080, map without labels (so the questions don't give the answers away). Checked one frame of every one of the 41 segments: intro title '¿TE SABES EL MAPA?', '16 lugares del mapa oficial', '0 a 16 cuenta tus aciertos'; Nivel 1 card; the 11 named-place rounds (ring + '?' + '¿QUÉ LUGAR ES? Ronda N de 16', then the name card with direction and nearest place: Resort relajado, The $.$. Rocky, Puerto Pirata, Arlong Park, Caverna Condenada, Playa de Buggy, Villa Molino, Bahía Bulliciosa, Frontera Farol, Loguetown, El cofre), each ring on the right spot; mid-roll code card; Nivel 2 card; the 5 landmark rounds with their hints (Bosque Mandarina de Nami, Campo de batalla del gigante on the purple spiral, La calavera salada in the dark crater, Baratie by Bahía Bulliciosa, Henry on the lagoon islet); '¿?/16 ¿CUÁNTOS SACASTE?'; the recap with the pins appearing as each name is said; final code card and sign-off. Directions and nearest places match the queued '¿Dónde está?' shorts. The three news quotes are word for word from today's tile '¡La aventura espera!'. Chapters: Intro, Nivel 1, Nivel 2, Resultados, Final. Nothing overlaps or is cut off; subtitles on one line.",
+      "items": []
+    },
+    {
+      "check": "8. Owner approval",
+      "status": "PASS",
+      "detail": "Standing approval for autopilot (owner, 2026-10-28): posts when checks 1-7 all PASS.",
+      "items": []
+    }
+  ],
+  "caption": "#EpicPartner ¿Te sabes el mapa de Fortnite de memoria? 🗺️ Te enseño cada lugar en el mapa sin nombres y tú adivinas: los 11 lugares con nombre y los 5 puntos de referencia del mapa oficial, con su ubicación.\n\n¿Cuántos sacaste de 16? Cuéntame en los comentarios 👇\nUsa el código BAD en la tienda de objetos 💛\n\n#Fortnite #MapaFortnite #FortniteEspañol"
+}
