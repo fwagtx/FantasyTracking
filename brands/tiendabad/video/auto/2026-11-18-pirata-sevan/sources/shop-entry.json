@@ -1,0 +1,384 @@
+{
+ "date": "2026-11-18T00:00:00Z",
+ "entries": [
+  {
+   "regularPrice": 4500,
+   "finalPrice": 2800,
+   "devName": "[VIRTUAL]1 x Glitch, 1 x Signal Sever, 1 x Scanlight, 1 x Bucky Bat, 1 x Sail Shark, 1 x Sprout of Tune, 1 x Flowerprint for -1 MtxCurrency",
+   "offerId": "v2:/2c6dea8fdf70a3fa365ec145153e0b8c7b9127e64a80840e7258a099d64914ca",
+   "inDate": "2026-11-16T00:00:00Z",
+   "outDate": "2026-11-18T23:59:59.999Z",
+   "bundle": {
+    "name": "Lote Casillero Glitch de Candywing",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/6f22bfd9a5a7f6a2/renderimage_0.png"
+   },
+   "banner": {
+    "value": "1700 monedas V de descuento",
+    "intensity": "Low",
+    "backendValue": "AmountOff"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -1,
+   "layoutId": "Candywing.99",
+   "layout": {
+    "id": "Candywing",
+    "name": "Casillero Glitch de Candywing",
+    "category": "Lotes Casillero",
+    "index": 6,
+    "rank": 177,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "ad2b35ff",
+    "color3": "3f060aff",
+    "textBackgroundColor": "3c0508ff"
+   },
+   "tileSize": "Size_3_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_Architect_SharkScoop_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S34/DAv2_Bundle_Featured_Architect_SharkScoop",
+   "newDisplayAsset": {
+    "id": "DAv2_Bundle_Featured_Architect_SharkScoop",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__6f22bfd9a5a7f6a2_ebc715ba17bf75e3.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/6f22bfd9a5a7f6a2/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__6f22bfd9a5a7f6a2_9ebf1561c143d6ec.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/6f22bfd9a5a7f6a2/renderimage_1.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__6f22bfd9a5a7f6a2_c53e2c9cbf02e854.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/6f22bfd9a5a7f6a2/renderimage_2.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__6f22bfd9a5a7f6a2_b25be859441e3a83.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/6f22bfd9a5a7f6a2/renderimage_3.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Character_DefectGlitch",
+     "name": "Glitch",
+     "description": "Eres más que tu programación.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "Red neuronal",
+      "text": "Pieza del conjunto Red neuronal.",
+      "backendValue": "BotTaught"
+     },
+     "introduction": {
+      "chapter": "3",
+      "season": "4",
+      "text": "Introducido en Capítulo 3, Temporada 4.",
+      "backendValue": 22
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_defectglitch/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_defectglitch/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_defectglitch/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_defectglitch/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_defectglitch/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_defectglitch/wide.png"
+      },
+      "bean": {
+       "small": "https://fortnite-api.com/images/cosmetics/beans/bean_defectglitch/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/beans/bean_defectglitch/large.png"
+      }
+     },
+     "variants": [
+      {
+       "channel": "RichColor2",
+       "type": "Color del metal",
+       "options": [
+        {
+         "tag": "000",
+         "name": "Bronce",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_defectglitch/variants/richcolor2/000.png"
+        },
+        {
+         "tag": "001",
+         "name": "Oro rosa",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_defectglitch/variants/richcolor2/001.png"
+        },
+        {
+         "tag": "002",
+         "name": "Acero azulado",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_defectglitch/variants/richcolor2/002.png"
+        },
+        {
+         "tag": "003",
+         "name": "Térmico",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_defectglitch/variants/richcolor2/003.png"
+        }
+       ]
+      }
+     ],
+     "showcaseVideo": "Q7tN7TC56Y0",
+     "added": "2022-11-01T13:50:36Z"
+    },
+    {
+     "id": "Backpack_DefectGlitch",
+     "name": "Inhibidor de señal",
+     "description": "Ya no hay más actualizaciones.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "Red neuronal",
+      "text": "Pieza del conjunto Red neuronal.",
+      "backendValue": "BotTaught"
+     },
+     "introduction": {
+      "chapter": "3",
+      "season": "4",
+      "text": "Introducido en Capítulo 3, Temporada 4.",
+      "backendValue": 22
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_defectglitch/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_defectglitch/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_defectglitch/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "RichColor2",
+       "type": "Color del metal",
+       "options": [
+        {
+         "tag": "000",
+         "name": "Bronce",
+         "image": "https://fortnite-api.com/images/cosmetics/br/backpack_defectglitch/variants/richcolor2/000.png"
+        },
+        {
+         "tag": "001",
+         "name": "Oro rosa",
+         "image": "https://fortnite-api.com/images/cosmetics/br/backpack_defectglitch/variants/richcolor2/001.png"
+        },
+        {
+         "tag": "002",
+         "name": "Acero azulado",
+         "image": "https://fortnite-api.com/images/cosmetics/br/backpack_defectglitch/variants/richcolor2/002.png"
+        },
+        {
+         "tag": "003",
+         "name": "Térmico",
+         "image": "https://fortnite-api.com/images/cosmetics/br/backpack_defectglitch/variants/richcolor2/003.png"
+        }
+       ]
+      }
+     ],
+     "added": "2022-11-01T13:50:36Z"
+    },
+    {
+     "id": "Wrap_DefectGlitch",
+     "name": "Sonar ultrasónico",
+     "description": "Muestra tu estilo.",
+     "type": {
+      "value": "wrap",
+      "displayValue": "Papel",
+      "backendValue": "AthenaItemWrap"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Red neuronal",
+      "text": "Pieza del conjunto Red neuronal.",
+      "backendValue": "BotTaught"
+     },
+     "introduction": {
+      "chapter": "3",
+      "season": "4",
+      "text": "Introducido en Capítulo 3, Temporada 4.",
+      "backendValue": 22
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/wrap_defectglitch/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/wrap_defectglitch/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/wrap_defectglitch/featured.png"
+     },
+     "added": "2022-11-01T13:50:36Z"
+    },
+    {
+     "id": "Pickaxe_ID_449_TripleScoopFemale",
+     "name": "Bate puntiagudo",
+     "description": "La seguridad ante todo.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Asaltapistas",
+      "text": "Pieza del conjunto Asaltapistas.",
+      "backendValue": "SkaterBeast"
+     },
+     "introduction": {
+      "chapter": "2",
+      "season": "3",
+      "text": "Introducido en Capítulo 2, Temporada 3.",
+      "backendValue": 13
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_id_449_triplescoopfemale/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_id_449_triplescoopfemale/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_id_449_triplescoopfemale/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Particle",
+       "type": "Estilo",
+       "options": [
+        {
+         "tag": "Particle1",
+         "name": "Predeterminado",
+         "image": "https://fortnite-api.com/images/cosmetics/br/pickaxe_id_449_triplescoopfemale/variants/particle/particle1.png"
+        },
+        {
+         "tag": "Particle2",
+         "name": "Menta",
+         "image": "https://fortnite-api.com/images/cosmetics/br/pickaxe_id_449_triplescoopfemale/variants/particle/particle2.png"
+        },
+        {
+         "tag": "Particle3",
+         "name": "En llamas",
+         "image": "https://fortnite-api.com/images/cosmetics/br/pickaxe_id_449_triplescoopfemale/variants/particle/particle3.png"
+        }
+       ]
+      }
+     ],
+     "showcaseVideo": "GzMm4cwPZK8",
+     "added": "2020-08-05T08:09:19Z"
+    },
+    {
+     "id": "Glider_ID_227_SharkSuit",
+     "name": "Marrajo mecánico",
+     "description": "Pégale un buen bocado al vuelo.",
+     "type": {
+      "value": "glider",
+      "displayValue": "Planeador",
+      "backendValue": "AthenaGlider"
+     },
+     "rarity": {
+      "value": "legendary",
+      "displayValue": "Legendario",
+      "backendValue": "EFortRarity::Legendary"
+     },
+     "set": {
+      "value": "Delirios dietéticos",
+      "text": "Pieza del conjunto Delirios dietéticos.",
+      "backendValue": "EatingCraze"
+     },
+     "introduction": {
+      "chapter": "2",
+      "season": "3",
+      "text": "Introducido en Capítulo 2, Temporada 3.",
+      "backendValue": 13
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/glider_id_227_sharksuit/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/glider_id_227_sharksuit/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/glider_id_227_sharksuit/featured.png"
+     },
+     "showcaseVideo": "RbkkL0jlBDs",
+     "added": "2020-06-30T06:09:08Z"
+    },
+    {
+     "id": "EID_GroovyPetals",
+     "name": "Rock & Sol",
+     "description": "¿Escuchas eso? Es el sonido de la rockosíntesis.",
+     "type": {
+      "value": "emote",
+      "displayValue": "Gesto",
+      "backendValue": "AthenaDance"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "introduction": {
+      "chapter": "4",
+      "season": "3",
+      "text": "Introducido en Capítulo 4, Temporada 3.",
+      "backendValue": 25
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/eid_groovypetals/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/eid_groovypetals/icon.png"
+     },
+     "showcaseVideo": "mmfF1RcoJME",
+     "added": "2023-06-23T16:22:36Z"
+    },
+    {
+     "id": "Wrap_092_Sarong",
+     "name": "Estampado de flores",
+     "description": "Muestra tu estilo.",
+     "type": {
+      "value": "wrap",
+      "displayValue": "Papel",
+      "backendValue": "AthenaItemWrap"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "Lirio rojo",
+      "text": "Pieza del conjunto Lirio rojo.",
+      "backendValue": "Sarong"
+     },
+     "introduction": {
+      "chapter": "1",
+      "season": "9",
+      "text": "Introducido en Capítulo 1, Temporada 9.",
+      "backendValue": 9
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/wrap_092_sarong/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/wrap_092_sarong/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/wrap_092_sarong/featured.png"
+     },
+     "showcaseVideo": "anhy_8O95Zw",
+     "added": "2019-11-20T12:48:26Z"
+    }
+   ]
+  }
+ ]
+}
