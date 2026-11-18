@@ -19,9 +19,10 @@
   "cy": 1171.7,
   "z": 0.62,
   "lines": [
-   "TIENDA PIRATA",
-   "GUÍA COMPLETA"
+   "GUÍA",
+   "COMPLETA"
   ],
-  "tag": "PROBABILIDADES Y MITOS"
+  "tag": "PROBABILIDADES Y MITOS",
+  "kicker": "TIENDA PIRATA"
  }
 }

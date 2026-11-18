@@ -47,15 +47,19 @@ A skipped slot costs nothing; a wrong post costs the channel.
    video whose TikTok caption or voice says gratis / free / sin gastar / 0 pavos / regalos skips TikTok (common.py
    `TIKTOK_RISKY`; the other networks still get it). Never reword a script just to get it onto TikTok.
 11. **Covers and thumbnails** (owner, 2026-11-18: the covers, a frame of the video, "look so ai right now and not engaging
-   at all"): ship makes a designed cover with `auto/thumbs.py` (layouts in `video/thumb.html`): one big subject from Epic's
-   own art (the video's items or the official map), two to four huge words, one hook (price tag, hand-drawn circle, "?"),
-   `#EpicPartner` small at the top, no subtitles, no emoji, and everything that matters inside the 3:4 crop the Instagram
-   grid shows (y 240-1680). After ship and before scheduling, open `<folder>/out/cover.jpg` (shop: `shop/D/out/cover.jpg`)
-   and judge it as a thumbnail: subject big, words readable when small, nothing overlapping, only the video's facts, never
-   the code next to "gratis" or "0 pavos". A map cover's circle must sit on the place (render it once over
-   `sources/map-labels.png` when in doubt). If ship printed `WARNING: no designed cover`, that post uses a frame: name it
-   in the summary and add a layout before the next video of that kind. Long videos: post.json needs a `thumb` spec
-   (layouts `ytmap`, `ytskins`; image paths relative to brands/tiendabad) or make_long.py refuses.
+   at all"; then, of the first designed ones, "make it look less ai ... it does give off very aish"): ship makes the cover
+   with `auto/thumbs.py` (layouts in `video/thumb.html`), built from the game's own look, never from generic effects:
+   a shop listing is shown as its in-game tile (the listing's newDisplayAsset render on Epic's own tile colours, the
+   name-and-price strip with the V-buck icon and the old price struck through), a place on the official map with one red
+   circle, a quiz skin on its rarity colours; straight Fortnite-style caps (a thin edge, no tilt), Fortnite's slanted yellow
+   banners, `#EpicPartner` and `LA TIENDITA BAD` small at the top, and everything that matters inside the 3:4 crop the
+   Instagram grid shows (y 240-1680). Never add sunburst rays, white sticker outlines, tilted text, marker-font notes,
+   bordered stickers, emoji or subtitles: those read as AI. After ship and before scheduling, open `<folder>/out/cover.jpg`
+   (shop: `shop/D/out/cover.jpg`) and judge it as a thumbnail: subject big, words readable when small, nothing overlapping,
+   only the video's facts, never the code next to "gratis" or "0 pavos". A map cover's circle must sit on the place (render
+   it once over `sources/map-labels.png` when in doubt). If ship printed `WARNING: no designed cover`, that post uses a
+   frame: name it in the summary and add a layout before the next video of that kind. Long videos: post.json needs a
+   `thumb` spec (layouts `ytmap`, `ytskins`; image paths relative to brands/tiendabad) or make_long.py refuses.
 
 ## Schedule (America/Mexico_City)
 

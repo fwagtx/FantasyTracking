@@ -3,42 +3,34 @@
 <head>
 <meta charset="utf-8">
 <!-- LA TIENDITA BAD covers and thumbnails (auto/thumbs.py writes the spec, thumb.mjs takes the screenshot).
-     Owner, 2026-11-18: the old covers (a frame of the video) "look so ai ... not engaging". So: one big subject from
-     Epic's own art, two to four huge words, one hook (price tag, red circle, "?"), no subtitles, no emoji, no UI pills. -->
+     Owner, 2026-11-18: the frame covers "look so ai"; the first designed ones still gave off "very ai-ish" (sunburst rays,
+     white sticker outlines, tilted text, marker-font notes, bordered stickers). So these are built from the game's own look:
+     the listing's in-game render on Epic's own tile colours, the shop's name-and-price strip with the V-buck icon, the
+     official map with its white map-label lettering, Fortnite's slanted yellow banners. Straight type on a grid, no effects. -->
 <style>
   @font-face { font-family: "BC"; font-weight: 900; src: url(../../_shared/fonts/BarlowCondensed-Black.ttf); font-display: block; }
   @font-face { font-family: "BC"; font-weight: 800; src: url(../../_shared/fonts/BarlowCondensed-ExtraBold.ttf); font-display: block; }
-  @font-face { font-family: "PM"; src: url(../../_shared/fonts/PermanentMarker-Regular.ttf); font-display: block; }
   html, body { margin: 0; padding: 0; background: #000; }
   #s { position: relative; overflow: hidden; }
   .fill { position: absolute; inset: 0; }
-  .rays { position: absolute; left: 50%; top: 42%; width: 320%; height: 320%; transform: translate(-50%, -50%);
-          background: repeating-conic-gradient(from 3deg, rgba(255,255,255,.11) 0deg 5deg, rgba(255,255,255,0) 5deg 15deg); }
-  .grain { position: absolute; inset: 0; opacity: .08; mix-blend-mode: overlay;
-           background-image: repeating-radial-gradient(circle at 17% 23%, #fff 0 1px, transparent 1px 3px), repeating-radial-gradient(circle at 71% 61%, #000 0 1px, transparent 1px 4px); }
-  .t { position: absolute; font-family: "BC"; font-weight: 900; text-transform: uppercase; line-height: .86; color: #fff; }
-  .t .l { position: relative; display: block; width: max-content; isolation: isolate; }
-  .t .l::before { content: attr(data-t); position: absolute; left: 0; top: 0; z-index: -1; color: #0b0b12;
-                  -webkit-text-stroke: var(--sw, 26px) #0b0b12; text-shadow: 0 var(--sh, 16px) 0 #0b0b12; }
-  .t.c .l { margin: 0 auto; }
-  .t.r .l { margin-left: auto; }
-  .m { position: absolute; font-family: "PM"; color: #fff; line-height: 1.05; white-space: nowrap; }
-  .m .l { position: relative; display: block; width: max-content; isolation: isolate; }
-  .m.c .l { margin: 0 auto; }
-  .m.r .l { margin-left: auto; }
-  .m .l::before { content: attr(data-t); position: absolute; left: 0; top: 0; z-index: -1; color: #0b0b12; -webkit-text-stroke: 16px #0b0b12; }
-  .tag { position: absolute; font-family: "BC"; font-weight: 900; text-transform: uppercase; color: #101014; background: #ffe03a;
-         border: 9px solid #101014; border-radius: 26px; box-shadow: 0 14px 0 #101014; padding: 12px 30px 2px; line-height: .9; white-space: nowrap; }
-  .tag.red { background: #ff2b2b; color: #fff; }
-  .tag.white { background: #fff; }
-  .tag s { text-decoration: none; position: relative; color: #6b6b6b; }
-  .tag s::after { content: ""; position: absolute; left: -6%; right: -6%; top: 46%; height: .13em; background: #ff2b2b; transform: rotate(-8deg); border-radius: 9px; }
-  .disc { position: absolute; font-family: "BC"; font-weight: 800; color: rgba(255,255,255,.9); text-shadow: 0 2px 6px rgba(0,0,0,.8); letter-spacing: .01em; }
   img { position: absolute; display: block; }
-  .hero, .sil, .back { -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 77%, rgba(0,0,0,0) 87%); }
-  .floor { position: absolute; left: 0; right: 0; bottom: 0; height: 460px; background: linear-gradient(0deg, rgba(0,0,0,.72) 0%, rgba(0,0,0,.35) 45%, rgba(0,0,0,0) 100%); }
-  .hero { filter: drop-shadow(7px 0 0 #fff) drop-shadow(-7px 0 0 #fff) drop-shadow(0 7px 0 #fff) drop-shadow(0 -7px 0 #fff) drop-shadow(0 30px 34px rgba(0,0,0,.6)); }
-  .sil { filter: brightness(0) drop-shadow(6px 0 0 #fff) drop-shadow(-6px 0 0 #fff) drop-shadow(0 6px 0 #fff) drop-shadow(0 -6px 0 #fff) drop-shadow(0 24px 30px rgba(0,0,0,.5)); }
+  /* headline: Fortnite-UI caps, a thin dark edge and a soft shadow, never tilted */
+  .h { position: absolute; font-family: "BC"; font-weight: 900; text-transform: uppercase; line-height: .88; color: #fff; letter-spacing: -.005em; }
+  .h .l { display: block; width: max-content; -webkit-text-stroke: var(--sw, 7px) rgba(8,8,16,.92); paint-order: stroke fill; text-shadow: 0 6px 22px rgba(0,0,0,.45); }
+  .h.c .l { margin: 0 auto; }
+  .h.r .l { margin-left: auto; }
+  .y { color: #ffe14d; }
+  /* Fortnite's slanted banner */
+  .ban { position: absolute; transform: skewX(-12deg); background: #ffe14d; padding: 8px 26px 4px; box-shadow: 0 8px 20px rgba(0,0,0,.35); }
+  .ban span { display: block; transform: skewX(12deg); font-family: "BC"; font-weight: 900; text-transform: uppercase; color: #12121a; line-height: 1; white-space: nowrap; }
+  .ban.dark { background: #12121a; } .ban.dark span { color: #fff; }
+  /* the shop tile's name-and-price strip */
+  .strip { position: absolute; left: 0; right: 0; padding: 26px 64px 22px; }
+  .strip .n { font-family: "BC"; font-weight: 800; text-transform: uppercase; color: #fff; line-height: 1; white-space: nowrap; width: max-content; }
+  .strip .p { display: flex; align-items: center; gap: 18px; margin-top: 14px; font-family: "BC"; font-weight: 900; color: #fff; line-height: 1; }
+  .strip .p img { position: static; }
+  .strip .p s { color: rgba(255,255,255,.55); text-decoration-thickness: .09em; text-decoration-color: rgba(255,255,255,.75); font-weight: 800; }
+  .brand { position: absolute; font-family: "BC"; font-weight: 800; color: rgba(255,255,255,.92); letter-spacing: .04em; text-shadow: 0 2px 8px rgba(0,0,0,.6); white-space: nowrap; }
 </style>
 </head>
 <body>
@@ -48,6 +40,7 @@ const S = window.SPEC, W = S.w, H = S.h;
 const st = document.getElementById("s");
 st.style.width = W + "px"; st.style.height = H + "px";
 const fits = [];
+const PAD = W > H ? 56 : 64;
 
 function el(cls, css, html, parent = st) {
   const d = document.createElement("div");
@@ -57,176 +50,150 @@ function el(cls, css, html, parent = st) {
   parent.appendChild(d);
   return d;
 }
-function pic(src, css, cls = "", parent = st) {
+function pic(src, css, parent = st) {
   const i = document.createElement("img");
-  i.src = src; i.className = cls; i.style.cssText = css;
+  i.src = src; i.style.cssText = css;
   parent.appendChild(i);
   return i;
 }
-// lines: [{t, size, c, max, sw}]; the outline is a stroked copy behind the fill (::before), so it never eats the letters
-function words(cls, lines, css) {
-  const box = el(cls, css);
+function head(lines, css, align = "") {         // lines: [{t, size, y (yellow), max}]
+  const box = el("h" + (align ? " " + align : ""), css);
   for (const L of lines) {
     const s = document.createElement("span");
-    s.className = "l"; s.dataset.t = L.t; s.textContent = L.t;
-    s.style.fontSize = L.size + "px";
-    if (L.c) s.style.color = L.c;
+    s.className = "l" + (L.y ? " y" : ""); s.textContent = L.t; s.style.fontSize = L.size + "px";
     if (L.sw) s.style.setProperty("--sw", L.sw + "px");
-    if (L.sh != null) s.style.setProperty("--sh", L.sh + "px");
     box.appendChild(s);
     if (L.max) fits.push([s, L.max]);
   }
   return box;
 }
-const title = (lines, css, align = "") => words("t" + (align ? " " + align : ""), lines, css);
-const note = (text, size, css, align = "") => words("m" + (align ? " " + align : ""), String(text).split("\n").map((t) => ({ t, size })), css);
-function tag(html, css, kind = "") { return el("tag" + (kind ? " " + kind : ""), css, html); }
-function disc(css) { if (S.disc !== false) el("disc", css, "#EpicPartner"); }
+function banner(text, size, css, kind = "") { return el("ban" + (kind ? " " + kind : ""), css, `<span style="font-size:${size}px">${text}</span>`); }
+const hex = (c) => "#" + String(c || "333333ff").slice(0, 6);
+const fmt = (n) => Number(n).toLocaleString("en-US");
+function marks() {
+  if (S.disc === false) return;
+  const sz = W > H ? 24 : 34, top = W > H ? 22 : 64;
+  el("brand", `left:${PAD}px;top:${top}px;font-size:${sz}px`, "#EpicPartner");
+  el("brand", `right:${PAD}px;top:${top}px;font-size:${sz}px`, "LA TIENDITA BAD");
+}
 
-function bgRadial(c1, c2, c3, at = "50% 42%", rays = true) {
-  el("fill", `background: radial-gradient(circle at ${at}, ${c1} 0%, ${c2} 46%, ${c3} 100%)`);
-  if (rays) el("rays", `top:${at.split(" ")[1]};left:${at.split(" ")[0]}`);
-  el("grain");
+// a listing as the game shows it: Epic's tile colours, a soft light behind the item, the in-game render
+function tileBg(c) {
+  const c1 = hex(c.color1), c2 = c.color2 ? hex(c.color2) : null, c3 = hex(c.color3 || c.color1);
+  el("fill", `background: linear-gradient(180deg, ${c1} 0%, ${c2 ? c2 + " 48%," : ""} ${c3} 100%)`);
+  el("fill", "background: radial-gradient(ellipse 62% 42% at 50% 52%, rgba(255,255,255,.20) 0%, rgba(255,255,255,0) 70%)");
 }
-function floor() { el("floor"); }
-function vignette(strength = .55) {
-  el("fill", `background: radial-gradient(ellipse 80% 62% at 50% 46%, rgba(0,0,0,0) 46%, rgba(0,0,0,${strength}) 100%)`);
-}
-// the official map (2048 px): map point (x, y) lands on screen point (cx, cy) at zoom z
-function bgMap(src, x, y, z, cx, cy, filter = "saturate(1.2) contrast(1.05)") {
-  const size = 2048 * z;
-  pic(src, `width:${size}px;height:${size}px;left:${cx - x * z}px;top:${cy - y * z}px;filter:${filter}`);
-}
-// a quick marker loop, the way a person circles something
-function loopPath(cx, cy, r) {
-  let d = ""; const n = 72;
-  for (let i = 0; i <= n; i++) {
-    const a = (-110 + i * (395 / n)) * Math.PI / 180;
-    const rr = r * (1 + 0.05 * Math.sin(i / n * Math.PI * 2.6) + (i / n) * 0.09);
-    d += (i ? "L" : "M") + (cx + rr * 1.1 * Math.cos(a)).toFixed(1) + "," + (cy + rr * 0.9 * Math.sin(a)).toFixed(1);
+function strip(c, name, price, regular, top, save) {
+  const bg = hex(c.textBackgroundColor || c.color3 || "1a1a22ff");
+  const s = el("strip", `top:${top}px;bottom:0;background:${bg};box-shadow:0 -6px 24px rgba(0,0,0,.25)`);
+  if (save) banner(save, 50, `right:${PAD + 8}px;top:${top + 118}px`);
+  const n = el("n", "font-size:64px", name, s);
+  fits.push([n, W - 2 * PAD]);
+  if (price != null) {
+    el("p", "font-size:100px", `<img src="${S.vbuck}" style="width:92px;height:92px">${price}${regular ? ` <s style="font-size:66px;margin-left:10px">${regular}</s>` : ""}`, s);
   }
-  return d;
-}
-function svgLayer(inner) { el("", `position:absolute;left:0;top:0;width:${W}px;height:${H}px`, `<svg width="${W}" height="${H}" style="overflow:visible">${inner}</svg>`); }
-function circle(cx, cy, r, color = "#ff2323") {
-  const d = loopPath(cx, cy, r);
-  svgLayer(`<path d="${d}" fill="none" stroke="#fff" stroke-width="34" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="${d}" fill="none" stroke="${color}" stroke-width="19" stroke-linecap="round" stroke-linejoin="round"/>`);
-}
-function arrow(x1, y1, x2, y2, bend = .25, color = "#ff2323", w = 22) {
-  const mx = (x1 + x2) / 2, my = (y1 + y2) / 2, dx = x2 - x1, dy = y2 - y1;
-  const qx = mx - dy * bend, qy = my + dx * bend;
-  const ang = Math.atan2(y2 - qy, x2 - qx), L = 3.4 * w, sp = .55;
-  const h1 = [x2 - L * Math.cos(ang - sp), y2 - L * Math.sin(ang - sp)], h2 = [x2 - L * Math.cos(ang + sp), y2 - L * Math.sin(ang + sp)];
-  const d = `M${x1},${y1} Q${qx},${qy} ${x2},${y2} M${h1[0]},${h1[1]} L${x2},${y2} L${h2[0]},${h2[1]}`;
-  svgLayer(`<path d="${d}" fill="none" stroke="#fff" stroke-width="${w + 16}" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="${d}" fill="none" stroke="${color}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round"/>`);
+  return s;
 }
 
-// ---------- layouts (1080x1920 covers: everything that matters sits in the 3:4 grid crop, y 240-1680) ----------
 const L = {};
 
-L.drop = () => {            // "Se va hoy": the bundle's outfit, huge; the price; the pirate hook
-  bgRadial("#ff8a1c", "#e3141f", "#3d0209", "64% 40%");
-  vignette(.45);
-  pic(S.hero, "width:1760px;height:1760px;left:-190px;top:300px", "hero");
-  floor();
-  title([{ t: "SE VA", size: 270 }, { t: "HOY", size: 400, c: "#ffe03a" }], "left:52px;top:300px;transform:rotate(-6deg);transform-origin:left top");
-  tag(`<div style="font-size:84px"><s>${S.regular}</s></div><div style="font-size:132px">${S.final} PAVOS</div>`, "left:46px;top:1010px;transform:rotate(-5deg)");
-  note(S.note, 66, "left:58px;top:1370px;transform:rotate(-5deg)");
-  disc("left:44px;top:70px;font-size:40px");
+L.drop = () => {              // "Se va hoy": the bundle leaving today, as its shop tile
+  tileBg(S.colors);
+  pic(S.hero, "width:1180px;height:1180px;left:-50px;top:600px;filter:drop-shadow(0 26px 40px rgba(0,0,0,.4))");
+  el("fill", "background: linear-gradient(180deg, rgba(0,0,0,.42) 0px, rgba(0,0,0,0) 640px)");
+  head([{ t: "SE VA", size: 230 }, { t: "HOY", size: 330, y: true }], `left:${PAD}px;top:236px`);
+  banner(S.when, 58, `right:${PAD + 10}px;top:300px`);
+  strip(S.colors, S.name, fmt(S.final), S.regular ? fmt(S.regular) : "", 1418);
+  marks();
 };
 
-L.top = () => {             // the #1 of a ranking, big, and the price hidden: the video reveals it
-  bgRadial("#41f598", "#0b9459", "#022317", "58% 50%");
-  vignette(.45);
-  pic(S.hero, "width:1340px;height:1340px;left:-130px;top:590px", "hero");
-  floor();
-  title(S.lines.map((t, i) => ({ t, size: 205, c: i ? "#ffe03a" : "#fff", max: 650 })), "left:48px;top:300px;transform:rotate(-5deg);transform-origin:left top");
-  title([{ t: "#1", size: 430, c: "#ffe03a", sw: 30, sh: 20 }], "right:46px;top:300px;transform:rotate(8deg)", "r");
-  tag(`<div style="font-size:116px">${S.tag}</div>`, "right:50px;top:1290px;transform:rotate(6deg)");
-  if (S.note) note(S.note, 64, "right:64px;top:1540px;transform:rotate(-4deg)", "r");
-  disc("left:44px;top:70px;font-size:40px");
+L.top = () => {               // the #1 of today's new listings, the price hidden: the video counts it up
+  tileBg(S.colors);
+  pic(S.hero, "width:1240px;height:1240px;left:-80px;top:470px;filter:drop-shadow(0 26px 40px rgba(0,0,0,.4))");
+  el("fill", "background: linear-gradient(180deg, rgba(0,0,0,.45) 0px, rgba(0,0,0,0) 660px)");
+  head(S.lines.map((t, i) => ({ t, size: 176, y: i === S.lines.length - 1, max: 700 })), `left:${PAD}px;top:236px`);
+  banner("#1", 150, `right:${PAD + 14}px;top:250px;padding:10px 34px 2px`);
+  strip(S.colors, S.name, "?????", "", 1418);
+  marks();
 };
 
-L.guide = () => {           // the countdown: one giant number over the map
-  bgMap(S.map, S.cx, S.cy, 1.25, 540, 960, "saturate(1.3) brightness(.72) blur(1.5px)");
-  el("fill", "background: radial-gradient(ellipse 70% 50% at 50% 52%, rgba(5,10,30,.25) 0%, rgba(5,10,30,.75) 100%)");
-  tag(`<div style="font-size:92px;letter-spacing:.01em">${S.kicker}</div>`, "left:50%;top:300px;transform:translateX(-50%) rotate(-3deg)", "red");
-  title([{ t: S.top, size: 190, max: 980 }], "left:0;right:0;top:470px", "c");
-  title([{ t: S.big, size: 860, c: "#ffe03a", sw: 34, sh: 26 }], "left:0;right:0;top:600px;transform:rotate(-4deg)", "c");
-  title([{ t: S.bottom, size: 250, max: 980 }], "left:0;right:0;top:1300px", "c");
-  if (S.note) note(S.note, 78, "left:0;right:0;top:1545px;text-align:center;transform:rotate(-3deg)", "c");
-  disc("left:44px;top:70px;font-size:40px");
+L.shop = () => {              // today's shop: the deal's listing as its tile, the date on a banner
+  tileBg(S.colors);
+  pic(S.hero, "width:1240px;height:1240px;left:-80px;top:470px;filter:drop-shadow(0 26px 40px rgba(0,0,0,.4))");
+  el("fill", "background: linear-gradient(180deg, rgba(0,0,0,.45) 0px, rgba(0,0,0,0) 640px)");
+  head([{ t: "TIENDA", size: 220 }, { t: "DE HOY", size: 220, y: true }], `left:${PAD}px;top:236px`);
+  banner(S.date, 84, `right:${PAD + 10}px;top:268px`);
+  strip(S.colors, S.name, S.final != null ? fmt(S.final) : null, S.regular ? fmt(S.regular) : "", 1418, S.tag);
+  marks();
 };
 
-L.map = () => {             // "¿Dónde está?": the real map, zoomed, circled by hand
-  const cx = 540, cy = 1190;
-  bgMap(S.map, S.x, S.y, S.z || 2.6, cx, cy);
-  el("fill", "background: linear-gradient(180deg, rgba(4,10,28,.86) 0px, rgba(4,10,28,.62) 560px, rgba(4,10,28,0) 820px)");
-  vignette(.35);
-  circle(cx, cy, 128);
-  arrow(870, 1530, 690, 1300, -.22);
-  title(S.lines.map((t, i) => ({ t, size: i ? 228 : 150, c: i ? "#ffe03a" : "#fff", max: 990 })), "left:0;right:0;top:285px;transform:rotate(-3deg)", "c");
-  note("¡aquí!", 118, "left:700px;top:1525px;transform:rotate(-9deg)");
-  disc("left:44px;top:70px;font-size:40px");
+L.guess = () => {             // "¿De qué temporada?": the skin on its rarity colours, the season left blank
+  tileBg({ color1: S.rarity[0], color3: S.rarity[1] });
+  pic(S.hero, "width:1500px;height:1500px;left:-210px;top:440px;filter:drop-shadow(0 26px 40px rgba(0,0,0,.4))");
+  el("fill", "background: linear-gradient(180deg, rgba(0,0,0,.45) 0px, rgba(0,0,0,0) 660px)");
+  head([{ t: "¿DE QUÉ", size: 190 }, { t: "TEMPORADA?", size: 214, y: true, max: W - 2 * PAD }], `left:${PAD}px;top:236px`);
+  banner("3 SKINS · SIN TRAMPA", 52, `left:${PAD + 8}px;top:640px`, "dark");
+  const s = strip({ textBackgroundColor: S.rarity[2] }, S.name, null, null, 1418);
+  el("p", "font-size:92px", `CAPÍTULO ? · TEMPORADA ?`, s);
+  marks();
 };
 
-L.guess = () => {           // "Adivina la temporada": one skin in colour, the other two as silhouettes
-  bgRadial("#c84bff", "#6a12cc", "#160335", "50% 48%");
-  vignette(.45);
-  pic(S.imgs[1], "width:1180px;height:1180px;left:-390px;top:680px", "sil");
-  pic(S.imgs[2], "width:1180px;height:1180px;left:290px;top:680px", "sil");
-  title([{ t: "?", size: 420, c: "#ffe03a", sw: 28 }], "left:120px;top:900px;transform:rotate(-10deg)");
-  title([{ t: "?", size: 420, c: "#ffe03a", sw: 28 }], "left:810px;top:900px;transform:rotate(9deg)");
-  pic(S.imgs[0], "width:1420px;height:1420px;left:-170px;top:560px", "hero");
-  floor();
-  title([{ t: "¿DE QUÉ", size: 200 }, { t: "TEMPORADA?", size: 232, c: "#ffe03a", max: 990 }], "left:0;right:0;top:285px;transform:rotate(-3deg)", "c");
-  note(S.note, 70, "left:0;right:0;top:1560px;text-align:center;transform:rotate(-3deg)", "c");
-  disc("left:44px;top:70px;font-size:40px");
+L.map = () => {               // "¿Dónde está?": the official map, the place circled once in red
+  const cx = 540, cy = 1130, z = S.z || 2.5, size = 2048 * z;
+  pic(S.map, `width:${size}px;height:${size}px;left:${cx - S.x * z}px;top:${cy - S.y * z}px;filter:saturate(1.12)`);
+  el("fill", "background: linear-gradient(180deg, rgba(6,14,34,.88) 0px, rgba(6,14,34,.7) 520px, rgba(6,14,34,0) 760px)");
+  const r = 132;
+  el("", `position:absolute;left:${cx - r * 1.12}px;top:${cy - r * .92}px;width:${r * 2.24}px;height:${r * 1.84}px;border:13px solid #ff2a2a;border-radius:50%;transform:rotate(-8deg);box-shadow:0 0 0 2px rgba(0,0,0,.18), inset 0 0 0 2px rgba(0,0,0,.12);box-sizing:border-box`);
+  head([{ t: "¿DÓNDE ESTÁ", size: 132 }, ...S.lines.map((t) => ({ t, size: 196, y: true, max: W - 2 * PAD }))], `left:${PAD}px;top:236px`);
+  marks();
 };
 
-L.shop = () => {            // today's shop: the deal's outfit up front, the OG one behind it, the saving on a tag
-  bgRadial("#3fa6ff", "#1452db", "#05123d", "56% 44%");
-  vignette(.45);
-  if (S.back) pic(S.back, "width:1250px;height:1250px;left:-470px;top:690px;filter:brightness(.78) drop-shadow(0 24px 30px rgba(0,0,0,.5))", "back");
-  pic(S.hero, "width:1700px;height:1700px;left:-250px;top:360px", "hero");
-  floor();
-  title([{ t: "TIENDA", size: 240 }, { t: "DE HOY", size: 240, c: "#ffe03a" }], "left:50px;top:300px;transform:rotate(-5deg);transform-origin:left top");
-  tag(`<div style="font-size:100px">${S.date}</div>`, "right:52px;top:600px;transform:rotate(7deg)", "white");
-  if (S.final) tag(`<div style="font-size:80px"><s>${S.regular}</s></div><div style="font-size:120px">${S.final} PAVOS</div>`, "left:46px;top:1110px;transform:rotate(-5deg)");
-  if (S.note) note(S.note, 64, "left:56px;top:1450px;transform:rotate(-4deg)");
-  disc("left:44px;top:70px;font-size:40px");
+L.guide = () => {             // the countdown: one number over the island
+  const z = 1.2, size = 2048 * z;
+  pic(S.map, `width:${size}px;height:${size}px;left:${540 - S.cx * z}px;top:${980 - S.cy * z}px;filter:saturate(1.1) brightness(.62)`);
+  el("fill", "background: linear-gradient(180deg, rgba(6,14,34,.7) 0%, rgba(6,14,34,.25) 45%, rgba(6,14,34,.75) 100%)");
+  banner(S.kicker, 70, `left:${PAD + 8}px;top:250px`);
+  if (S.top) head([{ t: S.top, size: 170 }], `left:${PAD}px;top:390px`);
+  head([{ t: S.big, size: 760, sw: 10, max: W - 2 * PAD }], `left:${PAD - 10}px;top:520px`);
+  if (S.bottom) head([{ t: S.bottom, size: 230, y: true }], `left:${PAD}px;top:1200px`);
+  if (S.note) head([{ t: S.note, size: 88 }], `left:${PAD}px;top:1450px`);
+  marks();
 };
 
-L.news = () => {            // a news tile: the hook, huge, over the map
-  bgMap(S.map, S.cx, S.cy, 1.1, 540, 1000, "saturate(1.2) brightness(.6) blur(2px)");
-  el("fill", "background: radial-gradient(ellipse 70% 55% at 50% 50%, rgba(5,10,30,.2) 0%, rgba(5,10,30,.75) 100%)");
-  tag(`<div style="font-size:84px">${S.kicker}</div>`, "left:50%;top:300px;transform:translateX(-50%) rotate(-3deg)", "red");
-  title(S.lines.map((t, i) => ({ t, size: 210, c: i % 2 ? "#ffe03a" : "#fff", max: 990 })), "left:0;right:0;top:500px;transform:rotate(-4deg)", "c");
-  if (S.note) note(S.note, 70, "left:0;right:0;top:1480px;text-align:center;transform:rotate(-3deg)", "c");
-  disc("left:44px;top:70px;font-size:40px");
+L.news = () => {
+  const z = 1.1, size = 2048 * z;
+  pic(S.map, `width:${size}px;height:${size}px;left:${540 - S.cx * z}px;top:${1000 - S.cy * z}px;filter:saturate(1.1) brightness(.6)`);
+  el("fill", "background: linear-gradient(180deg, rgba(6,14,34,.75) 0%, rgba(6,14,34,.3) 50%, rgba(6,14,34,.8) 100%)");
+  banner(S.kicker, 64, `left:${PAD + 8}px;top:250px`);
+  head(S.lines.map((t, i) => ({ t, size: 200, y: i % 2 === 1, max: W - 2 * PAD })), `left:${PAD}px;top:400px`);
+  if (S.note) head([{ t: S.note, size: 84, max: W - 2 * PAD }], `left:${PAD}px;top:1450px`);
+  marks();
 };
 
-// ---------- YouTube thumbnails (1280x720) ----------
+// ---------- YouTube (1280x720) ----------
 L.ytmap = () => {
-  bgMap(S.map, S.cx, S.cy, S.z || .62, 820, 380, "saturate(1.3) contrast(1.05)");
-  el("fill", "background: linear-gradient(90deg, rgba(4,10,28,.92) 0%, rgba(4,10,28,.7) 46%, rgba(4,10,28,0) 72%)");
-  title([{ t: S.big || "?", size: S.bigSize || 560, c: "#ffe03a", sw: 26, sh: 18 }], `right:${S.bigRight ?? 70}px;top:${S.bigTop ?? 40}px;transform:rotate(${S.bigRot ?? 10}deg)`);
-  title(S.lines.map((t, i) => ({ t, size: i ? 150 : 112, c: i ? "#ffe03a" : "#fff", max: 700, sw: 20, sh: 12 })), "left:44px;top:120px;transform:rotate(-4deg);transform-origin:left top");
-  if (S.tag) tag(`<div style="font-size:64px">${S.tag}</div>`, "left:52px;top:520px;transform:rotate(-4deg);border-width:7px;box-shadow:0 10px 0 #101014;border-radius:20px;padding:10px 22px 2px", "red");
-  if (S.circle) circle(S.circle[0], S.circle[1], 70);
+  const z = S.z || .62, size = 2048 * z;
+  pic(S.map, `width:${size}px;height:${size}px;left:${830 - S.cx * z}px;top:${370 - S.cy * z}px;filter:saturate(1.12)`);
+  el("fill", "background: linear-gradient(90deg, rgba(6,14,34,.94) 0%, rgba(6,14,34,.8) 40%, rgba(6,14,34,0) 66%)");
+  if (S.big) head([{ t: S.big, size: S.bigSize || 520, sw: 9 }], `right:${S.bigRight ?? 70}px;top:${S.bigTop ?? 40}px`, "r");
+  if (S.kicker) banner(S.kicker, 40, `left:${PAD + 6}px;top:118px`);
+  head(S.lines.map((t, i) => ({ t, size: i ? 132 : 104, y: !!i, max: 640, sw: 6 })), `left:${PAD}px;top:${S.kicker ? 190 : 150}px`);
+  if (S.tag) banner(S.tag, 44, `left:${PAD + 6}px;top:560px`, "dark");
+  marks();
 };
 L.ytskins = () => {
-  bgRadial(S.c1 || "#3fa6ff", S.c2 || "#1452db", S.c3 || "#05123d", "68% 46%");
-  vignette(.5);
+  tileBg({ color1: S.c1 || "2f8cffff", color2: S.c2 || null, color3: S.c3 || "071a52ff" });
   const n = S.imgs.length;
-  S.imgs.forEach((src, i) => {
-    const size = i === 0 ? 900 : 700, x = 1280 - 420 - (i === 0 ? 0 : (i % 2 ? 260 : -170)) - size / 2, y = i === 0 ? 120 : 210;
-    pic(src, `width:${size}px;height:${size}px;left:${x}px;top:${y}px;z-index:${10 - i};${i ? "filter:brightness(.8) drop-shadow(0 20px 24px rgba(0,0,0,.5))" : ""}`, i === 0 ? "hero" : "");
+  S.imgs.slice().reverse().forEach((src, k) => {
+    const i = n - 1 - k, size = i === 0 ? 860 : 640;
+    const x = i === 0 ? 1280 - 420 - size / 2 : (i === 1 ? 1280 - 700 - size / 2 : 1280 - 150 - size / 2);
+    pic(src, `width:${size}px;height:${size}px;left:${x}px;top:${i === 0 ? 120 : 230}px;filter:${i ? "brightness(.82) " : ""}drop-shadow(0 20px 30px rgba(0,0,0,.45))`);
   });
-  title(S.lines.map((t, i) => ({ t, size: i ? 150 : 112, c: i ? "#ffe03a" : "#fff", max: 640, sw: 20, sh: 12 })), "left:44px;top:110px;z-index:20;transform:rotate(-4deg);transform-origin:left top");
-  if (S.tag) tag(`<div style="font-size:60px">${S.tag}</div>`, "left:52px;top:520px;z-index:20;transform:rotate(-4deg);border-width:7px;box-shadow:0 10px 0 #101014;border-radius:20px;padding:10px 22px 2px", S.tagKind || "");
+  el("fill", "background: linear-gradient(90deg, rgba(0,0,0,.55) 0%, rgba(0,0,0,.25) 42%, rgba(0,0,0,0) 60%)");
+  if (S.kicker) banner(S.kicker, 40, `left:${PAD + 6}px;top:118px`);
+  head(S.lines.map((t, i) => ({ t, size: i ? 132 : 104, y: !!i, max: 620, sw: 6 })), `left:${PAD}px;top:${S.kicker ? 190 : 150}px`);
+  if (S.tag) banner(S.tag, 44, `left:${PAD + 6}px;top:560px`, "dark");
+  marks();
 };
 
 window.ready = (async () => {
@@ -234,7 +201,7 @@ window.ready = (async () => {
   await document.fonts.ready;
   for (const [s, max] of fits) {
     let f = parseFloat(s.style.fontSize);
-    while (s.getBoundingClientRect().width > max && f > 40) { f -= 3; s.style.fontSize = f + "px"; }
+    while (s.getBoundingClientRect().width > max && f > 30) { f -= 2; s.style.fontSize = f + "px"; }
   }
   await Promise.all([...document.images].map((i) => i.decode().catch(() => { throw new Error("image failed: " + i.src); })));
   return true;

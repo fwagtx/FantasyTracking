@@ -16,18 +16,18 @@
  "thumb_t": 61.4,
  "thumb": {
   "kind": "ytskins",
-  "c1": "#ff8a1c",
-  "c2": "#d6202a",
-  "c3": "#3d0209",
+  "c1": "c0392bff",
+  "c3": "3a0a0aff",
   "lines": [
-   "NOTICIAS",
-   "DE LA SEMANA"
+   "DE LA",
+   "SEMANA"
   ],
   "tag": "SOMBREROS DE PAJA",
   "imgs": [
    "video/long/2026-11-14-noticias-semana/img/Character_CeleryStitch.png",
    "video/long/2026-11-14-noticias-semana/img/Character_BrandCreed.png",
    "video/long/2026-11-14-noticias-semana/img/Character_BoastJoint.png"
-  ]
+  ],
+  "kicker": "NOTICIAS"
  }
 }
