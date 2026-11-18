@@ -55,7 +55,8 @@ A skipped slot costs nothing; a wrong post costs the channel.
 | **SHOP safety** | 7:47 PM daily | The SHOP run again; it ends at step 3 if the shop video is already scheduled |
 | **DAY** | 11:07 AM daily | **1:00 PM** today's current short (made that morning) and **8:30 PM** evergreen (kept 7 days ahead) |
 | **LONG** | 5:13 AM Mon, Wed, Sat | One long YouTube video at **3:00 PM** |
-| **PIRATA** | 12:17 PM daily until Dec 5 | 3 extra Tienda Pirata shorts: **3:45 PM**, **5:15 PM**, **7:30 PM** (no TikTok) |
+| **PIRATA** | 1:22 PM daily until Dec 5 (after Firecrawl's daily credits refresh at 1:12 PM) | 3 extra Tienda Pirata shorts: **3:45 PM**, **5:15 PM**, **7:30 PM** (no TikTok) |
+| **PIRATA safety** | 3:07 PM daily until Dec 5 | The PIRATA run again; it ends at its step 2 if all three are scheduled, else makes the missing ones still at least 20 min away |
 
 3 shorts a day on Instagram, Facebook, YouTube and Threads (1:00 PM, about 6:25 PM, 8:30 PM) plus 3 long YouTube videos a
 week, and until the treasure hunt ends (December 5) 3 more Tienda Pirata shorts a day (PIRATA run). TikTok: nothing
@@ -134,7 +135,7 @@ shop data for the One Piece leave date). The Big Lead lists the 2026 activation 
 says Dec 15: always use Dec 15. To make more pirate posts later, refresh the sources first (they must be under 24 h old when shipping), from the
 BAD ROYALE branch's `brand/badroyale/video/auto/pirate-shop-sources/` (read only), or skip.
 
-## PIRATA run (daily 12:17 PM, until December 5)
+## PIRATA run (daily 1:22 PM, until December 5)
 
 The owner (2026-11-11): *"make about 3 extra videos for today and everyday until it gets removed"* about the Pirate Shop
 token. The hunt ends December 5 (VGC citing Epic); the series ends then, or earlier if Epic removes the Pirate Shop.
@@ -149,11 +150,16 @@ sevan and caros are about the shop that is live until 6 PM, so they are built an
 used once (the script keeps the order); the last two days say "mañana / hoy es el último día".
 
 1. Setup (above). D = `TZ=America/Mexico_City date +%F`. After 2026-12-05: post nothing, disable the scheduled task
-   "LA TIENDITA BAD · PIRATA" (update_trigger, enabled false) and tell the owner the series is over.
+   "LA TIENDITA BAD · PIRATA" and "LA TIENDITA BAD · PIRATA safety" (update_trigger, enabled false) and tell the owner the
+   series is over.
 2. getScheduledPosts for D 15:00 to 20:00: skip a mode whose post is already there, matched on the YouTube title, any
    letter case (these posts have no TikTok copy, rule 10): sevan "Se va HOY de la tienda", caros "más caro de la tienda",
    cuenta "Tienda Pirata". If all three are there, stop: log "pirata already posted" and end the run (no source fetch).
-3. **Fresh sources** (the checklist refuses sources older than 24 h): re-fetch with Firecrawl (`maxAge: 0`, markdown,
+3. **Fresh sources** (the checklist refuses sources older than 24 h). Firecrawl's daily MCP credits refresh at about 19:12 UTC
+   (1:12 PM CDMX), which is why this run starts at 1:22 PM (owner, 2026-11-18: "make sure you post every needed video"; at
+   12:17 the fetch failed every day and the posts hung on a follow-up that a session restart once delayed past two slots).
+   If Firecrawl still refuses, post nothing from this run and say so: the PIRATA safety run at 3:07 PM tries again. The
+   press sites can't be reached without Firecrawl from here. Re-fetch with Firecrawl (`maxAge: 0`, markdown,
    onlyMainContent) the three articles in the latest `video/auto/pirata-sources-<date>/manifest.json`. Every passage in that
    folder's JSON files must still be on the page word for word (link and bold markup aside). Save them, same file names
    and passages, with today's fetch time, in `video/auto/pirata-sources-D/` plus a manifest. If a passage changed or is
@@ -166,6 +172,14 @@ used once (the script keeps the order); the last two days say "mañana / hoy es 
    schedule posts.json as in SHOP 6–7, and done.
 5. Ledger: one entry per video (format "Tienda Pirata diaria", the topic new_pirata.py printed). Log line, commit
    `brands/tiendabad/video/auto brands/tiendabad/auto`, push, summary.
+
+### PIRATA safety run (daily 3:07 PM, until December 5)
+
+The backstop for the PIRATA run (a missed or failed run, or a fetch Firecrawl refused). Setup, then PIRATA step 2: if all
+three posts are scheduled, log "pirata already posted" and stop. Otherwise do steps 3-5 for each missing mode whose post time
+is still at least 20 minutes away; skip (and name in the summary) any mode whose slot is closer or past. sevan and caros are
+about the shop that ends at 6 PM, so they never post after it. The session runs one turn at a time, so the PIRATA run has
+always finished before this one starts; reuse its sources folder for D if it wrote one (it is under 24 h old).
 
 ## Facts change: pull outdated posts
 
