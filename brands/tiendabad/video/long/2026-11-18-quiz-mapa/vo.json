@@ -14,8 +14,13 @@
    "say": "Son dieciséis lugares del mapa oficial: once lugares con nombre y cinco puntos de referencia."
   },
   {
-   "text": "Cuenta tus aciertos, y al final dime en los comentarios cuántos sacaste.",
-   "pause": 0.5
+   "text": "El círculo rojo marca el lugar, y tienes cinco segundos para adivinar.",
+   "pause": 0.4
+  },
+  {
+   "text": "Cuenta tus aciertos: de 0 a 5, eres nuevo en la isla; de 6 a 11, ya la conoces; de 12 a 15, eres un experto; y con 16, te sabes el mapa de memoria.",
+   "pause": 0.5,
+   "say": "Cuenta tus aciertos: de cero a cinco, eres nuevo en la isla; de seis a once, ya la conoces; de doce a quince, eres un experto; y con dieciséis, te sabes el mapa de memoria."
   },
   {
    "text": "Nivel 1: los 11 lugares con nombre. ¡Los más fáciles!",
@@ -24,150 +29,159 @@
   },
   {
    "text": "Número 1. ¿Qué lugar es este?",
-   "pause": 0.3,
+   "pause": 1.0,
    "say": "Número uno. ¿Qué lugar es este?"
   },
   {
-   "text": "Tres, dos, uno…",
+   "text": "Cinco, cuatro, tres, dos, uno…",
    "pause": 0.5
   },
   {
    "text": "¡Es Resort relajado! Está en el norte de la isla, cerca de El cofre.",
-   "pause": 0.6
+   "pause": 1.0
   },
   {
    "text": "Número 2. ¿Qué lugar es este?",
-   "pause": 0.3,
+   "pause": 1.0,
    "say": "Número dos. ¿Qué lugar es este?"
   },
   {
-   "text": "Tres, dos, uno…",
+   "text": "Cinco, cuatro, tres, dos, uno…",
    "pause": 0.5
   },
   {
    "text": "¡Es The $.$. Rocky! Está en el este de la isla, cerca de Caverna Condenada.",
-   "pause": 0.6,
+   "pause": 1.0,
    "say": "¡Es The S.S. Rocky! Está en el este de la isla, cerca de Caverna Condenada."
   },
   {
+   "text": "Y las noticias del juego dicen: «asalta El $.$. Rocky».",
+   "pause": 1.0,
+   "say": "Y las noticias del juego dicen: «asalta El S.S. Rocky»."
+  },
+  {
    "text": "Número 3. ¿Qué lugar es este?",
-   "pause": 0.3,
+   "pause": 1.0,
    "say": "Número tres. ¿Qué lugar es este?"
   },
   {
-   "text": "Tres, dos, uno…",
+   "text": "Cinco, cuatro, tres, dos, uno…",
    "pause": 0.5
   },
   {
    "text": "¡Es Puerto Pirata! Está en el sur de la isla, cerca de Bahía Bulliciosa.",
-   "pause": 0.6
+   "pause": 1.0
   },
   {
    "text": "Número 4. ¿Qué lugar es este?",
-   "pause": 0.3,
+   "pause": 1.0,
    "say": "Número cuatro. ¿Qué lugar es este?"
   },
   {
-   "text": "Tres, dos, uno…",
+   "text": "Cinco, cuatro, tres, dos, uno…",
    "pause": 0.5
   },
   {
    "text": "¡Es Arlong Park! Está en el oeste de la isla, cerca de Frontera Farol.",
-   "pause": 0.6
+   "pause": 1.0
+  },
+  {
+   "text": "Y las noticias del juego dicen: «Explora Arlong Park de One Piece».",
+   "pause": 1.0
   },
   {
    "text": "Número 5. ¿Qué lugar es este?",
-   "pause": 0.3,
+   "pause": 1.0,
    "say": "Número cinco. ¿Qué lugar es este?"
   },
   {
-   "text": "Tres, dos, uno…",
+   "text": "Cinco, cuatro, tres, dos, uno…",
    "pause": 0.5
   },
   {
    "text": "¡Es Caverna Condenada! Está en el este de la isla, cerca de The $.$. Rocky.",
-   "pause": 0.6,
+   "pause": 1.0,
    "say": "¡Es Caverna Condenada! Está en el este de la isla, cerca de The S.S. Rocky."
   },
   {
    "text": "Número 6. ¿Qué lugar es este?",
-   "pause": 0.3,
+   "pause": 1.0,
    "say": "Número seis. ¿Qué lugar es este?"
   },
   {
-   "text": "Tres, dos, uno…",
+   "text": "Cinco, cuatro, tres, dos, uno…",
    "pause": 0.5
   },
   {
    "text": "¡Es Playa de Buggy! Está en el norte de la isla, cerca de Frontera Farol.",
-   "pause": 0.6,
+   "pause": 1.0,
    "say": "¡Es Playa de Bugui! Está en el norte de la isla, cerca de Frontera Farol."
   },
   {
    "text": "Número 7. ¿Qué lugar es este?",
-   "pause": 0.3,
+   "pause": 1.0,
    "say": "Número siete. ¿Qué lugar es este?"
   },
   {
-   "text": "Tres, dos, uno…",
+   "text": "Cinco, cuatro, tres, dos, uno…",
    "pause": 0.5
   },
   {
    "text": "¡Es Villa Molino! Está en el suroeste de la isla, cerca de Loguetown.",
-   "pause": 0.6
+   "pause": 1.0
   },
   {
    "text": "Número 8. ¿Qué lugar es este?",
-   "pause": 0.3,
+   "pause": 1.0,
    "say": "Número ocho. ¿Qué lugar es este?"
   },
   {
-   "text": "Tres, dos, uno…",
+   "text": "Cinco, cuatro, tres, dos, uno…",
    "pause": 0.5
   },
   {
    "text": "¡Es Bahía Bulliciosa! Está en el sureste de la isla, cerca de The $.$. Rocky.",
-   "pause": 0.6,
+   "pause": 1.0,
    "say": "¡Es Bahía Bulliciosa! Está en el sureste de la isla, cerca de The S.S. Rocky."
   },
   {
    "text": "Número 9. ¿Qué lugar es este?",
-   "pause": 0.3,
+   "pause": 1.0,
    "say": "Número nueve. ¿Qué lugar es este?"
   },
   {
-   "text": "Tres, dos, uno…",
+   "text": "Cinco, cuatro, tres, dos, uno…",
    "pause": 0.5
   },
   {
    "text": "¡Es Frontera Farol! Está cerca del centro de la isla, cerca de El cofre.",
-   "pause": 0.6
+   "pause": 1.0
   },
   {
    "text": "Número 10. ¿Qué lugar es este?",
-   "pause": 0.3,
+   "pause": 1.0,
    "say": "Número diez. ¿Qué lugar es este?"
   },
   {
-   "text": "Tres, dos, uno…",
+   "text": "Cinco, cuatro, tres, dos, uno…",
    "pause": 0.5
   },
   {
    "text": "¡Es Loguetown! Está en el sur de la isla, cerca de Villa Molino.",
-   "pause": 0.6
+   "pause": 1.0
   },
   {
    "text": "Número 11. ¿Qué lugar es este?",
-   "pause": 0.3,
+   "pause": 1.0,
    "say": "Número once. ¿Qué lugar es este?"
   },
   {
-   "text": "Tres, dos, uno…",
+   "text": "Cinco, cuatro, tres, dos, uno…",
    "pause": 0.5
   },
   {
    "text": "¡Es El cofre! Está en el noroeste de la isla, cerca de Resort relajado.",
-   "pause": 0.6
+   "pause": 1.0
   },
   {
    "text": "Si te está gustando el quiz, usa el código BAD en la tienda de objetos. Le ayuda muchísimo al canal.",
@@ -181,78 +195,86 @@
   },
   {
    "text": "Número 12. ¿Qué punto de referencia es este? Pista: está cerca de Villa Molino.",
-   "pause": 0.3,
+   "pause": 1.0,
    "say": "Número doce. ¿Qué punto de referencia es este? Pista: está cerca de Villa Molino."
   },
   {
-   "text": "Tres, dos, uno…",
+   "text": "Cinco, cuatro, tres, dos, uno…",
    "pause": 0.5
   },
   {
    "text": "¡Es Bosque Mandarina de Nami! Está en el suroeste de la isla.",
-   "pause": 0.6
+   "pause": 1.0
   },
   {
    "text": "Número 13. ¿Qué punto de referencia es este? Pista: está cerca de Loguetown.",
-   "pause": 0.3,
+   "pause": 1.0,
    "say": "Número trece. ¿Qué punto de referencia es este? Pista: está cerca de Loguetown."
   },
   {
-   "text": "Tres, dos, uno…",
+   "text": "Cinco, cuatro, tres, dos, uno…",
    "pause": 0.5
   },
   {
    "text": "¡Es Campo de batalla del gigante! Está cerca del centro de la isla.",
-   "pause": 0.6
+   "pause": 1.0
   },
   {
    "text": "Número 14. ¿Qué punto de referencia es este? Pista: está cerca de Caverna Condenada.",
-   "pause": 0.3,
+   "pause": 1.0,
    "say": "Número catorce. ¿Qué punto de referencia es este? Pista: está cerca de Caverna Condenada."
   },
   {
-   "text": "Tres, dos, uno…",
+   "text": "Cinco, cuatro, tres, dos, uno…",
    "pause": 0.5
   },
   {
    "text": "¡Es La calavera salada! Está en el este de la isla.",
-   "pause": 0.6
+   "pause": 1.0
   },
   {
    "text": "Número 15. ¿Qué punto de referencia es este? Pista: está cerca de Bahía Bulliciosa.",
-   "pause": 0.3,
+   "pause": 1.0,
    "say": "Número quince. ¿Qué punto de referencia es este? Pista: está cerca de Bahía Bulliciosa."
   },
   {
-   "text": "Tres, dos, uno…",
+   "text": "Cinco, cuatro, tres, dos, uno…",
    "pause": 0.5
   },
   {
    "text": "¡Es Baratie! Está en el sureste de la isla.",
-   "pause": 0.6
+   "pause": 1.0
+  },
+  {
+   "text": "Y las noticias del juego dicen: «navega por la Bahía Baratie».",
+   "pause": 1.0
   },
   {
    "text": "Número 16. ¿Qué punto de referencia es este? Pista: está cerca de Puerto Pirata.",
-   "pause": 0.3,
+   "pause": 1.0,
    "say": "Número dieciséis. ¿Qué punto de referencia es este? Pista: está cerca de Puerto Pirata."
   },
   {
-   "text": "Tres, dos, uno…",
+   "text": "Cinco, cuatro, tres, dos, uno…",
    "pause": 0.5
   },
   {
    "text": "¡Es Henry! Está en el sureste de la isla.",
-   "pause": 0.6
+   "pause": 1.0
   },
   {
-   "text": "¿Cuántos sacaste de 16? Si sacaste los 16, te sabes el mapa de memoria.",
+   "text": "¿Cuántos sacaste de 16? De 12 a 15 eres un experto, y si sacaste los 16, te sabes el mapa de memoria.",
    "pause": 0.5,
-   "say": "¿Cuántos sacaste de dieciséis? Si sacaste los dieciséis, te sabes el mapa de memoria."
+   "say": "¿Cuántos sacaste de dieciséis? De doce a quince eres un experto, y si sacaste los dieciséis, te sabes el mapa de memoria."
   },
   {
-   "text": "Aquí están los 16 en el mapa completo.",
+   "text": "Repaso rápido: Resort relajado, The $.$. Rocky, Puerto Pirata, Arlong Park, Caverna Condenada, Playa de Buggy, Villa Molino, Bahía Bulliciosa, Frontera Farol, Loguetown, El cofre.",
    "pause": 0.3,
-   "say": "Aquí están los dieciséis en el mapa completo."
+   "say": "Repaso rápido: Resort relajado, The S.S. Rocky, Puerto Pirata, Arlong Park, Caverna Condenada, Playa de Bugui, Villa Molino, Bahía Bulliciosa, Frontera Farol, Loguetown, El cofre."
+  },
+  {
+   "text": "Bosque Mandarina de Nami, Campo de batalla del gigante, La calavera salada, Baratie y Henry.",
+   "pause": 0.5
   },
   {
    "text": "Dime en los comentarios cuál te costó más trabajo.",
