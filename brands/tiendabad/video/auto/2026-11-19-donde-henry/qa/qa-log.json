@@ -1,0 +1,67 @@
+{
+  "video": "latienditabad-2026-11-19-donde-henry.mp4",
+  "checked_utc": "2026-11-19T17:16:29Z",
+  "verdict": "READY TO POST",
+  "results": [
+    {
+      "check": "1. Facts",
+      "status": "PASS",
+      "detail": "2/2 claims verified against saved official data",
+      "items": [
+        {
+          "claim": "Henry es un lugar del mapa oficial",
+          "result": "PASS",
+          "why": "matched in map.json"
+        },
+        {
+          "claim": "Está en el sureste de la isla, cerca de Puerto Pirata",
+          "result": "PASS",
+          "why": "visual check against map-labels.png: map pixel (1203, 1500); nearest named place by coordinates: Puerto Pirata"
+        }
+      ]
+    },
+    {
+      "check": "2. Spelling and grammar",
+      "status": "PASS",
+      "detail": "32 distinct words checked; code written as BAD in all 2 mentions",
+      "items": []
+    },
+    {
+      "check": "3. Frames",
+      "status": "PASS",
+      "detail": "No black frames, no frozen stretches over 1.5 s. Contact sheet (1 frame/s) reviewed by eye: contact-sheet.png",
+      "items": []
+    },
+    {
+      "check": "4. Audio",
+      "status": "PASS",
+      "detail": "Integrated -14.1 LUFS, true peak -2.3 dBTP, no clipping, no silence gaps. All sound is original synthesis (no game rips, no copyrighted music). No voiceover in this cut.",
+      "items": []
+    },
+    {
+      "check": "5. Specs and safe zones",
+      "status": "PASS",
+      "detail": "1080x1920 h264 60 fps, aac 48000 Hz, 14.8s. Fits TikTok, Reels, Shorts, X, Facebook, Threads. Every on-screen text box sampled 4x/s stays out of the top bar, bottom caption area and button column.",
+      "items": []
+    },
+    {
+      "check": "6. Disclosure and wording",
+      "status": "PASS",
+      "detail": "#EpicPartner is the first hashtag in caption line 1 and on screen in every sampled frame from 0.0s. No discount, giveaway, endorsement or filler-CTA wording.",
+      "items": []
+    },
+    {
+      "check": "7. Would a fan stop scrolling? Made by a person?",
+      "status": "PASS",
+      "detail": "Frame 1: '¿DÓNDE ESTÁ HENRY?' over the zoomed map with LOGUETOWN, BAHÍA BULLICIOSA and PUERTO PIRATA labels; the red circle draws on the small round island between Loguetown and Bahía Bulliciosa, just north of Puerto Pirata (the map.json pin). The zoom-out at 3.7 s shows the circle in the south-east of the island, matching the caption 'en el sureste de la isla, cerca de Puerto Pirata'; the handwritten 'HENRY' label sits above 'PUERTO PIRATA', both readable. Captions '¿NO ENCUENTRAS', 'ESTÁ EN EL', 'CERCA', '¡GUÁRDALO PARA', 'USA EL CÓDIGO', '¡GRACIAS POR' on one line each; code card 'CÓDIGO BAD · Tienda de objetos + Apoya a un creador · #EpicPartner' and '¡GRACIAS POR VER! Síguenos para más contenido diario'. Nothing overlaps or is cut off. Cover checked: circle on the same island, 'Código de creador BAD' small at the top. 1080x1920, 15.2 s.",
+      "items": []
+    },
+    {
+      "check": "8. Owner approval",
+      "status": "PASS",
+      "detail": "Standing approval for autopilot (owner, 2026-10-28): posts when checks 1-7 all PASS.",
+      "items": []
+    }
+  ],
+  "caption": "#EpicPartner ¿No encuentras Henry en Fortnite? 📍 Está en el sureste de la isla, cerca de Puerto Pirata\n¿Ya lo visitaste? 👇\nUsa el código BAD en la tienda de objetos 💛\n#fortnite #mapafortnite #henry"
+}
