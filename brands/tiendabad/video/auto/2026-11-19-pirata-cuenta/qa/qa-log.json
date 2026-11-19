@@ -1,0 +1,72 @@
+{
+  "video": "latienditabad-2026-11-19-pirata-cuenta.mp4",
+  "checked_utc": "2026-11-19T19:42:44Z",
+  "verdict": "READY TO POST",
+  "results": [
+    {
+      "check": "1. Facts",
+      "status": "PASS",
+      "detail": "3/3 claims verified against saved official data",
+      "items": [
+        {
+          "claim": "La búsqueda termina el 5 de diciembre (hoy 2026-11-19: quedan 16 días)",
+          "result": "PASS",
+          "why": "matched in vgc-odds-confirmed.json; 2026-11-19 to 2026-12-05 is 16 days"
+        },
+        {
+          "claim": "1 en 137 500 por cofre",
+          "result": "PASS",
+          "why": "matched in vgc-odds-confirmed.json"
+        },
+        {
+          "claim": "Dato del día: Battle Royale y Cero Construcción",
+          "result": "PASS",
+          "why": "matched in vgc-guide.json"
+        }
+      ]
+    },
+    {
+      "check": "2. Spelling and grammar",
+      "status": "PASS",
+      "detail": "48 distinct words checked; code written as BAD in all 2 mentions",
+      "items": []
+    },
+    {
+      "check": "3. Frames",
+      "status": "PASS",
+      "detail": "No black frames, no frozen stretches over 1.5 s. Contact sheet (1 frame/s) reviewed by eye: contact-sheet.png",
+      "items": []
+    },
+    {
+      "check": "4. Audio",
+      "status": "PASS",
+      "detail": "Integrated -14.1 LUFS, true peak -2.7 dBTP, no clipping, no silence gaps. All sound is original synthesis (no game rips, no copyrighted music). No voiceover in this cut.",
+      "items": []
+    },
+    {
+      "check": "5. Specs and safe zones",
+      "status": "PASS",
+      "detail": "1080x1920 h264 60 fps, aac 48000 Hz, 19.8s. Fits TikTok, Reels, Shorts, X, Facebook, Threads. Every on-screen text box sampled 4x/s stays out of the top bar, bottom caption area and button column.",
+      "items": []
+    },
+    {
+      "check": "6. Disclosure and wording",
+      "status": "PASS",
+      "detail": "#EpicPartner is the first hashtag in caption line 1 and on screen in every sampled frame from 0.0s. No discount, giveaway, endorsement or filler-CTA wording.",
+      "items": []
+    },
+    {
+      "check": "7. Would a fan stop scrolling? Made by a person?",
+      "status": "PASS",
+      "detail": "'TIENDA PIRATA ¡QUEDAN 16 DÍAS! PARA ENCONTRARLA 🏴‍☠️' over the map with the 'QUEDAN 16 DÍAS' coin; the three cards appear in order and stay readable: 'TERMINA 5 DE DICIEMBRE', 'PROBABILIDAD 1 EN 137 500 POR COFRE', 'MODOS BATTLE ROYALE Y CERO CONSTRUCCIÓN' (the dato del día, VGC guide: 'you have to open chests during Battle Royale and Zero Build modes'); then the code card and '¡GRACIAS POR VER! Síguenos para más contenido diario'. Captions on one line, outlined, legible over the map labels and clear of the gold coin (checked at 1.0, 3.3, 4.4, 6.0, 8.0 and 10.5 s). 16 days = Nov 19 to Dec 5. Nothing cut off. Cover checked: 'TIENDA PIRATA · QUEDAN 16 DÍAS · ¿YA TE SALIÓ?' over the map, 'Código de creador BAD' small. 1080x1920, 20.2 s.",
+      "items": []
+    },
+    {
+      "check": "8. Owner approval",
+      "status": "PASS",
+      "detail": "Standing approval for autopilot (owner, 2026-10-28): posts when checks 1-7 all PASS.",
+      "items": []
+    }
+  ],
+  "caption": "#EpicPartner ¡Quedan 16 días para encontrar la Tienda Pirata! 🏴‍☠️ La búsqueda termina el 5 de diciembre\nCuenta en Battle Royale y en Cero Construcción.\n¿Ya te salió? 👇\nUsa el código BAD en la tienda de objetos 💛\n#fortnite #tiendapirata #fortniteespañol"
+}

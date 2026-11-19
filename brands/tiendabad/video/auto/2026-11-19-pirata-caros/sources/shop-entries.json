@@ -1,0 +1,1623 @@
+{
+ "date": "2026-11-19T00:00:00Z",
+ "entries": [
+  {
+   "regularPrice": 6100,
+   "finalPrice": 3400,
+   "devName": "[VIRTUAL]1 x Rigby, 1 x Mordecai, 1 x Maximum Glove, 1 x Skips, 1 x Fists of Justice, 1 x Oooohhh!, 1 x Skips' Skip, 1 x BABY DUCKS, 1 x Rattle & Mace for -1 MtxCurrency",
+   "offerId": "v2:/2da8e4249a3a63dd50b25911c408e5be83da9160cfbe021dcf25bcd9740a1a1e",
+   "inDate": "2026-11-19T00:00:00Z",
+   "outDate": "2026-11-23T23:59:59.999Z",
+   "bundle": {
+    "name": "Lote Un Show Más",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/1d934aa6ba832556/renderimage_0.png"
+   },
+   "banner": {
+    "value": "2700 monedas V de descuento",
+    "intensity": "Low",
+    "backendValue": "AmountOff"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -1,
+   "layoutId": "RegularShow.99",
+   "layout": {
+    "id": "RegularShow",
+    "name": "Un show más",
+    "index": 27,
+    "rank": 194,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "6e97f5ff",
+    "color3": "4e94d9ff",
+    "textBackgroundColor": "4e94d9ff"
+   },
+   "tileSize": "Size_3_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_PromDutch_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S39/DAv2_Bundle_Featured_PromDutch",
+   "newDisplayAsset": {
+    "id": "DAv2_Bundle_Featured_PromDutch",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__1d934aa6ba832556_7eecd2ef03935971.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/1d934aa6ba832556/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__1d934aa6ba832556_073cf85552b45389.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/1d934aa6ba832556/renderimage_1.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__1d934aa6ba832556_860b9839c8e0253a.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/1d934aa6ba832556/renderimage_2.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__1d934aa6ba832556_ba852a4b96761ad2.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/1d934aa6ba832556/renderimage_3.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Companion_PromDutch",
+     "name": "Rigby",
+     "description": "¡Sí que sí!",
+     "type": {
+      "value": "sidekick",
+      "displayValue": "Compañero",
+      "backendValue": "CosmeticCompanion"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "Un show más",
+      "text": "Pieza del conjunto Un show más.",
+      "backendValue": "CenterCard"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "1",
+      "text": "Introducido en Capítulo 7, Temporada 1.",
+      "backendValue": 39
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/companion_promdutch/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/companion_promdutch/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/companion_promdutch/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Emote",
+       "type": "Gesto de compañero",
+       "options": [
+        {
+         "tag": "CompanionEmote0",
+         "name": "¡Ooooh!",
+         "image": "https://fortnite-api.com/images/cosmetics/br/companion_promdutch/variants/emote/companionemote0.png"
+        }
+       ]
+      },
+      {
+       "channel": "Outfit",
+       "type": "gorra de camionero",
+       "options": [
+        {
+         "tag": "Stage1",
+         "name": "no",
+         "image": "https://fortnite-api.com/images/cosmetics/br/companion_promdutch/variants/outfit/stage1.png"
+        },
+        {
+         "tag": "Stage2",
+         "name": "Extrahuevordinario",
+         "image": "https://fortnite-api.com/images/cosmetics/br/companion_promdutch/variants/outfit/stage2.png"
+        }
+       ]
+      }
+     ],
+     "added": "2026-01-31T00:00:00Z"
+    },
+    {
+     "id": "Character_VouchTrig",
+     "name": "Mordecai",
+     "description": "¡Amigo!",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "Un show más",
+      "text": "Pieza del conjunto Un show más.",
+      "backendValue": "CenterCard"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "1",
+      "text": "Introducido en Capítulo 7, Temporada 1.",
+      "backendValue": 39
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_vouchtrig/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_vouchtrig/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_vouchtrig/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_vouchtrig/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_vouchtrig/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_vouchtrig/wide.png"
+      }
+     },
+     "metaTags": [
+      "Cosmetics.MetaTags.Special.Medium",
+      "Cosmetics.MetaTags.Special.BigHeadHelm"
+     ],
+     "showcaseVideo": "ow9QTpj_HIs",
+     "added": "2026-01-31T00:00:00Z"
+    },
+    {
+     "id": "Pickaxe_VouchTrig",
+     "name": "Guante supremo",
+     "description": "¡Se trata de divertirse!",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Un show más",
+      "text": "Pieza del conjunto Un show más.",
+      "backendValue": "CenterCard"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "1",
+      "text": "Introducido en Capítulo 7, Temporada 1.",
+      "backendValue": 39
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_vouchtrig/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_vouchtrig/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_vouchtrig/featured.png"
+     },
+     "metaTags": [
+      "Cosmetics.Pickaxe.VouchTrig"
+     ],
+     "added": "2026-01-31T00:00:00Z"
+    },
+    {
+     "id": "Character_RobustTorn",
+     "name": "Skips",
+     "description": "Antes conocido como Walks. ",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "Un show más",
+      "text": "Pieza del conjunto Un show más.",
+      "backendValue": "CenterCard"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "1",
+      "text": "Introducido en Capítulo 7, Temporada 1.",
+      "backendValue": 39
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_robusttorn/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_robusttorn/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_robusttorn/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_robusttorn/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_robusttorn/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_robusttorn/wide.png"
+      }
+     },
+     "metaTags": [
+      "Cosmetics.MetaTags.Special.AbnormalHead"
+     ],
+     "showcaseVideo": "_XsDNmBRUis",
+     "added": "2026-01-31T00:00:00Z"
+    },
+    {
+     "id": "Pickaxe_RobustTorn",
+     "name": "Puños justicieros",
+     "description": "¿Cómo funcionan estas cosas?",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Un show más",
+      "text": "Pieza del conjunto Un show más.",
+      "backendValue": "CenterCard"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "1",
+      "text": "Introducido en Capítulo 7, Temporada 1.",
+      "backendValue": 39
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_robusttorn/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_robusttorn/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_robusttorn/featured.png"
+     },
+     "added": "2026-01-31T00:00:00Z"
+    },
+    {
+     "id": "EID_VouchTrig",
+     "name": "¡Ooooh!",
+     "description": "¡Ooooh!",
+     "type": {
+      "value": "emote",
+      "displayValue": "Gesto",
+      "backendValue": "AthenaDance"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "Un show más",
+      "text": "Pieza del conjunto Un show más.",
+      "backendValue": "CenterCard"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "1",
+      "text": "Introducido en Capítulo 7, Temporada 1.",
+      "backendValue": 39
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/eid_vouchtrig/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/eid_vouchtrig/icon.png"
+     },
+     "showcaseVideo": "bXJZ5N2Ltwg",
+     "added": "2026-01-31T00:00:00Z"
+    },
+    {
+     "id": "EID_RobustTorn",
+     "name": "Saltito de Skips",
+     "description": "Salta de día y de noche, para siempre. ",
+     "type": {
+      "value": "emote",
+      "displayValue": "Gesto",
+      "backendValue": "AthenaDance"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "Un show más",
+      "text": "Pieza del conjunto Un show más.",
+      "backendValue": "CenterCard"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "1",
+      "text": "Introducido en Capítulo 7, Temporada 1.",
+      "backendValue": 39
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/eid_robusttorn/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/eid_robusttorn/icon.png"
+     },
+     "showcaseVideo": "8ZomBKBAjcE",
+     "added": "2026-01-31T00:00:00Z"
+    },
+    {
+     "id": "Backpack_VouchTrig",
+     "name": "PATITOS",
+     "description": "Pequeños, suaves y amarillitos. ",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Un show más",
+      "text": "Pieza del conjunto Un show más.",
+      "backendValue": "CenterCard"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "1",
+      "text": "Introducido en Capítulo 7, Temporada 1.",
+      "backendValue": 39
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_vouchtrig/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_vouchtrig/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_vouchtrig/featured.png"
+     },
+     "added": "2026-01-31T00:00:00Z"
+    },
+    {
+     "id": "Backpack_RobustTorn",
+     "name": "Sonajero y mazo",
+     "description": "¡El poder de la eterna juventud en tu espalda! (Incluso la de Klorgbane).",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Un show más",
+      "text": "Pieza del conjunto Un show más.",
+      "backendValue": "CenterCard"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "1",
+      "text": "Introducido en Capítulo 7, Temporada 1.",
+      "backendValue": 39
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_robusttorn/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_robusttorn/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_robusttorn/featured.png"
+     },
+     "added": "2026-01-31T00:00:00Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 6600,
+   "finalPrice": 3000,
+   "devName": "[VIRTUAL]1 x CouRage, 1 x Lion Shield, 1 x Louis, 1 x Courageous Knight, 1 x Courage Shield, 1 x Proud Victory, 1 x Win-ception, 1 x Courageous Scepter, 1 x Courageous Axe, 1 x The Lion's Pride for -1 MtxCurrency",
+   "offerId": "v2:/5a4a9cb8b0d26b15b73f221fe5850f49360914b832682107f7f69b6bb8cbdab4",
+   "inDate": "2026-11-19T00:00:00Z",
+   "outDate": "2026-11-21T23:59:59.999Z",
+   "bundle": {
+    "name": "Lote CouRage",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/85a3fb4d42231707/renderimage_0.png"
+   },
+   "banner": {
+    "value": "3600 monedas V de descuento",
+    "intensity": "Low",
+    "backendValue": "AmountOff"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -1,
+   "layoutId": "CourageJD.99",
+   "layout": {
+    "id": "CourageJD",
+    "name": "CouRage",
+    "category": "Íconos",
+    "index": 33,
+    "rank": 179,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "fddb30ff",
+    "color2": "b87006ff",
+    "color3": "db9d18ff",
+    "textBackgroundColor": "b87006ff"
+   },
+   "tileSize": "Size_2_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_BoldDormRise_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S39/DAv2_Bundle_Featured_BoldDormRise",
+   "newDisplayAsset": {
+    "id": "DAv2_Bundle_Featured_BoldDormRise",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__85a3fb4d42231707_f74b82351ecbb56e.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/85a3fb4d42231707/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__85a3fb4d42231707_a275a3612f99c8ab.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/85a3fb4d42231707/renderimage_1.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__85a3fb4d42231707_aa36540e3431f538.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/85a3fb4d42231707/renderimage_2.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__85a3fb4d42231707_f06101698f8fb347.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/85a3fb4d42231707/renderimage_3.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__85a3fb4d42231707_af9ee0851e3f5bf5.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/85a3fb4d42231707/renderimage_4.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__85a3fb4d42231707_c7b7c5b93e2dcead.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/85a3fb4d42231707/renderimage_5.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Character_BoldDormRise",
+     "name": "CouRage",
+     "description": "No pierdas el coraje.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "CouRage",
+      "text": "Pieza del conjunto CouRage.",
+      "backendValue": "SpiritPower"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "1",
+      "text": "Introducido en Capítulo 7, Temporada 1.",
+      "backendValue": 39
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_bolddormrise/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_bolddormrise/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_bolddormrise/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_bolddormrise/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_bolddormrise/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_bolddormrise/wide.png"
+      }
+     },
+     "variants": [
+      {
+       "channel": "Parts",
+       "type": "Estilo",
+       "options": [
+        {
+         "tag": "Stage1",
+         "name": "CouRage",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_bolddormrise/variants/parts/stage1.png"
+        },
+        {
+         "tag": "Stage2",
+         "name": "acorazado",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_bolddormrise/variants/parts/stage2.png"
+        },
+        {
+         "tag": "Stage3",
+         "name": "acorazado (reactivo apagado)",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_bolddormrise/variants/parts/stage3.png"
+        }
+       ]
+      },
+      {
+       "channel": "Material",
+       "type": "color",
+       "options": [
+        {
+         "tag": "Mat1",
+         "name": "CouRage",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_bolddormrise/variants/material/mat1.png"
+        },
+        {
+         "tag": "Mat2",
+         "name": "Noir",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_bolddormrise/variants/material/mat2.png"
+        }
+       ]
+      }
+     ],
+     "added": "2025-12-11T16:07:07Z"
+    },
+    {
+     "id": "Backpack_BoldDormMum",
+     "name": "Escudo leonino",
+     "description": "La protección de los aliados.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "CouRage",
+      "text": "Pieza del conjunto CouRage.",
+      "backendValue": "SpiritPower"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "1",
+      "text": "Introducido en Capítulo 7, Temporada 1.",
+      "backendValue": 39
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_bolddormmum/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_bolddormmum/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_bolddormmum/featured.png"
+     },
+     "added": "2025-12-11T16:07:07Z"
+    },
+    {
+     "id": "Companion_ScrollVessel",
+     "name": "Louis",
+     "description": "El perrito de CouRage.",
+     "type": {
+      "value": "sidekick",
+      "displayValue": "Compañero",
+      "backendValue": "CosmeticCompanion"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "CouRage",
+      "text": "Pieza del conjunto CouRage.",
+      "backendValue": "SpiritPower"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "1",
+      "text": "Introducido en Capítulo 7, Temporada 1.",
+      "backendValue": 39
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/companion_scrollvessel/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/companion_scrollvessel/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/companion_scrollvessel/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Emote",
+       "type": "Gesto de compañero",
+       "options": [
+        {
+         "tag": "CompanionEmote0",
+         "name": "Coronación canina",
+         "image": "https://fortnite-api.com/images/cosmetics/br/companion_scrollvessel/variants/emote/companionemote0.png"
+        }
+       ]
+      },
+      {
+       "channel": "Outfit",
+       "type": "bandana",
+       "options": [
+        {
+         "tag": "Mat1",
+         "name": "No",
+         "image": "https://fortnite-api.com/images/cosmetics/br/companion_scrollvessel/variants/outfit/mat1.png"
+        },
+        {
+         "tag": "Mat2",
+         "name": "Estampado de CouRage",
+         "image": "https://fortnite-api.com/images/cosmetics/br/companion_scrollvessel/variants/outfit/mat2.png"
+        }
+       ]
+      }
+     ],
+     "added": "2025-12-11T16:07:07Z"
+    },
+    {
+     "id": "Character_BoldDormWork",
+     "name": "Caballera CouRage",
+     "description": "Déjate guiar por el coraje. ",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "CouRage",
+      "text": "Pieza del conjunto CouRage.",
+      "backendValue": "SpiritPower"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "1",
+      "text": "Introducido en Capítulo 7, Temporada 1.",
+      "backendValue": 39
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_bolddormwork/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_bolddormwork/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_bolddormwork/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_bolddormwork/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_bolddormwork/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_bolddormwork/wide.png"
+      }
+     },
+     "added": "2025-12-11T16:07:07Z"
+    },
+    {
+     "id": "Backpack_BoldDormWork",
+     "name": "Escudo de CouRage",
+     "description": "Llévalo con honor.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Legendary"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "CouRage",
+      "text": "Pieza del conjunto CouRage.",
+      "backendValue": "SpiritPower"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "1",
+      "text": "Introducido en Capítulo 7, Temporada 1.",
+      "backendValue": 39
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_bolddormwork/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_bolddormwork/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_bolddormwork/featured.png"
+     },
+     "added": "2025-12-11T16:07:07Z"
+    },
+    {
+     "id": "EID_BoldDorm",
+     "name": "Victoria honrosa",
+     "description": "Gana todo. ",
+     "type": {
+      "value": "emote",
+      "displayValue": "Gesto",
+      "backendValue": "AthenaDance"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "CouRage",
+      "text": "Pieza del conjunto CouRage.",
+      "backendValue": "SpiritPower"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "1",
+      "text": "Introducido en Capítulo 7, Temporada 1.",
+      "backendValue": 39
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/eid_bolddorm/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/eid_bolddorm/icon.png"
+     },
+     "showcaseVideo": "Hj0BSrx6kEc",
+     "added": "2025-12-11T16:07:07Z"
+    },
+    {
+     "id": "EID_BoldDorm_Bagel",
+     "name": "Metavictoria",
+     "description": "¡Vamos!",
+     "type": {
+      "value": "emote",
+      "displayValue": "Gesto",
+      "backendValue": "AthenaDance"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "CouRage",
+      "text": "Pieza del conjunto CouRage.",
+      "backendValue": "SpiritPower"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "1",
+      "text": "Introducido en Capítulo 7, Temporada 1.",
+      "backendValue": 39
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/eid_bolddorm_bagel/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/eid_bolddorm_bagel/icon.png"
+     },
+     "showcaseVideo": "-sL5aDFq950",
+     "added": "2025-12-11T16:07:07Z"
+    },
+    {
+     "id": "Pickaxe_BoldDormRise",
+     "name": "Cetro de coraje",
+     "description": "Ve por el corazón de tus enemigos.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "CouRage",
+      "text": "Pieza del conjunto CouRage.",
+      "backendValue": "SpiritPower"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "1",
+      "text": "Introducido en Capítulo 7, Temporada 1.",
+      "backendValue": 39
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_bolddormrise/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_bolddormrise/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_bolddormrise/featured.png"
+     },
+     "added": "2025-12-11T16:07:07Z"
+    },
+    {
+     "id": "Pickaxe_BoldDormWork",
+     "name": "Piqueta de CouRage",
+     "description": "Asesta con coraje.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "CouRage",
+      "text": "Pieza del conjunto CouRage.",
+      "backendValue": "SpiritPower"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "1",
+      "text": "Introducido en Capítulo 7, Temporada 1.",
+      "backendValue": 39
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_bolddormwork/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_bolddormwork/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_bolddormwork/featured.png"
+     },
+     "added": "2025-12-11T16:07:07Z"
+    },
+    {
+     "id": "Wrap_BoldDorm",
+     "name": "El orgullo del león",
+     "description": "Muestra tu estilo.",
+     "type": {
+      "value": "wrap",
+      "displayValue": "Papel",
+      "backendValue": "AthenaItemWrap"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "CouRage",
+      "text": "Pieza del conjunto CouRage.",
+      "backendValue": "SpiritPower"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "1",
+      "text": "Introducido en Capítulo 7, Temporada 1.",
+      "backendValue": 39
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/wrap_bolddorm/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/wrap_bolddorm/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/wrap_bolddorm/featured.png"
+     },
+     "added": "2025-12-11T16:07:07Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 2000,
+   "finalPrice": 2000,
+   "devName": "[VIRTUAL]1 x Blank, 1 x Blank, 1 x Blank, 1 x Blank, 1 x Blank, 1 x Blank, 1 x Blank for -1 MtxCurrency",
+   "offerId": "v2:/1677fbae0ad0ae341a03fee8c70ecfb11efeb9983dcdaabe71d95b6db713d5d0",
+   "inDate": "2026-11-19T00:00:00Z",
+   "outDate": "2026-11-28T23:59:59.999Z",
+   "bundle": {
+    "name": "Jurassic Jeep Wrangler",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/ddf3aa02de901fff/renderimage_0.png"
+   },
+   "banner": {
+    "value": "Nuevo",
+    "intensity": "High",
+    "backendValue": "New"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -2,
+   "layoutId": "JJWrangler.99",
+   "layout": {
+    "id": "JJWrangler",
+    "name": "Jeep Wrangler",
+    "index": 13,
+    "rank": 195,
+    "showIneligibleOffers": "always",
+    "useWidePreview": true,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "bf7a2cff",
+    "color3": "592a08ff",
+    "textBackgroundColor": "592a08ff"
+   },
+   "tileSize": "Size_3_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_Maple_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S43/DAv2_Bundle_Featured_Maple",
+   "newDisplayAsset": {
+    "id": "DAv2_Bundle_Featured_Maple",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.DelMar",
+      "fileName": "T_UI_Vehicle_Web_Maple",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/ddf3aa02de901fff/renderimage_0.png"
+     }
+    ]
+   },
+   "cars": [
+    {
+     "id": "CarBody_Maple",
+     "vehicleId": "VCID_Body_Maple",
+     "name": "Jurassic Jeep® Wrangler",
+     "description": "La línea roja evita que los triceratops embistan.",
+     "type": {
+      "value": "body",
+      "displayValue": "Carrocería",
+      "backendValue": "VehicleCosmetics_Body"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "images": {
+      "small": "https://fortnite-api.com/images/cosmetics/cars/carbody_maple/small.png",
+      "large": "https://fortnite-api.com/images/cosmetics/cars/carbody_maple/large.png"
+     },
+     "added": "2026-11-17T14:00:46Z"
+    },
+    {
+     "id": "CarSkin_MapleDefaultA",
+     "vehicleId": "VCID_CarSkin_MapleDefaultA",
+     "name": "Vehículo del personal",
+     "description": "Calcomanía personalizada de Jurassic Jeep® Wrangler.",
+     "type": {
+      "value": "skin",
+      "displayValue": "Aspecto",
+      "backendValue": "VehicleCosmetics_Skin"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "images": {
+      "small": "https://fortnite-api.com/images/cosmetics/cars/carskin_mapledefaulta/small.png",
+      "large": "https://fortnite-api.com/images/cosmetics/cars/carskin_mapledefaulta/large.png"
+     },
+     "added": "2026-11-17T14:00:46Z"
+    },
+    {
+     "id": "CarSkin_MapleDefaultB",
+     "vehicleId": "VCID_CarSkin_MapleDefaultB",
+     "name": "Vehículo del personal: azul",
+     "description": "Calcomanía personalizada de Jurassic Jeep® Wrangler.",
+     "type": {
+      "value": "skin",
+      "displayValue": "Aspecto",
+      "backendValue": "VehicleCosmetics_Skin"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "images": {
+      "small": "https://fortnite-api.com/images/cosmetics/cars/carskin_mapledefaultb/small.png",
+      "large": "https://fortnite-api.com/images/cosmetics/cars/carskin_mapledefaultb/large.png"
+     },
+     "added": "2026-11-17T14:00:46Z"
+    },
+    {
+     "id": "CarSkin_MapleLivery01",
+     "vehicleId": "VCID_CarSkin_MapleLivery01",
+     "name": "Vehículo de tour",
+     "description": "Calcomanía personalizada de Jurassic Jeep® Wrangler.",
+     "type": {
+      "value": "skin",
+      "displayValue": "Aspecto",
+      "backendValue": "VehicleCosmetics_Skin"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "images": {
+      "small": "https://fortnite-api.com/images/cosmetics/cars/carskin_maplelivery01/small.png",
+      "large": "https://fortnite-api.com/images/cosmetics/cars/carskin_maplelivery01/large.png"
+     },
+     "added": "2026-11-17T14:00:46Z"
+    },
+    {
+     "id": "Wheel_Maple",
+     "vehicleId": "VCID_Wheel_Maple",
+     "name": "Jurassic Jeep® Wrangler",
+     "description": "La línea roja evita que los triceratops embistan.",
+     "type": {
+      "value": "wheel",
+      "displayValue": "Rueda",
+      "backendValue": "VehicleCosmetics_Wheel"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "images": {
+      "small": "https://fortnite-api.com/images/cosmetics/cars/wheel_maple/small.png",
+      "large": "https://fortnite-api.com/images/cosmetics/cars/wheel_maple/large.png"
+     },
+     "added": "2026-11-17T14:00:46Z"
+    },
+    {
+     "id": "Wheel_MapleRed",
+     "vehicleId": "VCID_Wheel_MapleRed",
+     "name": "Jurassic Jeep® Wrangler de personal",
+     "description": "Repelente de triceratops.",
+     "type": {
+      "value": "wheel",
+      "displayValue": "Rueda",
+      "backendValue": "VehicleCosmetics_Wheel"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "images": {
+      "small": "https://fortnite-api.com/images/cosmetics/cars/wheel_maplered/small.png",
+      "large": "https://fortnite-api.com/images/cosmetics/cars/wheel_maplered/large.png"
+     },
+     "added": "2026-11-17T14:00:46Z"
+    },
+    {
+     "id": "Wheel_MapleB",
+     "vehicleId": "VCID_Wheel_MapleB",
+     "name": "Jurassic Jeep® Wrangler de tour",
+     "description": "¡Disfruta el tour!",
+     "type": {
+      "value": "wheel",
+      "displayValue": "Rueda",
+      "backendValue": "VehicleCosmetics_Wheel"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "images": {
+      "small": "https://fortnite-api.com/images/cosmetics/cars/wheel_mapleb/small.png",
+      "large": "https://fortnite-api.com/images/cosmetics/cars/wheel_mapleb/large.png"
+     },
+     "added": "2026-11-17T14:00:46Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 2600,
+   "finalPrice": 1800,
+   "devName": "[VIRTUAL]1 x Lazarbeam, 1 x Baby Gingy, 1 x Lunch Break, 1 x Ol' Mate Sledgy for -1 MtxCurrency",
+   "offerId": "v2:/d2996371d7c9b8a00b35418518deefb2ce4d5d79aae2a203013ad10df913d41b",
+   "inDate": "2026-11-19T00:00:00Z",
+   "outDate": "2026-11-21T23:59:59.999Z",
+   "bundle": {
+    "name": "Lote LazarBeam",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/dd9b9d1e74a84bf8/renderimage_0.png"
+   },
+   "banner": {
+    "value": "800 monedas V de descuento",
+    "intensity": "Low",
+    "backendValue": "AmountOff"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -1,
+   "layoutId": "Lazarbeam.99",
+   "layout": {
+    "id": "Lazarbeam",
+    "name": "LazarBeam",
+    "category": "Íconos",
+    "index": 36,
+    "rank": 178,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "4bbfbfff",
+    "color2": "0d938cff",
+    "color3": "2ab19aff",
+    "textBackgroundColor": "096d73ff"
+   },
+   "tileBackgroundMaterial": "ShopTile_Blobs",
+   "tileSize": "Size_1_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_BuilderBundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/DAv2_Bundle_Builder",
+   "newDisplayAsset": {
+    "id": "DAv2_Bundle_Builder",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "T-AthenaBundles-M-Builder",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/dd9b9d1e74a84bf8/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__dd9b9d1e74a84bf8_158ff5a56aec79f1.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/dd9b9d1e74a84bf8/renderimage_1.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__dd9b9d1e74a84bf8_ae0f71e41f4a811a.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/dd9b9d1e74a84bf8/renderimage_2.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "CID_A_031_Athena_Commando_M_Builder",
+     "name": "LazarBeam",
+     "description": "De sangre azul.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "LazarBeam",
+      "text": "Pieza del conjunto LazarBeam.",
+      "backendValue": "MentionPremium"
+     },
+     "introduction": {
+      "chapter": "2",
+      "season": "5",
+      "text": "Introducido en Capítulo 2, Temporada 5.",
+      "backendValue": 15
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/cid_a_031_athena_commando_m_builder/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/cid_a_031_athena_commando_m_builder/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/cid_a_031_athena_commando_m_builder/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/cid_a_031_athena_commando_m_builder/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/cid_a_031_athena_commando_m_builder/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/cid_a_031_athena_commando_m_builder/wide.png"
+      }
+     },
+     "variants": [
+      {
+       "channel": "Parts",
+       "type": "ESTILO",
+       "options": [
+        {
+         "tag": "Stage1",
+         "name": "LazarBeam",
+         "image": "https://fortnite-api.com/images/cosmetics/br/cid_a_031_athena_commando_m_builder/variants/parts/stage1.png"
+        },
+        {
+         "tag": "Stage2",
+         "name": "CasualBeam",
+         "image": "https://fortnite-api.com/images/cosmetics/br/cid_a_031_athena_commando_m_builder/variants/parts/stage2.png"
+        },
+        {
+         "tag": "Stage3",
+         "name": "LazarBeam (casco)",
+         "image": "https://fortnite-api.com/images/cosmetics/br/cid_a_031_athena_commando_m_builder/variants/parts/stage3.png"
+        },
+        {
+         "tag": "Stage4",
+         "name": "CasualBeam (gorro)",
+         "image": "https://fortnite-api.com/images/cosmetics/br/cid_a_031_athena_commando_m_builder/variants/parts/stage4.png"
+        }
+       ]
+      }
+     ],
+     "showcaseVideo": "Sxop0bDP02c",
+     "added": "2021-03-02T10:19:28Z"
+    },
+    {
+     "id": "BID_708_GingerbreadBuilder",
+     "name": "Jengibrín",
+     "description": "Lleva a tu hijo al trabajo.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "LazarBeam",
+      "text": "Pieza del conjunto LazarBeam.",
+      "backendValue": "MentionPremium"
+     },
+     "introduction": {
+      "chapter": "2",
+      "season": "5",
+      "text": "Introducido en Capítulo 2, Temporada 5.",
+      "backendValue": 15
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/bid_708_gingerbreadbuilder/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/bid_708_gingerbreadbuilder/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/bid_708_gingerbreadbuilder/featured.png"
+     },
+     "added": "2021-03-02T10:19:28Z"
+    },
+    {
+     "id": "EID_Builders",
+     "name": "Hora del almuerzo",
+     "description": "Me voy a comer cinco.",
+     "type": {
+      "value": "emote",
+      "displayValue": "Gesto",
+      "backendValue": "AthenaDance"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "LazarBeam",
+      "text": "Pieza del conjunto LazarBeam.",
+      "backendValue": "MentionPremium"
+     },
+     "introduction": {
+      "chapter": "2",
+      "season": "5",
+      "text": "Introducido en Capítulo 2, Temporada 5.",
+      "backendValue": 15
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/eid_builders/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/eid_builders/icon.png"
+     },
+     "showcaseVideo": "QQdnzdmnPn0",
+     "added": "2021-03-02T10:19:28Z"
+    },
+    {
+     "id": "Pickaxe_ID_555_BuilderMale",
+     "name": "Mazo fiable",
+     "description": "Úsalo para que parezca que estás haciendo algo.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "LazarBeam",
+      "text": "Pieza del conjunto LazarBeam.",
+      "backendValue": "MentionPremium"
+     },
+     "introduction": {
+      "chapter": "2",
+      "season": "5",
+      "text": "Introducido en Capítulo 2, Temporada 5.",
+      "backendValue": 15
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_id_555_buildermale/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_id_555_buildermale/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_id_555_buildermale/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Mesh",
+       "type": "Tipo de pico",
+       "options": [
+        {
+         "tag": "Stage1",
+         "name": "Predeterminado",
+         "image": "https://fortnite-api.com/images/cosmetics/br/pickaxe_id_555_buildermale/variants/mesh/stage1.png"
+        },
+        {
+         "tag": "Stage2",
+         "name": "Mazo fiable (tamaño completo)",
+         "image": "https://fortnite-api.com/images/cosmetics/br/pickaxe_id_555_buildermale/variants/mesh/stage2.png"
+        }
+       ]
+      }
+     ],
+     "showcaseVideo": "uH_2QwXnEXY",
+     "added": "2021-03-02T10:19:28Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 1200,
+   "finalPrice": 1200,
+   "devName": "[VIRTUAL]1 x Curious, 1 x Pathwalker's Pack for -1 MtxCurrency",
+   "offerId": "v2:/11d293c9c05d7d53344a14cd97a89e840187b4f1d2e7923a59806e5317b7e82d",
+   "inDate": "2026-11-19T00:00:00Z",
+   "outDate": "2026-11-19T23:59:59.999Z",
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -3,
+   "layoutId": "BR111926.96",
+   "layout": {
+    "id": "BR111926",
+    "name": "Energía de protagonista ",
+    "index": 32,
+    "rank": 183,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "290f07ff",
+    "color3": "824100ff",
+    "textBackgroundColor": "824100ff"
+   },
+   "tileSize": "Size_1_x_1",
+   "displayAssetPath": "/Game/Catalog/DisplayAssets/DA_Featured_Character_FelineWarrior",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S29/DAv2_Character_FelineWarrior",
+   "newDisplayAsset": {
+    "id": "DAv2_Character_FelineWarrior",
+    "cosmeticId": "Character_FelineWarrior",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__65242eceaf640390_fff9ec4121941f22.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/65242eceaf640390/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__65242eceaf640390_86ff78c59fa705a2.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/65242eceaf640390/renderimage_1.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Character_FelineWarrior",
+     "name": "Curiosa",
+     "description": "Aventúrate más allá de la novena vida.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Trotamiaundos",
+      "text": "Pieza del conjunto Trotamiaundos.",
+      "backendValue": "WonderingExplorer"
+     },
+     "introduction": {
+      "chapter": "5",
+      "season": "2",
+      "text": "Introducido en Capítulo 5, Temporada 2.",
+      "backendValue": 29
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_felinewarrior/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_felinewarrior/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_felinewarrior/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_felinewarrior/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_felinewarrior/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_felinewarrior/wide.png"
+      },
+      "bean": {
+       "small": "https://fortnite-api.com/images/cosmetics/beans/bean_felinewarrior/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/beans/bean_felinewarrior/large.png"
+      }
+     },
+     "showcaseVideo": "WekNyuWaBXY",
+     "added": "2024-03-26T08:30:33Z"
+    },
+    {
+     "id": "Backpack_FelineWarrior",
+     "name": "Mochila trotamundos",
+     "description": "Sigue los caminos.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "Trotamiaundos",
+      "text": "Pieza del conjunto Trotamiaundos.",
+      "backendValue": "WonderingExplorer"
+     },
+     "introduction": {
+      "chapter": "5",
+      "season": "2",
+      "text": "Introducido en Capítulo 5, Temporada 2.",
+      "backendValue": 29
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_felinewarrior/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_felinewarrior/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_felinewarrior/featured.png"
+     },
+     "added": "2024-03-26T08:30:33Z"
+    }
+   ]
+  }
+ ]
+}

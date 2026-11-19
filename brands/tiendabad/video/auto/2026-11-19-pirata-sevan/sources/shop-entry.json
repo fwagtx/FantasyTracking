@@ -1,0 +1,445 @@
+{
+ "date": "2026-11-19T00:00:00Z",
+ "entries": [
+  {
+   "regularPrice": 5800,
+   "finalPrice": 2800,
+   "devName": "[VIRTUAL]1 x Kuno, 1 x Kenji, 1 x Falcon, 1 x Talons, 1 x Quickstrike, 1 x Katana & Kunai, 1 x Dual Kama for -1 MtxCurrency",
+   "offerId": "v2:/13b0ec4446f752fe7533fae803dc5bea52445d43159125f1200afe259815d37a",
+   "inDate": "2026-11-18T00:00:00Z",
+   "outDate": "2026-11-19T23:59:59.999Z",
+   "bundle": {
+    "name": "Lote Clan Halcón",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/89438ac471bede76/renderimage_0.png"
+   },
+   "banner": {
+    "value": "3000 monedas V de descuento",
+    "intensity": "Low",
+    "backendValue": "AmountOff"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -1,
+   "layoutId": "BR111926.94",
+   "layout": {
+    "id": "BR111926",
+    "name": "Energía de protagonista ",
+    "index": 32,
+    "rank": 183,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "290f07ff",
+    "color3": "824100ff",
+    "textBackgroundColor": "824100ff"
+   },
+   "tileSize": "Size_3_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_Architect_BandageNinja_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/DAv2_Bundle_Featured_BandageNinja",
+   "newDisplayAsset": {
+    "id": "DAv2_Bundle_Featured_BandageNinja",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__89438ac471bede76_1b9b1e721bef831d.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/89438ac471bede76/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__89438ac471bede76_13af347c1aab39fb.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/89438ac471bede76/renderimage_1.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__89438ac471bede76_6c4c7f2f627fdd5e.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/89438ac471bede76/renderimage_2.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__89438ac471bede76_911fb8e8c98b2e00.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/89438ac471bede76/renderimage_3.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "CID_362_Athena_Commando_F_BandageNinja",
+     "name": "Kuno",
+     "description": "Maestro del arte del engaño.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "Clan Halcón",
+      "text": "Pieza del conjunto Clan Halcón.",
+      "backendValue": "BandageNinja"
+     },
+     "introduction": {
+      "chapter": "1",
+      "season": "8",
+      "text": "Introducido en Capítulo 1, Temporada 8.",
+      "backendValue": 8
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/cid_362_athena_commando_f_bandageninja/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/cid_362_athena_commando_f_bandageninja/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/cid_362_athena_commando_f_bandageninja/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/cid_362_athena_commando_f_bandageninja/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/cid_362_athena_commando_f_bandageninja/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/cid_362_athena_commando_f_bandageninja/wide.png"
+      },
+      "bean": {
+       "small": "https://fortnite-api.com/images/cosmetics/beans/bean_bandageninjab/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/beans/bean_bandageninjab/large.png"
+      }
+     },
+     "variants": [
+      {
+       "channel": "Material",
+       "type": "color",
+       "options": [
+        {
+         "tag": "Mat1",
+         "name": "Kuno",
+         "image": "https://fortnite-api.com/images/cosmetics/br/cid_362_athena_commando_f_bandageninja/variants/material/mat1.png"
+        },
+        {
+         "tag": "Mat2",
+         "name": "Kuno Destruyeventiscas",
+         "image": "https://fortnite-api.com/images/cosmetics/br/cid_362_athena_commando_f_bandageninja/variants/material/mat2.png"
+        }
+       ]
+      }
+     ],
+     "showcaseVideo": "dO2v5PgA8eM",
+     "added": "2019-11-20T12:50:04Z"
+    },
+    {
+     "id": "CID_361_Athena_Commando_M_BandageNinja",
+     "name": "Kenji",
+     "description": "Ataca desde las sombras.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "Clan Halcón",
+      "text": "Pieza del conjunto Clan Halcón.",
+      "backendValue": "BandageNinja"
+     },
+     "introduction": {
+      "chapter": "1",
+      "season": "8",
+      "text": "Introducido en Capítulo 1, Temporada 8.",
+      "backendValue": 8
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/cid_361_athena_commando_m_bandageninja/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/cid_361_athena_commando_m_bandageninja/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/cid_361_athena_commando_m_bandageninja/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/cid_361_athena_commando_m_bandageninja/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/cid_361_athena_commando_m_bandageninja/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/cid_361_athena_commando_m_bandageninja/wide.png"
+      },
+      "bean": {
+       "small": "https://fortnite-api.com/images/cosmetics/beans/bean_bandageninjaa/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/beans/bean_bandageninjaa/large.png"
+      }
+     },
+     "variants": [
+      {
+       "channel": "Material",
+       "type": "color",
+       "options": [
+        {
+         "tag": "Mat1",
+         "name": "Kenji",
+         "image": "https://fortnite-api.com/images/cosmetics/br/cid_361_athena_commando_m_bandageninja/variants/material/mat1.png"
+        },
+        {
+         "tag": "Mat2",
+         "name": "Silenciador",
+         "image": "https://fortnite-api.com/images/cosmetics/br/cid_361_athena_commando_m_bandageninja/variants/material/mat2.png"
+        }
+       ]
+      }
+     ],
+     "showcaseVideo": "eD7PSYhiW-c",
+     "added": "2019-11-20T12:50:04Z"
+    },
+    {
+     "id": "Glider_ID_133_BandageNinja",
+     "name": "Halcón",
+     "description": "Vuela sobre las alas del legendario halcón.",
+     "type": {
+      "value": "glider",
+      "displayValue": "Planeador",
+      "backendValue": "AthenaGlider"
+     },
+     "rarity": {
+      "value": "legendary",
+      "displayValue": "Legendario",
+      "backendValue": "EFortRarity::Legendary"
+     },
+     "set": {
+      "value": "Clan Halcón",
+      "text": "Pieza del conjunto Clan Halcón.",
+      "backendValue": "BandageNinja"
+     },
+     "introduction": {
+      "chapter": "1",
+      "season": "8",
+      "text": "Introducido en Capítulo 1, Temporada 8.",
+      "backendValue": 8
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/glider_id_133_bandageninja/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/glider_id_133_bandageninja/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/glider_id_133_bandageninja/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Particle",
+       "type": "Estilo",
+       "options": [
+        {
+         "tag": "Particle1",
+         "name": "Halcón",
+         "image": "https://fortnite-api.com/images/cosmetics/br/glider_id_133_bandageninja/variants/particle/particle1.png"
+        },
+        {
+         "tag": "Particle2",
+         "name": "Halcón silenciado",
+         "image": "https://fortnite-api.com/images/cosmetics/br/glider_id_133_bandageninja/variants/particle/particle2.png"
+        }
+       ]
+      }
+     ],
+     "showcaseVideo": "6_LhKwpIM28",
+     "added": "2019-11-20T12:48:02Z"
+    },
+    {
+     "id": "Pickaxe_ID_219_BandageNinja1H",
+     "name": "Garras",
+     "description": "Saca las garras y llega a la cima.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Clan Halcón",
+      "text": "Pieza del conjunto Clan Halcón.",
+      "backendValue": "BandageNinja"
+     },
+     "introduction": {
+      "chapter": "1",
+      "season": "9",
+      "text": "Introducido en Capítulo 1, Temporada 9.",
+      "backendValue": 9
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_id_219_bandageninja1h/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_id_219_bandageninja1h/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_id_219_bandageninja1h/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Mesh",
+       "type": "Estilo",
+       "options": [
+        {
+         "tag": "Stage1",
+         "name": "Garras",
+         "image": "https://fortnite-api.com/images/cosmetics/br/pickaxe_id_219_bandageninja1h/variants/mesh/stage1.png"
+        },
+        {
+         "tag": "Stage2",
+         "name": "Garras nevadas",
+         "image": "https://fortnite-api.com/images/cosmetics/br/pickaxe_id_219_bandageninja1h/variants/mesh/stage2.png"
+        }
+       ]
+      }
+     ],
+     "showcaseVideo": "QL81IEr90v0",
+     "added": "2019-11-20T12:50:48Z"
+    },
+    {
+     "id": "Pickaxe_ID_172_BandageNinja",
+     "name": "Respuesta rápida",
+     "description": "Afilado en las sombras.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "Clan Halcón",
+      "text": "Pieza del conjunto Clan Halcón.",
+      "backendValue": "BandageNinja"
+     },
+     "introduction": {
+      "chapter": "1",
+      "season": "8",
+      "text": "Introducido en Capítulo 1, Temporada 8.",
+      "backendValue": 8
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_id_172_bandageninja/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_id_172_bandageninja/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_id_172_bandageninja/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Particle",
+       "type": "Estilo",
+       "options": [
+        {
+         "tag": "Particle1",
+         "name": "Respuesta rápida",
+         "image": "https://fortnite-api.com/images/cosmetics/br/pickaxe_id_172_bandageninja/variants/particle/particle1.png"
+        },
+        {
+         "tag": "Particle2",
+         "name": "Sigilo",
+         "image": "https://fortnite-api.com/images/cosmetics/br/pickaxe_id_172_bandageninja/variants/particle/particle2.png"
+        }
+       ]
+      }
+     ],
+     "showcaseVideo": "G5taD_2A71s",
+     "added": "2019-11-20T12:50:50Z"
+    },
+    {
+     "id": "BID_225_BandageNinjaMale",
+     "name": "Katana y Kunai",
+     "description": "Hojas de elección.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "Clan Halcón",
+      "text": "Pieza del conjunto Clan Halcón.",
+      "backendValue": "BandageNinja"
+     },
+     "introduction": {
+      "chapter": "1",
+      "season": "8",
+      "text": "Introducido en Capítulo 1, Temporada 8.",
+      "backendValue": 8
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/bid_225_bandageninjamale/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/bid_225_bandageninjamale/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/bid_225_bandageninjamale/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Material",
+       "type": "color",
+       "options": [
+        {
+         "tag": "Mat1",
+         "name": "Katana y kunái",
+         "image": "https://fortnite-api.com/images/cosmetics/br/bid_225_bandageninjamale/variants/material/mat1.png"
+        },
+        {
+         "tag": "Mat2",
+         "name": "Filo prístino",
+         "image": "https://fortnite-api.com/images/cosmetics/br/bid_225_bandageninjamale/variants/material/mat2.png"
+        }
+       ]
+      }
+     ],
+     "added": "2019-11-20T12:50:35Z"
+    },
+    {
+     "id": "BID_226_BandageNinjaFemale",
+     "name": "Doble Kama",
+     "description": "Va de la mano de la victoria.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "Clan Halcón",
+      "text": "Pieza del conjunto Clan Halcón.",
+      "backendValue": "BandageNinja"
+     },
+     "introduction": {
+      "chapter": "1",
+      "season": "8",
+      "text": "Introducido en Capítulo 1, Temporada 8.",
+      "backendValue": 8
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/bid_226_bandageninjafemale/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/bid_226_bandageninjafemale/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/bid_226_bandageninjafemale/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Material",
+       "type": "color",
+       "options": [
+        {
+         "tag": "Mat1",
+         "name": "Doble Kama",
+         "image": "https://fortnite-api.com/images/cosmetics/br/bid_226_bandageninjafemale/variants/material/mat1.png"
+        },
+        {
+         "tag": "Mat2",
+         "name": "Doble Kama nevada",
+         "image": "https://fortnite-api.com/images/cosmetics/br/bid_226_bandageninjafemale/variants/material/mat2.png"
+        }
+       ]
+      }
+     ],
+     "added": "2019-11-20T12:50:35Z"
+    }
+   ]
+  }
+ ]
+}
