@@ -1,0 +1,77 @@
+{
+  "video": "latienditabad-shop-2026-11-19.mp4",
+  "checked_utc": "2026-11-19T00:12:16Z",
+  "verdict": "READY TO POST",
+  "results": [
+    {
+      "check": "1. Facts",
+      "status": "PASS",
+      "detail": "4/4 claims verified against saved official data",
+      "items": [
+        {
+          "claim": "Lote de Lil' Uzi Vert: 3200 V-Bucks, regular 7100",
+          "result": "PASS",
+          "why": "matched in shop.json"
+        },
+        {
+          "claim": "Destructor de las profundidades: Capítulo 1, Temporada 7",
+          "result": "PASS",
+          "why": "matched in history.json"
+        },
+        {
+          "claim": "1 days since last in the shop",
+          "result": "PASS",
+          "why": "matched in history.json"
+        },
+        {
+          "claim": "10 outfits leave at the next reset",
+          "result": "PASS",
+          "why": "matched in plan.json"
+        }
+      ]
+    },
+    {
+      "check": "2. Spelling and grammar",
+      "status": "PASS",
+      "detail": "5 distinct words checked; code written as BAD in all 2 mentions",
+      "items": []
+    },
+    {
+      "check": "3. Frames",
+      "status": "PASS",
+      "detail": "No black frames, no frozen stretches over 1.5 s. Contact sheet (1 frame/s) reviewed by eye: contact-sheet.png",
+      "items": []
+    },
+    {
+      "check": "4. Audio",
+      "status": "PASS",
+      "detail": "Integrated -14.3 LUFS, true peak -1.9 dBTP, no clipping, no silence gaps. All sound is original synthesis (no game rips, no copyrighted music). No voiceover in this cut.",
+      "items": []
+    },
+    {
+      "check": "5. Specs and safe zones",
+      "status": "PASS",
+      "detail": "1080x1920 h264 60 fps, aac 48000 Hz, 25.7s. Fits TikTok, Reels, Shorts, X, Facebook, Threads. Every on-screen text box sampled 4x/s stays out of the top bar, bottom caption area and button column.",
+      "items": []
+    },
+    {
+      "check": "6. Disclosure and wording",
+      "status": "PASS",
+      "detail": "#EpicPartner is the first hashtag in caption line 1 and on screen in every sampled frame from 0.0s. No discount, giveaway, endorsement or filler-CTA wording.",
+      "items": []
+    },
+    {
+      "check": "7. Would a fan stop scrolling? Made by a person?",
+      "status": "PASS",
+      "detail": "Frame 1: 'TIENDA DE HOY 19 NOV' with three items at once (OFERTA Lil Uzi Vert, OG Destructor de las profundidades, ÚLTIMO DÍA Ava), real item art on every tile, names readable. Deal: Lote de Lil' Uzi Vert 3200 with 7100 struck, '-55% AHORRAS 3900', 'SE VA EL 12 DIC'; OG: Destructor de las profundidades 1500, 'CAPÍTULO 1 · TEMPORADA 7'; último día: six tiles with names and prices (Ava, Diseñador de envoltorios, Kenji, Kuno 1500; Armonizadora, Curiosa 1200), '+4 más', 'SE VAN EL 19 NOV, 6 PM'; code card and '¡GRACIAS POR VER!'. Nothing cut off or overlapping (checked full-size stills at 1.2 s and 15.7 s). Voice lines all make sense spoken; the first is 'Esta es la tienda de objetos de hoy, 19 de noviembre.'",
+      "items": []
+    },
+    {
+      "check": "8. Owner approval",
+      "status": "PASS",
+      "detail": "Standing approval for autopilot (owner, 2026-10-28): posts when checks 1-7 all PASS.",
+      "items": []
+    }
+  ],
+  "caption": "#EpicPartner Tienda de objetos de Fortnite, 19 de noviembre: el Lote de Lil' Uzi Vert cuesta 3200 V-Bucks en vez de 7100 (ahorras 3900), Destructor de las profundidades está en la tienda (Capítulo 1, Temporada 7) y 10 skins se van el 19 de noviembre a las 6 PM (CDMX).\n¿Vas a comprar hoy? Usa el código BAD en la tienda de objetos.\n#Fortnite #TiendaFortnite #FortniteTienda"
+}

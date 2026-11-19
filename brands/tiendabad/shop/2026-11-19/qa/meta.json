@@ -1,0 +1,101 @@
+{
+ "duration": 26.1,
+ "caption": "#EpicPartner Tienda de objetos de Fortnite, 19 de noviembre: el Lote de Lil' Uzi Vert cuesta 3200 V-Bucks en vez de 7100 (ahorras 3900), Destructor de las profundidades está en la tienda (Capítulo 1, Temporada 7) y 10 skins se van el 19 de noviembre a las 6 PM (CDMX).\n¿Vas a comprar hoy? Usa el código BAD en la tienda de objetos.\n#Fortnite #TiendaFortnite #FortniteTienda",
+ "claims": [
+  {
+   "text": "Lote de Lil' Uzi Vert: 3200 V-Bucks, regular 7100",
+   "source": "shop.json",
+   "match": [
+    "Lote de Lil' Uzi Vert",
+    "\"finalPrice\": 3200",
+    "\"regularPrice\": 7100"
+   ]
+  },
+  {
+   "text": "Destructor de las profundidades: Capítulo 1, Temporada 7",
+   "source": "history.json",
+   "match": [
+    "Destructor de las profundidades",
+    "\"chapter\": 1",
+    "\"season\": 7"
+   ]
+  },
+  {
+   "text": "1 days since last in the shop",
+   "source": "history.json",
+   "match": [
+    "\"gapDays\": 1"
+   ]
+  },
+  {
+   "text": "10 outfits leave at the next reset",
+   "source": "plan.json",
+   "match": [
+    "\"count\": 10"
+   ]
+  }
+ ],
+ "text": [
+  "LIL UZI VERT",
+  "DESTRUCTOR DE LAS PROFUNDIDADES",
+  "AVA",
+  "OFERTA",
+  "OG",
+  "ÚLTIMO DÍA",
+  "TIENDA DE HOY / 19 NOV",
+  "1 · OFERTA",
+  "LIL UZI VERT DE GIRA",
+  "3200",
+  "7100",
+  "LOTE DE LIL' UZI VERT · SE VA EL 12 DIC",
+  "-55% / AHORRAS 3900",
+  "2 · SKIN OG",
+  "CAPÍTULO 1 · TEMPORADA 7",
+  "3 · ÚLTIMO DÍA",
+  "DISEÑADOR DE ENVOLTORIOS",
+  "KENJI",
+  "KUNO",
+  "ARMONIZADORA",
+  "CURIOSA",
+  "+4 MÁS",
+  "SE VAN EL 19 NOV, 6 PM",
+  "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+  "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+  "ESTA ES LA",
+  "TIENDA DE OBJETOS",
+  "DE HOY,",
+  "19 DE NOVIEMBRE.",
+  "¡TRES COSAS ANTES",
+  "DE GASTAR UN",
+  "SOLO PAVO!",
+  "EL LOTE DE",
+  "LIL' UZI VERT:",
+  "3200 PAVOS,",
+  "EN VEZ DE",
+  "7100.",
+  "¡TE AHORRAS 3900!",
+  "DESTRUCTOR DE LAS",
+  "PROFUNDIDADES ESTÁ EN",
+  "LA TIENDA.",
+  "ES DEL CAPÍTULO",
+  "1,",
+  "TEMPORADA 7.",
+  "Y DIEZ SKINS",
+  "ESTÁN EN SU",
+  "ÚLTIMO DÍA,",
+  "CUATRO DE ELLAS",
+  "ÉPICAS.",
+  "¿VAS A COMPRAR",
+  "ALGO HOY?",
+  "USA EL CÓDIGO",
+  "BAD EN LA",
+  "TIENDA DE OBJETOS.",
+  "LE AYUDA MUCHÍSIMO",
+  "AL CANAL.",
+  "¡GRACIAS POR VER!",
+  "SÍGUENOS PARA MÁS",
+  "CONTENIDO DIARIO.",
+  "#EPICPARTNER",
+  "LA TIENDITA BAD"
+ ]
+}
