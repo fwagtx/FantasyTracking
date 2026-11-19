@@ -116,8 +116,10 @@ def tiktok_ok(when, kind, words=""):
 
 
 def post_calls(when, video, cover_url, c, networks=None, long=False, kind="short", spoken=""):
-    """One ready createScheduledPost call per network. Covers go only where Metricool takes them
-    (TikTok, Instagram Reels, Facebook Reels); YouTube gets one only for long videos on a verified channel.
+    """One ready createScheduledPost call per network. Covers go everywhere Metricool takes them: TikTok, Instagram
+    Reels, Facebook Reels and YouTube, Shorts included (owner, 2026-11-19: on YouTube the thumbnails "still look very bad",
+    because the Shorts never got a cover and YouTube picked a frame; Metricool accepts one for Shorts and YouTube shows it
+    where the channel has Shorts thumbnails). Threads has no cover.
     TikTok only where TIKTOK_RULE and TIKTOK_RISKY allow it, even when --networks names it; spoken = the voice's lines."""
     iso, local = when.isoformat(timespec="seconds"), when.strftime("%Y-%m-%dT%H:%M:%S")
     base = {"autoPublish": True, "draft": False, "descendants": [], "firstCommentText": "", "hasNotReadNotes": False, "mediaAltText": [],
@@ -131,7 +133,7 @@ def post_calls(when, video, cover_url, c, networks=None, long=False, kind="short
                       "instagramData": {"type": "REEL", "showReelOnFeed": True, "isAiGenerated": False}},
         "facebook": {**base, **thumb, "providers": [{"network": "facebook"}], "text": c["facebook"],
                      "facebookData": {"type": "REEL", "title": c["facebookTitle"]}},
-        "youtube": {**base, "providers": [{"network": "youtube"}], "text": c["youtube"],
+        "youtube": {**base, **thumb, "providers": [{"network": "youtube"}], "text": c["youtube"],
                     "youtubeData": {"title": c["youtubeTitle"], "type": "video" if long else "short", "privacy": "public", "tags": c["tags"], "category": "GAMING",
                                     "madeForKids": False, "isAiGeneratedContent": False}},
         "threads": {**base, "providers": [{"network": "threads"}], "text": c.get("threads") or c["facebook"], "threadsData": {}},

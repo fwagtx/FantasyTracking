@@ -48,7 +48,8 @@ A skipped slot costs nothing; a wrong post costs the channel.
    `TIKTOK_RISKY`; the other networks still get it). Never reword a script just to get it onto TikTok.
 11. **Covers and thumbnails** (owner, 2026-11-18, three rounds: the frame covers "look so ai"; the first designed ones
    "give off very aish"; then "still looks ai from the coloring. and promote our code in the thumbnail but make it subtle"):
-   ship makes the cover with `auto/thumbs.py` (layouts in `video/thumb.html`). All colour comes from Epic's art: the
+   ship makes the cover with `auto/thumbs.py` (layouts in `video/thumb.html`) and sends it to TikTok, Instagram, Facebook
+   and YouTube, Shorts included (owner, 2026-11-19: YouTube still showed random frames). All colour comes from Epic's art: the
    background is the cover's own skin render or map, blown up, blurred and darkened, graded down and given film grain;
    strips and banners are near-black; one muted accent. A shop listing shows its in-game render with the shop's
    name-and-price strip (V-buck icon, old price struck through); a place, the official map with one red circle; a quiz
