@@ -1,0 +1,72 @@
+{
+  "video": "latienditabad-2026-11-27-adivina-temporada.mp4",
+  "checked_utc": "2026-11-20T17:17:10Z",
+  "verdict": "READY TO POST",
+  "results": [
+    {
+      "check": "1. Facts",
+      "status": "PASS",
+      "detail": "3/3 claims verified against saved official data",
+      "items": [
+        {
+          "claim": "The Rogue LAROI: Capítulo 4, Temporada 1",
+          "result": "PASS",
+          "why": "matched in Character_SunBurstAlt.json"
+        },
+        {
+          "claim": "Gruñidos: Capítulo 1, Temporada 6",
+          "result": "PASS",
+          "why": "matched in CID_264_Athena_Commando_M_AnimalJackets.json"
+        },
+        {
+          "claim": "Helsie bruja del verano: Capítulo 7, Temporada 3",
+          "result": "PASS",
+          "why": "matched in Character_VibrantShell.json"
+        }
+      ]
+    },
+    {
+      "check": "2. Spelling and grammar",
+      "status": "PASS",
+      "detail": "36 distinct words checked; code written as BAD in all 2 mentions",
+      "items": []
+    },
+    {
+      "check": "3. Frames",
+      "status": "PASS",
+      "detail": "No black frames, no frozen stretches over 1.5 s. Contact sheet (1 frame/s) reviewed by eye: contact-sheet.png",
+      "items": []
+    },
+    {
+      "check": "4. Audio",
+      "status": "PASS",
+      "detail": "Integrated -14.2 LUFS, true peak -2.0 dBTP, no clipping, no silence gaps. All sound is original synthesis (no game rips, no copyrighted music). No voiceover in this cut.",
+      "items": []
+    },
+    {
+      "check": "5. Specs and safe zones",
+      "status": "PASS",
+      "detail": "1080x1920 h264 60 fps, aac 48000 Hz, 25.4s. Fits TikTok, Reels, Shorts, X, Facebook, Threads. Every on-screen text box sampled 4x/s stays out of the top bar, bottom caption area and button column.",
+      "items": []
+    },
+    {
+      "check": "6. Disclosure and wording",
+      "status": "PASS",
+      "detail": "#EpicPartner is the first hashtag in caption line 1 and on screen in every sampled frame from 0.0s. No discount, giveaway, endorsement or filler-CTA wording.",
+      "items": []
+    },
+    {
+      "check": "7. Would a fan stop scrolling? Made by a person?",
+      "status": "PASS",
+      "detail": "Frame 1: 'ADIVINA LA TEMPORADA · 3 SKINS · SIN TRAMPA' with the three face-down cards (The Rogue LAROI, Gruñidos, Helsie bruja del verano, names readable). Each round: card 'n/3', '¿QUÉ TEMPORADA?', then the yellow answer tag: The Rogue LAROI 'CAPÍTULO 4 · TEMPORADA 1', Gruñidos 'CAPÍTULO 1 · TEMPORADA 6', Helsie bruja del verano 'CAPÍTULO 7 · TEMPORADA 3'. All three match Epic's cosmetics data in sources/ (introduction chapter/season). '¿CUÁNTAS ACERTASTE?', code card 'CÓDIGO BAD · Tienda de objetos → Apoya a un creador · #EpicPartner', then '¡GRACIAS POR VER! Síguenos para más contenido diario' (checked 12.6, 16.5, 21.0 s and the last frame). Nothing overlaps or is cut off. Cover checked: The Rogue LAROI render, '¿DE QUÉ TEMPORADA?', 'CAPÍTULO ? · TEMPORADA ?' (no answer given away), 'Código de creador BAD' small at the top. 1080x1920, 25.4 s.",
+      "items": []
+    },
+    {
+      "check": "8. Owner approval",
+      "status": "PASS",
+      "detail": "Standing approval for autopilot (owner, 2026-10-28): posts when checks 1-7 all PASS.",
+      "items": []
+    }
+  ],
+  "caption": "#EpicPartner Adivina la temporada 👀 Solo los verdaderos OG aciertan las 3\n¿Cuántas acertaste? 👇\nUsa el código BAD en la tienda de objetos 💛\n#fortnite #fortniteog #adivinalatemporada"
+}

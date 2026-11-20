@@ -469,6 +469,19 @@
    "format": "Tienda Pirata diaria (cuenta)",
    "topic": "Quedan 16 días · dato: modos",
    "folder": "video/auto/2026-11-19-pirata-cuenta"
+  },
+  {
+   "date": "2026-11-27",
+   "slot": "20:30",
+   "format": "Adivina la temporada",
+   "topic": "The Rogue LAROI (C4 T1), Gruñidos (C1 T6), Helsie bruja del verano (C7 T3)",
+   "folder": "video/auto/2026-11-27-adivina-temporada",
+   "ids": [
+    "Character_SunBurstAlt",
+    "CID_264_Athena_Commando_M_AnimalJackets",
+    "Character_VibrantShell"
+   ],
+   "note": "Every map place has had its '¿Dónde está?' (Henry, Nov 19, was the last), so this 8:30 PM slot, a '¿Dónde está?' day in the 2:1 rotation, got the other evergreen format."
   }
  ]
 }

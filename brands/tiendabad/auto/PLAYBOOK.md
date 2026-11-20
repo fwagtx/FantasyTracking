@@ -231,6 +231,10 @@ week's news and the Tienda Pirata guide while the season runs. 4–10 minutes, 1
   edited"). If Metricool refuses the thumbnail, get a fresh link and retry once; if it still refuses, schedule
   nothing and tell the owner.
 - After scheduling, getScheduledPosts must show a `videoThumbnailUrl` on the YouTube post before `done`.
+- YouTube can still refuse the image when the video goes live: the post then reads "published with some warnings:
+  Could not upload video thumbnail" (seen on a Short on 2026-11-19). Only YouTube Studio can fix a live video, so the
+  first run that sees it on a long video (DAY run step 9 at the latest) sends the owner `out/thumb.jpg` and the
+  video's Studio link (`https://studio.youtube.com/video/<id>/edit`) right away.
 
 ## If something breaks
 

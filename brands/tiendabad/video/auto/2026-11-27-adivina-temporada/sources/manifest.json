@@ -1,0 +1,23 @@
+{
+ "via": "fortnite-api.com (mirror of Epic's cosmetics data, es-419)",
+ "files": [
+  {
+   "file": "Character_SunBurstAlt.json",
+   "source": "Epic cosmetics data for The Rogue LAROI (es-419)",
+   "url": "https://fortnite-api.com/v2/cosmetics/br/Character_SunBurstAlt?language=es-419",
+   "fetched_utc": "2026-11-20T17:12:00Z"
+  },
+  {
+   "file": "CID_264_Athena_Commando_M_AnimalJackets.json",
+   "source": "Epic cosmetics data for Gruñidos (es-419)",
+   "url": "https://fortnite-api.com/v2/cosmetics/br/CID_264_Athena_Commando_M_AnimalJackets?language=es-419",
+   "fetched_utc": "2026-11-20T17:12:00Z"
+  },
+  {
+   "file": "Character_VibrantShell.json",
+   "source": "Epic cosmetics data for Helsie bruja del verano (es-419)",
+   "url": "https://fortnite-api.com/v2/cosmetics/br/Character_VibrantShell?language=es-419",
+   "fetched_utc": "2026-11-20T17:12:00Z"
+  }
+ ]
+}
