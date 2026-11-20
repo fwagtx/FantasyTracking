@@ -218,8 +218,19 @@ its date, media and `"draft": false` once its rebuild passes).
 
 Mon "La tienda de la semana" (from `shop/archive/`), Wed a map tour or "todos los X del mapa" (map.json), Sat the
 week's news and the Tienda Pirata guide while the season runs. 4–10 minutes, 1920x1080, YouTube only
-(`make_long.py`, once it is in this folder; until then skip and say so). post.json carries the YouTube thumbnail
- spec, `thumb` (rule 11); look at `out/thumb.jpg` before scheduling.
+(`make_long.py`, once it is in this folder; until then skip and say so).
+
+**Thumbnail, every long video** (owner, 2026-11-19: "very important for our channels growth and engagement"):
+- post.json carries the spec, `thumb` (rule 11). Start from the closest of the five in `video/long/*/post.json`:
+  `ytmap` for map videos, `ytskins` with three in-game renders for the shop and the news. Two to four huge words
+  that say what the video is, a short tag, the real subject; nothing the video doesn't show.
+- `make_long.py ship` renders it, refuses anything but a 1280x720 JPG under 2 MB, and writes `qa/thumb-small.png`
+  at the size YouTube's home feed shows it. Look at both: the big words must read in the small one.
+- The YouTube post always carries `videoThumbnailUrl`. Never schedule a long video without it: once a video is
+  live, Metricool can't change its thumbnail (2026-11-19: "This post is already published and can no longer be
+  edited"). If Metricool refuses the thumbnail, get a fresh link and retry once; if it still refuses, schedule
+  nothing and tell the owner.
+- After scheduling, getScheduledPosts must show a `videoThumbnailUrl` on the YouTube post before `done`.
 
 ## If something breaks
 

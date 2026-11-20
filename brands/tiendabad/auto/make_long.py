@@ -122,6 +122,7 @@ def ship():
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     import thumbs
     thumbs.render({"w": 1280, "h": 720, **c["thumb"]}, os.path.join(out, "thumb.jpg"))
+    check_thumb(os.path.join(out, "thumb.jpg"), os.path.join(d, "qa", "thumb-small.png"), FF)
     video = run([sys.executable, STORE, "put", os.path.join(out, "video.mp4"), f"{slug}/video.mp4"], BRAND, quiet=True).strip()
     thumb = run([sys.executable, STORE, "put", os.path.join(out, "thumb.jpg"), f"{slug}/thumb.jpg"], BRAND, quiet=True).strip()
     iso, local = when.isoformat(timespec="seconds"), when.strftime("%Y-%m-%dT%H:%M:%S")
@@ -132,7 +133,29 @@ def ship():
     calls = [{"network": "youtube", "blogId": BLOG, "date": iso, "info": info, "match": c["youtubeTitle"]}]
     write_posts(os.path.join(d, "posts.json"), slug, when, calls)
     print(json.dumps({"verdict": verdict, "post_at": mx_label(when), "posts": os.path.relpath(os.path.join(d, "posts.json"), BRAND)}, indent=1))
-    print("NEXT: schedule it with videoThumbnailUrl (if Metricool answers VIDEO_THUMBNAIL_NOT_APPLICABLE, schedule again without it), then run done.")
+    print(f"thumbnail: {os.path.relpath(os.path.join(out, 'thumb.jpg'), BRAND)} (and {os.path.relpath(os.path.join(d, 'qa', 'thumb-small.png'), BRAND)}, "
+          "the size YouTube's home feed shows it); look at both before scheduling (rule 11)")
+    print("NEXT: schedule it exactly as posts.json says, videoThumbnailUrl included. Never schedule a long video without its thumbnail "
+          "(owner, 2026-11-19: 'very important for our channels growth and engagement'; once it is live, Metricool can't change it). "
+          f"If Metricool refuses the thumbnail, get a fresh link (python3 brands/_shared/store.py link {slug}/thumb.jpg) and retry once; "
+          "if it still refuses, schedule nothing and tell the owner. Then getScheduledPosts: the YouTube post must carry a videoThumbnailUrl; then run done.")
+
+
+def check_thumb(path, preview, ff):
+    """YouTube takes a custom thumbnail as a 1280x720 JPG under 2 MB; the preview is the size the home feed shows it."""
+    data = open(path, "rb").read()
+    size, i = None, 2
+    while i + 9 < len(data) and size is None:
+        if data[i] != 0xFF:
+            i += 1
+        elif data[i + 1] in (0xC0, 0xC1, 0xC2):
+            size = (int.from_bytes(data[i + 7:i + 9], "big"), int.from_bytes(data[i + 5:i + 7], "big"))
+        else:
+            i += 2 + int.from_bytes(data[i + 2:i + 4], "big")
+    if size != (1280, 720) or len(data) >= 2 * 1024 * 1024:
+        raise SystemExit(f"STOP: the thumbnail must be a 1280x720 JPG under 2 MB (got {size}, {len(data)} bytes).")
+    os.makedirs(os.path.dirname(preview), exist_ok=True)
+    run([ff, "-y", "-loglevel", "error", "-i", path, "-vf", "scale=320:180", preview], os.path.dirname(path), quiet=True)
 
 
 def done():
