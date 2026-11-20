@@ -482,6 +482,27 @@
     "Character_VibrantShell"
    ],
    "note": "Every map place has had its '¿Dónde está?' (Henry, Nov 19, was the last), so this 8:30 PM slot, a '¿Dónde está?' day in the 2:1 rotation, got the other evergreen format."
+  },
+  {
+   "date": "2026-11-20",
+   "slot": "15:45",
+   "format": "Tienda Pirata diaria (sevan)",
+   "topic": "Se va hoy (2026-11-20): Lote Kaiju N.º 8, 3800 pavos (normalmente 7700)",
+   "folder": "video/auto/2026-11-20-pirata-sevan"
+  },
+  {
+   "date": "2026-11-20",
+   "slot": "17:15",
+   "format": "Tienda Pirata diaria (caros)",
+   "topic": "Lo nuevo más caro de hoy (2026-11-20): Lote Cowboy Bebop 3400, Lote Kim Kardashian 3000, Lote Corazones de Piedra 2500, Lote The Kid LAROI 2400, Lote Excursionista rebelde 1500 (empata con Lote de Amos del skatepark)",
+   "folder": "video/auto/2026-11-20-pirata-caros"
+  },
+  {
+   "date": "2026-11-20",
+   "slot": "19:30",
+   "format": "Tienda Pirata diaria (cuenta)",
+   "topic": "Quedan 15 días · dato: Horas del Tesoro 2026-11-21",
+   "folder": "video/auto/2026-11-20-pirata-cuenta"
   }
  ]
 }

@@ -1,0 +1,2028 @@
+{
+ "date": "2026-11-20T00:00:00Z",
+ "entries": [
+  {
+   "regularPrice": 6600,
+   "finalPrice": 3400,
+   "devName": "[VIRTUAL]1 x Faye Valentine, 1 x Spike Spiegel, 1 x Jukebox Bop, 1 x Lil' Swordfish II, 1 x Red Tail Reaver, 1 x Swordfish II Slasher, 1 x Multi-Purpose Phone, 1 x Roses For Julia, 1 x Valentine Blue for -1 MtxCurrency",
+   "offerId": "v2:/d1457119b8331bbe79b21eca7033b036cf4ca7076cfa1f22985b279a5d12f715",
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-23T23:59:59.999Z",
+   "bundle": {
+    "name": "Lote Cowboy Bebop",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/68e33d6957e3dba5/renderimage_0.png"
+   },
+   "banner": {
+    "value": "3200 monedas V de descuento",
+    "intensity": "Low",
+    "backendValue": "AmountOff"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -1,
+   "layoutId": "CowboyBebop.99",
+   "layout": {
+    "id": "CowboyBebop",
+    "name": "Cowboy Bebop",
+    "index": 38,
+    "rank": 195,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "6e03d8ff",
+    "color2": "fee1faff",
+    "color3": "faadffff",
+    "textBackgroundColor": "8235dcff"
+   },
+   "tileBackgroundMaterial": "ShopTile_SketchedBorder",
+   "tileSize": "Size_2_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_KneeLensStudyBench_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S34/DAv2_Bundle_Featured_KneeLensStudyBench",
+   "newDisplayAsset": {
+    "id": "DAv2_Bundle_Featured_KneeLensStudyBench",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__68e33d6957e3dba5_a2efafbd47dd28ea.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/68e33d6957e3dba5/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__68e33d6957e3dba5_40aa49c89b2ec469.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/68e33d6957e3dba5/renderimage_1.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Character_KneeLens",
+     "name": "Faye Valentine",
+     "description": "Una cazarrecompensas con un pasado olvidado que adora los juegos de azar.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "Cowboy Bebop",
+      "text": "Pieza del conjunto Cowboy Bebop.",
+      "backendValue": "AnotherMeeting"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "2",
+      "text": "Introducido en Capítulo 6, Temporada 2.",
+      "backendValue": 34
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_kneelens/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_kneelens/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_kneelens/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Material",
+       "type": "gafas",
+       "options": [
+        {
+         "tag": "Mat1",
+         "name": "no",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_kneelens/variants/material/mat1.png"
+        },
+        {
+         "tag": "Mat2",
+         "name": "Sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_kneelens/variants/material/mat2.png"
+        }
+       ]
+      }
+     ],
+     "showcaseVideo": "gYa2KW0kOOg",
+     "added": "2025-02-27T00:00:00Z"
+    },
+    {
+     "id": "Character_StudyBench",
+     "name": "Spike Spiegel",
+     "description": "Un cazarrecompensas abordo de la Bebop y un experto en jeet kune do.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "Cowboy Bebop",
+      "text": "Pieza del conjunto Cowboy Bebop.",
+      "backendValue": "AnotherMeeting"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "2",
+      "text": "Introducido en Capítulo 6, Temporada 2.",
+      "backendValue": 34
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_studybench/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_studybench/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_studybench/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Material",
+       "type": "Gafas",
+       "options": [
+        {
+         "tag": "Mat1",
+         "name": "No",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_studybench/variants/material/mat1.png"
+        },
+        {
+         "tag": "Mat2",
+         "name": "Sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_studybench/variants/material/mat2.png"
+        }
+       ]
+      }
+     ],
+     "showcaseVideo": "KA_iT8SMHkI",
+     "added": "2025-02-27T00:00:00Z"
+    },
+    {
+     "id": "EID_KneeLens",
+     "name": "Ritmo Bop",
+     "description": "Disfruta de la música antes de abandonar la escena.",
+     "type": {
+      "value": "emote",
+      "displayValue": "Gesto",
+      "backendValue": "AthenaDance"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "Cowboy Bebop",
+      "text": "Pieza del conjunto Cowboy Bebop.",
+      "backendValue": "AnotherMeeting"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "2",
+      "text": "Introducido en Capítulo 6, Temporada 2.",
+      "backendValue": 34
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/eid_kneelens/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/eid_kneelens/icon.png"
+     },
+     "showcaseVideo": "V0Zq9KV0Q4Q",
+     "added": "2025-02-27T00:00:00Z"
+    },
+    {
+     "id": "EID_StudyBench",
+     "name": "Mini-Swordfish II",
+     "description": "Rediseñado para un minidespliegue.",
+     "type": {
+      "value": "emote",
+      "displayValue": "Gesto",
+      "backendValue": "AthenaDance"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "Cowboy Bebop",
+      "text": "Pieza del conjunto Cowboy Bebop.",
+      "backendValue": "AnotherMeeting"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "2",
+      "text": "Introducido en Capítulo 6, Temporada 2.",
+      "backendValue": 34
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/eid_studybench/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/eid_studybench/icon.png"
+     },
+     "showcaseVideo": "OZccERdY9Kc",
+     "added": "2025-02-27T00:00:00Z"
+    },
+    {
+     "id": "Pickaxe_KneeLens",
+     "name": "Mazo de la Red Tail",
+     "description": "Una réplica de la nave personal de Faye, diseñada para el combate cuerpo a cuerpo.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Cowboy Bebop",
+      "text": "Pieza del conjunto Cowboy Bebop.",
+      "backendValue": "AnotherMeeting"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "2",
+      "text": "Introducido en Capítulo 6, Temporada 2.",
+      "backendValue": 34
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_kneelens/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_kneelens/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_kneelens/featured.png"
+     },
+     "showcaseVideo": "krjZuBN2Rd8",
+     "added": "2025-02-27T00:00:00Z"
+    },
+    {
+     "id": "Pickaxe_StudyBench",
+     "name": "Segador de la Swordfish II",
+     "description": "Una réplica de la nave favorita de Spike, reconstruida para el combate cuerpo a cuerpo.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Cowboy Bebop",
+      "text": "Pieza del conjunto Cowboy Bebop.",
+      "backendValue": "AnotherMeeting"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "2",
+      "text": "Introducido en Capítulo 6, Temporada 2.",
+      "backendValue": 34
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_studybench/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_studybench/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_studybench/featured.png"
+     },
+     "showcaseVideo": "5FrkWvNs0OY",
+     "added": "2025-02-27T00:00:00Z"
+    },
+    {
+     "id": "Backpack_KneeLens",
+     "name": "Teléfono multiusos",
+     "description": "Un teléfono que conecta con la tripulación de la Bebop.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Cowboy Bebop",
+      "text": "Pieza del conjunto Cowboy Bebop.",
+      "backendValue": "AnotherMeeting"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "2",
+      "text": "Introducido en Capítulo 6, Temporada 2.",
+      "backendValue": 34
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_kneelens/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_kneelens/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_kneelens/featured.png"
+     },
+     "added": "2025-02-27T00:00:00Z"
+    },
+    {
+     "id": "Backpack_StudyBench",
+     "name": "Rosas para Julia",
+     "description": "Despídete con flores.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Cowboy Bebop",
+      "text": "Pieza del conjunto Cowboy Bebop.",
+      "backendValue": "AnotherMeeting"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "2",
+      "text": "Introducido en Capítulo 6, Temporada 2.",
+      "backendValue": 34
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_studybench/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_studybench/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_studybench/featured.png"
+     },
+     "showcaseVideo": "ruLT1R_m80Y",
+     "added": "2025-02-27T00:00:00Z"
+    },
+    {
+     "id": "Wrap_KneeLens",
+     "name": "Azul Valentine",
+     "description": "Muestra tu estilo.",
+     "type": {
+      "value": "wrap",
+      "displayValue": "Papel",
+      "backendValue": "AthenaItemWrap"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Cowboy Bebop",
+      "text": "Pieza del conjunto Cowboy Bebop.",
+      "backendValue": "AnotherMeeting"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "2",
+      "text": "Introducido en Capítulo 6, Temporada 2.",
+      "backendValue": 34
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/wrap_kneelens/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/wrap_kneelens/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/wrap_kneelens/featured.png"
+     },
+     "showcaseVideo": "EJ4IqM4cIjg",
+     "added": "2025-02-27T00:00:00Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 5900,
+   "finalPrice": 3000,
+   "devName": "[VIRTUAL]1 x Iconic Kim Kardashian, 1 x Ring Light To Go, 1 x Kim Kardashian, 1 x Kim's Kit, 1 x Full Beat Brush, 1 x Bag Basher, 1 x Slurp the Internet, 1 x Diamond Drop, 1 x Private Jet for -1 MtxCurrency",
+   "offerId": "v2:/157b1df898f498ad48f6607a8bc65afddd16f382b9f890e7b281a6cb80438dca",
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-24T23:59:59.999Z",
+   "bundle": {
+    "name": "Lote Kim Kardashian",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/962e064aee2d8bb5/renderimage_0.png"
+   },
+   "banner": {
+    "value": "2900 monedas V de descuento",
+    "intensity": "Low",
+    "backendValue": "AmountOff"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -1,
+   "layoutId": "QuicheLorraine.99",
+   "layout": {
+    "id": "QuicheLorraine",
+    "name": "Kim Kardashian",
+    "index": 28,
+    "rank": 193,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "737373ff",
+    "color3": "262626ff",
+    "textBackgroundColor": "252525ff"
+   },
+   "tileBackgroundMaterial": "ShopTile_Glitter",
+   "tileSize": "Size_2_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_QuicheLorraineLime_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S39/DAv2_Bundle_Featured_QuicheLorraineLime",
+   "newDisplayAsset": {
+    "id": "DAv2_Bundle_Featured_QuicheLorraineLime",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__962e064aee2d8bb5_297d600f3d2f2f0b.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/962e064aee2d8bb5/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__962e064aee2d8bb5_b45a160c27802d0e.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/962e064aee2d8bb5/renderimage_1.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__962e064aee2d8bb5_682e83bbbd72501c.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/962e064aee2d8bb5/renderimage_2.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__962e064aee2d8bb5_0ec838ebe5a7ad3b.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/962e064aee2d8bb5/renderimage_3.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__962e064aee2d8bb5_cd944c4595e78176.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/962e064aee2d8bb5/renderimage_4.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Character_QuicheLorraineLime",
+     "name": "Kim Kardashian icónica",
+     "description": "Mamá, millonaria e ídolo.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "1",
+      "text": "Introducido en Capítulo 7, Temporada 1.",
+      "backendValue": 39
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_quichelorrainelime/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_quichelorrainelime/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_quichelorrainelime/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Parts",
+       "type": "estilo",
+       "options": [
+        {
+         "tag": "Stage1",
+         "name": "Escote redondo",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_quichelorrainelime/variants/parts/stage1.png"
+        },
+        {
+         "tag": "Stage2",
+         "name": "Cuello alto",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_quichelorrainelime/variants/parts/stage2.png"
+        },
+        {
+         "tag": "Stage3",
+         "name": "Halter",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_quichelorrainelime/variants/parts/stage3.png"
+        },
+        {
+         "tag": "Stage4",
+         "name": "Corset",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_quichelorrainelime/variants/parts/stage4.png"
+        }
+       ]
+      },
+      {
+       "channel": "Material",
+       "type": "guantes",
+       "options": [
+        {
+         "tag": "Mat1",
+         "name": "sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_quichelorrainelime/variants/material/mat1.png"
+        },
+        {
+         "tag": "Mat2",
+         "name": "no",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_quichelorrainelime/variants/material/mat2.png"
+        }
+       ]
+      },
+      {
+       "channel": "Particle",
+       "type": "cabello",
+       "options": [
+        {
+         "tag": "Particle1",
+         "name": "Peinado casual",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_quichelorrainelime/variants/particle/particle1.png"
+        },
+        {
+         "tag": "Particle2",
+         "name": "Castaño revuelto",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_quichelorrainelime/variants/particle/particle2.png"
+        },
+        {
+         "tag": "Particle3",
+         "name": "Rubio veraniego",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_quichelorrainelime/variants/particle/particle3.png"
+        }
+       ]
+      },
+      {
+       "channel": "Emissive",
+       "type": "gafas",
+       "options": [
+        {
+         "tag": "Emissive1",
+         "name": "no",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_quichelorrainelime/variants/emissive/emissive1.png"
+        },
+        {
+         "tag": "Emissive2",
+         "name": "sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_quichelorrainelime/variants/emissive/emissive2.png"
+        }
+       ]
+      }
+     ],
+     "added": "2025-12-12T10:05:30Z"
+    },
+    {
+     "id": "Backpack_QuicheLorraineLime",
+     "name": "Aro de luz portátil",
+     "description": "Nunca te pierdas una selfi.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Kim Kardashian",
+      "text": "Pieza del conjunto Kim Kardashian.",
+      "backendValue": "LightRest"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "1",
+      "text": "Introducido en Capítulo 7, Temporada 1.",
+      "backendValue": 39
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_quichelorrainelime/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_quichelorrainelime/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_quichelorrainelime/featured.png"
+     },
+     "added": "2025-12-12T10:05:30Z"
+    },
+    {
+     "id": "Character_QuicheLorraineCrisp",
+     "name": "Kim Kardashian",
+     "description": "Una ídolo impasible y superior.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "1",
+      "text": "Introducido en Capítulo 7, Temporada 1.",
+      "backendValue": 39
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_quichelorrainecrisp/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_quichelorrainecrisp/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_quichelorrainecrisp/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Parts",
+       "type": "Abrigo",
+       "options": [
+        {
+         "tag": "Stage1",
+         "name": "Sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_quichelorrainecrisp/variants/parts/stage1.png"
+        },
+        {
+         "tag": "Stage2",
+         "name": "No",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_quichelorrainecrisp/variants/parts/stage2.png"
+        }
+       ]
+      }
+     ],
+     "added": "2025-12-12T10:05:30Z"
+    },
+    {
+     "id": "Backpack_QuicheLorraineCrisp",
+     "name": "Kit de Kim",
+     "description": "Deslúmbralos a todos donde sea que estés.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Kim Kardashian",
+      "text": "Pieza del conjunto Kim Kardashian.",
+      "backendValue": "LightRest"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "1",
+      "text": "Introducido en Capítulo 7, Temporada 1.",
+      "backendValue": 39
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_quichelorrainecrisp/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_quichelorrainecrisp/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_quichelorrainecrisp/featured.png"
+     },
+     "added": "2025-12-12T10:05:30Z"
+    },
+    {
+     "id": "Pickaxe_QuicheLorraineCrisp",
+     "name": "Brocha de batalla",
+     "description": "Todo listo para la farándula.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Kim Kardashian",
+      "text": "Pieza del conjunto Kim Kardashian.",
+      "backendValue": "LightRest"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "1",
+      "text": "Introducido en Capítulo 7, Temporada 1.",
+      "backendValue": 39
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_quichelorrainecrisp/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_quichelorrainecrisp/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_quichelorrainecrisp/featured.png"
+     },
+     "added": "2025-12-12T10:05:30Z"
+    },
+    {
+     "id": "Pickaxe_QuicheLorraineLime",
+     "name": "Cartera chic",
+     "description": "¡No seas grosera!",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Kim Kardashian",
+      "text": "Pieza del conjunto Kim Kardashian.",
+      "backendValue": "LightRest"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "1",
+      "text": "Introducido en Capítulo 7, Temporada 1.",
+      "backendValue": 39
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_quichelorrainelime/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_quichelorrainelime/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_quichelorrainelime/featured.png"
+     },
+     "added": "2025-12-12T10:05:30Z"
+    },
+    {
+     "id": "EID_QuicheLorraineCrisp",
+     "name": "Rompe internet",
+     "description": "La mejor forma de servir.",
+     "type": {
+      "value": "emote",
+      "displayValue": "Gesto",
+      "backendValue": "AthenaDance"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Kim Kardashian",
+      "text": "Pieza del conjunto Kim Kardashian.",
+      "backendValue": "LightRest"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "1",
+      "text": "Introducido en Capítulo 7, Temporada 1.",
+      "backendValue": 39
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/eid_quichelorrainecrisp/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/eid_quichelorrainecrisp/icon.png"
+     },
+     "added": "2025-12-12T10:05:30Z"
+    },
+    {
+     "id": "EID_QuicheLorraineLime",
+     "name": "Lágrimas de lujo",
+     "description": "Kim, hay gente que se está muriendo.",
+     "type": {
+      "value": "emote",
+      "displayValue": "Gesto",
+      "backendValue": "AthenaDance"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Kim Kardashian",
+      "text": "Pieza del conjunto Kim Kardashian.",
+      "backendValue": "LightRest"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "1",
+      "text": "Introducido en Capítulo 7, Temporada 1.",
+      "backendValue": 39
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/eid_quichelorrainelime/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/eid_quichelorrainelime/icon.png"
+     },
+     "added": "2025-12-12T10:05:30Z"
+    },
+    {
+     "id": "Glider_QuicheLorraineLime",
+     "name": "Jet privado",
+     "description": "El mundo te espera.",
+     "type": {
+      "value": "glider",
+      "displayValue": "Planeador",
+      "backendValue": "AthenaGlider"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Kim Kardashian",
+      "text": "Pieza del conjunto Kim Kardashian.",
+      "backendValue": "LightRest"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "1",
+      "text": "Introducido en Capítulo 7, Temporada 1.",
+      "backendValue": 39
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/glider_quichelorrainelime/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/glider_quichelorrainelime/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/glider_quichelorrainelime/featured.png"
+     },
+     "added": "2025-12-12T10:05:30Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 5300,
+   "finalPrice": 2500,
+   "devName": "[VIRTUAL]1 x Love Ranger, 1 x Love Wings, 1 x Stoneheart, 1 x Wings of Love, 1 x Tat Axe, 1 x Cupid's Daggers, 1 x True Love for -1 MtxCurrency",
+   "offerId": "v2:/5bd94d7f69dc08a0745764d185405a62513e2e13af1b04bc77b021a240c95850",
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-21T23:59:59.999Z",
+   "bundle": {
+    "name": "Lote Corazones de Piedra",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/8a06bf12fe56bb18/renderimage_0.png"
+   },
+   "banner": {
+    "value": "2800 monedas V de descuento",
+    "intensity": "Low",
+    "backendValue": "AmountOff"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -2,
+   "layoutId": "BR112026.97",
+   "layout": {
+    "id": "BR112026",
+    "name": "Energía de protagonista ",
+    "index": 4,
+    "rank": 178,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "290f07ff",
+    "color3": "824100ff",
+    "textBackgroundColor": "824100ff"
+   },
+   "tileSize": "Size_3_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_Cupid_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/DAv2_Bundle_Featured_Cupid",
+   "newDisplayAsset": {
+    "id": "DAv2_Bundle_Featured_Cupid",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__8a06bf12fe56bb18_6cd209553bbfc98f.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/8a06bf12fe56bb18/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__8a06bf12fe56bb18_c5753a877ca2e13d.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/8a06bf12fe56bb18/renderimage_1.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "CID_070_Athena_Commando_M_Cupid",
+     "name": "Comando del amor",
+     "description": "Apunta al corazón.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "legendary",
+      "displayValue": "Legendario",
+      "backendValue": "EFortRarity::Legendary"
+     },
+     "set": {
+      "value": "Corazones campales",
+      "text": "Pieza del conjunto Corazones campales.",
+      "backendValue": "RoyaleHearts"
+     },
+     "introduction": {
+      "chapter": "1",
+      "season": "2",
+      "text": "Introducido en Capítulo 1, Temporada 2.",
+      "backendValue": 2
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/cid_070_athena_commando_m_cupid/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/cid_070_athena_commando_m_cupid/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/cid_070_athena_commando_m_cupid/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/cid_070_athena_commando_m_cupid/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/cid_070_athena_commando_m_cupid/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/cid_070_athena_commando_m_cupid/wide.png"
+      },
+      "bean": {
+       "small": "https://fortnite-api.com/images/cosmetics/beans/bean_cupida/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/beans/bean_cupida/large.png"
+      }
+     },
+     "showcaseVideo": "7rPI4_WheJY",
+     "added": "2019-11-20T12:50:28Z"
+    },
+    {
+     "id": "BID_022_Cupid",
+     "name": "Alas del amor",
+     "description": "¡Contagia el amor!",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "legendary",
+      "displayValue": "Legendario",
+      "backendValue": "EFortRarity::Legendary"
+     },
+     "set": {
+      "value": "Corazones campales",
+      "text": "Pieza del conjunto Corazones campales.",
+      "backendValue": "RoyaleHearts"
+     },
+     "introduction": {
+      "chapter": "1",
+      "season": "3",
+      "text": "Introducido en Capítulo 1, Temporada 3.",
+      "backendValue": 3
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/bid_022_cupid/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/bid_022_cupid/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/bid_022_cupid/featured.png"
+     },
+     "added": "2019-11-20T12:50:41Z"
+    },
+    {
+     "id": "CID_523_Athena_Commando_F_Cupid",
+     "name": "Corazón de piedra",
+     "description": "Una romántica guerrera estatua.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "Corazones campales",
+      "text": "Pieza del conjunto Corazones campales.",
+      "backendValue": "RoyaleHearts"
+     },
+     "introduction": {
+      "chapter": "1",
+      "season": "X",
+      "text": "Introducido en Capítulo 1, Temporada X.",
+      "backendValue": 10
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/cid_523_athena_commando_f_cupid/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/cid_523_athena_commando_f_cupid/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/cid_523_athena_commando_f_cupid/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/cid_523_athena_commando_f_cupid/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/cid_523_athena_commando_f_cupid/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/cid_523_athena_commando_f_cupid/wide.png"
+      },
+      "bean": {
+       "small": "https://fortnite-api.com/images/cosmetics/beans/bean_cupidb/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/beans/bean_cupidb/large.png"
+      }
+     },
+     "metaTags": [
+      "Cosmetics.Emote.CharacterGroup.Skirts"
+     ],
+     "showcaseVideo": "OyH43R9mFHo",
+     "added": "2019-11-20T12:49:50Z"
+    },
+    {
+     "id": "BID_352_CupidFemale",
+     "name": "Alas de amor",
+     "description": "Hacia los cielos.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "Corazones campales",
+      "text": "Pieza del conjunto Corazones campales.",
+      "backendValue": "RoyaleHearts"
+     },
+     "introduction": {
+      "chapter": "1",
+      "season": "X",
+      "text": "Introducido en Capítulo 1, Temporada X.",
+      "backendValue": 10
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/bid_352_cupidfemale/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/bid_352_cupidfemale/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/bid_352_cupidfemale/featured.png"
+     },
+     "added": "2019-11-20T12:50:32Z"
+    },
+    {
+     "id": "Pickaxe_ID_019_Heart",
+     "name": "Pico corazón",
+     "description": "¡Sin arrepentimientos!",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Corazones campales",
+      "text": "Pieza del conjunto Corazones campales.",
+      "backendValue": "RoyaleHearts"
+     },
+     "introduction": {
+      "chapter": "1",
+      "season": "2",
+      "text": "Introducido en Capítulo 1, Temporada 2.",
+      "backendValue": 2
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_id_019_heart/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_id_019_heart/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_id_019_heart/featured.png"
+     },
+     "showcaseVideo": "4DRqVsu-ybw",
+     "added": "2019-11-20T12:50:59Z"
+    },
+    {
+     "id": "Pickaxe_ID_259_CupidFemale1H",
+     "name": "Dagas de cupido",
+     "description": "Amar duele.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Corazones campales",
+      "text": "Pieza del conjunto Corazones campales.",
+      "backendValue": "RoyaleHearts"
+     },
+     "introduction": {
+      "chapter": "1",
+      "season": "X",
+      "text": "Introducido en Capítulo 1, Temporada X.",
+      "backendValue": 10
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_id_259_cupidfemale1h/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_id_259_cupidfemale1h/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_id_259_cupidfemale1h/featured.png"
+     },
+     "showcaseVideo": "8CPGxX8rnX0",
+     "added": "2019-11-20T12:50:44Z"
+    },
+    {
+     "id": "EID_TrueLove",
+     "name": "Amor verdadero",
+     "description": "Saca tu lado romántico.",
+     "type": {
+      "value": "emote",
+      "displayValue": "Gesto",
+      "backendValue": "AthenaDance"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "Corazones campales",
+      "text": "Pieza del conjunto Corazones campales.",
+      "backendValue": "RoyaleHearts"
+     },
+     "introduction": {
+      "chapter": "1",
+      "season": "2",
+      "text": "Introducido en Capítulo 1, Temporada 2.",
+      "backendValue": 2
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/eid_truelove/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/eid_truelove/icon.png"
+     },
+     "showcaseVideo": "A1jN9ibr75E",
+     "added": "2019-11-20T12:49:41Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 4000,
+   "finalPrice": 2400,
+   "devName": "[VIRTUAL]1 x The Kid LAROI, 1 x Get My Bag, 1 x The Rogue LAROI, 1 x The Tragic BLADE, 1 x The Tragic BLADE, 1 x LAROI Free Style for -1 MtxCurrency",
+   "offerId": "v2:/584b021ea1e74efc0dfecd5f1904035a7cb9b19fea17f5123c795b37a72f519b",
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-26T23:59:59.999Z",
+   "bundle": {
+    "name": "Lote The Kid LAROI",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/6bc3076da4d111b8/renderimage_0.png"
+   },
+   "banner": {
+    "value": "1600 monedas V de descuento",
+    "intensity": "Low",
+    "backendValue": "AmountOff"
+   },
+   "offerTag": {
+    "id": "promodesc85",
+    "text": "¡Desenfunda el pico <highlight>SABLE TRÁGICO</> de la mochila retro al tener ambos equipados!"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -1,
+   "layoutId": "KidLaroi.99",
+   "layout": {
+    "id": "KidLaroi",
+    "name": "The Kid LAROI",
+    "index": 1,
+    "rank": 197,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "ff82d3ff",
+    "color3": "7835d6ff",
+    "textBackgroundColor": "3b1026ff"
+   },
+   "tileSize": "Size_1_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_Sunburst_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S23/DAv2_Bundle_Featured_Sunburst",
+   "newDisplayAsset": {
+    "id": "DAv2_Bundle_Featured_SunBurst",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__6bc3076da4d111b8_e758384c4c6e8e25.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/6bc3076da4d111b8/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__6bc3076da4d111b8_cf5da8d99be75a65.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/6bc3076da4d111b8/renderimage_1.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__6bc3076da4d111b8_da371dd238c65d77.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/6bc3076da4d111b8/renderimage_2.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__6bc3076da4d111b8_c657b7bf1c88bdb6.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/6bc3076da4d111b8/renderimage_3.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Character_SunBurst",
+     "name": "The Kid LAROI",
+     "description": "Hizo realidad sus sueños.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "The Kid LAROI",
+      "text": "Pieza del conjunto The Kid LAROI.",
+      "backendValue": "TruthTenant"
+     },
+     "introduction": {
+      "chapter": "4",
+      "season": "1",
+      "text": "Introducido en Capítulo 4, Temporada 1.",
+      "backendValue": 23
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_sunburst/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_sunburst/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_sunburst/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Parts",
+       "type": "Sombrero",
+       "options": [
+        {
+         "tag": "Stage1",
+         "name": "Cabello",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_sunburst/variants/parts/stage1.png"
+        },
+        {
+         "tag": "Stage2",
+         "name": "Accesorio",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_sunburst/variants/parts/stage2.png"
+        }
+       ]
+      },
+      {
+       "channel": "Material",
+       "type": "Gafas",
+       "options": [
+        {
+         "tag": "Stage1",
+         "name": "Sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_sunburst/variants/material/stage1.png"
+        },
+        {
+         "tag": "Stage2",
+         "name": "No",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_sunburst/variants/material/stage2.png"
+        }
+       ]
+      },
+      {
+       "channel": "Particle",
+       "type": "estilo",
+       "options": [
+        {
+         "tag": "Particle1",
+         "name": "The Kid LAROI",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_sunburst/variants/particle/particle1.png"
+        },
+        {
+         "tag": "Particle2",
+         "name": "Electrificado",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_sunburst/variants/particle/particle2.png"
+        }
+       ]
+      }
+     ],
+     "showcaseVideo": "k6x2NZupolw",
+     "added": "2023-01-23T23:50:35Z"
+    },
+    {
+     "id": "Backpack_SunBurst",
+     "name": "Get My Bag",
+     "description": "¡Como la canción!",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "The Kid LAROI",
+      "text": "Pieza del conjunto The Kid LAROI.",
+      "backendValue": "TruthTenant"
+     },
+     "introduction": {
+      "chapter": "4",
+      "season": "1",
+      "text": "Introducido en Capítulo 4, Temporada 1.",
+      "backendValue": 23
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_sunburst/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_sunburst/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_sunburst/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Parts",
+       "type": "Color",
+       "options": [
+        {
+         "tag": "Stage1",
+         "name": "Get My Bag",
+         "image": "https://fortnite-api.com/images/cosmetics/br/backpack_sunburst/variants/parts/stage1.png"
+        },
+        {
+         "tag": "Stage2",
+         "name": "Siempre solo",
+         "image": "https://fortnite-api.com/images/cosmetics/br/backpack_sunburst/variants/parts/stage2.png"
+        }
+       ]
+      }
+     ],
+     "added": "2023-01-23T23:50:35Z"
+    },
+    {
+     "id": "Character_SunBurstAlt",
+     "name": "The Rogue LAROI",
+     "description": "De compositor a cazador.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "The Kid LAROI",
+      "text": "Pieza del conjunto The Kid LAROI.",
+      "backendValue": "TruthTenant"
+     },
+     "introduction": {
+      "chapter": "4",
+      "season": "1",
+      "text": "Introducido en Capítulo 4, Temporada 1.",
+      "backendValue": 23
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_sunburstalt/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_sunburstalt/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_sunburstalt/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Parts",
+       "type": "estilo",
+       "options": [
+        {
+         "tag": "Stage1",
+         "name": "The Rogue LAROI",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_sunburstalt/variants/parts/stage1.png"
+        },
+        {
+         "tag": "Stage2",
+         "name": "sin gorro",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_sunburstalt/variants/parts/stage2.png"
+        },
+        {
+         "tag": "Stage3",
+         "name": "Electrificado",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_sunburstalt/variants/parts/stage3.png"
+        },
+        {
+         "tag": "Stage4",
+         "name": "calaveras",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_sunburstalt/variants/parts/stage4.png"
+        }
+       ]
+      }
+     ],
+     "metaTags": [
+      "Cosmetics.MetaTags.Special.Large"
+     ],
+     "showcaseVideo": "PUhNZTzOZbc",
+     "added": "2023-01-23T23:50:35Z"
+    },
+    {
+     "id": "Backpack_Sunburst_Alt",
+     "name": "Sable trágico",
+     "description": "La emblemática arma del cazador.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "The Kid LAROI",
+      "text": "Pieza del conjunto The Kid LAROI.",
+      "backendValue": "TruthTenant"
+     },
+     "introduction": {
+      "chapter": "4",
+      "season": "1",
+      "text": "Introducido en Capítulo 4, Temporada 1.",
+      "backendValue": 23
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_sunburst_alt/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_sunburst_alt/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_sunburst_alt/featured.png"
+     },
+     "added": "2023-01-23T23:50:35Z"
+    },
+    {
+     "id": "Pickaxe_SunBurstAlt",
+     "name": "Sable trágico",
+     "description": "Seis disparos y golpes infinitos.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "The Kid LAROI",
+      "text": "Pieza del conjunto The Kid LAROI.",
+      "backendValue": "TruthTenant"
+     },
+     "introduction": {
+      "chapter": "4",
+      "season": "1",
+      "text": "Introducido en Capítulo 4, Temporada 1.",
+      "backendValue": 23
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_sunburstalt/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_sunburstalt/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_sunburstalt/featured.png"
+     },
+     "metaTags": [
+      "Cosmetics.MetaTags.SunBurstAlt"
+     ],
+     "added": "2023-01-23T23:50:35Z"
+    },
+    {
+     "id": "Wrap_SunBurst",
+     "name": "Improvisación de LAROI",
+     "description": "Muestra tu estilo.",
+     "type": {
+      "value": "wrap",
+      "displayValue": "Papel",
+      "backendValue": "AthenaItemWrap"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "The Kid LAROI",
+      "text": "Pieza del conjunto The Kid LAROI.",
+      "backendValue": "TruthTenant"
+     },
+     "introduction": {
+      "chapter": "4",
+      "season": "1",
+      "text": "Introducido en Capítulo 4, Temporada 1.",
+      "backendValue": 23
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/wrap_sunburst/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/wrap_sunburst/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/wrap_sunburst/featured.png"
+     },
+     "showcaseVideo": "LFD1RkKWDkw",
+     "added": "2023-01-23T23:50:35Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 2000,
+   "finalPrice": 1500,
+   "devName": "[VIRTUAL]1 x Dara, 1 x Mercenary Razorsword, 1 x Razorsword Scabbard for -1 MtxCurrency",
+   "offerId": "v2:/bb49b60e6ecd6f904ba9148fd3940048a338912f161a14c5a5e772dde78ad016",
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-26T23:59:59.999Z",
+   "bundle": {
+    "name": "Lote Excursionista rebelde",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/f9f9828d189aafa8/renderimage_0.png"
+   },
+   "banner": {
+    "value": "500 monedas V de descuento",
+    "intensity": "Low",
+    "backendValue": "AmountOff"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -1,
+   "layoutId": "STWPack.98",
+   "layout": {
+    "id": "STWPack",
+    "name": "Salva el mundo",
+    "index": 34,
+    "rank": 192,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "a853d3ff",
+    "color3": "7a1bc7ff",
+    "textBackgroundColor": "6b0eb6ff"
+   },
+   "tileBackgroundMaterial": "ShopTile_Rocks",
+   "tileSize": "Size_2_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_Goldenpleats_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S43/DAv2_Bundle_Featured_Goldenpleats",
+   "newDisplayAsset": {
+    "id": "DAv2_Bundle_Featured_GoldenPleats",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__f9f9828d189aafa8_29c0c4191e61fb71.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/f9f9828d189aafa8/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__f9f9828d189aafa8_5aff8d0c456b1e98.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/f9f9828d189aafa8/renderimage_1.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Character_GoldenPleats",
+     "name": "Dara",
+     "description": "No pierdas la concentración.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "Excursionista rebelde",
+      "text": "Pieza del conjunto Excursionista rebelde.",
+      "backendValue": "RascalGuard"
+     },
+     "introduction": {
+      "chapter": "5",
+      "season": "1",
+      "text": "Introducido en Capítulo 5, Temporada 1.",
+      "backendValue": 28
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_goldenpleats/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_goldenpleats/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_goldenpleats/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_goldenpleats/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_goldenpleats/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_goldenpleats/wide.png"
+      },
+      "bean": {
+       "small": "https://fortnite-api.com/images/cosmetics/beans/bean_goldenpleats/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/beans/bean_goldenpleats/large.png"
+      }
+     },
+     "metaTags": [
+      "Cosmetics.Emote.CharacterGroup.Skirts"
+     ],
+     "added": "2023-12-07T17:39:21Z"
+    },
+    {
+     "id": "Pickaxe_GoldenPleats",
+     "name": "Filoespada de mercenaria",
+     "description": "Que nunca falte en tus viajes.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Excursionista rebelde",
+      "text": "Pieza del conjunto Excursionista rebelde.",
+      "backendValue": "RascalGuard"
+     },
+     "introduction": {
+      "chapter": "5",
+      "season": "1",
+      "text": "Introducido en Capítulo 5, Temporada 1.",
+      "backendValue": 28
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_goldenpleats/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_goldenpleats/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_goldenpleats/featured.png"
+     },
+     "metaTags": [
+      "Cosmetics.MetaTags.GoldenPleats"
+     ],
+     "added": "2023-12-07T17:39:21Z"
+    },
+    {
+     "id": "Backpack_GoldenPleats",
+     "name": "Vaina de mercenaria",
+     "description": "Siempre listo para contraatacar.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Excursionista rebelde",
+      "text": "Pieza del conjunto Excursionista rebelde.",
+      "backendValue": "RascalGuard"
+     },
+     "introduction": {
+      "chapter": "5",
+      "season": "1",
+      "text": "Introducido en Capítulo 5, Temporada 1.",
+      "backendValue": 28
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_goldenpleats/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_goldenpleats/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_goldenpleats/featured.png"
+     },
+     "added": "2023-12-07T17:39:21Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 2000,
+   "finalPrice": 1500,
+   "devName": "[VIRTUAL]1 x Toni, 1 x Ollie-Oop, 1 x Inline Impactor for -1 MtxCurrency",
+   "offerId": "v2:/dcc741e5d3146649c09bf3d5f8226c98cd8f09410a49edf453aee516c61f5870",
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-26T23:59:59.999Z",
+   "bundle": {
+    "name": "Lote de Amos del skatepark",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/57a35038b17b1092/renderimage_0.png"
+   },
+   "banner": {
+    "value": "500 monedas V de descuento",
+    "intensity": "Low",
+    "backendValue": "AmountOff"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -1,
+   "layoutId": "STWPack.99",
+   "layout": {
+    "id": "STWPack",
+    "name": "Salva el mundo",
+    "index": 34,
+    "rank": 192,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "a853d3ff",
+    "color3": "7a1bc7ff",
+    "textBackgroundColor": "6b0eb6ff"
+   },
+   "tileBackgroundMaterial": "ShopTile_Rocks",
+   "tileSize": "Size_1_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_Glare_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S43/DAv2_Bundle_Featured_Glare",
+   "newDisplayAsset": {
+    "id": "DAv2_Bundle_Featured_Glare",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__57a35038b17b1092_29c0c4191e61fb71.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/57a35038b17b1092/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__57a35038b17b1092_5aff8d0c456b1e98.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/57a35038b17b1092/renderimage_1.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "CID_A_413_Athena_Commando_M_Glare",
+     "name": "Toni",
+     "description": "Es un clásico de la vieja escuela con estilo de sobra.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Amos del skatepark",
+      "text": "Pieza del conjunto Amos del skatepark.",
+      "backendValue": "ShredKing"
+     },
+     "introduction": {
+      "chapter": "3",
+      "season": "2",
+      "text": "Introducido en Capítulo 3, Temporada 2.",
+      "backendValue": 20
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/cid_a_413_athena_commando_m_glare/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/cid_a_413_athena_commando_m_glare/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/cid_a_413_athena_commando_m_glare/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/cid_a_413_athena_commando_m_glare/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/cid_a_413_athena_commando_m_glare/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/cid_a_413_athena_commando_m_glare/wide.png"
+      },
+      "bean": {
+       "small": "https://fortnite-api.com/images/cosmetics/beans/bean_glare/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/beans/bean_glare/large.png"
+      }
+     },
+     "added": "2022-05-17T08:48:22Z"
+    },
+    {
+     "id": "BID_A_014_GlareMale",
+     "name": "Ollie-Oop",
+     "description": "El kickflip no se hace por sí solo.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Amos del skatepark",
+      "text": "Pieza del conjunto Amos del skatepark.",
+      "backendValue": "ShredKing"
+     },
+     "introduction": {
+      "chapter": "3",
+      "season": "2",
+      "text": "Introducido en Capítulo 3, Temporada 2.",
+      "backendValue": 20
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/bid_a_014_glaremale/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/bid_a_014_glaremale/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/bid_a_014_glaremale/featured.png"
+     },
+     "added": "2022-05-17T08:48:22Z"
+    },
+    {
+     "id": "Pickaxe_ID_805_GlareMale",
+     "name": "Patín pisapatanes",
+     "description": "Písalos bien pisados.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Amos del skatepark",
+      "text": "Pieza del conjunto Amos del skatepark.",
+      "backendValue": "ShredKing"
+     },
+     "introduction": {
+      "chapter": "3",
+      "season": "2",
+      "text": "Introducido en Capítulo 3, Temporada 2.",
+      "backendValue": 20
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_id_805_glaremale/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_id_805_glaremale/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_id_805_glaremale/featured.png"
+     },
+     "added": "2022-05-17T08:48:22Z"
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,461 @@
+{
+ "date": "2026-11-20T00:00:00Z",
+ "entries": [
+  {
+   "regularPrice": 7700,
+   "finalPrice": 3800,
+   "devName": "[VIRTUAL]1 x Kafka Hibino, 1 x Kikoru Shinomiya, 1 x Reno Ichikawa, 1 x Kikoru’s Personal Weapon, 1 x Kaiju No. 8's Scythe, 1 x Freezing Round Axes, 1 x Spirit of the Kaiju, 1 x Kikoru's Scaled Slingbag, 1 x Cracked Mask, 1 x Reno's Gearbag, 1 x Kaiju No. 8 for -1 MtxCurrency",
+   "offerId": "v2:/8134264ccdc09756d6a68d0aecbce4e0e987eaaa57896067d03a629a0b4bf733",
+   "inDate": "2026-11-17T00:00:00Z",
+   "outDate": "2026-11-20T23:59:59.999Z",
+   "bundle": {
+    "name": "Lote Kaiju N.º 8",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/61e231fb71351fbb/renderimage_0.png"
+   },
+   "banner": {
+    "value": "3900 monedas V de descuento",
+    "intensity": "Low",
+    "backendValue": "AmountOff"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -1,
+   "layoutId": "Kaiju.99",
+   "layout": {
+    "id": "Kaiju",
+    "name": "Kaiju N.º 8",
+    "index": 11,
+    "rank": 182,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "6f0b83ff",
+    "color2": "49145eff",
+    "color3": "7c1d8fff",
+    "textBackgroundColor": "4e0052ff"
+   },
+   "tileBackgroundMaterial": "ShopTile_Pirates_Brush",
+   "tileSize": "Size_1_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_CafeStove_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S33/DAv2_Bundle_Featured_CafeStove",
+   "newDisplayAsset": {
+    "id": "DAv2_Bundle_Featured_CafeStove",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__61e231fb71351fbb_5330a74702e4252f.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/61e231fb71351fbb/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__61e231fb71351fbb_573ef10401c15554.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/61e231fb71351fbb/renderimage_1.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__61e231fb71351fbb_46834eff61b4d6ed.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/61e231fb71351fbb/renderimage_2.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Character_SureBamboo",
+     "name": "Kafka Hibino",
+     "description": "El hombre que se convirtió en kaiju.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "Kaiju N.º 8",
+      "text": "Pieza del conjunto Kaiju N.º 8.",
+      "backendValue": "HighriseReed"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "1",
+      "text": "Introducido en Capítulo 6, Temporada 1.",
+      "backendValue": 33
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_surebamboo/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_surebamboo/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_surebamboo/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Parts",
+       "type": "estilo",
+       "options": [
+        {
+         "tag": "Stage1",
+         "name": "Kafka Hibino",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_surebamboo/variants/parts/stage1.png"
+        },
+        {
+         "tag": "Stage2",
+         "name": "Kaiju N.º 8",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_surebamboo/variants/parts/stage2.png"
+        }
+       ]
+      },
+      {
+       "channel": "Emissive",
+       "type": "Reactivo",
+       "options": [
+        {
+         "tag": "Emissive0",
+         "name": "Sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_surebamboo/variants/emissive/emissive0.png"
+        },
+        {
+         "tag": "Emissive1",
+         "name": "No",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_surebamboo/variants/emissive/emissive1.png"
+        }
+       ]
+      }
+     ],
+     "showcaseVideo": "necZFx_cadM",
+     "added": "2025-01-25T00:00:00Z"
+    },
+    {
+     "id": "Character_CafeStove",
+     "name": "Kikoru Shinomiya",
+     "description": "Una guerrera muy respetada en la neutralización de kaijus.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "Kaiju N.º 8",
+      "text": "Pieza del conjunto Kaiju N.º 8.",
+      "backendValue": "HighriseReed"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "1",
+      "text": "Introducido en Capítulo 6, Temporada 1.",
+      "backendValue": 33
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_cafestove/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_cafestove/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_cafestove/featured.png"
+     },
+     "showcaseVideo": "fehnl5EWULY",
+     "added": "2025-01-25T00:00:00Z"
+    },
+    {
+     "id": "Character_YamPowder",
+     "name": "Reno Ichikawa",
+     "description": "El tirador experto de la tercera división.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "Kaiju N.º 8",
+      "text": "Pieza del conjunto Kaiju N.º 8.",
+      "backendValue": "HighriseReed"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "1",
+      "text": "Introducido en Capítulo 6, Temporada 1.",
+      "backendValue": 33
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_yampowder/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_yampowder/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_yampowder/featured.png"
+     },
+     "showcaseVideo": "VPOUYiVgvkQ",
+     "added": "2025-01-25T00:00:00Z"
+    },
+    {
+     "id": "Pickaxe_CafeStove",
+     "name": "Arma personal de Kikoru",
+     "description": "¡Atraviesa su armadura!",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Kaiju N.º 8",
+      "text": "Pieza del conjunto Kaiju N.º 8.",
+      "backendValue": "HighriseReed"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "1",
+      "text": "Introducido en Capítulo 6, Temporada 1.",
+      "backendValue": 33
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_cafestove/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_cafestove/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_cafestove/featured.png"
+     },
+     "added": "2025-01-25T00:00:00Z"
+    },
+    {
+     "id": "Pickaxe_SureBamboo",
+     "name": "Guadaña de Kaiju N.º 8",
+     "description": "Tan poderosa como Kaiju N.º 8.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Kaiju N.º 8",
+      "text": "Pieza del conjunto Kaiju N.º 8.",
+      "backendValue": "HighriseReed"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "1",
+      "text": "Introducido en Capítulo 6, Temporada 1.",
+      "backendValue": 33
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_surebamboo/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_surebamboo/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_surebamboo/featured.png"
+     },
+     "showcaseVideo": "0IlJAMG58lo",
+     "added": "2025-01-25T00:00:00Z"
+    },
+    {
+     "id": "Pickaxe_YamPowder",
+     "name": "Hachas de congelación",
+     "description": "Cubiertas con un aire frío como una bala de congelación.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Kaiju N.º 8",
+      "text": "Pieza del conjunto Kaiju N.º 8.",
+      "backendValue": "HighriseReed"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "1",
+      "text": "Introducido en Capítulo 6, Temporada 1.",
+      "backendValue": 33
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_yampowder/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_yampowder/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_yampowder/featured.png"
+     },
+     "showcaseVideo": "Nr-yj8wRl9s",
+     "added": "2025-01-25T00:00:00Z"
+    },
+    {
+     "id": "EID_SureBamboo",
+     "name": "Espíritu del kaiju",
+     "description": "Siente al kaiju de tu interior.",
+     "type": {
+      "value": "emote",
+      "displayValue": "Gesto",
+      "backendValue": "AthenaDance"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "Kaiju N.º 8",
+      "text": "Pieza del conjunto Kaiju N.º 8.",
+      "backendValue": "HighriseReed"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "1",
+      "text": "Introducido en Capítulo 6, Temporada 1.",
+      "backendValue": 33
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/eid_surebamboo/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/eid_surebamboo/icon.png"
+     },
+     "showcaseVideo": "RVJc6VIgHyY",
+     "added": "2025-01-25T00:00:00Z"
+    },
+    {
+     "id": "Backpack_CafeStove",
+     "name": "Morral de Kikoru",
+     "description": "Un resistente bolso para armas.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Kaiju N.º 8",
+      "text": "Pieza del conjunto Kaiju N.º 8.",
+      "backendValue": "HighriseReed"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "1",
+      "text": "Introducido en Capítulo 6, Temporada 1.",
+      "backendValue": 33
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_cafestove/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_cafestove/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_cafestove/featured.png"
+     },
+     "added": "2025-01-25T00:00:00Z"
+    },
+    {
+     "id": "Backpack_SureBamboo",
+     "name": "Máscara quebrada",
+     "description": "Una máscara que imita el rostro de Kaiju N.º 8.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Kaiju N.º 8",
+      "text": "Pieza del conjunto Kaiju N.º 8.",
+      "backendValue": "HighriseReed"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "1",
+      "text": "Introducido en Capítulo 6, Temporada 1.",
+      "backendValue": 33
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_surebamboo/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_surebamboo/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_surebamboo/featured.png"
+     },
+     "added": "2025-01-25T00:00:00Z"
+    },
+    {
+     "id": "Backpack_YamPowder",
+     "name": "Equipamiento de Reno",
+     "description": "Hay que tener todo a mano.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Kaiju N.º 8",
+      "text": "Pieza del conjunto Kaiju N.º 8.",
+      "backendValue": "HighriseReed"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "1",
+      "text": "Introducido en Capítulo 6, Temporada 1.",
+      "backendValue": 33
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_yampowder/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_yampowder/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_yampowder/featured.png"
+     },
+     "added": "2025-01-25T00:00:00Z"
+    },
+    {
+     "id": "Wrap_SureBamboo",
+     "name": "Kaiju N.º 8",
+     "description": "Muestra tu estilo.",
+     "type": {
+      "value": "wrap",
+      "displayValue": "Papel",
+      "backendValue": "AthenaItemWrap"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "Kaiju N.º 8",
+      "text": "Pieza del conjunto Kaiju N.º 8.",
+      "backendValue": "HighriseReed"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "1",
+      "text": "Introducido en Capítulo 6, Temporada 1.",
+      "backendValue": 33
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/wrap_surebamboo/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/wrap_surebamboo/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/wrap_surebamboo/featured.png"
+     },
+     "showcaseVideo": "44Un2uUXgcE",
+     "added": "2025-01-25T00:00:00Z"
+    }
+   ]
+  }
+ ]
+}
