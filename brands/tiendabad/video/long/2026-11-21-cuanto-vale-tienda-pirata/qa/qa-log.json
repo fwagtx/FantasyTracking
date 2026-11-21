@@ -1,0 +1,197 @@
+{
+  "video": "latienditabad-2026-11-21-cuanto-vale-tienda-pirata.mp4",
+  "checked_utc": "2026-11-21T12:25:39Z",
+  "verdict": "READY TO POST",
+  "results": [
+    {
+      "check": "1. Facts",
+      "status": "PASS",
+      "detail": "28/28 claims verified against saved official data",
+      "items": [
+        {
+          "claim": "Con la ficha, todo lo que cuesta pavos es gratis 14 días (skins, gestos, mochilas, picos, instrumentos, autos, planeadores, canciones)",
+          "result": "PASS",
+          "why": "matched in vgc-guide.json"
+        },
+        {
+          "claim": "Excepciones: niveles del pase de batalla, lotes con dinero real, regalar objetos, solo un compañero gratis",
+          "result": "PASS",
+          "why": "matched in vgc-guide.json"
+        },
+        {
+          "claim": "Tienda del 21 de noviembre: 367 ofertas que suman 296 000 pavos (342 000 a precio normal)",
+          "result": "PASS",
+          "why": "matched in totals.json"
+        },
+        {
+          "claim": "49 skins, 49 mochilas, 36 picos, 38 gestos, 130 canciones, 48 objetos para autos y 34 lotes distintos",
+          "result": "PASS",
+          "why": "matched in totals.json"
+        },
+        {
+          "claim": "Lo más barato: 200 pavos; lo más caro: 4000",
+          "result": "PASS",
+          "why": "matched in totals.json"
+        },
+        {
+          "claim": "Los 34 lotes suman 71 500 pavos",
+          "result": "PASS",
+          "why": "matched in totals.json"
+        },
+        {
+          "claim": "Lote One Piece (Luffy, Nami, Usopp): 4000 en vez de 8200, hasta el 5 de diciembre",
+          "result": "PASS",
+          "why": "matched in shop.json"
+        },
+        {
+          "claim": "3400 pavos: Lote Madison Beer, Lote Cowboy Bebop y Lote Un Show Más",
+          "result": "PASS",
+          "why": "matched in shop.json"
+        },
+        {
+          "claim": "3200 pavos: Lote A$AP Rocky (en vez de 8800), Lote de Lil' Uzi Vert y Lote Sombrero de paja (Zoro y Sanji)",
+          "result": "PASS",
+          "why": "matched in shop.json"
+        },
+        {
+          "claim": "Lote Ice Spice: 2800, llegó el 21 de noviembre",
+          "result": "PASS",
+          "why": "matched in shop.json"
+        },
+        {
+          "claim": "11 compañeros distintos en la tienda, entre ellos Tony Tony Chopper, Rigby, Louis y Kitsune",
+          "result": "PASS",
+          "why": "matched in totals.json"
+        },
+        {
+          "claim": "La tienda cambia cada día a las 00:00 UTC (6 PM CDMX): la del 21 empezó a las 00:00 UTC y sus ofertas de un día terminan a las 23:59 UTC",
+          "result": "PASS",
+          "why": "matched in shop.json"
+        },
+        {
+          "claim": "Ficha de 2026: hasta el 15 de diciembre; la otra, del 1 de enero al 31 de diciembre de 2027",
+          "result": "PASS",
+          "why": "matched in vgc-odds-confirmed.json"
+        },
+        {
+          "claim": "La ficha sale al abrir o romper cofres en Battle Royale y Cero Construcción",
+          "result": "PASS",
+          "why": "matched in vgc-guide.json"
+        },
+        {
+          "claim": "Tienda Pirata: 1 en 137 500 por cofre; con ×1.5 ≈ 1 en 91 667",
+          "result": "PASS",
+          "why": "matched in vice-treasure-hours.json"
+        },
+        {
+          "claim": "Horas del Tesoro del 21 nov: segunda ronda 6-8 PM PT = 8-10 PM CDMX, ×1.5",
+          "result": "PASS",
+          "why": "matched in vice-treasure-hours.json"
+        },
+        {
+          "claim": "Escuadrón: si alguien la encuentra, la reciben los cuatro",
+          "result": "PASS",
+          "why": "matched in vgc-guide.json"
+        },
+        {
+          "claim": "Siguientes Horas del Tesoro: 28 de noviembre y 5 de diciembre",
+          "result": "PASS",
+          "why": "matched in vice-treasure-hours.json"
+        },
+        {
+          "claim": "La búsqueda termina el 5 de diciembre (quedan 14 días desde el 21 de noviembre)",
+          "result": "PASS",
+          "why": "matched in vgc-odds-confirmed.json"
+        },
+        {
+          "claim": "16 de las 49 skins son de la Serie de ídolos (Ice Spice, Kim Kardashian, Madison Beer, Lil Uzi Vert…)",
+          "result": "PASS",
+          "why": "matched in totals.json"
+        },
+        {
+          "claim": "130 canciones sueltas, a 500 pavos cada una: 65 000",
+          "result": "PASS",
+          "why": "matched in totals.json"
+        },
+        {
+          "claim": "Lote One Piece: 16 objetos (sombrero de Luffy, Pistola goma goma, Ráfaga de puñetazos, planeador Going Merry, guitarra)",
+          "result": "PASS",
+          "why": "matched in totals.json"
+        },
+        {
+          "claim": "Objetos del Lote One Piece nombrados",
+          "result": "PASS",
+          "why": "matched in shop.json"
+        },
+        {
+          "claim": "Cowboy Bebop: Spike Spiegel y Faye Valentine; Un Show Más: Mordecai, Skips y Rigby (compañero)",
+          "result": "PASS",
+          "why": "matched in shop.json"
+        },
+        {
+          "claim": "Lote Ice Spice: Ice Spice e Ice Spice princesa del rap",
+          "result": "PASS",
+          "why": "matched in shop.json"
+        },
+        {
+          "claim": "Compañeros sueltos: 1200 o 1500 pavos",
+          "result": "PASS",
+          "why": "matched in totals.json"
+        },
+        {
+          "claim": "0.00073% por cofre en partida normal",
+          "result": "PASS",
+          "why": "matched in vice-treasure-hours.json"
+        },
+        {
+          "claim": "Horas del Tesoro del 21 nov: 11 AM-1 PM y 6-8 PM PT = 1-3 PM y 8-10 PM CDMX",
+          "result": "PASS",
+          "why": "matched in vice-treasure-hours.json"
+        }
+      ]
+    },
+    {
+      "check": "2. Spelling and grammar",
+      "status": "PASS",
+      "detail": "181 distinct words checked; code written as BAD in all 3 mentions",
+      "items": []
+    },
+    {
+      "check": "3. Frames",
+      "status": "PASS",
+      "detail": "No black frames, no frozen stretches over 1.5 s. Contact sheet (1 frame/s) reviewed by eye: contact-sheet.png",
+      "items": []
+    },
+    {
+      "check": "4. Audio",
+      "status": "PASS",
+      "detail": "Integrated -14.1 LUFS, true peak -2.7 dBTP, no clipping, no silence gaps. All sound is original synthesis (no game rips, no copyrighted music). No voiceover in this cut.",
+      "items": []
+    },
+    {
+      "check": "5. Specs and safe zones",
+      "status": "PASS",
+      "detail": "1920x1080 h264 30 fps, aac 48000 Hz, 251.2s. Long YouTube video; every on-screen text box sampled 4x/s stays inside the title-safe area.",
+      "items": []
+    },
+    {
+      "check": "6. Disclosure and wording",
+      "status": "PASS",
+      "detail": "#EpicPartner is the first hashtag in caption line 1 and on screen in every sampled frame from 0.0s. No discount, giveaway, endorsement or filler-CTA wording.",
+      "items": []
+    },
+    {
+      "check": "7. Would a fan stop scrolling? Made by a person?",
+      "status": "PASS",
+      "detail": "Saturday long video '¿Cuánto vale la Tienda Pirata?', 4:11, 1920x1080, 9 chapters (Intro, La regla, Lo que no incluye, La cuenta, Los lotes más caros, La trampa, 14 días 14 tiendas, Horas del Tesoro, Final). Checked one frame of every one of the 42 segments in the final render (the build's sheet covers only the first 12), plus the sign-off: opening card '¿CUÁNTO VALE LA TIENDA PIRATA?' over the official map; the rule '14 DÍAS'; '4 EXCEPCIONES' and the four exceptions (pase de batalla, dinero real, regalos, 1 compañero) as the vgc guide lists them; the count from the Nov 21 shop (367 ofertas, 49 skins, 49 · 36 · 38 mochilas/picos/gestos, 130 canciones, 34 lotes y 48 objetos para autos, 200 → 4000, 16 skins de la Serie de ídolos, 296 000 pavos, 342 000 a precio normal, 65 000 en canciones), every number matching totals.json computed from all 367 offers in shop-offers.json; the mid-roll code card after the totals, away from any free wording; One Piece tiles (Luffy, Nami, Usopp), 4000 en vez de 8200, 16 objetos; the 3400 row (Madison Beer, Cowboy Bebop, Un Show Más) and the 3200 row (A$AP Rocky, Lil' Uzi Vert, Sombrero de paja) with names and prices legible on the tiles; Ahorras 5600; Lote Ice Spice 2800; 71 500 for the 34 bundles; the sidekick tiles (Tony Tony Chopper, Rigby, Louis, Kitsune), 1200 o 1500, Solo 1; 6 PM; 14 tiendas; 15 dic / 2027; Horas del Tesoro (1 en 137 500, 0.00073%, 1-3 PM · 8-10 PM hora CDMX, ×1.5 ≈ 1 en 91 667, ×4 for the squad, 28 nov · 5 dic, 14 días); closing code card with ¡GRACIAS POR VER!. Chapter chips, watermark and #EpicPartner sit in the corners; subtitles readable at the bottom. Fixed before shipping: the first cut ran 3:23 (added sourced content to reach 4:11); the One Piece bundle count corrected to 16 objects (15 + the guitar); the mid-roll code card moved away from 'sin gastar ni un pavo'; six stat labels left one word on a second line (…HORA / CDMX, …LOS / CUATRO, …DE / 2026, …CADA / UNA, …DINERO / REAL, NO, …31 DE / DICIEMBRE) and were shortened to one line; the 'Lo que NO incluye' title card lasted 1.7 s and never finished fading in, now a '4 EXCEPCIONES' stat card. Spanish reads naturally; the first Treasure Hours round is in the past tense because the video goes live at 3:00 PM CDMX, when it has just ended.",
+      "items": []
+    },
+    {
+      "check": "8. Owner approval",
+      "status": "PASS",
+      "detail": "Standing approval for autopilot (owner, 2026-10-28): posts when checks 1-7 all PASS.",
+      "items": []
+    }
+  ],
+  "caption": "#EpicPartner ¿Cuánto vale la Tienda Pirata? 🏴‍☠️ Hice la cuenta con la tienda del 21 de noviembre: 367 ofertas que suman 296 000 pavos.\n¿Qué te llevarías primero? 👇\nUsa el código BAD en la tienda de objetos 💛\n#Fortnite #TiendaPirata #FortniteEspañol"
+}
