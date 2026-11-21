@@ -510,6 +510,19 @@
    "format": "LONG",
    "topic": "¿Cuánto vale la Tienda Pirata? La tienda del 21 nov sumada oferta por oferta (367 ofertas, 296 000 pavos; 342 000 a precio normal), lo que la ficha no incluye, los lotes más caros (One Piece 4000, 3400 y 3200), la trampa de los compañeros (solo 1 gratis), 14 días = 14 tiendas, Horas del Tesoro del sábado",
    "folder": "video/long/2026-11-21-cuanto-vale-tienda-pirata"
+  },
+  {
+   "date": "2026-11-28",
+   "slot": "20:30",
+   "format": "Adivina la temporada",
+   "topic": "Dara (C5 T1), Sargento asador (C1 T5), Mordecai (C7 T1)",
+   "folder": "video/auto/2026-11-28-adivina-temporada",
+   "ids": [
+    "Character_GoldenPleats",
+    "CID_184_Athena_Commando_M_DurrburgerWorker",
+    "Character_VouchTrig"
+   ],
+   "note": "Every map place has had its '¿Dónde está?', so this '¿Dónde está?' day in the 2:1 rotation got the other evergreen format again; whether to repeat places instead is still a question for the owner."
   }
  ]
 }
