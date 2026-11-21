@@ -1,0 +1,677 @@
+{
+ "date": "2026-11-21T00:00:00Z",
+ "entries": [
+  {
+   "regularPrice": 6800,
+   "finalPrice": 3400,
+   "devName": "[VIRTUAL]1 x Make You Mine Madison, 1 x Madison's OG Pickaxe, 1 x Satin Angel Madison, 1 x Madison's Angel Wings, 1 x Mookie & Maple Plushies, 1 x Bittersweet, 1 x Yes Baby, 1 x Madison's Mic, 1 x Madison's Mic, 1 x Madison's Mic, 1 x Madison's Glam Wrap, 1 x Rooftop Madison, 1 x TBD (SID_Placeholder_906), 1 x TBD (SID_Placeholder_907) for -1 MtxCurrency",
+   "offerId": "v2:/0a7c4d1c71dc4b42b1aa534145f48a8ba26c98a8943e4f3eccf7d5276edd3ce0",
+   "inDate": "2026-11-17T00:00:00Z",
+   "outDate": "2026-11-21T23:59:59.999Z",
+   "bundle": {
+    "name": "Lote Madison Beer",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/947097c49a99d065/renderimage_0.png"
+   },
+   "banner": {
+    "value": "3400 monedas V de descuento",
+    "intensity": "Low",
+    "backendValue": "AmountOff"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -1,
+   "layoutId": "MadisonBeer.99",
+   "layout": {
+    "id": "MadisonBeer",
+    "name": "Madison Beer",
+    "index": 15,
+    "rank": 190,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "88c5ffff",
+    "color2": "42a8ffff",
+    "color3": "55afffff",
+    "textBackgroundColor": "42a8ffff"
+   },
+   "tileSize": "Size_1_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_MistTycoon_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S42/DAv2_Bundle_Featured_MistTycoon",
+   "newDisplayAsset": {
+    "id": "DAv2_Bundle_Featured_MistTycoon",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__947097c49a99d065_29c0c4191e61fb71.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/947097c49a99d065/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__947097c49a99d065_d2e71b6320aa32c2.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/947097c49a99d065/renderimage_1.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__947097c49a99d065_71e578208f570b02.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/947097c49a99d065/renderimage_2.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Character_MistTycoonHike",
+     "name": "Madison Make You Mine",
+     "description": "Tu corazón le pertenece.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Madison Beer",
+      "text": "Pieza del conjunto Madison Beer.",
+      "backendValue": "FirstCaravan"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_misttycoonhike/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_misttycoonhike/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_misttycoonhike/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_misttycoonhike/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_misttycoonhike/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_misttycoonhike/wide.png"
+      }
+     },
+     "showcaseVideo": "IXK6euUvP9U",
+     "added": "2026-09-23T16:31:22Z"
+    },
+    {
+     "id": "Pickaxe_MistTycoonHike",
+     "name": "Arma de Madison",
+     "description": "Los clásicos nunca pasan de moda.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Madison Beer",
+      "text": "Pieza del conjunto Madison Beer.",
+      "backendValue": "FirstCaravan"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_misttycoonhike/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_misttycoonhike/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_misttycoonhike/featured.png"
+     },
+     "added": "2026-09-24T13:00:55Z"
+    },
+    {
+     "id": "Character_MistTycoonLife",
+     "name": "Madison angelical",
+     "description": "Caída del cielo.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Madison Beer",
+      "text": "Pieza del conjunto Madison Beer.",
+      "backendValue": "FirstCaravan"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_misttycoonlife/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_misttycoonlife/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_misttycoonlife/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_misttycoonlife/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_misttycoonlife/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_misttycoonlife/wide.png"
+      }
+     },
+     "variants": [
+      {
+       "channel": "Outfit",
+       "type": "Reactividad",
+       "options": [
+        {
+         "tag": "Particle1",
+         "name": "Sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_misttycoonlife/variants/outfit/particle1.png"
+        },
+        {
+         "tag": "Particle2",
+         "name": "No",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_misttycoonlife/variants/outfit/particle2.png"
+        }
+       ]
+      }
+     ],
+     "showcaseVideo": "vMOJuYo441k",
+     "added": "2026-09-23T16:31:22Z"
+    },
+    {
+     "id": "Backpack_MistTycoonLife",
+     "name": "Alas angelicales de Madison",
+     "description": "Alas de plumas suaves y flameantes.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Madison Beer",
+      "text": "Pieza del conjunto Madison Beer.",
+      "backendValue": "FirstCaravan"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_misttycoonlife/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_misttycoonlife/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_misttycoonlife/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Particle",
+       "type": "Reactividad",
+       "options": [
+        {
+         "tag": "Particle1",
+         "name": "Sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/backpack_misttycoonlife/variants/particle/particle1.png"
+        },
+        {
+         "tag": "Particle2",
+         "name": "No",
+         "image": "https://fortnite-api.com/images/cosmetics/br/backpack_misttycoonlife/variants/particle/particle2.png"
+        }
+       ]
+      }
+     ],
+     "added": "2026-09-23T16:31:22Z"
+    },
+    {
+     "id": "Backpack_MistTycoonHike",
+     "name": "Peluches de Mookie y Maple",
+     "description": "Escuadrón gatuno de apoyo.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Madison Beer",
+      "text": "Pieza del conjunto Madison Beer.",
+      "backendValue": "FirstCaravan"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_misttycoonhike/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_misttycoonhike/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_misttycoonhike/featured.png"
+     },
+     "added": "2026-09-23T16:31:22Z"
+    },
+    {
+     "id": "EID_MistTycoonLife",
+     "name": "Bittersweet",
+     "description": "Combate la amargura con un poco de dulzura.",
+     "type": {
+      "value": "emote",
+      "displayValue": "Gesto",
+      "backendValue": "AthenaDance"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Madison Beer",
+      "text": "Pieza del conjunto Madison Beer.",
+      "backendValue": "FirstCaravan"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/eid_misttycoonlife/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/eid_misttycoonlife/icon.png"
+     },
+     "showcaseVideo": "aal7m3tbR-4",
+     "added": "2026-09-23T16:31:22Z"
+    },
+    {
+     "id": "EID_MistTycoonHike",
+     "name": "Yes Baby",
+     "description": "Pregúntame y te diré que sí, bebé.",
+     "type": {
+      "value": "emote",
+      "displayValue": "Gesto",
+      "backendValue": "AthenaDance"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Madison Beer",
+      "text": "Pieza del conjunto Madison Beer.",
+      "backendValue": "FirstCaravan"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/eid_misttycoonhike/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/eid_misttycoonhike/icon.png"
+     },
+     "showcaseVideo": "JyHeUTCOrFs",
+     "added": "2026-09-23T16:31:22Z"
+    },
+    {
+     "id": "Pickaxe_MistTycoon_Mic",
+     "name": "Voz de Madison",
+     "description": "Voz de ángel, corazón de piedra.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Madison Beer",
+      "text": "Pieza del conjunto Madison Beer.",
+      "backendValue": "FirstCaravan"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_misttycoon_mic/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_misttycoon_mic/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_misttycoon_mic/featured.png"
+     },
+     "added": "2026-09-24T13:00:55Z"
+    },
+    {
+     "id": "Backpack_MistTycoon_Mic",
+     "name": "Voz de Madison",
+     "description": "Voz de ángel, corazón de piedra.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Madison Beer",
+      "text": "Pieza del conjunto Madison Beer.",
+      "backendValue": "FirstCaravan"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_misttycoon_mic/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_misttycoon_mic/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_misttycoon_mic/featured.png"
+     },
+     "added": "2026-09-24T13:00:55Z"
+    },
+    {
+     "id": "Wrap_MistTycoon",
+     "name": "Glamur de Madison",
+     "description": "Muestra tu estilo.",
+     "type": {
+      "value": "wrap",
+      "displayValue": "Papel",
+      "backendValue": "AthenaItemWrap"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Madison Beer",
+      "text": "Pieza del conjunto Madison Beer.",
+      "backendValue": "FirstCaravan"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/wrap_misttycoon/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/wrap_misttycoon/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/wrap_misttycoon/featured.png"
+     },
+     "added": "2026-09-24T13:00:55Z"
+    },
+    {
+     "id": "LoadingScreen_MistTycoonKeyArt",
+     "name": "Madison en lo más alto",
+     "description": "Ella hace lo que quiere.",
+     "type": {
+      "value": "loadingscreen",
+      "displayValue": "Pantalla de carga",
+      "backendValue": "AthenaLoadingScreen"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Madison Beer",
+      "text": "Pieza del conjunto Madison Beer.",
+      "backendValue": "FirstCaravan"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/loadingscreen_misttycoonkeyart/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/loadingscreen_misttycoonkeyart/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/loadingscreen_misttycoonkeyart/featured.png",
+      "other": {
+       "background": "https://fortnite-api.com/images/cosmetics/br/loadingscreen_misttycoonkeyart/background.png"
+      }
+     },
+     "added": "2026-09-24T13:00:55Z"
+    }
+   ],
+   "tracks": [
+    {
+     "id": "sid_placeholder_906",
+     "devName": "yesbaby",
+     "title": "yes baby",
+     "artist": "Madison Beer",
+     "releaseYear": 2026,
+     "bpm": 134,
+     "duration": 178,
+     "difficulty": {
+      "vocals": 3,
+      "guitar": 3,
+      "bass": 3,
+      "plasticBass": 3,
+      "drums": 4,
+      "plasticDrums": 4
+     },
+     "albumArt": "https://cdn.fortnite-api.com/tracks/a7ac8f21b74ed64b.jpg",
+     "added": "2026-09-23T18:01:04Z"
+    },
+    {
+     "id": "sid_placeholder_907",
+     "devName": "bittersweet",
+     "title": "bittersweet",
+     "artist": "Madison Beer",
+     "releaseYear": 2026,
+     "bpm": 110,
+     "duration": 207,
+     "difficulty": {
+      "vocals": 3,
+      "guitar": 4,
+      "bass": 1,
+      "plasticBass": 1,
+      "drums": 1,
+      "plasticDrums": 1
+     },
+     "albumArt": "https://cdn.fortnite-api.com/tracks/ac6b58e08dc2d37e.jpg",
+     "added": "2026-09-23T18:01:04Z"
+    }
+   ],
+   "instruments": [
+    {
+     "id": "Sparks_MistTycoon_Mic",
+     "name": "Voz de Madison",
+     "description": "Voz de ángel, corazón de piedra.",
+     "type": {
+      "value": "mic",
+      "displayValue": "Micrófono",
+      "backendValue": "SparksMic"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Common"
+     },
+     "images": {
+      "small": "https://fortnite-api.com/images/cosmetics/instruments/sparks_misttycoon_mic/small.png",
+      "large": "https://fortnite-api.com/images/cosmetics/instruments/sparks_misttycoon_mic/large.png"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "added": "2026-09-24T13:00:55Z"
+    }
+   ]
+  }
+ ]
+}

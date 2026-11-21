@@ -1,0 +1,1623 @@
+{
+ "date": "2026-11-21T00:00:00Z",
+ "entries": [
+  {
+   "regularPrice": 4800,
+   "finalPrice": 2800,
+   "devName": "[VIRTUAL]1 x Rap Princess Ice Spice, 1 x Ice Spice, 1 x Ice Spice Mini, 1 x Munchkin, 1 x In Ha Mood, 1 x Oh Shhh, 1 x Iced Out Mic, 1 x Iced Out Mic, 1 x Iced Out Mic for -1 MtxCurrency",
+   "offerId": "v2:/6757f18935d1b7110028b0e9bf1795449bc2fc393ad17063f77288a9cb816080",
+   "inDate": "2026-11-21T00:00:00Z",
+   "outDate": "2026-11-24T23:59:59.999Z",
+   "bundle": {
+    "name": "Lote Ice Spice",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/dbabf28ad9d4b954/renderimage_0.png"
+   },
+   "banner": {
+    "value": "2000 monedas V de descuento",
+    "intensity": "Low",
+    "backendValue": "AmountOff"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -1,
+   "layoutId": "IceSpiceNoicons.99",
+   "layout": {
+    "id": "IceSpiceNoicons",
+    "name": "Ice Spice",
+    "index": 19,
+    "rank": 194,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "00baceff",
+    "color2": "0e3e71ff",
+    "color3": "23c484ff",
+    "textBackgroundColor": "0e3e71ff"
+   },
+   "tileBackgroundMaterial": "ShopTile_CornerGradient",
+   "tileSize": "Size_3_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_BerryTart_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S32/DAv2_Bundle_Featured_BerryTart",
+   "newDisplayAsset": {
+    "id": "DAv2_Bundle_Featured_BerryTart",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__dbabf28ad9d4b954_108a64e6a691a99e.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/dbabf28ad9d4b954/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__dbabf28ad9d4b954_a7c1a6568c09398a.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/dbabf28ad9d4b954/renderimage_1.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__dbabf28ad9d4b954_0df4133c6c474fa1.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/dbabf28ad9d4b954/renderimage_2.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Character_BerryTartBrunt",
+     "name": "Ice Spice princesa del rap",
+     "description": "Viene por la corona.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Ice Spice",
+      "text": "Pieza del conjunto Ice Spice.",
+      "backendValue": "HomeSkeleton"
+     },
+     "introduction": {
+      "chapter": "2",
+      "season": "Remix",
+      "text": "Introducido en Capítulo 2, Temporada Remix.",
+      "backendValue": 32
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_berrytartbrunt/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_berrytartbrunt/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_berrytartbrunt/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Material",
+       "type": "tiara",
+       "options": [
+        {
+         "tag": "Mat1",
+         "name": "sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_berrytartbrunt/variants/material/mat1.png"
+        },
+        {
+         "tag": "Mat2",
+         "name": "no",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_berrytartbrunt/variants/material/mat2.png"
+        }
+       ]
+      },
+      {
+       "channel": "Particle",
+       "type": "Reactivo",
+       "options": [
+        {
+         "tag": "Particle1",
+         "name": "Sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_berrytartbrunt/variants/particle/particle1.png"
+        },
+        {
+         "tag": "Particle2",
+         "name": "No",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_berrytartbrunt/variants/particle/particle2.png"
+        }
+       ]
+      }
+     ],
+     "metaTags": [
+      "Cosmetics.MetaTags.Special.XLarge"
+     ],
+     "showcaseVideo": "Wjc1S4PUD_I",
+     "added": "2024-11-13T10:14:32Z"
+    },
+    {
+     "id": "Character_BerryTartRiver",
+     "name": "Ice Spice",
+     "description": "La princesa promesa del rap.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Ice Spice",
+      "text": "Pieza del conjunto Ice Spice.",
+      "backendValue": "HomeSkeleton"
+     },
+     "introduction": {
+      "chapter": "2",
+      "season": "Remix",
+      "text": "Introducido en Capítulo 2, Temporada Remix.",
+      "backendValue": 32
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_berrytartriver/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_berrytartriver/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_berrytartriver/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Material",
+       "type": "gafas",
+       "options": [
+        {
+         "tag": "Mat1",
+         "name": "sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_berrytartriver/variants/material/mat1.png"
+        },
+        {
+         "tag": "Mat2",
+         "name": "no",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_berrytartriver/variants/material/mat2.png"
+        }
+       ]
+      }
+     ],
+     "showcaseVideo": "2MFxIgnV-eU",
+     "added": "2024-11-13T10:14:32Z"
+    },
+    {
+     "id": "Backpack_BerryTartBrunt",
+     "name": "Ice Spice en miniatura",
+     "description": "Dale un toque picante.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Ice Spice",
+      "text": "Pieza del conjunto Ice Spice.",
+      "backendValue": "HomeSkeleton"
+     },
+     "introduction": {
+      "chapter": "2",
+      "season": "Remix",
+      "text": "Introducido en Capítulo 2, Temporada Remix.",
+      "backendValue": 32
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_berrytartbrunt/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_berrytartbrunt/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_berrytartbrunt/featured.png"
+     },
+     "added": "2024-11-13T10:14:32Z"
+    },
+    {
+     "id": "Backpack_BerryTartRiver",
+     "name": "Munchkin",
+     "description": "Princesa a bordo.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Ice Spice",
+      "text": "Pieza del conjunto Ice Spice.",
+      "backendValue": "HomeSkeleton"
+     },
+     "introduction": {
+      "chapter": "2",
+      "season": "Remix",
+      "text": "Introducido en Capítulo 2, Temporada Remix.",
+      "backendValue": 32
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_berrytartriver/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_berrytartriver/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_berrytartriver/featured.png"
+     },
+     "added": "2024-11-13T10:14:32Z"
+    },
+    {
+     "id": "EID_BerryTart",
+     "name": "In Ha Mood",
+     "description": "Grrr.",
+     "type": {
+      "value": "emote",
+      "displayValue": "Gesto",
+      "backendValue": "AthenaDance"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Ice Spice",
+      "text": "Pieza del conjunto Ice Spice.",
+      "backendValue": "HomeSkeleton"
+     },
+     "introduction": {
+      "chapter": "2",
+      "season": "Remix",
+      "text": "Introducido en Capítulo 2, Temporada Remix.",
+      "backendValue": 32
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/eid_berrytart/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/eid_berrytart/icon.png"
+     },
+     "showcaseVideo": "PgN4eui05Aw",
+     "added": "2024-11-13T10:14:32Z"
+    },
+    {
+     "id": "EID_BerryTartRiver",
+     "name": "Oh Shhh",
+     "description": "No tienes que guardar silencio.",
+     "type": {
+      "value": "emote",
+      "displayValue": "Gesto",
+      "backendValue": "AthenaDance"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Ice Spice",
+      "text": "Pieza del conjunto Ice Spice.",
+      "backendValue": "HomeSkeleton"
+     },
+     "introduction": {
+      "chapter": "2",
+      "season": "Remix",
+      "text": "Introducido en Capítulo 2, Temporada Remix.",
+      "backendValue": 32
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/eid_berrytartriver/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/eid_berrytartriver/icon.png"
+     },
+     "showcaseVideo": "T4__8RIzos0",
+     "added": "2024-11-13T10:14:32Z"
+    },
+    {
+     "id": "Backpack_BerryTart_Mic",
+     "name": "Micrófono Ice-pectacular",
+     "description": "Grrr.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Ice Spice",
+      "text": "Pieza del conjunto Ice Spice.",
+      "backendValue": "HomeSkeleton"
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_berrytart_mic/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_berrytart_mic/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_berrytart_mic/featured.png"
+     },
+     "added": "2025-01-26T00:00:00Z"
+    },
+    {
+     "id": "Pickaxe_BerryTart_Mic",
+     "name": "Micrófono Ice-pectacular",
+     "description": "Grrr.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Ice Spice",
+      "text": "Pieza del conjunto Ice Spice.",
+      "backendValue": "HomeSkeleton"
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_berrytart_mic/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_berrytart_mic/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_berrytart_mic/featured.png"
+     },
+     "added": "2025-01-26T00:00:00Z"
+    }
+   ],
+   "instruments": [
+    {
+     "id": "Sparks_Mic_BerryTart",
+     "name": "Micrófono Ice-pectacular",
+     "description": "Grrr.",
+     "type": {
+      "value": "mic",
+      "displayValue": "Micrófono",
+      "backendValue": "SparksMic"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Common"
+     },
+     "images": {
+      "small": "https://fortnite-api.com/images/cosmetics/instruments/sparks_mic_berrytart/small.png",
+      "large": "https://fortnite-api.com/images/cosmetics/instruments/sparks_mic_berrytart/large.png"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "added": "2024-11-13T10:13:40Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 5000,
+   "finalPrice": 2400,
+   "devName": "[VIRTUAL]1 x Widowmaker, 1 x Widowmaker's Fang, 1 x Widow's Kiss, 1 x Kiriko, 1 x Kiriko's Kitsune, 1 x Kiriko's Kunai, 1 x Kitsune Slippers, 1 x Ofuda Whirlwind, 1 x Widowmaker's Salute for -1 MtxCurrency",
+   "offerId": "v2:/38567ddc43e462542d125af3a11a6a5bff1197bcfce1dd84cebf915be90a1034",
+   "inDate": "2026-11-21T00:00:00Z",
+   "outDate": "2026-12-04T23:59:59.999Z",
+   "banner": {
+    "value": "Nuevo",
+    "intensity": "High",
+    "backendValue": "New"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -2,
+   "layoutId": "OW21.99",
+   "layout": {
+    "id": "OW21",
+    "name": "Overwatch",
+    "index": 0,
+    "rank": 198,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "billboard",
+    "textureMetadata": [
+     {
+      "key": "background",
+      "value": "https://cdn2.unrealengine.com/sk-Billboard_DanderClay_BG-c44031ba.png"
+     },
+     {
+      "key": "foreground",
+      "value": "https://cdn2.unrealengine.com/sk-Billboard_DanderClay_Character-22710007.png"
+     },
+     {
+      "key": "foreground_juno",
+      "value": "https://cdn2.unrealengine.com/sk-Billboard_DanderClay_Figure-f8cce08a.png"
+     },
+     {
+      "key": "bodyImage",
+      "value": "https://cdn2.unrealengine.com/sk-Billboard_DanderClay_ItemStack-12a7b7ba.png"
+     },
+     {
+      "key": "titleImage",
+      "value": "https://cdn2.unrealengine.com/sk-Billboard_DanderClay_Logo-9e6c08bb.png"
+     }
+    ],
+    "stringMetadata": [
+     {
+      "key": "alignment",
+      "value": "left"
+     },
+     {
+      "key": "highlightEnabled",
+      "value": "true"
+     },
+     {
+      "key": "parallaxEnabled",
+      "value": "true"
+     },
+     {
+      "key": "titleColorA",
+      "value": "FFFFFF"
+     },
+     {
+      "key": "titleColorB",
+      "value": "FFFFFF"
+     },
+     {
+      "key": "displayMode",
+      "value": "billboard"
+     }
+    ],
+    "textMetadata": [
+     {
+      "key": "cta",
+      "value": "Ver oferta"
+     },
+     {
+      "key": "subtitle",
+      "value": "Lote de Widowmaker y Kiriko"
+     }
+    ]
+   },
+   "colors": {
+    "color1": "4ab8efff",
+    "color3": "b3f2ffff",
+    "textBackgroundColor": "76c6e6ff"
+   },
+   "tileBackgroundMaterial": "ShopTile_HolographicSquares",
+   "tileSize": "Size_4_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_DanderClay_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S43/DAv2_Bundle_Featured_DanderClay",
+   "brItems": [
+    {
+     "id": "Character_ShoneStays",
+     "name": "Widowmaker",
+     "description": "Una puntería devastadora.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "gaminglegends",
+      "displayValue": "Leyendas de videojuegos",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "Leyendas de videojuegos",
+      "colors": [
+       "8078ffff",
+       "5328d6ff",
+       "3e1398ff",
+       "28085fff",
+       "0d0027ff"
+      ],
+      "backendValue": "PlatformSeries"
+     },
+     "set": {
+      "value": "Overwatch",
+      "text": "Pieza del conjunto Overwatch.",
+      "backendValue": "AlpineSaturn"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_shonestays/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_shonestays/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_shonestays/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_shonestays/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_shonestays/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_shonestays/wide.png"
+      }
+     },
+     "showcaseVideo": "aWMquVEHIp0",
+     "dynamicPakId": "1035",
+     "added": "2026-11-19T14:12:42Z"
+    },
+    {
+     "id": "Pickaxe_ShoneStays",
+     "name": "Colmillo de Widowmaker",
+     "description": "No hay mordida más letal que la suya.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "gaminglegends",
+      "displayValue": "Leyendas de videojuegos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Leyendas de videojuegos",
+      "colors": [
+       "8078ffff",
+       "5328d6ff",
+       "3e1398ff",
+       "28085fff",
+       "0d0027ff"
+      ],
+      "backendValue": "PlatformSeries"
+     },
+     "set": {
+      "value": "Overwatch",
+      "text": "Pieza del conjunto Overwatch.",
+      "backendValue": "AlpineSaturn"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_shonestays/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_shonestays/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_shonestays/featured.png"
+     },
+     "dynamicPakId": "1035",
+     "added": "2026-11-19T14:12:42Z"
+    },
+    {
+     "id": "Backpack_ShoneStays",
+     "name": "Beso de viuda",
+     "description": "Un beso que puede ser letal.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "gaminglegends",
+      "displayValue": "Leyendas de videojuegos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Leyendas de videojuegos",
+      "colors": [
+       "8078ffff",
+       "5328d6ff",
+       "3e1398ff",
+       "28085fff",
+       "0d0027ff"
+      ],
+      "backendValue": "PlatformSeries"
+     },
+     "set": {
+      "value": "Overwatch",
+      "text": "Pieza del conjunto Overwatch.",
+      "backendValue": "AlpineSaturn"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_shonestays/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_shonestays/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_shonestays/featured.png"
+     },
+     "dynamicPakId": "1035",
+     "added": "2026-11-19T14:12:42Z"
+    },
+    {
+     "id": "Character_DanderClay",
+     "name": "Kiriko",
+     "description": "Encontró su propio camino.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "gaminglegends",
+      "displayValue": "Leyendas de videojuegos",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "Leyendas de videojuegos",
+      "colors": [
+       "8078ffff",
+       "5328d6ff",
+       "3e1398ff",
+       "28085fff",
+       "0d0027ff"
+      ],
+      "backendValue": "PlatformSeries"
+     },
+     "set": {
+      "value": "Overwatch",
+      "text": "Pieza del conjunto Overwatch.",
+      "backendValue": "AlpineSaturn"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_danderclay/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_danderclay/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_danderclay/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_danderclay/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_danderclay/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_danderclay/wide.png"
+      }
+     },
+     "showcaseVideo": "8FbMKH1OGV4",
+     "dynamicPakId": "1043",
+     "added": "2026-11-19T14:00:37Z"
+    },
+    {
+     "id": "Backpack_DanderClay",
+     "name": "Kitsune de Kiriko",
+     "description": "Confía en que el espíritu zorro chibi te cuidará la espalda.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "gaminglegends",
+      "displayValue": "Leyendas de videojuegos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Leyendas de videojuegos",
+      "colors": [
+       "8078ffff",
+       "5328d6ff",
+       "3e1398ff",
+       "28085fff",
+       "0d0027ff"
+      ],
+      "backendValue": "PlatformSeries"
+     },
+     "set": {
+      "value": "Overwatch",
+      "text": "Pieza del conjunto Overwatch.",
+      "backendValue": "AlpineSaturn"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_danderclay/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_danderclay/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_danderclay/featured.png"
+     },
+     "dynamicPakId": "1043",
+     "added": "2026-11-19T14:00:37Z"
+    },
+    {
+     "id": "Pickaxe_DanderClay",
+     "name": "Kunais de Kiriko",
+     "description": "Las armas preferidas de Kiriko.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "gaminglegends",
+      "displayValue": "Leyendas de videojuegos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Leyendas de videojuegos",
+      "colors": [
+       "8078ffff",
+       "5328d6ff",
+       "3e1398ff",
+       "28085fff",
+       "0d0027ff"
+      ],
+      "backendValue": "PlatformSeries"
+     },
+     "set": {
+      "value": "Overwatch",
+      "text": "Pieza del conjunto Overwatch.",
+      "backendValue": "AlpineSaturn"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_danderclay/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_danderclay/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_danderclay/featured.png"
+     },
+     "dynamicPakId": "1043",
+     "added": "2026-11-19T14:00:37Z"
+    },
+    {
+     "id": "Shoes_DanderClay",
+     "name": "Pasos de Kitsune",
+     "description": "Presume tu estilo.",
+     "type": {
+      "value": "shoe",
+      "displayValue": "Calzado",
+      "backendValue": "CosmeticShoes"
+     },
+     "rarity": {
+      "value": "gaminglegends",
+      "displayValue": "Leyendas de videojuegos",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "series": {
+      "value": "Leyendas de videojuegos",
+      "colors": [
+       "8078ffff",
+       "5328d6ff",
+       "3e1398ff",
+       "28085fff",
+       "0d0027ff"
+      ],
+      "backendValue": "PlatformSeries"
+     },
+     "set": {
+      "value": "Overwatch",
+      "text": "Pieza del conjunto Overwatch.",
+      "backendValue": "AlpineSaturn"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/shoes_danderclay/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/shoes_danderclay/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/shoes_danderclay/featured.png"
+     },
+     "dynamicPakId": "1024",
+     "added": "2026-11-13T00:00:00Z"
+    },
+    {
+     "id": "EID_DanderClay",
+     "name": "Tornado de ofuda",
+     "description": "Lo lleva el viento.",
+     "type": {
+      "value": "emote",
+      "displayValue": "Gesto",
+      "backendValue": "AthenaDance"
+     },
+     "rarity": {
+      "value": "gaminglegends",
+      "displayValue": "Leyendas de videojuegos",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "series": {
+      "value": "Leyendas de videojuegos",
+      "colors": [
+       "8078ffff",
+       "5328d6ff",
+       "3e1398ff",
+       "28085fff",
+       "0d0027ff"
+      ],
+      "backendValue": "PlatformSeries"
+     },
+     "set": {
+      "value": "Overwatch",
+      "text": "Pieza del conjunto Overwatch.",
+      "backendValue": "AlpineSaturn"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/eid_danderclay/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/eid_danderclay/icon.png"
+     },
+     "showcaseVideo": "tqrtxvP5Xng",
+     "dynamicPakId": "1043",
+     "added": "2026-11-19T14:00:37Z"
+    },
+    {
+     "id": "Wrap_ShoneStays",
+     "name": "Insignia de Widowmaker",
+     "description": "Muestra tu estilo.",
+     "type": {
+      "value": "wrap",
+      "displayValue": "Papel",
+      "backendValue": "AthenaItemWrap"
+     },
+     "rarity": {
+      "value": "gaminglegends",
+      "displayValue": "Leyendas de videojuegos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Leyendas de videojuegos",
+      "colors": [
+       "8078ffff",
+       "5328d6ff",
+       "3e1398ff",
+       "28085fff",
+       "0d0027ff"
+      ],
+      "backendValue": "PlatformSeries"
+     },
+     "set": {
+      "value": "Overwatch",
+      "text": "Pieza del conjunto Overwatch.",
+      "backendValue": "AlpineSaturn"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/wrap_shonestays/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/wrap_shonestays/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/wrap_shonestays/featured.png"
+     },
+     "dynamicPakId": "1043",
+     "added": "2026-11-19T14:00:37Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 2400,
+   "finalPrice": 2400,
+   "devName": "[VIRTUAL]1 x Porsche Cayenne Turbo Electric, 1 x Psych Wave, 1 x Tracer, 1 x Mercy, 1 x D.Va, 1 x Genji, 1 x Porsche Cayenne Turbo Electric for -1 MtxCurrency",
+   "offerId": "v2:/ccee7a57a32bcd7f5b33a2c00c55eb74cc00de3ae5148b9988dae968478ab580",
+   "inDate": "2026-11-21T00:00:00Z",
+   "outDate": "2026-12-04T23:59:59.999Z",
+   "bundle": {
+    "name": "Porsche Cayenne Turbo Electric y Overwatch",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/b1b5f35e662e04b6/renderimage_0.png"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -2,
+   "layoutId": "OW21.96",
+   "layout": {
+    "id": "OW21",
+    "name": "Overwatch",
+    "index": 0,
+    "rank": 198,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "4ab8efff",
+    "color3": "b3f2ffff",
+    "textBackgroundColor": "76c6e6ff"
+   },
+   "tileBackgroundMaterial": "ShopTile_HolographicSquares",
+   "tileSize": "Size_2_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_BlueTorque_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S40/DAv2_Bundle_Featured_BlueTorque",
+   "newDisplayAsset": {
+    "id": "DAv2_Bundle_Featured_BlueTorque",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.DelMar",
+      "fileName": "cosmo__b1b5f35e662e04b6_c5dd2e58ea945bb2.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/b1b5f35e662e04b6/renderimage_0.png"
+     }
+    ]
+   },
+   "cars": [
+    {
+     "id": "CarBody_BlueTorque",
+     "vehicleId": "VCID_Body_BlueTorque",
+     "name": "Porsche Cayenne Turbo Electric",
+     "description": "Estilo de superdeportivo con diseño eléctrico.",
+     "type": {
+      "value": "body",
+      "displayValue": "Carrocería",
+      "backendValue": "VehicleCosmetics_Body"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "images": {
+      "small": "https://fortnite-api.com/images/cosmetics/cars/carbody_bluetorque/small.png",
+      "large": "https://fortnite-api.com/images/cosmetics/cars/carbody_bluetorque/large.png"
+     },
+     "series": {
+      "value": "PORSCHE SERIES",
+      "colors": [
+       "c2cdd6ff",
+       "a2acb4ff",
+       "ebd698ff",
+       "222626ff"
+      ],
+      "backendValue": "Series_Porsche"
+     },
+     "added": "2026-05-14T09:00:00Z"
+    },
+    {
+     "id": "CarSkin_BlueTorqueLivery01",
+     "vehicleId": "VCID_Skin_BlueTorqueLivery01",
+     "name": "Onda psíquica",
+     "description": "Calcomanía personalizada de Porsche Cayenne Turbo Electric.",
+     "type": {
+      "value": "skin",
+      "displayValue": "Aspecto",
+      "backendValue": "VehicleCosmetics_Skin"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "images": {
+      "small": "https://fortnite-api.com/images/cosmetics/cars/carskin_bluetorquelivery01/small.png",
+      "large": "https://fortnite-api.com/images/cosmetics/cars/carskin_bluetorquelivery01/large.png"
+     },
+     "series": {
+      "value": "PORSCHE SERIES",
+      "colors": [
+       "c2cdd6ff",
+       "a2acb4ff",
+       "ebd698ff",
+       "222626ff"
+      ],
+      "backendValue": "Series_Porsche"
+     },
+     "added": "2026-05-14T09:00:00Z"
+    },
+    {
+     "id": "CarSkin_BlueTorque01",
+     "vehicleId": "VCID_Skin_BlueTorque01",
+     "name": "Tracer",
+     "description": "En un abrir y cerrar de ojos. Calcomanía personalizada de Porsche Cayenne Turbo Electric.",
+     "type": {
+      "value": "skin",
+      "displayValue": "Aspecto",
+      "backendValue": "VehicleCosmetics_Skin"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "images": {
+      "small": "https://fortnite-api.com/images/cosmetics/cars/carskin_bluetorque01/small.png",
+      "large": "https://fortnite-api.com/images/cosmetics/cars/carskin_bluetorque01/large.png"
+     },
+     "series": {
+      "value": "SERIE DE LEYENDAS DEL JUEGO",
+      "colors": [
+       "e7f4ffff",
+       "c2cdd6ff",
+       "a2acb4ff",
+       "222626ff"
+      ],
+      "backendValue": "Series_GamingLegends"
+     },
+     "added": "2026-05-14T09:00:00Z"
+    },
+    {
+     "id": "CarSkin_BlueTorque02",
+     "vehicleId": "VCID_Skin_BlueTorque02",
+     "name": "Mercy",
+     "description": "Curación sobre ruedas. Calcomanía personalizada de Porsche Cayenne Turbo Electric.",
+     "type": {
+      "value": "skin",
+      "displayValue": "Aspecto",
+      "backendValue": "VehicleCosmetics_Skin"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "images": {
+      "small": "https://fortnite-api.com/images/cosmetics/cars/carskin_bluetorque02/small.png",
+      "large": "https://fortnite-api.com/images/cosmetics/cars/carskin_bluetorque02/large.png"
+     },
+     "series": {
+      "value": "SERIE DE LEYENDAS DEL JUEGO",
+      "colors": [
+       "e7f4ffff",
+       "c2cdd6ff",
+       "a2acb4ff",
+       "222626ff"
+      ],
+      "backendValue": "Series_GamingLegends"
+     },
+     "added": "2026-05-14T09:00:00Z"
+    },
+    {
+     "id": "CarSkin_BlueTorque03",
+     "vehicleId": "VCID_Skin_BlueTorque03",
+     "name": "D.Va",
+     "description": "No es Tokki, pero servirá. Calcomanía personalizada de Porsche Cayenne Turbo Electric.",
+     "type": {
+      "value": "skin",
+      "displayValue": "Aspecto",
+      "backendValue": "VehicleCosmetics_Skin"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "images": {
+      "small": "https://fortnite-api.com/images/cosmetics/cars/carskin_bluetorque03/small.png",
+      "large": "https://fortnite-api.com/images/cosmetics/cars/carskin_bluetorque03/large.png"
+     },
+     "series": {
+      "value": "SERIE DE LEYENDAS DEL JUEGO",
+      "colors": [
+       "e7f4ffff",
+       "c2cdd6ff",
+       "a2acb4ff",
+       "222626ff"
+      ],
+      "backendValue": "Series_GamingLegends"
+     },
+     "added": "2026-05-14T09:00:00Z"
+    },
+    {
+     "id": "CarSkin_BlueTorque04",
+     "vehicleId": "VCID_Skin_BlueTorque04",
+     "name": "Genji",
+     "description": "Veloz como ataque de dragón. Calcomanía personalizada de Porsche Cayenne Turbo Electric.",
+     "type": {
+      "value": "skin",
+      "displayValue": "Aspecto",
+      "backendValue": "VehicleCosmetics_Skin"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "images": {
+      "small": "https://fortnite-api.com/images/cosmetics/cars/carskin_bluetorque04/small.png",
+      "large": "https://fortnite-api.com/images/cosmetics/cars/carskin_bluetorque04/large.png"
+     },
+     "series": {
+      "value": "SERIE DE LEYENDAS DEL JUEGO",
+      "colors": [
+       "e7f4ffff",
+       "c2cdd6ff",
+       "a2acb4ff",
+       "222626ff"
+      ],
+      "backendValue": "Series_GamingLegends"
+     },
+     "added": "2026-05-14T09:00:00Z"
+    },
+    {
+     "id": "Wheel_BlueTorque01",
+     "vehicleId": "VCID_Wheel_BlueTorque01",
+     "name": "Porsche Cayenne Turbo Electric",
+     "description": "La belleza de la perfección.",
+     "type": {
+      "value": "wheel",
+      "displayValue": "Rueda",
+      "backendValue": "VehicleCosmetics_Wheel"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "images": {
+      "small": "https://fortnite-api.com/images/cosmetics/cars/wheel_bluetorque01/small.png",
+      "large": "https://fortnite-api.com/images/cosmetics/cars/wheel_bluetorque01/large.png"
+     },
+     "series": {
+      "value": "PORSCHE SERIES",
+      "colors": [
+       "c2cdd6ff",
+       "a2acb4ff",
+       "ebd698ff",
+       "222626ff"
+      ],
+      "backendValue": "Series_Porsche"
+     },
+     "added": "2026-05-14T09:00:00Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 2300,
+   "finalPrice": 1700,
+   "devName": "[VIRTUAL]1 x Syd, 1 x Cuddlebear Cutie, 1 x Weighted Spikegloves, 1 x Heartwave for -1 MtxCurrency",
+   "offerId": "v2:/bb38b6d1fb3cac760a3a484e0de17767e3e17c70b7f97df416f5113ae83f8a43",
+   "inDate": "2026-11-21T00:00:00Z",
+   "outDate": "2026-11-22T23:59:59.999Z",
+   "bundle": {
+    "name": "Lote Osa amorosa",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/bfab08ebbd35ec75/renderimage_0.png"
+   },
+   "banner": {
+    "value": "600 monedas V de descuento",
+    "intensity": "Low",
+    "backendValue": "AmountOff"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -1,
+   "layoutId": "BR112126.99",
+   "layout": {
+    "id": "BR112126",
+    "name": "Energía de protagonista ",
+    "index": 16,
+    "rank": 181,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "290f07ff",
+    "color3": "824100ff",
+    "textBackgroundColor": "824100ff"
+   },
+   "tileSize": "Size_1_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_FuzzyBearSummer_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/DAv2_Bundle_Featured_FuzzyBearSummer",
+   "newDisplayAsset": {
+    "id": "DAv2_Bundle_Featured_FuzzyBearSummer",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__bfab08ebbd35ec75_a699eeef844fc29d.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/bfab08ebbd35ec75/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__bfab08ebbd35ec75_39822d7dc095b7e7.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/bfab08ebbd35ec75/renderimage_1.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__bfab08ebbd35ec75_cc9b1095a489677a.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/bfab08ebbd35ec75/renderimage_2.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__bfab08ebbd35ec75_50cde5216f427736.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/bfab08ebbd35ec75/renderimage_3.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__bfab08ebbd35ec75_a2b9790423b51b74.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/bfab08ebbd35ec75/renderimage_4.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "CID_A_453_Athena_Commando_F_FuzzyBearSummer",
+     "name": "Syd",
+     "description": "No oses acercarte a ella.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Osa amorosa",
+      "text": "Pieza del conjunto Osa amorosa.",
+      "backendValue": "JustSoft"
+     },
+     "introduction": {
+      "chapter": "3",
+      "season": "3",
+      "text": "Introducido en Capítulo 3, Temporada 3.",
+      "backendValue": 21
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/cid_a_453_athena_commando_f_fuzzybearsummer/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/cid_a_453_athena_commando_f_fuzzybearsummer/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/cid_a_453_athena_commando_f_fuzzybearsummer/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/cid_a_453_athena_commando_f_fuzzybearsummer/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/cid_a_453_athena_commando_f_fuzzybearsummer/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/cid_a_453_athena_commando_f_fuzzybearsummer/wide.png"
+      },
+      "bean": {
+       "small": "https://fortnite-api.com/images/cosmetics/beans/bean_fuzzybearsummer/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/beans/bean_fuzzybearsummer/large.png"
+      }
+     },
+     "variants": [
+      {
+       "channel": "Parts",
+       "type": "estilo",
+       "options": [
+        {
+         "tag": "Stage1",
+         "name": "Capucha",
+         "image": "https://fortnite-api.com/images/cosmetics/br/cid_a_453_athena_commando_f_fuzzybearsummer/variants/parts/stage1.png"
+        },
+        {
+         "tag": "Stage2",
+         "name": "Sin capucha",
+         "image": "https://fortnite-api.com/images/cosmetics/br/cid_a_453_athena_commando_f_fuzzybearsummer/variants/parts/stage2.png"
+        }
+       ]
+      },
+      {
+       "channel": "Material",
+       "type": "color",
+       "options": [
+        {
+         "tag": "Mat1",
+         "name": "Syd",
+         "image": "https://fortnite-api.com/images/cosmetics/br/cid_a_453_athena_commando_f_fuzzybearsummer/variants/material/mat1.png"
+        },
+        {
+         "tag": "Mat2",
+         "name": "menta",
+         "image": "https://fortnite-api.com/images/cosmetics/br/cid_a_453_athena_commando_f_fuzzybearsummer/variants/material/mat2.png"
+        },
+        {
+         "tag": "Mat3",
+         "name": "Panda rojo",
+         "image": "https://fortnite-api.com/images/cosmetics/br/cid_a_453_athena_commando_f_fuzzybearsummer/variants/material/mat3.png"
+        }
+       ]
+      }
+     ],
+     "showcaseVideo": "t8iSoSZBtVs",
+     "added": "2022-07-18T12:38:54Z"
+    },
+    {
+     "id": "BID_A_042_FuzzyBearSummerFemale",
+     "name": "Osito cariñoso",
+     "description": "¡Una cosita muy bonita!",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Osa amorosa",
+      "text": "Pieza del conjunto Osa amorosa.",
+      "backendValue": "JustSoft"
+     },
+     "introduction": {
+      "chapter": "3",
+      "season": "3",
+      "text": "Introducido en Capítulo 3, Temporada 3.",
+      "backendValue": 21
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/bid_a_042_fuzzybearsummerfemale/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/bid_a_042_fuzzybearsummerfemale/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/bid_a_042_fuzzybearsummerfemale/featured.png"
+     },
+     "added": "2022-07-18T12:38:54Z"
+    },
+    {
+     "id": "Pickaxe_ID_831_FuzzyBearSummerFemale",
+     "name": "Puños espinosos",
+     "description": "Muestra tus golpes más lacerantes.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Osa amorosa",
+      "text": "Pieza del conjunto Osa amorosa.",
+      "backendValue": "JustSoft"
+     },
+     "introduction": {
+      "chapter": "3",
+      "season": "3",
+      "text": "Introducido en Capítulo 3, Temporada 3.",
+      "backendValue": 21
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_id_831_fuzzybearsummerfemale/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_id_831_fuzzybearsummerfemale/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_id_831_fuzzybearsummerfemale/featured.png"
+     },
+     "showcaseVideo": "ZDfhkC40HjI",
+     "added": "2022-07-18T12:38:54Z"
+    },
+    {
+     "id": "Wrap_503_FuzzyBearSummer",
+     "name": "Ola de amor",
+     "description": "Muestra tu estilo.",
+     "type": {
+      "value": "wrap",
+      "displayValue": "Papel",
+      "backendValue": "AthenaItemWrap"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "Osa amorosa",
+      "text": "Pieza del conjunto Osa amorosa.",
+      "backendValue": "JustSoft"
+     },
+     "introduction": {
+      "chapter": "3",
+      "season": "3",
+      "text": "Introducido en Capítulo 3, Temporada 3.",
+      "backendValue": 21
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/wrap_503_fuzzybearsummer/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/wrap_503_fuzzybearsummer/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/wrap_503_fuzzybearsummer/featured.png"
+     },
+     "showcaseVideo": "Gn7ECxGdk3E",
+     "added": "2022-07-18T12:38:54Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 1200,
+   "finalPrice": 1200,
+   "devName": "[VIRTUAL]1 x Peely Heelys for 1200 MtxCurrency",
+   "offerId": "v2:/3db3264e43f6292fee9247adcc481d170083ae256b23378d526912720003eb28",
+   "inDate": "2026-11-21T00:00:00Z",
+   "outDate": "2026-11-24T23:59:59.999Z",
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -4,
+   "layoutId": "1121Kicks.98",
+   "layout": {
+    "id": "1121Kicks",
+    "name": "Diviértete",
+    "index": 17,
+    "rank": 183,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "9d99bdff",
+    "color3": "63559dff",
+    "textBackgroundColor": "63559dff"
+   },
+   "tileSize": "Size_1_x_1",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S40/DAv2_Shoes_JoyGridForge",
+   "newDisplayAsset": {
+    "id": "DAv2_Shoes_JoyGridForge",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__442ea21371ff5713_05bb099945be7f1f.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/442ea21371ff5713/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__442ea21371ff5713_d9b960022e5667a1.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/442ea21371ff5713/renderimage_1.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__442ea21371ff5713_518c9afcd70f2c0b.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/442ea21371ff5713/renderimage_2.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Shoes_JoyGridForge",
+     "name": "Heelys de Bananín",
+     "description": "Presume tu estilo.",
+     "type": {
+      "value": "shoe",
+      "displayValue": "Calzado",
+      "backendValue": "CosmeticShoes"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "Calzado Heelys",
+      "text": "Pieza del conjunto Calzado Heelys.",
+      "backendValue": "TrickDeck"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "2",
+      "text": "Introducido en Capítulo 7, Temporada 2.",
+      "backendValue": 40
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/shoes_joygridforge/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/shoes_joygridforge/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/shoes_joygridforge/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Material",
+       "type": "Ruedas",
+       "options": [
+        {
+         "tag": "Mat1",
+         "name": "No",
+         "image": "https://fortnite-api.com/images/cosmetics/br/shoes_joygridforge/variants/material/mat1.png"
+        },
+        {
+         "tag": "Mat2",
+         "name": "Sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/shoes_joygridforge/variants/material/mat2.png"
+        }
+       ]
+      }
+     ],
+     "builtInEmoteIds": [
+      "EID_JoyGrid"
+     ],
+     "added": "2026-03-19T08:00:57Z"
+    }
+   ]
+  }
+ ]
+}
