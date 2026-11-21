@@ -523,6 +523,27 @@
     "Character_VouchTrig"
    ],
    "note": "Every map place has had its '¿Dónde está?', so this '¿Dónde está?' day in the 2:1 rotation got the other evergreen format again; whether to repeat places instead is still a question for the owner."
+  },
+  {
+   "date": "2026-11-21",
+   "slot": "15:45",
+   "format": "Tienda Pirata diaria (sevan)",
+   "topic": "Se va hoy (2026-11-21): Lote Madison Beer, 3400 pavos (normalmente 6800)",
+   "folder": "video/auto/2026-11-21-pirata-sevan"
+  },
+  {
+   "date": "2026-11-21",
+   "slot": "17:15",
+   "format": "Tienda Pirata diaria (caros)",
+   "topic": "Lo nuevo más caro de hoy (2026-11-21): Lote Ice Spice 2800, Widowmaker y Kiriko 2400, Porsche Cayenne Turbo Electric y Overwatch 2400, Lote Osa amorosa 1700, Heelys de Bananín 1200",
+   "folder": "video/auto/2026-11-21-pirata-caros"
+  },
+  {
+   "date": "2026-11-21",
+   "slot": "19:30",
+   "format": "Tienda Pirata diaria (cuenta)",
+   "topic": "Quedan 14 días · dato: Horas del Tesoro 2026-11-21",
+   "folder": "video/auto/2026-11-21-pirata-cuenta"
   }
  ]
 }
