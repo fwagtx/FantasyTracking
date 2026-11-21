@@ -100,9 +100,24 @@ def spoken(s):
     return " ".join(w.capitalize() if w.isupper() and len(w) > 2 else w for w in s.split(" "))
 
 
+def names_of(e):
+    """The names a listing goes by in Epic's data, which is what its claims match: the bundle's name; for a listing with no
+    bundle name and two or more skins, every skin (2026-11-21: Widowmaker and Kiriko came as one 2400 listing, and
+    "Widowmaker" alone read as if that skin cost 2400); else its first item."""
+    bundle = ((e.get("bundle") or {}).get("name") or "").strip()
+    if bundle:
+        return [bundle]
+    outfits = [i["name"].strip() for i in e.get("brItems") or [] if (i.get("type") or {}).get("value") == "outfit" and (i.get("name") or "").strip()]
+    if len(outfits) > 1:
+        return outfits
+    first = (((e.get("brItems") or [{}])[0].get("name")) or ((e.get("cars") or [{}])[0].get("name"))
+             or ((e.get("tracks") or [{}])[0].get("title")) or ((e.get("instruments") or [{}])[0].get("name")) or "").strip()
+    return [first] if first else []
+
+
 def name_of(e):
-    return ((e.get("bundle") or {}).get("name") or ((e.get("brItems") or [{}])[0].get("name")) or ((e.get("cars") or [{}])[0].get("name"))
-            or ((e.get("tracks") or [{}])[0].get("title")) or ((e.get("instruments") or [{}])[0].get("name")) or "").strip()
+    n = names_of(e)
+    return ", ".join(n[:-1]) + " y " + n[-1] if len(n) > 1 else (n[0] if n else "")
 
 
 def art_of(e):
@@ -213,7 +228,7 @@ def sevan(folder, src_dir):
            "price": {"final": f, "regular": r}, "when": "se va hoy · 6 PM (CDMX)", "tone": "last", "ask": ["¿Te lo", "llevarías?"],
            "caption": f"#EpicPartner {body}\n#fortnite #tiendapirata #tiendafortnite",
            "claims": [{"text": f"{name}: {f} pavos (normalmente {r}) en la tienda de hoy ({day})", "source": "shop-entry.json",
-                       "match": [name, f'"finalPrice": {f}', f'"regularPrice": {r}', f'"date": "{shop["date"]}"']},
+                       "match": [*names_of(e), f'"finalPrice": {f}', f'"regularPrice": {r}', f'"date": "{shop["date"]}"']},
                       {"text": f"Se va hoy a las 6 PM (CDMX): outDate {e['outDate']}", "source": "shop-entry.json", "match": [f'"outDate": "{e["outDate"]}"'],
                        "visual": "23:59 UTC is 5:59 PM in Mexico City (UTC-6): it leaves at the 6 PM reset"},
                       {"text": f"Trae {contents}", "source": "shop-entry.json", "match": [i["name"] for i in items]}, FREE]}
@@ -284,17 +299,17 @@ def caros(folder, src_dir):
         if rank == 5 and nxt and nxt["finalPrice"] == f:
             n6 = name_of(nxt)
             extras.append({"p": say(f"Y empatado: {n6}.", 0.15, f"Y empatado: {spoken(n6)}." if spoken(n6) != n6 else None), "text": f"empata con {n6}"})
-            claims.append({"text": f"{n6} también cuesta {f} pavos hoy", "source": "shop-entries.json", "match": [n6, f'"finalPrice": {f}']})
+            claims.append({"text": f"{n6} también cuesta {f} pavos hoy", "source": "shop-entries.json", "match": [*names_of(nxt), f'"finalPrice": {f}']})
         if rank == 1 and r > f:
             extras.append({"p": say(f"Y su precio normal es de {r}.", 0.15), "text": f"precio normal: {r}"})
-            claims.append({"text": f"{name}: precio normal {r} pavos", "source": "shop-entries.json", "match": [name, f'"regularPrice": {r}']})
+            claims.append({"text": f"{name}: precio normal {r} pavos", "source": "shop-entries.json", "match": [*names_of(e), f'"regularPrice": {r}']})
         if extras:
             it["extras"] = extras
         if rank == 1:
             it["sticker"] = {"p": say("¡Con la Tienda Pirata: cero pavos!", 0.65), "text": "con la Tienda Pirata: 0 pavos 🏴‍☠️"}
             it["flag"] = "🏴‍☠️"
         claims.append({"text": f"{name}: {f} pavos en la tienda de hoy ({day})" + (", nuevo hoy" if new else ""), "source": "shop-entries.json",
-                       "match": [name, f'"finalPrice": {f}', f'"date": "{shop["date"]}"'] + ([f'"inDate": "{e["inDate"]}"'] if new else [])})
+                       "match": [*names_of(e), f'"finalPrice": {f}', f'"date": "{shop["date"]}"'] + ([f'"inDate": "{e["inDate"]}"'] if new else [])})
         items.append(it)
     # "compañero" is Epic's es-419 name for a sidekick (the line said "sidekick" until Nov 16)
     recap_line = "Con la Tienda Pirata, todo lo que cuesta pavos es gratis por 14 días" + (", y solo puedes reclamar un compañero." if sidekick else ".") + " ¿Cuál te llevarías?"
