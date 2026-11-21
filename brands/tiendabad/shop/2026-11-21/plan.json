@@ -1,0 +1,160 @@
+{
+ "date": "2026-11-21",
+ "dateLabel": "21 NOV",
+ "dateLong": "21 de noviembre",
+ "resetLabel": "6 PM",
+ "resetZone": "CDMX",
+ "dealOutLabel": "5 DIC",
+ "dealOutTime": "6 PM",
+ "deal": {
+  "name": "Lote One Piece",
+  "final": 4000,
+  "regular": 8200,
+  "out": "2026-12-05T23:59:59.999Z",
+  "outfits": [
+   {
+    "id": "Character_CeleryStitch",
+    "name": "Monkey D. Luffy",
+    "rarity": "Épico",
+    "rarityKey": "epic",
+    "series": null,
+    "img": "https://fortnite-api.com/images/cosmetics/br/character_celerystitch/featured.png",
+    "price": null,
+    "out": null
+   },
+   {
+    "id": "Character_BoastJoint",
+    "name": "Nami",
+    "rarity": "Épico",
+    "rarityKey": "epic",
+    "series": null,
+    "img": "https://fortnite-api.com/images/cosmetics/br/character_boastjoint/featured.png",
+    "price": null,
+    "out": null
+   },
+   {
+    "id": "Character_LoomRise",
+    "name": "Usopp",
+    "rarity": "Épico",
+    "rarityKey": "epic",
+    "series": null,
+    "img": "https://fortnite-api.com/images/cosmetics/br/character_loomrise/featured.png",
+    "price": null,
+    "out": null
+   }
+  ],
+  "saving": 4200,
+  "pct": 51
+ },
+ "dealBest": false,
+ "og": {
+  "chapter": 1,
+  "season": 4,
+  "gapDays": 1,
+  "gapName": null,
+  "outfits": [
+   {
+    "id": "CID_134_Athena_Commando_M_Jailbird",
+    "name": "Sinvergüenza",
+    "rarity": "Épico",
+    "rarityKey": "epic",
+    "series": null,
+    "img": "https://fortnite-api.com/images/cosmetics/br/cid_134_athena_commando_m_jailbird/featured.png",
+    "price": 1500,
+    "out": "2026-11-23",
+    "gapDays": 1
+   }
+  ]
+ },
+ "last": {
+  "count": 10,
+  "outfits": [
+   {
+    "id": "Character_BoldDormRise",
+    "name": "CouRage",
+    "rarity": "Serie de ídolos",
+    "rarityKey": "icon",
+    "series": "Serie de ídolos",
+    "img": "https://fortnite-api.com/images/cosmetics/br/character_bolddormrise/featured.png",
+    "price": 1500,
+    "out": null
+   },
+   {
+    "id": "CID_A_031_Athena_Commando_M_Builder",
+    "name": "LazarBeam",
+    "rarity": "Serie de ídolos",
+    "rarityKey": "icon",
+    "series": "Serie de ídolos",
+    "img": "https://fortnite-api.com/images/cosmetics/br/cid_a_031_athena_commando_m_builder/featured.png",
+    "price": 1500,
+    "out": "2026-11-21"
+   },
+   {
+    "id": "Character_MistTycoonHike",
+    "name": "Madison Make You Mine",
+    "rarity": "Serie de ídolos",
+    "rarityKey": "icon",
+    "series": "Serie de ídolos",
+    "img": "https://fortnite-api.com/images/cosmetics/br/character_misttycoonhike/featured.png",
+    "price": 1500,
+    "out": "2026-11-21"
+   },
+   {
+    "id": "Character_MistTycoonLife",
+    "name": "Madison angelical",
+    "rarity": "Serie de ídolos",
+    "rarityKey": "icon",
+    "series": "Serie de ídolos",
+    "img": "https://fortnite-api.com/images/cosmetics/br/character_misttycoonlife/featured.png",
+    "price": 1500,
+    "out": "2026-11-21"
+   },
+   {
+    "id": "Character_BoldDormWork",
+    "name": "Caballera CouRage",
+    "rarity": "Serie de ídolos",
+    "rarityKey": "icon",
+    "series": "Serie de ídolos",
+    "img": "https://fortnite-api.com/images/cosmetics/br/character_bolddormwork/featured.png",
+    "price": 1200,
+    "out": null
+   },
+   {
+    "id": "CID_070_Athena_Commando_M_Cupid",
+    "name": "Comando del amor",
+    "rarity": "Legendario",
+    "rarityKey": "legendary",
+    "series": null,
+    "img": "https://fortnite-api.com/images/cosmetics/br/cid_070_athena_commando_m_cupid/featured.png",
+    "price": 2000,
+    "out": "2026-11-21"
+   }
+  ]
+ },
+ "roles": [
+  "intro",
+  "hook",
+  "deal_name",
+  "deal_price",
+  "saving",
+  "og_name",
+  "og_era",
+  "last",
+  "ask",
+  "code",
+  "thanks"
+ ],
+ "phrases": [
+  "Esta es la tienda de objetos de hoy, 21 de noviembre.",
+  "¡Tres cosas antes de gastar un solo pavo!",
+  "El Lote One Piece:",
+  "4000 pavos, en vez de 8200.",
+  "¡Te ahorras 4200!",
+  "Sinvergüenza está en la tienda.",
+  "Es del Capítulo 1, Temporada 4.",
+  "Y diez skins están en su último día, cinco de ellas de Serie de ídolos.",
+  "¿Vas a comprar algo hoy?",
+  "Usa el código BAD en la tienda de objetos. Le ayuda muchísimo al canal.",
+  "¡Gracias por ver! Síguenos para más contenido diario."
+ ]
+}

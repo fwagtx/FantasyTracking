@@ -1,0 +1,102 @@
+{
+ "duration": 25.6,
+ "caption": "#EpicPartner Tienda de objetos de Fortnite, 21 de noviembre: el Lote One Piece cuesta 4000 V-Bucks en vez de 8200 (ahorras 4200), Sinvergüenza está en la tienda (Capítulo 1, Temporada 4) y 10 skins se van el 21 de noviembre a las 6 PM (CDMX).\n¿Vas a comprar hoy? Usa el código BAD en la tienda de objetos.\n#Fortnite #TiendaFortnite #FortniteTienda",
+ "claims": [
+  {
+   "text": "Lote One Piece: 4000 V-Bucks, regular 8200",
+   "source": "shop.json",
+   "match": [
+    "Lote One Piece",
+    "\"finalPrice\": 4000",
+    "\"regularPrice\": 8200"
+   ]
+  },
+  {
+   "text": "Sinvergüenza: Capítulo 1, Temporada 4",
+   "source": "history.json",
+   "match": [
+    "Sinvergüenza",
+    "\"chapter\": 1",
+    "\"season\": 4"
+   ]
+  },
+  {
+   "text": "1 days since last in the shop",
+   "source": "history.json",
+   "match": [
+    "\"gapDays\": 1"
+   ]
+  },
+  {
+   "text": "10 outfits leave at the next reset",
+   "source": "plan.json",
+   "match": [
+    "\"count\": 10"
+   ]
+  }
+ ],
+ "text": [
+  "MONKEY D. LUFFY",
+  "SINVERGÜENZA",
+  "COURAGE",
+  "OFERTA",
+  "OG",
+  "ÚLTIMO DÍA",
+  "TIENDA DE HOY / 21 NOV",
+  "1 · OFERTA",
+  "NAMI",
+  "USOPP",
+  "4000",
+  "8200",
+  "LOTE ONE PIECE · SE VA EL 5 DIC",
+  "-51% / AHORRAS 4200",
+  "2 · SKIN OG",
+  "CAPÍTULO 1 · TEMPORADA 4",
+  "3 · ÚLTIMO DÍA",
+  "LAZARBEAM",
+  "MADISON MAKE YOU MINE",
+  "MADISON ANGELICAL",
+  "CABALLERA COURAGE",
+  "COMANDO DEL AMOR",
+  "+4 MÁS",
+  "SE VAN EL 21 NOV, 6 PM",
+  "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+  "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+  "ESTA ES LA",
+  "TIENDA DE OBJETOS",
+  "DE HOY,",
+  "21 DE NOVIEMBRE.",
+  "¡TRES COSAS ANTES",
+  "DE GASTAR UN",
+  "SOLO PAVO!",
+  "EL LOTE ONE",
+  "PIECE:",
+  "4000 PAVOS,",
+  "EN VEZ DE",
+  "8200.",
+  "¡TE AHORRAS 4200!",
+  "SINVERGÜENZA ESTÁ EN",
+  "LA TIENDA.",
+  "ES DEL CAPÍTULO",
+  "1,",
+  "TEMPORADA 4.",
+  "Y DIEZ SKINS",
+  "ESTÁN EN SU",
+  "ÚLTIMO DÍA,",
+  "CINCO DE ELLAS",
+  "DE SERIE DE",
+  "ÍDOLOS.",
+  "¿VAS A COMPRAR",
+  "ALGO HOY?",
+  "USA EL CÓDIGO",
+  "BAD EN LA",
+  "TIENDA DE OBJETOS.",
+  "LE AYUDA MUCHÍSIMO",
+  "AL CANAL.",
+  "¡GRACIAS POR VER!",
+  "SÍGUENOS PARA MÁS",
+  "CONTENIDO DIARIO.",
+  "#EPICPARTNER",
+  "LA TIENDITA BAD"
+ ]
+}
