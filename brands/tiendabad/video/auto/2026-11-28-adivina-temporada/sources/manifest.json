@@ -1,0 +1,23 @@
+{
+ "via": "fortnite-api.com (mirror of Epic's cosmetics data, es-419)",
+ "files": [
+  {
+   "file": "Character_GoldenPleats.json",
+   "source": "Epic cosmetics data for Dara (es-419)",
+   "url": "https://fortnite-api.com/v2/cosmetics/br/Character_GoldenPleats?language=es-419",
+   "fetched_utc": "2026-11-21T17:10:17Z"
+  },
+  {
+   "file": "CID_184_Athena_Commando_M_DurrburgerWorker.json",
+   "source": "Epic cosmetics data for Sargento asador (es-419)",
+   "url": "https://fortnite-api.com/v2/cosmetics/br/CID_184_Athena_Commando_M_DurrburgerWorker?language=es-419",
+   "fetched_utc": "2026-11-21T17:10:17Z"
+  },
+  {
+   "file": "Character_VouchTrig.json",
+   "source": "Epic cosmetics data for Mordecai (es-419)",
+   "url": "https://fortnite-api.com/v2/cosmetics/br/Character_VouchTrig?language=es-419",
+   "fetched_utc": "2026-11-21T17:10:17Z"
+  }
+ ]
+}
