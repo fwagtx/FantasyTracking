@@ -1,0 +1,600 @@
+{
+ "title": "¿Cuánto vale la Tienda Pirata?",
+ "caption": "#EpicPartner ¿Cuánto vale la Tienda Pirata? 🏴‍☠️ Hice la cuenta con la tienda del 21 de noviembre: 367 ofertas que suman 296 000 pavos.\n¿Qué te llevarías primero? 👇\nUsa el código BAD en la tienda de objetos 💛\n#Fortnite #TiendaPirata #FortniteEspañol",
+ "claims": [
+  {
+   "text": "Con la ficha, todo lo que cuesta pavos es gratis 14 días (skins, gestos, mochilas, picos, instrumentos, autos, planeadores, canciones)",
+   "source": "vgc-guide.json",
+   "match": [
+    "When you activate a token, every single item in the Fortnite Shop which costs V-Bucks becomes entirely free for the next 14 days",
+    "Everything else – skins, emotes, backpacks, pickaxes, instruments, cars, gliders, jam tracks – is entirely free for you to claim, as if you were buying it with V-Bucks"
+   ]
+  },
+  {
+   "text": "Excepciones: niveles del pase de batalla, lotes con dinero real, regalar objetos, solo un compañero gratis",
+   "source": "vgc-guide.json",
+   "match": [
+    "you can't claim Battle Pass levels, you can't get bundles that cost real money (instead of V-Bucks), you can't gift items to other players, and you can only claim one free sidekick"
+   ]
+  },
+  {
+   "text": "Tienda del 21 de noviembre: 367 ofertas que suman 296 000 pavos (342 000 a precio normal)",
+   "source": "totals.json",
+   "match": [
+    "\"offers\": 367",
+    "\"sum_finalPrice\": 296000",
+    "\"sum_regularPrice\": 342000",
+    "\"shop_date\": \"2026-11-21\""
+   ]
+  },
+  {
+   "text": "49 skins, 49 mochilas, 36 picos, 38 gestos, 130 canciones, 48 objetos para autos y 34 lotes distintos",
+   "source": "totals.json",
+   "match": [
+    "\"distinct_outfits\": 49",
+    "\"distinct_backpacks\": 49",
+    "\"distinct_pickaxes\": 36",
+    "\"distinct_emotes\": 38",
+    "\"distinct_tracks\": 130",
+    "\"distinct_car_items\": 48",
+    "\"bundles\": 34"
+   ]
+  },
+  {
+   "text": "Lo más barato: 200 pavos; lo más caro: 4000",
+   "source": "totals.json",
+   "match": [
+    "\"cheapest_offer\": 200",
+    "\"most_expensive_offer\": 4000"
+   ]
+  },
+  {
+   "text": "Los 34 lotes suman 71 500 pavos",
+   "source": "totals.json",
+   "match": [
+    "\"bundles_sum_finalPrice\": 71500"
+   ]
+  },
+  {
+   "text": "Lote One Piece (Luffy, Nami, Usopp): 4000 en vez de 8200, hasta el 5 de diciembre",
+   "source": "shop.json",
+   "match": [
+    "\"regularPrice\": 8200, \"finalPrice\": 4000, \"devName\": \"[VIRTUAL]1 x Monkey D. Luffy, 1 x Luffy's Straw Hat, 1 x Gum-Gum Pistol, 1 x Multi-Punches Flex, 1 x Nami, 1 x Nami's Tangerines, 1 x Climate Baton, 1 x Usopp, 1 x Usopp's Kit, 1 x 5 Ton Hammer, 1 x Going Merry, 1 x Roasted Meat, 1 x Giant Meat on the Bone, 1 x Straw Hat Guitar, 1 x Straw Hat Guitar, 1 x Straw Hat Guitar for -1 MtxCurrency\", \"offerId\": \"v2:/8c57975e9814357c059acb6102b3af63c1f7ceec628657d40cbcde2a89738443\", \"inDate\": \"2026-11-01T00:00:00Z\", \"outDate\": \"2026-12-05T23:59:59.999Z\"",
+    "\"name\": \"Monkey D. Luffy\"",
+    "\"name\": \"Nami\"",
+    "\"name\": \"Usopp\""
+   ]
+  },
+  {
+   "text": "3400 pavos: Lote Madison Beer, Lote Cowboy Bebop y Lote Un Show Más",
+   "source": "shop.json",
+   "match": [
+    "\"regularPrice\": 6800, \"finalPrice\": 3400, \"devName\": \"[VIRTUAL]1 x Make You Mine Madison, 1 x Madison's OG Pickaxe, 1 x Satin Angel Madison, 1 x Madison's Angel Wings, 1 x Mookie & Maple Plushies, 1 x Bittersweet, 1 x Yes Baby, 1 x Madison's Mic, 1 x Madison's Mic, 1 x Madison's Mic, 1 x Madison's Glam Wrap, 1 x Rooftop Madison, 1 x TBD (SID_Placeholder_906), 1 x TBD (SID_Placeholder_907) for -1 MtxCurrency\", \"offerId\": \"v2:/0a7c4d1c71dc4b42b1aa534145f48a8ba26c98a8943e4f3eccf7d5276edd3ce0\", \"inDate\": \"2026-11-17T00:00:00Z\", \"outDate\": \"2026-11-21T23:59:59.999Z\"",
+    "\"regularPrice\": 6600, \"finalPrice\": 3400, \"devName\": \"[VIRTUAL]1 x Faye Valentine, 1 x Spike Spiegel, 1 x Jukebox Bop, 1 x Lil' Swordfish II, 1 x Red Tail Reaver, 1 x Swordfish II Slasher, 1 x Multi-Purpose Phone, 1 x Roses For Julia, 1 x Valentine Blue for -1 MtxCurrency\", \"offerId\": \"v2:/d1457119b8331bbe79b21eca7033b036cf4ca7076cfa1f22985b279a5d12f715\", \"inDate\": \"2026-11-20T00:00:00Z\", \"outDate\": \"2026-11-23T23:59:59.999Z\"",
+    "\"regularPrice\": 6100, \"finalPrice\": 3400, \"devName\": \"[VIRTUAL]1 x Rigby, 1 x Mordecai, 1 x Maximum Glove, 1 x Skips, 1 x Fists of Justice, 1 x Oooohhh!, 1 x Skips' Skip, 1 x BABY DUCKS, 1 x Rattle & Mace for -1 MtxCurrency\", \"offerId\": \"v2:/2da8e4249a3a63dd50b25911c408e5be83da9160cfbe021dcf25bcd9740a1a1e\", \"inDate\": \"2026-11-19T00:00:00Z\", \"outDate\": \"2026-11-23T23:59:59.999Z\"",
+    "\"name\": \"Lote Madison Beer\"",
+    "\"name\": \"Lote Cowboy Bebop\"",
+    "\"name\": \"Lote Un Show Más\""
+   ]
+  },
+  {
+   "text": "3200 pavos: Lote A$AP Rocky (en vez de 8800), Lote de Lil' Uzi Vert y Lote Sombrero de paja (Zoro y Sanji)",
+   "source": "shop.json",
+   "match": [
+    "\"regularPrice\": 8800, \"finalPrice\": 3200, \"devName\": \"[VIRTUAL]1 x Shirthead Flacko, 1 x Hi-Fi Jets, 1 x Rocky Rugahand, 1 x A$AP ROCKY X PUMA Suede 94 ‘Black/White’, 1 x Flacko's Chopper, 1 x A$AP's Gauntlets, 1 x A$AP Rockets, 1 x Helicopter, 1 x RIOT (Rowdy Pipe'n), 1 x A$AP ROCKY X PUMA Straycat V6 ‘Red Flash/Black’, 1 x Message From Flacko, 1 x Rocky's BOOM Mic, 1 x Rocky's BOOM Mic, 1 x Rocky's BOOM Mic for -1 MtxCurrency\", \"offerId\": \"v2:/ec90ad43e5988096783782d40bdb9acbcc89434bc8b19dc96f88623195ad1fd6\", \"inDate\": \"2026-11-06T00:00:00Z\", \"outDate\": \"2026-12-06T23:59:59.999Z\"",
+    "\"regularPrice\": 7100, \"finalPrice\": 3200, \"devName\": \"[VIRTUAL]1 x Lil Uzi Vert, 1 x Uzi's Wings, 1 x Pink Star Lil Uzi Vert, 1 x Lil Uzi Star, 1 x Picco-Axe, 1 x XO Tour Llif3, 1 x What You Saying, 1 x Uzi's Tour Guitar, 1 x Uzi's Tour Guitar, 1 x Uzi's Tour Guitar, 1 x Vans x Lil Uzi Vert LX Old Skool 36, 1 x Uzi On Tour, 1 x Cap'n Lil Uzi Vert for -1 MtxCurrency\", \"offerId\": \"v2:/68cd6682741636a3ab0b9fae18d0823e04b5975570fc8a58c519e11af496c0f5\", \"inDate\": \"2026-11-13T00:00:00Z\", \"outDate\": \"2026-12-12T23:59:59.999Z\"",
+    "\"regularPrice\": 4900, \"finalPrice\": 3200, \"devName\": \"[VIRTUAL]1 x Roronoa Zoro, 1 x Zoro's Swords, 1 x Zoro's Training Gear, 1 x Test of Will, 1 x Sanji, 1 x Sanji's Utensils, 1 x Sanji's Utensils, 1 x Tony Tony Chopper for -1 MtxCurrency\", \"offerId\": \"v2:/f3aab314d09d6a4f2b25b377f8f4115ee6e066098dc43be5063be21f193757fe\", \"inDate\": \"2026-11-08T00:00:00Z\", \"outDate\": \"2026-12-05T23:59:59.999Z\"",
+    "\"name\": \"Roronoa Zoro\"",
+    "\"name\": \"Sanji\""
+   ]
+  },
+  {
+   "text": "Lote Ice Spice: 2800, llegó el 21 de noviembre",
+   "source": "shop.json",
+   "match": [
+    "\"regularPrice\": 4800, \"finalPrice\": 2800, \"devName\": \"[VIRTUAL]1 x Rap Princess Ice Spice, 1 x Ice Spice, 1 x Ice Spice Mini, 1 x Munchkin, 1 x In Ha Mood, 1 x Oh Shhh, 1 x Iced Out Mic, 1 x Iced Out Mic, 1 x Iced Out Mic for -1 MtxCurrency\", \"offerId\": \"v2:/6757f18935d1b7110028b0e9bf1795449bc2fc393ad17063f77288a9cb816080\", \"inDate\": \"2026-11-21T00:00:00Z\", \"outDate\": \"2026-11-24T23:59:59.999Z\"",
+    "\"name\": \"Lote Ice Spice\""
+   ]
+  },
+  {
+   "text": "11 compañeros distintos en la tienda, entre ellos Tony Tony Chopper, Rigby, Louis y Kitsune",
+   "source": "totals.json",
+   "match": [
+    "\"distinct_sidekicks\": 11",
+    "\"Tony Tony Chopper\"",
+    "\"Rigby\"",
+    "\"Louis\"",
+    "\"Kitsune\""
+   ]
+  },
+  {
+   "text": "La tienda cambia cada día a las 00:00 UTC (6 PM CDMX): la del 21 empezó a las 00:00 UTC y sus ofertas de un día terminan a las 23:59 UTC",
+   "source": "shop.json",
+   "match": [
+    "\"date\": \"2026-11-21T00:00:00Z\"",
+    "\"regularPrice\": 6800, \"finalPrice\": 3400, \"devName\": \"[VIRTUAL]1 x Make You Mine Madison, 1 x Madison's OG Pickaxe, 1 x Satin Angel Madison, 1 x Madison's Angel Wings, 1 x Mookie & Maple Plushies, 1 x Bittersweet, 1 x Yes Baby, 1 x Madison's Mic, 1 x Madison's Mic, 1 x Madison's Mic, 1 x Madison's Glam Wrap, 1 x Rooftop Madison, 1 x TBD (SID_Placeholder_906), 1 x TBD (SID_Placeholder_907) for -1 MtxCurrency\", \"offerId\": \"v2:/0a7c4d1c71dc4b42b1aa534145f48a8ba26c98a8943e4f3eccf7d5276edd3ce0\", \"inDate\": \"2026-11-17T00:00:00Z\", \"outDate\": \"2026-11-21T23:59:59.999Z\""
+   ]
+  },
+  {
+   "text": "Ficha de 2026: hasta el 15 de diciembre; la otra, del 1 de enero al 31 de diciembre de 2027",
+   "source": "vgc-odds-confirmed.json",
+   "match": [
+    "one which can be activated at any point in 2026 between November 1 and December 15, and one which can be activated at any point in 2027 between January 1 and December 31"
+   ]
+  },
+  {
+   "text": "La ficha sale al abrir o romper cofres en Battle Royale y Cero Construcción",
+   "source": "vgc-guide.json",
+   "match": [
+    "every time you open or break a chest, there's a small chance that you'll get a treasure reward",
+    "open chests during Battle Royale and Zero Build modes"
+   ]
+  },
+  {
+   "text": "Tienda Pirata: 1 en 137 500 por cofre; con ×1.5 ≈ 1 en 91 667",
+   "source": "vice-treasure-hours.json",
+   "match": [
+    "The normal Fortnite Pirate Token drop rate is 1 in 137,500 per chest",
+    "A 1.5× boost brings it to about 1 in 91,667"
+   ]
+  },
+  {
+   "text": "Horas del Tesoro del 21 nov: segunda ronda 6-8 PM PT = 8-10 PM CDMX, ×1.5",
+   "source": "vice-treasure-hours.json",
+   "match": [
+    "November 21 | 11 AM–1 PM PT / 2–4 PM ET | 6–8 PM PT / 9–11 PM ET | 1.5× both rounds"
+   ]
+  },
+  {
+   "text": "Escuadrón: si alguien la encuentra, la reciben los cuatro",
+   "source": "vgc-guide.json",
+   "match": [
+    "if anyone in your Squad finds the Pirate Shop Token in a chest, every member of the Squad gets it",
+    "add random players to your squad of four"
+   ]
+  },
+  {
+   "text": "Siguientes Horas del Tesoro: 28 de noviembre y 5 de diciembre",
+   "source": "vice-treasure-hours.json",
+   "match": [
+    "November 28 | 11 AM–1 PM PT / 2–4 PM ET | 6–8 PM PT / 9–11 PM ET | 1.5× both rounds",
+    "December 5 | 11 AM–1 PM PT / 2–4 PM ET | 6–8 PM PT / 9–11 PM ET | 1.5× both rounds"
+   ]
+  },
+  {
+   "text": "La búsqueda termina el 5 de diciembre (quedan 14 días desde el 21 de noviembre)",
+   "source": "vgc-odds-confirmed.json",
+   "match": [
+    "which started on November 1 and is set to end on December 5"
+   ]
+  },
+  {
+   "text": "16 de las 49 skins son de la Serie de ídolos (Ice Spice, Kim Kardashian, Madison Beer, Lil Uzi Vert…)",
+   "source": "totals.json",
+   "match": [
+    "\"icon_series_outfit_count\": 16",
+    "\"Ice Spice\"",
+    "\"Kim Kardashian\"",
+    "\"Madison Make You Mine\"",
+    "\"Lil Uzi Vert\""
+   ]
+  },
+  {
+   "text": "130 canciones sueltas, a 500 pavos cada una: 65 000",
+   "source": "totals.json",
+   "match": [
+    "\"track_only_offers\": 130",
+    "\"track_only_sum_finalPrice\": 65000",
+    "\"track_only_prices\": [500]"
+   ]
+  },
+  {
+   "text": "Lote One Piece: 16 objetos (sombrero de Luffy, Pistola goma goma, Ráfaga de puñetazos, planeador Going Merry, guitarra)",
+   "source": "totals.json",
+   "match": [
+    "\"Lote One Piece\": 16"
+   ]
+  },
+  {
+   "text": "Objetos del Lote One Piece nombrados",
+   "source": "shop.json",
+   "match": [
+    "\"name\": \"Sombrero de paja de Luffy\"",
+    "\"name\": \"Pistola goma goma\"",
+    "\"name\": \"Ráfaga de puñetazos\"",
+    "\"name\": \"Going Merry\"",
+    "\"name\": \"Cuerdas de los Sombrero de paja\""
+   ]
+  },
+  {
+   "text": "Cowboy Bebop: Spike Spiegel y Faye Valentine; Un Show Más: Mordecai, Skips y Rigby (compañero)",
+   "source": "shop.json",
+   "match": [
+    "\"name\": \"Spike Spiegel\"",
+    "\"name\": \"Faye Valentine\"",
+    "\"name\": \"Mordecai\"",
+    "\"name\": \"Skips\"",
+    "\"id\": \"Companion_PromDutch\", \"name\": \"Rigby\""
+   ]
+  },
+  {
+   "text": "Lote Ice Spice: Ice Spice e Ice Spice princesa del rap",
+   "source": "shop.json",
+   "match": [
+    "\"name\": \"Ice Spice princesa del rap\"",
+    "\"name\": \"Ice Spice\""
+   ]
+  },
+  {
+   "text": "Compañeros sueltos: 1200 o 1500 pavos",
+   "source": "totals.json",
+   "match": [
+    "\"standalone_sidekick_prices\": [1200, 1500]"
+   ]
+  },
+  {
+   "text": "0.00073% por cofre en partida normal",
+   "source": "vice-treasure-hours.json",
+   "match": [
+    "That works out to about 0.00073% per chest"
+   ]
+  },
+  {
+   "text": "Horas del Tesoro del 21 nov: 11 AM-1 PM y 6-8 PM PT = 1-3 PM y 8-10 PM CDMX",
+   "source": "vice-treasure-hours.json",
+   "match": [
+    "November 21 | 11 AM–1 PM PT / 2–4 PM ET | 6–8 PM PT / 9–11 PM ET | 1.5× both rounds"
+   ]
+  }
+ ],
+ "segments": [
+  {
+   "type": "title",
+   "p": 0,
+   "chapter": "Intro",
+   "kicker": "TIENDA PIRATA",
+   "lines": [
+    "¿Cuánto vale",
+    "la Tienda Pirata?"
+   ]
+  },
+  {
+   "type": "stat",
+   "p": 5,
+   "chapter": "La regla",
+   "big": "14 días",
+   "label": "Todo lo que cuesta pavos, gratis"
+  },
+  {
+   "p": 8,
+   "type": "stat",
+   "chapter": "Lo que no incluye",
+   "big": "4 excepciones",
+   "label": "Lo que la ficha no incluye"
+  },
+  {
+   "type": "stat",
+   "p": 9,
+   "big": "Pase de batalla",
+   "label": "Sus niveles no se reclaman"
+  },
+  {
+   "type": "stat",
+   "p": 10,
+   "big": "Dinero real",
+   "label": "Lotes con dinero real: no entran"
+  },
+  {
+   "type": "stat",
+   "p": 11,
+   "big": "Regalos",
+   "label": "No puedes regalar objetos"
+  },
+  {
+   "type": "stat",
+   "p": 12,
+   "big": "1 compañero",
+   "label": "Solo uno gratis"
+  },
+  {
+   "type": "stat",
+   "p": 13,
+   "chapter": "La cuenta",
+   "big": "367 ofertas",
+   "label": "En la tienda del 21 de noviembre"
+  },
+  {
+   "type": "stat",
+   "p": 15,
+   "big": "49 skins",
+   "label": "Distintas, en un solo día"
+  },
+  {
+   "type": "stat",
+   "p": 16,
+   "big": "49 · 36 · 38",
+   "label": "Mochilas · picos · gestos"
+  },
+  {
+   "type": "stat",
+   "p": 17,
+   "big": "130 canciones",
+   "label": "Pistas de improvisación"
+  },
+  {
+   "type": "stat",
+   "p": 18,
+   "big": "34 lotes",
+   "label": "Y 48 objetos para autos"
+  },
+  {
+   "type": "stat",
+   "p": 19,
+   "big": "200 → 4000",
+   "label": "Lo más barato y lo más caro"
+  },
+  {
+   "type": "stat",
+   "p": 20,
+   "big": "16 skins",
+   "label": "De la Serie de ídolos"
+  },
+  {
+   "type": "stat",
+   "p": 21,
+   "big": "296 000 pavos",
+   "label": "Sumando el precio de cada oferta"
+  },
+  {
+   "type": "stat",
+   "p": 24,
+   "big": "342 000",
+   "label": "A precio normal"
+  },
+  {
+   "type": "stat",
+   "p": 25,
+   "big": "65 000 pavos",
+   "label": "Las 130 canciones, a 500 cada una"
+  },
+  {
+   "type": "code",
+   "p": 26,
+   "chapter": "Código BAD",
+   "wide": true
+  },
+  {
+   "type": "items",
+   "p": 27,
+   "chapter": "Los lotes más caros",
+   "title": "El más caro: Lote One Piece",
+   "items": [
+    {
+     "img": "../../tiendabad/video/long/2026-11-21-cuanto-vale-tienda-pirata/img/Character_CeleryStitch.png",
+     "name": "Monkey D. Luffy",
+     "rarity": "epic"
+    },
+    {
+     "img": "../../tiendabad/video/long/2026-11-21-cuanto-vale-tienda-pirata/img/Character_BoastJoint.png",
+     "name": "Nami",
+     "rarity": "epic"
+    },
+    {
+     "img": "../../tiendabad/video/long/2026-11-21-cuanto-vale-tienda-pirata/img/Character_LoomRise.png",
+     "name": "Usopp",
+     "rarity": "epic"
+    }
+   ]
+  },
+  {
+   "type": "stat",
+   "p": 29,
+   "big": "4000 pavos",
+   "label": "Lote One Piece, en vez de 8200"
+  },
+  {
+   "type": "stat",
+   "p": 30,
+   "big": "16 objetos",
+   "label": "En el Lote One Piece"
+  },
+  {
+   "type": "items",
+   "p": 31,
+   "title": "3400 pavos cada uno",
+   "items": [
+    {
+     "img": "../../tiendabad/video/long/2026-11-21-cuanto-vale-tienda-pirata/img/Character_MistTycoonHike.png",
+     "name": "Lote Madison Beer",
+     "rarity": "icon",
+     "price": 3400
+    },
+    {
+     "img": "../../tiendabad/video/long/2026-11-21-cuanto-vale-tienda-pirata/img/Character_StudyBench.png",
+     "name": "Lote Cowboy Bebop",
+     "rarity": "epic",
+     "price": 3400
+    },
+    {
+     "img": "../../tiendabad/video/long/2026-11-21-cuanto-vale-tienda-pirata/img/Character_VouchTrig.png",
+     "name": "Lote Un Show Más",
+     "rarity": "epic",
+     "price": 3400
+    }
+   ]
+  },
+  {
+   "type": "items",
+   "p": 33,
+   "title": "3200 pavos cada uno",
+   "items": [
+    {
+     "img": "../../tiendabad/video/long/2026-11-21-cuanto-vale-tienda-pirata/img/Character_TonicMailWeb.png",
+     "name": "Lote A$AP Rocky",
+     "rarity": "icon",
+     "price": 3200
+    },
+    {
+     "img": "../../tiendabad/video/long/2026-11-21-cuanto-vale-tienda-pirata/img/Character_RookGeckoRod.png",
+     "name": "Lote Lil' Uzi Vert",
+     "rarity": "icon",
+     "price": 3200
+    },
+    {
+     "img": "../../tiendabad/video/long/2026-11-21-cuanto-vale-tienda-pirata/img/Character_BrandCreed.png",
+     "name": "Lote Sombrero de paja",
+     "rarity": "epic",
+     "price": 3200
+    }
+   ]
+  },
+  {
+   "type": "stat",
+   "p": 34,
+   "big": "Ahorras 5600",
+   "label": "Lote A$AP Rocky: 3200 en vez de 8800"
+  },
+  {
+   "type": "items",
+   "p": 35,
+   "title": "Nuevo hoy: Lote Ice Spice",
+   "items": [
+    {
+     "img": "../../tiendabad/video/long/2026-11-21-cuanto-vale-tienda-pirata/img/Character_BerryTartBrunt.png",
+     "name": "Ice Spice",
+     "rarity": "icon",
+     "price": 2800
+    }
+   ]
+  },
+  {
+   "type": "stat",
+   "p": 37,
+   "big": "71 500 pavos",
+   "label": "Los 34 lotes juntos"
+  },
+  {
+   "type": "items",
+   "p": 39,
+   "chapter": "La trampa",
+   "title": "11 compañeros en la tienda",
+   "items": [
+    {
+     "img": "../../tiendabad/video/long/2026-11-21-cuanto-vale-tienda-pirata/img/Companion_BloomScar.png",
+     "name": "Tony Tony Chopper",
+     "rarity": "uncommon"
+    },
+    {
+     "img": "../../tiendabad/video/long/2026-11-21-cuanto-vale-tienda-pirata/img/Companion_PromDutch.png",
+     "name": "Rigby",
+     "rarity": "uncommon"
+    },
+    {
+     "img": "../../tiendabad/video/long/2026-11-21-cuanto-vale-tienda-pirata/img/Companion_ScrollVessel.png",
+     "name": "Louis",
+     "rarity": "icon"
+    },
+    {
+     "img": "../../tiendabad/video/long/2026-11-21-cuanto-vale-tienda-pirata/img/Companion_MuzzleSwish.png",
+     "name": "Kitsune",
+     "rarity": "uncommon"
+    }
+   ]
+  },
+  {
+   "type": "stat",
+   "p": 41,
+   "big": "1200 o 1500",
+   "label": "Pavos, cada compañero suelto"
+  },
+  {
+   "type": "stat",
+   "p": 42,
+   "big": "Solo 1",
+   "label": "Compañero gratis con la ficha"
+  },
+  {
+   "type": "stat",
+   "p": 44,
+   "chapter": "14 días, 14 tiendas",
+   "big": "6 PM",
+   "label": "La tienda cambia cada día (CDMX)"
+  },
+  {
+   "type": "stat",
+   "p": 46,
+   "big": "14 tiendas",
+   "label": "Una nueva cada día de tu ficha"
+  },
+  {
+   "type": "stat",
+   "p": 48,
+   "big": "15 dic",
+   "label": "Límite para activar la ficha 2026"
+  },
+  {
+   "type": "stat",
+   "p": 49,
+   "big": "2027",
+   "label": "La otra ficha: 1 ene – 31 dic"
+  },
+  {
+   "type": "title",
+   "p": 50,
+   "chapter": "Horas del Tesoro",
+   "kicker": "HOY SÁBADO",
+   "lines": [
+    "Horas del",
+    "Tesoro"
+   ]
+  },
+  {
+   "type": "stat",
+   "p": 51,
+   "big": "1 en 137 500",
+   "label": "Tienda Pirata, por cofre"
+  },
+  {
+   "type": "stat",
+   "p": 52,
+   "big": "0.00073%",
+   "label": "Por cofre, en una partida normal"
+  },
+  {
+   "type": "stat",
+   "p": 53,
+   "big": "1-3 PM · 8-10 PM",
+   "label": "Sábado 21 de nov. · hora CDMX"
+  },
+  {
+   "type": "stat",
+   "p": 55,
+   "big": "×1.5",
+   "label": "Tienda Pirata: ~1 en 91 667 por cofre"
+  },
+  {
+   "type": "stat",
+   "p": 56,
+   "big": "×4",
+   "label": "Ficha para todo tu escuadrón"
+  },
+  {
+   "type": "stat",
+   "p": 57,
+   "big": "28 nov · 5 dic",
+   "label": "Las últimas Horas del Tesoro"
+  },
+  {
+   "type": "stat",
+   "p": 58,
+   "big": "14 días",
+   "label": "Para encontrar la Tienda Pirata"
+  },
+  {
+   "type": "code",
+   "p": 59,
+   "chapter": "Final",
+   "wide": true
+  }
+ ]
+}

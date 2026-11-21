@@ -1,0 +1,6637 @@
+{
+ "shop_date": "2026-11-21T00:00:00Z",
+ "fetched_utc": "2026-11-21T00:07:15Z",
+ "offers": [
+  {
+   "offer": "Therefore I Am",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Therefore I Am"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "yes baby",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "yes baby"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-17T00:00:00Z",
+   "outDate": "2026-11-21T23:59:59.999Z"
+  },
+  {
+   "offer": "¡Ooooh!",
+   "bundle": false,
+   "brItems": [
+    [
+     "¡Ooooh!",
+     "emote"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 400,
+   "regularPrice": 400,
+   "inDate": "2026-11-19T00:00:00Z",
+   "outDate": "2026-11-23T23:59:59.999Z"
+  },
+  {
+   "offer": "Escudo de CouRage",
+   "bundle": false,
+   "brItems": [
+    [
+     "Escudo de CouRage",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 300,
+   "regularPrice": 300,
+   "inDate": "2026-11-19T00:00:00Z",
+   "outDate": "2026-11-21T23:59:59.999Z"
+  },
+  {
+   "offer": "PPAP (Pen Pineapple Apple Pen) [Long Version]",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "PPAP (Pen Pineapple Apple Pen) [Long Version]"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "The Emptiness Machine",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "The Emptiness Machine"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Bloody Mary",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Bloody Mary"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Victoria Saint, Alforja de asesina",
+   "bundle": false,
+   "brItems": [
+    [
+     "Victoria Saint",
+     "outfit"
+    ],
+    [
+     "Alforja de asesina",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 1200,
+   "regularPrice": 1200,
+   "inDate": "2026-11-17T00:00:00Z",
+   "outDate": "2026-11-23T23:59:59.999Z"
+  },
+  {
+   "offer": "Guante supremo",
+   "bundle": false,
+   "brItems": [
+    [
+     "Guante supremo",
+     "pickaxe"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-19T00:00:00Z",
+   "outDate": "2026-11-23T23:59:59.999Z"
+  },
+  {
+   "offer": "Lote de Embrujos y hechicería",
+   "bundle": true,
+   "brItems": [
+    [
+     "Greta gris",
+     "outfit"
+    ],
+    [
+     "Ivor",
+     "backpack"
+    ],
+    [
+     "Desgarradoras demoníacas",
+     "pickaxe"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 1500,
+   "regularPrice": 2000,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-26T23:59:59.999Z"
+  },
+  {
+   "offer": "Oro del vacío",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [],
+   "cars": [
+    "Oro del vacío"
+   ],
+   "instruments": [],
+   "finalPrice": 400,
+   "regularPrice": 400,
+   "inDate": "2026-11-18T00:00:00Z",
+   "outDate": "2026-11-24T23:59:59.999Z"
+  },
+  {
+   "offer": "Who",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Who"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-26T23:59:59.999Z"
+  },
+  {
+   "offer": "Toni, Ollie-Oop",
+   "bundle": false,
+   "brItems": [
+    [
+     "Toni",
+     "outfit"
+    ],
+    [
+     "Ollie-Oop",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 1200,
+   "regularPrice": 1200,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-26T23:59:59.999Z"
+  },
+  {
+   "offer": "Barbaras Rhabarberbar",
+   "bundle": false,
+   "brItems": [
+    [
+     "Barbaras Rhabarberbar",
+     "emote"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-19T00:00:00Z",
+   "outDate": "2026-11-24T23:59:59.999Z"
+  },
+  {
+   "offer": "LUNCH",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "LUNCH"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Alas del amor",
+   "bundle": false,
+   "brItems": [
+    [
+     "Alas del amor",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 200,
+   "regularPrice": 200,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-21T23:59:59.999Z"
+  },
+  {
+   "offer": "Sargento asador",
+   "bundle": false,
+   "brItems": [
+    [
+     "Sargento asador",
+     "outfit"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 800,
+   "regularPrice": 800,
+   "inDate": "2026-11-21T00:00:00Z",
+   "outDate": "2026-11-21T23:59:59.999Z"
+  },
+  {
+   "offer": "Arma de Madison",
+   "bundle": false,
+   "brItems": [
+    [
+     "Arma de Madison",
+     "pickaxe"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-17T00:00:00Z",
+   "outDate": "2026-11-21T23:59:59.999Z"
+  },
+  {
+   "offer": "Monkey D. Luffy, Sombrero de paja de Luffy, Pistola goma goma, Ráfaga de puñetazos",
+   "bundle": false,
+   "brItems": [
+    [
+     "Monkey D. Luffy",
+     "outfit"
+    ],
+    [
+     "Sombrero de paja de Luffy",
+     "backpack"
+    ],
+    [
+     "Pistola goma goma",
+     "pickaxe"
+    ],
+    [
+     "Ráfaga de puñetazos",
+     "emote"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 1800,
+   "regularPrice": 1800,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-12-05T23:59:59.999Z"
+  },
+  {
+   "offer": "Agora Hills",
+   "bundle": false,
+   "brItems": [
+    [
+     "Agora Hills",
+     "emote"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-19T00:00:00Z",
+   "outDate": "2026-11-24T23:59:59.999Z"
+  },
+  {
+   "offer": "Carne gigante",
+   "bundle": false,
+   "brItems": [
+    [
+     "Carne gigante",
+     "pickaxe"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 800,
+   "regularPrice": 800,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-12-05T23:59:59.999Z"
+  },
+  {
+   "offer": "Lote de Lil' Uzi Vert",
+   "bundle": true,
+   "brItems": [
+    [
+     "Lil Uzi Vert",
+     "outfit"
+    ],
+    [
+     "Alas de Uzi",
+     "backpack"
+    ],
+    [
+     "Lil Uzi Vert de gira",
+     "outfit"
+    ],
+    [
+     "Estrella de Lil Uzi",
+     "backpack"
+    ],
+    [
+     "Hacha de Picco",
+     "pickaxe"
+    ],
+    [
+     "XO Tour Llif3",
+     "emote"
+    ],
+    [
+     "What You Saying",
+     "emote"
+    ],
+    [
+     "Cuerdas de gira de Uzi",
+     "backpack"
+    ],
+    [
+     "Cuerdas de gira de Uzi",
+     "pickaxe"
+    ],
+    [
+     "Vans x Lil Uzi Vert LX Old Skool 36",
+     "shoe"
+    ],
+    [
+     "Uzi de gira",
+     "wrap"
+    ],
+    [
+     "Arte de Uzi",
+     "loadingscreen"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [
+    "Cuerdas de gira de Uzi"
+   ],
+   "finalPrice": 3200,
+   "regularPrice": 7100,
+   "inDate": "2026-11-13T00:00:00Z",
+   "outDate": "2026-12-12T23:59:59.999Z"
+  },
+  {
+   "offer": "Guanteletes de A$AP",
+   "bundle": false,
+   "brItems": [
+    [
+     "Guanteletes de A$AP",
+     "pickaxe"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 800,
+   "regularPrice": 800,
+   "inDate": "2026-11-06T00:00:00Z",
+   "outDate": "2026-12-06T23:59:59.999Z"
+  },
+  {
+   "offer": "Air Jordan 5 Retro \"Wolf Grey\"",
+   "bundle": false,
+   "brItems": [
+    [
+     "Air Jordan 5 Retro \"Wolf Grey\"",
+     "shoe"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 800,
+   "regularPrice": 800,
+   "inDate": "2026-11-19T00:00:00Z",
+   "outDate": "2026-11-22T23:59:59.999Z"
+  },
+  {
+   "offer": "A Bar Song",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "A Bar Song"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Nike Dunk Hi \"Pink Prime\"",
+   "bundle": false,
+   "brItems": [
+    [
+     "Nike Dunk Hi \"Pink Prime\"",
+     "shoe"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 800,
+   "regularPrice": 800,
+   "inDate": "2026-11-21T00:00:00Z",
+   "outDate": "2026-11-24T23:59:59.999Z"
+  },
+  {
+   "offer": "Cuchillos de Buggy",
+   "bundle": false,
+   "brItems": [
+    [
+     "Cuchillos de Buggy",
+     "pickaxe"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-14T00:00:00Z",
+   "outDate": "2026-12-05T23:59:59.999Z"
+  },
+  {
+   "offer": "What You Saying",
+   "bundle": false,
+   "brItems": [
+    [
+     "What You Saying",
+     "emote"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-13T00:00:00Z",
+   "outDate": "2026-12-12T23:59:59.999Z"
+  },
+  {
+   "offer": "Single Soon",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Single Soon"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "As Alive As You Need Me To Be",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "As Alive As You Need Me To Be"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-26T23:59:59.999Z"
+  },
+  {
+   "offer": "Lote Excursionista rebelde",
+   "bundle": true,
+   "brItems": [
+    [
+     "Dara",
+     "outfit"
+    ],
+    [
+     "Filoespada de mercenaria",
+     "pickaxe"
+    ],
+    [
+     "Vaina de mercenaria",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 1500,
+   "regularPrice": 2000,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-26T23:59:59.999Z"
+  },
+  {
+   "offer": "Mazo de la Red Tail",
+   "bundle": false,
+   "brItems": [
+    [
+     "Mazo de la Red Tail",
+     "pickaxe"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 800,
+   "regularPrice": 800,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-23T23:59:59.999Z"
+  },
+  {
+   "offer": "Verde impactante",
+   "bundle": false,
+   "brItems": [
+    [
+     "Verde impactante",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 200,
+   "regularPrice": 200,
+   "inDate": "2026-11-17T00:00:00Z",
+   "outDate": "2026-11-23T23:59:59.999Z"
+  },
+  {
+   "offer": "Cheguei",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Cheguei"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Ráfaga de puñetazos",
+   "bundle": false,
+   "brItems": [
+    [
+     "Ráfaga de puñetazos",
+     "emote"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 300,
+   "regularPrice": 300,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-12-05T23:59:59.999Z"
+  },
+  {
+   "offer": "Mini-Swordfish II",
+   "bundle": false,
+   "brItems": [
+    [
+     "Mini-Swordfish II",
+     "emote"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-23T23:59:59.999Z"
+  },
+  {
+   "offer": "Boulevard of Broken Dreams",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Boulevard of Broken Dreams"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Capa de Buggy",
+   "bundle": false,
+   "brItems": [
+    [
+     "Capa de Buggy",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 300,
+   "regularPrice": 300,
+   "inDate": "2026-11-14T00:00:00Z",
+   "outDate": "2026-12-05T23:59:59.999Z"
+  },
+  {
+   "offer": "Lote Cyclone de Hatsune Miku",
+   "bundle": true,
+   "brItems": [],
+   "tracks": [],
+   "cars": [
+    "Miku Rider rayo",
+    "Miku Rider ligero",
+    "Chico murciélago",
+    "Llamas",
+    "L-ita 99",
+    "Sliver",
+    "Rayas",
+    "Whiteout"
+   ],
+   "instruments": [],
+   "finalPrice": 1500,
+   "regularPrice": 1500,
+   "inDate": "2026-11-15T00:00:00Z",
+   "outDate": "2026-12-14T23:59:59.999Z"
+  },
+  {
+   "offer": "Tusa",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Tusa"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-26T23:59:59.999Z"
+  },
+  {
+   "offer": "Young, Wild & Free",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Young, Wild & Free"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Comando del amor, Alas del amor",
+   "bundle": false,
+   "brItems": [
+    [
+     "Comando del amor",
+     "outfit"
+    ],
+    [
+     "Alas del amor",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 2000,
+   "regularPrice": 2000,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-21T23:59:59.999Z"
+  },
+  {
+   "offer": "Pantuflas de hipopótamo",
+   "bundle": false,
+   "brItems": [
+    [
+     "Pantuflas de hipopótamo",
+     "shoe"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 600,
+   "regularPrice": 600,
+   "inDate": "2026-11-21T00:00:00Z",
+   "outDate": "2026-11-24T23:59:59.999Z"
+  },
+  {
+   "offer": "Grifo de piedra",
+   "bundle": false,
+   "brItems": [
+    [
+     "Grifo de piedra",
+     "sidekick"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 1200,
+   "regularPrice": 1200,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-23T23:59:59.999Z"
+  },
+  {
+   "offer": "Voz de Miku, Voz de Miku, Voz de Miku",
+   "bundle": false,
+   "brItems": [
+    [
+     "Voz de Miku",
+     "pickaxe"
+    ],
+    [
+     "Voz de Miku",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [
+    "Voz de Miku"
+   ],
+   "finalPrice": 800,
+   "regularPrice": 800,
+   "inDate": "2026-11-15T00:00:00Z",
+   "outDate": "2026-12-14T23:59:59.999Z"
+  },
+  {
+   "offer": "Kit de Kim",
+   "bundle": false,
+   "brItems": [
+    [
+     "Kit de Kim",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 300,
+   "regularPrice": 300,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-24T23:59:59.999Z"
+  },
+  {
+   "offer": "Nike Air Force 1 \"Galaxy\"",
+   "bundle": false,
+   "brItems": [
+    [
+     "Nike Air Force 1 \"Galaxy\"",
+     "shoe"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 1000,
+   "regularPrice": 1000,
+   "inDate": "2026-11-21T00:00:00Z",
+   "outDate": "2026-11-24T23:59:59.999Z"
+  },
+  {
+   "offer": "Mind Reader",
+   "bundle": false,
+   "brItems": [
+    [
+     "Mind Reader",
+     "emote"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-17T00:00:00Z",
+   "outDate": "2026-11-22T23:59:59.999Z"
+  },
+  {
+   "offer": "The Rogue LAROI, Sable trágico, Sable trágico",
+   "bundle": false,
+   "brItems": [
+    [
+     "The Rogue LAROI",
+     "outfit"
+    ],
+    [
+     "Sable trágico",
+     "backpack"
+    ],
+    [
+     "Sable trágico",
+     "pickaxe"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 2000,
+   "regularPrice": 2000,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-26T23:59:59.999Z"
+  },
+  {
+   "offer": "Carne asada",
+   "bundle": false,
+   "brItems": [
+    [
+     "Carne asada",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 400,
+   "regularPrice": 400,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-12-05T23:59:59.999Z"
+  },
+  {
+   "offer": "Lovin On Me",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Lovin On Me"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Say It Ain't So",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Say It Ain't So"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Aro de luz portátil",
+   "bundle": false,
+   "brItems": [
+    [
+     "Aro de luz portátil",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 300,
+   "regularPrice": 300,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-24T23:59:59.999Z"
+  },
+  {
+   "offer": "Cartera chic",
+   "bundle": false,
+   "brItems": [
+    [
+     "Cartera chic",
+     "pickaxe"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-24T23:59:59.999Z"
+  },
+  {
+   "offer": "Poured",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Poured"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-13T00:00:00Z",
+   "outDate": "2026-11-26T23:59:59.999Z"
+  },
+  {
+   "offer": "Who Let The Dogs Out",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Who Let The Dogs Out"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "all the good girls go to hell",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "all the good girls go to hell"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Fat Lip",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Fat Lip"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Tony Tony Chopper",
+   "bundle": false,
+   "brItems": [
+    [
+     "Tony Tony Chopper",
+     "sidekick"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 1500,
+   "regularPrice": 1500,
+   "inDate": "2026-11-08T00:00:00Z",
+   "outDate": "2026-12-05T23:59:59.999Z"
+  },
+  {
+   "offer": "Air Jordan 14 Retro \"Yellow/Black\"",
+   "bundle": false,
+   "brItems": [
+    [
+     "Air Jordan 14 Retro \"Yellow/Black\"",
+     "shoe"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 1000,
+   "regularPrice": 1000,
+   "inDate": "2026-11-19T00:00:00Z",
+   "outDate": "2026-11-22T23:59:59.999Z"
+  },
+  {
+   "offer": "When I Come Around",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "When I Come Around"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Tough Luck",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Tough Luck"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Colmillo de Widowmaker, Beso de viuda",
+   "bundle": false,
+   "brItems": [
+    [
+     "Colmillo de Widowmaker",
+     "pickaxe"
+    ],
+    [
+     "Beso de viuda",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 800,
+   "regularPrice": 800,
+   "inDate": "2026-11-21T00:00:00Z",
+   "outDate": "2026-12-04T23:59:59.999Z"
+  },
+  {
+   "offer": "Break From Toronto",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Break From Toronto"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Blitzkrieg Bop",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Blitzkrieg Bop"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Jurassic Jeep® Wrangler de personal",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [],
+   "cars": [
+    "Jurassic Jeep® Wrangler de personal"
+   ],
+   "instruments": [],
+   "finalPrice": 400,
+   "regularPrice": 400,
+   "inDate": "2026-11-19T00:00:00Z",
+   "outDate": "2026-11-28T23:59:59.999Z"
+  },
+  {
+   "offer": "In Ha Mood",
+   "bundle": false,
+   "brItems": [
+    [
+     "In Ha Mood",
+     "emote"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-21T00:00:00Z",
+   "outDate": "2026-11-24T23:59:59.999Z"
+  },
+  {
+   "offer": "Kitsune",
+   "bundle": false,
+   "brItems": [
+    [
+     "Kitsune",
+     "sidekick"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 1200,
+   "regularPrice": 1200,
+   "inDate": "2026-11-17T00:00:00Z",
+   "outDate": "2026-11-23T23:59:59.999Z"
+  },
+  {
+   "offer": "Glamur de Madison",
+   "bundle": false,
+   "brItems": [
+    [
+     "Glamur de Madison",
+     "wrap"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-17T00:00:00Z",
+   "outDate": "2026-11-21T23:59:59.999Z"
+  },
+  {
+   "offer": "Prodigio del pop",
+   "bundle": false,
+   "brItems": [
+    [
+     "Prodigio del pop",
+     "outfit"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 1200,
+   "regularPrice": 1200,
+   "inDate": "2026-11-17T00:00:00Z",
+   "outDate": "2026-11-23T23:59:59.999Z"
+  },
+  {
+   "offer": "GRIM FREESTYLE",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "GRIM FREESTYLE"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-06T00:00:00Z",
+   "outDate": "2026-12-06T23:59:59.999Z"
+  },
+  {
+   "offer": "Basket Case",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Basket Case"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Bulls On Parade",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Bulls On Parade"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Munchkin",
+   "bundle": false,
+   "brItems": [
+    [
+     "Munchkin",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 300,
+   "regularPrice": 300,
+   "inDate": "2026-11-21T00:00:00Z",
+   "outDate": "2026-11-24T23:59:59.999Z"
+  },
+  {
+   "offer": "WHERE IS MY HUSBAND!",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "WHERE IS MY HUSBAND!"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "XO Tour Llif3",
+   "bundle": false,
+   "brItems": [
+    [
+     "XO Tour Llif3",
+     "emote"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-13T00:00:00Z",
+   "outDate": "2026-12-12T23:59:59.999Z"
+  },
+  {
+   "offer": "Patín pisapatanes",
+   "bundle": false,
+   "brItems": [
+    [
+     "Patín pisapatanes",
+     "pickaxe"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 800,
+   "regularPrice": 800,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-26T23:59:59.999Z"
+  },
+  {
+   "offer": "THE DINER",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "THE DINER"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Hips Don't Lie",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Hips Don't Lie"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Right Round",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Right Round"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Discotekera, Bola de discoteca",
+   "bundle": false,
+   "brItems": [
+    [
+     "Discotekera",
+     "outfit"
+    ],
+    [
+     "Bola de discoteca",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 1200,
+   "regularPrice": 1200,
+   "inDate": "2026-11-17T00:00:00Z",
+   "outDate": "2026-11-23T23:59:59.999Z"
+  },
+  {
+   "offer": "Lil Uzi Vert de gira, Estrella de Lil Uzi",
+   "bundle": false,
+   "brItems": [
+    [
+     "Lil Uzi Vert de gira",
+     "outfit"
+    ],
+    [
+     "Estrella de Lil Uzi",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 1500,
+   "regularPrice": 1500,
+   "inDate": "2026-11-13T00:00:00Z",
+   "outDate": "2026-12-12T23:59:59.999Z"
+  },
+  {
+   "offer": "Firework",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Firework"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Martillo de 5 toneladas",
+   "bundle": false,
+   "brItems": [
+    [
+     "Martillo de 5 toneladas",
+     "pickaxe"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-12-05T23:59:59.999Z"
+  },
+  {
+   "offer": "Skips",
+   "bundle": true,
+   "brItems": [
+    [
+     "Skips",
+     "outfit"
+    ],
+    [
+     "Puños justicieros",
+     "pickaxe"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 1500,
+   "regularPrice": 1500,
+   "inDate": "2026-11-19T00:00:00Z",
+   "outDate": "2026-11-23T23:59:59.999Z"
+  },
+  {
+   "offer": "CouRage",
+   "bundle": true,
+   "brItems": [
+    [
+     "CouRage",
+     "outfit"
+    ],
+    [
+     "Escudo leonino",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 1500,
+   "regularPrice": 1500,
+   "inDate": "2026-11-19T00:00:00Z",
+   "outDate": "2026-11-21T23:59:59.999Z"
+  },
+  {
+   "offer": "Llamila",
+   "bundle": false,
+   "brItems": [
+    [
+     "Llamila",
+     "sidekick"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 1500,
+   "regularPrice": 1500,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Amor verdadero",
+   "bundle": false,
+   "brItems": [
+    [
+     "Amor verdadero",
+     "emote"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 200,
+   "regularPrice": 200,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-21T23:59:59.999Z"
+  },
+  {
+   "offer": "Don't Let Me Down",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Don't Let Me Down"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Uzi de gira",
+   "bundle": false,
+   "brItems": [
+    [
+     "Uzi de gira",
+     "wrap"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-13T00:00:00Z",
+   "outDate": "2026-12-12T23:59:59.999Z"
+  },
+  {
+   "offer": "Azul Valentine",
+   "bundle": false,
+   "brItems": [
+    [
+     "Azul Valentine",
+     "wrap"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-23T23:59:59.999Z"
+  },
+  {
+   "offer": "Osito cariñoso",
+   "bundle": false,
+   "brItems": [
+    [
+     "Osito cariñoso",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 400,
+   "regularPrice": 400,
+   "inDate": "2026-11-21T00:00:00Z",
+   "outDate": "2026-11-22T23:59:59.999Z"
+  },
+  {
+   "offer": "Dinamita cárnica",
+   "bundle": false,
+   "brItems": [
+    [
+     "Dinamita cárnica",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 300,
+   "regularPrice": 300,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-22T23:59:59.999Z"
+  },
+  {
+   "offer": "Jurassic Jeep® Wrangler de tour",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [],
+   "cars": [
+    "Jurassic Jeep® Wrangler de tour"
+   ],
+   "instruments": [],
+   "finalPrice": 400,
+   "regularPrice": 400,
+   "inDate": "2026-11-19T00:00:00Z",
+   "outDate": "2026-11-28T23:59:59.999Z"
+  },
+  {
+   "offer": "Heelys de Bananín",
+   "bundle": false,
+   "brItems": [
+    [
+     "Heelys de Bananín",
+     "shoe"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 1200,
+   "regularPrice": 1200,
+   "inDate": "2026-11-21T00:00:00Z",
+   "outDate": "2026-11-24T23:59:59.999Z"
+  },
+  {
+   "offer": "Pesas de Zoro",
+   "bundle": false,
+   "brItems": [
+    [
+     "Pesas de Zoro",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 300,
+   "regularPrice": 300,
+   "inDate": "2026-11-08T00:00:00Z",
+   "outDate": "2026-12-05T23:59:59.999Z"
+  },
+  {
+   "offer": "Tubthumping",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Tubthumping"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Jules playera, Engranaje plasmático",
+   "bundle": false,
+   "brItems": [
+    [
+     "Jules playera",
+     "outfit"
+    ],
+    [
+     "Engranaje plasmático",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 1200,
+   "regularPrice": 1200,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-21T23:59:59.999Z"
+  },
+  {
+   "offer": "Multicuchillas",
+   "bundle": false,
+   "brItems": [
+    [
+     "Multicuchillas",
+     "pickaxe"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 800,
+   "regularPrice": 800,
+   "inDate": "2026-11-21T00:00:00Z",
+   "outDate": "2026-11-21T23:59:59.999Z"
+  },
+  {
+   "offer": "Chicken Banana",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Chicken Banana"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-26T23:59:59.999Z"
+  },
+  {
+   "offer": "Melodía de Rocky, Melodía de Rocky, Melodía de Rocky",
+   "bundle": false,
+   "brItems": [
+    [
+     "Melodía de Rocky",
+     "backpack"
+    ],
+    [
+     "Melodía de Rocky",
+     "pickaxe"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [
+    "Melodía de Rocky"
+   ],
+   "finalPrice": 800,
+   "regularPrice": 800,
+   "inDate": "2026-11-06T00:00:00Z",
+   "outDate": "2026-12-06T23:59:59.999Z"
+  },
+  {
+   "offer": "Heat Waves",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Heat Waves"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-21T23:59:59.999Z"
+  },
+  {
+   "offer": "Faye Valentine",
+   "bundle": false,
+   "brItems": [
+    [
+     "Faye Valentine",
+     "outfit"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 1500,
+   "regularPrice": 1500,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-23T23:59:59.999Z"
+  },
+  {
+   "offer": "Lote de improvisación de A$AP Rocky",
+   "bundle": true,
+   "brItems": [],
+   "tracks": [
+    "GRIM FREESTYLE",
+    "RIOT (Rowdy Pipe’n)",
+    "Lord Pretty Flacko Jodye 2 (LPFJ2)"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 1100,
+   "regularPrice": 1500,
+   "inDate": "2026-11-06T00:00:00Z",
+   "outDate": "2026-12-06T23:59:59.999Z"
+  },
+  {
+   "offer": "Lean Back",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Lean Back"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-26T23:59:59.999Z"
+  },
+  {
+   "offer": "A$AP ROCKY X PUMA Suede 94 \"Black/White\"",
+   "bundle": false,
+   "brItems": [
+    [
+     "A$AP ROCKY X PUMA Suede 94 \"Black/White\"",
+     "shoe"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 1000,
+   "regularPrice": 1000,
+   "inDate": "2026-11-06T00:00:00Z",
+   "outDate": "2026-12-06T23:59:59.999Z"
+  },
+  {
+   "offer": "LazarBeam, Jengibrín",
+   "bundle": false,
+   "brItems": [
+    [
+     "LazarBeam",
+     "outfit"
+    ],
+    [
+     "Jengibrín",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 1500,
+   "regularPrice": 1500,
+   "inDate": "2026-11-19T00:00:00Z",
+   "outDate": "2026-11-21T23:59:59.999Z"
+  },
+  {
+   "offer": "Get Busy",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Get Busy"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-10-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Mira",
+   "bundle": false,
+   "brItems": [
+    [
+     "Mira",
+     "outfit"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 800,
+   "regularPrice": 800,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-22T23:59:59.999Z"
+  },
+  {
+   "offer": "Less Than",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Less Than"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Battery",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Battery"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Widowmaker, Colmillo de Widowmaker, Beso de viuda, Kiriko, Kitsune de Kiriko, Kunais de Kiriko, Pasos de Kitsune, Tornado de ofuda, Insignia de Widowmaker",
+   "bundle": false,
+   "brItems": [
+    [
+     "Widowmaker",
+     "outfit"
+    ],
+    [
+     "Colmillo de Widowmaker",
+     "pickaxe"
+    ],
+    [
+     "Beso de viuda",
+     "backpack"
+    ],
+    [
+     "Kiriko",
+     "outfit"
+    ],
+    [
+     "Kitsune de Kiriko",
+     "backpack"
+    ],
+    [
+     "Kunais de Kiriko",
+     "pickaxe"
+    ],
+    [
+     "Pasos de Kitsune",
+     "shoe"
+    ],
+    [
+     "Tornado de ofuda",
+     "emote"
+    ],
+    [
+     "Insignia de Widowmaker",
+     "wrap"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 2400,
+   "regularPrice": 5000,
+   "inDate": "2026-11-21T00:00:00Z",
+   "outDate": "2026-12-04T23:59:59.999Z"
+  },
+  {
+   "offer": "Brocha de batalla",
+   "bundle": false,
+   "brItems": [
+    [
+     "Brocha de batalla",
+     "pickaxe"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-24T23:59:59.999Z"
+  },
+  {
+   "offer": "Lágrimas de lujo",
+   "bundle": false,
+   "brItems": [
+    [
+     "Lágrimas de lujo",
+     "emote"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-24T23:59:59.999Z"
+  },
+  {
+   "offer": "What You Saying",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "What You Saying"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-13T00:00:00Z",
+   "outDate": "2026-11-26T23:59:59.999Z"
+  },
+  {
+   "offer": "Holiday",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Holiday"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Sanji, Utensilios de Sanji, Utensilios de Sanji",
+   "bundle": false,
+   "brItems": [
+    [
+     "Sanji",
+     "outfit"
+    ],
+    [
+     "Utensilios de Sanji",
+     "pickaxe"
+    ],
+    [
+     "Utensilios de Sanji",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 1600,
+   "regularPrice": 1600,
+   "inDate": "2026-11-08T00:00:00Z",
+   "outDate": "2026-12-05T23:59:59.999Z"
+  },
+  {
+   "offer": "Sinvergüenza, Caja fuerte",
+   "bundle": false,
+   "brItems": [
+    [
+     "Sinvergüenza",
+     "outfit"
+    ],
+    [
+     "Caja fuerte",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 1500,
+   "regularPrice": 1500,
+   "inDate": "2026-11-17T00:00:00Z",
+   "outDate": "2026-11-23T23:59:59.999Z"
+  },
+  {
+   "offer": "Vans x Lil Uzi Vert LX Old Skool 36",
+   "bundle": false,
+   "brItems": [
+    [
+     "Vans x Lil Uzi Vert LX Old Skool 36",
+     "shoe"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 1000,
+   "regularPrice": 1000,
+   "inDate": "2026-11-13T00:00:00Z",
+   "outDate": "2026-12-12T23:59:59.999Z"
+  },
+  {
+   "offer": "Ruedas Sakura",
+   "bundle": true,
+   "brItems": [],
+   "tracks": [],
+   "cars": [
+    "Sakura"
+   ],
+   "instruments": [],
+   "finalPrice": 400,
+   "regularPrice": 400,
+   "inDate": "2026-11-21T00:00:00Z",
+   "outDate": "2026-11-27T23:59:59.999Z"
+  },
+  {
+   "offer": "EVIL J0RDAN",
+   "bundle": false,
+   "brItems": [
+    [
+     "EVIL J0RDAN",
+     "emote"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-19T00:00:00Z",
+   "outDate": "2026-11-24T23:59:59.999Z"
+  },
+  {
+   "offer": "Rocky Rugahand, Cohetes de A$AP",
+   "bundle": false,
+   "brItems": [
+    [
+     "Rocky Rugahand",
+     "outfit"
+    ],
+    [
+     "Cohetes de A$AP",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 1500,
+   "regularPrice": 1500,
+   "inDate": "2026-11-06T00:00:00Z",
+   "outDate": "2026-12-06T23:59:59.999Z"
+  },
+  {
+   "offer": "Piloto del B.R.U.T.O.",
+   "bundle": false,
+   "brItems": [
+    [
+     "Piloto del B.R.U.T.O.",
+     "outfit"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 800,
+   "regularPrice": 800,
+   "inDate": "2026-11-17T00:00:00Z",
+   "outDate": "2026-11-23T23:59:59.999Z"
+  },
+  {
+   "offer": "Melt",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Melt"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Porsche Cayenne Turbo Electric y Overwatch",
+   "bundle": true,
+   "brItems": [],
+   "tracks": [],
+   "cars": [
+    "Porsche Cayenne Turbo Electric",
+    "Onda psíquica",
+    "Tracer",
+    "Mercy",
+    "D.Va",
+    "Genji",
+    "Porsche Cayenne Turbo Electric"
+   ],
+   "instruments": [],
+   "finalPrice": 2400,
+   "regularPrice": 2400,
+   "inDate": "2026-11-21T00:00:00Z",
+   "outDate": "2026-12-04T23:59:59.999Z"
+  },
+  {
+   "offer": "Kiriko, Kitsune de Kiriko, Kunais de Kiriko",
+   "bundle": false,
+   "brItems": [
+    [
+     "Kiriko",
+     "outfit"
+    ],
+    [
+     "Kitsune de Kiriko",
+     "backpack"
+    ],
+    [
+     "Kunais de Kiriko",
+     "pickaxe"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 1600,
+   "regularPrice": 1600,
+   "inDate": "2026-11-21T00:00:00Z",
+   "outDate": "2026-12-04T23:59:59.999Z"
+  },
+  {
+   "offer": "Voz de Madison, Voz de Madison, Voz de Madison",
+   "bundle": false,
+   "brItems": [
+    [
+     "Voz de Madison",
+     "backpack"
+    ],
+    [
+     "Voz de Madison",
+     "pickaxe"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [
+    "Voz de Madison"
+   ],
+   "finalPrice": 800,
+   "regularPrice": 800,
+   "inDate": "2026-11-17T00:00:00Z",
+   "outDate": "2026-11-21T23:59:59.999Z"
+  },
+  {
+   "offer": "Hora del almuerzo",
+   "bundle": false,
+   "brItems": [
+    [
+     "Hora del almuerzo",
+     "emote"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 300,
+   "regularPrice": 300,
+   "inDate": "2026-11-19T00:00:00Z",
+   "outDate": "2026-11-21T23:59:59.999Z"
+  },
+  {
+   "offer": "Fritanga",
+   "bundle": false,
+   "brItems": [
+    [
+     "Fritanga",
+     "outfit"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 800,
+   "regularPrice": 800,
+   "inDate": "2026-11-21T00:00:00Z",
+   "outDate": "2026-11-21T23:59:59.999Z"
+  },
+  {
+   "offer": "Helicóptero de Flacko",
+   "bundle": false,
+   "brItems": [
+    [
+     "Helicóptero de Flacko",
+     "glider"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 1200,
+   "regularPrice": 1200,
+   "inDate": "2026-11-06T00:00:00Z",
+   "outDate": "2026-12-06T23:59:59.999Z"
+  },
+  {
+   "offer": "Santeria",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Santeria"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Prueba de voluntad",
+   "bundle": false,
+   "brItems": [
+    [
+     "Prueba de voluntad",
+     "emote"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 300,
+   "regularPrice": 300,
+   "inDate": "2026-11-08T00:00:00Z",
+   "outDate": "2026-12-05T23:59:59.999Z"
+  },
+  {
+   "offer": "A$AP ROCKY X PUMA Straycat V6 \"Red Flash/Black\"",
+   "bundle": false,
+   "brItems": [
+    [
+     "A$AP ROCKY X PUMA Straycat V6 \"Red Flash/Black\"",
+     "shoe"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 1000,
+   "regularPrice": 1000,
+   "inDate": "2026-11-06T00:00:00Z",
+   "outDate": "2026-12-06T23:59:59.999Z"
+  },
+  {
+   "offer": "Teléfono multiusos",
+   "bundle": false,
+   "brItems": [
+    [
+     "Teléfono multiusos",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 300,
+   "regularPrice": 300,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-23T23:59:59.999Z"
+  },
+  {
+   "offer": "Alerta roja",
+   "bundle": false,
+   "brItems": [
+    [
+     "Alerta roja",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 300,
+   "regularPrice": 300,
+   "inDate": "2026-11-17T00:00:00Z",
+   "outDate": "2026-11-23T23:59:59.999Z"
+  },
+  {
+   "offer": "Ollie-Oop",
+   "bundle": false,
+   "brItems": [
+    [
+     "Ollie-Oop",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 300,
+   "regularPrice": 300,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-26T23:59:59.999Z"
+  },
+  {
+   "offer": "Nami, Mandarinas de Nami, Bastón del clima",
+   "bundle": false,
+   "brItems": [
+    [
+     "Nami",
+     "outfit"
+    ],
+    [
+     "Mandarinas de Nami",
+     "backpack"
+    ],
+    [
+     "Bastón del clima",
+     "pickaxe"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 1600,
+   "regularPrice": 1600,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-12-05T23:59:59.999Z"
+  },
+  {
+   "offer": "Next Semester",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Next Semester"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "RIOT (Rowdy Pipe’n)",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "RIOT (Rowdy Pipe’n)"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-06T00:00:00Z",
+   "outDate": "2026-12-06T23:59:59.999Z"
+  },
+  {
+   "offer": "Sad But True",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Sad But True"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Piqueta de CouRage",
+   "bundle": false,
+   "brItems": [
+    [
+     "Piqueta de CouRage",
+     "pickaxe"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-19T00:00:00Z",
+   "outDate": "2026-11-21T23:59:59.999Z"
+  },
+  {
+   "offer": "Kit de Usopp",
+   "bundle": false,
+   "brItems": [
+    [
+     "Kit de Usopp",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 300,
+   "regularPrice": 300,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-12-05T23:59:59.999Z"
+  },
+  {
+   "offer": "Spike Spiegel",
+   "bundle": false,
+   "brItems": [
+    [
+     "Spike Spiegel",
+     "outfit"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 1500,
+   "regularPrice": 1500,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-23T23:59:59.999Z"
+  },
+  {
+   "offer": "Wolves",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Wolves"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Make You Mine",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Make You Mine"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-17T00:00:00Z",
+   "outDate": "2026-11-21T23:59:59.999Z"
+  },
+  {
+   "offer": "Converse Chuck 70 Hi Canvas \"White\"",
+   "bundle": false,
+   "brItems": [
+    [
+     "Converse Chuck 70 Hi Canvas \"White\"",
+     "shoe"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 800,
+   "regularPrice": 800,
+   "inDate": "2026-11-19T00:00:00Z",
+   "outDate": "2026-11-22T23:59:59.999Z"
+  },
+  {
+   "offer": "Stargazing",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Stargazing"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Stick Season",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Stick Season"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Ruedas Rayo de Miku",
+   "bundle": true,
+   "brItems": [],
+   "tracks": [],
+   "cars": [
+    "Rayo de Miku"
+   ],
+   "instruments": [],
+   "finalPrice": 700,
+   "regularPrice": 700,
+   "inDate": "2026-11-15T00:00:00Z",
+   "outDate": "2026-12-14T23:59:59.999Z"
+  },
+  {
+   "offer": "Nonsense",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Nonsense"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Take Over Control",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Take Over Control"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-26T23:59:59.999Z"
+  },
+  {
+   "offer": "Usopp, Kit de Usopp, Martillo de 5 toneladas",
+   "bundle": false,
+   "brItems": [
+    [
+     "Usopp",
+     "outfit"
+    ],
+    [
+     "Kit de Usopp",
+     "backpack"
+    ],
+    [
+     "Martillo de 5 toneladas",
+     "pickaxe"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 1600,
+   "regularPrice": 1600,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-12-05T23:59:59.999Z"
+  },
+  {
+   "offer": "Savage",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Savage"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Lote Un Show Más",
+   "bundle": true,
+   "brItems": [
+    [
+     "Rigby",
+     "sidekick"
+    ],
+    [
+     "Mordecai",
+     "outfit"
+    ],
+    [
+     "Guante supremo",
+     "pickaxe"
+    ],
+    [
+     "Skips",
+     "outfit"
+    ],
+    [
+     "Puños justicieros",
+     "pickaxe"
+    ],
+    [
+     "¡Ooooh!",
+     "emote"
+    ],
+    [
+     "Saltito de Skips",
+     "emote"
+    ],
+    [
+     "PATITOS",
+     "backpack"
+    ],
+    [
+     "Sonajero y mazo",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 3400,
+   "regularPrice": 6100,
+   "inDate": "2026-11-19T00:00:00Z",
+   "outDate": "2026-11-23T23:59:59.999Z"
+  },
+  {
+   "offer": "Bang Bang",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Bang Bang"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-26T23:59:59.999Z"
+  },
+  {
+   "offer": "Aubrey, Dinamita cárnica",
+   "bundle": false,
+   "brItems": [
+    [
+     "Aubrey",
+     "outfit"
+    ],
+    [
+     "Dinamita cárnica",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 1200,
+   "regularPrice": 1200,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-22T23:59:59.999Z"
+  },
+  {
+   "offer": "Segador de la Swordfish II",
+   "bundle": false,
+   "brItems": [
+    [
+     "Segador de la Swordfish II",
+     "pickaxe"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 800,
+   "regularPrice": 800,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-23T23:59:59.999Z"
+  },
+  {
+   "offer": "Rubí, Alerta roja",
+   "bundle": false,
+   "brItems": [
+    [
+     "Rubí",
+     "outfit"
+    ],
+    [
+     "Alerta roja",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 1200,
+   "regularPrice": 1200,
+   "inDate": "2026-11-17T00:00:00Z",
+   "outDate": "2026-11-23T23:59:59.999Z"
+  },
+  {
+   "offer": "Flotador de ancla de Miku",
+   "bundle": false,
+   "brItems": [
+    [
+     "Flotador de ancla de Miku",
+     "pickaxe"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 800,
+   "regularPrice": 800,
+   "inDate": "2026-11-15T00:00:00Z",
+   "outDate": "2026-12-14T23:59:59.999Z"
+  },
+  {
+   "offer": "Ghost",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Ghost"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Air Jordan 4 Retro SE \"What The\"",
+   "bundle": false,
+   "brItems": [
+    [
+     "Air Jordan 4 Retro SE \"What The\"",
+     "shoe"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 800,
+   "regularPrice": 800,
+   "inDate": "2026-11-21T00:00:00Z",
+   "outDate": "2026-11-24T23:59:59.999Z"
+  },
+  {
+   "offer": "Sunflower - Spider-Man: Into the Spider-Verse",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Sunflower - Spider-Man: Into the Spider-Verse"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Emperatriz",
+   "bundle": false,
+   "brItems": [
+    [
+     "Emperatriz",
+     "sidekick"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 1200,
+   "regularPrice": 1200,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-23T23:59:59.999Z"
+  },
+  {
+   "offer": "Madison Make You Mine, Arma de Madison",
+   "bundle": false,
+   "brItems": [
+    [
+     "Madison Make You Mine",
+     "outfit"
+    ],
+    [
+     "Arma de Madison",
+     "pickaxe"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 1500,
+   "regularPrice": 1500,
+   "inDate": "2026-11-17T00:00:00Z",
+   "outDate": "2026-11-21T23:59:59.999Z"
+  },
+  {
+   "offer": "Maps",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Maps"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Free Bird",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Free Bird"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "complexity",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "complexity"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-17T00:00:00Z",
+   "outDate": "2026-11-21T23:59:59.999Z"
+  },
+  {
+   "offer": "Saltito de Skips",
+   "bundle": false,
+   "brItems": [
+    [
+     "Saltito de Skips",
+     "emote"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 400,
+   "regularPrice": 400,
+   "inDate": "2026-11-19T00:00:00Z",
+   "outDate": "2026-11-23T23:59:59.999Z"
+  },
+  {
+   "offer": "McLaren P1",
+   "bundle": true,
+   "brItems": [],
+   "tracks": [],
+   "cars": [
+    "McLaren P1",
+    "Temerario",
+    "Llamas",
+    "Rayas",
+    "McLaren P1"
+   ],
+   "instruments": [],
+   "finalPrice": 2800,
+   "regularPrice": 2800,
+   "inDate": "2026-11-18T00:00:00Z",
+   "outDate": "2026-11-24T23:59:59.999Z"
+  },
+  {
+   "offer": "positions",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "positions"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Bola de discoteca",
+   "bundle": false,
+   "brItems": [
+    [
+     "Bola de discoteca",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 300,
+   "regularPrice": 300,
+   "inDate": "2026-11-17T00:00:00Z",
+   "outDate": "2026-11-23T23:59:59.999Z"
+  },
+  {
+   "offer": "Lote Heat Waves",
+   "bundle": true,
+   "brItems": [
+    [
+     "Jules playera",
+     "outfit"
+    ],
+    [
+     "Engranaje plasmático",
+     "backpack"
+    ]
+   ],
+   "tracks": [
+    "Heat Waves"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 1500,
+   "regularPrice": 1700,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-21T23:59:59.999Z"
+  },
+  {
+   "offer": "NIGHT DANCER",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "NIGHT DANCER"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "XO Tour Llif3",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "XO Tour Llif3"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-13T00:00:00Z",
+   "outDate": "2026-11-26T23:59:59.999Z"
+  },
+  {
+   "offer": "Feel It Still",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Feel It Still"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Jurassic Jeep Wrangler",
+   "bundle": true,
+   "brItems": [],
+   "tracks": [],
+   "cars": [
+    "Jurassic Jeep® Wrangler",
+    "Vehículo del personal",
+    "Vehículo del personal: azul",
+    "Vehículo de tour",
+    "Jurassic Jeep® Wrangler",
+    "Jurassic Jeep® Wrangler de personal",
+    "Jurassic Jeep® Wrangler de tour"
+   ],
+   "instruments": [],
+   "finalPrice": 2000,
+   "regularPrice": 2000,
+   "inDate": "2026-11-19T00:00:00Z",
+   "outDate": "2026-11-28T23:59:59.999Z"
+  },
+  {
+   "offer": "Greta gris, Ivor",
+   "bundle": false,
+   "brItems": [
+    [
+     "Greta gris",
+     "outfit"
+    ],
+    [
+     "Ivor",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 1200,
+   "regularPrice": 1200,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-26T23:59:59.999Z"
+  },
+  {
+   "offer": "Persígueme",
+   "bundle": false,
+   "brItems": [
+    [
+     "Persígueme",
+     "emote"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-17T00:00:00Z",
+   "outDate": "2026-11-22T23:59:59.999Z"
+  },
+  {
+   "offer": "Cetro de coraje",
+   "bundle": false,
+   "brItems": [
+    [
+     "Cetro de coraje",
+     "pickaxe"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 800,
+   "regularPrice": 800,
+   "inDate": "2026-11-19T00:00:00Z",
+   "outDate": "2026-11-21T23:59:59.999Z"
+  },
+  {
+   "offer": "Crocs Classic Clog \"Pink Milk\"",
+   "bundle": false,
+   "brItems": [
+    [
+     "Crocs Classic Clog \"Pink Milk\"",
+     "shoe"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 1000,
+   "regularPrice": 1000,
+   "inDate": "2026-11-21T00:00:00Z",
+   "outDate": "2026-11-24T23:59:59.999Z"
+  },
+  {
+   "offer": "abcdefu",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "abcdefu"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Big Dawgs",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Big Dawgs"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-26T23:59:59.999Z"
+  },
+  {
+   "offer": "Pico corazón",
+   "bundle": false,
+   "brItems": [
+    [
+     "Pico corazón",
+     "pickaxe"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 800,
+   "regularPrice": 800,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-21T23:59:59.999Z"
+  },
+  {
+   "offer": "Cuerdas de gira de Uzi, Cuerdas de gira de Uzi, Cuerdas de gira de Uzi",
+   "bundle": false,
+   "brItems": [
+    [
+     "Cuerdas de gira de Uzi",
+     "pickaxe"
+    ],
+    [
+     "Cuerdas de gira de Uzi",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [
+    "Cuerdas de gira de Uzi"
+   ],
+   "finalPrice": 800,
+   "regularPrice": 800,
+   "inDate": "2026-11-13T00:00:00Z",
+   "outDate": "2026-12-12T23:59:59.999Z"
+  },
+  {
+   "offer": "Lil Uzi Vert, Alas de Uzi",
+   "bundle": false,
+   "brItems": [
+    [
+     "Lil Uzi Vert",
+     "outfit"
+    ],
+    [
+     "Alas de Uzi",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 1500,
+   "regularPrice": 1500,
+   "inDate": "2026-11-13T00:00:00Z",
+   "outDate": "2026-12-12T23:59:59.999Z"
+  },
+  {
+   "offer": "Air Jordan 11 \"Legend Blue\"",
+   "bundle": false,
+   "brItems": [
+    [
+     "Air Jordan 11 \"Legend Blue\"",
+     "shoe"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 1000,
+   "regularPrice": 1000,
+   "inDate": "2026-11-19T00:00:00Z",
+   "outDate": "2026-11-22T23:59:59.999Z"
+  },
+  {
+   "offer": "The Middle",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "The Middle"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Pop Muzik",
+   "bundle": false,
+   "brItems": [
+    [
+     "Pop Muzik",
+     "emote"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-21T00:00:00Z",
+   "outDate": "2026-11-26T23:59:59.999Z"
+  },
+  {
+   "offer": "Lote Cowboy Bebop",
+   "bundle": true,
+   "brItems": [
+    [
+     "Faye Valentine",
+     "outfit"
+    ],
+    [
+     "Spike Spiegel",
+     "outfit"
+    ],
+    [
+     "Ritmo Bop",
+     "emote"
+    ],
+    [
+     "Mini-Swordfish II",
+     "emote"
+    ],
+    [
+     "Mazo de la Red Tail",
+     "pickaxe"
+    ],
+    [
+     "Segador de la Swordfish II",
+     "pickaxe"
+    ],
+    [
+     "Teléfono multiusos",
+     "backpack"
+    ],
+    [
+     "Rosas para Julia",
+     "backpack"
+    ],
+    [
+     "Azul Valentine",
+     "wrap"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 3400,
+   "regularPrice": 6600,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-23T23:59:59.999Z"
+  },
+  {
+   "offer": "Insignia de Widowmaker",
+   "bundle": false,
+   "brItems": [
+    [
+     "Insignia de Widowmaker",
+     "wrap"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-21T00:00:00Z",
+   "outDate": "2026-12-04T23:59:59.999Z"
+  },
+  {
+   "offer": "Sonajero y mazo",
+   "bundle": false,
+   "brItems": [
+    [
+     "Sonajero y mazo",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 400,
+   "regularPrice": 400,
+   "inDate": "2026-11-19T00:00:00Z",
+   "outDate": "2026-11-23T23:59:59.999Z"
+  },
+  {
+   "offer": "Metavictoria",
+   "bundle": false,
+   "brItems": [
+    [
+     "Metavictoria",
+     "emote"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 300,
+   "regularPrice": 300,
+   "inDate": "2026-11-19T00:00:00Z",
+   "outDate": "2026-11-21T23:59:59.999Z"
+  },
+  {
+   "offer": "Happy",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Happy"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Mensaje de Flacko",
+   "bundle": false,
+   "brItems": [
+    [
+     "Mensaje de Flacko",
+     "wrap"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-06T00:00:00Z",
+   "outDate": "2026-12-06T23:59:59.999Z"
+  },
+  {
+   "offer": "Engranaje plasmático",
+   "bundle": false,
+   "brItems": [
+    [
+     "Engranaje plasmático",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 300,
+   "regularPrice": 300,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-21T23:59:59.999Z"
+  },
+  {
+   "offer": "Helicopter",
+   "bundle": false,
+   "brItems": [
+    [
+     "Helicopter",
+     "emote"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-06T00:00:00Z",
+   "outDate": "2026-12-06T23:59:59.999Z"
+  },
+  {
+   "offer": "Monster",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Monster"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "CONNECT:COMMUNE",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "CONNECT:COMMUNE"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-15T00:00:00Z",
+   "outDate": "2026-12-14T23:59:59.999Z"
+  },
+  {
+   "offer": "Capitana Hatsune Miku, Tesoro de Miku, Flotador de ancla de Miku, Miku Miku ni Shite Ageru♪, Voz de Miku, Voz de Miku, Voz de Miku, CONNECT:COMMUNE",
+   "bundle": false,
+   "brItems": [
+    [
+     "Capitana Hatsune Miku",
+     "outfit"
+    ],
+    [
+     "Tesoro de Miku",
+     "backpack"
+    ],
+    [
+     "Flotador de ancla de Miku",
+     "pickaxe"
+    ],
+    [
+     "Miku Miku ni Shite Ageru♪",
+     "emote"
+    ],
+    [
+     "Voz de Miku",
+     "backpack"
+    ],
+    [
+     "Voz de Miku",
+     "pickaxe"
+    ]
+   ],
+   "tracks": [
+    "CONNECT:COMMUNE"
+   ],
+   "cars": [],
+   "instruments": [
+    "Voz de Miku"
+   ],
+   "finalPrice": 2200,
+   "regularPrice": 4100,
+   "inDate": "2026-11-15T00:00:00Z",
+   "outDate": "2026-12-14T23:59:59.999Z"
+  },
+  {
+   "offer": "Pasos dinámicos",
+   "bundle": false,
+   "brItems": [
+    [
+     "Pasos dinámicos",
+     "emote"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-13T00:00:00Z",
+   "outDate": "2026-11-26T23:59:59.999Z"
+  },
+  {
+   "offer": "PROVENZA (REMIX)",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "PROVENZA (REMIX)"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "bittersweet",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "bittersweet"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-17T00:00:00Z",
+   "outDate": "2026-11-21T23:59:59.999Z"
+  },
+  {
+   "offer": "All The Small Things",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "All The Small Things"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Jengibrín",
+   "bundle": false,
+   "brItems": [
+    [
+     "Jengibrín",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 400,
+   "regularPrice": 400,
+   "inDate": "2026-11-19T00:00:00Z",
+   "outDate": "2026-11-21T23:59:59.999Z"
+  },
+  {
+   "offer": "Mambo No. 5 (A Little Bit of...)",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Mambo No. 5 (A Little Bit of...)"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Kendo ronin callejero",
+   "bundle": false,
+   "brItems": [
+    [
+     "Kendo ronin callejero",
+     "outfit"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 800,
+   "regularPrice": 800,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-22T23:59:59.999Z"
+  },
+  {
+   "offer": "Tesoro de Miku",
+   "bundle": false,
+   "brItems": [
+    [
+     "Tesoro de Miku",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 400,
+   "regularPrice": 400,
+   "inDate": "2026-11-15T00:00:00Z",
+   "outDate": "2026-12-14T23:59:59.999Z"
+  },
+  {
+   "offer": "Desgarradoras demoníacas",
+   "bundle": false,
+   "brItems": [
+    [
+     "Desgarradoras demoníacas",
+     "pickaxe"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 800,
+   "regularPrice": 800,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-26T23:59:59.999Z"
+  },
+  {
+   "offer": "Cohetes de A$AP",
+   "bundle": false,
+   "brItems": [
+    [
+     "Cohetes de A$AP",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 400,
+   "regularPrice": 400,
+   "inDate": "2026-11-06T00:00:00Z",
+   "outDate": "2026-12-06T23:59:59.999Z"
+  },
+  {
+   "offer": "Sable trágico, Sable trágico",
+   "bundle": false,
+   "brItems": [
+    [
+     "Sable trágico",
+     "pickaxe"
+    ],
+    [
+     "Sable trágico",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 800,
+   "regularPrice": 800,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-26T23:59:59.999Z"
+  },
+  {
+   "offer": "Gangnam Style",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Gangnam Style"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Gatito Cupido",
+   "bundle": false,
+   "brItems": [
+    [
+     "Gatito Cupido",
+     "sidekick"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 1200,
+   "regularPrice": 1200,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "On The Floor",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "On The Floor"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Utensilios de Sanji, Utensilios de Sanji",
+   "bundle": false,
+   "brItems": [
+    [
+     "Utensilios de Sanji",
+     "pickaxe"
+    ],
+    [
+     "Utensilios de Sanji",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 800,
+   "regularPrice": 800,
+   "inDate": "2026-11-08T00:00:00Z",
+   "outDate": "2026-12-05T23:59:59.999Z"
+  },
+  {
+   "offer": "Lote Kim Kardashian",
+   "bundle": true,
+   "brItems": [
+    [
+     "Kim Kardashian icónica",
+     "outfit"
+    ],
+    [
+     "Aro de luz portátil",
+     "backpack"
+    ],
+    [
+     "Kim Kardashian",
+     "outfit"
+    ],
+    [
+     "Kit de Kim",
+     "backpack"
+    ],
+    [
+     "Brocha de batalla",
+     "pickaxe"
+    ],
+    [
+     "Cartera chic",
+     "pickaxe"
+    ],
+    [
+     "Rompe internet",
+     "emote"
+    ],
+    [
+     "Lágrimas de lujo",
+     "emote"
+    ],
+    [
+     "Jet privado",
+     "glider"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 3000,
+   "regularPrice": 5900,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-24T23:59:59.999Z"
+  },
+  {
+   "offer": "Shurikens de los Shimada",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [],
+   "cars": [
+    "Shurikens de los Shimada"
+   ],
+   "instruments": [],
+   "finalPrice": 400,
+   "regularPrice": 400,
+   "inDate": "2026-11-21T00:00:00Z",
+   "outDate": "2026-12-04T23:59:59.999Z"
+  },
+  {
+   "offer": "Bastón del clima",
+   "bundle": false,
+   "brItems": [
+    [
+     "Bastón del clima",
+     "pickaxe"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-12-05T23:59:59.999Z"
+  },
+  {
+   "offer": "March Of The Pigs",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "March Of The Pigs"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Tornado de ofuda",
+   "bundle": false,
+   "brItems": [
+    [
+     "Tornado de ofuda",
+     "emote"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 300,
+   "regularPrice": 300,
+   "inDate": "2026-11-21T00:00:00Z",
+   "outDate": "2026-12-04T23:59:59.999Z"
+  },
+  {
+   "offer": "Lote CouRage",
+   "bundle": true,
+   "brItems": [
+    [
+     "CouRage",
+     "outfit"
+    ],
+    [
+     "Escudo leonino",
+     "backpack"
+    ],
+    [
+     "Louis",
+     "sidekick"
+    ],
+    [
+     "Caballera CouRage",
+     "outfit"
+    ],
+    [
+     "Escudo de CouRage",
+     "backpack"
+    ],
+    [
+     "Victoria honrosa",
+     "emote"
+    ],
+    [
+     "Metavictoria",
+     "emote"
+    ],
+    [
+     "Cetro de coraje",
+     "pickaxe"
+    ],
+    [
+     "Piqueta de CouRage",
+     "pickaxe"
+    ],
+    [
+     "El orgullo del león",
+     "wrap"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 3000,
+   "regularPrice": 6600,
+   "inDate": "2026-11-19T00:00:00Z",
+   "outDate": "2026-11-21T23:59:59.999Z"
+  },
+  {
+   "offer": "Fell In Love With A Girl",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Fell In Love With A Girl"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Dara",
+   "bundle": false,
+   "brItems": [
+    [
+     "Dara",
+     "outfit"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 1200,
+   "regularPrice": 1200,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-26T23:59:59.999Z"
+  },
+  {
+   "offer": "Love Me Not",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Love Me Not"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Shake It",
+   "bundle": false,
+   "brItems": [
+    [
+     "Shake It",
+     "emote"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-21T00:00:00Z",
+   "outDate": "2026-11-26T23:59:59.999Z"
+  },
+  {
+   "offer": "Feather",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Feather"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Sterling, Estrella de diamante",
+   "bundle": false,
+   "brItems": [
+    [
+     "Sterling",
+     "outfit"
+    ],
+    [
+     "Estrella de diamante",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 1500,
+   "regularPrice": 1500,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-22T23:59:59.999Z"
+  },
+  {
+   "offer": "I Wish",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "I Wish"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Kitsune de Kiriko",
+   "bundle": false,
+   "brItems": [
+    [
+     "Kitsune de Kiriko",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 400,
+   "regularPrice": 400,
+   "inDate": "2026-11-21T00:00:00Z",
+   "outDate": "2026-12-04T23:59:59.999Z"
+  },
+  {
+   "offer": "Get My Bag",
+   "bundle": false,
+   "brItems": [
+    [
+     "Get My Bag",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 400,
+   "regularPrice": 400,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-26T23:59:59.999Z"
+  },
+  {
+   "offer": "Say It Was",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Say It Was"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-13T00:00:00Z",
+   "outDate": "2026-11-26T23:59:59.999Z"
+  },
+  {
+   "offer": "Best of You",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Best of You"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-26T23:59:59.999Z"
+  },
+  {
+   "offer": "Mordecai",
+   "bundle": true,
+   "brItems": [
+    [
+     "Mordecai",
+     "outfit"
+    ],
+    [
+     "Guante supremo",
+     "pickaxe"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 1500,
+   "regularPrice": 1500,
+   "inDate": "2026-11-19T00:00:00Z",
+   "outDate": "2026-11-23T23:59:59.999Z"
+  },
+  {
+   "offer": "Void Burn",
+   "bundle": true,
+   "brItems": [],
+   "tracks": [],
+   "cars": [
+    "Vacío ardiente",
+    "Llamas",
+    "Relámpago",
+    "Kanji de cadete",
+    "Máscara del vacío",
+    "Rayas",
+    "Alas",
+    "Oro del vacío",
+    "ROY G BUFFY",
+    "BUFFY del vacío"
+   ],
+   "instruments": [],
+   "finalPrice": 1500,
+   "regularPrice": 1500,
+   "inDate": "2026-11-18T00:00:00Z",
+   "outDate": "2026-11-24T23:59:59.999Z"
+  },
+  {
+   "offer": "Rosas para Julia",
+   "bundle": false,
+   "brItems": [
+    [
+     "Rosas para Julia",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 300,
+   "regularPrice": 300,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-23T23:59:59.999Z"
+  },
+  {
+   "offer": "Filoespada de mercenaria, Vaina de mercenaria",
+   "bundle": false,
+   "brItems": [
+    [
+     "Filoespada de mercenaria",
+     "pickaxe"
+    ],
+    [
+     "Vaina de mercenaria",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 800,
+   "regularPrice": 800,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-26T23:59:59.999Z"
+  },
+  {
+   "offer": "High Hopes",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "High Hopes"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Porsche Cayenne Turbo Electric",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [],
+   "cars": [
+    "Porsche Cayenne Turbo Electric"
+   ],
+   "instruments": [],
+   "finalPrice": 400,
+   "regularPrice": 400,
+   "inDate": "2026-11-21T00:00:00Z",
+   "outDate": "2026-12-04T23:59:59.999Z"
+  },
+  {
+   "offer": "Without You",
+   "bundle": false,
+   "brItems": [
+    [
+     "Without You",
+     "emote"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-17T00:00:00Z",
+   "outDate": "2026-11-22T23:59:59.999Z"
+  },
+  {
+   "offer": "Misery Business",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Misery Business"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Lote A$AP Rocky",
+   "bundle": true,
+   "brItems": [
+    [
+     "Flacko Helicopter",
+     "outfit"
+    ],
+    [
+     "Propulsores de alta fidelidad",
+     "backpack"
+    ],
+    [
+     "Rocky Rugahand",
+     "outfit"
+    ],
+    [
+     "A$AP ROCKY X PUMA Suede 94 \"Black/White\"",
+     "shoe"
+    ],
+    [
+     "Helicóptero de Flacko",
+     "glider"
+    ],
+    [
+     "Guanteletes de A$AP",
+     "pickaxe"
+    ],
+    [
+     "Cohetes de A$AP",
+     "backpack"
+    ],
+    [
+     "Helicopter",
+     "emote"
+    ],
+    [
+     "RIOT (Rowdy Pipe'n)",
+     "emote"
+    ],
+    [
+     "A$AP ROCKY X PUMA Straycat V6 \"Red Flash/Black\"",
+     "shoe"
+    ],
+    [
+     "Mensaje de Flacko",
+     "wrap"
+    ],
+    [
+     "Melodía de Rocky",
+     "pickaxe"
+    ],
+    [
+     "Melodía de Rocky",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [
+    "Melodía de Rocky"
+   ],
+   "finalPrice": 3200,
+   "regularPrice": 8800,
+   "inDate": "2026-11-06T00:00:00Z",
+   "outDate": "2026-12-06T23:59:59.999Z"
+  },
+  {
+   "offer": "Kyra, Verde impactante",
+   "bundle": false,
+   "brItems": [
+    [
+     "Kyra",
+     "outfit"
+    ],
+    [
+     "Verde impactante",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 1200,
+   "regularPrice": 1200,
+   "inDate": "2026-11-17T00:00:00Z",
+   "outDate": "2026-11-23T23:59:59.999Z"
+  },
+  {
+   "offer": "Kim Kardashian",
+   "bundle": true,
+   "brItems": [
+    [
+     "Kim Kardashian",
+     "outfit"
+    ],
+    [
+     "Kit de Kim",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 1500,
+   "regularPrice": 1500,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-24T23:59:59.999Z"
+  },
+  {
+   "offer": "Pantuflas porcinas",
+   "bundle": false,
+   "brItems": [
+    [
+     "Pantuflas porcinas",
+     "shoe"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 600,
+   "regularPrice": 600,
+   "inDate": "2026-11-21T00:00:00Z",
+   "outDate": "2026-11-24T23:59:59.999Z"
+  },
+  {
+   "offer": "Mandarinas de Nami",
+   "bundle": false,
+   "brItems": [
+    [
+     "Mandarinas de Nami",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 300,
+   "regularPrice": 300,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-12-05T23:59:59.999Z"
+  },
+  {
+   "offer": "Fly",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Fly"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Jet privado",
+   "bundle": false,
+   "brItems": [
+    [
+     "Jet privado",
+     "glider"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 800,
+   "regularPrice": 800,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-24T23:59:59.999Z"
+  },
+  {
+   "offer": "Kim Kardashian icónica",
+   "bundle": true,
+   "brItems": [
+    [
+     "Kim Kardashian icónica",
+     "outfit"
+    ],
+    [
+     "Aro de luz portátil",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 1800,
+   "regularPrice": 1800,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-24T23:59:59.999Z"
+  },
+  {
+   "offer": "Die With A Smile",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Die With A Smile"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Black Beatles",
+   "bundle": false,
+   "brItems": [
+    [
+     "Black Beatles",
+     "emote"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-21T00:00:00Z",
+   "outDate": "2026-11-26T23:59:59.999Z"
+  },
+  {
+   "offer": "Perfect Night",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Perfect Night"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-26T23:59:59.999Z"
+  },
+  {
+   "offer": "Hysteria",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Hysteria"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "It Takes Two",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "It Takes Two"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Wildberry Lillet",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Wildberry Lillet"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Kids",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Kids"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Escudo leonino",
+   "bundle": false,
+   "brItems": [
+    [
+     "Escudo leonino",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 300,
+   "regularPrice": 300,
+   "inDate": "2026-11-19T00:00:00Z",
+   "outDate": "2026-11-21T23:59:59.999Z"
+  },
+  {
+   "offer": "Rockstar",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Rockstar"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-26T23:59:59.999Z"
+  },
+  {
+   "offer": "Lord Pretty Flacko Jodye 2 (LPFJ2)",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Lord Pretty Flacko Jodye 2 (LPFJ2)"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-06T00:00:00Z",
+   "outDate": "2026-12-06T23:59:59.999Z"
+  },
+  {
+   "offer": "Yes Baby",
+   "bundle": false,
+   "brItems": [
+    [
+     "Yes Baby",
+     "emote"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-17T00:00:00Z",
+   "outDate": "2026-11-21T23:59:59.999Z"
+  },
+  {
+   "offer": "Whine Up",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Whine Up"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "El orgullo del león",
+   "bundle": false,
+   "brItems": [
+    [
+     "El orgullo del león",
+     "wrap"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-19T00:00:00Z",
+   "outDate": "2026-11-21T23:59:59.999Z"
+  },
+  {
+   "offer": "mau5lab",
+   "bundle": false,
+   "brItems": [
+    [
+     "mau5lab",
+     "emote"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-19T00:00:00Z",
+   "outDate": "2026-11-24T23:59:59.999Z"
+  },
+  {
+   "offer": "Sucker",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Sucker"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Lote Osa amorosa",
+   "bundle": true,
+   "brItems": [
+    [
+     "Syd",
+     "outfit"
+    ],
+    [
+     "Osito cariñoso",
+     "backpack"
+    ],
+    [
+     "Puños espinosos",
+     "pickaxe"
+    ],
+    [
+     "Ola de amor",
+     "wrap"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 1700,
+   "regularPrice": 2300,
+   "inDate": "2026-11-21T00:00:00Z",
+   "outDate": "2026-11-22T23:59:59.999Z"
+  },
+  {
+   "offer": "Hacha de Picco",
+   "bundle": false,
+   "brItems": [
+    [
+     "Hacha de Picco",
+     "pickaxe"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 800,
+   "regularPrice": 800,
+   "inDate": "2026-11-13T00:00:00Z",
+   "outDate": "2026-12-12T23:59:59.999Z"
+  },
+  {
+   "offer": "Unholy",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Unholy"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "I Wanna Get Better",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "I Wanna Get Better"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Lote LazarBeam",
+   "bundle": true,
+   "brItems": [
+    [
+     "LazarBeam",
+     "outfit"
+    ],
+    [
+     "Jengibrín",
+     "backpack"
+    ],
+    [
+     "Hora del almuerzo",
+     "emote"
+    ],
+    [
+     "Mazo fiable",
+     "pickaxe"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 1800,
+   "regularPrice": 2600,
+   "inDate": "2026-11-19T00:00:00Z",
+   "outDate": "2026-11-21T23:59:59.999Z"
+  },
+  {
+   "offer": "Ice Spice, Munchkin",
+   "bundle": false,
+   "brItems": [
+    [
+     "Ice Spice",
+     "outfit"
+    ],
+    [
+     "Munchkin",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 1500,
+   "regularPrice": 1500,
+   "inDate": "2026-11-21T00:00:00Z",
+   "outDate": "2026-11-24T23:59:59.999Z"
+  },
+  {
+   "offer": "Fireball",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Fireball"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Ola de amor",
+   "bundle": false,
+   "brItems": [
+    [
+     "Ola de amor",
+     "wrap"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 300,
+   "regularPrice": 300,
+   "inDate": "2026-11-21T00:00:00Z",
+   "outDate": "2026-11-22T23:59:59.999Z"
+  },
+  {
+   "offer": "A Bar Song",
+   "bundle": false,
+   "brItems": [
+    [
+     "A Bar Song",
+     "emote"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-21T00:00:00Z",
+   "outDate": "2026-11-26T23:59:59.999Z"
+  },
+  {
+   "offer": "Capitana Hatsune Miku, Tesoro de Miku",
+   "bundle": false,
+   "brItems": [
+    [
+     "Capitana Hatsune Miku",
+     "outfit"
+    ],
+    [
+     "Tesoro de Miku",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 1500,
+   "regularPrice": 1500,
+   "inDate": "2026-11-15T00:00:00Z",
+   "outDate": "2026-12-14T23:59:59.999Z"
+  },
+  {
+   "offer": "Flacko Helicopter, Propulsores de alta fidelidad, A$AP ROCKY X PUMA Suede 94 \"Black/White\"",
+   "bundle": false,
+   "brItems": [
+    [
+     "Flacko Helicopter",
+     "outfit"
+    ],
+    [
+     "Propulsores de alta fidelidad",
+     "backpack"
+    ],
+    [
+     "A$AP ROCKY X PUMA Suede 94 \"Black/White\"",
+     "shoe"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 2000,
+   "regularPrice": 2000,
+   "inDate": "2026-11-06T00:00:00Z",
+   "outDate": "2026-12-06T23:59:59.999Z"
+  },
+  {
+   "offer": "Rompe internet",
+   "bundle": false,
+   "brItems": [
+    [
+     "Rompe internet",
+     "emote"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 300,
+   "regularPrice": 300,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-24T23:59:59.999Z"
+  },
+  {
+   "offer": "Ballin'",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Ballin'"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Kunais de Kiriko",
+   "bundle": false,
+   "brItems": [
+    [
+     "Kunais de Kiriko",
+     "pickaxe"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-21T00:00:00Z",
+   "outDate": "2026-12-04T23:59:59.999Z"
+  },
+  {
+   "offer": "Alforja de asesina",
+   "bundle": false,
+   "brItems": [
+    [
+     "Alforja de asesina",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 200,
+   "regularPrice": 200,
+   "inDate": "2026-11-17T00:00:00Z",
+   "outDate": "2026-11-23T23:59:59.999Z"
+  },
+  {
+   "offer": "Beanie",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Beanie"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Somebody That I Used To Know",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Somebody That I Used To Know"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Volkswagen Golf II GTI",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [],
+   "cars": [
+    "Volkswagen Golf II GTI"
+   ],
+   "instruments": [],
+   "finalPrice": 400,
+   "regularPrice": 400,
+   "inDate": "2026-11-14T00:00:00Z",
+   "outDate": "2026-11-23T23:59:59.999Z"
+  },
+  {
+   "offer": "All I Do Is Win",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "All I Do Is Win"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Bum Bum",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Bum Bum"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-26T23:59:59.999Z"
+  },
+  {
+   "offer": "Corazón de piedra, Alas de amor",
+   "bundle": false,
+   "brItems": [
+    [
+     "Corazón de piedra",
+     "outfit"
+    ],
+    [
+     "Alas de amor",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 1500,
+   "regularPrice": 1500,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-21T23:59:59.999Z"
+  },
+  {
+   "offer": "Celebrate Happy",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Celebrate Happy"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Alas de amor",
+   "bundle": false,
+   "brItems": [
+    [
+     "Alas de amor",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 400,
+   "regularPrice": 400,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-21T23:59:59.999Z"
+  },
+  {
+   "offer": "Caja fuerte",
+   "bundle": false,
+   "brItems": [
+    [
+     "Caja fuerte",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 300,
+   "regularPrice": 300,
+   "inDate": "2026-11-17T00:00:00Z",
+   "outDate": "2026-11-23T23:59:59.999Z"
+  },
+  {
+   "offer": "Song 2",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Song 2"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Don't You Worry Child",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Don't You Worry Child"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-10-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Going Merry",
+   "bundle": false,
+   "brItems": [
+    [
+     "Going Merry",
+     "glider"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 1200,
+   "regularPrice": 1200,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-12-05T23:59:59.999Z"
+  },
+  {
+   "offer": "Puños justicieros",
+   "bundle": false,
+   "brItems": [
+    [
+     "Puños justicieros",
+     "pickaxe"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 800,
+   "regularPrice": 800,
+   "inDate": "2026-11-19T00:00:00Z",
+   "outDate": "2026-11-23T23:59:59.999Z"
+  },
+  {
+   "offer": "Propulsores de alta fidelidad",
+   "bundle": false,
+   "brItems": [
+    [
+     "Propulsores de alta fidelidad",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-06T00:00:00Z",
+   "outDate": "2026-12-06T23:59:59.999Z"
+  },
+  {
+   "offer": "Basic Being Basic",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Basic Being Basic"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "The Brave",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "The Brave"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "CRUISING TO SELF SOOTHE",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "CRUISING TO SELF SOOTHE"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-26T23:59:59.999Z"
+  },
+  {
+   "offer": "Lote de improvisación de Lil' Uzi Vert",
+   "bundle": true,
+   "brItems": [],
+   "tracks": [
+    "What You Saying",
+    "Say It Was",
+    "Poured"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 1100,
+   "regularPrice": 1500,
+   "inDate": "2026-11-13T00:00:00Z",
+   "outDate": "2026-11-26T23:59:59.999Z"
+  },
+  {
+   "offer": "15 minutos",
+   "bundle": false,
+   "brItems": [
+    [
+     "15 minutos",
+     "emote"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-17T00:00:00Z",
+   "outDate": "2026-11-21T23:59:59.999Z"
+  },
+  {
+   "offer": "Lote One Piece",
+   "bundle": true,
+   "brItems": [
+    [
+     "Monkey D. Luffy",
+     "outfit"
+    ],
+    [
+     "Sombrero de paja de Luffy",
+     "backpack"
+    ],
+    [
+     "Pistola goma goma",
+     "pickaxe"
+    ],
+    [
+     "Ráfaga de puñetazos",
+     "emote"
+    ],
+    [
+     "Nami",
+     "outfit"
+    ],
+    [
+     "Mandarinas de Nami",
+     "backpack"
+    ],
+    [
+     "Bastón del clima",
+     "pickaxe"
+    ],
+    [
+     "Usopp",
+     "outfit"
+    ],
+    [
+     "Kit de Usopp",
+     "backpack"
+    ],
+    [
+     "Martillo de 5 toneladas",
+     "pickaxe"
+    ],
+    [
+     "Going Merry",
+     "glider"
+    ],
+    [
+     "Carne asada",
+     "backpack"
+    ],
+    [
+     "Carne gigante",
+     "pickaxe"
+    ],
+    [
+     "Cuerdas de los Sombrero de paja",
+     "backpack"
+    ],
+    [
+     "Cuerdas de los Sombrero de paja",
+     "pickaxe"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [
+    "Cuerdas de los Sombrero de paja"
+   ],
+   "finalPrice": 4000,
+   "regularPrice": 8200,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-12-05T23:59:59.999Z"
+  },
+  {
+   "offer": "Lote The Kid LAROI",
+   "bundle": true,
+   "brItems": [
+    [
+     "The Kid LAROI",
+     "outfit"
+    ],
+    [
+     "Get My Bag",
+     "backpack"
+    ],
+    [
+     "The Rogue LAROI",
+     "outfit"
+    ],
+    [
+     "Sable trágico",
+     "backpack"
+    ],
+    [
+     "Sable trágico",
+     "pickaxe"
+    ],
+    [
+     "Improvisación de LAROI",
+     "wrap"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 2400,
+   "regularPrice": 4000,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-26T23:59:59.999Z"
+  },
+  {
+   "offer": "Peluches de Mookie y Maple",
+   "bundle": false,
+   "brItems": [
+    [
+     "Peluches de Mookie y Maple",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-17T00:00:00Z",
+   "outDate": "2026-11-21T23:59:59.999Z"
+  },
+  {
+   "offer": "Bittersweet",
+   "bundle": false,
+   "brItems": [
+    [
+     "Bittersweet",
+     "emote"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-17T00:00:00Z",
+   "outDate": "2026-11-21T23:59:59.999Z"
+  },
+  {
+   "offer": "Dancing in the Flames",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Dancing in the Flames"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-26T23:59:59.999Z"
+  },
+  {
+   "offer": "Mazo fiable",
+   "bundle": false,
+   "brItems": [
+    [
+     "Mazo fiable",
+     "pickaxe"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 800,
+   "regularPrice": 800,
+   "inDate": "2026-11-19T00:00:00Z",
+   "outDate": "2026-11-21T23:59:59.999Z"
+  },
+  {
+   "offer": "Dynamite",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Dynamite"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Bust A Move",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Bust A Move"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Buggy, Capa de Buggy, Cuchillos de Buggy",
+   "bundle": false,
+   "brItems": [
+    [
+     "Buggy",
+     "outfit"
+    ],
+    [
+     "Capa de Buggy",
+     "backpack"
+    ],
+    [
+     "Cuchillos de Buggy",
+     "pickaxe"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 1600,
+   "regularPrice": 1600,
+   "inDate": "2026-11-14T00:00:00Z",
+   "outDate": "2026-12-05T23:59:59.999Z"
+  },
+  {
+   "offer": "Para mí",
+   "bundle": false,
+   "brItems": [
+    [
+     "Para mí",
+     "emote"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-17T00:00:00Z",
+   "outDate": "2026-11-21T23:59:59.999Z"
+  },
+  {
+   "offer": "Ritmo Bop",
+   "bundle": false,
+   "brItems": [
+    [
+     "Ritmo Bop",
+     "emote"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 400,
+   "regularPrice": 400,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-23T23:59:59.999Z"
+  },
+  {
+   "offer": "BUFFY del vacío",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [],
+   "cars": [
+    "BUFFY del vacío"
+   ],
+   "instruments": [],
+   "finalPrice": 400,
+   "regularPrice": 400,
+   "inDate": "2026-11-18T00:00:00Z",
+   "outDate": "2026-11-24T23:59:59.999Z"
+  },
+  {
+   "offer": "Miku Miku ni Shite Ageru♪",
+   "bundle": false,
+   "brItems": [
+    [
+     "Miku Miku ni Shite Ageru♪",
+     "emote"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-15T00:00:00Z",
+   "outDate": "2026-12-14T23:59:59.999Z"
+  },
+  {
+   "offer": "Air Jordan 4 OG \"White Cement\"",
+   "bundle": false,
+   "brItems": [
+    [
+     "Air Jordan 4 OG \"White Cement\"",
+     "shoe"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 1000,
+   "regularPrice": 1000,
+   "inDate": "2026-11-21T00:00:00Z",
+   "outDate": "2026-11-24T23:59:59.999Z"
+  },
+  {
+   "offer": "Syd, Osito cariñoso",
+   "bundle": false,
+   "brItems": [
+    [
+     "Syd",
+     "outfit"
+    ],
+    [
+     "Osito cariñoso",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 1200,
+   "regularPrice": 1200,
+   "inDate": "2026-11-21T00:00:00Z",
+   "outDate": "2026-11-22T23:59:59.999Z"
+  },
+  {
+   "offer": "Improvisación de LAROI",
+   "bundle": false,
+   "brItems": [
+    [
+     "Improvisación de LAROI",
+     "wrap"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-26T23:59:59.999Z"
+  },
+  {
+   "offer": "Creatures In Heaven",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Creatures In Heaven"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Ice Spice princesa del rap, Ice Spice en miniatura",
+   "bundle": false,
+   "brItems": [
+    [
+     "Ice Spice princesa del rap",
+     "outfit"
+    ],
+    [
+     "Ice Spice en miniatura",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 1500,
+   "regularPrice": 1500,
+   "inDate": "2026-11-21T00:00:00Z",
+   "outDate": "2026-11-24T23:59:59.999Z"
+  },
+  {
+   "offer": "Roronoa Zoro, Espadas de Zoro, Pesas de Zoro, Prueba de voluntad",
+   "bundle": false,
+   "brItems": [
+    [
+     "Roronoa Zoro",
+     "outfit"
+    ],
+    [
+     "Espadas de Zoro",
+     "pickaxe"
+    ],
+    [
+     "Pesas de Zoro",
+     "backpack"
+    ],
+    [
+     "Prueba de voluntad",
+     "emote"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 1800,
+   "regularPrice": 1800,
+   "inDate": "2026-11-08T00:00:00Z",
+   "outDate": "2026-12-05T23:59:59.999Z"
+  },
+  {
+   "offer": "Alas angelicales de Madison",
+   "bundle": false,
+   "brItems": [
+    [
+     "Alas angelicales de Madison",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-17T00:00:00Z",
+   "outDate": "2026-11-21T23:59:59.999Z"
+  },
+  {
+   "offer": "The Kid LAROI, Get My Bag",
+   "bundle": false,
+   "brItems": [
+    [
+     "The Kid LAROI",
+     "outfit"
+    ],
+    [
+     "Get My Bag",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 1500,
+   "regularPrice": 1500,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-26T23:59:59.999Z"
+  },
+  {
+   "offer": "Brigada marcada",
+   "bundle": false,
+   "brItems": [
+    [
+     "Brigada marcada",
+     "outfit"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 800,
+   "regularPrice": 800,
+   "inDate": "2026-11-17T00:00:00Z",
+   "outDate": "2026-11-23T23:59:59.999Z"
+  },
+  {
+   "offer": "Lote Ice Spice",
+   "bundle": true,
+   "brItems": [
+    [
+     "Ice Spice princesa del rap",
+     "outfit"
+    ],
+    [
+     "Ice Spice",
+     "outfit"
+    ],
+    [
+     "Ice Spice en miniatura",
+     "backpack"
+    ],
+    [
+     "Munchkin",
+     "backpack"
+    ],
+    [
+     "In Ha Mood",
+     "emote"
+    ],
+    [
+     "Oh Shhh",
+     "emote"
+    ],
+    [
+     "Micrófono Ice-pectacular",
+     "backpack"
+    ],
+    [
+     "Micrófono Ice-pectacular",
+     "pickaxe"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [
+    "Micrófono Ice-pectacular"
+   ],
+   "finalPrice": 2800,
+   "regularPrice": 4800,
+   "inDate": "2026-11-21T00:00:00Z",
+   "outDate": "2026-11-24T23:59:59.999Z"
+  },
+  {
+   "offer": "McLaren P1",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [],
+   "cars": [
+    "McLaren P1"
+   ],
+   "instruments": [],
+   "finalPrice": 700,
+   "regularPrice": 700,
+   "inDate": "2026-11-18T00:00:00Z",
+   "outDate": "2026-11-24T23:59:59.999Z"
+  },
+  {
+   "offer": "Ruby Soho",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Ruby Soho"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Lote de Amos del skatepark",
+   "bundle": true,
+   "brItems": [
+    [
+     "Toni",
+     "outfit"
+    ],
+    [
+     "Ollie-Oop",
+     "backpack"
+    ],
+    [
+     "Patín pisapatanes",
+     "pickaxe"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 1500,
+   "regularPrice": 2000,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-26T23:59:59.999Z"
+  },
+  {
+   "offer": "Como si fuera oro",
+   "bundle": false,
+   "brItems": [
+    [
+     "Como si fuera oro",
+     "emote"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-21T00:00:00Z",
+   "outDate": "2026-11-21T23:59:59.999Z"
+  },
+  {
+   "offer": "Lote Corazones de Piedra",
+   "bundle": true,
+   "brItems": [
+    [
+     "Comando del amor",
+     "outfit"
+    ],
+    [
+     "Alas del amor",
+     "backpack"
+    ],
+    [
+     "Corazón de piedra",
+     "outfit"
+    ],
+    [
+     "Alas de amor",
+     "backpack"
+    ],
+    [
+     "Pico corazón",
+     "pickaxe"
+    ],
+    [
+     "Dagas de cupido",
+     "pickaxe"
+    ],
+    [
+     "Amor verdadero",
+     "emote"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 2500,
+   "regularPrice": 5300,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-21T23:59:59.999Z"
+  },
+  {
+   "offer": "Oh Shhh",
+   "bundle": false,
+   "brItems": [
+    [
+     "Oh Shhh",
+     "emote"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-21T00:00:00Z",
+   "outDate": "2026-11-24T23:59:59.999Z"
+  },
+  {
+   "offer": "FLAMMABLE",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "FLAMMABLE"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Faint",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Faint"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Africa",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Africa"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Hot In Herre",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Hot In Herre"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Estrella de Lil Uzi",
+   "bundle": false,
+   "brItems": [
+    [
+     "Estrella de Lil Uzi",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-13T00:00:00Z",
+   "outDate": "2026-12-12T23:59:59.999Z"
+  },
+  {
+   "offer": "Madison angelical, Alas angelicales de Madison",
+   "bundle": false,
+   "brItems": [
+    [
+     "Madison angelical",
+     "outfit"
+    ],
+    [
+     "Alas angelicales de Madison",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 1500,
+   "regularPrice": 1500,
+   "inDate": "2026-11-17T00:00:00Z",
+   "outDate": "2026-11-21T23:59:59.999Z"
+  },
+  {
+   "offer": "Micrófono Ice-pectacular, Micrófono Ice-pectacular, Micrófono Ice-pectacular",
+   "bundle": false,
+   "brItems": [
+    [
+     "Micrófono Ice-pectacular",
+     "backpack"
+    ],
+    [
+     "Micrófono Ice-pectacular",
+     "pickaxe"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [
+    "Micrófono Ice-pectacular"
+   ],
+   "finalPrice": 800,
+   "regularPrice": 800,
+   "inDate": "2026-11-21T00:00:00Z",
+   "outDate": "2026-11-24T23:59:59.999Z"
+  },
+  {
+   "offer": "Side To Side",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Side To Side"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Lote Madison Beer",
+   "bundle": true,
+   "brItems": [
+    [
+     "Madison Make You Mine",
+     "outfit"
+    ],
+    [
+     "Arma de Madison",
+     "pickaxe"
+    ],
+    [
+     "Madison angelical",
+     "outfit"
+    ],
+    [
+     "Alas angelicales de Madison",
+     "backpack"
+    ],
+    [
+     "Peluches de Mookie y Maple",
+     "backpack"
+    ],
+    [
+     "Bittersweet",
+     "emote"
+    ],
+    [
+     "Yes Baby",
+     "emote"
+    ],
+    [
+     "Voz de Madison",
+     "pickaxe"
+    ],
+    [
+     "Voz de Madison",
+     "backpack"
+    ],
+    [
+     "Glamur de Madison",
+     "wrap"
+    ],
+    [
+     "Madison en lo más alto",
+     "loadingscreen"
+    ]
+   ],
+   "tracks": [
+    "yes baby",
+    "bittersweet"
+   ],
+   "cars": [],
+   "instruments": [
+    "Voz de Madison"
+   ],
+   "finalPrice": 3400,
+   "regularPrice": 6800,
+   "inDate": "2026-11-17T00:00:00Z",
+   "outDate": "2026-11-21T23:59:59.999Z"
+  },
+  {
+   "offer": "Cuerdas de los Sombrero de paja, Cuerdas de los Sombrero de paja, Cuerdas de los Sombrero de paja",
+   "bundle": false,
+   "brItems": [
+    [
+     "Cuerdas de los Sombrero de paja",
+     "pickaxe"
+    ],
+    [
+     "Cuerdas de los Sombrero de paja",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [
+    "Cuerdas de los Sombrero de paja"
+   ],
+   "finalPrice": 800,
+   "regularPrice": 800,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-12-05T23:59:59.999Z"
+  },
+  {
+   "offer": "September",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "September"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Friday I'm In Love",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Friday I'm In Love"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-26T23:59:59.999Z"
+  },
+  {
+   "offer": "With Or Without You",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "With Or Without You"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Widowmaker, Colmillo de Widowmaker, Beso de viuda",
+   "bundle": false,
+   "brItems": [
+    [
+     "Widowmaker",
+     "outfit"
+    ],
+    [
+     "Colmillo de Widowmaker",
+     "pickaxe"
+    ],
+    [
+     "Beso de viuda",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 1600,
+   "regularPrice": 1600,
+   "inDate": "2026-11-21T00:00:00Z",
+   "outDate": "2026-12-04T23:59:59.999Z"
+  },
+  {
+   "offer": "Whenever, Wherever",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Whenever, Wherever"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Puños espinosos",
+   "bundle": false,
+   "brItems": [
+    [
+     "Puños espinosos",
+     "pickaxe"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 800,
+   "regularPrice": 800,
+   "inDate": "2026-11-21T00:00:00Z",
+   "outDate": "2026-11-22T23:59:59.999Z"
+  },
+  {
+   "offer": "Victoria honrosa",
+   "bundle": false,
+   "brItems": [
+    [
+     "Victoria honrosa",
+     "emote"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 300,
+   "regularPrice": 300,
+   "inDate": "2026-11-19T00:00:00Z",
+   "outDate": "2026-11-21T23:59:59.999Z"
+  },
+  {
+   "offer": "Caballera CouRage",
+   "bundle": true,
+   "brItems": [
+    [
+     "Caballera CouRage",
+     "outfit"
+    ],
+    [
+     "Escudo de CouRage",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 1200,
+   "regularPrice": 1200,
+   "inDate": "2026-11-19T00:00:00Z",
+   "outDate": "2026-11-21T23:59:59.999Z"
+  },
+  {
+   "offer": "get him back!",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "get him back!"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Jurassic Jeep® Wrangler",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [],
+   "cars": [
+    "Jurassic Jeep® Wrangler"
+   ],
+   "instruments": [],
+   "finalPrice": 400,
+   "regularPrice": 400,
+   "inDate": "2026-11-19T00:00:00Z",
+   "outDate": "2026-11-28T23:59:59.999Z"
+  },
+  {
+   "offer": "RIOT (Rowdy Pipe'n)",
+   "bundle": false,
+   "brItems": [
+    [
+     "RIOT (Rowdy Pipe'n)",
+     "emote"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-06T00:00:00Z",
+   "outDate": "2026-12-06T23:59:59.999Z"
+  },
+  {
+   "offer": "Poison",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Poison"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Woman",
+   "bundle": false,
+   "brItems": [
+    [
+     "Woman",
+     "emote"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-17T00:00:00Z",
+   "outDate": "2026-11-22T23:59:59.999Z"
+  },
+  {
+   "offer": "Alas de Uzi",
+   "bundle": false,
+   "brItems": [
+    [
+     "Alas de Uzi",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 400,
+   "regularPrice": 400,
+   "inDate": "2026-11-13T00:00:00Z",
+   "outDate": "2026-12-12T23:59:59.999Z"
+  },
+  {
+   "offer": "Pasos de Kitsune",
+   "bundle": false,
+   "brItems": [
+    [
+     "Pasos de Kitsune",
+     "shoe"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 1000,
+   "regularPrice": 1000,
+   "inDate": "2026-11-21T00:00:00Z",
+   "outDate": "2026-12-04T23:59:59.999Z"
+  },
+  {
+   "offer": "Ivor",
+   "bundle": false,
+   "brItems": [
+    [
+     "Ivor",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 300,
+   "regularPrice": 300,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-26T23:59:59.999Z"
+  },
+  {
+   "offer": "Your Love (9pm)",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Your Love (9pm)"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Dagas de cupido",
+   "bundle": false,
+   "brItems": [
+    [
+     "Dagas de cupido",
+     "pickaxe"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 800,
+   "regularPrice": 800,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-21T23:59:59.999Z"
+  },
+  {
+   "offer": "ROY G BUFFY",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [],
+   "cars": [
+    "ROY G BUFFY"
+   ],
+   "instruments": [],
+   "finalPrice": 400,
+   "regularPrice": 400,
+   "inDate": "2026-11-18T00:00:00Z",
+   "outDate": "2026-11-24T23:59:59.999Z"
+  },
+  {
+   "offer": "Lote Sombrero de paja",
+   "bundle": true,
+   "brItems": [
+    [
+     "Roronoa Zoro",
+     "outfit"
+    ],
+    [
+     "Espadas de Zoro",
+     "pickaxe"
+    ],
+    [
+     "Pesas de Zoro",
+     "backpack"
+    ],
+    [
+     "Prueba de voluntad",
+     "emote"
+    ],
+    [
+     "Sanji",
+     "outfit"
+    ],
+    [
+     "Utensilios de Sanji",
+     "pickaxe"
+    ],
+    [
+     "Utensilios de Sanji",
+     "backpack"
+    ],
+    [
+     "Tony Tony Chopper",
+     "sidekick"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 3200,
+   "regularPrice": 4900,
+   "inDate": "2026-11-08T00:00:00Z",
+   "outDate": "2026-12-05T23:59:59.999Z"
+  },
+  {
+   "offer": "Volkswagen Golf GTI",
+   "bundle": true,
+   "brItems": [],
+   "tracks": [],
+   "cars": [
+    "Cazadora",
+    "Alas",
+    "A punto para la pista",
+    "Rayas",
+    "Rayos",
+    "Equipo Kingsnake",
+    "Llamas",
+    "Volkswagen Golf II GTI"
+   ],
+   "instruments": [],
+   "finalPrice": 2000,
+   "regularPrice": 2000,
+   "inDate": "2026-11-14T00:00:00Z",
+   "outDate": "2026-11-23T23:59:59.999Z"
+  },
+  {
+   "offer": "Estrella de diamante",
+   "bundle": false,
+   "brItems": [
+    [
+     "Estrella de diamante",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 400,
+   "regularPrice": 400,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-22T23:59:59.999Z"
+  },
+  {
+   "offer": "The Way Life Goes",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "The Way Life Goes"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-13T00:00:00Z",
+   "outDate": "2026-11-26T23:59:59.999Z"
+  },
+  {
+   "offer": "PATITOS",
+   "bundle": false,
+   "brItems": [
+    [
+     "PATITOS",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 400,
+   "regularPrice": 400,
+   "inDate": "2026-11-19T00:00:00Z",
+   "outDate": "2026-11-23T23:59:59.999Z"
+  },
+  {
+   "offer": "Hot Blooded",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "Hot Blooded"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-01T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Ice Spice en miniatura",
+   "bundle": false,
+   "brItems": [
+    [
+     "Ice Spice en miniatura",
+     "backpack"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 300,
+   "regularPrice": 300,
+   "inDate": "2026-11-21T00:00:00Z",
+   "outDate": "2026-11-24T23:59:59.999Z"
+  },
+  {
+   "offer": "PLAYERS",
+   "bundle": false,
+   "brItems": [],
+   "tracks": [
+    "PLAYERS"
+   ],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 500,
+   "regularPrice": 500,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-26T23:59:59.999Z"
+  },
+  {
+   "offer": "Remus",
+   "bundle": false,
+   "brItems": [
+    [
+     "Remus",
+     "sidekick"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 1200,
+   "regularPrice": 1200,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Louis",
+   "bundle": false,
+   "brItems": [
+    [
+     "Louis",
+     "sidekick"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 1500,
+   "regularPrice": 1500,
+   "inDate": "2026-11-19T00:00:00Z",
+   "outDate": "2026-11-21T23:59:59.999Z"
+  },
+  {
+   "offer": "Rigby",
+   "bundle": false,
+   "brItems": [
+    [
+     "Rigby",
+     "sidekick"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 1500,
+   "regularPrice": 1500,
+   "inDate": "2026-11-19T00:00:00Z",
+   "outDate": "2026-11-23T23:59:59.999Z"
+  },
+  {
+   "offer": "Quiquiriquí",
+   "bundle": false,
+   "brItems": [
+    [
+     "Quiquiriquí",
+     "sidekick"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 1200,
+   "regularPrice": 1200,
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-30T23:59:59.999Z"
+  },
+  {
+   "offer": "Pulgoso Jr.",
+   "bundle": false,
+   "brItems": [
+    [
+     "Pulgoso Jr.",
+     "sidekick"
+    ]
+   ],
+   "tracks": [],
+   "cars": [],
+   "instruments": [],
+   "finalPrice": 1500,
+   "regularPrice": 1500,
+   "inDate": "2026-11-17T00:00:00Z",
+   "outDate": "2026-11-23T23:59:59.999Z"
+  }
+ ]
+}

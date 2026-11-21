@@ -1,0 +1,41 @@
+{
+ "via": "fortnite-api.com (mirror of Epic's in-game Item Shop, es-419) for the shop of 2026-11-21, fetched at the 6 PM (CDMX) reset; the counts and sums in totals.json are computed from every offer in that shop (shop-offers.json). Press reports quoting Epic's Fortnite Status post (VGC, VICE) for the Tienda Pirata rules, odds and Treasure Hours, re-fetched live on 2026-11-20 19:23 UTC with Firecrawl (maxAge 0), every passage checked word for word.",
+ "files": [
+  {
+   "file": "shop-offers.json",
+   "source": "Every offer in the Item Shop for 2026-11-21 (fields copied from shop.json: names, types, prices, dates)",
+   "url": "https://fortnite-api.com/v2/shop?language=es-419",
+   "fetched_utc": "2026-11-21T00:07:15Z"
+  },
+  {
+   "file": "totals.json",
+   "source": "Counts and sums computed from shop-offers.json (offers, distinct items by type, price totals)",
+   "url": "https://fortnite-api.com/v2/shop?language=es-419",
+   "fetched_utc": "2026-11-21T00:07:15Z"
+  },
+  {
+   "file": "shop.json",
+   "source": "Item Shop for 2026-11-21 (subset: the bundles and companions shown, copied verbatim)",
+   "url": "https://fortnite-api.com/v2/shop?language=es-419",
+   "fetched_utc": "2026-11-21T00:07:15Z"
+  },
+  {
+   "file": "vgc-odds-confirmed.json",
+   "source": "VGC: Fortnite officially confirms Pirate Shop Access Token drop rate (Nov 9, 2026), reporting Epic's Fortnite Status post",
+   "url": "https://www.videogameschronicle.com/news/fortnite-officially-confirms-pirate-shop-access-token-drop-rate-as-players-hunt-for-item-which-makes-entire-shop-free/",
+   "fetched_utc": "2026-11-20T19:23:00Z"
+  },
+  {
+   "file": "vgc-guide.json",
+   "source": "VGC: Fortnite Pirate Shop Token guide (published Nov 5, 2026, updated Nov 8 with Epic's confirmed odds)",
+   "url": "https://www.videogameschronicle.com/news/fortnite-pirate-shop-access-token-guide/",
+   "fetched_utc": "2026-11-20T19:23:00Z"
+  },
+  {
+   "file": "vice-treasure-hours.json",
+   "source": "VICE: Fortnite Pirate Token Drop Rate Revealed – Normal and Treasure Hour Odds (Nov 7, 2026), reporting Epic's Fortnite Status schedule",
+   "url": "https://www.vice.com/en/article/fortnite-pirate-token-drop-rate-confirmed/",
+   "fetched_utc": "2026-11-20T19:23:00Z"
+  }
+ ]
+}
