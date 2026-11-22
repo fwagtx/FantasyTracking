@@ -172,8 +172,11 @@ def main():
     open(os.path.join(out, "img", "vbuck.png"), "wb").write(get(shop["vbuckIcon"]))
 
     voice = json.load(open(os.path.join(HERE, "..", "voice.json")))
-    # names styled with symbols (A$AP Rocky, The $.$. Rocky) are read with the letter they stand for
-    spoken = lambda x: x.replace("$", "S")
+    # names styled with symbols (A$AP Rocky, The $.$. Rocky) are read with the letter they stand for, and names Spanish
+    # phonetics would mangle are respelled (auto/say.py, shared with the pirate shorts; 2026-11-22: Lote Noodle y 2D)
+    sys.path.insert(0, os.path.join(HERE, "..", "auto"))
+    from say import say_names
+    spoken = say_names
     json.dump({**{k: voice[k] for k in ("voice", "speed", "lang", "lead", "mode", "slack") if k in voice},
                "phrases": [dict({"text": t, "pause": p}, **({"say": spoken(s or t)} if (s or spoken(t) != t) else {})) for _, t, s, p in P]},
               open(os.path.join(out, "vo.json"), "w"), indent=1, ensure_ascii=False)

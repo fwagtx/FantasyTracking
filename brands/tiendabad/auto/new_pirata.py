@@ -88,9 +88,8 @@ def get(url, tries=3):
             time.sleep(3 * (i + 1))
 
 
-SAY = {"$": "S", "Spider-Man": "Spáider Man", "Buggy": "Bugui", "Jason": "Yéison", "Like a G6": "Laik a yi six",
-       "Volkswagen": "Folksvaguen", "Speedy": "Spidi", "Pierogi": "Pierogui", "Hatsune": "Jatsune", "Cyclone": "Saiclon",
-       "Nike Air Force 1": "Naik Er Fors Uan"}     # how Kokoro es-419 should say these
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from say import SAY  # noqa: E402  (how Kokoro es-419 should say names; shared with the shop video)
 
 
 def spoken(s):
