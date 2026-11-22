@@ -1,0 +1,4 @@
+{
+ "status": "PASS",
+ "notes": "Tienda 22 nov, 25.6 s. Frame 1 shows 'TIENDA DE HOY 22 NOV' and all three items at once (OFERTA Noodle, OG Sterling, ÚLTIMO DÍA Aubrey). Real items on every tile: Lote Noodle y 2D 2600 (7300 struck, -64%, 'Ahorras 4700', se va el 24 nov); Sterling 1500 with 'CAPÍTULO 1 · TEMPORADA 8'; the seven last-day skins (Aubrey, Bronto, Syd, Úrsida, Sterling, Kendo Ronin Callejero, +1 más) with 'SE VAN EL 22 NOV, 6 PM'; code card and '¡GRACIAS POR VER!'. Prices and names readable, nothing cut off or overlapping. Voice: first line 'Esta es la tienda de objetos de hoy, 22 de noviembre.', every line makes sense spoken; rebuilt once so the voice says 'Núdel y Tu Di' for the Gorillaz names (Spanish phonetics read 'No-o-dle y dos de'; shared pronunciation map auto/say.py)."
+}

@@ -1,0 +1,99 @@
+{
+ "duration": 25.6,
+ "caption": "#EpicPartner Tienda de objetos de Fortnite, 22 de noviembre: el Lote Noodle y 2D cuesta 2600 V-Bucks en vez de 7300 (ahorras 4700), Sterling está en la tienda (Capítulo 1, Temporada 8) y 7 skins se van el 22 de noviembre a las 6 PM (CDMX).\n¿Vas a comprar hoy? Usa el código BAD en la tienda de objetos.\n#Fortnite #TiendaFortnite #FortniteTienda",
+ "claims": [
+  {
+   "text": "Lote Noodle y 2D: 2600 V-Bucks, regular 7300",
+   "source": "shop.json",
+   "match": [
+    "Lote Noodle y 2D",
+    "\"finalPrice\": 2600",
+    "\"regularPrice\": 7300"
+   ]
+  },
+  {
+   "text": "Sterling: Capítulo 1, Temporada 8",
+   "source": "history.json",
+   "match": [
+    "Sterling",
+    "\"chapter\": 1",
+    "\"season\": 8"
+   ]
+  },
+  {
+   "text": "1 days since last in the shop",
+   "source": "history.json",
+   "match": [
+    "\"gapDays\": 1"
+   ]
+  },
+  {
+   "text": "7 outfits leave at the next reset",
+   "source": "plan.json",
+   "match": [
+    "\"count\": 7"
+   ]
+  }
+ ],
+ "text": [
+  "NOODLE",
+  "STERLING",
+  "AUBREY",
+  "OFERTA",
+  "OG",
+  "ÚLTIMO DÍA",
+  "TIENDA DE HOY / 22 NOV",
+  "1 · OFERTA",
+  "2D",
+  "2600",
+  "7300",
+  "LOTE NOODLE Y 2D · SE VA EL 24 NOV",
+  "-64% / AHORRAS 4700",
+  "2 · SKIN OG",
+  "CAPÍTULO 1 · TEMPORADA 8",
+  "3 · ÚLTIMO DÍA",
+  "BRONTO",
+  "SYD",
+  "ÚRSIDA",
+  "KENDO RONIN CALLEJERO",
+  "+1 MÁS",
+  "SE VAN EL 22 NOV, 6 PM",
+  "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+  "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+  "ESTA ES LA",
+  "TIENDA DE OBJETOS",
+  "DE HOY,",
+  "22 DE NOVIEMBRE.",
+  "¡TRES COSAS ANTES",
+  "DE GASTAR UN",
+  "SOLO PAVO!",
+  "EL LOTE NOODLE",
+  "Y 2D:",
+  "2600 PAVOS,",
+  "EN VEZ DE",
+  "7300.",
+  "¡TE AHORRAS 4700!",
+  "STERLING ESTÁ EN",
+  "LA TIENDA.",
+  "ES DEL CAPÍTULO",
+  "1,",
+  "TEMPORADA 8.",
+  "Y SIETE SKINS",
+  "ESTÁN EN SU",
+  "ÚLTIMO DÍA,",
+  "CUATRO DE ELLAS",
+  "RARAS.",
+  "¿VAS A COMPRAR",
+  "ALGO HOY?",
+  "USA EL CÓDIGO",
+  "BAD EN LA",
+  "TIENDA DE OBJETOS.",
+  "LE AYUDA MUCHÍSIMO",
+  "AL CANAL.",
+  "¡GRACIAS POR VER!",
+  "SÍGUENOS PARA MÁS",
+  "CONTENIDO DIARIO.",
+  "#EPICPARTNER",
+  "LA TIENDITA BAD"
+ ]
+}
