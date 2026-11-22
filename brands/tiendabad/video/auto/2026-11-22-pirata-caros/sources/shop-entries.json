@@ -1,0 +1,2689 @@
+{
+ "date": "2026-11-22T00:00:00Z",
+ "entries": [
+  {
+   "regularPrice": 8800,
+   "finalPrice": 4200,
+   "devName": "[VIRTUAL]1 x Mercy, 1 x Mercy's Valkyrie Wings, 1 x Mercy's Valkyrie Wings, 1 x Caduceus Pickaxe, 1 x D.Va, 1 x Tokki's Slicer, 1 x Travel Tokki Model, 1 x Tracer, 1 x Tracer's Pulse Knives, 1 x Tracer's Pulse Bomb, 1 x Genji, 1 x Ryū Ichimonji, 1 x Ryū Ichimonji, 1 x Mercy's Reach, 1 x Lil' Tokki, 1 x Blinkin' Amazing, 1 x Mark of Mercy, 1 x Mercy's Medkit for -1 MtxCurrency",
+   "offerId": "v2:/400a5de6888cb848fef7c6797a9ca721b93ef91ea7e866a0596743d17f7778cd",
+   "inDate": "2026-11-22T00:00:00Z",
+   "outDate": "2026-12-04T23:59:59.999Z",
+   "bundle": {
+    "name": "Lote Overwatch",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/21ae0f3a9c16e581/renderimage_0.png"
+   },
+   "banner": {
+    "value": "4600 monedas V de descuento",
+    "intensity": "Low",
+    "backendValue": "AmountOff"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -1,
+   "layoutId": "OW2.96",
+   "layout": {
+    "id": "OW2",
+    "name": "Overwatch",
+    "index": 6,
+    "rank": 196,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "4ab8efff",
+    "color3": "b3f2ffff",
+    "textBackgroundColor": "76c6e6ff"
+   },
+   "tileBackgroundMaterial": "ShopTile_HolographicSquares",
+   "tileSize": "Size_2_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_TrackWaver_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S40/DAv2_Bundle_Featured_TrackWaver",
+   "newDisplayAsset": {
+    "id": "DAv2_Bundle_Featured_TrackWaver",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__21ae0f3a9c16e581_23290b4cd3f10196.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/21ae0f3a9c16e581/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__21ae0f3a9c16e581_699c82c301896214.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/21ae0f3a9c16e581/renderimage_1.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__21ae0f3a9c16e581_64a03b97f40558bf.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/21ae0f3a9c16e581/renderimage_2.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__21ae0f3a9c16e581_4f921a973e853be5.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/21ae0f3a9c16e581/renderimage_3.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Character_TrackWaver",
+     "name": "Mercy",
+     "description": "El ángel de la guarda de Overwatch en el campo de batalla.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "gaminglegends",
+      "displayValue": "Leyendas de videojuegos",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "Leyendas de videojuegos",
+      "colors": [
+       "8078ffff",
+       "5328d6ff",
+       "3e1398ff",
+       "28085fff",
+       "0d0027ff"
+      ],
+      "backendValue": "PlatformSeries"
+     },
+     "set": {
+      "value": "Overwatch",
+      "text": "Pieza del conjunto Overwatch.",
+      "backendValue": "AlpineSaturn"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "2",
+      "text": "Introducido en Capítulo 7, Temporada 2.",
+      "backendValue": 40
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_trackwaver/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_trackwaver/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_trackwaver/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_trackwaver/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_trackwaver/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_trackwaver/wide.png"
+      }
+     },
+     "variants": [
+      {
+       "channel": "Parts",
+       "type": "estilo",
+       "options": [
+        {
+         "tag": "Stage1",
+         "name": "Mercy",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_trackwaver/variants/parts/stage1.png"
+        },
+        {
+         "tag": "Stage2",
+         "name": "Diabla",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_trackwaver/variants/parts/stage2.png"
+        }
+       ]
+      }
+     ],
+     "showcaseVideo": "--mkpe1Tu9A",
+     "added": "2026-05-14T09:00:00Z"
+    },
+    {
+     "id": "Backpack_TrackWaver",
+     "name": "Alas de valquiria de Mercy",
+     "description": "Un símbolo de esperanza en el campo de batalla.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "gaminglegends",
+      "displayValue": "Leyendas de videojuegos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Leyendas de videojuegos",
+      "colors": [
+       "8078ffff",
+       "5328d6ff",
+       "3e1398ff",
+       "28085fff",
+       "0d0027ff"
+      ],
+      "backendValue": "PlatformSeries"
+     },
+     "set": {
+      "value": "Overwatch",
+      "text": "Pieza del conjunto Overwatch.",
+      "backendValue": "AlpineSaturn"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "2",
+      "text": "Introducido en Capítulo 7, Temporada 2.",
+      "backendValue": 40
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_trackwaver/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_trackwaver/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_trackwaver/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Parts",
+       "type": "estilo",
+       "options": [
+        {
+         "tag": "Stage1",
+         "name": "Alas de valquiria de Mercy",
+         "image": "https://fortnite-api.com/images/cosmetics/br/backpack_trackwaver/variants/parts/stage1.png"
+        },
+        {
+         "tag": "Stage2",
+         "name": "Alas de diabla de Mercy",
+         "image": "https://fortnite-api.com/images/cosmetics/br/backpack_trackwaver/variants/parts/stage2.png"
+        }
+       ]
+      }
+     ],
+     "added": "2026-05-14T09:00:00Z"
+    },
+    {
+     "id": "Glider_TrackWaver",
+     "name": "Alas de valquiria de Mercy",
+     "description": "Un símbolo de esperanza en el campo de batalla.",
+     "type": {
+      "value": "glider",
+      "displayValue": "Planeador",
+      "backendValue": "AthenaGlider"
+     },
+     "rarity": {
+      "value": "gaminglegends",
+      "displayValue": "Leyendas de videojuegos",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "Leyendas de videojuegos",
+      "colors": [
+       "8078ffff",
+       "5328d6ff",
+       "3e1398ff",
+       "28085fff",
+       "0d0027ff"
+      ],
+      "backendValue": "PlatformSeries"
+     },
+     "set": {
+      "value": "Overwatch",
+      "text": "Pieza del conjunto Overwatch.",
+      "backendValue": "AlpineSaturn"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "2",
+      "text": "Introducido en Capítulo 7, Temporada 2.",
+      "backendValue": 40
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/glider_trackwaver/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/glider_trackwaver/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/glider_trackwaver/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Mesh",
+       "type": "Estilo",
+       "options": [
+        {
+         "tag": "Stage1",
+         "name": "Alas de valquiria de Mercy",
+         "image": "https://fortnite-api.com/images/cosmetics/br/glider_trackwaver/variants/mesh/stage1.png"
+        },
+        {
+         "tag": "Stage2",
+         "name": "Alas de diabla de Mercy",
+         "image": "https://fortnite-api.com/images/cosmetics/br/glider_trackwaver/variants/mesh/stage2.png"
+        }
+       ]
+      }
+     ],
+     "added": "2026-05-14T09:00:00Z"
+    },
+    {
+     "id": "Pickaxe_TrackWaver",
+     "name": "Bastón caduceo",
+     "description": "Llegó el mejor apoyo.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "gaminglegends",
+      "displayValue": "Leyendas de videojuegos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Leyendas de videojuegos",
+      "colors": [
+       "8078ffff",
+       "5328d6ff",
+       "3e1398ff",
+       "28085fff",
+       "0d0027ff"
+      ],
+      "backendValue": "PlatformSeries"
+     },
+     "set": {
+      "value": "Overwatch",
+      "text": "Pieza del conjunto Overwatch.",
+      "backendValue": "AlpineSaturn"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "2",
+      "text": "Introducido en Capítulo 7, Temporada 2.",
+      "backendValue": 40
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_trackwaver/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_trackwaver/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_trackwaver/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Material",
+       "type": "Estilo",
+       "options": [
+        {
+         "tag": "Mat0",
+         "name": "Bastón caduceo",
+         "image": "https://fortnite-api.com/images/cosmetics/br/pickaxe_trackwaver/variants/material/mat0.png"
+        },
+        {
+         "tag": "Mat1",
+         "name": "Bastón caduceo de diabla",
+         "image": "https://fortnite-api.com/images/cosmetics/br/pickaxe_trackwaver/variants/material/mat1.png"
+        }
+       ]
+      }
+     ],
+     "added": "2026-05-14T09:00:00Z"
+    },
+    {
+     "id": "Character_SkiffGrind",
+     "name": "D.Va",
+     "description": "La estrella fugaz del escuadrón MEKA.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "gaminglegends",
+      "displayValue": "Leyendas de videojuegos",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "Leyendas de videojuegos",
+      "colors": [
+       "8078ffff",
+       "5328d6ff",
+       "3e1398ff",
+       "28085fff",
+       "0d0027ff"
+      ],
+      "backendValue": "PlatformSeries"
+     },
+     "set": {
+      "value": "Overwatch",
+      "text": "Pieza del conjunto Overwatch.",
+      "backendValue": "AlpineSaturn"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "2",
+      "text": "Introducido en Capítulo 7, Temporada 2.",
+      "backendValue": 40
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_skiffgrind/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_skiffgrind/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_skiffgrind/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_skiffgrind/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_skiffgrind/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_skiffgrind/wide.png"
+      }
+     },
+     "showcaseVideo": "28QSPdVX87E",
+     "added": "2026-05-14T09:00:00Z"
+    },
+    {
+     "id": "Pickaxe_SkiffGrind",
+     "name": "Cercenador de Tokki",
+     "description": "Arrasa con la competencia.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "gaminglegends",
+      "displayValue": "Leyendas de videojuegos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Leyendas de videojuegos",
+      "colors": [
+       "8078ffff",
+       "5328d6ff",
+       "3e1398ff",
+       "28085fff",
+       "0d0027ff"
+      ],
+      "backendValue": "PlatformSeries"
+     },
+     "set": {
+      "value": "Overwatch",
+      "text": "Pieza del conjunto Overwatch.",
+      "backendValue": "AlpineSaturn"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "2",
+      "text": "Introducido en Capítulo 7, Temporada 2.",
+      "backendValue": 40
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_skiffgrind/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_skiffgrind/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_skiffgrind/featured.png"
+     },
+     "added": "2026-05-14T09:00:00Z"
+    },
+    {
+     "id": "Backpack_SkiffGrind",
+     "name": "Tokki portátil",
+     "description": "Un modelo en miniatura de tu mejor amigo mecha.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "gaminglegends",
+      "displayValue": "Leyendas de videojuegos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Leyendas de videojuegos",
+      "colors": [
+       "8078ffff",
+       "5328d6ff",
+       "3e1398ff",
+       "28085fff",
+       "0d0027ff"
+      ],
+      "backendValue": "PlatformSeries"
+     },
+     "set": {
+      "value": "Overwatch",
+      "text": "Pieza del conjunto Overwatch.",
+      "backendValue": "AlpineSaturn"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "2",
+      "text": "Introducido en Capítulo 7, Temporada 2.",
+      "backendValue": 40
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_skiffgrind/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_skiffgrind/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_skiffgrind/featured.png"
+     },
+     "added": "2026-05-14T09:00:00Z"
+    },
+    {
+     "id": "Character_LooseCreep",
+     "name": "Tracer",
+     "description": "Si parpadeas, desaparece.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "gaminglegends",
+      "displayValue": "Leyendas de videojuegos",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "Leyendas de videojuegos",
+      "colors": [
+       "8078ffff",
+       "5328d6ff",
+       "3e1398ff",
+       "28085fff",
+       "0d0027ff"
+      ],
+      "backendValue": "PlatformSeries"
+     },
+     "set": {
+      "value": "Overwatch",
+      "text": "Pieza del conjunto Overwatch.",
+      "backendValue": "AlpineSaturn"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "2",
+      "text": "Introducido en Capítulo 7, Temporada 2.",
+      "backendValue": 40
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_loosecreep/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_loosecreep/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_loosecreep/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_loosecreep/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_loosecreep/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_loosecreep/wide.png"
+      }
+     },
+     "showcaseVideo": "EUrmGELmQhw",
+     "added": "2026-05-14T09:00:00Z"
+    },
+    {
+     "id": "Pickaxe_LooseCreep",
+     "name": "Cuchillos de pulso de Tracer",
+     "description": "Fabricados con tecnología cronal.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "gaminglegends",
+      "displayValue": "Leyendas de videojuegos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Leyendas de videojuegos",
+      "colors": [
+       "8078ffff",
+       "5328d6ff",
+       "3e1398ff",
+       "28085fff",
+       "0d0027ff"
+      ],
+      "backendValue": "PlatformSeries"
+     },
+     "set": {
+      "value": "Overwatch",
+      "text": "Pieza del conjunto Overwatch.",
+      "backendValue": "AlpineSaturn"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "2",
+      "text": "Introducido en Capítulo 7, Temporada 2.",
+      "backendValue": 40
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_loosecreep/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_loosecreep/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_loosecreep/featured.png"
+     },
+     "added": "2026-05-14T09:00:00Z"
+    },
+    {
+     "id": "Backpack_LooseCreep",
+     "name": "Bomba de pulso de Tracer",
+     "description": "Inerte, por tu seguridad.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "gaminglegends",
+      "displayValue": "Leyendas de videojuegos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Leyendas de videojuegos",
+      "colors": [
+       "8078ffff",
+       "5328d6ff",
+       "3e1398ff",
+       "28085fff",
+       "0d0027ff"
+      ],
+      "backendValue": "PlatformSeries"
+     },
+     "set": {
+      "value": "Overwatch",
+      "text": "Pieza del conjunto Overwatch.",
+      "backendValue": "AlpineSaturn"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "2",
+      "text": "Introducido en Capítulo 7, Temporada 2.",
+      "backendValue": 40
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_loosecreep/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_loosecreep/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_loosecreep/featured.png"
+     },
+     "added": "2026-05-14T09:00:00Z"
+    },
+    {
+     "id": "Character_FacetBlom",
+     "name": "Genji",
+     "description": "Un ciberninja legendario.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "gaminglegends",
+      "displayValue": "Leyendas de videojuegos",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "Leyendas de videojuegos",
+      "colors": [
+       "8078ffff",
+       "5328d6ff",
+       "3e1398ff",
+       "28085fff",
+       "0d0027ff"
+      ],
+      "backendValue": "PlatformSeries"
+     },
+     "set": {
+      "value": "Overwatch",
+      "text": "Pieza del conjunto Overwatch.",
+      "backendValue": "AlpineSaturn"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "2",
+      "text": "Introducido en Capítulo 7, Temporada 2.",
+      "backendValue": 40
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_facetblom/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_facetblom/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_facetblom/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_facetblom/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_facetblom/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_facetblom/wide.png"
+      }
+     },
+     "showcaseVideo": "TLsJdBZqP_U",
+     "added": "2026-05-14T09:00:00Z"
+    },
+    {
+     "id": "Pickaxe_FacetBlom",
+     "name": "Ryū Ichimonji",
+     "description": "El filo del dragón del norte.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "gaminglegends",
+      "displayValue": "Leyendas de videojuegos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Leyendas de videojuegos",
+      "colors": [
+       "8078ffff",
+       "5328d6ff",
+       "3e1398ff",
+       "28085fff",
+       "0d0027ff"
+      ],
+      "backendValue": "PlatformSeries"
+     },
+     "set": {
+      "value": "Overwatch",
+      "text": "Pieza del conjunto Overwatch.",
+      "backendValue": "AlpineSaturn"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "2",
+      "text": "Introducido en Capítulo 7, Temporada 2.",
+      "backendValue": 40
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_facetblom/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_facetblom/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_facetblom/featured.png"
+     },
+     "added": "2026-05-14T09:00:00Z"
+    },
+    {
+     "id": "Backpack_FacetBlom",
+     "name": "Ryū Ichimonji",
+     "description": "El filo del dragón del norte.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "gaminglegends",
+      "displayValue": "Leyendas de videojuegos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Leyendas de videojuegos",
+      "colors": [
+       "8078ffff",
+       "5328d6ff",
+       "3e1398ff",
+       "28085fff",
+       "0d0027ff"
+      ],
+      "backendValue": "PlatformSeries"
+     },
+     "set": {
+      "value": "Overwatch",
+      "text": "Pieza del conjunto Overwatch.",
+      "backendValue": "AlpineSaturn"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "2",
+      "text": "Introducido en Capítulo 7, Temporada 2.",
+      "backendValue": 40
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_facetblom/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_facetblom/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_facetblom/featured.png"
+     },
+     "metaTags": [
+      "Cosmetics.MetaTags.FacetBlom"
+     ],
+     "added": "2026-05-14T09:00:00Z"
+    },
+    {
+     "id": "EID_TrackWaver",
+     "name": "Mercy salvadora",
+     "description": "Está aquí para ayudar.",
+     "type": {
+      "value": "emote",
+      "displayValue": "Gesto",
+      "backendValue": "AthenaDance"
+     },
+     "rarity": {
+      "value": "gaminglegends",
+      "displayValue": "Leyendas de videojuegos",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "series": {
+      "value": "Leyendas de videojuegos",
+      "colors": [
+       "8078ffff",
+       "5328d6ff",
+       "3e1398ff",
+       "28085fff",
+       "0d0027ff"
+      ],
+      "backendValue": "PlatformSeries"
+     },
+     "set": {
+      "value": "Overwatch",
+      "text": "Pieza del conjunto Overwatch.",
+      "backendValue": "AlpineSaturn"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "2",
+      "text": "Introducido en Capítulo 7, Temporada 2.",
+      "backendValue": 40
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/eid_trackwaver/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/eid_trackwaver/icon.png"
+     },
+     "showcaseVideo": "A1P-G3eFaWY",
+     "added": "2026-05-14T09:00:00Z"
+    },
+    {
+     "id": "EID_SkiffGrind",
+     "name": "Pequeño Tokki",
+     "description": "Un minimecha para tus pequeñas necesidades en batalla.",
+     "type": {
+      "value": "emote",
+      "displayValue": "Gesto",
+      "backendValue": "AthenaDance"
+     },
+     "rarity": {
+      "value": "gaminglegends",
+      "displayValue": "Leyendas de videojuegos",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "series": {
+      "value": "Leyendas de videojuegos",
+      "colors": [
+       "8078ffff",
+       "5328d6ff",
+       "3e1398ff",
+       "28085fff",
+       "0d0027ff"
+      ],
+      "backendValue": "PlatformSeries"
+     },
+     "set": {
+      "value": "Overwatch",
+      "text": "Pieza del conjunto Overwatch.",
+      "backendValue": "AlpineSaturn"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "2",
+      "text": "Introducido en Capítulo 7, Temporada 2.",
+      "backendValue": 40
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/eid_skiffgrind/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/eid_skiffgrind/icon.png"
+     },
+     "showcaseVideo": "lPe_UuYp-nw",
+     "added": "2026-05-14T09:00:00Z"
+    },
+    {
+     "id": "EID_LooseCreep",
+     "name": "Traslación",
+     "description": "Prepárate para la batalla, igual que Tracer.",
+     "type": {
+      "value": "emote",
+      "displayValue": "Gesto",
+      "backendValue": "AthenaDance"
+     },
+     "rarity": {
+      "value": "gaminglegends",
+      "displayValue": "Leyendas de videojuegos",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "series": {
+      "value": "Leyendas de videojuegos",
+      "colors": [
+       "8078ffff",
+       "5328d6ff",
+       "3e1398ff",
+       "28085fff",
+       "0d0027ff"
+      ],
+      "backendValue": "PlatformSeries"
+     },
+     "set": {
+      "value": "Overwatch",
+      "text": "Pieza del conjunto Overwatch.",
+      "backendValue": "AlpineSaturn"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "2",
+      "text": "Introducido en Capítulo 7, Temporada 2.",
+      "backendValue": 40
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/eid_loosecreep/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/eid_loosecreep/icon.png"
+     },
+     "showcaseVideo": "MHP9R87P6m8",
+     "added": "2026-05-14T09:00:00Z"
+    },
+    {
+     "id": "Wrap_TrackWaver",
+     "name": "Marca de Mercy",
+     "description": "Muestra tu estilo.",
+     "type": {
+      "value": "wrap",
+      "displayValue": "Papel",
+      "backendValue": "AthenaItemWrap"
+     },
+     "rarity": {
+      "value": "gaminglegends",
+      "displayValue": "Leyendas de videojuegos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Leyendas de videojuegos",
+      "colors": [
+       "8078ffff",
+       "5328d6ff",
+       "3e1398ff",
+       "28085fff",
+       "0d0027ff"
+      ],
+      "backendValue": "PlatformSeries"
+     },
+     "set": {
+      "value": "Overwatch",
+      "text": "Pieza del conjunto Overwatch.",
+      "backendValue": "AlpineSaturn"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "2",
+      "text": "Introducido en Capítulo 7, Temporada 2.",
+      "backendValue": 40
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/wrap_trackwaver/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/wrap_trackwaver/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/wrap_trackwaver/featured.png"
+     },
+     "added": "2026-05-14T09:00:00Z"
+    },
+    {
+     "id": "LoadingScreen_TrackWaver",
+     "name": "Botiquín de Mercy",
+     "description": "La doctora Ziegler tiene un plan de tratamiento. Ilustración de Fahmi Fauzi.",
+     "type": {
+      "value": "loadingscreen",
+      "displayValue": "Pantalla de carga",
+      "backendValue": "AthenaLoadingScreen"
+     },
+     "rarity": {
+      "value": "gaminglegends",
+      "displayValue": "Leyendas de videojuegos",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "series": {
+      "value": "Leyendas de videojuegos",
+      "colors": [
+       "8078ffff",
+       "5328d6ff",
+       "3e1398ff",
+       "28085fff",
+       "0d0027ff"
+      ],
+      "backendValue": "PlatformSeries"
+     },
+     "set": {
+      "value": "Overwatch",
+      "text": "Pieza del conjunto Overwatch.",
+      "backendValue": "AlpineSaturn"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "2",
+      "text": "Introducido en Capítulo 7, Temporada 2.",
+      "backendValue": 40
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/loadingscreen_trackwaver/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/loadingscreen_trackwaver/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/loadingscreen_trackwaver/featured.png",
+      "other": {
+       "background": "https://fortnite-api.com/images/cosmetics/br/loadingscreen_trackwaver/background.png"
+      }
+     },
+     "added": "2026-05-14T09:00:00Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 4900,
+   "finalPrice": 3000,
+   "devName": "[VIRTUAL]1 x Crash Bandicoot, 1 x Bandicoot, 1 x Spyro the Dragon, 1 x Aku Aku, 1 x Crash's Victory, 1 x Crash's Wumpa Mace for -1 MtxCurrency",
+   "offerId": "v2:/e30b9910f9e3826de9c50d45f46fd633dbf20d5880487cb37ddfb4ee45d91009",
+   "inDate": "2026-11-22T00:00:00Z",
+   "outDate": "2026-11-26T23:59:59.999Z",
+   "bundle": {
+    "name": "Lote Crash Bandicoot y Spyro the Dragon",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/50df3ec91772656e/renderimage_0.png"
+   },
+   "banner": {
+    "value": "1900 monedas V de descuento",
+    "intensity": "Low",
+    "backendValue": "AmountOff"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -1,
+   "layoutId": "CrashSpyro1.99",
+   "layout": {
+    "id": "CrashSpyro1",
+    "name": "Crash Bandicoot y Spyro the Dragon",
+    "index": 33,
+    "rank": 194,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "8ad986ff",
+    "color3": "05544cff",
+    "textBackgroundColor": "05544cff"
+   },
+   "tileSize": "Size_2_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_SpruceBark_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S42/DAv2_Bundle_Featured_SpruceBark",
+   "newDisplayAsset": {
+    "id": "DAv2_Bundle_Featured_SpruceBark",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__50df3ec91772656e_29c0c4191e61fb71.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/50df3ec91772656e/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__50df3ec91772656e_d2e71b6320aa32c2.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/50df3ec91772656e/renderimage_1.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__50df3ec91772656e_71e578208f570b02.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/50df3ec91772656e/renderimage_2.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Character_SpruceBark",
+     "name": "Crash Bandicoot",
+     "description": "¡Woah!",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "gaminglegends",
+      "displayValue": "Leyendas de videojuegos",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "Leyendas de videojuegos",
+      "colors": [
+       "8078ffff",
+       "5328d6ff",
+       "3e1398ff",
+       "28085fff",
+       "0d0027ff"
+      ],
+      "backendValue": "PlatformSeries"
+     },
+     "set": {
+      "value": "Crash Bandicoot",
+      "text": "Pieza del conjunto Crash Bandicoot.",
+      "backendValue": "ColdTake"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_sprucebark/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_sprucebark/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_sprucebark/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_sprucebark/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_sprucebark/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_sprucebark/wide.png"
+      }
+     },
+     "variants": [
+      {
+       "channel": "Parts",
+       "type": "Estilo",
+       "options": [
+        {
+         "tag": "Stage1",
+         "name": "Crash Bandicoot",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_sprucebark/variants/parts/stage1.png"
+        },
+        {
+         "tag": "Stage2",
+         "name": "Crash clásico",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_sprucebark/variants/parts/stage2.png"
+        }
+       ]
+      }
+     ],
+     "metaTags": [
+      "Cosmetics.MetaTags.Special.Large",
+      "Cosmetics.Emote.CharacterGroup.BigHead"
+     ],
+     "showcaseVideo": "YhgtFoM0N14",
+     "added": "2026-08-26T23:33:06Z"
+    },
+    {
+     "id": "Wrap_SpruceBark",
+     "name": "Bandicoot",
+     "description": "Muestra tu estilo.",
+     "type": {
+      "value": "wrap",
+      "displayValue": "Papel",
+      "backendValue": "AthenaItemWrap"
+     },
+     "rarity": {
+      "value": "gaminglegends",
+      "displayValue": "Leyendas de videojuegos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Leyendas de videojuegos",
+      "colors": [
+       "8078ffff",
+       "5328d6ff",
+       "3e1398ff",
+       "28085fff",
+       "0d0027ff"
+      ],
+      "backendValue": "PlatformSeries"
+     },
+     "set": {
+      "value": "Crash Bandicoot",
+      "text": "Pieza del conjunto Crash Bandicoot.",
+      "backendValue": "ColdTake"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/wrap_sprucebark/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/wrap_sprucebark/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/wrap_sprucebark/featured.png"
+     },
+     "added": "2026-08-26T23:33:06Z"
+    },
+    {
+     "id": "Companion_SandyInland",
+     "name": "Spyro the Dragon",
+     "description": "Prepárense, apunten, ¡llamas!",
+     "type": {
+      "value": "sidekick",
+      "displayValue": "Compañero",
+      "backendValue": "CosmeticCompanion"
+     },
+     "rarity": {
+      "value": "gaminglegends",
+      "displayValue": "Leyendas de videojuegos",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "series": {
+      "value": "Leyendas de videojuegos",
+      "colors": [
+       "8078ffff",
+       "5328d6ff",
+       "3e1398ff",
+       "28085fff",
+       "0d0027ff"
+      ],
+      "backendValue": "PlatformSeries"
+     },
+     "set": {
+      "value": "Spyro",
+      "text": "Pieza del conjunto Spyro.",
+      "backendValue": "PieMask"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/companion_sandyinland/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/companion_sandyinland/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/companion_sandyinland/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Emote",
+       "type": "Gesto de compañero",
+       "options": [
+        {
+         "tag": "CompanionEmote0",
+         "name": "Pirueta ardiente de Spyro",
+         "image": "https://fortnite-api.com/images/cosmetics/br/companion_sandyinland/variants/emote/companionemote0.png"
+        }
+       ]
+      },
+      {
+       "channel": "Outfit",
+       "type": "Escamas",
+       "options": [
+        {
+         "tag": "Stage1",
+         "name": "Spyro the Dragon",
+         "image": "https://fortnite-api.com/images/cosmetics/br/companion_sandyinland/variants/outfit/stage1.png"
+        },
+        {
+         "tag": "Stage2",
+         "name": "Verdes",
+         "image": "https://fortnite-api.com/images/cosmetics/br/companion_sandyinland/variants/outfit/stage2.png"
+        },
+        {
+         "tag": "Stage3",
+         "name": "Naranjas",
+         "image": "https://fortnite-api.com/images/cosmetics/br/companion_sandyinland/variants/outfit/stage3.png"
+        },
+        {
+         "tag": "Stage4",
+         "name": "Rojas",
+         "image": "https://fortnite-api.com/images/cosmetics/br/companion_sandyinland/variants/outfit/stage4.png"
+        },
+        {
+         "tag": "Stage5",
+         "name": "Azules",
+         "image": "https://fortnite-api.com/images/cosmetics/br/companion_sandyinland/variants/outfit/stage5.png"
+        }
+       ]
+      }
+     ],
+     "added": "2026-08-27T13:00:15Z"
+    },
+    {
+     "id": "Backpack_SpruceBark",
+     "name": "Aku Aku",
+     "description": "Protector y guía de Crash.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "gaminglegends",
+      "displayValue": "Leyendas de videojuegos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Leyendas de videojuegos",
+      "colors": [
+       "8078ffff",
+       "5328d6ff",
+       "3e1398ff",
+       "28085fff",
+       "0d0027ff"
+      ],
+      "backendValue": "PlatformSeries"
+     },
+     "set": {
+      "value": "Crash Bandicoot",
+      "text": "Pieza del conjunto Crash Bandicoot.",
+      "backendValue": "ColdTake"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_sprucebark/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_sprucebark/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_sprucebark/featured.png"
+     },
+     "added": "2026-08-27T13:00:15Z"
+    },
+    {
+     "id": "EID_SpruceBark",
+     "name": "Victoria de Crash",
+     "description": "¡Lo lograste!",
+     "type": {
+      "value": "emote",
+      "displayValue": "Gesto",
+      "backendValue": "AthenaDance"
+     },
+     "rarity": {
+      "value": "gaminglegends",
+      "displayValue": "Leyendas de videojuegos",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "series": {
+      "value": "Leyendas de videojuegos",
+      "colors": [
+       "8078ffff",
+       "5328d6ff",
+       "3e1398ff",
+       "28085fff",
+       "0d0027ff"
+      ],
+      "backendValue": "PlatformSeries"
+     },
+     "set": {
+      "value": "Crash Bandicoot",
+      "text": "Pieza del conjunto Crash Bandicoot.",
+      "backendValue": "ColdTake"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/eid_sprucebark/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/eid_sprucebark/icon.png"
+     },
+     "showcaseVideo": "ZC9q27dK8VQ",
+     "added": "2026-08-26T23:33:06Z"
+    },
+    {
+     "id": "Pickaxe_SpruceBark",
+     "name": "Maza wumpa de Crash",
+     "description": "La favorita de Crash.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "gaminglegends",
+      "displayValue": "Leyendas de videojuegos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Leyendas de videojuegos",
+      "colors": [
+       "8078ffff",
+       "5328d6ff",
+       "3e1398ff",
+       "28085fff",
+       "0d0027ff"
+      ],
+      "backendValue": "PlatformSeries"
+     },
+     "set": {
+      "value": "Crash Bandicoot",
+      "text": "Pieza del conjunto Crash Bandicoot.",
+      "backendValue": "ColdTake"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_sprucebark/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_sprucebark/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_sprucebark/featured.png"
+     },
+     "added": "2026-08-27T13:00:15Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 7300,
+   "finalPrice": 2600,
+   "devName": "[VIRTUAL]1 x Noodle, 1 x 2D, 1 x DARE, 1 x Noodle's Case, 1 x Noodle's Axe, 1 x Noodle's Axe, 1 x Noodle's Axe, 1 x 2D's Megaphone, 1 x Bonesy Balloons, 1 x 2D's Mic, 1 x 2D's Mic, 1 x 2D's Mic, 1 x TBD (SID_Placeholder_636), 1 x Gorillaz Camo for -1 MtxCurrency",
+   "offerId": "v2:/9bf519ccae9b56b83193347ba283316f06e39041966676b841dba8068e604720",
+   "inDate": "2026-11-22T00:00:00Z",
+   "outDate": "2026-11-24T23:59:59.999Z",
+   "bundle": {
+    "name": "Lote Noodle y 2D",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/74917a599ff53ba6/renderimage_0.png"
+   },
+   "banner": {
+    "value": "4700 monedas V de descuento",
+    "intensity": "Low",
+    "backendValue": "AmountOff"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -5,
+   "layoutId": "Gorillaz1.98",
+   "layout": {
+    "id": "Gorillaz1",
+    "name": "Gorillaz",
+    "category": "Íconos",
+    "index": 13,
+    "rank": 178,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "bcaf95ff",
+    "color3": "c55434ff",
+    "textBackgroundColor": "c55434ff"
+   },
+   "tileSize": "Size_1_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_PajamaSoar_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S37/DAv2_Bundle_Featured_PajamaSoar",
+   "newDisplayAsset": {
+    "id": "DAv2_Bundle_Featured_PajamaSoar",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__74917a599ff53ba6_bc621cc63b8ad109.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/74917a599ff53ba6/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__74917a599ff53ba6_6ff89d4a88313036.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/74917a599ff53ba6/renderimage_1.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__74917a599ff53ba6_7d93abc5847f382a.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/74917a599ff53ba6/renderimage_2.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__74917a599ff53ba6_92146f456c604475.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/74917a599ff53ba6/renderimage_3.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Character_DegreeProper",
+     "name": "Noodle",
+     "description": "Guitarrista de Gorillaz. Asesina profesional. Posiblemente una cíborg.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Gorillaz",
+      "text": "Pieza del conjunto Gorillaz.",
+      "backendValue": "NightSwitch"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "5",
+      "text": "Introducido en Capítulo 6, Temporada 5.",
+      "backendValue": 37
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_degreeproper/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_degreeproper/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_degreeproper/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_degreeproper/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_degreeproper/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_degreeproper/wide.png"
+      }
+     },
+     "variants": [
+      {
+       "channel": "Progressive",
+       "type": "Máscara",
+       "options": [
+        {
+         "tag": "Mat1",
+         "name": "No",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_degreeproper/variants/progressive/mat1.png"
+        },
+        {
+         "tag": "Mat2",
+         "name": "Sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_degreeproper/variants/progressive/mat2.png"
+        }
+       ]
+      }
+     ],
+     "showcaseVideo": "oNS7r5s35AM",
+     "added": "2025-08-26T08:00:00Z"
+    },
+    {
+     "id": "Character_PajamaSoar",
+     "name": "2D",
+     "description": "Cantante de Gorillaz. No le gusta el conflicto. Prefiere las satsumas.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Gorillaz",
+      "text": "Pieza del conjunto Gorillaz.",
+      "backendValue": "NightSwitch"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "5",
+      "text": "Introducido en Capítulo 6, Temporada 5.",
+      "backendValue": 37
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_pajamasoar/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_pajamasoar/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_pajamasoar/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_pajamasoar/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_pajamasoar/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_pajamasoar/wide.png"
+      }
+     },
+     "variants": [
+      {
+       "channel": "Material",
+       "type": "Gafas",
+       "options": [
+        {
+         "tag": "Mat1",
+         "name": "No",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_pajamasoar/variants/material/mat1.png"
+        },
+        {
+         "tag": "Mat2",
+         "name": "Sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_pajamasoar/variants/material/mat2.png"
+        }
+       ]
+      }
+     ],
+     "showcaseVideo": "TFIDHzd_2FY",
+     "added": "2025-08-26T08:00:00Z"
+    },
+    {
+     "id": "EID_DegreeProper",
+     "name": "DARE",
+     "description": "Atrévete a moverte como Noodle.",
+     "type": {
+      "value": "emote",
+      "displayValue": "Gesto",
+      "backendValue": "AthenaDance"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Gorillaz",
+      "text": "Pieza del conjunto Gorillaz.",
+      "backendValue": "NightSwitch"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "5",
+      "text": "Introducido en Capítulo 6, Temporada 5.",
+      "backendValue": 37
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/eid_degreeproper/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/eid_degreeproper/icon.png"
+     },
+     "showcaseVideo": "yCGAcAZs_lA",
+     "added": "2025-08-26T08:00:00Z"
+    },
+    {
+     "id": "Backpack_DegreeProper",
+     "name": "Funda de Noodle",
+     "description": "Un complemento imprescindible para cualquier asesina sónica.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Gorillaz",
+      "text": "Pieza del conjunto Gorillaz.",
+      "backendValue": "NightSwitch"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "5",
+      "text": "Introducido en Capítulo 6, Temporada 5.",
+      "backendValue": 37
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_degreeproper/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_degreeproper/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_degreeproper/featured.png"
+     },
+     "showcaseVideo": "C4Z7IYk_QCc",
+     "added": "2025-08-26T08:00:00Z"
+    },
+    {
+     "id": "Backpack_DegreeProper_Guitar",
+     "name": "Armonía de Noodle",
+     "description": "Recomendamos protegerse los oídos.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Gorillaz",
+      "text": "Pieza del conjunto Gorillaz.",
+      "backendValue": "NightSwitch"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "5",
+      "text": "Introducido en Capítulo 6, Temporada 5.",
+      "backendValue": 37
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_degreeproper_guitar/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_degreeproper_guitar/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_degreeproper_guitar/featured.png"
+     },
+     "added": "2025-08-26T08:00:00Z"
+    },
+    {
+     "id": "Pickaxe_DegreeProper_Guitar",
+     "name": "Armonía de Noodle",
+     "description": "Recomendamos protegerse los oídos.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Gorillaz",
+      "text": "Pieza del conjunto Gorillaz.",
+      "backendValue": "NightSwitch"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "5",
+      "text": "Introducido en Capítulo 6, Temporada 5.",
+      "backendValue": 37
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_degreeproper_guitar/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_degreeproper_guitar/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_degreeproper_guitar/featured.png"
+     },
+     "showcaseVideo": "9GJt5bqtSXA",
+     "added": "2025-08-26T08:00:00Z"
+    },
+    {
+     "id": "Backpack_PajamaSoar",
+     "name": "Megáfono de 2D",
+     "description": "Haz escuchar tu voz o grita al vacío.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Gorillaz",
+      "text": "Pieza del conjunto Gorillaz.",
+      "backendValue": "NightSwitch"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "5",
+      "text": "Introducido en Capítulo 6, Temporada 5.",
+      "backendValue": 37
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_pajamasoar/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_pajamasoar/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_pajamasoar/featured.png"
+     },
+     "added": "2025-08-26T08:00:00Z"
+    },
+    {
+     "id": "Contrail_PajamaSoar",
+     "name": "Globos de Bonesy",
+     "description": "Una buena caída.",
+     "type": {
+      "value": "contrail",
+      "displayValue": "Estela",
+      "backendValue": "AthenaSkyDiveContrail"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Gorillaz",
+      "text": "Pieza del conjunto Gorillaz.",
+      "backendValue": "NightSwitch"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "5",
+      "text": "Introducido en Capítulo 6, Temporada 5.",
+      "backendValue": 37
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/contrail_pajamasoar/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/contrail_pajamasoar/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/contrail_pajamasoar/featured.png"
+     },
+     "added": "2025-08-26T08:00:00Z"
+    },
+    {
+     "id": "Backpack_PajamaSoar_Mic",
+     "name": "Melodía de 2D",
+     "description": "Probando. ¿1, mmm, eh, 3?",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Gorillaz",
+      "text": "Pieza del conjunto Gorillaz.",
+      "backendValue": "NightSwitch"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "5",
+      "text": "Introducido en Capítulo 6, Temporada 5.",
+      "backendValue": 37
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_pajamasoar_mic/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_pajamasoar_mic/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_pajamasoar_mic/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Particle",
+       "type": "Estilo",
+       "options": [
+        {
+         "tag": "Particle1",
+         "name": "Predeterminado",
+         "image": "https://fortnite-api.com/images/cosmetics/br/backpack_pajamasoar_mic/variants/particle/particle1.png"
+        },
+        {
+         "tag": "Particle2",
+         "name": "Efectos desactivados",
+         "image": "https://fortnite-api.com/images/cosmetics/br/backpack_pajamasoar_mic/variants/particle/particle2.png"
+        }
+       ]
+      }
+     ],
+     "added": "2025-08-26T08:00:00Z"
+    },
+    {
+     "id": "Pickaxe_PajamaSoar_Mic",
+     "name": "Melodía de 2D",
+     "description": "Probando. ¿1, mmm, eh, 3?",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Gorillaz",
+      "text": "Pieza del conjunto Gorillaz.",
+      "backendValue": "NightSwitch"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "5",
+      "text": "Introducido en Capítulo 6, Temporada 5.",
+      "backendValue": 37
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_pajamasoar_mic/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_pajamasoar_mic/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_pajamasoar_mic/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Particle",
+       "type": "Estilo",
+       "options": [
+        {
+         "tag": "Particle1",
+         "name": "Predeterminado",
+         "image": "https://fortnite-api.com/images/cosmetics/br/pickaxe_pajamasoar_mic/variants/particle/particle1.png"
+        },
+        {
+         "tag": "Particle2",
+         "name": "Efectos desactivados",
+         "image": "https://fortnite-api.com/images/cosmetics/br/pickaxe_pajamasoar_mic/variants/particle/particle2.png"
+        }
+       ]
+      }
+     ],
+     "added": "2025-08-26T08:00:00Z"
+    },
+    {
+     "id": "Wrap_PajamaSoar",
+     "name": "Camuflaje de Gorillaz",
+     "description": "Muestra tu estilo.",
+     "type": {
+      "value": "wrap",
+      "displayValue": "Papel",
+      "backendValue": "AthenaItemWrap"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Gorillaz",
+      "text": "Pieza del conjunto Gorillaz.",
+      "backendValue": "NightSwitch"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "5",
+      "text": "Introducido en Capítulo 6, Temporada 5.",
+      "backendValue": 37
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/wrap_pajamasoar/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/wrap_pajamasoar/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/wrap_pajamasoar/featured.png"
+     },
+     "added": "2025-08-26T08:00:00Z"
+    }
+   ],
+   "tracks": [
+    {
+     "id": "sid_placeholder_636",
+     "devName": "dare",
+     "title": "DARE",
+     "artist": "Gorillaz ft. Shaun Ryder & Roses Gabor",
+     "releaseYear": 2005,
+     "bpm": 120,
+     "duration": 248,
+     "difficulty": {
+      "vocals": 2,
+      "guitar": 2,
+      "bass": 0,
+      "plasticBass": 0,
+      "drums": 2,
+      "plasticDrums": 2
+     },
+     "albumArt": "https://cdn.fortnite-api.com/tracks/7072547ef4eb8d43.jpg",
+     "added": "2025-08-26T08:00:00Z"
+    }
+   ],
+   "instruments": [
+    {
+     "id": "Sparks_DegreeProper_Guitar",
+     "name": "Armonía de Noodle",
+     "description": "Recomendamos protegerse los oídos.",
+     "type": {
+      "value": "guitar",
+      "displayValue": "Guitarra",
+      "backendValue": "SparksGuitar"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Common"
+     },
+     "images": {
+      "small": "https://fortnite-api.com/images/cosmetics/instruments/sparks_degreeproper_guitar/small.png",
+      "large": "https://fortnite-api.com/images/cosmetics/instruments/sparks_degreeproper_guitar/large.png"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "added": "2025-08-26T08:00:00Z"
+    },
+    {
+     "id": "Sparks_PajamaSoar_Mic",
+     "name": "Melodía de 2D",
+     "description": "Probando. ¿1, mmm, eh, 3?",
+     "type": {
+      "value": "mic",
+      "displayValue": "Micrófono",
+      "backendValue": "SparksMic"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Common"
+     },
+     "images": {
+      "small": "https://fortnite-api.com/images/cosmetics/instruments/sparks_pajamasoar_mic/small.png",
+      "large": "https://fortnite-api.com/images/cosmetics/instruments/sparks_pajamasoar_mic/large.png"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "added": "2025-08-26T08:00:00Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 3300,
+   "finalPrice": 2400,
+   "devName": "[VIRTUAL]1 x Rubius, 1 x Wilson, 1 x Moon Flame, 1 x Flamitas de Kevin, 1 x ASMR Keys  for -1 MtxCurrency",
+   "offerId": "v2:/0b0e06d31820ca42249f6f851856ede77de773e9be3329983fac5a81c73b4b3e",
+   "inDate": "2026-11-22T00:00:00Z",
+   "outDate": "2026-11-24T23:59:59.999Z",
+   "bundle": {
+    "name": "Lote Rubius",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/10852623aa4a2344/renderimage_0.png"
+   },
+   "banner": {
+    "value": "900 monedas V de descuento",
+    "intensity": "Low",
+    "backendValue": "AmountOff"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -2,
+   "layoutId": "ElRubius.99",
+   "layout": {
+    "id": "ElRubius",
+    "name": "Rubius",
+    "category": "Íconos",
+    "index": 25,
+    "rank": 176,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "57239bff",
+    "color3": "08bcbaff",
+    "textBackgroundColor": "147574ff"
+   },
+   "tileSize": "Size_4_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_LivelyDomino_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S31/DAv2_Bundle_Featured_LivelyDomino",
+   "newDisplayAsset": {
+    "id": "DAv2_Bundle_Featured_LivelyDomino",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__10852623aa4a2344_80ec777e94e524b3.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/10852623aa4a2344/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__10852623aa4a2344_e21382a2dd16fc73.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/10852623aa4a2344/renderimage_1.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__10852623aa4a2344_a5e8aa94835c9fa1.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/10852623aa4a2344/renderimage_2.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__10852623aa4a2344_dfd35d14b6a6cc75.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/10852623aa4a2344/renderimage_3.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__10852623aa4a2344_299e2e9d6feadab2.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/10852623aa4a2344/renderimage_4.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__10852623aa4a2344_713bb706fab10f2d.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/10852623aa4a2344/renderimage_5.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Character_LivelyDomino",
+     "name": "Rubius",
+     "description": "Leyenda del gaming.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Rubius",
+      "text": "Pieza del conjunto Rubius.",
+      "backendValue": "LockDose"
+     },
+     "introduction": {
+      "chapter": "5",
+      "season": "4",
+      "text": "Introducido en Capítulo 5, Temporada 4.",
+      "backendValue": 31
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_livelydomino/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_livelydomino/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_livelydomino/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_livelydomino/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_livelydomino/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_livelydomino/wide.png"
+      }
+     },
+     "variants": [
+      {
+       "channel": "Parts",
+       "type": "Estilo",
+       "options": [
+        {
+         "tag": "Stage1",
+         "name": "Rubius",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_livelydomino/variants/parts/stage1.png"
+        },
+        {
+         "tag": "Stage2",
+         "name": "MadKat",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_livelydomino/variants/parts/stage2.png"
+        }
+       ]
+      },
+      {
+       "channel": "Material",
+       "type": "Gafas",
+       "options": [
+        {
+         "tag": "Mat1",
+         "name": "No",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_livelydomino/variants/material/mat1.png"
+        },
+        {
+         "tag": "Mat2",
+         "name": "Sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_livelydomino/variants/material/mat2.png"
+        }
+       ]
+      },
+      {
+       "channel": "Particle",
+       "type": "Cabello",
+       "options": [
+        {
+         "tag": "Particle1",
+         "name": "Marrón",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_livelydomino/variants/particle/particle1.png"
+        },
+        {
+         "tag": "Particle2",
+         "name": "Blanco",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_livelydomino/variants/particle/particle2.png"
+        }
+       ]
+      },
+      {
+       "channel": "Emissive",
+       "type": "Electricidad",
+       "options": [
+        {
+         "tag": "Emissive1",
+         "name": "Sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_livelydomino/variants/emissive/emissive1.png"
+        },
+        {
+         "tag": "Emissive2",
+         "name": "No",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_livelydomino/variants/emissive/emissive2.png"
+        }
+       ]
+      }
+     ],
+     "showcaseVideo": "uBFiENj34pM",
+     "added": "2024-09-17T08:31:42Z"
+    },
+    {
+     "id": "Backpack_LivelyDomino",
+     "name": "Wilson",
+     "description": "Ahora Wilson vivirá por siempre.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Rubius",
+      "text": "Pieza del conjunto Rubius.",
+      "backendValue": "LockDose"
+     },
+     "introduction": {
+      "chapter": "5",
+      "season": "4",
+      "text": "Introducido en Capítulo 5, Temporada 4.",
+      "backendValue": 31
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_livelydomino/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_livelydomino/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_livelydomino/featured.png"
+     },
+     "showcaseVideo": "lz8-sRMI18M",
+     "added": "2024-09-17T08:31:42Z"
+    },
+    {
+     "id": "Pickaxe_LivelyDomino",
+     "name": "Fuego lunar",
+     "description": "La única garra que necesita un MadKat.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Rubius",
+      "text": "Pieza del conjunto Rubius.",
+      "backendValue": "LockDose"
+     },
+     "introduction": {
+      "chapter": "5",
+      "season": "4",
+      "text": "Introducido en Capítulo 5, Temporada 4.",
+      "backendValue": 31
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_livelydomino/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_livelydomino/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_livelydomino/featured.png"
+     },
+     "metaTags": [
+      "Cosmetics.MetaTags.LivelyDomino"
+     ],
+     "added": "2024-09-17T08:31:42Z"
+    },
+    {
+     "id": "Wrap_LivelyDomino",
+     "name": "Flamitas de Kevin",
+     "description": "Muestra tu estilo.\nCambia en la noche",
+     "type": {
+      "value": "wrap",
+      "displayValue": "Papel",
+      "backendValue": "AthenaItemWrap"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Rubius",
+      "text": "Pieza del conjunto Rubius.",
+      "backendValue": "LockDose"
+     },
+     "introduction": {
+      "chapter": "5",
+      "season": "4",
+      "text": "Introducido en Capítulo 5, Temporada 4.",
+      "backendValue": 31
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/wrap_livelydomino/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/wrap_livelydomino/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/wrap_livelydomino/featured.png"
+     },
+     "showcaseVideo": "Ef9Qfk53zFI",
+     "added": "2024-09-17T08:31:42Z"
+    },
+    {
+     "id": "EID_LivelyDomino",
+     "name": "Teclas ASMR ",
+     "description": "Tic, tic, tic...",
+     "type": {
+      "value": "emote",
+      "displayValue": "Gesto",
+      "backendValue": "AthenaDance"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Rubius",
+      "text": "Pieza del conjunto Rubius.",
+      "backendValue": "LockDose"
+     },
+     "introduction": {
+      "chapter": "5",
+      "season": "4",
+      "text": "Introducido en Capítulo 5, Temporada 4.",
+      "backendValue": 31
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/eid_livelydomino/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/eid_livelydomino/icon.png"
+     },
+     "showcaseVideo": "uEUFiTxZsJ4",
+     "added": "2024-09-17T08:31:42Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 3000,
+   "finalPrice": 2200,
+   "devName": "[VIRTUAL]1 x Lachlan, 1 x PWR Pack, 1 x PWR Punch, 1 x PWR Slicers for -1 MtxCurrency",
+   "offerId": "v2:/7bdac06e88b44c186fbfe7694a667c03a4499b64815bcc18aa84136669a678bc",
+   "inDate": "2026-11-22T00:00:00Z",
+   "outDate": "2026-11-24T23:59:59.999Z",
+   "bundle": {
+    "name": "Lote Lachlan",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/a07b917b335783cd/renderimage_0.png"
+   },
+   "banner": {
+    "value": "800 monedas V de descuento",
+    "intensity": "Low",
+    "backendValue": "AmountOff"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -1,
+   "layoutId": "Icons1-6.99",
+   "layout": {
+    "id": "Icons1-6",
+    "name": "Lachlan",
+    "category": "Íconos",
+    "index": 34,
+    "rank": 175,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "4bbfbfff",
+    "color2": "0d938cff",
+    "color3": "2ab19aff",
+    "textBackgroundColor": "096d73ff"
+   },
+   "tileBackgroundMaterial": "ShopTile_Blobs",
+   "tileSize": "Size_1_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_LunchBoxBundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/DAv2_Bundles_LunchBox",
+   "newDisplayAsset": {
+    "id": "DAv2_Bundles_LunchBox",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__a07b917b335783cd_28f5ff7ab7651340.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/a07b917b335783cd/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__a07b917b335783cd_062b9a891f8e1bf9.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/a07b917b335783cd/renderimage_1.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__a07b917b335783cd_87f953f5aa2047a4.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/a07b917b335783cd/renderimage_2.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "CID_891_Athena_Commando_M_LunchBox",
+     "name": "Lachlan",
+     "description": "Jugando para descubrir la grandeza.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "PWR",
+      "text": "Pieza del conjunto PWR.",
+      "backendValue": "MoarPower"
+     },
+     "introduction": {
+      "chapter": "2",
+      "season": "4",
+      "text": "Introducido en Capítulo 2, Temporada 4.",
+      "backendValue": 14
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/cid_891_athena_commando_m_lunchbox/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/cid_891_athena_commando_m_lunchbox/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/cid_891_athena_commando_m_lunchbox/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/cid_891_athena_commando_m_lunchbox/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/cid_891_athena_commando_m_lunchbox/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/cid_891_athena_commando_m_lunchbox/wide.png"
+      }
+     },
+     "showcaseVideo": "pfBl56ehbfU",
+     "added": "2020-11-13T00:00:00Z"
+    },
+    {
+     "id": "BID_629_LunchBox",
+     "name": "Paquete PWR",
+     "description": "Potenciador.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "PWR",
+      "text": "Pieza del conjunto PWR.",
+      "backendValue": "MoarPower"
+     },
+     "introduction": {
+      "chapter": "2",
+      "season": "4",
+      "text": "Introducido en Capítulo 2, Temporada 4.",
+      "backendValue": 14
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/bid_629_lunchbox/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/bid_629_lunchbox/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/bid_629_lunchbox/featured.png"
+     },
+     "added": "2020-11-13T00:00:00Z"
+    },
+    {
+     "id": "EID_LunchBox",
+     "name": "Puñetazo PWR",
+     "description": "¡Aumento de PWR!",
+     "type": {
+      "value": "emote",
+      "displayValue": "Gesto",
+      "backendValue": "AthenaDance"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "PWR",
+      "text": "Pieza del conjunto PWR.",
+      "backendValue": "MoarPower"
+     },
+     "introduction": {
+      "chapter": "2",
+      "season": "4",
+      "text": "Introducido en Capítulo 2, Temporada 4.",
+      "backendValue": 14
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/eid_lunchbox/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/eid_lunchbox/icon.png"
+     },
+     "showcaseVideo": "lXUYQRtNKe4",
+     "added": "2020-11-13T00:00:00Z"
+    },
+    {
+     "id": "Pickaxe_ID_479_LunchBox1H",
+     "name": "Cortadores PWR",
+     "description": "Juega al máximo. Gana a lo grande.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "PWR",
+      "text": "Pieza del conjunto PWR.",
+      "backendValue": "MoarPower"
+     },
+     "introduction": {
+      "chapter": "2",
+      "season": "4",
+      "text": "Introducido en Capítulo 2, Temporada 4.",
+      "backendValue": 14
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_id_479_lunchbox1h/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_id_479_lunchbox1h/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_id_479_lunchbox1h/featured.png"
+     },
+     "showcaseVideo": "OVP2_m02Vrg",
+     "added": "2020-11-13T00:00:00Z"
+    }
+   ]
+  }
+ ]
+}

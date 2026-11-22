@@ -1,0 +1,96 @@
+{
+ "phrases": [
+  {
+   "text": "Lo nuevo más caro de la tienda de hoy… ¡y con la Tienda Pirata te lo llevarías sin gastar ni un pavo!",
+   "pause": 0.15
+  },
+  {
+   "text": "Número cinco: Lote Lachlan.",
+   "pause": 0.15,
+   "say": "Número cinco: Lote Láclan."
+  },
+  {
+   "text": "Cuesta…",
+   "pause": 0.5
+  },
+  {
+   "text": "¡2200 pavos!",
+   "pause": 0.2
+  },
+  {
+   "text": "Número cuatro: Lote Rubius.",
+   "pause": 0.15
+  },
+  {
+   "text": "Cuesta…",
+   "pause": 0.5
+  },
+  {
+   "text": "¡2400 pavos!",
+   "pause": 0.2
+  },
+  {
+   "text": "Número tres: Lote Noodle y 2D.",
+   "pause": 0.15,
+   "say": "Número tres: Lote Núdel y Tu Di."
+  },
+  {
+   "text": "Cuesta…",
+   "pause": 0.5
+  },
+  {
+   "text": "¡2600 pavos!",
+   "pause": 0.2
+  },
+  {
+   "text": "Número dos: Lote Crash Bandicoot y Spyro the Dragon.",
+   "pause": 0.15,
+   "say": "Número dos: Lote Crash Bándicut y Spáiro de Drágon."
+  },
+  {
+   "text": "Cuesta…",
+   "pause": 0.5
+  },
+  {
+   "text": "¡3000 pavos!",
+   "pause": 0.2
+  },
+  {
+   "text": "¿Y el número uno?",
+   "pause": 0.6
+  },
+  {
+   "text": "¡Lote Overwatch!",
+   "pause": 0.15
+  },
+  {
+   "text": "Cuesta…",
+   "pause": 0.5
+  },
+  {
+   "text": "¡4200 pavos!",
+   "pause": 0.2
+  },
+  {
+   "text": "Y su precio normal es de 8800.",
+   "pause": 0.15
+  },
+  {
+   "text": "¡Con la Tienda Pirata: cero pavos!",
+   "pause": 0.65
+  },
+  {
+   "text": "Con la Tienda Pirata, todo lo que cuesta pavos es gratis por 14 días, y solo puedes reclamar un compañero. ¿Cuál te llevarías?",
+   "pause": 0.2
+  },
+  {
+   "text": "Usa el código BAD en la tienda de objetos.",
+   "pause": 0.25,
+   "say": "Usa el código bad, en la tienda de objetos."
+  },
+  {
+   "text": "¡Gracias por ver! Síguenos para más contenido diario.",
+   "pause": 0.3
+  }
+ ]
+}

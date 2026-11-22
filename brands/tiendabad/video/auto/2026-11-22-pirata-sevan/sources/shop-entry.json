@@ -1,0 +1,256 @@
+{
+ "date": "2026-11-22T00:00:00Z",
+ "entries": [
+  {
+   "regularPrice": 2300,
+   "finalPrice": 1700,
+   "devName": "[VIRTUAL]1 x Syd, 1 x Cuddlebear Cutie, 1 x Weighted Spikegloves, 1 x Heartwave for -1 MtxCurrency",
+   "offerId": "v2:/bb38b6d1fb3cac760a3a484e0de17767e3e17c70b7f97df416f5113ae83f8a43",
+   "inDate": "2026-11-21T00:00:00Z",
+   "outDate": "2026-11-22T23:59:59.999Z",
+   "bundle": {
+    "name": "Lote Osa amorosa",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/bfab08ebbd35ec75/renderimage_0.png"
+   },
+   "banner": {
+    "value": "600 monedas V de descuento",
+    "intensity": "Low",
+    "backendValue": "AmountOff"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -1,
+   "layoutId": "BR112226.95",
+   "layout": {
+    "id": "BR112226",
+    "name": "Energía de protagonista ",
+    "index": 40,
+    "rank": 181,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "290f07ff",
+    "color3": "824100ff",
+    "textBackgroundColor": "824100ff"
+   },
+   "tileSize": "Size_1_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_FuzzyBearSummer_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/DAv2_Bundle_Featured_FuzzyBearSummer",
+   "newDisplayAsset": {
+    "id": "DAv2_Bundle_Featured_FuzzyBearSummer",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__bfab08ebbd35ec75_a699eeef844fc29d.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/bfab08ebbd35ec75/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__bfab08ebbd35ec75_39822d7dc095b7e7.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/bfab08ebbd35ec75/renderimage_1.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__bfab08ebbd35ec75_cc9b1095a489677a.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/bfab08ebbd35ec75/renderimage_2.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__bfab08ebbd35ec75_50cde5216f427736.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/bfab08ebbd35ec75/renderimage_3.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__bfab08ebbd35ec75_a2b9790423b51b74.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/bfab08ebbd35ec75/renderimage_4.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "CID_A_453_Athena_Commando_F_FuzzyBearSummer",
+     "name": "Syd",
+     "description": "No oses acercarte a ella.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Osa amorosa",
+      "text": "Pieza del conjunto Osa amorosa.",
+      "backendValue": "JustSoft"
+     },
+     "introduction": {
+      "chapter": "3",
+      "season": "3",
+      "text": "Introducido en Capítulo 3, Temporada 3.",
+      "backendValue": 21
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/cid_a_453_athena_commando_f_fuzzybearsummer/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/cid_a_453_athena_commando_f_fuzzybearsummer/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/cid_a_453_athena_commando_f_fuzzybearsummer/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/cid_a_453_athena_commando_f_fuzzybearsummer/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/cid_a_453_athena_commando_f_fuzzybearsummer/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/cid_a_453_athena_commando_f_fuzzybearsummer/wide.png"
+      },
+      "bean": {
+       "small": "https://fortnite-api.com/images/cosmetics/beans/bean_fuzzybearsummer/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/beans/bean_fuzzybearsummer/large.png"
+      }
+     },
+     "variants": [
+      {
+       "channel": "Parts",
+       "type": "estilo",
+       "options": [
+        {
+         "tag": "Stage1",
+         "name": "Capucha",
+         "image": "https://fortnite-api.com/images/cosmetics/br/cid_a_453_athena_commando_f_fuzzybearsummer/variants/parts/stage1.png"
+        },
+        {
+         "tag": "Stage2",
+         "name": "Sin capucha",
+         "image": "https://fortnite-api.com/images/cosmetics/br/cid_a_453_athena_commando_f_fuzzybearsummer/variants/parts/stage2.png"
+        }
+       ]
+      },
+      {
+       "channel": "Material",
+       "type": "color",
+       "options": [
+        {
+         "tag": "Mat1",
+         "name": "Syd",
+         "image": "https://fortnite-api.com/images/cosmetics/br/cid_a_453_athena_commando_f_fuzzybearsummer/variants/material/mat1.png"
+        },
+        {
+         "tag": "Mat2",
+         "name": "menta",
+         "image": "https://fortnite-api.com/images/cosmetics/br/cid_a_453_athena_commando_f_fuzzybearsummer/variants/material/mat2.png"
+        },
+        {
+         "tag": "Mat3",
+         "name": "Panda rojo",
+         "image": "https://fortnite-api.com/images/cosmetics/br/cid_a_453_athena_commando_f_fuzzybearsummer/variants/material/mat3.png"
+        }
+       ]
+      }
+     ],
+     "showcaseVideo": "t8iSoSZBtVs",
+     "added": "2022-07-18T12:38:54Z"
+    },
+    {
+     "id": "BID_A_042_FuzzyBearSummerFemale",
+     "name": "Osito cariñoso",
+     "description": "¡Una cosita muy bonita!",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Osa amorosa",
+      "text": "Pieza del conjunto Osa amorosa.",
+      "backendValue": "JustSoft"
+     },
+     "introduction": {
+      "chapter": "3",
+      "season": "3",
+      "text": "Introducido en Capítulo 3, Temporada 3.",
+      "backendValue": 21
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/bid_a_042_fuzzybearsummerfemale/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/bid_a_042_fuzzybearsummerfemale/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/bid_a_042_fuzzybearsummerfemale/featured.png"
+     },
+     "added": "2022-07-18T12:38:54Z"
+    },
+    {
+     "id": "Pickaxe_ID_831_FuzzyBearSummerFemale",
+     "name": "Puños espinosos",
+     "description": "Muestra tus golpes más lacerantes.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Osa amorosa",
+      "text": "Pieza del conjunto Osa amorosa.",
+      "backendValue": "JustSoft"
+     },
+     "introduction": {
+      "chapter": "3",
+      "season": "3",
+      "text": "Introducido en Capítulo 3, Temporada 3.",
+      "backendValue": 21
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_id_831_fuzzybearsummerfemale/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_id_831_fuzzybearsummerfemale/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_id_831_fuzzybearsummerfemale/featured.png"
+     },
+     "showcaseVideo": "ZDfhkC40HjI",
+     "added": "2022-07-18T12:38:54Z"
+    },
+    {
+     "id": "Wrap_503_FuzzyBearSummer",
+     "name": "Ola de amor",
+     "description": "Muestra tu estilo.",
+     "type": {
+      "value": "wrap",
+      "displayValue": "Papel",
+      "backendValue": "AthenaItemWrap"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "Osa amorosa",
+      "text": "Pieza del conjunto Osa amorosa.",
+      "backendValue": "JustSoft"
+     },
+     "introduction": {
+      "chapter": "3",
+      "season": "3",
+      "text": "Introducido en Capítulo 3, Temporada 3.",
+      "backendValue": 21
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/wrap_503_fuzzybearsummer/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/wrap_503_fuzzybearsummer/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/wrap_503_fuzzybearsummer/featured.png"
+     },
+     "showcaseVideo": "Gn7ECxGdk3E",
+     "added": "2022-07-18T12:38:54Z"
+    }
+   ]
+  }
+ ]
+}
