@@ -9,7 +9,8 @@ SAY = {"$": "S", "Spider-Man": "Spáider Man", "Buggy": "Bugui", "Jason": "Yéis
        "Nike Air Force 1": "Naik Er Fors Uan",
        "Karol G": "Karol Yi",                  # the G would be read "je"
        "Noodle": "Núdel", "2D": "Tu Di",       # 2026-11-22: Lote Noodle y 2D (Gorillaz) would have been "No-o-dle y dos de"
-       "Bandicoot": "Bándicut"}                # 2026-11-22: Crash Bandicoot would have been "Ban-di-co-ot"
+       "Bandicoot": "Bándicut",                # 2026-11-22: Crash Bandicoot would have been "Ban-di-co-ot"
+       "Spyro the Dragon": "Spáiro de Drágon", "Lachlan": "Láclan"}   # 2026-11-22: Lote Crash Bandicoot y Spyro the Dragon, Lote Lachlan
 
 
 def say_names(s):
