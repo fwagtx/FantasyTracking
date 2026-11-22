@@ -544,6 +544,19 @@
    "format": "Tienda Pirata diaria (cuenta)",
    "topic": "Quedan 14 días · dato: Horas del Tesoro 2026-11-21",
    "folder": "video/auto/2026-11-21-pirata-cuenta"
+  },
+  {
+   "date": "2026-11-29",
+   "slot": "20:30",
+   "format": "Adivina la temporada",
+   "topic": "Felina (C5 T4), Brigada marcada (C1 T9), Crash Bandicoot (C7 T4)",
+   "folder": "video/auto/2026-11-29-adivina-temporada",
+   "ids": [
+    "Character_RankedScythe",
+    "CID_444_Athena_Commando_F_BannerC",
+    "Character_SpruceBark"
+   ],
+   "note": "Every map place has had its '¿Dónde está?', so this 8:30 PM slot got the other evergreen format again; whether to repeat places instead is still a question for the owner."
   }
  ]
 }
