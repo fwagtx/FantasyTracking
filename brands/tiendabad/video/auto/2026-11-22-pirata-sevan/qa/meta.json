@@ -1,0 +1,89 @@
+{
+ "duration": 22.9,
+ "caption": "#EpicPartner Se va HOY de la tienda ⏰ Lote Osa amorosa: 1700 pavos (normalmente 2300)… y con la Tienda Pirata, 0 pavos 🏴‍☠️\n¿Te lo llevarías? 👇\nUsa el código BAD en la tienda de objetos 💛\n#fortnite #tiendapirata #tiendafortnite",
+ "claims": [
+  {
+   "text": "Lote Osa amorosa: 1700 pavos (normalmente 2300) en la tienda de hoy (2026-11-22)",
+   "source": "shop-entry.json",
+   "match": [
+    "Lote Osa amorosa",
+    "\"finalPrice\": 1700",
+    "\"regularPrice\": 2300",
+    "\"date\": \"2026-11-22T00:00:00Z\""
+   ]
+  },
+  {
+   "text": "Se va hoy a las 6 PM (CDMX): outDate 2026-11-22T23:59:59.999Z",
+   "source": "shop-entry.json",
+   "match": [
+    "\"outDate\": \"2026-11-22T23:59:59.999Z\""
+   ],
+   "visual": "23:59 UTC is 5:59 PM in Mexico City (UTC-6): it leaves at the 6 PM reset"
+  },
+  {
+   "text": "Trae una skin, una mochila, un pico y un envoltorio",
+   "source": "shop-entry.json",
+   "match": [
+    "Syd",
+    "Osito cariñoso",
+    "Puños espinosos",
+    "Ola de amor"
+   ]
+  },
+  {
+   "text": "Con la Tienda Pirata, todo lo que cuesta pavos es gratis por 14 días",
+   "source": "vgc-odds-confirmed.json",
+   "match": [
+    "every single item in the Fortnite Shop which costs V-Bucks",
+    "becomes entirely free to that player for the next 14 days"
+   ]
+  }
+ ],
+ "text": [
+  "¡SE VA HOY! ⏰ / ¿Y LA TIENDA PIRATA? 🏴‍☠️",
+  "SYD",
+  "OSITO CARIÑOSO",
+  "PUÑOS ESPINOSOS",
+  "LOTE OSA AMOROSA",
+  "UNA SKIN, UNA MOCHILA, UN PICO Y UN ENVOLTORIO",
+  "1700 PAVOS",
+  "SE VA HOY · 6 PM (CDMX)",
+  "¿Y SI HOY",
+  "TE SALE LA",
+  "TIENDA PIRATA?",
+  "ESTO SE VA",
+  "HOY DE LA",
+  "TIENDA.",
+  "EL LOTE OSA",
+  "AMOROSA.",
+  "TRAE UNA SKIN,",
+  "UNA MOCHILA,",
+  "UN PICO Y",
+  "UN ENVOLTORIO.",
+  "CUESTA 1700 PAVOS,",
+  "Y NORMALMENTE 2300.",
+  "Y SE VA",
+  "HOY A LAS",
+  "6 DE LA",
+  "TARDE,",
+  "HORA DE LA",
+  "CIUDAD DE MÉXICO.",
+  "CON LA TIENDA",
+  "PIRATA,",
+  "TE LO LLEVARÍAS",
+  "SIN GASTAR NI",
+  "UN PAVO.",
+  "¿TE LO LLEVARÍAS?",
+  "USA EL CÓDIGO",
+  "BAD EN LA",
+  "TIENDA DE OBJETOS.",
+  "¡GRACIAS POR VER!",
+  "SÍGUENOS PARA MÁS",
+  "CONTENIDO DIARIO.",
+  "#EPICPARTNER",
+  "LA TIENDITA BAD",
+  "¿TE LO / LLEVARÍAS?",
+  "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+  "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO"
+ ]
+}

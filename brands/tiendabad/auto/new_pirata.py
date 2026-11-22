@@ -14,6 +14,7 @@ The hunt ends December 5 (VGC citing Epic): after that day this script refuses t
 import datetime
 import json
 import os
+import re
 import shutil
 import sys
 import time
@@ -90,6 +91,13 @@ def get(url, tries=3):
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from say import SAY  # noqa: E402  (how Kokoro es-419 should say names; shared with the shop video)
+
+
+def nobreak(s):
+    """Keep a number, and the "1 en" before it, on one line of an on-screen row (2026-11-22: "Skin dorada: 1 en 1 562 500"
+    wrapped as "1 en 1 562" / "500", which reads as a different number)."""
+    s = re.sub(r"(?<=\d) (?=\d{3}\b)", "\u00a0", s)              # 1 562 500
+    return re.sub(r"\b(\d+) (en|de) (?=\d)", "\\1\u00a0\\2\u00a0", s)   # 1 en 137 500
 
 
 def spoken(s):
@@ -402,6 +410,8 @@ def cuenta(folder, src_dir, day=None):
     copy_sources(folder, src_dir, sorted({c["source"] for c in claims}), [])
     head = "¡Hoy es el último día para encontrar la Tienda Pirata!" if left == 0 else ("¡Mañana es el último día para encontrar la Tienda Pirata!" if left == 1 else f"¡Quedan {left} días para encontrar la Tienda Pirata!")
     body = f"{head} 🏴‍☠️ La búsqueda termina el 5 de diciembre\n{dato}\n¿Ya te salió? 👇\nUsa el código BAD en la tienda de objetos 💛"
+    for f in facts:
+        f["text"] = nobreak(f["text"])
     cfg = {"kicker": "TIENDA PIRATA", "title": title, "coin": coin, "facts": facts[:4], "caption": f"#EpicPartner {body}\n#fortnite #tiendapirata #fortniteespañol", "claims": claims}
     yt = ("Tienda Pirata: ¡HOY es el último día! 🏴‍☠️ #Shorts" if left == 0 else "Tienda Pirata: ¡queda 1 día! 🏴‍☠️ #Shorts" if left == 1
           else f"Tienda Pirata de Fortnite: ¡quedan {left} días! 🏴‍☠️ #Shorts")

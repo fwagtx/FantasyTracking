@@ -1,0 +1,4 @@
+{
+ "status": "PASS",
+ "notes": "24 s 'Quedan 13 días' (Nov 22 → Dec 5). '¡QUEDAN 13 DÍAS! PARA ENCONTRARLA 🏴‍☠️' over the official map with the 'QUEDAN 13 DÍAS' coin; rows 'TERMINA 5 DE DICIEMBRE', 'PROBABILIDAD 1 EN 137 500 POR COFRE', 'MÁS RARA AÚN · SKIN DORADA: 1 EN 1 562 500' (VGC citing Epic: Weekly Gold Outfit 1 in 1,562,500). Fixed before shipping: that row first wrapped inside the number ('1 en 1 562' / '500'); on-screen rows now keep a number and the '1 en' before it together (new_pirata.py nobreak), so it reads 'SKIN DORADA:' / '1 EN 1 562 500'. Captions on one line and clear of the coin, '¿YA TE SALIÓ?', code card and sign-off. Sources re-fetched live today 19:24 UTC, 58/58 passages verbatim."
+}
