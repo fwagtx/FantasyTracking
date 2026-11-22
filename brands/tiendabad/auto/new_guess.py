@@ -118,11 +118,10 @@ def main(folder, ids):
     phrases += [{"text": "¿Cuántas acertaste? Dímelo en los comentarios.", "pause": 0.2},
                 {"text": "Usa el código BAD en la tienda de objetos. Le ayuda muchísimo al canal.", "say": "Usa el código bad, en la tienda de objetos. Le ayuda muchísimo al canal.", "pause": 0.25},
                 {"text": "¡Gracias por ver! Síguenos para más contenido diario.", "pause": 0.3}]
-    say = {"$": "S", "Karol G": "Karol Yi"}      # "$" is read as the letter S; Kokoro es-419 reads the G in "Karol G" as "je"
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from say import say_names                    # the respellings the shop video and pirate shorts use too (auto/say.py)
     for ph in phrases:
-        s = ph.get("say", ph["text"])
-        for a, b in say.items():
-            s = s.replace(a, b)
+        s = say_names(ph.get("say", ph["text"]))
         if s != ph["text"]:
             ph["say"] = s
     json.dump({"phrases": phrases}, open(os.path.join(folder, "vo.json"), "w"), indent=1, ensure_ascii=False)

@@ -7,7 +7,9 @@ gets wrong is fixed here once, for both. Keys are matched as plain text, so keep
 SAY = {"$": "S", "Spider-Man": "Spáider Man", "Buggy": "Bugui", "Jason": "Yéison", "Like a G6": "Laik a yi six",
        "Volkswagen": "Folksvaguen", "Speedy": "Spidi", "Pierogi": "Pierogui", "Hatsune": "Jatsune", "Cyclone": "Saiclon",
        "Nike Air Force 1": "Naik Er Fors Uan",
-       "Noodle": "Núdel", "2D": "Tu Di"}       # 2026-11-22: Lote Noodle y 2D (Gorillaz) would have been "No-o-dle y dos de"
+       "Karol G": "Karol Yi",                  # the G would be read "je"
+       "Noodle": "Núdel", "2D": "Tu Di",       # 2026-11-22: Lote Noodle y 2D (Gorillaz) would have been "No-o-dle y dos de"
+       "Bandicoot": "Bándicut"}                # 2026-11-22: Crash Bandicoot would have been "Ban-di-co-ot"
 
 
 def say_names(s):
