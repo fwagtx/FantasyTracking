@@ -598,6 +598,27 @@
     "Character_TrackWaver"
    ],
    "note": "Every map place has had its '¿Dónde está?', so this 8:30 PM slot got the other evergreen format again; whether to repeat places instead is still a question for the owner. None of the three had its season said in the Nov 23 shop or long videos."
+  },
+  {
+   "date": "2026-11-23",
+   "slot": "15:45",
+   "format": "Tienda Pirata diaria (sevan)",
+   "topic": "Se va hoy (2026-11-23): Lote Cowboy Bebop, 3400 pavos (normalmente 6600)",
+   "folder": "video/auto/2026-11-23-pirata-sevan"
+  },
+  {
+   "date": "2026-11-23",
+   "slot": "17:15",
+   "format": "Tienda Pirata diaria (caros)",
+   "topic": "Lo nuevo más caro de hoy (2026-11-23): Lote Piratas del Caribe 3400, Lote Phineas y Ferb 3200, Lote Botín de la cosecha 2000, Lote Jardineros letales 2000, Lote Jack Sparrow 2000",
+   "folder": "video/auto/2026-11-23-pirata-caros"
+  },
+  {
+   "date": "2026-11-23",
+   "slot": "19:30",
+   "format": "Tienda Pirata diaria (cuenta)",
+   "topic": "Quedan 12 días · dato: no incluye",
+   "folder": "video/auto/2026-11-23-pirata-cuenta"
   }
  ]
 }

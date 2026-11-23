@@ -1,0 +1,77 @@
+{
+  "video": "latienditabad-2026-11-23-pirata-sevan.mp4",
+  "checked_utc": "2026-11-23T19:36:51Z",
+  "verdict": "READY TO POST",
+  "results": [
+    {
+      "check": "1. Facts",
+      "status": "PASS",
+      "detail": "4/4 claims verified against saved official data",
+      "items": [
+        {
+          "claim": "Lote Cowboy Bebop: 3400 pavos (normalmente 6600) en la tienda de hoy (2026-11-23)",
+          "result": "PASS",
+          "why": "matched in shop-entry.json"
+        },
+        {
+          "claim": "Se va hoy a las 6 PM (CDMX): outDate 2026-11-23T23:59:59.999Z",
+          "result": "PASS",
+          "why": "matched in shop-entry.json; 23:59 UTC is 5:59 PM in Mexico City (UTC-6): it leaves at the 6 PM reset"
+        },
+        {
+          "claim": "Trae 2 skins, 2 mochilas, 2 picos, 2 gestos y un envoltorio",
+          "result": "PASS",
+          "why": "matched in shop-entry.json"
+        },
+        {
+          "claim": "Con la Tienda Pirata, todo lo que cuesta pavos es gratis por 14 días",
+          "result": "PASS",
+          "why": "matched in vgc-odds-confirmed.json"
+        }
+      ]
+    },
+    {
+      "check": "2. Spelling and grammar",
+      "status": "PASS",
+      "detail": "42 distinct words checked; code written as BAD in all 2 mentions",
+      "items": []
+    },
+    {
+      "check": "3. Frames",
+      "status": "PASS",
+      "detail": "No black frames, no frozen stretches over 1.5 s. Contact sheet (1 frame/s) reviewed by eye: contact-sheet.png",
+      "items": []
+    },
+    {
+      "check": "4. Audio",
+      "status": "PASS",
+      "detail": "Integrated -14.2 LUFS, true peak -2.8 dBTP, no clipping, no silence gaps. All sound is original synthesis (no game rips, no copyrighted music). No voiceover in this cut.",
+      "items": []
+    },
+    {
+      "check": "5. Specs and safe zones",
+      "status": "PASS",
+      "detail": "1080x1920 h264 60 fps, aac 48000 Hz, 23.8s. Fits TikTok, Reels, Shorts, X, Facebook, Threads. Every on-screen text box sampled 4x/s stays out of the top bar, bottom caption area and button column.",
+      "items": []
+    },
+    {
+      "check": "6. Disclosure and wording",
+      "status": "PASS",
+      "detail": "#EpicPartner is the first hashtag in caption line 1 and on screen in every sampled frame from 0.0s. No discount, giveaway, endorsement or filler-CTA wording.",
+      "items": []
+    },
+    {
+      "check": "7. Would a fan stop scrolling? Made by a person?",
+      "status": "PASS",
+      "detail": "Se va HOY, 3:45 PM: Lote Cowboy Bebop (Faye Valentine, Spike Spiegel), 3400 pavos instead of 6600, leaves today at 6 PM CDMX, from today's shop. Checked the review sheet and eight stills over the whole 23.8 s: the title '¡SE VA HOY! ¿Y LA TIENDA PIRATA?' with the bundle's tiles (Faye Valentine, Spike Spiegel, Rosas para Julia), 'LOTE COWBOY BEBOP', the contents line (2 skins, 2 mochilas, 2 picos, 2 gestos y un envoltorio, matching the 9 items), '3400 PAVOS' with 6600 struck through, 'SE VA HOY · 6 PM (CDMX)', the closing '¿TE LO LLEVARÍAS?' clear of the tiles, the code card and ¡GRACIAS POR VER!. Everything readable on a phone, nothing overlapping; voice says 'Cáuboi Bíbop' (auto/say.py).",
+      "items": []
+    },
+    {
+      "check": "8. Owner approval",
+      "status": "PASS",
+      "detail": "Standing approval for autopilot (owner, 2026-10-28): posts when checks 1-7 all PASS.",
+      "items": []
+    }
+  ],
+  "caption": "#EpicPartner Se va HOY de la tienda ⏰ Lote Cowboy Bebop: 3400 pavos (normalmente 6600)… y con la Tienda Pirata, 0 pavos 🏴‍☠️\n¿Te lo llevarías? 👇\nUsa el código BAD en la tienda de objetos 💛\n#fortnite #tiendapirata #tiendafortnite"
+}
