@@ -1,0 +1,729 @@
+{
+ "duration": 299.6,
+ "caption": "#EpicPartner La tienda de Fortnite de la semana (23 de noviembre) 🛒 Lo que llegó, las 5 mejores ofertas nuevas, los regresos más esperados y lo que se va pronto.\n¿Qué te llevarías? 👇\nUsa el código BAD en la tienda de objetos 💛\n#Fortnite #TiendaFortnite #FortniteEspañol",
+ "claims": [
+  {
+   "text": "Jack Sparrow y Jack Sparrow maldito: 1500 cada uno, desde el 23 nov; Lote Jack Sparrow (los dos) 2000 en vez de 3000",
+   "source": "shop.json",
+   "match": [
+    "\"regularPrice\": 1500, \"finalPrice\": 1500, \"devName\": \"[VIRTUAL]1 x Jack Sparrow for 1500 MtxCurrency\", \"offerId\": \"v2:/d4383b30147d2192624802900d1dcb8deb2a30acbed09051068de1219de207ab\", \"inDate\": \"2026-11-23T00:00:00Z\", \"outDate\": \"2026-11-26T23:59:59.999Z\"",
+    "\"regularPrice\": 1500, \"finalPrice\": 1500, \"devName\": \"[VIRTUAL]1 x Cursed Jack Sparrow for 1500 MtxCurrency\", \"offerId\": \"v2:/ca64c01187c1b799bbb2f1ef62c5744b960d3f569de9ff295441cdd2fd8288b8\", \"inDate\": \"2026-11-23T00:00:00Z\", \"outDate\": \"2026-11-26T23:59:59.999Z\"",
+    "\"regularPrice\": 3000, \"finalPrice\": 2000, \"devName\": \"[VIRTUAL]1 x Jack Sparrow, 1 x Cursed Jack Sparrow for -1 MtxCurrency\", \"offerId\": \"v2:/763124f368c6837f888153890fb2ff62515122e10c9585e2de421156fc7ee5af\", \"inDate\": \"2026-11-23T00:00:00Z\", \"outDate\": \"2026-11-26T23:59:59.999Z\", \"bundle\": {\"name\": \"Lote Jack Sparrow\"",
+    "\"name\": \"Jack Sparrow\"",
+    "\"name\": \"Jack Sparrow maldito\""
+   ]
+  },
+  {
+   "text": "Lote Piratas del Caribe: Davy Jones, Elizabeth Swann y Capitán Barbosa, 3400 en vez de 5200 (sueltos 1600, 1600 y 1500)",
+   "source": "shop.json",
+   "match": [
+    "\"regularPrice\": 5200, \"finalPrice\": 3400, \"devName\": \"[VIRTUAL]1 x Davy Jones, 1 x Lil Kraken, 1 x Norrington's Sacrifice, 1 x Elizabeth Swann, 1 x Dead Man's Chest, 1 x Elizabeth's Favor, 1 x Captain Barbossa, 1 x Barbossa's Sword, 1 x Davy's Pipe Organ for -1 MtxCurrency\", \"offerId\": \"v2:/8dcfcc18a936c86384d6b03544a0f996194380cbbf55e490f3f532848f57c57a\", \"inDate\": \"2026-11-23T00:00:00Z\", \"outDate\": \"2026-11-26T23:59:59.999Z\", \"bundle\": {\"name\": \"Lote Piratas del Caribe\"",
+    "\"regularPrice\": 1600, \"finalPrice\": 1600, \"devName\": \"[VIRTUAL]1 x Davy Jones, 1 x Lil Kraken, 1 x Norrington's Sacrifice for -1 MtxCurrency\", \"offerId\": \"v2:/034f983bba7177f710dbd31d82d3d0a064d1e45b0352829cdb8b534a0dc88a79\", \"inDate\": \"2026-11-23T00:00:00Z\", \"outDate\": \"2026-11-26T23:59:59.999Z\", \"bundle\": {\"name\": \"Davy Jones\"",
+    "\"regularPrice\": 1600, \"finalPrice\": 1600, \"devName\": \"[VIRTUAL]1 x Elizabeth Swann, 1 x Dead Man's Chest, 1 x Elizabeth's Favor for -1 MtxCurrency\", \"offerId\": \"v2:/19ad05bc02314e7125835a68025d1ae5949dc98cc4124b8e238a358dd403f950\", \"inDate\": \"2026-11-23T00:00:00Z\", \"outDate\": \"2026-11-26T23:59:59.999Z\", \"bundle\": {\"name\": \"Elizabeth Swann\"",
+    "\"regularPrice\": 1500, \"finalPrice\": 1500, \"devName\": \"[VIRTUAL]1 x Captain Barbossa, 1 x Barbossa's Sword for 1500 MtxCurrency\", \"offerId\": \"v2:/b31fd71e39e50b59801744152e3546efa9c9e58f1d03afc1003d6b8baffade0d\", \"inDate\": \"2026-11-23T00:00:00Z\", \"outDate\": \"2026-11-26T23:59:59.999Z\", \"bundle\": {\"name\": \"Capitán Barbosa\"",
+    "\"name\": \"Davy Jones\"",
+    "\"name\": \"Elizabeth Swann\"",
+    "\"name\": \"Capitán Barbosa\""
+   ]
+  },
+  {
+   "text": "Los cinco de Piratas del Caribe no salían desde el 29 sep y volvieron el 23 nov",
+   "source": "cosmetics.json",
+   "match": [
+    "\"2026-09-29T00:00:00Z\", \"2026-11-23T00:00:00Z\"]",
+    "\"2026-09-29T00:00:00Z\", \"2026-11-23T00:00:00Z\"]",
+    "\"2026-09-29T00:00:00Z\", \"2026-11-23T00:00:00Z\"]",
+    "\"2026-09-29T00:00:00Z\", \"2026-11-23T00:00:00Z\"]",
+    "\"2026-09-29T00:00:00Z\", \"2026-11-23T00:00:00Z\"]",
+    "\"value\": \"Piratas del Caribe\", \"text\": \"Pieza del conjunto Piratas del Caribe.\""
+   ]
+  },
+  {
+   "text": "Piratas del Caribe y Phineas y Ferb se van el 26 nov",
+   "source": "shop.json",
+   "match": [
+    "\"regularPrice\": 3000, \"finalPrice\": 2000, \"devName\": \"[VIRTUAL]1 x Jack Sparrow, 1 x Cursed Jack Sparrow for -1 MtxCurrency\", \"offerId\": \"v2:/763124f368c6837f888153890fb2ff62515122e10c9585e2de421156fc7ee5af\", \"inDate\": \"2026-11-23T00:00:00Z\", \"outDate\": \"2026-11-26T23:59:59.999Z\", \"bundle\": {\"name\": \"Lote Jack Sparrow\"",
+    "\"regularPrice\": 5200, \"finalPrice\": 3400, \"devName\": \"[VIRTUAL]1 x Davy Jones, 1 x Lil Kraken, 1 x Norrington's Sacrifice, 1 x Elizabeth Swann, 1 x Dead Man's Chest, 1 x Elizabeth's Favor, 1 x Captain Barbossa, 1 x Barbossa's Sword, 1 x Davy's Pipe Organ for -1 MtxCurrency\", \"offerId\": \"v2:/8dcfcc18a936c86384d6b03544a0f996194380cbbf55e490f3f532848f57c57a\", \"inDate\": \"2026-11-23T00:00:00Z\", \"outDate\": \"2026-11-26T23:59:59.999Z\", \"bundle\": {\"name\": \"Lote Piratas del Caribe\"",
+    "\"regularPrice\": 6400, \"finalPrice\": 3200, \"devName\": \"[VIRTUAL]1 x Buff Perry, 1 x Ducky Momo Plushie, 1 x Perry the Inaction Figure, 1 x Dr. Doofenshmirtz, 1 x Balloony, 1 x Gnome-Clamp-inator, 1 x Doof's High Kicks, 1 x Agent G Sharp, 1 x Agent G Sharp, 1 x Agent G Sharp, 1 x TBD (SID_Placeholder_777) for -1 MtxCurrency\", \"offerId\": \"v2:/9417801fd1d2602ee65fbcde9c3a54df2e6898f93bb877cd6c99c28bf11b1592\", \"inDate\": \"2026-11-23T00:00:00Z\", \"outDate\": \"2026-11-26T23:59:59.999Z\", \"bundle\": {\"name\": \"Lote Phineas y Ferb\"",
+    "\"regularPrice\": 1500, \"finalPrice\": 1500, \"devName\": \"[VIRTUAL]1 x Buff Perry, 1 x Ducky Momo Plushie for -1 MtxCurrency\", \"offerId\": \"v2:/086d24a09b2b3cfab8864181f49d1f4e3affe2abe4cb27d226a6f892e51575ab\", \"inDate\": \"2026-11-23T00:00:00Z\", \"outDate\": \"2026-11-26T23:59:59.999Z\", \"bundle\": {\"name\": \"Perry musculoso\"",
+    "\"regularPrice\": 1500, \"finalPrice\": 1500, \"devName\": \"[VIRTUAL]1 x Dr. Doofenshmirtz, 1 x Balloony for -1 MtxCurrency\", \"offerId\": \"v2:/d49045dedfec1e09c0e65356d3982eb4fd75957a170988ca1f74fd583f692357\", \"inDate\": \"2026-11-23T00:00:00Z\", \"outDate\": \"2026-11-26T23:59:59.999Z\", \"bundle\": {\"name\": \"Dr. Doofenshmirtz\""
+   ]
+  },
+  {
+   "text": "Phineas y Ferb regresó el 23 nov (Perry musculoso y Dr. Doofenshmirtz, última vez el 17 jun)",
+   "source": "cosmetics.json",
+   "match": [
+    "\"2026-06-17T00:00:00Z\", \"2026-11-23T00:00:00Z\"]",
+    "\"2026-06-17T00:00:00Z\", \"2026-11-23T00:00:00Z\"]",
+    "\"value\": \"Phineas y Ferb\", \"text\": \"Pieza del conjunto Phineas y Ferb.\""
+   ]
+  },
+  {
+   "text": "Perry musculoso y Dr. Doofenshmirtz 1500 cada uno; su lote, con mochilas, picos y un gesto, 3200 en vez de 6400",
+   "source": "shop.json",
+   "match": [
+    "\"regularPrice\": 6400, \"finalPrice\": 3200, \"devName\": \"[VIRTUAL]1 x Buff Perry, 1 x Ducky Momo Plushie, 1 x Perry the Inaction Figure, 1 x Dr. Doofenshmirtz, 1 x Balloony, 1 x Gnome-Clamp-inator, 1 x Doof's High Kicks, 1 x Agent G Sharp, 1 x Agent G Sharp, 1 x Agent G Sharp, 1 x TBD (SID_Placeholder_777) for -1 MtxCurrency\", \"offerId\": \"v2:/9417801fd1d2602ee65fbcde9c3a54df2e6898f93bb877cd6c99c28bf11b1592\", \"inDate\": \"2026-11-23T00:00:00Z\", \"outDate\": \"2026-11-26T23:59:59.999Z\", \"bundle\": {\"name\": \"Lote Phineas y Ferb\"",
+    "\"name\": \"Peluche Patito Momo\"",
+    "\"name\": \"Perry la figura de inacción\"",
+    "\"name\": \"Globito\"",
+    "\"name\": \"Gnomoexterminador\"",
+    "\"name\": \"Pasos de jazz de Doof\""
+   ]
+  },
+  {
+   "text": "Ludwig y Heidi: Oktoberfest, Capítulo 1, Temporada 6; regresaron el 23 nov",
+   "source": "cosmetics.json",
+   "match": [
+    "\"name\": \"Ludwig\", \"description\": \"Guten morgen, camaradas.\", \"type\": {\"value\": \"outfit\", \"displayValue\": \"Atuendo\", \"backendValue\": \"AthenaCharacter\"}, \"rarity\": {\"value\": \"epic\", \"displayValue\": \"Épico\", \"backendValue\": \"EFortRarity::Epic\"}, \"set\": {\"value\": \"Oktoberfest\", \"text\": \"Pieza del conjunto Oktoberfest.\", \"backendValue\": \"Octoberfest\"}, \"introduction\": {\"chapter\": \"1\", \"season\": \"6\", \"text\": \"Introducido en Capítulo 1, Temporada 6.",
+    "\"name\": \"Heidi\", \"description\": \"Celebra con la mejor.\", \"type\": {\"value\": \"outfit\", \"displayValue\": \"Atuendo\", \"backendValue\": \"AthenaCharacter\"}, \"rarity\": {\"value\": \"epic\", \"displayValue\": \"Épico\", \"backendValue\": \"EFortRarity::Epic\"}, \"set\": {\"value\": \"Oktoberfest\", \"text\": \"Pieza del conjunto Oktoberfest.\", \"backendValue\": \"Octoberfest\"}, \"introduction\": {\"chapter\": \"1\", \"season\": \"6\", \"text\": \"Introducido en Capítulo 1, Temporada 6.",
+    "\"value\": \"Oktoberfest\", \"text\": \"Pieza del conjunto Oktoberfest.\"",
+    "\"2024-07-26T00:00:00Z\", \"2026-11-23T00:00:00Z\"]",
+    "\"2026-06-23T00:00:00Z\", \"2026-11-23T00:00:00Z\"]"
+   ]
+  },
+  {
+   "text": "Ludwig y Heidi 1500 cada uno; Lote Botín de la cosecha (Hojaldre hendido y Mazorquín) 2000 en vez de 4000; todo hasta el 30 nov",
+   "source": "shop.json",
+   "match": [
+    "\"regularPrice\": 1500, \"finalPrice\": 1500, \"devName\": \"[VIRTUAL]1 x Ludwig, 1 x Clockworks for -1 MtxCurrency\", \"offerId\": \"v2:/8c2b7705f34e3fa8df707aca2811f1ad94e87e22fac51b0461804cc217c5f2fa\", \"inDate\": \"2026-11-23T00:00:00Z\", \"outDate\": \"2026-11-30T23:59:59.999Z\"",
+    "\"regularPrice\": 1500, \"finalPrice\": 1500, \"devName\": \"[VIRTUAL]1 x Heidi, 1 x Pretzel Protector for -1 MtxCurrency\", \"offerId\": \"v2:/c1c72d7fcc502398a7a0b9a8c64983d74fbe6dab88f967cf4854aff26d8bc0fa\", \"inDate\": \"2026-11-23T00:00:00Z\", \"outDate\": \"2026-11-30T23:59:59.999Z\"",
+    "\"regularPrice\": 4000, \"finalPrice\": 2000, \"devName\": \"[VIRTUAL]1 x Mincemeat, 1 x Stir-Baby, 1 x Cobb, 1 x Mash-Mincers, 1 x Mash for -1 MtxCurrency\", \"offerId\": \"v2:/c113c39036316d882127b0c578d06385613e7cae377722a3ec93a925ff5ce5cf\", \"inDate\": \"2026-11-23T00:00:00Z\", \"outDate\": \"2026-11-30T23:59:59.999Z\", \"bundle\": {\"name\": \"Lote Botín de la cosecha\"",
+    "\"regularPrice\": 1500, \"finalPrice\": 1500, \"devName\": \"[VIRTUAL]1 x Mincemeat, 1 x Stir-Baby for -1 MtxCurrency\", \"offerId\": \"v2:/d79f579d96822c438a5322d21e897e388e3cd7f59e580390f28f2b3519d5dbdd\", \"inDate\": \"2026-11-23T00:00:00Z\", \"outDate\": \"2026-11-30T23:59:59.999Z\"",
+    "\"regularPrice\": 1200, \"finalPrice\": 1200, \"devName\": \"[VIRTUAL]1 x Cobb for 1200 MtxCurrency\", \"offerId\": \"v2:/2db112e9c15bffeb7829f0048b7d45aee06930ebfe308860cc5dc5dbf6f976df\", \"inDate\": \"2026-11-23T00:00:00Z\", \"outDate\": \"2026-11-30T23:59:59.999Z\"",
+    "\"name\": \"Hojaldre hendido\"",
+    "\"name\": \"Mazorquín\""
+   ]
+  },
+  {
+   "text": "Gorillaz regresó el 22 nov (Noodle, 2D, Murdoc y Russel, última vez el 26 jul)",
+   "source": "cosmetics.json",
+   "match": [
+    "\"2026-07-26T00:00:00Z\", \"2026-11-22T00:00:00Z\", \"2026-11-23T00:00:00Z\"]",
+    "\"2026-07-26T00:00:00Z\", \"2026-11-22T00:00:00Z\", \"2026-11-23T00:00:00Z\"]",
+    "\"2026-07-26T00:00:00Z\", \"2026-11-22T00:00:00Z\", \"2026-11-23T00:00:00Z\"]",
+    "\"2026-07-26T00:00:00Z\", \"2026-11-22T00:00:00Z\", \"2026-11-23T00:00:00Z\"]",
+    "\"value\": \"Gorillaz\", \"text\": \"Pieza del conjunto Gorillaz.\""
+   ]
+  },
+  {
+   "text": "Noodle, 2D, Murdoc y Russel 1500 cada uno; Lote Noodle y 2D 2600 en vez de 7300; hasta el 24 nov",
+   "source": "shop.json",
+   "match": [
+    "\"regularPrice\": 1500, \"finalPrice\": 1500, \"devName\": \"[VIRTUAL]1 x Noodle for 1500 MtxCurrency\", \"offerId\": \"v2:/c678ab3bbbab3d144332be9a74fc3437119568b0e12f04038b5f40f06a974ec2\", \"inDate\": \"2026-11-22T00:00:00Z\", \"outDate\": \"2026-11-24T23:59:59.999Z\"",
+    "\"regularPrice\": 1500, \"finalPrice\": 1500, \"devName\": \"[VIRTUAL]1 x 2D for 1500 MtxCurrency\", \"offerId\": \"v2:/472459ccc789faf337d92aa948cc9db22eca89bfbcdf053ebe343723c2425a2e\", \"inDate\": \"2026-11-22T00:00:00Z\", \"outDate\": \"2026-11-24T23:59:59.999Z\"",
+    "\"regularPrice\": 1500, \"finalPrice\": 1500, \"devName\": \"[VIRTUAL]1 x Murdoc for 1500 MtxCurrency\", \"offerId\": \"v2:/b46678eca4f3d2a04b77d82d0f467a492b65c0c3885d00db72aee22d8b4a05a0\", \"inDate\": \"2026-11-22T00:00:00Z\", \"outDate\": \"2026-11-24T23:59:59.999Z\"",
+    "\"regularPrice\": 1500, \"finalPrice\": 1500, \"devName\": \"[VIRTUAL]1 x Russel for 1500 MtxCurrency\", \"offerId\": \"v2:/14ff85f0fe3aa1d720fc075d2161e6c54e050cfa824a78345155db3df34724e6\", \"inDate\": \"2026-11-22T00:00:00Z\", \"outDate\": \"2026-11-24T23:59:59.999Z\"",
+    "\"regularPrice\": 7300, \"finalPrice\": 2600, \"devName\": \"[VIRTUAL]1 x Noodle, 1 x 2D, 1 x DARE, 1 x Noodle's Case, 1 x Noodle's Axe, 1 x Noodle's Axe, 1 x Noodle's Axe, 1 x 2D's Megaphone, 1 x Bonesy Balloons, 1 x 2D's Mic, 1 x 2D's Mic, 1 x 2D's Mic, 1 x TBD (SID_Placeholder_636), 1 x Gorillaz Camo for -1 MtxCurrency\", \"offerId\": \"v2:/9bf519ccae9b56b83193347ba283316f06e39041966676b841dba8068e604720\", \"inDate\": \"2026-11-22T00:00:00Z\", \"outDate\": \"2026-11-24T23:59:59.999Z\", \"bundle\": {\"name\": \"Lote Noodle y 2D\""
+   ]
+  },
+  {
+   "text": "Overwatch regresó el 22 nov (Mercy, D.Va, Tracer y Genji, última vez el 16 sep)",
+   "source": "cosmetics.json",
+   "match": [
+    "\"2026-09-16T00:00:00Z\", \"2026-11-22T00:00:00Z\", \"2026-11-23T00:00:00Z\"]",
+    "\"2026-09-16T00:00:00Z\", \"2026-11-22T00:00:00Z\", \"2026-11-23T00:00:00Z\"]",
+    "\"2026-09-16T00:00:00Z\", \"2026-11-22T00:00:00Z\", \"2026-11-23T00:00:00Z\"]",
+    "\"2026-09-16T00:00:00Z\", \"2026-11-22T00:00:00Z\", \"2026-11-23T00:00:00Z\"]",
+    "\"value\": \"Overwatch\", \"text\": \"Pieza del conjunto Overwatch.\""
+   ]
+  },
+  {
+   "text": "Mercy, D.Va, Tracer y Genji 1600 cada uno; Lote Overwatch (los cuatro) 4200 en vez de 8800; hasta el 4 dic",
+   "source": "shop.json",
+   "match": [
+    "\"regularPrice\": 1600, \"finalPrice\": 1600, \"devName\": \"[VIRTUAL]1 x Mercy, 1 x Mercy's Valkyrie Wings, 1 x Mercy's Valkyrie Wings for -1 MtxCurrency\", \"offerId\": \"v2:/6095d1e6a643fc8312f59b51ef9a158f0843fc106c35cdbc0b7887869c1d879c\", \"inDate\": \"2026-11-22T00:00:00Z\", \"outDate\": \"2026-12-04T23:59:59.999Z\", \"bundle\": {\"name\": \"Mercy\"",
+    "\"regularPrice\": 1600, \"finalPrice\": 1600, \"devName\": \"[VIRTUAL]1 x D.Va, 1 x Tokki's Slicer, 1 x Travel Tokki Model for -1 MtxCurrency\", \"offerId\": \"v2:/0899aa576a45851e8f7f9b1bb0d9656d2752cca1e77ad7f54a6626ff0efa71f9\", \"inDate\": \"2026-11-22T00:00:00Z\", \"outDate\": \"2026-12-04T23:59:59.999Z\", \"bundle\": {\"name\": \"D.Va\"",
+    "\"regularPrice\": 1600, \"finalPrice\": 1600, \"devName\": \"[VIRTUAL]1 x Tracer, 1 x Tracer's Pulse Knives, 1 x Tracer's Pulse Bomb for -1 MtxCurrency\", \"offerId\": \"v2:/e6213119f2b02e11345ec6a1b0d08ce506ec9caf564cf805d172af80b4811d58\", \"inDate\": \"2026-11-22T00:00:00Z\", \"outDate\": \"2026-12-04T23:59:59.999Z\", \"bundle\": {\"name\": \"Tracer\"",
+    "\"regularPrice\": 1600, \"finalPrice\": 1600, \"devName\": \"[VIRTUAL]1 x Genji, 1 x Ryū Ichimonji, 1 x Ryū Ichimonji for -1 MtxCurrency\", \"offerId\": \"v2:/e5803144dd782ddc2553fb3d6a18dd013db3f8281ded3bface13f2c7f972e214\", \"inDate\": \"2026-11-22T00:00:00Z\", \"outDate\": \"2026-12-04T23:59:59.999Z\", \"bundle\": {\"name\": \"Genji\"",
+    "\"regularPrice\": 8800, \"finalPrice\": 4200, \"devName\": \"[VIRTUAL]1 x Mercy, 1 x Mercy's Valkyrie Wings, 1 x Mercy's Valkyrie Wings, 1 x Caduceus Pickaxe, 1 x D.Va, 1 x Tokki's Slicer, 1 x Travel Tokki Model, 1 x Tracer, 1 x Tracer's Pulse Knives, 1 x Tracer's Pulse Bomb, 1 x Genji, 1 x Ryū Ichimonji, 1 x Ryū Ichimonji, 1 x Mercy's Reach, 1 x Lil' Tokki, 1 x Blinkin' Amazing, 1 x Mark of Mercy, 1 x Mercy's Medkit for -1 MtxCurrency\", \"offerId\": \"v2:/400a5de6888cb848fef7c6797a9ca721b93ef91ea7e866a0596743d17f7778cd\", \"inDate\": \"2026-11-22T00:00:00Z\", \"outDate\": \"2026-12-04T23:59:59.999Z\", \"bundle\": {\"name\": \"Lote Overwatch\""
+   ]
+  },
+  {
+   "text": "Widowmaker y Kiriko llegaron a la tienda por primera vez el 21 nov",
+   "source": "cosmetics.json",
+   "match": [
+    "[\"2026-11-21T00:00:00Z\", \"2026-11-22T00:00:00Z\", \"2026-11-23T00:00:00Z\"]",
+    "[\"2026-11-21T00:00:00Z\", \"2026-11-22T00:00:00Z\", \"2026-11-23T00:00:00Z\"]",
+    "\"name\": \"Widowmaker\", \"description\": \"Una puntería devastadora.\", \"type\": {\"value\": \"outfit\", \"displayValue\": \"Atuendo\", \"backendValue\": \"AthenaCharacter\"}, \"rarity\": {\"value\": \"gaminglegends\", \"displayValue\": \"Leyendas de videojuegos\", \"backendValue\": \"EFortRarity::Epic\"}, \"series\": {\"value\": \"Leyendas de videojuegos\", \"colors\": [\"8078ffff\", \"5328d6ff\", \"3e1398ff\", \"28085fff\", \"0d0027ff\"], \"backendValue\": \"PlatformSeries\"}, \"set\": {\"value\": \"Overwatch\", \"text\": \"Pieza del conjunto Overwatch.\", \"backendValue\": \"AlpineSaturn\"}, \"introduction\": {\"chapter\": \"7\", \"season\": \"5\", \"text\": \"Introducido en Capítulo 7, Temporada 5.",
+    "\"name\": \"Kiriko\", \"description\": \"Encontró su propio camino.\", \"type\": {\"value\": \"outfit\", \"displayValue\": \"Atuendo\", \"backendValue\": \"AthenaCharacter\"}, \"rarity\": {\"value\": \"gaminglegends\", \"displayValue\": \"Leyendas de videojuegos\", \"backendValue\": \"EFortRarity::Epic\"}, \"series\": {\"value\": \"Leyendas de videojuegos\", \"colors\": [\"8078ffff\", \"5328d6ff\", \"3e1398ff\", \"28085fff\", \"0d0027ff\"], \"backendValue\": \"PlatformSeries\"}, \"set\": {\"value\": \"Overwatch\", \"text\": \"Pieza del conjunto Overwatch.\", \"backendValue\": \"AlpineSaturn\"}, \"introduction\": {\"chapter\": \"7\", \"season\": \"5\", \"text\": \"Introducido en Capítulo 7, Temporada 5.",
+    "\"value\": \"Overwatch\", \"text\": \"Pieza del conjunto Overwatch.\""
+   ]
+  },
+  {
+   "text": "Widowmaker y Kiriko 1600 cada una; juntas 2400 en vez de 5000; hasta el 4 dic",
+   "source": "shop.json",
+   "match": [
+    "\"regularPrice\": 1600, \"finalPrice\": 1600, \"devName\": \"[VIRTUAL]1 x Widowmaker, 1 x Widowmaker's Fang, 1 x Widow's Kiss for -1 MtxCurrency\", \"offerId\": \"v2:/1c3c4b7527a2b403277517531ebbd949ebad6a12441151149908a42f3216548c\", \"inDate\": \"2026-11-21T00:00:00Z\", \"outDate\": \"2026-12-04T23:59:59.999Z\"",
+    "\"regularPrice\": 1600, \"finalPrice\": 1600, \"devName\": \"[VIRTUAL]1 x Kiriko, 1 x Kiriko's Kitsune, 1 x Kiriko's Kunai for -1 MtxCurrency\", \"offerId\": \"v2:/d6c2f3bed9d261e88a5f52d73a38c47dbd5a75f3809fc22fa0ffa28f7438d0bf\", \"inDate\": \"2026-11-21T00:00:00Z\", \"outDate\": \"2026-12-04T23:59:59.999Z\"",
+    "\"regularPrice\": 5000, \"finalPrice\": 2400, \"devName\": \"[VIRTUAL]1 x Widowmaker, 1 x Widowmaker's Fang, 1 x Widow's Kiss, 1 x Kiriko, 1 x Kiriko's Kitsune, 1 x Kiriko's Kunai, 1 x Kitsune Slippers, 1 x Ofuda Whirlwind, 1 x Widowmaker's Salute for -1 MtxCurrency\", \"offerId\": \"v2:/38567ddc43e462542d125af3a11a6a5bff1197bcfce1dd84cebf915be90a1034\", \"inDate\": \"2026-11-21T00:00:00Z\", \"outDate\": \"2026-12-04T23:59:59.999Z\""
+   ]
+  },
+  {
+   "text": "Crash Bandicoot regresó el 22 nov: 1500; su lote, con Spyro the Dragon de compañero, 3000 en vez de 4900, hasta el 26 nov",
+   "source": "shop.json",
+   "match": [
+    "\"regularPrice\": 1500, \"finalPrice\": 1500, \"devName\": \"[VIRTUAL]1 x Crash Bandicoot, 1 x Bandicoot for -1 MtxCurrency\", \"offerId\": \"v2:/117f42f89b68390c4c34cbf2f9d9d0dfc4335e004861a47a7de11f92fbd65b62\", \"inDate\": \"2026-11-22T00:00:00Z\", \"outDate\": \"2026-11-26T23:59:59.999Z\"",
+    "\"regularPrice\": 4900, \"finalPrice\": 3000, \"devName\": \"[VIRTUAL]1 x Crash Bandicoot, 1 x Bandicoot, 1 x Spyro the Dragon, 1 x Aku Aku, 1 x Crash's Victory, 1 x Crash's Wumpa Mace for -1 MtxCurrency\", \"offerId\": \"v2:/e30b9910f9e3826de9c50d45f46fd633dbf20d5880487cb37ddfb4ee45d91009\", \"inDate\": \"2026-11-22T00:00:00Z\", \"outDate\": \"2026-11-26T23:59:59.999Z\", \"bundle\": {\"name\": \"Lote Crash Bandicoot y Spyro the Dragon\"",
+    "\"name\": \"Spyro the Dragon\""
+   ]
+  },
+  {
+   "text": "Crash Bandicoot volvió el 22 nov (última vez el 11 sep)",
+   "source": "cosmetics.json",
+   "match": [
+    "\"2026-09-11T00:00:00Z\", \"2026-11-22T00:00:00Z\", \"2026-11-23T00:00:00Z\"]"
+   ]
+  },
+  {
+   "text": "Rubius y Lachlan 1500 cada uno, del 22 al 24 nov",
+   "source": "shop.json",
+   "match": [
+    "\"regularPrice\": 1500, \"finalPrice\": 1500, \"devName\": \"[VIRTUAL]1 x Rubius for 1500 MtxCurrency\", \"offerId\": \"v2:/5d93c29d5f386d70a8bd64df7d389f8b5cb628fd2c4e85a5e4507c895e500135\", \"inDate\": \"2026-11-22T00:00:00Z\", \"outDate\": \"2026-11-24T23:59:59.999Z\"",
+    "\"regularPrice\": 1500, \"finalPrice\": 1500, \"devName\": \"[VIRTUAL]1 x Lachlan, 1 x PWR Pack for -1 MtxCurrency\", \"offerId\": \"v2:/00db4ae5d4b0c0a34337539d85f212be758f04b02c392c32134e151ff4d4eae5\", \"inDate\": \"2026-11-22T00:00:00Z\", \"outDate\": \"2026-11-24T23:59:59.999Z\"",
+    "\"name\": \"Rubius\"",
+    "\"name\": \"Lachlan\""
+   ]
+  },
+  {
+   "text": "Lote Ice Spice (sus dos atuendos) 2800 en vez de 4800, del 21 al 24 nov; Ice Spice volvió el 21 nov",
+   "source": "shop.json",
+   "match": [
+    "\"regularPrice\": 4800, \"finalPrice\": 2800, \"devName\": \"[VIRTUAL]1 x Rap Princess Ice Spice, 1 x Ice Spice, 1 x Ice Spice Mini, 1 x Munchkin, 1 x In Ha Mood, 1 x Oh Shhh, 1 x Iced Out Mic, 1 x Iced Out Mic, 1 x Iced Out Mic for -1 MtxCurrency\", \"offerId\": \"v2:/6757f18935d1b7110028b0e9bf1795449bc2fc393ad17063f77288a9cb816080\", \"inDate\": \"2026-11-21T00:00:00Z\", \"outDate\": \"2026-11-24T23:59:59.999Z\", \"bundle\": {\"name\": \"Lote Ice Spice\"",
+    "\"regularPrice\": 1500, \"finalPrice\": 1500, \"devName\": \"[VIRTUAL]1 x Ice Spice, 1 x Munchkin for -1 MtxCurrency\", \"offerId\": \"v2:/80dbabcc41098edfa802d220eb4655e4ae6353c38b924095f8adae030dfa3507\", \"inDate\": \"2026-11-21T00:00:00Z\", \"outDate\": \"2026-11-24T23:59:59.999Z\"",
+    "\"regularPrice\": 1500, \"finalPrice\": 1500, \"devName\": \"[VIRTUAL]1 x Rap Princess Ice Spice, 1 x Ice Spice Mini for -1 MtxCurrency\", \"offerId\": \"v2:/1b1ecb401d8bef6eb230306f8cf94b9dd9130150c253317b7fad04a6fb92ab79\", \"inDate\": \"2026-11-21T00:00:00Z\", \"outDate\": \"2026-11-24T23:59:59.999Z\""
+   ]
+  },
+  {
+   "text": "Ice Spice regresó el 21 nov",
+   "source": "cosmetics.json",
+   "match": [
+    "\"2026-01-04T00:00:00Z\", \"2026-11-21T00:00:00Z\""
+   ]
+  },
+  {
+   "text": "Kim Kardashian (1500) y Kim Kardashian icónica (1800); su lote 3000 en vez de 5900, del 20 al 24 nov; The Kid LAROI 1500, The Rogue LAROI 2000, desde el 20 nov",
+   "source": "shop.json",
+   "match": [
+    "\"regularPrice\": 5900, \"finalPrice\": 3000, \"devName\": \"[VIRTUAL]1 x Iconic Kim Kardashian, 1 x Ring Light To Go, 1 x Kim Kardashian, 1 x Kim's Kit, 1 x Full Beat Brush, 1 x Bag Basher, 1 x Slurp the Internet, 1 x Diamond Drop, 1 x Private Jet for -1 MtxCurrency\", \"offerId\": \"v2:/157b1df898f498ad48f6607a8bc65afddd16f382b9f890e7b281a6cb80438dca\", \"inDate\": \"2026-11-20T00:00:00Z\", \"outDate\": \"2026-11-24T23:59:59.999Z\", \"bundle\": {\"name\": \"Lote Kim Kardashian\"",
+    "\"regularPrice\": 1500, \"finalPrice\": 1500, \"devName\": \"[VIRTUAL]1 x Kim Kardashian, 1 x Kim's Kit for -1 MtxCurrency\", \"offerId\": \"v2:/2eabf862d4a3698efc65d79c7279ac0af60c22fd3dc612c389242818e39ee364\", \"inDate\": \"2026-11-20T00:00:00Z\", \"outDate\": \"2026-11-24T23:59:59.999Z\", \"bundle\": {\"name\": \"Kim Kardashian\"",
+    "\"regularPrice\": 1800, \"finalPrice\": 1800, \"devName\": \"[VIRTUAL]1 x Iconic Kim Kardashian, 1 x Ring Light To Go for -1 MtxCurrency\", \"offerId\": \"v2:/43884f83fe93b6ef19389d38beaad1087c7d48919cda36fb75377b4d48ea0e71\", \"inDate\": \"2026-11-20T00:00:00Z\", \"outDate\": \"2026-11-24T23:59:59.999Z\", \"bundle\": {\"name\": \"Kim Kardashian icónica\"",
+    "\"regularPrice\": 1500, \"finalPrice\": 1500, \"devName\": \"[VIRTUAL]1 x The Kid LAROI, 1 x Get My Bag for -1 MtxCurrency\", \"offerId\": \"v2:/475a882eb2e7102cbe730fa492a7bfc5ccd52ff77b1c86d6fa89a5efb60d8c02\", \"inDate\": \"2026-11-20T00:00:00Z\", \"outDate\": \"2026-11-26T23:59:59.999Z\"",
+    "\"regularPrice\": 2000, \"finalPrice\": 2000, \"devName\": \"[VIRTUAL]1 x The Rogue LAROI, 1 x The Tragic BLADE, 1 x The Tragic BLADE for -1 MtxCurrency\", \"offerId\": \"v2:/c1f2c55a938cc6d29469e3c134784a91e00e6a65fa99a39810d135e7d93abbe6\", \"inDate\": \"2026-11-20T00:00:00Z\", \"outDate\": \"2026-11-26T23:59:59.999Z\""
+   ]
+  },
+  {
+   "text": "Top 5 de ahorro en lo que llegó del 17 al 23 nov: Noodle y 2D 4700, Overwatch 4600, Phineas y Ferb 3200, Cowboy Bebop 3200, Kim Kardashian 2900",
+   "source": "shop.json",
+   "match": [
+    "\"regularPrice\": 7300, \"finalPrice\": 2600, \"devName\": \"[VIRTUAL]1 x Noodle, 1 x 2D, 1 x DARE, 1 x Noodle's Case, 1 x Noodle's Axe, 1 x Noodle's Axe, 1 x Noodle's Axe, 1 x 2D's Megaphone, 1 x Bonesy Balloons, 1 x 2D's Mic, 1 x 2D's Mic, 1 x 2D's Mic, 1 x TBD (SID_Placeholder_636), 1 x Gorillaz Camo for -1 MtxCurrency\", \"offerId\": \"v2:/9bf519ccae9b56b83193347ba283316f06e39041966676b841dba8068e604720\", \"inDate\": \"2026-11-22T00:00:00Z\", \"outDate\": \"2026-11-24T23:59:59.999Z\", \"bundle\": {\"name\": \"Lote Noodle y 2D\"",
+    "\"regularPrice\": 8800, \"finalPrice\": 4200, \"devName\": \"[VIRTUAL]1 x Mercy, 1 x Mercy's Valkyrie Wings, 1 x Mercy's Valkyrie Wings, 1 x Caduceus Pickaxe, 1 x D.Va, 1 x Tokki's Slicer, 1 x Travel Tokki Model, 1 x Tracer, 1 x Tracer's Pulse Knives, 1 x Tracer's Pulse Bomb, 1 x Genji, 1 x Ryū Ichimonji, 1 x Ryū Ichimonji, 1 x Mercy's Reach, 1 x Lil' Tokki, 1 x Blinkin' Amazing, 1 x Mark of Mercy, 1 x Mercy's Medkit for -1 MtxCurrency\", \"offerId\": \"v2:/400a5de6888cb848fef7c6797a9ca721b93ef91ea7e866a0596743d17f7778cd\", \"inDate\": \"2026-11-22T00:00:00Z\", \"outDate\": \"2026-12-04T23:59:59.999Z\", \"bundle\": {\"name\": \"Lote Overwatch\"",
+    "\"regularPrice\": 6400, \"finalPrice\": 3200, \"devName\": \"[VIRTUAL]1 x Buff Perry, 1 x Ducky Momo Plushie, 1 x Perry the Inaction Figure, 1 x Dr. Doofenshmirtz, 1 x Balloony, 1 x Gnome-Clamp-inator, 1 x Doof's High Kicks, 1 x Agent G Sharp, 1 x Agent G Sharp, 1 x Agent G Sharp, 1 x TBD (SID_Placeholder_777) for -1 MtxCurrency\", \"offerId\": \"v2:/9417801fd1d2602ee65fbcde9c3a54df2e6898f93bb877cd6c99c28bf11b1592\", \"inDate\": \"2026-11-23T00:00:00Z\", \"outDate\": \"2026-11-26T23:59:59.999Z\", \"bundle\": {\"name\": \"Lote Phineas y Ferb\"",
+    "\"regularPrice\": 6600, \"finalPrice\": 3400, \"devName\": \"[VIRTUAL]1 x Faye Valentine, 1 x Spike Spiegel, 1 x Jukebox Bop, 1 x Lil' Swordfish II, 1 x Red Tail Reaver, 1 x Swordfish II Slasher, 1 x Multi-Purpose Phone, 1 x Roses For Julia, 1 x Valentine Blue for -1 MtxCurrency\", \"offerId\": \"v2:/d1457119b8331bbe79b21eca7033b036cf4ca7076cfa1f22985b279a5d12f715\", \"inDate\": \"2026-11-20T00:00:00Z\", \"outDate\": \"2026-11-23T23:59:59.999Z\", \"bundle\": {\"name\": \"Lote Cowboy Bebop\"",
+    "\"regularPrice\": 5900, \"finalPrice\": 3000, \"devName\": \"[VIRTUAL]1 x Iconic Kim Kardashian, 1 x Ring Light To Go, 1 x Kim Kardashian, 1 x Kim's Kit, 1 x Full Beat Brush, 1 x Bag Basher, 1 x Slurp the Internet, 1 x Diamond Drop, 1 x Private Jet for -1 MtxCurrency\", \"offerId\": \"v2:/157b1df898f498ad48f6607a8bc65afddd16f382b9f890e7b281a6cb80438dca\", \"inDate\": \"2026-11-20T00:00:00Z\", \"outDate\": \"2026-11-24T23:59:59.999Z\", \"bundle\": {\"name\": \"Lote Kim Kardashian\""
+   ],
+   "visual": "ranking computed from every offer that arrived Nov 17-23 in the full 2026-11-23 shop (the next one saves 2700)"
+  },
+  {
+   "text": "Lote Cowboy Bebop (Faye Valentine y Spike Spiegel) se va el 23 nov",
+   "source": "shop.json",
+   "match": [
+    "\"regularPrice\": 6600, \"finalPrice\": 3400, \"devName\": \"[VIRTUAL]1 x Faye Valentine, 1 x Spike Spiegel, 1 x Jukebox Bop, 1 x Lil' Swordfish II, 1 x Red Tail Reaver, 1 x Swordfish II Slasher, 1 x Multi-Purpose Phone, 1 x Roses For Julia, 1 x Valentine Blue for -1 MtxCurrency\", \"offerId\": \"v2:/d1457119b8331bbe79b21eca7033b036cf4ca7076cfa1f22985b279a5d12f715\", \"inDate\": \"2026-11-20T00:00:00Z\", \"outDate\": \"2026-11-23T23:59:59.999Z\", \"bundle\": {\"name\": \"Lote Cowboy Bebop\"",
+    "\"name\": \"Faye Valentine\"",
+    "\"name\": \"Spike Spiegel\""
+   ]
+  },
+  {
+   "text": "Top 5 regresos más esperados del 17 al 23 nov: The Kid LAROI 1087 días, Ludwig 850, Hombre diana 764, Brigada marcada 637, Prodigio del pop 581",
+   "source": "cosmetics.json",
+   "match": [
+    "\"2023-11-29T00:00:00Z\", \"2026-11-20T00:00:00Z\"",
+    "\"2023-11-29T00:00:00Z\", \"2026-11-20T00:00:00Z\"",
+    "\"2024-07-26T00:00:00Z\", \"2026-11-23T00:00:00Z\"]",
+    "\"2024-10-14T00:00:00Z\", \"2026-11-17T00:00:00Z\"]",
+    "\"2025-02-18T00:00:00Z\", \"2026-11-17T00:00:00Z\", \"2026-11-18T00:00:00Z\", \"2026-11-19T00:00:00Z\", \"2026-11-20T00:00:00Z\", \"2026-11-21T00:00:00Z\", \"2026-11-22T00:00:00Z\", \"2026-11-23T00:00:00Z\"]",
+    "\"2025-04-15T00:00:00Z\", \"2026-11-17T00:00:00Z\", \"2026-11-18T00:00:00Z\", \"2026-11-19T00:00:00Z\", \"2026-11-20T00:00:00Z\", \"2026-11-21T00:00:00Z\", \"2026-11-22T00:00:00Z\", \"2026-11-23T00:00:00Z\"]"
+   ],
+   "visual": "ranking computed from the full shop history of all 152 outfits in the shops of Nov 17-23 (fetched 2026-11-23 11:26 UTC); the next return waited 406 days"
+  },
+  {
+   "text": "Prodigio del pop: Capítulo 2, Temporada 7; Brigada marcada: Capítulo 1, Temporada 9; Hombre diana: Capítulo 2, Temporada 2 (solo el 17 nov); The Kid LAROI: Capítulo 4, Temporada 1",
+   "source": "cosmetics.json",
+   "match": [
+    "\"name\": \"Prodigio del pop\", \"description\": \"La cantante del verano.\", \"type\": {\"value\": \"outfit\", \"displayValue\": \"Atuendo\", \"backendValue\": \"AthenaCharacter\"}, \"rarity\": {\"value\": \"rare\", \"displayValue\": \"Raro\", \"backendValue\": \"EFortRarity::Rare\"}, \"set\": {\"value\": \"Dale a reproducir\", \"text\": \"Pieza del conjunto Dale a reproducir.\", \"backendValue\": \"HitStart\"}, \"introduction\": {\"chapter\": \"2\", \"season\": \"7\", \"text\": \"Introducido en Capítulo 2, Temporada 7.",
+    "\"name\": \"Brigada marcada\", \"description\": \"Personaliza tu aspecto al elegir un estandarte y un color en el casillero.\", \"type\": {\"value\": \"outfit\", \"displayValue\": \"Atuendo\", \"backendValue\": \"AthenaCharacter\"}, \"rarity\": {\"value\": \"uncommon\", \"displayValue\": \"Poco común\", \"backendValue\": \"EFortRarity::Uncommon\"}, \"set\": {\"value\": \"Brigada de estandartes\", \"text\": \"Pieza del conjunto Brigada de estandartes.\", \"backendValue\": \"Banner\"}, \"introduction\": {\"chapter\": \"1\", \"season\": \"9\", \"text\": \"Introducido en Capítulo 1, Temporada 9.",
+    "\"name\": \"Hombre diana\", \"description\": \"¿Vestido para el trabajo soñado?\", \"type\": {\"value\": \"outfit\", \"displayValue\": \"Atuendo\", \"backendValue\": \"AthenaCharacter\"}, \"rarity\": {\"value\": \"epic\", \"displayValue\": \"Épico\", \"backendValue\": \"EFortRarity::Epic\"}, \"set\": {\"value\": \"¡Prepárense, apunten y disparen!\", \"text\": \"Pieza del conjunto ¡Prepárense, apunten y disparen!.\", \"backendValue\": \"GetSetGo\"}, \"introduction\": {\"chapter\": \"2\", \"season\": \"2\", \"text\": \"Introducido en Capítulo 2, Temporada 2.",
+    "\"name\": \"The Kid LAROI\", \"description\": \"Hizo realidad sus sueños.\", \"type\": {\"value\": \"outfit\", \"displayValue\": \"Atuendo\", \"backendValue\": \"AthenaCharacter\"}, \"rarity\": {\"value\": \"icon\", \"displayValue\": \"Serie de ídolos\", \"backendValue\": \"EFortRarity::Epic\"}, \"series\": {\"value\": \"Serie de ídolos\", \"image\": \"https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png\", \"colors\": [\"5cf2f3ff\", \"2bc9caff\", \"004c71ff\", \"025253ff\", \"000f2bff\"], \"backendValue\": \"CreatorCollabSeries\"}, \"set\": {\"value\": \"The Kid LAROI\", \"text\": \"Pieza del conjunto The Kid LAROI.\", \"backendValue\": \"TruthTenant\"}, \"introduction\": {\"chapter\": \"4\", \"season\": \"1\", \"text\": \"Introducido en Capítulo 4, Temporada 1.",
+    "\"name\": \"The Rogue LAROI\", \"description\": \"De compositor a cazador.\", \"type\": {\"value\": \"outfit\", \"displayValue\": \"Atuendo\", \"backendValue\": \"AthenaCharacter\"}, \"rarity\": {\"value\": \"icon\", \"displayValue\": \"Serie de ídolos\", \"backendValue\": \"EFortRarity::Epic\"}, \"series\": {\"value\": \"Serie de ídolos\", \"image\": \"https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png\", \"colors\": [\"5cf2f3ff\", \"2bc9caff\", \"004c71ff\", \"025253ff\", \"000f2bff\"], \"backendValue\": \"CreatorCollabSeries\"}, \"set\": {\"value\": \"The Kid LAROI\", \"text\": \"Pieza del conjunto The Kid LAROI.\", \"backendValue\": \"TruthTenant\"}, \"introduction\": {\"chapter\": \"4\", \"season\": \"1\", \"text\": \"Introducido en Capítulo 4, Temporada 1."
+   ]
+  },
+  {
+   "text": "Prodigio del pop (1200) y Brigada marcada (800) se van el 23 nov; Ludwig 1500",
+   "source": "shop.json",
+   "match": [
+    "\"regularPrice\": 1200, \"finalPrice\": 1200, \"devName\": \"[VIRTUAL]1 x Pop Prodigy for 1200 MtxCurrency\", \"offerId\": \"v2:/797e5b01dda2f9dedcce865e142723d3b1158a24da16b7432a39d0cc53efe1fc\", \"inDate\": \"2026-11-17T00:00:00Z\", \"outDate\": \"2026-11-23T23:59:59.999Z\"",
+    "\"regularPrice\": 800, \"finalPrice\": 800, \"devName\": \"[VIRTUAL]1 x Branded Brigadier for 800 MtxCurrency\", \"offerId\": \"v2:/2bb322a8335dd5a0344fdafae69786c0815916a2eff80ef6c3d725cdcd750e28\", \"inDate\": \"2026-11-17T00:00:00Z\", \"outDate\": \"2026-11-23T23:59:59.999Z\"",
+    "\"regularPrice\": 1500, \"finalPrice\": 1500, \"devName\": \"[VIRTUAL]1 x Ludwig, 1 x Clockworks for -1 MtxCurrency\", \"offerId\": \"v2:/8c2b7705f34e3fa8df707aca2811f1ad94e87e22fac51b0461804cc217c5f2fa\", \"inDate\": \"2026-11-23T00:00:00Z\", \"outDate\": \"2026-11-30T23:59:59.999Z\""
+   ]
+  },
+  {
+   "text": "Lote The Kid LAROI 2400 en vez de 4000, hasta el 26 nov",
+   "source": "shop.json",
+   "match": [
+    "\"regularPrice\": 4000, \"finalPrice\": 2400, \"devName\": \"[VIRTUAL]1 x The Kid LAROI, 1 x Get My Bag, 1 x The Rogue LAROI, 1 x The Tragic BLADE, 1 x The Tragic BLADE, 1 x LAROI Free Style for -1 MtxCurrency\", \"offerId\": \"v2:/584b021ea1e74efc0dfecd5f1904035a7cb9b19fea17f5123c795b37a72f519b\", \"inDate\": \"2026-11-20T00:00:00Z\", \"outDate\": \"2026-11-26T23:59:59.999Z\", \"bundle\": {\"name\": \"Lote The Kid LAROI\""
+   ]
+  },
+  {
+   "text": "Baba Yaga: Capítulo 2, Temporada 4; volvió el 23 nov tras 406 días; 1200, hasta el 30 nov",
+   "source": "cosmetics.json",
+   "match": [
+    "\"name\": \"Baba Yaga\", \"description\": \"¿Escuchas el sonido de las patas de pollo...?\", \"type\": {\"value\": \"outfit\", \"displayValue\": \"Atuendo\", \"backendValue\": \"AthenaCharacter\"}, \"rarity\": {\"value\": \"rare\", \"displayValue\": \"Raro\", \"backendValue\": \"EFortRarity::Rare\"}, \"set\": {\"value\": \"Aquelarre original\", \"text\": \"Pieza del conjunto Aquelarre original.\", \"backendValue\": \"ClanNew\"}, \"introduction\": {\"chapter\": \"2\", \"season\": \"4\", \"text\": \"Introducido en Capítulo 2, Temporada 4.",
+    "\"2025-10-13T00:00:00Z\", \"2026-11-23T00:00:00Z\"]"
+   ]
+  },
+  {
+   "text": "Baba Yaga 1200, del 23 al 30 nov",
+   "source": "shop.json",
+   "match": [
+    "\"regularPrice\": 1200, \"finalPrice\": 1200, \"devName\": \"[VIRTUAL]1 x Baba Yaga, 1 x Auric for -1 MtxCurrency\", \"offerId\": \"v2:/abb1e71f457f48db7983cf9eaf73d419593fc5adc091ac5e5ff1d4151180c645\", \"inDate\": \"2026-11-23T00:00:00Z\", \"outDate\": \"2026-11-30T23:59:59.999Z\""
+   ]
+  },
+  {
+   "text": "16 skins se van el 23 nov a las 6 PM CDMX (00:00 UTC)",
+   "source": "plan.json",
+   "match": [
+    "\"count\": 16"
+   ]
+  },
+  {
+   "text": "Se van el 23 nov: Faye Valentine, Spike Spiegel, Mordecai, Skips y Sinvergüenza (1500 cada uno)",
+   "source": "shop.json",
+   "match": [
+    "\"regularPrice\": 1500, \"finalPrice\": 1500, \"devName\": \"[VIRTUAL]1 x Faye Valentine for 1500 MtxCurrency\", \"offerId\": \"v2:/056c4dbed8dbd6e1fd035764b6af7616a040c99e728cdc77e5148f568f39b8f0\", \"inDate\": \"2026-11-20T00:00:00Z\", \"outDate\": \"2026-11-23T23:59:59.999Z\"",
+    "\"regularPrice\": 1500, \"finalPrice\": 1500, \"devName\": \"[VIRTUAL]1 x Spike Spiegel for 1500 MtxCurrency\", \"offerId\": \"v2:/85fa442811bb196364a2ec03a0b929dce2cf85ae1021234801a6c1766a6ec389\", \"inDate\": \"2026-11-20T00:00:00Z\", \"outDate\": \"2026-11-23T23:59:59.999Z\"",
+    "\"regularPrice\": 1500, \"finalPrice\": 1500, \"devName\": \"[VIRTUAL]1 x Mordecai, 1 x Maximum Glove for -1 MtxCurrency\", \"offerId\": \"v2:/732b786a282c6bd0fe08fff4904ee6c55dd165f0c0534c647a9279a646493ac1\", \"inDate\": \"2026-11-19T00:00:00Z\", \"outDate\": \"2026-11-23T23:59:59.999Z\", \"bundle\": {\"name\": \"Mordecai\"",
+    "\"regularPrice\": 1500, \"finalPrice\": 1500, \"devName\": \"[VIRTUAL]1 x Skips, 1 x Fists of Justice for -1 MtxCurrency\", \"offerId\": \"v2:/f8ce513914ffe404415726817f801d30688f3fdb99a312de67e0495a94ffaab7\", \"inDate\": \"2026-11-19T00:00:00Z\", \"outDate\": \"2026-11-23T23:59:59.999Z\", \"bundle\": {\"name\": \"Skips\"",
+    "\"regularPrice\": 1500, \"finalPrice\": 1500, \"devName\": \"[VIRTUAL]1 x Scoundrel, 1 x Strongbox for -1 MtxCurrency\", \"offerId\": \"v2:/ae696a050b843832b35bb785bc090caef33d4a52f8d4e4e6b3331dcbf6fd6c35\", \"inDate\": \"2026-11-17T00:00:00Z\", \"outDate\": \"2026-11-23T23:59:59.999Z\"",
+    "\"name\": \"Mordecai\"",
+    "\"name\": \"Skips\"",
+    "\"name\": \"Sinvergüenza\""
+   ]
+  },
+  {
+   "text": "Se van el 24 nov: Gorillaz, Kim Kardashian, Ice Spice, Rubius y Lachlan",
+   "source": "shop.json",
+   "match": [
+    "\"regularPrice\": 7300, \"finalPrice\": 2600, \"devName\": \"[VIRTUAL]1 x Noodle, 1 x 2D, 1 x DARE, 1 x Noodle's Case, 1 x Noodle's Axe, 1 x Noodle's Axe, 1 x Noodle's Axe, 1 x 2D's Megaphone, 1 x Bonesy Balloons, 1 x 2D's Mic, 1 x 2D's Mic, 1 x 2D's Mic, 1 x TBD (SID_Placeholder_636), 1 x Gorillaz Camo for -1 MtxCurrency\", \"offerId\": \"v2:/9bf519ccae9b56b83193347ba283316f06e39041966676b841dba8068e604720\", \"inDate\": \"2026-11-22T00:00:00Z\", \"outDate\": \"2026-11-24T23:59:59.999Z\", \"bundle\": {\"name\": \"Lote Noodle y 2D\"",
+    "\"regularPrice\": 5900, \"finalPrice\": 3000, \"devName\": \"[VIRTUAL]1 x Iconic Kim Kardashian, 1 x Ring Light To Go, 1 x Kim Kardashian, 1 x Kim's Kit, 1 x Full Beat Brush, 1 x Bag Basher, 1 x Slurp the Internet, 1 x Diamond Drop, 1 x Private Jet for -1 MtxCurrency\", \"offerId\": \"v2:/157b1df898f498ad48f6607a8bc65afddd16f382b9f890e7b281a6cb80438dca\", \"inDate\": \"2026-11-20T00:00:00Z\", \"outDate\": \"2026-11-24T23:59:59.999Z\", \"bundle\": {\"name\": \"Lote Kim Kardashian\"",
+    "\"regularPrice\": 4800, \"finalPrice\": 2800, \"devName\": \"[VIRTUAL]1 x Rap Princess Ice Spice, 1 x Ice Spice, 1 x Ice Spice Mini, 1 x Munchkin, 1 x In Ha Mood, 1 x Oh Shhh, 1 x Iced Out Mic, 1 x Iced Out Mic, 1 x Iced Out Mic for -1 MtxCurrency\", \"offerId\": \"v2:/6757f18935d1b7110028b0e9bf1795449bc2fc393ad17063f77288a9cb816080\", \"inDate\": \"2026-11-21T00:00:00Z\", \"outDate\": \"2026-11-24T23:59:59.999Z\", \"bundle\": {\"name\": \"Lote Ice Spice\"",
+    "\"regularPrice\": 1500, \"finalPrice\": 1500, \"devName\": \"[VIRTUAL]1 x Rubius for 1500 MtxCurrency\", \"offerId\": \"v2:/5d93c29d5f386d70a8bd64df7d389f8b5cb628fd2c4e85a5e4507c895e500135\", \"inDate\": \"2026-11-22T00:00:00Z\", \"outDate\": \"2026-11-24T23:59:59.999Z\"",
+    "\"regularPrice\": 1500, \"finalPrice\": 1500, \"devName\": \"[VIRTUAL]1 x Lachlan, 1 x PWR Pack for -1 MtxCurrency\", \"offerId\": \"v2:/00db4ae5d4b0c0a34337539d85f212be758f04b02c392c32134e151ff4d4eae5\", \"inDate\": \"2026-11-22T00:00:00Z\", \"outDate\": \"2026-11-24T23:59:59.999Z\"",
+    "\"regularPrice\": 3300, \"finalPrice\": 2400, \"devName\": \"[VIRTUAL]1 x Rubius, 1 x Wilson, 1 x Moon Flame, 1 x Flamitas de Kevin, 1 x ASMR Keys  for -1 MtxCurrency\", \"offerId\": \"v2:/0b0e06d31820ca42249f6f851856ede77de773e9be3329983fac5a81c73b4b3e\", \"inDate\": \"2026-11-22T00:00:00Z\", \"outDate\": \"2026-11-24T23:59:59.999Z\", \"bundle\": {\"name\": \"Lote Rubius\"",
+    "\"regularPrice\": 3000, \"finalPrice\": 2200, \"devName\": \"[VIRTUAL]1 x Lachlan, 1 x PWR Pack, 1 x PWR Punch, 1 x PWR Slicers for -1 MtxCurrency\", \"offerId\": \"v2:/7bdac06e88b44c186fbfe7694a667c03a4499b64815bcc18aa84136669a678bc\", \"inDate\": \"2026-11-22T00:00:00Z\", \"outDate\": \"2026-11-24T23:59:59.999Z\", \"bundle\": {\"name\": \"Lote Lachlan\""
+   ]
+  },
+  {
+   "text": "Se van el 26 nov: Piratas del Caribe, Phineas y Ferb, Crash Bandicoot y The Kid LAROI; el 30, Ludwig, Heidi, Baba Yaga y el Botín de la cosecha",
+   "source": "shop.json",
+   "match": [
+    "\"regularPrice\": 5200, \"finalPrice\": 3400, \"devName\": \"[VIRTUAL]1 x Davy Jones, 1 x Lil Kraken, 1 x Norrington's Sacrifice, 1 x Elizabeth Swann, 1 x Dead Man's Chest, 1 x Elizabeth's Favor, 1 x Captain Barbossa, 1 x Barbossa's Sword, 1 x Davy's Pipe Organ for -1 MtxCurrency\", \"offerId\": \"v2:/8dcfcc18a936c86384d6b03544a0f996194380cbbf55e490f3f532848f57c57a\", \"inDate\": \"2026-11-23T00:00:00Z\", \"outDate\": \"2026-11-26T23:59:59.999Z\", \"bundle\": {\"name\": \"Lote Piratas del Caribe\"",
+    "\"regularPrice\": 6400, \"finalPrice\": 3200, \"devName\": \"[VIRTUAL]1 x Buff Perry, 1 x Ducky Momo Plushie, 1 x Perry the Inaction Figure, 1 x Dr. Doofenshmirtz, 1 x Balloony, 1 x Gnome-Clamp-inator, 1 x Doof's High Kicks, 1 x Agent G Sharp, 1 x Agent G Sharp, 1 x Agent G Sharp, 1 x TBD (SID_Placeholder_777) for -1 MtxCurrency\", \"offerId\": \"v2:/9417801fd1d2602ee65fbcde9c3a54df2e6898f93bb877cd6c99c28bf11b1592\", \"inDate\": \"2026-11-23T00:00:00Z\", \"outDate\": \"2026-11-26T23:59:59.999Z\", \"bundle\": {\"name\": \"Lote Phineas y Ferb\"",
+    "\"regularPrice\": 4900, \"finalPrice\": 3000, \"devName\": \"[VIRTUAL]1 x Crash Bandicoot, 1 x Bandicoot, 1 x Spyro the Dragon, 1 x Aku Aku, 1 x Crash's Victory, 1 x Crash's Wumpa Mace for -1 MtxCurrency\", \"offerId\": \"v2:/e30b9910f9e3826de9c50d45f46fd633dbf20d5880487cb37ddfb4ee45d91009\", \"inDate\": \"2026-11-22T00:00:00Z\", \"outDate\": \"2026-11-26T23:59:59.999Z\", \"bundle\": {\"name\": \"Lote Crash Bandicoot y Spyro the Dragon\"",
+    "\"regularPrice\": 4000, \"finalPrice\": 2400, \"devName\": \"[VIRTUAL]1 x The Kid LAROI, 1 x Get My Bag, 1 x The Rogue LAROI, 1 x The Tragic BLADE, 1 x The Tragic BLADE, 1 x LAROI Free Style for -1 MtxCurrency\", \"offerId\": \"v2:/584b021ea1e74efc0dfecd5f1904035a7cb9b19fea17f5123c795b37a72f519b\", \"inDate\": \"2026-11-20T00:00:00Z\", \"outDate\": \"2026-11-26T23:59:59.999Z\", \"bundle\": {\"name\": \"Lote The Kid LAROI\"",
+    "\"regularPrice\": 1500, \"finalPrice\": 1500, \"devName\": \"[VIRTUAL]1 x Ludwig, 1 x Clockworks for -1 MtxCurrency\", \"offerId\": \"v2:/8c2b7705f34e3fa8df707aca2811f1ad94e87e22fac51b0461804cc217c5f2fa\", \"inDate\": \"2026-11-23T00:00:00Z\", \"outDate\": \"2026-11-30T23:59:59.999Z\"",
+    "\"regularPrice\": 1500, \"finalPrice\": 1500, \"devName\": \"[VIRTUAL]1 x Heidi, 1 x Pretzel Protector for -1 MtxCurrency\", \"offerId\": \"v2:/c1c72d7fcc502398a7a0b9a8c64983d74fbe6dab88f967cf4854aff26d8bc0fa\", \"inDate\": \"2026-11-23T00:00:00Z\", \"outDate\": \"2026-11-30T23:59:59.999Z\"",
+    "\"regularPrice\": 1200, \"finalPrice\": 1200, \"devName\": \"[VIRTUAL]1 x Baba Yaga, 1 x Auric for -1 MtxCurrency\", \"offerId\": \"v2:/abb1e71f457f48db7983cf9eaf73d419593fc5adc091ac5e5ff1d4151180c645\", \"inDate\": \"2026-11-23T00:00:00Z\", \"outDate\": \"2026-11-30T23:59:59.999Z\"",
+    "\"regularPrice\": 4000, \"finalPrice\": 2000, \"devName\": \"[VIRTUAL]1 x Mincemeat, 1 x Stir-Baby, 1 x Cobb, 1 x Mash-Mincers, 1 x Mash for -1 MtxCurrency\", \"offerId\": \"v2:/c113c39036316d882127b0c578d06385613e7cae377722a3ec93a925ff5ce5cf\", \"inDate\": \"2026-11-23T00:00:00Z\", \"outDate\": \"2026-11-30T23:59:59.999Z\", \"bundle\": {\"name\": \"Lote Botín de la cosecha\""
+   ]
+  },
+  {
+   "text": "Con la Tienda Pirata, todo lo que cuesta pavos es gratis por 14 días",
+   "source": "vgc-odds-confirmed.json",
+   "match": [
+    "every single item in the Fortnite Shop which costs V-Bucks",
+    "becomes entirely free to that player for the next 14 days"
+   ]
+  },
+  {
+   "text": "Hasta el 4 dic: Overwatch con Widowmaker y Kiriko; hasta el 5 dic: One Piece (Luffy, Nami, Usopp, Zoro, Sanji, Buggy)",
+   "source": "shop.json",
+   "match": [
+    "\"regularPrice\": 8800, \"finalPrice\": 4200, \"devName\": \"[VIRTUAL]1 x Mercy, 1 x Mercy's Valkyrie Wings, 1 x Mercy's Valkyrie Wings, 1 x Caduceus Pickaxe, 1 x D.Va, 1 x Tokki's Slicer, 1 x Travel Tokki Model, 1 x Tracer, 1 x Tracer's Pulse Knives, 1 x Tracer's Pulse Bomb, 1 x Genji, 1 x Ryū Ichimonji, 1 x Ryū Ichimonji, 1 x Mercy's Reach, 1 x Lil' Tokki, 1 x Blinkin' Amazing, 1 x Mark of Mercy, 1 x Mercy's Medkit for -1 MtxCurrency\", \"offerId\": \"v2:/400a5de6888cb848fef7c6797a9ca721b93ef91ea7e866a0596743d17f7778cd\", \"inDate\": \"2026-11-22T00:00:00Z\", \"outDate\": \"2026-12-04T23:59:59.999Z\", \"bundle\": {\"name\": \"Lote Overwatch\"",
+    "\"regularPrice\": 5000, \"finalPrice\": 2400, \"devName\": \"[VIRTUAL]1 x Widowmaker, 1 x Widowmaker's Fang, 1 x Widow's Kiss, 1 x Kiriko, 1 x Kiriko's Kitsune, 1 x Kiriko's Kunai, 1 x Kitsune Slippers, 1 x Ofuda Whirlwind, 1 x Widowmaker's Salute for -1 MtxCurrency\", \"offerId\": \"v2:/38567ddc43e462542d125af3a11a6a5bff1197bcfce1dd84cebf915be90a1034\", \"inDate\": \"2026-11-21T00:00:00Z\", \"outDate\": \"2026-12-04T23:59:59.999Z\"",
+    "\"regularPrice\": 8200, \"finalPrice\": 4000, \"devName\": \"[VIRTUAL]1 x Monkey D. Luffy, 1 x Luffy's Straw Hat, 1 x Gum-Gum Pistol, 1 x Multi-Punches Flex, 1 x Nami, 1 x Nami's Tangerines, 1 x Climate Baton, 1 x Usopp, 1 x Usopp's Kit, 1 x 5 Ton Hammer, 1 x Going Merry, 1 x Roasted Meat, 1 x Giant Meat on the Bone, 1 x Straw Hat Guitar, 1 x Straw Hat Guitar, 1 x Straw Hat Guitar for -1 MtxCurrency\", \"offerId\": \"v2:/8c57975e9814357c059acb6102b3af63c1f7ceec628657d40cbcde2a89738443\", \"inDate\": \"2026-11-01T00:00:00Z\", \"outDate\": \"2026-12-05T23:59:59.999Z\", \"bundle\": {\"name\": \"Lote One Piece\"",
+    "\"regularPrice\": 4900, \"finalPrice\": 3200, \"devName\": \"[VIRTUAL]1 x Roronoa Zoro, 1 x Zoro's Swords, 1 x Zoro's Training Gear, 1 x Test of Will, 1 x Sanji, 1 x Sanji's Utensils, 1 x Sanji's Utensils, 1 x Tony Tony Chopper for -1 MtxCurrency\", \"offerId\": \"v2:/f3aab314d09d6a4f2b25b377f8f4115ee6e066098dc43be5063be21f193757fe\", \"inDate\": \"2026-11-08T00:00:00Z\", \"outDate\": \"2026-12-05T23:59:59.999Z\", \"bundle\": {\"name\": \"Lote Sombrero de paja\"",
+    "\"regularPrice\": 1600, \"finalPrice\": 1600, \"devName\": \"[VIRTUAL]1 x Buggy, 1 x Buggy's Coat, 1 x Buggy Knives for -1 MtxCurrency\", \"offerId\": \"v2:/4431d4a16bd18c613e3ed16fe0c7f5485adb651a7545d313c8d36fae43ab2963\", \"inDate\": \"2026-11-14T00:00:00Z\", \"outDate\": \"2026-12-05T23:59:59.999Z\"",
+    "\"name\": \"Monkey D. Luffy\"",
+    "\"name\": \"Nami\"",
+    "\"name\": \"Usopp\"",
+    "\"name\": \"Roronoa Zoro\"",
+    "\"name\": \"Sanji\"",
+    "\"name\": \"Buggy\""
+   ]
+  },
+  {
+   "text": "Lote A$AP Rocky: la mejor oferta de toda la tienda (ahorras 5600: 3200 en vez de 8800), hasta el 6 dic",
+   "source": "shop.json",
+   "match": [
+    "\"regularPrice\": 8800, \"finalPrice\": 3200, \"devName\": \"[VIRTUAL]1 x Shirthead Flacko, 1 x Hi-Fi Jets, 1 x Rocky Rugahand, 1 x A$AP ROCKY X PUMA Suede 94 ‘Black/White', 1 x Flacko's Chopper, 1 x A$AP's Gauntlets, 1 x A$AP Rockets, 1 x Helicopter, 1 x RIOT (Rowdy Pipe'n), 1 x A$AP ROCKY X PUMA Straycat V6 ‘Red Flash/Black', 1 x Message From Flacko, 1 x Rocky's BOOM Mic, 1 x Rocky's BOOM Mic, 1 x Rocky's BOOM Mic for -1 MtxCurrency\", \"offerId\": \"v2:/ec90ad43e5988096783782d40bdb9acbcc89434bc8b19dc96f88623195ad1fd6\", \"inDate\": \"2026-11-06T00:00:00Z\", \"outDate\": \"2026-12-06T23:59:59.999Z\", \"bundle\": {\"name\": \"Lote A$AP Rocky\"",
+    "\"name\": \"Flacko Helicopter\"",
+    "\"name\": \"Rocky Rugahand\""
+   ],
+   "visual": "the biggest saving of every entry in the full 2026-11-23 shop"
+  },
+  {
+   "text": "Los atuendos de Lil Uzi Vert (y su lote) hasta el 12 dic; Capitana Hatsune Miku hasta el 14 dic",
+   "source": "shop.json",
+   "match": [
+    "\"regularPrice\": 7100, \"finalPrice\": 3200, \"devName\": \"[VIRTUAL]1 x Lil Uzi Vert, 1 x Uzi's Wings, 1 x Pink Star Lil Uzi Vert, 1 x Lil Uzi Star, 1 x Picco-Axe, 1 x XO Tour Llif3, 1 x What You Saying, 1 x Uzi's Tour Guitar, 1 x Uzi's Tour Guitar, 1 x Uzi's Tour Guitar, 1 x Vans x Lil Uzi Vert LX Old Skool 36, 1 x Uzi On Tour, 1 x Cap'n Lil Uzi Vert for -1 MtxCurrency\", \"offerId\": \"v2:/68cd6682741636a3ab0b9fae18d0823e04b5975570fc8a58c519e11af496c0f5\", \"inDate\": \"2026-11-13T00:00:00Z\", \"outDate\": \"2026-12-12T23:59:59.999Z\", \"bundle\": {\"name\": \"Lote de Lil' Uzi Vert\"",
+    "\"regularPrice\": 1500, \"finalPrice\": 1500, \"devName\": \"[VIRTUAL]1 x Lil Uzi Vert, 1 x Uzi's Wings for -1 MtxCurrency\", \"offerId\": \"v2:/c1c469b1cd292d375109466b840d0801b409897a9c59766ece261cb586a60a2d\", \"inDate\": \"2026-11-13T00:00:00Z\", \"outDate\": \"2026-12-12T23:59:59.999Z\"",
+    "\"regularPrice\": 1500, \"finalPrice\": 1500, \"devName\": \"[VIRTUAL]1 x Pink Star Lil Uzi Vert, 1 x Lil Uzi Star for -1 MtxCurrency\", \"offerId\": \"v2:/26f08b744f58ef13c0939c11f467de60498f568986a42b59eb7fcc02b8f17e34\", \"inDate\": \"2026-11-13T00:00:00Z\", \"outDate\": \"2026-12-12T23:59:59.999Z\"",
+    "\"regularPrice\": 4100, \"finalPrice\": 2200, \"devName\": \"[VIRTUAL]1 x Cap'n Hatsune Miku, 1 x Miku's Treasure, 1 x Miku's Anchor Floatie, 1 x Miku Miku ni Shite Ageru♪, 1 x Miku's Mic, 1 x Miku's Mic, 1 x Miku's Mic, 1 x TBD (SID_Placeholder_991) for -1 MtxCurrency\", \"offerId\": \"v2:/8f114946b8d166af6a3f7ae3ed7b1ae75c6a1e9c1d9508c258080c01d88a2365\", \"inDate\": \"2026-11-15T00:00:00Z\", \"outDate\": \"2026-12-14T23:59:59.999Z\"",
+    "\"name\": \"Capitana Hatsune Miku\""
+   ]
+  }
+ ],
+ "text": [
+  "TIENDA DE FORTNITE / LA TIENDA / DE LA SEMANA",
+  "INTRO",
+  "LLEGÓ EL 23 NOV: PIRATAS DEL CARIBE",
+  "JACK SPARROW",
+  "JACK SPARROW MALDITO",
+  "LLEGÓ EL 23 DE NOVIEMBRE",
+  "2000 PAVOS / LOTE JACK SPARROW: LOS DOS, EN VEZ DE 3000",
+  "LOTE PIRATAS DEL CARIBE: 3400",
+  "DAVY JONES",
+  "ELIZABETH SWANN",
+  "CAPITÁN BARBOSA",
+  "HASTA EL 26 NOV / NO SALÍAN DESDE EL 29 DE SEPTIEMBRE",
+  "PHINEAS Y FERB: 1500 CADA UNO",
+  "PERRY MUSCULOSO",
+  "DR. DOOFENSHMIRTZ",
+  "3200 PAVOS / LOTE PHINEAS Y FERB, EN VEZ DE 6400",
+  "OKTOBERFEST · CAPÍTULO 1, TEMPORADA 6",
+  "LUDWIG",
+  "HEIDI",
+  "BOTÍN DE LA COSECHA: 2000 (EN VEZ DE 4000)",
+  "HOJALDRE HENDIDO",
+  "MAZORQUÍN",
+  "HASTA EL 30 NOV / LUDWIG, HEIDI Y EL BOTÍN DE LA COSECHA",
+  "22 NOV: REGRESÓ GORILLAZ",
+  "NOODLE",
+  "2D",
+  "MURDOC",
+  "RUSSEL",
+  "LLEGÓ ESTA SEMANA",
+  "2600 PAVOS / LOTE NOODLE Y 2D, EN VEZ DE 7300 · HASTA EL 24 NOV",
+  "22 NOV: REGRESÓ OVERWATCH",
+  "MERCY",
+  "D.VA",
+  "TRACER",
+  "GENJI",
+  "4200 PAVOS / LOTE OVERWATCH, EN VEZ DE 8800",
+  "21 NOV: POR PRIMERA VEZ EN LA TIENDA",
+  "WIDOWMAKER",
+  "KIRIKO",
+  "2400 PAVOS / LAS DOS JUNTAS, EN VEZ DE 5000 · HASTA EL 4 DIC",
+  "CRASH Y SPYRO: 3000 (EN VEZ DE 4900)",
+  "CRASH BANDICOOT",
+  "22 NOV: RUBIUS Y LACHLAN",
+  "RUBIUS",
+  "LACHLAN",
+  "LOTE ICE SPICE: 2800 (EN VEZ DE 4800)",
+  "ICE SPICE PRINCESA DEL RAP",
+  "ICE SPICE",
+  "20 NOV: KIM KARDASHIAN Y THE KID LAROI",
+  "KIM KARDASHIAN ICÓNICA",
+  "KIM KARDASHIAN",
+  "THE KID LAROI",
+  "THE ROGUE LAROI",
+  "TOP 5 / LAS MEJORES / OFERTAS NUEVAS",
+  "LAS 5 MEJORES OFERTAS NUEVAS",
+  "AHORRAS 2900 / #5 · LOTE KIM KARDASHIAN: 3000 EN VEZ DE 5900",
+  "#4 Y #3 · AHORRAS 3200 EN CADA UNO",
+  "FAYE VALENTINE",
+  "SPIKE SPIEGEL",
+  "#2 · LOTE OVERWATCH: 4200 (EN VEZ DE 8800)",
+  "#1 / LA MEJOR OFERTA NUEVA",
+  "#1 · LOTE NOODLE Y 2D: 2600 (EN VEZ DE 7300)",
+  "AHORRAS 4700 / #1 · LOTE NOODLE Y 2D · SE VA EL 24 NOV",
+  "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+  "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+  "CÓDIGO BAD",
+  "REGRESOS / LOS REGRESOS / MÁS ESPERADOS",
+  "LOS REGRESOS MÁS ESPERADOS",
+  "#5 · 581 DÍAS · CAPÍTULO 2, TEMPORADA 7",
+  "PRODIGIO DEL POP",
+  "#4 · 637 DÍAS · CAPÍTULO 1, TEMPORADA 9",
+  "BRIGADA MARCADA",
+  "#3 · 764 DÍAS · CAPÍTULO 2, TEMPORADA 2",
+  "HOMBRE DIANA",
+  "#2 · 850 DÍAS · CAPÍTULO 1, TEMPORADA 6",
+  "#1 / EL REGRESO MÁS ESPERADO",
+  "#1 · 1087 DÍAS · CAPÍTULO 4, TEMPORADA 1",
+  "2400 PAVOS / LOTE THE KID LAROI, EN VEZ DE 4000 · HASTA EL 26 NOV",
+  "HOY · 406 DÍAS · CAPÍTULO 2, TEMPORADA 4",
+  "BABA YAGA",
+  "16 SKINS / SE VAN EL 23 NOV A LAS 6 PM (CDMX)",
+  "SE VAN PRONTO",
+  "SE VAN HOY, 23 NOV",
+  "MORDECAI",
+  "SKIPS",
+  "SINVERGÜENZA",
+  "SE VAN EL 24 NOV",
+  "26 NOV / PIRATAS DEL CARIBE, PHINEAS Y FERB, CRASH Y THE KID LAROI",
+  "30 NOV / LUDWIG, HEIDI, BABA YAGA Y EL BOTÍN DE LA COSECHA",
+  "14 DÍAS / CON LA TIENDA PIRATA, TODO LO QUE CUESTA PAVOS ES GRATIS",
+  "SE QUEDAN / HASTA / DICIEMBRE",
+  "HASTA DICIEMBRE",
+  "4 DIC / OVERWATCH, CON WIDOWMAKER Y KIRIKO",
+  "HASTA EL 5 DIC: ONE PIECE",
+  "MONKEY D. LUFFY",
+  "NAMI",
+  "USOPP",
+  "RORONOA ZORO",
+  "SANJI",
+  "BUGGY",
+  "HASTA EL 6 DIC · AHORRAS 5600",
+  "FLACKO HELICOPTER",
+  "ROCKY RUGAHAND",
+  "12 DIC / LOS ATUENDOS DE LIL UZI VERT",
+  "14 DIC / CAPITANA HATSUNE MIKU",
+  "TU TURNO / ¿QUÉ TE / LLEVARÍAS?",
+  "FINAL",
+  "¡ESTA ES LA TIENDA DE LA",
+  "SEMANA!",
+  "HOY ES LUNES 23 DE NOVIEMBRE,",
+  "Y TE CUENTO TODO LO QUE",
+  "PASÓ EN LA TIENDA DE OBJETOS",
+  "DE FORTNITE.",
+  "LO QUE LLEGÓ,",
+  "LAS MEJORES OFERTAS,",
+  "LOS REGRESOS MÁS ESPERADOS Y LO",
+  "QUE SE VA PRONTO.",
+  "Y QUÉDATE HASTA EL FINAL,",
+  "PORQUE TE DIGO QUÉ SE QUEDA",
+  "EN LA TIENDA HASTA DICIEMBRE.",
+  "EMPECEMOS CON LO QUE LLEGÓ HOY,",
+  "23 DE NOVIEMBRE:",
+  "¡LLEGARON LOS PIRATAS DEL CARIBE!",
+  "JACK SPARROW Y JACK SPARROW MALDITO",
+  "CUESTAN 1500 PAVOS CADA UNO,",
+  "Y EL LOTE JACK SPARROW TRAE",
+  "LOS DOS POR 2000 EN VEZ",
+  "DE 3000.",
+  "EL LOTE PIRATAS DEL CARIBE TRAE",
+  "A DAVY JONES,",
+  "ELIZABETH SWANN Y EL CAPITÁN BARBOSA,",
+  "POR 3400 PAVOS EN VEZ DE",
+  "5200.",
+  "LOS CINCO NO SALÍAN DESDE EL",
+  "29 DE SEPTIEMBRE,",
+  "Y SE VAN EL 26 DE",
+  "NOVIEMBRE.",
+  "TAMBIÉN REGRESÓ PHINEAS Y FERB:",
+  "PERRY MUSCULOSO Y EL DR.",
+  "DOOFENSHMIRTZ,",
+  "A 1500 PAVOS CADA UNO.",
+  "SU LOTE TRAE A LOS DOS,",
+  "CON MOCHILAS,",
+  "PICOS Y MÁS,",
+  "POR 3200 PAVOS EN VEZ DE",
+  "6400.",
+  "¡LA MITAD!",
+  "Y DEL OKTOBERFEST REGRESARON LUDWIG Y",
+  "HEIDI,",
+  "DEL CAPÍTULO 1,",
+  "TEMPORADA 6,",
+  "LUDWIG LLEVABA MUCHÍSIMO TIEMPO SIN SALIR.",
+  "MÁS ADELANTE TE DIGO CUÁNTO.",
+  "Y LLEGÓ EL LOTE BOTÍN DE",
+  "LA COSECHA,",
+  "CON HOJALDRE HENDIDO Y MAZORQUÍN,",
+  "POR 2000 PAVOS EN VEZ DE",
+  "4000.",
+  "LUDWIG,",
+  "HEIDI Y LA COSECHA SE QUEDAN",
+  "HASTA EL 30 DE NOVIEMBRE.",
+  "PERO ESO NO ES TODO:",
+  "ESTA SEMANA LLEGARON MÁS COSAS QUE",
+  "SIGUEN EN LA TIENDA.",
+  "EL 22 DE NOVIEMBRE REGRESÓ GORILLAZ:",
+  "NOODLE,",
+  "2D,",
+  "MURDOC Y RUSSEL,",
+  "EL LOTE NOODLE Y 2D CUESTA",
+  "2600 PAVOS EN VEZ DE 7300,",
+  "PERO SE VA MAÑANA,",
+  "24 DE NOVIEMBRE.",
+  "ESE MISMO DÍA REGRESÓ OVERWATCH:",
+  "MERCY,",
+  "D.VA,",
+  "TRACER Y GENJI,",
+  "A 1600 PAVOS CADA UNO.",
+  "EL LOTE OVERWATCH TRAE A LOS",
+  "CUATRO POR 4200 PAVOS EN VEZ",
+  "DE 8800.",
+  "Y UN DÍA ANTES,",
+  "EL 21,",
+  "LLEGARON POR PRIMERA VEZ A LA",
+  "TIENDA WIDOWMAKER Y KIRIKO,",
+  "A 1600 CADA UNA.",
+  "JUNTAS CUESTAN 2400 PAVOS EN VEZ",
+  "DE 5000,",
+  "Y TODO LO DE OVERWATCH SE",
+  "QUEDA HASTA EL 4 DE DICIEMBRE.",
+  "EL 22 TAMBIÉN REGRESÓ CRASH BANDICOOT,",
+  "POR 1500 PAVOS,",
+  "Y SU LOTE,",
+  "CON SPYRO THE DRAGON COMO COMPAÑERO,",
+  "CUESTA 3000 EN VEZ DE 4900.",
+  "RUBIUS Y LACHLAN TAMBIÉN LLEGARON EL",
+  "22,",
+  "A 1500 PAVOS CADA UNO,",
+  "PERO SE VAN MAÑANA.",
+  "EL 21 REGRESÓ ICE SPICE:",
+  "SU LOTE,",
+  "CON SUS DOS ATUENDOS,",
+  "CUESTA 2800 PAVOS EN VEZ DE",
+  "4800.",
+  "Y EL 20 LLEGARON KIM KARDASHIAN,",
+  "CON SU LOTE DE 3000 PAVOS",
+  "EN VEZ DE 5900,",
+  "Y THE KID LAROI,",
+  "POR 1500.",
+  "AHORA SÍ:",
+  "LAS 5 MEJORES OFERTAS QUE LLEGARON",
+  "ESTA SEMANA,",
+  "POR LO QUE TE AHORRAS.",
+  "NÚMERO 5:",
+  "EL LOTE KIM KARDASHIAN.",
+  "TE AHORRAS 2900 PAVOS.",
+  "NÚMEROS 4 Y 3,",
+  "EMPATADOS:",
+  "EL LOTE PHINEAS Y FERB Y",
+  "EL LOTE COWBOY BEBOP.",
+  "EN LOS DOS TE AHORRAS 3200,",
+  "PERO EL DE COWBOY BEBOP SE",
+  "VA HOY.",
+  "NÚMERO 2:",
+  "EL LOTE OVERWATCH,",
+  "CON MERCY,",
+  "POR 4200 PAVOS EN VEZ DE",
+  "8800.",
+  "TE AHORRAS 4600.",
+  "¿Y EL NÚMERO 1?",
+  "¡EL LOTE NOODLE Y 2D,",
+  "DE GORILLAZ!",
+  "TRAE A NOODLE Y A 2D",
+  "POR 2600 PAVOS EN VEZ DE",
+  "7300.",
+  "¡TE AHORRAS 4700 PAVOS!",
+  "ASÍ QUE NO LO DEJES PARA",
+  "DESPUÉS.",
+  "POR CIERTO,",
+  "SI ESTE RESUMEN TE ESTÁ SIRVIENDO,",
+  "USA EL CÓDIGO BAD EN LA",
+  "TIENDA DE OBJETOS.",
+  "LE AYUDA MUCHÍSIMO AL CANAL.",
+  "AHORA,",
+  "LOS 5 REGRESOS MÁS ESPERADOS DE",
+  "LA SEMANA:",
+  "LAS SKINS QUE MÁS TIEMPO LLEVABAN",
+  "SIN SALIR.",
+  "PRODIGIO DEL POP,",
+  "DEL CAPÍTULO 2,",
+  "TEMPORADA 7.",
+  "REGRESÓ EL 17 DE NOVIEMBRE,",
+  "DESPUÉS DE 581 DÍAS.",
+  "NÚMERO 4:",
+  "BRIGADA MARCADA,",
+  "TEMPORADA 9,",
+  "TAMBIÉN EL 17,",
+  "DESPUÉS DE 637 DÍAS.",
+  "Y OJO:",
+  "LAS DOS SE VAN HOY.",
+  "NÚMERO 3:",
+  "HOMBRE DIANA,",
+  "TEMPORADA 2.",
+  "VOLVIÓ EL 17 DESPUÉS DE 764",
+  "DÍAS,",
+  "PERO SOLO POR UN DÍA.",
+  "TEMPORADA 6.",
+  "NO SALÍA DESDE EL 26 DE",
+  "JULIO DE 2024:",
+  "¡850 DÍAS!",
+  "¡THE KID LAROI!",
+  "SUS DOS ATUENDOS REGRESARON EL 20",
+  "DE NOVIEMBRE,",
+  "DESPUÉS DE 1087 DÍAS.",
+  "¡CASI TRES AÑOS!",
+  "SU LOTE CUESTA 2400 PAVOS EN",
+  "VEZ DE 4000,",
+  "Y SE QUEDA HASTA EL 26",
+  "DE NOVIEMBRE.",
+  "Y UNA MENCIÓN ESPECIAL:",
+  "BABA YAGA TAMBIÉN VOLVIÓ HOY,",
+  "DESPUÉS DE 406 DÍAS,",
+  "Y SE QUEDA HASTA EL 30.",
+  "Y SI QUIERES ALGO QUE SE",
+  "VA,",
+  "APÚRATE:",
+  "HOY,",
+  "23 DE NOVIEMBRE,",
+  "A LAS 6 DE LA TARDE,",
+  "HORA DE LA CIUDAD DE MÉXICO,",
+  "SE VAN 16 SKINS.",
+  "ENTRE ELLAS,",
+  "FAYE VALENTINE Y SPIKE SPIEGEL,",
+  "DE COWBOY BEBOP,",
+  "MORDECAI Y SKIPS,",
+  "DE UN SHOW MÁS,",
+  "Y SINVERGÜENZA.",
+  "MAÑANA,",
+  "24 DE NOVIEMBRE,",
+  "SE VAN GORILLAZ,",
+  "KIM KARDASHIAN,",
+  "ICE SPICE,",
+  "RUBIUS Y LACHLAN.",
+  "EL 26 SE VAN LOS PIRATAS",
+  "DEL CARIBE,",
+  "PHINEAS Y FERB,",
+  "CRASH BANDICOOT Y THE KID LAROI.",
+  "Y EL 30,",
+  "BABA YAGA Y LA COSECHA.",
+  "Y RECUERDA:",
+  "SI TE SALE LA TIENDA PIRATA,",
+  "TODO LO QUE CUESTA PAVOS EN",
+  "LA TIENDA ES GRATIS POR 14",
+  "DÍAS.",
+  "¿Y QUÉ SE QUEDA MÁS TIEMPO?",
+  "TODO ESTO SIGUE EN DICIEMBRE.",
+  "OVERWATCH,",
+  "CON WIDOWMAKER Y KIRIKO,",
+  "SE QUEDA HASTA EL 4 DE",
+  "DICIEMBRE.",
+  "LO DE ONE PIECE,",
+  "CON LUFFY,",
+  "NAMI,",
+  "USOPP,",
+  "ZORO,",
+  "SANJI Y BUGGY,",
+  "HASTA EL 5 DE DICIEMBRE.",
+  "EL LOTE A$AP ROCKY,",
+  "QUE SIGUE SIENDO LA MEJOR OFERTA",
+  "DE TODA LA TIENDA,",
+  "HASTA EL 6 DE DICIEMBRE.",
+  "¡AHÍ TE AHORRAS 5600 PAVOS!",
+  "LOS ATUENDOS DE LIL UZI VERT,",
+  "HASTA EL 12 DE DICIEMBRE.",
+  "Y LA CAPITANA HATSUNE MIKU,",
+  "HASTA EL 14 DE DICIEMBRE.",
+  "¿QUÉ TE LLEVARÍAS TÚ DE LA",
+  "TIENDA DE ESTA SEMANA?",
+  "¡CUÉNTAME EN LOS COMENTARIOS!",
+  "¡GRACIAS POR VER!",
+  "SÍGUENOS PARA MÁS CONTENIDO DIARIO.",
+  "LA TIENDITA BAD",
+  "#EPICPARTNER"
+ ]
+}
