@@ -1,0 +1,116 @@
+{
+ "duration": 28.7,
+ "caption": "#EpicPartner Tienda de objetos de Fortnite, 23 de noviembre: el Lote Overwatch cuesta 4200 V-Bucks en vez de 8800 (ahorras 4600), Ludwig y Heidi están en la tienda (Capítulo 1, Temporada 6, 850 días sin salir) y 16 skins se van el 23 de noviembre a las 6 PM (CDMX).\n¿Vas a comprar hoy? Usa el código BAD en la tienda de objetos.\n#Fortnite #TiendaFortnite #FortniteTienda",
+ "claims": [
+  {
+   "text": "Lote Overwatch: 4200 V-Bucks, regular 8800",
+   "source": "shop.json",
+   "match": [
+    "Lote Overwatch",
+    "\"finalPrice\": 4200",
+    "\"regularPrice\": 8800"
+   ]
+  },
+  {
+   "text": "Ludwig: Capítulo 1, Temporada 6",
+   "source": "history.json",
+   "match": [
+    "Ludwig",
+    "\"chapter\": 1",
+    "\"season\": 6"
+   ]
+  },
+  {
+   "text": "Heidi: Capítulo 1, Temporada 6",
+   "source": "history.json",
+   "match": [
+    "Heidi",
+    "\"chapter\": 1",
+    "\"season\": 6"
+   ]
+  },
+  {
+   "text": "850 days since last in the shop",
+   "source": "history.json",
+   "match": [
+    "\"gapDays\": 850"
+   ]
+  },
+  {
+   "text": "16 outfits leave at the next reset",
+   "source": "plan.json",
+   "match": [
+    "\"count\": 16"
+   ]
+  }
+ ],
+ "text": [
+  "MERCY",
+  "HEIDI",
+  "FAYE VALENTINE",
+  "OFERTA",
+  "OG",
+  "ÚLTIMO DÍA",
+  "TIENDA DE HOY / 23 NOV",
+  "1 · OFERTA",
+  "D.VA",
+  "TRACER",
+  "GENJI",
+  "4200",
+  "8800",
+  "LOTE OVERWATCH · SE VA EL 4 DIC",
+  "-52% / AHORRAS 4600",
+  "2 · REGRESO OG",
+  "LUDWIG",
+  "CAPÍTULO 1 · TEMPORADA 6",
+  "¡LUDWIG: 850 DÍAS!",
+  "3 · ÚLTIMO DÍA",
+  "FELINA",
+  "MORDECAI",
+  "SINVERGÜENZA",
+  "SKIPS",
+  "SPIKE SPIEGEL",
+  "+10 MÁS",
+  "SE VAN EL 23 NOV, 6 PM",
+  "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+  "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+  "ESTA ES LA",
+  "TIENDA DE OBJETOS",
+  "DE HOY,",
+  "23 DE NOVIEMBRE.",
+  "¡TRES COSAS ANTES",
+  "DE GASTAR UN",
+  "SOLO PAVO!",
+  "EL LOTE OVERWATCH:",
+  "4200 PAVOS,",
+  "EN VEZ DE",
+  "8800.",
+  "¡TE AHORRAS 4600!",
+  "LUDWIG Y HEIDI",
+  "ESTÁN EN LA",
+  "TIENDA.",
+  "LAS DOS SON",
+  "DEL CAPÍTULO 1,",
+  "TEMPORADA 6,",
+  "Y LUDWIG NO",
+  "SALÍA DESDE HACE",
+  "850 DÍAS.",
+  "Y 16 SKINS",
+  "ESTÁN EN SU",
+  "ÚLTIMO DÍA,",
+  "NUEVE DE ELLAS",
+  "ÉPICAS.",
+  "¿VAS A COMPRAR",
+  "ALGO HOY?",
+  "USA EL CÓDIGO",
+  "BAD EN LA",
+  "TIENDA DE OBJETOS.",
+  "LE AYUDA MUCHÍSIMO",
+  "AL CANAL.",
+  "¡GRACIAS POR VER!",
+  "SÍGUENOS PARA MÁS",
+  "CONTENIDO DIARIO.",
+  "#EPICPARTNER",
+  "LA TIENDITA BAD"
+ ]
+}

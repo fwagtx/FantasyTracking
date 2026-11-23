@@ -1,0 +1,181 @@
+{
+ "date": "2026-11-23",
+ "dateLabel": "23 NOV",
+ "dateLong": "23 de noviembre",
+ "resetLabel": "6 PM",
+ "resetZone": "CDMX",
+ "dealOutLabel": "4 DIC",
+ "dealOutTime": "6 PM",
+ "deal": {
+  "name": "Lote Overwatch",
+  "final": 4200,
+  "regular": 8800,
+  "out": "2026-12-04T23:59:59.999Z",
+  "outfits": [
+   {
+    "id": "Character_TrackWaver",
+    "name": "Mercy",
+    "rarity": "Leyendas de videojuegos",
+    "rarityKey": "gaminglegends",
+    "series": "Leyendas de videojuegos",
+    "img": "https://fortnite-api.com/images/cosmetics/br/character_trackwaver/featured.png",
+    "price": null,
+    "out": null
+   },
+   {
+    "id": "Character_SkiffGrind",
+    "name": "D.Va",
+    "rarity": "Leyendas de videojuegos",
+    "rarityKey": "gaminglegends",
+    "series": "Leyendas de videojuegos",
+    "img": "https://fortnite-api.com/images/cosmetics/br/character_skiffgrind/featured.png",
+    "price": null,
+    "out": null
+   },
+   {
+    "id": "Character_LooseCreep",
+    "name": "Tracer",
+    "rarity": "Leyendas de videojuegos",
+    "rarityKey": "gaminglegends",
+    "series": "Leyendas de videojuegos",
+    "img": "https://fortnite-api.com/images/cosmetics/br/character_loosecreep/featured.png",
+    "price": null,
+    "out": null
+   },
+   {
+    "id": "Character_FacetBlom",
+    "name": "Genji",
+    "rarity": "Leyendas de videojuegos",
+    "rarityKey": "gaminglegends",
+    "series": "Leyendas de videojuegos",
+    "img": "https://fortnite-api.com/images/cosmetics/br/character_facetblom/featured.png",
+    "price": null,
+    "out": null
+   }
+  ],
+  "saving": 4600,
+  "pct": 52
+ },
+ "dealBest": false,
+ "og": {
+  "chapter": 1,
+  "season": 6,
+  "gapDays": 850,
+  "gapName": "Ludwig",
+  "outfits": [
+   {
+    "id": "CID_225_Athena_Commando_M_Octoberfest",
+    "name": "Ludwig",
+    "rarity": "Épico",
+    "rarityKey": "epic",
+    "series": null,
+    "img": "https://fortnite-api.com/images/cosmetics/br/cid_225_athena_commando_m_octoberfest/featured.png",
+    "price": 1500,
+    "out": "2026-11-30",
+    "gapDays": 850
+   },
+   {
+    "id": "CID_226_Athena_Commando_F_Octoberfest",
+    "name": "Heidi",
+    "rarity": "Épico",
+    "rarityKey": "epic",
+    "series": null,
+    "img": "https://fortnite-api.com/images/cosmetics/br/cid_226_athena_commando_f_octoberfest/featured.png",
+    "price": 1500,
+    "out": "2026-11-30",
+    "gapDays": 153
+   }
+  ]
+ },
+ "last": {
+  "count": 16,
+  "outfits": [
+   {
+    "id": "Character_KneeLens",
+    "name": "Faye Valentine",
+    "rarity": "Épico",
+    "rarityKey": "epic",
+    "series": null,
+    "img": "https://fortnite-api.com/images/cosmetics/br/character_kneelens/featured.png",
+    "price": 1500,
+    "out": "2026-11-23"
+   },
+   {
+    "id": "Character_RankedScythe",
+    "name": "Felina",
+    "rarity": "Épico",
+    "rarityKey": "epic",
+    "series": null,
+    "img": "https://fortnite-api.com/images/cosmetics/br/character_rankedscythe/featured.png",
+    "price": 1500,
+    "out": "2026-11-23"
+   },
+   {
+    "id": "Character_VouchTrig",
+    "name": "Mordecai",
+    "rarity": "Épico",
+    "rarityKey": "epic",
+    "series": null,
+    "img": "https://fortnite-api.com/images/cosmetics/br/character_vouchtrig/featured.png",
+    "price": 1500,
+    "out": null
+   },
+   {
+    "id": "CID_134_Athena_Commando_M_Jailbird",
+    "name": "Sinvergüenza",
+    "rarity": "Épico",
+    "rarityKey": "epic",
+    "series": null,
+    "img": "https://fortnite-api.com/images/cosmetics/br/cid_134_athena_commando_m_jailbird/featured.png",
+    "price": 1500,
+    "out": "2026-11-23"
+   },
+   {
+    "id": "Character_RobustTorn",
+    "name": "Skips",
+    "rarity": "Épico",
+    "rarityKey": "epic",
+    "series": null,
+    "img": "https://fortnite-api.com/images/cosmetics/br/character_robusttorn/featured.png",
+    "price": 1500,
+    "out": null
+   },
+   {
+    "id": "Character_StudyBench",
+    "name": "Spike Spiegel",
+    "rarity": "Épico",
+    "rarityKey": "epic",
+    "series": null,
+    "img": "https://fortnite-api.com/images/cosmetics/br/character_studybench/featured.png",
+    "price": 1500,
+    "out": "2026-11-23"
+   }
+  ]
+ },
+ "roles": [
+  "intro",
+  "hook",
+  "deal_name",
+  "deal_price",
+  "saving",
+  "og_name",
+  "og_era",
+  "last",
+  "ask",
+  "code",
+  "thanks"
+ ],
+ "phrases": [
+  "Esta es la tienda de objetos de hoy, 23 de noviembre.",
+  "¡Tres cosas antes de gastar un solo pavo!",
+  "El Lote Overwatch:",
+  "4200 pavos, en vez de 8800.",
+  "¡Te ahorras 4600!",
+  "Ludwig y Heidi están en la tienda.",
+  "Las dos son del Capítulo 1, Temporada 6, y Ludwig no salía desde hace 850 días.",
+  "Y 16 skins están en su último día, nueve de ellas épicas.",
+  "¿Vas a comprar algo hoy?",
+  "Usa el código BAD en la tienda de objetos. Le ayuda muchísimo al canal.",
+  "¡Gracias por ver! Síguenos para más contenido diario."
+ ]
+}
