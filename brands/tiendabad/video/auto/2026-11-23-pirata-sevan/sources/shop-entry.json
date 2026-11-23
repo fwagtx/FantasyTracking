@@ -1,0 +1,394 @@
+{
+ "date": "2026-11-23T00:00:00Z",
+ "entries": [
+  {
+   "regularPrice": 6600,
+   "finalPrice": 3400,
+   "devName": "[VIRTUAL]1 x Faye Valentine, 1 x Spike Spiegel, 1 x Jukebox Bop, 1 x Lil' Swordfish II, 1 x Red Tail Reaver, 1 x Swordfish II Slasher, 1 x Multi-Purpose Phone, 1 x Roses For Julia, 1 x Valentine Blue for -1 MtxCurrency",
+   "offerId": "v2:/d1457119b8331bbe79b21eca7033b036cf4ca7076cfa1f22985b279a5d12f715",
+   "inDate": "2026-11-20T00:00:00Z",
+   "outDate": "2026-11-23T23:59:59.999Z",
+   "bundle": {
+    "name": "Lote Cowboy Bebop",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/68e33d6957e3dba5/renderimage_0.png"
+   },
+   "banner": {
+    "value": "3200 monedas V de descuento",
+    "intensity": "Low",
+    "backendValue": "AmountOff"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -1,
+   "layoutId": "CowboyBebop.99",
+   "layout": {
+    "id": "CowboyBebop",
+    "name": "Cowboy Bebop",
+    "index": 25,
+    "rank": 185,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "6e03d8ff",
+    "color2": "fee1faff",
+    "color3": "faadffff",
+    "textBackgroundColor": "8235dcff"
+   },
+   "tileBackgroundMaterial": "ShopTile_SketchedBorder",
+   "tileSize": "Size_2_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_KneeLensStudyBench_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S34/DAv2_Bundle_Featured_KneeLensStudyBench",
+   "newDisplayAsset": {
+    "id": "DAv2_Bundle_Featured_KneeLensStudyBench",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__68e33d6957e3dba5_a2efafbd47dd28ea.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/68e33d6957e3dba5/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__68e33d6957e3dba5_40aa49c89b2ec469.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/68e33d6957e3dba5/renderimage_1.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Character_KneeLens",
+     "name": "Faye Valentine",
+     "description": "Una cazarrecompensas con un pasado olvidado que adora los juegos de azar.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "Cowboy Bebop",
+      "text": "Pieza del conjunto Cowboy Bebop.",
+      "backendValue": "AnotherMeeting"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "2",
+      "text": "Introducido en Capítulo 6, Temporada 2.",
+      "backendValue": 34
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_kneelens/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_kneelens/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_kneelens/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Material",
+       "type": "gafas",
+       "options": [
+        {
+         "tag": "Mat1",
+         "name": "no",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_kneelens/variants/material/mat1.png"
+        },
+        {
+         "tag": "Mat2",
+         "name": "Sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_kneelens/variants/material/mat2.png"
+        }
+       ]
+      }
+     ],
+     "showcaseVideo": "gYa2KW0kOOg",
+     "added": "2025-02-27T00:00:00Z"
+    },
+    {
+     "id": "Character_StudyBench",
+     "name": "Spike Spiegel",
+     "description": "Un cazarrecompensas abordo de la Bebop y un experto en jeet kune do.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "Cowboy Bebop",
+      "text": "Pieza del conjunto Cowboy Bebop.",
+      "backendValue": "AnotherMeeting"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "2",
+      "text": "Introducido en Capítulo 6, Temporada 2.",
+      "backendValue": 34
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_studybench/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_studybench/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_studybench/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Material",
+       "type": "Gafas",
+       "options": [
+        {
+         "tag": "Mat1",
+         "name": "No",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_studybench/variants/material/mat1.png"
+        },
+        {
+         "tag": "Mat2",
+         "name": "Sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_studybench/variants/material/mat2.png"
+        }
+       ]
+      }
+     ],
+     "showcaseVideo": "KA_iT8SMHkI",
+     "added": "2025-02-27T00:00:00Z"
+    },
+    {
+     "id": "EID_KneeLens",
+     "name": "Ritmo Bop",
+     "description": "Disfruta de la música antes de abandonar la escena.",
+     "type": {
+      "value": "emote",
+      "displayValue": "Gesto",
+      "backendValue": "AthenaDance"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "Cowboy Bebop",
+      "text": "Pieza del conjunto Cowboy Bebop.",
+      "backendValue": "AnotherMeeting"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "2",
+      "text": "Introducido en Capítulo 6, Temporada 2.",
+      "backendValue": 34
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/eid_kneelens/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/eid_kneelens/icon.png"
+     },
+     "showcaseVideo": "V0Zq9KV0Q4Q",
+     "added": "2025-02-27T00:00:00Z"
+    },
+    {
+     "id": "EID_StudyBench",
+     "name": "Mini-Swordfish II",
+     "description": "Rediseñado para un minidespliegue.",
+     "type": {
+      "value": "emote",
+      "displayValue": "Gesto",
+      "backendValue": "AthenaDance"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "Cowboy Bebop",
+      "text": "Pieza del conjunto Cowboy Bebop.",
+      "backendValue": "AnotherMeeting"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "2",
+      "text": "Introducido en Capítulo 6, Temporada 2.",
+      "backendValue": 34
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/eid_studybench/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/eid_studybench/icon.png"
+     },
+     "showcaseVideo": "OZccERdY9Kc",
+     "added": "2025-02-27T00:00:00Z"
+    },
+    {
+     "id": "Pickaxe_KneeLens",
+     "name": "Mazo de la Red Tail",
+     "description": "Una réplica de la nave personal de Faye, diseñada para el combate cuerpo a cuerpo.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Cowboy Bebop",
+      "text": "Pieza del conjunto Cowboy Bebop.",
+      "backendValue": "AnotherMeeting"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "2",
+      "text": "Introducido en Capítulo 6, Temporada 2.",
+      "backendValue": 34
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_kneelens/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_kneelens/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_kneelens/featured.png"
+     },
+     "showcaseVideo": "krjZuBN2Rd8",
+     "added": "2025-02-27T00:00:00Z"
+    },
+    {
+     "id": "Pickaxe_StudyBench",
+     "name": "Segador de la Swordfish II",
+     "description": "Una réplica de la nave favorita de Spike, reconstruida para el combate cuerpo a cuerpo.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Cowboy Bebop",
+      "text": "Pieza del conjunto Cowboy Bebop.",
+      "backendValue": "AnotherMeeting"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "2",
+      "text": "Introducido en Capítulo 6, Temporada 2.",
+      "backendValue": 34
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_studybench/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_studybench/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_studybench/featured.png"
+     },
+     "showcaseVideo": "5FrkWvNs0OY",
+     "added": "2025-02-27T00:00:00Z"
+    },
+    {
+     "id": "Backpack_KneeLens",
+     "name": "Teléfono multiusos",
+     "description": "Un teléfono que conecta con la tripulación de la Bebop.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Cowboy Bebop",
+      "text": "Pieza del conjunto Cowboy Bebop.",
+      "backendValue": "AnotherMeeting"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "2",
+      "text": "Introducido en Capítulo 6, Temporada 2.",
+      "backendValue": 34
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_kneelens/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_kneelens/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_kneelens/featured.png"
+     },
+     "added": "2025-02-27T00:00:00Z"
+    },
+    {
+     "id": "Backpack_StudyBench",
+     "name": "Rosas para Julia",
+     "description": "Despídete con flores.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Cowboy Bebop",
+      "text": "Pieza del conjunto Cowboy Bebop.",
+      "backendValue": "AnotherMeeting"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "2",
+      "text": "Introducido en Capítulo 6, Temporada 2.",
+      "backendValue": 34
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_studybench/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_studybench/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_studybench/featured.png"
+     },
+     "showcaseVideo": "ruLT1R_m80Y",
+     "added": "2025-02-27T00:00:00Z"
+    },
+    {
+     "id": "Wrap_KneeLens",
+     "name": "Azul Valentine",
+     "description": "Muestra tu estilo.",
+     "type": {
+      "value": "wrap",
+      "displayValue": "Papel",
+      "backendValue": "AthenaItemWrap"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Cowboy Bebop",
+      "text": "Pieza del conjunto Cowboy Bebop.",
+      "backendValue": "AnotherMeeting"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "2",
+      "text": "Introducido en Capítulo 6, Temporada 2.",
+      "backendValue": 34
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/wrap_kneelens/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/wrap_kneelens/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/wrap_kneelens/featured.png"
+     },
+     "showcaseVideo": "EJ4IqM4cIjg",
+     "added": "2025-02-27T00:00:00Z"
+    }
+   ]
+  }
+ ]
+}
