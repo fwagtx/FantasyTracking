@@ -1,0 +1,23 @@
+{
+ "via": "fortnite-api.com (mirror of Epic's cosmetics data, es-419)",
+ "files": [
+  {
+   "file": "Character_AccentWall.json",
+   "source": "Epic cosmetics data for Davy Jones (es-419)",
+   "url": "https://fortnite-api.com/v2/cosmetics/br/Character_AccentWall?language=es-419",
+   "fetched_utc": "2026-11-23T17:12:26Z"
+  },
+  {
+   "file": "CID_355_Athena_Commando_M_Farmer.json",
+   "source": "Epic cosmetics data for Pueblerino (es-419)",
+   "url": "https://fortnite-api.com/v2/cosmetics/br/CID_355_Athena_Commando_M_Farmer?language=es-419",
+   "fetched_utc": "2026-11-23T17:12:26Z"
+  },
+  {
+   "file": "Character_TrackWaver.json",
+   "source": "Epic cosmetics data for Mercy (es-419)",
+   "url": "https://fortnite-api.com/v2/cosmetics/br/Character_TrackWaver?language=es-419",
+   "fetched_utc": "2026-11-23T17:12:26Z"
+  }
+ ]
+}
