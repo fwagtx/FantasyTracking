@@ -585,6 +585,19 @@
    "format": "LONG",
    "topic": "La tienda de la semana (23 nov): lo que llegó el 23 (Piratas del Caribe con Jack Sparrow, Phineas y Ferb, Ludwig y Heidi, Botín de la cosecha) y en la semana (Gorillaz, Overwatch, Widowmaker y Kiriko por primera vez, Crash y Spyro, Rubius y Lachlan, Ice Spice, Kim Kardashian, The Kid LAROI), top 5 de ahorro en lo nuevo de la semana, top 5 regresos más esperados (The Kid LAROI 1087 días, Ludwig 850, Hombre diana 764, Brigada marcada 637, Prodigio del pop 581; Baba Yaga 406), lo que se va y lo que se queda hasta diciembre",
    "folder": "video/long/2026-11-23-tienda-semana"
+  },
+  {
+   "date": "2026-11-30",
+   "slot": "20:30",
+   "format": "Adivina la temporada",
+   "topic": "Davy Jones (C5 T3), Pueblerino (C1 T8), Mercy (C7 T2)",
+   "folder": "video/auto/2026-11-30-adivina-temporada",
+   "ids": [
+    "Character_AccentWall",
+    "CID_355_Athena_Commando_M_Farmer",
+    "Character_TrackWaver"
+   ],
+   "note": "Every map place has had its '¿Dónde está?', so this 8:30 PM slot got the other evergreen format again; whether to repeat places instead is still a question for the owner. None of the three had its season said in the Nov 23 shop or long videos."
   }
  ]
 }
