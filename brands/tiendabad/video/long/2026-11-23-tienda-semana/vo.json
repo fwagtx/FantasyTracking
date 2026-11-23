@@ -1,0 +1,264 @@
+{
+ "phrases": [
+  {
+   "text": "¡Esta es la tienda de la semana! Hoy es lunes 23 de noviembre, y te cuento todo lo que pasó en la tienda de objetos de Fortnite.",
+   "pause": 0.4
+  },
+  {
+   "text": "Lo que llegó, las mejores ofertas, los regresos más esperados y lo que se va pronto.",
+   "pause": 0.4
+  },
+  {
+   "text": "Y quédate hasta el final, porque te digo qué se queda en la tienda hasta diciembre.",
+   "pause": 0.4
+  },
+  {
+   "text": "Empecemos con lo que llegó hoy, 23 de noviembre: ¡llegaron los Piratas del Caribe!",
+   "pause": 0.4
+  },
+  {
+   "text": "Jack Sparrow y Jack Sparrow maldito cuestan 1500 pavos cada uno, y el Lote Jack Sparrow trae los dos por 2000 en vez de 3000.",
+   "pause": 0.4,
+   "say": "Yak Spárrou y Yak Spárrou maldito cuestan 1500 pavos cada uno, y el Lote Yak Spárrou trae los dos por 2000 en vez de 3000."
+  },
+  {
+   "text": "El Lote Piratas del Caribe trae a Davy Jones, Elizabeth Swann y el Capitán Barbosa, por 3400 pavos en vez de 5200.",
+   "pause": 0.4,
+   "say": "El Lote Piratas del Caribe trae a Déivi Yons, Elísabet Suan y el Capitán Barbosa, por 3400 pavos en vez de 5200."
+  },
+  {
+   "text": "Los cinco no salían desde el 29 de septiembre, y se van el 26 de noviembre.",
+   "pause": 0.4
+  },
+  {
+   "text": "También regresó Phineas y Ferb: Perry musculoso y el Dr. Doofenshmirtz, a 1500 pavos cada uno.",
+   "pause": 0.4,
+   "say": "También regresó Fíneas y Ferb: Perry musculoso y el Doctor Dúfenshmirtz, a 1500 pavos cada uno."
+  },
+  {
+   "text": "Su lote trae a los dos, con mochilas, picos y más, por 3200 pavos en vez de 6400. ¡La mitad!",
+   "pause": 0.4
+  },
+  {
+   "text": "Y del Oktoberfest regresaron Ludwig y Heidi, del Capítulo 1, Temporada 6, a 1500 pavos cada uno.",
+   "pause": 0.4,
+   "say": "Y del Oktoberfest regresaron Lúdvig y Jáidi, del Capítulo 1, Temporada 6, a 1500 pavos cada uno."
+  },
+  {
+   "text": "Ludwig llevaba muchísimo tiempo sin salir. Más adelante te digo cuánto.",
+   "pause": 0.4,
+   "say": "Lúdvig llevaba muchísimo tiempo sin salir. Más adelante te digo cuánto."
+  },
+  {
+   "text": "Y llegó el Lote Botín de la cosecha, con Hojaldre hendido y Mazorquín, por 2000 pavos en vez de 4000.",
+   "pause": 0.4
+  },
+  {
+   "text": "Ludwig, Heidi y la cosecha se quedan hasta el 30 de noviembre.",
+   "pause": 0.4,
+   "say": "Lúdvig, Jáidi y la cosecha se quedan hasta el 30 de noviembre."
+  },
+  {
+   "text": "Pero eso no es todo: esta semana llegaron más cosas que siguen en la tienda.",
+   "pause": 0.4
+  },
+  {
+   "text": "El 22 de noviembre regresó Gorillaz: Noodle, 2D, Murdoc y Russel, a 1500 pavos cada uno.",
+   "pause": 0.4,
+   "say": "El 22 de noviembre regresó Gorílas: Núdel, Tu Di, Múrdoc y Rásel, a 1500 pavos cada uno."
+  },
+  {
+   "text": "El Lote Noodle y 2D cuesta 2600 pavos en vez de 7300, pero se va mañana, 24 de noviembre.",
+   "pause": 0.4,
+   "say": "El Lote Núdel y Tu Di cuesta 2600 pavos en vez de 7300, pero se va mañana, 24 de noviembre."
+  },
+  {
+   "text": "Ese mismo día regresó Overwatch: Mercy, D.Va, Tracer y Genji, a 1600 pavos cada uno.",
+   "pause": 0.4,
+   "say": "Ese mismo día regresó Óverguach: Mercy, Di Va, Tréiser y Yen yi, a 1600 pavos cada uno."
+  },
+  {
+   "text": "El Lote Overwatch trae a los cuatro por 4200 pavos en vez de 8800.",
+   "pause": 0.4,
+   "say": "El Lote Óverguach trae a los cuatro por 4200 pavos en vez de 8800."
+  },
+  {
+   "text": "Y un día antes, el 21, llegaron por primera vez a la tienda Widowmaker y Kiriko, a 1600 cada una.",
+   "pause": 0.4,
+   "say": "Y un día antes, el 21, llegaron por primera vez a la tienda Uídou Méiker y Kiriko, a 1600 cada una."
+  },
+  {
+   "text": "Juntas cuestan 2400 pavos en vez de 5000, y todo lo de Overwatch se queda hasta el 4 de diciembre.",
+   "pause": 0.4,
+   "say": "Juntas cuestan 2400 pavos en vez de 5000, y todo lo de Óverguach se queda hasta el 4 de diciembre."
+  },
+  {
+   "text": "El 22 también regresó Crash Bandicoot, por 1500 pavos, y su lote, con Spyro the Dragon como compañero, cuesta 3000 en vez de 4900.",
+   "pause": 0.4,
+   "say": "El 22 también regresó Crash Bándicut, por 1500 pavos, y su lote, con Spáiro de Drágon como compañero, cuesta 3000 en vez de 4900."
+  },
+  {
+   "text": "Rubius y Lachlan también llegaron el 22, a 1500 pavos cada uno, pero se van mañana.",
+   "pause": 0.4,
+   "say": "Rubius y Láclan también llegaron el 22, a 1500 pavos cada uno, pero se van mañana."
+  },
+  {
+   "text": "El 21 regresó Ice Spice: su lote, con sus dos atuendos, cuesta 2800 pavos en vez de 4800.",
+   "pause": 0.4,
+   "say": "El 21 regresó Ais Spais: su lote, con sus dos atuendos, cuesta 2800 pavos en vez de 4800."
+  },
+  {
+   "text": "Y el 20 llegaron Kim Kardashian, con su lote de 3000 pavos en vez de 5900, y The Kid LAROI, por 1500.",
+   "pause": 0.4,
+   "say": "Y el 20 llegaron Kim Kardashian, con su lote de 3000 pavos en vez de 5900, y De Kid La Rói, por 1500."
+  },
+  {
+   "text": "Ahora sí: las 5 mejores ofertas que llegaron esta semana, por lo que te ahorras.",
+   "pause": 0.4
+  },
+  {
+   "text": "Número 5: el Lote Kim Kardashian. Te ahorras 2900 pavos.",
+   "pause": 0.4
+  },
+  {
+   "text": "Números 4 y 3, empatados: el Lote Phineas y Ferb y el Lote Cowboy Bebop. En los dos te ahorras 3200, pero el de Cowboy Bebop se va hoy.",
+   "pause": 0.4,
+   "say": "Números 4 y 3, empatados: el Lote Fíneas y Ferb y el Lote Cáuboi Bíbop. En los dos te ahorras 3200, pero el de Cáuboi Bíbop se va hoy."
+  },
+  {
+   "text": "Número 2: el Lote Overwatch, con Mercy, D.Va, Tracer y Genji, por 4200 pavos en vez de 8800. Te ahorras 4600.",
+   "pause": 0.4,
+   "say": "Número 2: el Lote Óverguach, con Mercy, Di Va, Tréiser y Yen yi, por 4200 pavos en vez de 8800. Te ahorras 4600."
+  },
+  {
+   "text": "¿Y el número 1?",
+   "pause": 0.4
+  },
+  {
+   "text": "¡El Lote Noodle y 2D, de Gorillaz! Trae a Noodle y a 2D por 2600 pavos en vez de 7300.",
+   "pause": 0.4,
+   "say": "¡El Lote Núdel y Tu Di, de Gorílas! Trae a Núdel y a Tu Di por 2600 pavos en vez de 7300."
+  },
+  {
+   "text": "¡Te ahorras 4700 pavos! Pero se va mañana, así que no lo dejes para después.",
+   "pause": 0.4
+  },
+  {
+   "text": "Por cierto, si este resumen te está sirviendo, usa el código BAD en la tienda de objetos. Le ayuda muchísimo al canal.",
+   "pause": 0.4,
+   "say": "Por cierto, si este resumen te está sirviendo, usa el código bad, en la tienda de objetos. Le ayuda muchísimo al canal."
+  },
+  {
+   "text": "Ahora, los 5 regresos más esperados de la semana: las skins que más tiempo llevaban sin salir.",
+   "pause": 0.4
+  },
+  {
+   "text": "Número 5: Prodigio del pop, del Capítulo 2, Temporada 7. Regresó el 17 de noviembre, después de 581 días.",
+   "pause": 0.4
+  },
+  {
+   "text": "Número 4: Brigada marcada, del Capítulo 1, Temporada 9, también el 17, después de 637 días. Y ojo: las dos se van hoy.",
+   "pause": 0.4
+  },
+  {
+   "text": "Número 3: Hombre diana, del Capítulo 2, Temporada 2. Volvió el 17 después de 764 días, pero solo por un día.",
+   "pause": 0.4
+  },
+  {
+   "text": "Número 2: Ludwig, del Capítulo 1, Temporada 6. No salía desde el 26 de julio de 2024: ¡850 días!",
+   "pause": 0.4,
+   "say": "Número 2: Lúdvig, del Capítulo 1, Temporada 6. No salía desde el 26 de julio de 2024: ¡850 días!"
+  },
+  {
+   "text": "¿Y el número 1?",
+   "pause": 0.4
+  },
+  {
+   "text": "¡The Kid LAROI! Sus dos atuendos regresaron el 20 de noviembre, después de 1087 días. ¡Casi tres años!",
+   "pause": 0.4,
+   "say": "¡De Kid La Rói! Sus dos atuendos regresaron el 20 de noviembre, después de 1087 días. ¡Casi tres años!"
+  },
+  {
+   "text": "Su lote cuesta 2400 pavos en vez de 4000, y se queda hasta el 26 de noviembre.",
+   "pause": 0.4
+  },
+  {
+   "text": "Y una mención especial: Baba Yaga también volvió hoy, después de 406 días, y se queda hasta el 30.",
+   "pause": 0.4
+  },
+  {
+   "text": "Y si quieres algo que se va, apúrate: hoy, 23 de noviembre, a las 6 de la tarde, hora de la Ciudad de México, se van 16 skins.",
+   "pause": 0.4
+  },
+  {
+   "text": "Entre ellas, Faye Valentine y Spike Spiegel, de Cowboy Bebop, Mordecai y Skips, de Un Show Más, y Sinvergüenza.",
+   "pause": 0.4,
+   "say": "Entre ellas, Féi Válentain y Spáik Spíguel, de Cáuboi Bíbop, Mórdecai y Skips, de Un Show Más, y Sinvergüenza."
+  },
+  {
+   "text": "Mañana, 24 de noviembre, se van Gorillaz, Kim Kardashian, Ice Spice, Rubius y Lachlan.",
+   "pause": 0.4,
+   "say": "Mañana, 24 de noviembre, se van Gorílas, Kim Kardashian, Ais Spais, Rubius y Láclan."
+  },
+  {
+   "text": "El 26 se van los Piratas del Caribe, Phineas y Ferb, Crash Bandicoot y The Kid LAROI.",
+   "pause": 0.4,
+   "say": "El 26 se van los Piratas del Caribe, Fíneas y Ferb, Crash Bándicut y De Kid La Rói."
+  },
+  {
+   "text": "Y el 30, Ludwig, Heidi, Baba Yaga y la cosecha.",
+   "pause": 0.4,
+   "say": "Y el 30, Lúdvig, Jáidi, Baba Yaga y la cosecha."
+  },
+  {
+   "text": "Y recuerda: si te sale la Tienda Pirata, todo lo que cuesta pavos en la tienda es gratis por 14 días.",
+   "pause": 0.4
+  },
+  {
+   "text": "¿Y qué se queda más tiempo? Todo esto sigue en diciembre.",
+   "pause": 0.4
+  },
+  {
+   "text": "Overwatch, con Widowmaker y Kiriko, se queda hasta el 4 de diciembre.",
+   "pause": 0.4,
+   "say": "Óverguach, con Uídou Méiker y Kiriko, se queda hasta el 4 de diciembre."
+  },
+  {
+   "text": "Lo de One Piece, con Luffy, Nami, Usopp, Zoro, Sanji y Buggy, hasta el 5 de diciembre.",
+   "pause": 0.4,
+   "say": "Lo de Uan Pis, con Lufi, Nami, Usopp, Zoro, San yi y Bugui, hasta el 5 de diciembre."
+  },
+  {
+   "text": "El Lote A$AP Rocky, que sigue siendo la mejor oferta de toda la tienda, hasta el 6 de diciembre. ¡Ahí te ahorras 5600 pavos!",
+   "pause": 0.4,
+   "say": "El Lote Éisap Róqui, que sigue siendo la mejor oferta de toda la tienda, hasta el 6 de diciembre. ¡Ahí te ahorras 5600 pavos!"
+  },
+  {
+   "text": "Los atuendos de Lil Uzi Vert, hasta el 12 de diciembre.",
+   "pause": 0.4
+  },
+  {
+   "text": "Y la Capitana Hatsune Miku, hasta el 14 de diciembre.",
+   "pause": 0.4,
+   "say": "Y la Capitana Jatsune Miku, hasta el 14 de diciembre."
+  },
+  {
+   "text": "¿Qué te llevarías tú de la tienda de esta semana? ¡Cuéntame en los comentarios!",
+   "pause": 0.4
+  },
+  {
+   "text": "Usa el código BAD en la tienda de objetos. Le ayuda muchísimo al canal.",
+   "pause": 0.4,
+   "say": "Usa el código bad, en la tienda de objetos. Le ayuda muchísimo al canal."
+  },
+  {
+   "text": "¡Gracias por ver! Síguenos para más contenido diario.",
+   "pause": 0.4
+  }
+ ],
+ "voice": "ef_dora",
+ "speed": 1.2,
+ "lang": "es-419",
+ "lead": 0.2,
+ "mode": "flow"
+}

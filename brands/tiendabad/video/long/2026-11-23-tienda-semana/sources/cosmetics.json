@@ -1,0 +1,4703 @@
+{
+ "Character_BrawnGraze": {
+  "id": "Character_BrawnGraze",
+  "name": "Perry musculoso",
+  "description": "¿Un ornitorrinco? ¡¿Perry el ornitorrinco?!",
+  "type": {
+   "value": "outfit",
+   "displayValue": "Atuendo",
+   "backendValue": "AthenaCharacter"
+  },
+  "rarity": {
+   "value": "epic",
+   "displayValue": "Épico",
+   "backendValue": "EFortRarity::Epic"
+  },
+  "set": {
+   "value": "Phineas y Ferb",
+   "text": "Pieza del conjunto Phineas y Ferb.",
+   "backendValue": "TopCloud"
+  },
+  "introduction": {
+   "chapter": "7",
+   "season": "2",
+   "text": "Introducido en Capítulo 7, Temporada 2.",
+   "backendValue": 40
+  },
+  "images": {
+   "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_brawngraze/smallicon.png",
+   "icon": "https://fortnite-api.com/images/cosmetics/br/character_brawngraze/icon.png",
+   "featured": "https://fortnite-api.com/images/cosmetics/br/character_brawngraze/featured.png",
+   "lego": {
+    "small": "https://fortnite-api.com/images/cosmetics/lego/character_brawngraze/small.png",
+    "large": "https://fortnite-api.com/images/cosmetics/lego/character_brawngraze/large.png",
+    "wide": "https://fortnite-api.com/images/cosmetics/lego/character_brawngraze/wide.png"
+   }
+  },
+  "metaTags": [
+   "Cosmetics.Emote.CharacterGroup.BigHead"
+  ],
+  "showcaseVideo": "KRw7qkDGPSE",
+  "added": "2026-04-02T16:00:41Z",
+  "shopHistory": [
+   "2026-04-05T00:00:00Z",
+   "2026-04-06T00:00:00Z",
+   "2026-04-07T00:00:00Z",
+   "2026-04-08T00:00:00Z",
+   "2026-04-09T00:00:00Z",
+   "2026-04-10T00:00:00Z",
+   "2026-04-11T00:00:00Z",
+   "2026-04-12T00:00:00Z",
+   "2026-04-13T00:00:00Z",
+   "2026-04-14T00:00:00Z",
+   "2026-06-14T00:00:00Z",
+   "2026-06-15T00:00:00Z",
+   "2026-06-16T00:00:00Z",
+   "2026-06-17T00:00:00Z",
+   "2026-11-23T00:00:00Z"
+  ]
+ },
+ "Character_PeaceScarf": {
+  "id": "Character_PeaceScarf",
+  "name": "Dr. Doofenshmirtz",
+  "description": "¡Se va a apoderar de toda el área de Fortnite!",
+  "type": {
+   "value": "outfit",
+   "displayValue": "Atuendo",
+   "backendValue": "AthenaCharacter"
+  },
+  "rarity": {
+   "value": "epic",
+   "displayValue": "Épico",
+   "backendValue": "EFortRarity::Epic"
+  },
+  "set": {
+   "value": "Phineas y Ferb",
+   "text": "Pieza del conjunto Phineas y Ferb.",
+   "backendValue": "TopCloud"
+  },
+  "introduction": {
+   "chapter": "7",
+   "season": "2",
+   "text": "Introducido en Capítulo 7, Temporada 2.",
+   "backendValue": 40
+  },
+  "images": {
+   "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_peacescarf/smallicon.png",
+   "icon": "https://fortnite-api.com/images/cosmetics/br/character_peacescarf/icon.png",
+   "featured": "https://fortnite-api.com/images/cosmetics/br/character_peacescarf/featured.png",
+   "lego": {
+    "small": "https://fortnite-api.com/images/cosmetics/lego/character_peacescarf/small.png",
+    "large": "https://fortnite-api.com/images/cosmetics/lego/character_peacescarf/large.png",
+    "wide": "https://fortnite-api.com/images/cosmetics/lego/character_peacescarf/wide.png"
+   }
+  },
+  "metaTags": [
+   "Cosmetics.MetaTags.Special.AbnormalHead"
+  ],
+  "showcaseVideo": "1qmb1l49Tvc",
+  "added": "2026-04-02T16:00:41Z",
+  "shopHistory": [
+   "2026-04-05T00:00:00Z",
+   "2026-04-06T00:00:00Z",
+   "2026-04-07T00:00:00Z",
+   "2026-04-08T00:00:00Z",
+   "2026-04-09T00:00:00Z",
+   "2026-04-10T00:00:00Z",
+   "2026-04-11T00:00:00Z",
+   "2026-04-12T00:00:00Z",
+   "2026-04-13T00:00:00Z",
+   "2026-04-14T00:00:00Z",
+   "2026-06-14T00:00:00Z",
+   "2026-06-15T00:00:00Z",
+   "2026-06-16T00:00:00Z",
+   "2026-06-17T00:00:00Z",
+   "2026-11-23T00:00:00Z"
+  ]
+ },
+ "Character_RookGeckoRod": {
+  "id": "Character_RookGeckoRod",
+  "name": "Lil Uzi Vert",
+  "description": "Uzi contra la isla.",
+  "type": {
+   "value": "outfit",
+   "displayValue": "Atuendo",
+   "backendValue": "AthenaCharacter"
+  },
+  "rarity": {
+   "value": "icon",
+   "displayValue": "Serie de ídolos",
+   "backendValue": "EFortRarity::Epic"
+  },
+  "series": {
+   "value": "Serie de ídolos",
+   "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+   "colors": [
+    "5cf2f3ff",
+    "2bc9caff",
+    "004c71ff",
+    "025253ff",
+    "000f2bff"
+   ],
+   "backendValue": "CreatorCollabSeries"
+  },
+  "set": {
+   "value": "Lil Uzi Vert",
+   "text": "Pieza del conjunto Lil Uzi Vert.",
+   "backendValue": "TwinWillow"
+  },
+  "introduction": {
+   "chapter": "7",
+   "season": "5",
+   "text": "Introducido en Capítulo 7, Temporada 5.",
+   "backendValue": 43
+  },
+  "images": {
+   "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_rookgeckorod/smallicon.png",
+   "icon": "https://fortnite-api.com/images/cosmetics/br/character_rookgeckorod/icon.png",
+   "featured": "https://fortnite-api.com/images/cosmetics/br/character_rookgeckorod/featured.png"
+  },
+  "variants": [
+   {
+    "channel": "Emissive",
+    "type": "Reactividad",
+    "options": [
+     {
+      "tag": "Emissive0",
+      "name": "Sí",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_rookgeckorod/variants/emissive/emissive0.png"
+     },
+     {
+      "tag": "Emissive1",
+      "name": "No",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_rookgeckorod/variants/emissive/emissive1.png"
+     }
+    ]
+   }
+  ],
+  "showcaseVideo": "gdhv9FOxpFQ",
+  "dynamicPakId": "1041",
+  "added": "2026-11-12T14:00:23Z",
+  "shopHistory": [
+   "2026-11-13T00:00:00Z",
+   "2026-11-14T00:00:00Z",
+   "2026-11-15T00:00:00Z",
+   "2026-11-16T00:00:00Z",
+   "2026-11-17T00:00:00Z",
+   "2026-11-18T00:00:00Z",
+   "2026-11-19T00:00:00Z",
+   "2026-11-20T00:00:00Z",
+   "2026-11-21T00:00:00Z",
+   "2026-11-22T00:00:00Z",
+   "2026-11-23T00:00:00Z"
+  ]
+ },
+ "Character_RookGeckoRye": {
+  "id": "Character_RookGeckoRye",
+  "name": "Lil Uzi Vert de gira",
+  "description": "Un diamante en bruto.",
+  "type": {
+   "value": "outfit",
+   "displayValue": "Atuendo",
+   "backendValue": "AthenaCharacter"
+  },
+  "rarity": {
+   "value": "icon",
+   "displayValue": "Serie de ídolos",
+   "backendValue": "EFortRarity::Epic"
+  },
+  "series": {
+   "value": "Serie de ídolos",
+   "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+   "colors": [
+    "5cf2f3ff",
+    "2bc9caff",
+    "004c71ff",
+    "025253ff",
+    "000f2bff"
+   ],
+   "backendValue": "CreatorCollabSeries"
+  },
+  "set": {
+   "value": "Lil Uzi Vert",
+   "text": "Pieza del conjunto Lil Uzi Vert.",
+   "backendValue": "TwinWillow"
+  },
+  "introduction": {
+   "chapter": "7",
+   "season": "5",
+   "text": "Introducido en Capítulo 7, Temporada 5.",
+   "backendValue": 43
+  },
+  "images": {
+   "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_rookgeckorye/smallicon.png",
+   "icon": "https://fortnite-api.com/images/cosmetics/br/character_rookgeckorye/icon.png",
+   "featured": "https://fortnite-api.com/images/cosmetics/br/character_rookgeckorye/featured.png"
+  },
+  "showcaseVideo": "8rP4Cn3BGbY",
+  "dynamicPakId": "1041",
+  "added": "2026-11-01T23:10:43Z",
+  "shopHistory": [
+   "2026-11-13T00:00:00Z",
+   "2026-11-14T00:00:00Z",
+   "2026-11-15T00:00:00Z",
+   "2026-11-16T00:00:00Z",
+   "2026-11-17T00:00:00Z",
+   "2026-11-18T00:00:00Z",
+   "2026-11-19T00:00:00Z",
+   "2026-11-20T00:00:00Z",
+   "2026-11-21T00:00:00Z",
+   "2026-11-22T00:00:00Z",
+   "2026-11-23T00:00:00Z"
+  ]
+ },
+ "Character_SunBurstAlt": {
+  "id": "Character_SunBurstAlt",
+  "name": "The Rogue LAROI",
+  "description": "De compositor a cazador.",
+  "type": {
+   "value": "outfit",
+   "displayValue": "Atuendo",
+   "backendValue": "AthenaCharacter"
+  },
+  "rarity": {
+   "value": "icon",
+   "displayValue": "Serie de ídolos",
+   "backendValue": "EFortRarity::Epic"
+  },
+  "series": {
+   "value": "Serie de ídolos",
+   "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+   "colors": [
+    "5cf2f3ff",
+    "2bc9caff",
+    "004c71ff",
+    "025253ff",
+    "000f2bff"
+   ],
+   "backendValue": "CreatorCollabSeries"
+  },
+  "set": {
+   "value": "The Kid LAROI",
+   "text": "Pieza del conjunto The Kid LAROI.",
+   "backendValue": "TruthTenant"
+  },
+  "introduction": {
+   "chapter": "4",
+   "season": "1",
+   "text": "Introducido en Capítulo 4, Temporada 1.",
+   "backendValue": 23
+  },
+  "images": {
+   "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_sunburstalt/smallicon.png",
+   "icon": "https://fortnite-api.com/images/cosmetics/br/character_sunburstalt/icon.png",
+   "featured": "https://fortnite-api.com/images/cosmetics/br/character_sunburstalt/featured.png"
+  },
+  "variants": [
+   {
+    "channel": "Parts",
+    "type": "estilo",
+    "options": [
+     {
+      "tag": "Stage1",
+      "name": "The Rogue LAROI",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_sunburstalt/variants/parts/stage1.png"
+     },
+     {
+      "tag": "Stage2",
+      "name": "sin gorro",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_sunburstalt/variants/parts/stage2.png"
+     },
+     {
+      "tag": "Stage3",
+      "name": "Electrificado",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_sunburstalt/variants/parts/stage3.png"
+     },
+     {
+      "tag": "Stage4",
+      "name": "calaveras",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_sunburstalt/variants/parts/stage4.png"
+     }
+    ]
+   }
+  ],
+  "metaTags": [
+   "Cosmetics.MetaTags.Special.Large"
+  ],
+  "showcaseVideo": "PUhNZTzOZbc",
+  "added": "2023-01-23T23:50:35Z",
+  "shopHistory": [
+   "2023-01-27T00:00:00Z",
+   "2023-01-28T00:00:00Z",
+   "2023-01-29T00:00:00Z",
+   "2023-01-30T00:00:00Z",
+   "2023-01-31T00:00:00Z",
+   "2023-02-01T00:00:00Z",
+   "2023-02-02T00:00:00Z",
+   "2023-02-03T00:00:00Z",
+   "2023-02-04T00:00:00Z",
+   "2023-02-05T00:00:00Z",
+   "2023-02-06T00:00:00Z",
+   "2023-02-07T00:00:00Z",
+   "2023-02-08T00:00:00Z",
+   "2023-02-09T00:00:00Z",
+   "2023-02-10T00:00:00Z",
+   "2023-02-11T00:00:00Z",
+   "2023-02-12T00:00:00Z",
+   "2023-02-13T00:00:00Z",
+   "2023-02-14T00:00:00Z",
+   "2023-02-15T00:00:00Z",
+   "2023-02-16T00:00:00Z",
+   "2023-03-14T00:00:00Z",
+   "2023-03-15T00:00:00Z",
+   "2023-03-16T00:00:00Z",
+   "2023-03-17T00:00:00Z",
+   "2023-03-18T00:00:00Z",
+   "2023-03-19T00:00:00Z",
+   "2023-03-20T00:00:00Z",
+   "2023-04-14T00:00:00Z",
+   "2023-04-15T00:00:00Z",
+   "2023-04-16T00:00:00Z",
+   "2023-04-17T00:00:00Z",
+   "2023-04-18T00:00:00Z",
+   "2023-04-19T00:00:00Z",
+   "2023-04-20T00:00:00Z",
+   "2023-04-21T00:00:00Z",
+   "2023-04-22T00:00:00Z",
+   "2023-04-23T00:00:00Z",
+   "2023-04-24T00:00:00Z",
+   "2023-04-25T00:00:00Z",
+   "2023-04-26T00:00:00Z",
+   "2023-04-27T00:00:00Z",
+   "2023-08-03T00:00:00Z",
+   "2023-08-04T00:00:00Z",
+   "2023-08-05T00:00:00Z",
+   "2023-08-06T00:00:00Z",
+   "2023-08-07T00:00:00Z",
+   "2023-08-08T00:00:00Z",
+   "2023-08-09T00:00:00Z",
+   "2023-10-22T00:00:00Z",
+   "2023-10-23T00:00:00Z",
+   "2023-10-24T00:00:00Z",
+   "2023-11-29T00:00:00Z",
+   "2026-11-20T00:00:00Z",
+   "2026-11-21T00:00:00Z",
+   "2026-11-22T00:00:00Z",
+   "2026-11-23T00:00:00Z"
+  ]
+ },
+ "CID_891_Athena_Commando_M_LunchBox": {
+  "id": "CID_891_Athena_Commando_M_LunchBox",
+  "name": "Lachlan",
+  "description": "Jugando para descubrir la grandeza.",
+  "type": {
+   "value": "outfit",
+   "displayValue": "Atuendo",
+   "backendValue": "AthenaCharacter"
+  },
+  "rarity": {
+   "value": "icon",
+   "displayValue": "Serie de ídolos",
+   "backendValue": "EFortRarity::Epic"
+  },
+  "series": {
+   "value": "Serie de ídolos",
+   "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+   "colors": [
+    "5cf2f3ff",
+    "2bc9caff",
+    "004c71ff",
+    "025253ff",
+    "000f2bff"
+   ],
+   "backendValue": "CreatorCollabSeries"
+  },
+  "set": {
+   "value": "PWR",
+   "text": "Pieza del conjunto PWR.",
+   "backendValue": "MoarPower"
+  },
+  "introduction": {
+   "chapter": "2",
+   "season": "4",
+   "text": "Introducido en Capítulo 2, Temporada 4.",
+   "backendValue": 14
+  },
+  "images": {
+   "smallIcon": "https://fortnite-api.com/images/cosmetics/br/cid_891_athena_commando_m_lunchbox/smallicon.png",
+   "icon": "https://fortnite-api.com/images/cosmetics/br/cid_891_athena_commando_m_lunchbox/icon.png",
+   "featured": "https://fortnite-api.com/images/cosmetics/br/cid_891_athena_commando_m_lunchbox/featured.png",
+   "lego": {
+    "small": "https://fortnite-api.com/images/cosmetics/lego/cid_891_athena_commando_m_lunchbox/small.png",
+    "large": "https://fortnite-api.com/images/cosmetics/lego/cid_891_athena_commando_m_lunchbox/large.png",
+    "wide": "https://fortnite-api.com/images/cosmetics/lego/cid_891_athena_commando_m_lunchbox/wide.png"
+   }
+  },
+  "showcaseVideo": "pfBl56ehbfU",
+  "added": "2020-11-13T00:00:00Z",
+  "shopHistory": [
+   "2020-11-13T00:00:00Z",
+   "2020-11-14T00:00:00Z",
+   "2020-11-15T00:00:00Z",
+   "2020-11-16T00:00:00Z",
+   "2020-11-17T00:00:00Z",
+   "2021-03-12T00:00:00Z",
+   "2021-03-13T00:00:00Z",
+   "2021-03-14T00:00:00Z",
+   "2021-03-15T00:00:00Z",
+   "2021-07-26T00:00:00Z",
+   "2021-07-27T00:00:00Z",
+   "2021-07-28T00:00:00Z",
+   "2021-07-29T00:00:00Z",
+   "2021-07-30T00:00:00Z",
+   "2021-07-31T00:00:00Z",
+   "2021-08-01T00:00:00Z",
+   "2022-01-20T00:00:00Z",
+   "2022-01-21T00:00:00Z",
+   "2022-01-22T00:00:00Z",
+   "2022-01-23T00:00:00Z",
+   "2022-01-24T00:00:00Z",
+   "2022-05-11T00:00:00Z",
+   "2022-05-12T00:00:00Z",
+   "2022-05-13T00:00:00Z",
+   "2022-05-14T00:00:00Z",
+   "2022-05-15T00:00:00Z",
+   "2022-05-16T00:00:00Z",
+   "2022-07-07T00:00:00Z",
+   "2022-07-08T00:00:00Z",
+   "2022-07-09T00:00:00Z",
+   "2022-07-10T00:00:00Z",
+   "2022-07-11T00:00:00Z",
+   "2022-09-30T00:00:00Z",
+   "2022-10-01T00:00:00Z",
+   "2022-10-02T00:00:00Z",
+   "2022-12-19T00:00:00Z",
+   "2022-12-20T00:00:00Z",
+   "2022-12-21T00:00:00Z",
+   "2022-12-22T00:00:00Z",
+   "2022-12-23T00:00:00Z",
+   "2022-12-24T00:00:00Z",
+   "2023-02-05T00:00:00Z",
+   "2023-02-06T00:00:00Z",
+   "2023-02-07T00:00:00Z",
+   "2023-02-08T00:00:00Z",
+   "2023-03-04T00:00:00Z",
+   "2023-05-14T00:00:00Z",
+   "2023-05-15T00:00:00Z",
+   "2023-05-16T00:00:00Z",
+   "2023-05-17T00:00:00Z",
+   "2023-05-18T00:00:00Z",
+   "2023-05-19T00:00:00Z",
+   "2023-05-20T00:00:00Z",
+   "2023-07-14T00:00:00Z",
+   "2023-07-15T00:00:00Z",
+   "2023-07-16T00:00:00Z",
+   "2023-07-17T00:00:00Z",
+   "2023-08-16T00:00:00Z",
+   "2023-08-17T00:00:00Z",
+   "2023-08-18T00:00:00Z",
+   "2023-10-10T00:00:00Z",
+   "2023-10-11T00:00:00Z",
+   "2023-10-12T00:00:00Z",
+   "2023-10-13T00:00:00Z",
+   "2023-10-14T00:00:00Z",
+   "2024-01-24T00:00:00Z",
+   "2024-01-31T00:00:00Z",
+   "2024-02-01T00:00:00Z",
+   "2024-02-02T00:00:00Z",
+   "2024-02-03T00:00:00Z",
+   "2024-02-04T00:00:00Z",
+   "2024-02-05T00:00:00Z",
+   "2024-04-29T00:00:00Z",
+   "2024-04-30T00:00:00Z",
+   "2024-05-01T00:00:00Z",
+   "2024-06-17T00:00:00Z",
+   "2024-06-18T00:00:00Z",
+   "2024-06-19T00:00:00Z",
+   "2024-07-25T00:00:00Z",
+   "2024-07-26T00:00:00Z",
+   "2024-07-27T00:00:00Z",
+   "2024-08-23T00:00:00Z",
+   "2024-08-24T00:00:00Z",
+   "2024-08-25T00:00:00Z",
+   "2024-10-08T00:00:00Z",
+   "2024-10-09T00:00:00Z",
+   "2024-10-10T00:00:00Z",
+   "2024-11-25T00:00:00Z",
+   "2024-11-26T00:00:00Z",
+   "2024-11-27T00:00:00Z",
+   "2025-01-08T00:00:00Z",
+   "2025-01-09T00:00:00Z",
+   "2025-02-23T00:00:00Z",
+   "2025-02-24T00:00:00Z",
+   "2025-02-25T00:00:00Z",
+   "2025-07-19T00:00:00Z",
+   "2025-07-20T00:00:00Z",
+   "2025-08-28T00:00:00Z",
+   "2025-08-29T00:00:00Z",
+   "2025-12-08T00:00:00Z",
+   "2025-12-09T00:00:00Z",
+   "2025-12-10T00:00:00Z",
+   "2026-03-31T00:00:00Z",
+   "2026-04-01T00:00:00Z",
+   "2026-04-02T00:00:00Z",
+   "2026-06-17T00:00:00Z",
+   "2026-06-18T00:00:00Z",
+   "2026-06-19T00:00:00Z",
+   "2026-09-08T00:00:00Z",
+   "2026-09-09T00:00:00Z",
+   "2026-09-10T00:00:00Z",
+   "2026-10-07T00:00:00Z",
+   "2026-10-08T00:00:00Z",
+   "2026-10-09T00:00:00Z",
+   "2026-11-22T00:00:00Z",
+   "2026-11-23T00:00:00Z"
+  ]
+ },
+ "Character_TrackWaver": {
+  "id": "Character_TrackWaver",
+  "name": "Mercy",
+  "description": "El ángel de la guarda de Overwatch en el campo de batalla.",
+  "type": {
+   "value": "outfit",
+   "displayValue": "Atuendo",
+   "backendValue": "AthenaCharacter"
+  },
+  "rarity": {
+   "value": "gaminglegends",
+   "displayValue": "Leyendas de videojuegos",
+   "backendValue": "EFortRarity::Epic"
+  },
+  "series": {
+   "value": "Leyendas de videojuegos",
+   "colors": [
+    "8078ffff",
+    "5328d6ff",
+    "3e1398ff",
+    "28085fff",
+    "0d0027ff"
+   ],
+   "backendValue": "PlatformSeries"
+  },
+  "set": {
+   "value": "Overwatch",
+   "text": "Pieza del conjunto Overwatch.",
+   "backendValue": "AlpineSaturn"
+  },
+  "introduction": {
+   "chapter": "7",
+   "season": "2",
+   "text": "Introducido en Capítulo 7, Temporada 2.",
+   "backendValue": 40
+  },
+  "images": {
+   "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_trackwaver/smallicon.png",
+   "icon": "https://fortnite-api.com/images/cosmetics/br/character_trackwaver/icon.png",
+   "featured": "https://fortnite-api.com/images/cosmetics/br/character_trackwaver/featured.png",
+   "lego": {
+    "small": "https://fortnite-api.com/images/cosmetics/lego/character_trackwaver/small.png",
+    "large": "https://fortnite-api.com/images/cosmetics/lego/character_trackwaver/large.png",
+    "wide": "https://fortnite-api.com/images/cosmetics/lego/character_trackwaver/wide.png"
+   }
+  },
+  "variants": [
+   {
+    "channel": "Parts",
+    "type": "estilo",
+    "options": [
+     {
+      "tag": "Stage1",
+      "name": "Mercy",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_trackwaver/variants/parts/stage1.png"
+     },
+     {
+      "tag": "Stage2",
+      "name": "Diabla",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_trackwaver/variants/parts/stage2.png"
+     }
+    ]
+   }
+  ],
+  "showcaseVideo": "--mkpe1Tu9A",
+  "added": "2026-05-14T09:00:00Z",
+  "shopHistory": [
+   "2026-05-14T00:00:00Z",
+   "2026-05-15T00:00:00Z",
+   "2026-05-16T00:00:00Z",
+   "2026-05-17T00:00:00Z",
+   "2026-05-18T00:00:00Z",
+   "2026-05-19T00:00:00Z",
+   "2026-05-20T00:00:00Z",
+   "2026-05-21T00:00:00Z",
+   "2026-05-22T00:00:00Z",
+   "2026-05-23T00:00:00Z",
+   "2026-05-24T00:00:00Z",
+   "2026-05-25T00:00:00Z",
+   "2026-05-26T00:00:00Z",
+   "2026-05-27T00:00:00Z",
+   "2026-05-28T00:00:00Z",
+   "2026-05-29T00:00:00Z",
+   "2026-05-30T00:00:00Z",
+   "2026-05-31T00:00:00Z",
+   "2026-06-01T00:00:00Z",
+   "2026-06-02T00:00:00Z",
+   "2026-06-03T00:00:00Z",
+   "2026-06-04T00:00:00Z",
+   "2026-06-05T00:00:00Z",
+   "2026-06-06T00:00:00Z",
+   "2026-06-07T00:00:00Z",
+   "2026-06-08T00:00:00Z",
+   "2026-09-12T00:00:00Z",
+   "2026-09-13T00:00:00Z",
+   "2026-09-14T00:00:00Z",
+   "2026-09-15T00:00:00Z",
+   "2026-09-16T00:00:00Z",
+   "2026-11-22T00:00:00Z",
+   "2026-11-23T00:00:00Z"
+  ]
+ },
+ "CID_225_Athena_Commando_M_Octoberfest": {
+  "id": "CID_225_Athena_Commando_M_Octoberfest",
+  "name": "Ludwig",
+  "description": "Guten morgen, camaradas.",
+  "type": {
+   "value": "outfit",
+   "displayValue": "Atuendo",
+   "backendValue": "AthenaCharacter"
+  },
+  "rarity": {
+   "value": "epic",
+   "displayValue": "Épico",
+   "backendValue": "EFortRarity::Epic"
+  },
+  "set": {
+   "value": "Oktoberfest",
+   "text": "Pieza del conjunto Oktoberfest.",
+   "backendValue": "Octoberfest"
+  },
+  "introduction": {
+   "chapter": "1",
+   "season": "6",
+   "text": "Introducido en Capítulo 1, Temporada 6.",
+   "backendValue": 6
+  },
+  "images": {
+   "smallIcon": "https://fortnite-api.com/images/cosmetics/br/cid_225_athena_commando_m_octoberfest/smallicon.png",
+   "icon": "https://fortnite-api.com/images/cosmetics/br/cid_225_athena_commando_m_octoberfest/icon.png",
+   "featured": "https://fortnite-api.com/images/cosmetics/br/cid_225_athena_commando_m_octoberfest/featured.png",
+   "lego": {
+    "small": "https://fortnite-api.com/images/cosmetics/lego/cid_225_athena_commando_m_octoberfest/small.png",
+    "large": "https://fortnite-api.com/images/cosmetics/lego/cid_225_athena_commando_m_octoberfest/large.png",
+    "wide": "https://fortnite-api.com/images/cosmetics/lego/cid_225_athena_commando_m_octoberfest/wide.png"
+   },
+   "bean": {
+    "small": "https://fortnite-api.com/images/cosmetics/beans/bean_octoberfesta/small.png",
+    "large": "https://fortnite-api.com/images/cosmetics/beans/bean_octoberfesta/large.png"
+   }
+  },
+  "showcaseVideo": "pXDPzBS1JjQ",
+  "added": "2019-11-20T12:50:16Z",
+  "shopHistory": [
+   "2018-09-28T00:00:00Z",
+   "2018-09-29T00:00:00Z",
+   "2018-10-30T00:00:00Z",
+   "2019-09-25T00:00:00Z",
+   "2020-09-21T00:00:00Z",
+   "2020-10-21T00:00:00Z",
+   "2021-09-23T00:00:00Z",
+   "2023-09-30T00:00:00Z",
+   "2023-10-01T00:00:00Z",
+   "2023-10-02T00:00:00Z",
+   "2023-10-03T00:00:00Z",
+   "2024-05-13T00:00:00Z",
+   "2024-07-26T00:00:00Z",
+   "2026-11-23T00:00:00Z"
+  ]
+ },
+ "Character_RobustTorn": {
+  "id": "Character_RobustTorn",
+  "name": "Skips",
+  "description": "Antes conocido como Walks. ",
+  "type": {
+   "value": "outfit",
+   "displayValue": "Atuendo",
+   "backendValue": "AthenaCharacter"
+  },
+  "rarity": {
+   "value": "epic",
+   "displayValue": "Épico",
+   "backendValue": "EFortRarity::Epic"
+  },
+  "set": {
+   "value": "Un show más",
+   "text": "Pieza del conjunto Un show más.",
+   "backendValue": "CenterCard"
+  },
+  "introduction": {
+   "chapter": "7",
+   "season": "1",
+   "text": "Introducido en Capítulo 7, Temporada 1.",
+   "backendValue": 39
+  },
+  "images": {
+   "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_robusttorn/smallicon.png",
+   "icon": "https://fortnite-api.com/images/cosmetics/br/character_robusttorn/icon.png",
+   "featured": "https://fortnite-api.com/images/cosmetics/br/character_robusttorn/featured.png",
+   "lego": {
+    "small": "https://fortnite-api.com/images/cosmetics/lego/character_robusttorn/small.png",
+    "large": "https://fortnite-api.com/images/cosmetics/lego/character_robusttorn/large.png",
+    "wide": "https://fortnite-api.com/images/cosmetics/lego/character_robusttorn/wide.png"
+   }
+  },
+  "metaTags": [
+   "Cosmetics.MetaTags.Special.AbnormalHead"
+  ],
+  "showcaseVideo": "_XsDNmBRUis",
+  "added": "2026-01-31T00:00:00Z",
+  "shopHistory": [
+   "2026-01-31T00:00:00Z",
+   "2026-02-01T00:00:00Z",
+   "2026-02-02T00:00:00Z",
+   "2026-02-03T00:00:00Z",
+   "2026-02-04T00:00:00Z",
+   "2026-02-05T00:00:00Z",
+   "2026-02-06T00:00:00Z",
+   "2026-05-17T00:00:00Z",
+   "2026-05-18T00:00:00Z",
+   "2026-05-19T00:00:00Z",
+   "2026-05-20T00:00:00Z",
+   "2026-05-21T00:00:00Z",
+   "2026-08-09T00:00:00Z",
+   "2026-08-10T00:00:00Z",
+   "2026-08-11T00:00:00Z",
+   "2026-08-12T00:00:00Z",
+   "2026-08-13T00:00:00Z",
+   "2026-11-19T00:00:00Z",
+   "2026-11-20T00:00:00Z",
+   "2026-11-21T00:00:00Z",
+   "2026-11-22T00:00:00Z",
+   "2026-11-23T00:00:00Z"
+  ]
+ },
+ "Character_SpringBreak": {
+  "id": "Character_SpringBreak",
+  "name": "Jack Sparrow",
+  "description": "Capitán Jack Sparrow, por favor.",
+  "type": {
+   "value": "outfit",
+   "displayValue": "Atuendo",
+   "backendValue": "AthenaCharacter"
+  },
+  "rarity": {
+   "value": "epic",
+   "displayValue": "Épico",
+   "backendValue": "EFortRarity::Epic"
+  },
+  "set": {
+   "value": "Piratas del Caribe",
+   "text": "Pieza del conjunto Piratas del Caribe.",
+   "backendValue": "GroanScheme"
+  },
+  "introduction": {
+   "chapter": "5",
+   "season": "3",
+   "text": "Introducido en Capítulo 5, Temporada 3.",
+   "backendValue": 30
+  },
+  "images": {
+   "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_springbreak/smallicon.png",
+   "icon": "https://fortnite-api.com/images/cosmetics/br/character_springbreak/icon.png",
+   "featured": "https://fortnite-api.com/images/cosmetics/br/character_springbreak/featured.png",
+   "lego": {
+    "small": "https://fortnite-api.com/images/cosmetics/lego/character_springbreak/small.png",
+    "large": "https://fortnite-api.com/images/cosmetics/lego/character_springbreak/large.png",
+    "wide": "https://fortnite-api.com/images/cosmetics/lego/character_springbreak/wide.png"
+   }
+  },
+  "variants": [
+   {
+    "channel": "Parts",
+    "type": "Accesorio",
+    "options": [
+     {
+      "tag": "Stage1",
+      "name": "no",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_springbreak/variants/parts/stage1.png"
+     },
+     {
+      "tag": "Stage2",
+      "name": "sí",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_springbreak/variants/parts/stage2.png"
+     }
+    ]
+   }
+  ],
+  "metaTags": [
+   "Cosmetics.MetaTags.Special.ReplaceFace"
+  ],
+  "added": "2024-06-22T08:21:26Z",
+  "shopHistory": [
+   "2025-01-29T00:00:00Z",
+   "2025-01-30T00:00:00Z",
+   "2025-01-31T00:00:00Z",
+   "2025-02-01T00:00:00Z",
+   "2025-04-28T00:00:00Z",
+   "2025-04-29T00:00:00Z",
+   "2025-04-30T00:00:00Z",
+   "2025-05-01T00:00:00Z",
+   "2025-08-20T00:00:00Z",
+   "2025-08-21T00:00:00Z",
+   "2025-08-22T00:00:00Z",
+   "2025-08-23T00:00:00Z",
+   "2026-01-26T00:00:00Z",
+   "2026-01-28T00:00:00Z",
+   "2026-01-29T00:00:00Z",
+   "2026-09-26T00:00:00Z",
+   "2026-09-27T00:00:00Z",
+   "2026-09-28T00:00:00Z",
+   "2026-09-29T00:00:00Z",
+   "2026-11-23T00:00:00Z"
+  ]
+ },
+ "Character_SpringBreakTrip": {
+  "id": "Character_SpringBreakTrip",
+  "name": "Jack Sparrow maldito",
+  "description": "Capitán Jack Sparrow maldito, por favor.",
+  "type": {
+   "value": "outfit",
+   "displayValue": "Atuendo",
+   "backendValue": "AthenaCharacter"
+  },
+  "rarity": {
+   "value": "epic",
+   "displayValue": "Épico",
+   "backendValue": "EFortRarity::Epic"
+  },
+  "set": {
+   "value": "Piratas del Caribe",
+   "text": "Pieza del conjunto Piratas del Caribe.",
+   "backendValue": "GroanScheme"
+  },
+  "introduction": {
+   "chapter": "5",
+   "season": "3",
+   "text": "Introducido en Capítulo 5, Temporada 3.",
+   "backendValue": 30
+  },
+  "images": {
+   "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_springbreaktrip/smallicon.png",
+   "icon": "https://fortnite-api.com/images/cosmetics/br/character_springbreaktrip/icon.png",
+   "featured": "https://fortnite-api.com/images/cosmetics/br/character_springbreaktrip/featured.png",
+   "lego": {
+    "small": "https://fortnite-api.com/images/cosmetics/lego/character_springbreaktrip/small.png",
+    "large": "https://fortnite-api.com/images/cosmetics/lego/character_springbreaktrip/large.png",
+    "wide": "https://fortnite-api.com/images/cosmetics/lego/character_springbreaktrip/wide.png"
+   }
+  },
+  "added": "2024-06-22T08:21:26Z",
+  "shopHistory": [
+   "2025-01-29T00:00:00Z",
+   "2025-01-30T00:00:00Z",
+   "2025-01-31T00:00:00Z",
+   "2025-02-01T00:00:00Z",
+   "2025-04-28T00:00:00Z",
+   "2025-04-29T00:00:00Z",
+   "2025-04-30T00:00:00Z",
+   "2025-05-01T00:00:00Z",
+   "2025-08-20T00:00:00Z",
+   "2025-08-21T00:00:00Z",
+   "2025-08-22T00:00:00Z",
+   "2025-08-23T00:00:00Z",
+   "2026-01-26T00:00:00Z",
+   "2026-01-28T00:00:00Z",
+   "2026-01-29T00:00:00Z",
+   "2026-09-26T00:00:00Z",
+   "2026-09-27T00:00:00Z",
+   "2026-09-28T00:00:00Z",
+   "2026-09-29T00:00:00Z",
+   "2026-11-23T00:00:00Z"
+  ]
+ },
+ "CID_134_Athena_Commando_M_Jailbird": {
+  "id": "CID_134_Athena_Commando_M_Jailbird",
+  "name": "Sinvergüenza",
+  "description": "El más buscado de Ciénaga Chorreante.",
+  "type": {
+   "value": "outfit",
+   "displayValue": "Atuendo",
+   "backendValue": "AthenaCharacter"
+  },
+  "rarity": {
+   "value": "epic",
+   "displayValue": "Épico",
+   "backendValue": "EFortRarity::Epic"
+  },
+  "set": {
+   "value": "Presidiario",
+   "text": "Pieza del conjunto Presidiario.",
+   "backendValue": "Jailbird"
+  },
+  "introduction": {
+   "chapter": "1",
+   "season": "4",
+   "text": "Introducido en Capítulo 1, Temporada 4.",
+   "backendValue": 4
+  },
+  "images": {
+   "smallIcon": "https://fortnite-api.com/images/cosmetics/br/cid_134_athena_commando_m_jailbird/smallicon.png",
+   "icon": "https://fortnite-api.com/images/cosmetics/br/cid_134_athena_commando_m_jailbird/icon.png",
+   "featured": "https://fortnite-api.com/images/cosmetics/br/cid_134_athena_commando_m_jailbird/featured.png",
+   "lego": {
+    "small": "https://fortnite-api.com/images/cosmetics/lego/cid_134_athena_commando_m_jailbird/small.png",
+    "large": "https://fortnite-api.com/images/cosmetics/lego/cid_134_athena_commando_m_jailbird/large.png",
+    "wide": "https://fortnite-api.com/images/cosmetics/lego/cid_134_athena_commando_m_jailbird/wide.png"
+   },
+   "bean": {
+    "small": "https://fortnite-api.com/images/cosmetics/beans/bean_jailbirda/small.png",
+    "large": "https://fortnite-api.com/images/cosmetics/beans/bean_jailbirda/large.png"
+   }
+  },
+  "variants": [
+   {
+    "channel": "Parts",
+    "type": "ESTILO",
+    "options": [
+     {
+      "tag": "Stage1",
+      "name": "PREDETERMINADO",
+      "image": "https://fortnite-api.com/images/cosmetics/br/cid_134_athena_commando_m_jailbird/variants/parts/stage1.png"
+     },
+     {
+      "tag": "Stage2",
+      "name": "ABEJORRO",
+      "image": "https://fortnite-api.com/images/cosmetics/br/cid_134_athena_commando_m_jailbird/variants/parts/stage2.png"
+     }
+    ]
+   }
+  ],
+  "showcaseVideo": "W0wf51KM4NQ",
+  "added": "2019-11-20T12:50:23Z",
+  "shopHistory": [
+   "2018-06-03T00:00:00Z",
+   "2018-06-04T00:00:00Z",
+   "2018-07-11T00:00:00Z",
+   "2018-08-14T00:00:00Z",
+   "2018-10-01T00:00:00Z",
+   "2018-11-14T00:00:00Z",
+   "2018-12-09T00:00:00Z",
+   "2019-01-14T00:00:00Z",
+   "2019-03-12T00:00:00Z",
+   "2019-08-28T00:00:00Z",
+   "2021-06-14T00:00:00Z",
+   "2021-07-14T00:00:00Z",
+   "2021-08-22T00:00:00Z",
+   "2022-01-12T00:00:00Z",
+   "2022-03-10T00:00:00Z",
+   "2022-07-23T00:00:00Z",
+   "2022-08-29T00:00:00Z",
+   "2022-09-30T00:00:00Z",
+   "2022-11-04T00:00:00Z",
+   "2022-12-05T00:00:00Z",
+   "2023-01-07T00:00:00Z",
+   "2023-02-14T00:00:00Z",
+   "2023-02-15T00:00:00Z",
+   "2023-02-16T00:00:00Z",
+   "2023-02-17T00:00:00Z",
+   "2023-02-18T00:00:00Z",
+   "2023-02-19T00:00:00Z",
+   "2023-02-20T00:00:00Z",
+   "2023-02-21T00:00:00Z",
+   "2023-02-22T00:00:00Z",
+   "2023-02-23T00:00:00Z",
+   "2023-02-24T00:00:00Z",
+   "2023-02-25T00:00:00Z",
+   "2023-02-26T00:00:00Z",
+   "2023-02-27T00:00:00Z",
+   "2023-02-28T00:00:00Z",
+   "2023-04-23T00:00:00Z",
+   "2023-05-30T00:00:00Z",
+   "2023-08-06T00:00:00Z",
+   "2023-08-25T00:00:00Z",
+   "2023-08-26T00:00:00Z",
+   "2023-08-27T00:00:00Z",
+   "2023-08-28T00:00:00Z",
+   "2023-08-29T00:00:00Z",
+   "2023-08-30T00:00:00Z",
+   "2023-08-31T00:00:00Z",
+   "2023-09-01T00:00:00Z",
+   "2023-09-02T00:00:00Z",
+   "2024-04-18T00:00:00Z",
+   "2024-06-18T00:00:00Z",
+   "2024-09-18T00:00:00Z",
+   "2024-11-27T00:00:00Z",
+   "2024-12-13T00:00:00Z",
+   "2024-12-14T00:00:00Z",
+   "2024-12-15T00:00:00Z",
+   "2024-12-16T00:00:00Z",
+   "2025-02-22T00:00:00Z",
+   "2025-02-23T00:00:00Z",
+   "2025-02-24T00:00:00Z",
+   "2025-06-29T00:00:00Z",
+   "2026-01-13T00:00:00Z",
+   "2026-01-23T00:00:00Z",
+   "2026-03-15T00:00:00Z",
+   "2026-11-17T00:00:00Z",
+   "2026-11-18T00:00:00Z",
+   "2026-11-19T00:00:00Z",
+   "2026-11-20T00:00:00Z",
+   "2026-11-21T00:00:00Z",
+   "2026-11-22T00:00:00Z",
+   "2026-11-23T00:00:00Z"
+  ]
+ },
+ "Character_LooseCreep": {
+  "id": "Character_LooseCreep",
+  "name": "Tracer",
+  "description": "Si parpadeas, desaparece.",
+  "type": {
+   "value": "outfit",
+   "displayValue": "Atuendo",
+   "backendValue": "AthenaCharacter"
+  },
+  "rarity": {
+   "value": "gaminglegends",
+   "displayValue": "Leyendas de videojuegos",
+   "backendValue": "EFortRarity::Epic"
+  },
+  "series": {
+   "value": "Leyendas de videojuegos",
+   "colors": [
+    "8078ffff",
+    "5328d6ff",
+    "3e1398ff",
+    "28085fff",
+    "0d0027ff"
+   ],
+   "backendValue": "PlatformSeries"
+  },
+  "set": {
+   "value": "Overwatch",
+   "text": "Pieza del conjunto Overwatch.",
+   "backendValue": "AlpineSaturn"
+  },
+  "introduction": {
+   "chapter": "7",
+   "season": "2",
+   "text": "Introducido en Capítulo 7, Temporada 2.",
+   "backendValue": 40
+  },
+  "images": {
+   "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_loosecreep/smallicon.png",
+   "icon": "https://fortnite-api.com/images/cosmetics/br/character_loosecreep/icon.png",
+   "featured": "https://fortnite-api.com/images/cosmetics/br/character_loosecreep/featured.png",
+   "lego": {
+    "small": "https://fortnite-api.com/images/cosmetics/lego/character_loosecreep/small.png",
+    "large": "https://fortnite-api.com/images/cosmetics/lego/character_loosecreep/large.png",
+    "wide": "https://fortnite-api.com/images/cosmetics/lego/character_loosecreep/wide.png"
+   }
+  },
+  "showcaseVideo": "EUrmGELmQhw",
+  "added": "2026-05-14T09:00:00Z",
+  "shopHistory": [
+   "2026-05-14T00:00:00Z",
+   "2026-05-15T00:00:00Z",
+   "2026-05-16T00:00:00Z",
+   "2026-05-17T00:00:00Z",
+   "2026-05-18T00:00:00Z",
+   "2026-05-19T00:00:00Z",
+   "2026-05-20T00:00:00Z",
+   "2026-05-21T00:00:00Z",
+   "2026-05-22T00:00:00Z",
+   "2026-05-23T00:00:00Z",
+   "2026-05-24T00:00:00Z",
+   "2026-05-25T00:00:00Z",
+   "2026-05-26T00:00:00Z",
+   "2026-05-27T00:00:00Z",
+   "2026-05-28T00:00:00Z",
+   "2026-05-29T00:00:00Z",
+   "2026-05-30T00:00:00Z",
+   "2026-05-31T00:00:00Z",
+   "2026-06-01T00:00:00Z",
+   "2026-06-02T00:00:00Z",
+   "2026-06-03T00:00:00Z",
+   "2026-06-04T00:00:00Z",
+   "2026-06-05T00:00:00Z",
+   "2026-06-06T00:00:00Z",
+   "2026-06-07T00:00:00Z",
+   "2026-06-08T00:00:00Z",
+   "2026-09-12T00:00:00Z",
+   "2026-09-13T00:00:00Z",
+   "2026-09-14T00:00:00Z",
+   "2026-09-15T00:00:00Z",
+   "2026-09-16T00:00:00Z",
+   "2026-11-22T00:00:00Z",
+   "2026-11-23T00:00:00Z"
+  ]
+ },
+ "Character_StudyBench": {
+  "id": "Character_StudyBench",
+  "name": "Spike Spiegel",
+  "description": "Un cazarrecompensas abordo de la Bebop y un experto en jeet kune do.",
+  "type": {
+   "value": "outfit",
+   "displayValue": "Atuendo",
+   "backendValue": "AthenaCharacter"
+  },
+  "rarity": {
+   "value": "epic",
+   "displayValue": "Épico",
+   "backendValue": "EFortRarity::Epic"
+  },
+  "set": {
+   "value": "Cowboy Bebop",
+   "text": "Pieza del conjunto Cowboy Bebop.",
+   "backendValue": "AnotherMeeting"
+  },
+  "introduction": {
+   "chapter": "6",
+   "season": "2",
+   "text": "Introducido en Capítulo 6, Temporada 2.",
+   "backendValue": 34
+  },
+  "images": {
+   "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_studybench/smallicon.png",
+   "icon": "https://fortnite-api.com/images/cosmetics/br/character_studybench/icon.png",
+   "featured": "https://fortnite-api.com/images/cosmetics/br/character_studybench/featured.png"
+  },
+  "variants": [
+   {
+    "channel": "Material",
+    "type": "Gafas",
+    "options": [
+     {
+      "tag": "Mat1",
+      "name": "No",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_studybench/variants/material/mat1.png"
+     },
+     {
+      "tag": "Mat2",
+      "name": "Sí",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_studybench/variants/material/mat2.png"
+     }
+    ]
+   }
+  ],
+  "showcaseVideo": "KA_iT8SMHkI",
+  "added": "2025-02-27T00:00:00Z",
+  "shopHistory": [
+   "2025-02-27T00:00:00Z",
+   "2025-02-28T00:00:00Z",
+   "2025-03-01T00:00:00Z",
+   "2025-03-02T00:00:00Z",
+   "2025-03-03T00:00:00Z",
+   "2025-03-04T00:00:00Z",
+   "2025-03-05T00:00:00Z",
+   "2025-03-06T00:00:00Z",
+   "2025-03-07T00:00:00Z",
+   "2025-05-04T00:00:00Z",
+   "2025-05-05T00:00:00Z",
+   "2025-05-06T00:00:00Z",
+   "2025-10-01T00:00:00Z",
+   "2025-10-02T00:00:00Z",
+   "2025-10-03T00:00:00Z",
+   "2025-10-04T00:00:00Z",
+   "2026-05-03T00:00:00Z",
+   "2026-05-04T00:00:00Z",
+   "2026-05-05T00:00:00Z",
+   "2026-05-06T00:00:00Z",
+   "2026-11-20T00:00:00Z",
+   "2026-11-21T00:00:00Z",
+   "2026-11-22T00:00:00Z",
+   "2026-11-23T00:00:00Z"
+  ]
+ },
+ "Character_LoomRise": {
+  "id": "Character_LoomRise",
+  "name": "Usopp",
+  "description": "Francotirador y mitómano.",
+  "type": {
+   "value": "outfit",
+   "displayValue": "Atuendo",
+   "backendValue": "AthenaCharacter"
+  },
+  "rarity": {
+   "value": "epic",
+   "displayValue": "Épico",
+   "backendValue": "EFortRarity::Epic"
+  },
+  "set": {
+   "value": "One Piece",
+   "text": "Pieza del conjunto One Piece.",
+   "backendValue": "FrailShark"
+  },
+  "introduction": {
+   "chapter": "7",
+   "season": "5",
+   "text": "Introducido en Capítulo 7, Temporada 5.",
+   "backendValue": 43
+  },
+  "images": {
+   "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_loomrise/smallicon.png",
+   "icon": "https://fortnite-api.com/images/cosmetics/br/character_loomrise/icon.png",
+   "featured": "https://fortnite-api.com/images/cosmetics/br/character_loomrise/featured.png",
+   "lego": {
+    "small": "https://fortnite-api.com/images/cosmetics/lego/character_loomrise/small.png",
+    "large": "https://fortnite-api.com/images/cosmetics/lego/character_loomrise/large.png",
+    "wide": "https://fortnite-api.com/images/cosmetics/lego/character_loomrise/wide.png"
+   }
+  },
+  "showcaseVideo": "tTSfkTgvsio",
+  "added": "2026-11-01T05:00:00Z",
+  "shopHistory": [
+   "2026-11-01T00:00:00Z",
+   "2026-11-02T00:00:00Z",
+   "2026-11-03T00:00:00Z",
+   "2026-11-04T00:00:00Z",
+   "2026-11-05T00:00:00Z",
+   "2026-11-06T00:00:00Z",
+   "2026-11-07T00:00:00Z",
+   "2026-11-08T00:00:00Z",
+   "2026-11-09T00:00:00Z",
+   "2026-11-10T00:00:00Z",
+   "2026-11-11T00:00:00Z",
+   "2026-11-12T00:00:00Z",
+   "2026-11-13T00:00:00Z",
+   "2026-11-14T00:00:00Z",
+   "2026-11-15T00:00:00Z",
+   "2026-11-16T00:00:00Z",
+   "2026-11-17T00:00:00Z",
+   "2026-11-18T00:00:00Z",
+   "2026-11-19T00:00:00Z",
+   "2026-11-20T00:00:00Z",
+   "2026-11-21T00:00:00Z",
+   "2026-11-22T00:00:00Z",
+   "2026-11-23T00:00:00Z"
+  ]
+ },
+ "Character_LivelyDomino": {
+  "id": "Character_LivelyDomino",
+  "name": "Rubius",
+  "description": "Leyenda del gaming.",
+  "type": {
+   "value": "outfit",
+   "displayValue": "Atuendo",
+   "backendValue": "AthenaCharacter"
+  },
+  "rarity": {
+   "value": "icon",
+   "displayValue": "Serie de ídolos",
+   "backendValue": "EFortRarity::Epic"
+  },
+  "series": {
+   "value": "Serie de ídolos",
+   "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+   "colors": [
+    "5cf2f3ff",
+    "2bc9caff",
+    "004c71ff",
+    "025253ff",
+    "000f2bff"
+   ],
+   "backendValue": "CreatorCollabSeries"
+  },
+  "set": {
+   "value": "Rubius",
+   "text": "Pieza del conjunto Rubius.",
+   "backendValue": "LockDose"
+  },
+  "introduction": {
+   "chapter": "5",
+   "season": "4",
+   "text": "Introducido en Capítulo 5, Temporada 4.",
+   "backendValue": 31
+  },
+  "images": {
+   "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_livelydomino/smallicon.png",
+   "icon": "https://fortnite-api.com/images/cosmetics/br/character_livelydomino/icon.png",
+   "featured": "https://fortnite-api.com/images/cosmetics/br/character_livelydomino/featured.png",
+   "lego": {
+    "small": "https://fortnite-api.com/images/cosmetics/lego/character_livelydomino/small.png",
+    "large": "https://fortnite-api.com/images/cosmetics/lego/character_livelydomino/large.png",
+    "wide": "https://fortnite-api.com/images/cosmetics/lego/character_livelydomino/wide.png"
+   }
+  },
+  "variants": [
+   {
+    "channel": "Parts",
+    "type": "Estilo",
+    "options": [
+     {
+      "tag": "Stage1",
+      "name": "Rubius",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_livelydomino/variants/parts/stage1.png"
+     },
+     {
+      "tag": "Stage2",
+      "name": "MadKat",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_livelydomino/variants/parts/stage2.png"
+     }
+    ]
+   },
+   {
+    "channel": "Material",
+    "type": "Gafas",
+    "options": [
+     {
+      "tag": "Mat1",
+      "name": "No",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_livelydomino/variants/material/mat1.png"
+     },
+     {
+      "tag": "Mat2",
+      "name": "Sí",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_livelydomino/variants/material/mat2.png"
+     }
+    ]
+   },
+   {
+    "channel": "Particle",
+    "type": "Cabello",
+    "options": [
+     {
+      "tag": "Particle1",
+      "name": "Marrón",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_livelydomino/variants/particle/particle1.png"
+     },
+     {
+      "tag": "Particle2",
+      "name": "Blanco",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_livelydomino/variants/particle/particle2.png"
+     }
+    ]
+   },
+   {
+    "channel": "Emissive",
+    "type": "Electricidad",
+    "options": [
+     {
+      "tag": "Emissive1",
+      "name": "Sí",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_livelydomino/variants/emissive/emissive1.png"
+     },
+     {
+      "tag": "Emissive2",
+      "name": "No",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_livelydomino/variants/emissive/emissive2.png"
+     }
+    ]
+   }
+  ],
+  "showcaseVideo": "uBFiENj34pM",
+  "added": "2024-09-17T08:31:42Z",
+  "shopHistory": [
+   "2024-09-26T00:00:00Z",
+   "2024-09-27T00:00:00Z",
+   "2024-09-28T00:00:00Z",
+   "2024-09-29T00:00:00Z",
+   "2024-09-30T00:00:00Z",
+   "2024-10-01T00:00:00Z",
+   "2024-10-02T00:00:00Z",
+   "2024-10-03T00:00:00Z",
+   "2024-10-04T00:00:00Z",
+   "2024-10-05T00:00:00Z",
+   "2024-10-06T00:00:00Z",
+   "2024-12-04T00:00:00Z",
+   "2024-12-05T00:00:00Z",
+   "2024-12-06T00:00:00Z",
+   "2025-01-05T00:00:00Z",
+   "2025-01-06T00:00:00Z",
+   "2025-01-07T00:00:00Z",
+   "2025-03-01T00:00:00Z",
+   "2025-03-02T00:00:00Z",
+   "2025-03-03T00:00:00Z",
+   "2025-05-07T00:00:00Z",
+   "2025-05-08T00:00:00Z",
+   "2025-07-19T00:00:00Z",
+   "2025-07-20T00:00:00Z",
+   "2025-09-01T00:00:00Z",
+   "2025-09-02T00:00:00Z",
+   "2025-12-01T00:00:00Z",
+   "2025-12-02T00:00:00Z",
+   "2025-12-03T00:00:00Z",
+   "2026-03-22T00:00:00Z",
+   "2026-03-23T00:00:00Z",
+   "2026-03-24T00:00:00Z",
+   "2026-05-05T00:00:00Z",
+   "2026-05-06T00:00:00Z",
+   "2026-07-07T00:00:00Z",
+   "2026-07-08T00:00:00Z",
+   "2026-07-09T00:00:00Z",
+   "2026-08-27T00:00:00Z",
+   "2026-08-28T00:00:00Z",
+   "2026-08-29T00:00:00Z",
+   "2026-11-22T00:00:00Z",
+   "2026-11-23T00:00:00Z"
+  ]
+ },
+ "Character_PeonyPizza": {
+  "id": "Character_PeonyPizza",
+  "name": "Capitana Hatsune Miku",
+  "description": "¡Todos a bordo del barco de la amistad!",
+  "type": {
+   "value": "outfit",
+   "displayValue": "Atuendo",
+   "backendValue": "AthenaCharacter"
+  },
+  "rarity": {
+   "value": "icon",
+   "displayValue": "Serie de ídolos",
+   "backendValue": "EFortRarity::Epic"
+  },
+  "series": {
+   "value": "Serie de ídolos",
+   "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+   "colors": [
+    "5cf2f3ff",
+    "2bc9caff",
+    "004c71ff",
+    "025253ff",
+    "000f2bff"
+   ],
+   "backendValue": "CreatorCollabSeries"
+  },
+  "set": {
+   "value": "La travesía de Miku",
+   "text": "Pieza del conjunto La travesía de Miku.",
+   "backendValue": "CoarseCaravan"
+  },
+  "introduction": {
+   "chapter": "7",
+   "season": "5",
+   "text": "Introducido en Capítulo 7, Temporada 5.",
+   "backendValue": 43
+  },
+  "images": {
+   "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_peonypizza/smallicon.png",
+   "icon": "https://fortnite-api.com/images/cosmetics/br/character_peonypizza/icon.png",
+   "featured": "https://fortnite-api.com/images/cosmetics/br/character_peonypizza/featured.png",
+   "lego": {
+    "small": "https://fortnite-api.com/images/cosmetics/lego/character_peonypizza/small.png",
+    "large": "https://fortnite-api.com/images/cosmetics/lego/character_peonypizza/large.png",
+    "wide": "https://fortnite-api.com/images/cosmetics/lego/character_peonypizza/wide.png"
+   }
+  },
+  "variants": [
+   {
+    "channel": "Emissive",
+    "type": "Reactividad",
+    "options": [
+     {
+      "tag": "Emissive0",
+      "name": "Sí",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_peonypizza/variants/emissive/emissive0.png"
+     },
+     {
+      "tag": "Emissive1",
+      "name": "No",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_peonypizza/variants/emissive/emissive1.png"
+     }
+    ]
+   }
+  ],
+  "metaTags": [
+   "Cosmetics.Emote.CharacterGroup.Skirts"
+  ],
+  "showcaseVideo": "I4clf571seM",
+  "added": "2026-11-12T13:09:30Z",
+  "shopHistory": [
+   "2026-11-15T00:00:00Z",
+   "2026-11-16T00:00:00Z",
+   "2026-11-17T00:00:00Z",
+   "2026-11-18T00:00:00Z",
+   "2026-11-19T00:00:00Z",
+   "2026-11-20T00:00:00Z",
+   "2026-11-21T00:00:00Z",
+   "2026-11-22T00:00:00Z",
+   "2026-11-23T00:00:00Z"
+  ]
+ },
+ "Character_QuicheLorraineLime": {
+  "id": "Character_QuicheLorraineLime",
+  "name": "Kim Kardashian icónica",
+  "description": "Mamá, millonaria e ídolo.",
+  "type": {
+   "value": "outfit",
+   "displayValue": "Atuendo",
+   "backendValue": "AthenaCharacter"
+  },
+  "rarity": {
+   "value": "icon",
+   "displayValue": "Serie de ídolos",
+   "backendValue": "EFortRarity::Epic"
+  },
+  "series": {
+   "value": "Serie de ídolos",
+   "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+   "colors": [
+    "5cf2f3ff",
+    "2bc9caff",
+    "004c71ff",
+    "025253ff",
+    "000f2bff"
+   ],
+   "backendValue": "CreatorCollabSeries"
+  },
+  "introduction": {
+   "chapter": "7",
+   "season": "1",
+   "text": "Introducido en Capítulo 7, Temporada 1.",
+   "backendValue": 39
+  },
+  "images": {
+   "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_quichelorrainelime/smallicon.png",
+   "icon": "https://fortnite-api.com/images/cosmetics/br/character_quichelorrainelime/icon.png",
+   "featured": "https://fortnite-api.com/images/cosmetics/br/character_quichelorrainelime/featured.png"
+  },
+  "variants": [
+   {
+    "channel": "Parts",
+    "type": "estilo",
+    "options": [
+     {
+      "tag": "Stage1",
+      "name": "Escote redondo",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_quichelorrainelime/variants/parts/stage1.png"
+     },
+     {
+      "tag": "Stage2",
+      "name": "Cuello alto",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_quichelorrainelime/variants/parts/stage2.png"
+     },
+     {
+      "tag": "Stage3",
+      "name": "Halter",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_quichelorrainelime/variants/parts/stage3.png"
+     },
+     {
+      "tag": "Stage4",
+      "name": "Corset",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_quichelorrainelime/variants/parts/stage4.png"
+     }
+    ]
+   },
+   {
+    "channel": "Material",
+    "type": "guantes",
+    "options": [
+     {
+      "tag": "Mat1",
+      "name": "sí",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_quichelorrainelime/variants/material/mat1.png"
+     },
+     {
+      "tag": "Mat2",
+      "name": "no",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_quichelorrainelime/variants/material/mat2.png"
+     }
+    ]
+   },
+   {
+    "channel": "Particle",
+    "type": "cabello",
+    "options": [
+     {
+      "tag": "Particle1",
+      "name": "Peinado casual",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_quichelorrainelime/variants/particle/particle1.png"
+     },
+     {
+      "tag": "Particle2",
+      "name": "Castaño revuelto",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_quichelorrainelime/variants/particle/particle2.png"
+     },
+     {
+      "tag": "Particle3",
+      "name": "Rubio veraniego",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_quichelorrainelime/variants/particle/particle3.png"
+     }
+    ]
+   },
+   {
+    "channel": "Emissive",
+    "type": "gafas",
+    "options": [
+     {
+      "tag": "Emissive1",
+      "name": "no",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_quichelorrainelime/variants/emissive/emissive1.png"
+     },
+     {
+      "tag": "Emissive2",
+      "name": "sí",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_quichelorrainelime/variants/emissive/emissive2.png"
+     }
+    ]
+   }
+  ],
+  "added": "2025-12-12T10:05:30Z",
+  "shopHistory": [
+   "2025-12-14T00:00:00Z",
+   "2025-12-15T00:00:00Z",
+   "2025-12-16T00:00:00Z",
+   "2025-12-17T00:00:00Z",
+   "2025-12-18T00:00:00Z",
+   "2025-12-19T00:00:00Z",
+   "2025-12-20T00:00:00Z",
+   "2025-12-21T00:00:00Z",
+   "2025-12-22T00:00:00Z",
+   "2025-12-23T00:00:00Z",
+   "2025-12-24T00:00:00Z",
+   "2025-12-25T00:00:00Z",
+   "2025-12-26T00:00:00Z",
+   "2025-12-27T00:00:00Z",
+   "2025-12-28T00:00:00Z",
+   "2026-02-15T00:00:00Z",
+   "2026-02-16T00:00:00Z",
+   "2026-02-17T00:00:00Z",
+   "2026-02-18T00:00:00Z",
+   "2026-02-19T00:00:00Z",
+   "2026-02-20T00:00:00Z",
+   "2026-02-21T00:00:00Z",
+   "2026-02-22T00:00:00Z",
+   "2026-02-23T00:00:00Z",
+   "2026-02-24T00:00:00Z",
+   "2026-02-25T00:00:00Z",
+   "2026-02-26T00:00:00Z",
+   "2026-02-27T00:00:00Z",
+   "2026-02-28T00:00:00Z",
+   "2026-04-26T00:00:00Z",
+   "2026-04-27T00:00:00Z",
+   "2026-04-28T00:00:00Z",
+   "2026-04-29T00:00:00Z",
+   "2026-04-30T00:00:00Z",
+   "2026-05-21T00:00:00Z",
+   "2026-05-22T00:00:00Z",
+   "2026-05-23T00:00:00Z",
+   "2026-05-24T00:00:00Z",
+   "2026-05-25T00:00:00Z",
+   "2026-05-26T00:00:00Z",
+   "2026-05-27T00:00:00Z",
+   "2026-05-28T00:00:00Z",
+   "2026-05-29T00:00:00Z",
+   "2026-05-30T00:00:00Z",
+   "2026-07-06T00:00:00Z",
+   "2026-07-07T00:00:00Z",
+   "2026-07-08T00:00:00Z",
+   "2026-07-09T00:00:00Z",
+   "2026-07-10T00:00:00Z",
+   "2026-08-20T00:00:00Z",
+   "2026-08-21T00:00:00Z",
+   "2026-08-22T00:00:00Z",
+   "2026-08-23T00:00:00Z",
+   "2026-10-08T00:00:00Z",
+   "2026-10-09T00:00:00Z",
+   "2026-10-10T00:00:00Z",
+   "2026-10-11T00:00:00Z",
+   "2026-10-12T00:00:00Z",
+   "2026-11-20T00:00:00Z",
+   "2026-11-21T00:00:00Z",
+   "2026-11-22T00:00:00Z",
+   "2026-11-23T00:00:00Z"
+  ]
+ },
+ "Character_QuicheLorraineCrisp": {
+  "id": "Character_QuicheLorraineCrisp",
+  "name": "Kim Kardashian",
+  "description": "Una ídolo impasible y superior.",
+  "type": {
+   "value": "outfit",
+   "displayValue": "Atuendo",
+   "backendValue": "AthenaCharacter"
+  },
+  "rarity": {
+   "value": "icon",
+   "displayValue": "Serie de ídolos",
+   "backendValue": "EFortRarity::Epic"
+  },
+  "series": {
+   "value": "Serie de ídolos",
+   "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+   "colors": [
+    "5cf2f3ff",
+    "2bc9caff",
+    "004c71ff",
+    "025253ff",
+    "000f2bff"
+   ],
+   "backendValue": "CreatorCollabSeries"
+  },
+  "introduction": {
+   "chapter": "7",
+   "season": "1",
+   "text": "Introducido en Capítulo 7, Temporada 1.",
+   "backendValue": 39
+  },
+  "images": {
+   "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_quichelorrainecrisp/smallicon.png",
+   "icon": "https://fortnite-api.com/images/cosmetics/br/character_quichelorrainecrisp/icon.png",
+   "featured": "https://fortnite-api.com/images/cosmetics/br/character_quichelorrainecrisp/featured.png"
+  },
+  "variants": [
+   {
+    "channel": "Parts",
+    "type": "Abrigo",
+    "options": [
+     {
+      "tag": "Stage1",
+      "name": "Sí",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_quichelorrainecrisp/variants/parts/stage1.png"
+     },
+     {
+      "tag": "Stage2",
+      "name": "No",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_quichelorrainecrisp/variants/parts/stage2.png"
+     }
+    ]
+   }
+  ],
+  "added": "2025-12-12T10:05:30Z",
+  "shopHistory": [
+   "2025-12-14T00:00:00Z",
+   "2025-12-15T00:00:00Z",
+   "2025-12-16T00:00:00Z",
+   "2025-12-17T00:00:00Z",
+   "2025-12-18T00:00:00Z",
+   "2025-12-19T00:00:00Z",
+   "2025-12-20T00:00:00Z",
+   "2025-12-21T00:00:00Z",
+   "2025-12-22T00:00:00Z",
+   "2025-12-23T00:00:00Z",
+   "2025-12-24T00:00:00Z",
+   "2025-12-25T00:00:00Z",
+   "2025-12-26T00:00:00Z",
+   "2025-12-27T00:00:00Z",
+   "2025-12-28T00:00:00Z",
+   "2026-02-15T00:00:00Z",
+   "2026-02-16T00:00:00Z",
+   "2026-02-17T00:00:00Z",
+   "2026-02-18T00:00:00Z",
+   "2026-02-19T00:00:00Z",
+   "2026-02-20T00:00:00Z",
+   "2026-02-21T00:00:00Z",
+   "2026-02-22T00:00:00Z",
+   "2026-02-23T00:00:00Z",
+   "2026-02-24T00:00:00Z",
+   "2026-02-25T00:00:00Z",
+   "2026-02-26T00:00:00Z",
+   "2026-02-27T00:00:00Z",
+   "2026-02-28T00:00:00Z",
+   "2026-04-26T00:00:00Z",
+   "2026-04-27T00:00:00Z",
+   "2026-04-28T00:00:00Z",
+   "2026-04-29T00:00:00Z",
+   "2026-04-30T00:00:00Z",
+   "2026-05-21T00:00:00Z",
+   "2026-05-22T00:00:00Z",
+   "2026-05-23T00:00:00Z",
+   "2026-05-24T00:00:00Z",
+   "2026-05-25T00:00:00Z",
+   "2026-05-26T00:00:00Z",
+   "2026-05-27T00:00:00Z",
+   "2026-05-28T00:00:00Z",
+   "2026-05-29T00:00:00Z",
+   "2026-05-30T00:00:00Z",
+   "2026-07-06T00:00:00Z",
+   "2026-07-07T00:00:00Z",
+   "2026-07-08T00:00:00Z",
+   "2026-07-09T00:00:00Z",
+   "2026-07-10T00:00:00Z",
+   "2026-08-20T00:00:00Z",
+   "2026-08-21T00:00:00Z",
+   "2026-08-22T00:00:00Z",
+   "2026-08-23T00:00:00Z",
+   "2026-10-08T00:00:00Z",
+   "2026-10-09T00:00:00Z",
+   "2026-10-10T00:00:00Z",
+   "2026-10-11T00:00:00Z",
+   "2026-10-12T00:00:00Z",
+   "2026-11-20T00:00:00Z",
+   "2026-11-21T00:00:00Z",
+   "2026-11-22T00:00:00Z",
+   "2026-11-23T00:00:00Z"
+  ]
+ },
+ "Character_DegreeProper": {
+  "id": "Character_DegreeProper",
+  "name": "Noodle",
+  "description": "Guitarrista de Gorillaz. Asesina profesional. Posiblemente una cíborg.",
+  "type": {
+   "value": "outfit",
+   "displayValue": "Atuendo",
+   "backendValue": "AthenaCharacter"
+  },
+  "rarity": {
+   "value": "icon",
+   "displayValue": "Serie de ídolos",
+   "backendValue": "EFortRarity::Epic"
+  },
+  "series": {
+   "value": "Serie de ídolos",
+   "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+   "colors": [
+    "5cf2f3ff",
+    "2bc9caff",
+    "004c71ff",
+    "025253ff",
+    "000f2bff"
+   ],
+   "backendValue": "CreatorCollabSeries"
+  },
+  "set": {
+   "value": "Gorillaz",
+   "text": "Pieza del conjunto Gorillaz.",
+   "backendValue": "NightSwitch"
+  },
+  "introduction": {
+   "chapter": "6",
+   "season": "5",
+   "text": "Introducido en Capítulo 6, Temporada 5.",
+   "backendValue": 37
+  },
+  "images": {
+   "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_degreeproper/smallicon.png",
+   "icon": "https://fortnite-api.com/images/cosmetics/br/character_degreeproper/icon.png",
+   "featured": "https://fortnite-api.com/images/cosmetics/br/character_degreeproper/featured.png",
+   "lego": {
+    "small": "https://fortnite-api.com/images/cosmetics/lego/character_degreeproper/small.png",
+    "large": "https://fortnite-api.com/images/cosmetics/lego/character_degreeproper/large.png",
+    "wide": "https://fortnite-api.com/images/cosmetics/lego/character_degreeproper/wide.png"
+   }
+  },
+  "variants": [
+   {
+    "channel": "Progressive",
+    "type": "Máscara",
+    "options": [
+     {
+      "tag": "Mat1",
+      "name": "No",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_degreeproper/variants/progressive/mat1.png"
+     },
+     {
+      "tag": "Mat2",
+      "name": "Sí",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_degreeproper/variants/progressive/mat2.png"
+     }
+    ]
+   }
+  ],
+  "showcaseVideo": "oNS7r5s35AM",
+  "added": "2025-08-26T08:00:00Z",
+  "shopHistory": [
+   "2025-08-26T00:00:00Z",
+   "2025-08-27T00:00:00Z",
+   "2025-08-28T00:00:00Z",
+   "2025-08-29T00:00:00Z",
+   "2025-08-30T00:00:00Z",
+   "2025-08-31T00:00:00Z",
+   "2025-09-01T00:00:00Z",
+   "2025-09-02T00:00:00Z",
+   "2025-09-03T00:00:00Z",
+   "2025-09-04T00:00:00Z",
+   "2025-09-05T00:00:00Z",
+   "2025-09-06T00:00:00Z",
+   "2025-09-07T00:00:00Z",
+   "2025-09-08T00:00:00Z",
+   "2025-09-09T00:00:00Z",
+   "2025-09-10T00:00:00Z",
+   "2025-09-11T00:00:00Z",
+   "2025-09-12T00:00:00Z",
+   "2025-09-13T00:00:00Z",
+   "2025-09-14T00:00:00Z",
+   "2025-09-15T00:00:00Z",
+   "2025-09-16T00:00:00Z",
+   "2025-09-17T00:00:00Z",
+   "2025-09-18T00:00:00Z",
+   "2025-09-19T00:00:00Z",
+   "2025-09-20T00:00:00Z",
+   "2025-09-21T00:00:00Z",
+   "2025-09-22T00:00:00Z",
+   "2025-09-23T00:00:00Z",
+   "2025-09-24T00:00:00Z",
+   "2025-09-25T00:00:00Z",
+   "2025-09-26T00:00:00Z",
+   "2025-09-27T00:00:00Z",
+   "2025-09-28T00:00:00Z",
+   "2025-09-29T00:00:00Z",
+   "2025-09-30T00:00:00Z",
+   "2025-10-01T00:00:00Z",
+   "2025-10-02T00:00:00Z",
+   "2025-10-03T00:00:00Z",
+   "2025-10-04T00:00:00Z",
+   "2025-10-05T00:00:00Z",
+   "2025-10-06T00:00:00Z",
+   "2025-10-07T00:00:00Z",
+   "2025-10-08T00:00:00Z",
+   "2026-03-06T00:00:00Z",
+   "2026-03-07T00:00:00Z",
+   "2026-03-08T00:00:00Z",
+   "2026-03-09T00:00:00Z",
+   "2026-03-10T00:00:00Z",
+   "2026-03-11T00:00:00Z",
+   "2026-03-12T00:00:00Z",
+   "2026-07-22T00:00:00Z",
+   "2026-07-23T00:00:00Z",
+   "2026-07-24T00:00:00Z",
+   "2026-07-25T00:00:00Z",
+   "2026-07-26T00:00:00Z",
+   "2026-11-22T00:00:00Z",
+   "2026-11-23T00:00:00Z"
+  ]
+ },
+ "Character_PajamaSoar": {
+  "id": "Character_PajamaSoar",
+  "name": "2D",
+  "description": "Cantante de Gorillaz. No le gusta el conflicto. Prefiere las satsumas.",
+  "type": {
+   "value": "outfit",
+   "displayValue": "Atuendo",
+   "backendValue": "AthenaCharacter"
+  },
+  "rarity": {
+   "value": "icon",
+   "displayValue": "Serie de ídolos",
+   "backendValue": "EFortRarity::Epic"
+  },
+  "series": {
+   "value": "Serie de ídolos",
+   "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+   "colors": [
+    "5cf2f3ff",
+    "2bc9caff",
+    "004c71ff",
+    "025253ff",
+    "000f2bff"
+   ],
+   "backendValue": "CreatorCollabSeries"
+  },
+  "set": {
+   "value": "Gorillaz",
+   "text": "Pieza del conjunto Gorillaz.",
+   "backendValue": "NightSwitch"
+  },
+  "introduction": {
+   "chapter": "6",
+   "season": "5",
+   "text": "Introducido en Capítulo 6, Temporada 5.",
+   "backendValue": 37
+  },
+  "images": {
+   "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_pajamasoar/smallicon.png",
+   "icon": "https://fortnite-api.com/images/cosmetics/br/character_pajamasoar/icon.png",
+   "featured": "https://fortnite-api.com/images/cosmetics/br/character_pajamasoar/featured.png",
+   "lego": {
+    "small": "https://fortnite-api.com/images/cosmetics/lego/character_pajamasoar/small.png",
+    "large": "https://fortnite-api.com/images/cosmetics/lego/character_pajamasoar/large.png",
+    "wide": "https://fortnite-api.com/images/cosmetics/lego/character_pajamasoar/wide.png"
+   }
+  },
+  "variants": [
+   {
+    "channel": "Material",
+    "type": "Gafas",
+    "options": [
+     {
+      "tag": "Mat1",
+      "name": "No",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_pajamasoar/variants/material/mat1.png"
+     },
+     {
+      "tag": "Mat2",
+      "name": "Sí",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_pajamasoar/variants/material/mat2.png"
+     }
+    ]
+   }
+  ],
+  "showcaseVideo": "TFIDHzd_2FY",
+  "added": "2025-08-26T08:00:00Z",
+  "shopHistory": [
+   "2025-08-26T00:00:00Z",
+   "2025-08-27T00:00:00Z",
+   "2025-08-28T00:00:00Z",
+   "2025-08-29T00:00:00Z",
+   "2025-08-30T00:00:00Z",
+   "2025-08-31T00:00:00Z",
+   "2025-09-01T00:00:00Z",
+   "2025-09-02T00:00:00Z",
+   "2025-09-03T00:00:00Z",
+   "2025-09-04T00:00:00Z",
+   "2025-09-05T00:00:00Z",
+   "2025-09-06T00:00:00Z",
+   "2025-09-07T00:00:00Z",
+   "2025-09-08T00:00:00Z",
+   "2025-09-09T00:00:00Z",
+   "2025-09-10T00:00:00Z",
+   "2025-09-11T00:00:00Z",
+   "2025-09-12T00:00:00Z",
+   "2025-09-13T00:00:00Z",
+   "2025-09-14T00:00:00Z",
+   "2025-09-15T00:00:00Z",
+   "2025-09-16T00:00:00Z",
+   "2025-09-17T00:00:00Z",
+   "2025-09-18T00:00:00Z",
+   "2025-09-19T00:00:00Z",
+   "2025-09-20T00:00:00Z",
+   "2025-09-21T00:00:00Z",
+   "2025-09-22T00:00:00Z",
+   "2025-09-23T00:00:00Z",
+   "2025-09-24T00:00:00Z",
+   "2025-09-25T00:00:00Z",
+   "2025-09-26T00:00:00Z",
+   "2025-09-27T00:00:00Z",
+   "2025-09-28T00:00:00Z",
+   "2025-09-29T00:00:00Z",
+   "2025-09-30T00:00:00Z",
+   "2025-10-01T00:00:00Z",
+   "2025-10-02T00:00:00Z",
+   "2025-10-03T00:00:00Z",
+   "2025-10-04T00:00:00Z",
+   "2025-10-05T00:00:00Z",
+   "2025-10-06T00:00:00Z",
+   "2025-10-07T00:00:00Z",
+   "2025-10-08T00:00:00Z",
+   "2026-03-06T00:00:00Z",
+   "2026-03-07T00:00:00Z",
+   "2026-03-08T00:00:00Z",
+   "2026-03-09T00:00:00Z",
+   "2026-03-10T00:00:00Z",
+   "2026-03-11T00:00:00Z",
+   "2026-03-12T00:00:00Z",
+   "2026-07-22T00:00:00Z",
+   "2026-07-23T00:00:00Z",
+   "2026-07-24T00:00:00Z",
+   "2026-07-25T00:00:00Z",
+   "2026-07-26T00:00:00Z",
+   "2026-11-22T00:00:00Z",
+   "2026-11-23T00:00:00Z"
+  ]
+ },
+ "CID_959_Athena_Commando_M_Corny": {
+  "id": "CID_959_Athena_Commando_M_Corny",
+  "name": "Mazorquín",
+  "description": "Prepáralo y ponle mantequilla.",
+  "type": {
+   "value": "outfit",
+   "displayValue": "Atuendo",
+   "backendValue": "AthenaCharacter"
+  },
+  "rarity": {
+   "value": "rare",
+   "displayValue": "Raro",
+   "backendValue": "EFortRarity::Rare"
+  },
+  "set": {
+   "value": "Milicia maíz",
+   "text": "Pieza del conjunto Milicia maíz.",
+   "backendValue": "CenterSoldier"
+  },
+  "introduction": {
+   "chapter": "2",
+   "season": "4",
+   "text": "Introducido en Capítulo 2, Temporada 4.",
+   "backendValue": 14
+  },
+  "images": {
+   "smallIcon": "https://fortnite-api.com/images/cosmetics/br/cid_959_athena_commando_m_corny/smallicon.png",
+   "icon": "https://fortnite-api.com/images/cosmetics/br/cid_959_athena_commando_m_corny/icon.png",
+   "featured": "https://fortnite-api.com/images/cosmetics/br/cid_959_athena_commando_m_corny/featured.png",
+   "lego": {
+    "small": "https://fortnite-api.com/images/cosmetics/lego/cid_959_athena_commando_m_corny/small.png",
+    "large": "https://fortnite-api.com/images/cosmetics/lego/cid_959_athena_commando_m_corny/large.png",
+    "wide": "https://fortnite-api.com/images/cosmetics/lego/cid_959_athena_commando_m_corny/wide.png"
+   },
+   "bean": {
+    "small": "https://fortnite-api.com/images/cosmetics/beans/bean_corny/small.png",
+    "large": "https://fortnite-api.com/images/cosmetics/beans/bean_corny/large.png"
+   }
+  },
+  "variants": [
+   {
+    "channel": "Parts",
+    "type": "ESTILO",
+    "options": [
+     {
+      "tag": "Stage1",
+      "name": "PREDETERMINADO",
+      "image": "https://fortnite-api.com/images/cosmetics/br/cid_959_athena_commando_m_corny/variants/parts/stage1.png"
+     },
+     {
+      "tag": "Stage2",
+      "name": "NO-REACTIVO",
+      "image": "https://fortnite-api.com/images/cosmetics/br/cid_959_athena_commando_m_corny/variants/parts/stage2.png"
+     },
+     {
+      "tag": "Stage3",
+      "name": "EXPLOSIÓN COMPLETA",
+      "image": "https://fortnite-api.com/images/cosmetics/br/cid_959_athena_commando_m_corny/variants/parts/stage3.png"
+     }
+    ]
+   }
+  ],
+  "searchTags": [
+   "Comida",
+   "Amarillo"
+  ],
+  "metaTags": [
+   "Cosmetics.MetaTags.Trait.ExtremelyUnique",
+   "Cosmetics.MetaTags.Special.XLarge",
+   "Cosmetics.MetaTags.Special.BodySwap.Full",
+   "Cosmetics.MetaTags.Special.BigHeadHelm"
+  ],
+  "showcaseVideo": "AUlXB6KXkEk",
+  "added": "2020-11-25T00:00:00Z",
+  "shopHistory": [
+   "2020-11-25T00:00:00Z",
+   "2020-11-26T00:00:00Z",
+   "2021-02-06T00:00:00Z",
+   "2021-03-14T00:00:00Z",
+   "2021-04-28T00:00:00Z",
+   "2021-06-22T00:00:00Z",
+   "2021-06-23T00:00:00Z",
+   "2021-06-24T00:00:00Z",
+   "2021-11-25T00:00:00Z",
+   "2021-11-26T00:00:00Z",
+   "2022-03-14T00:00:00Z",
+   "2022-09-22T00:00:00Z",
+   "2022-11-24T00:00:00Z",
+   "2022-11-25T00:00:00Z",
+   "2022-11-26T00:00:00Z",
+   "2023-03-14T00:00:00Z",
+   "2023-04-18T00:00:00Z",
+   "2023-05-26T00:00:00Z",
+   "2023-06-30T00:00:00Z",
+   "2023-07-01T00:00:00Z",
+   "2023-07-02T00:00:00Z",
+   "2023-07-03T00:00:00Z",
+   "2023-07-04T00:00:00Z",
+   "2023-07-05T00:00:00Z",
+   "2023-09-30T00:00:00Z",
+   "2023-10-01T00:00:00Z",
+   "2023-10-02T00:00:00Z",
+   "2023-10-03T00:00:00Z",
+   "2024-11-27T00:00:00Z",
+   "2024-11-28T00:00:00Z",
+   "2024-11-29T00:00:00Z",
+   "2024-11-30T00:00:00Z",
+   "2024-12-01T00:00:00Z",
+   "2025-01-08T00:00:00Z",
+   "2025-07-15T00:00:00Z",
+   "2025-11-05T00:00:00Z",
+   "2025-11-06T00:00:00Z",
+   "2025-11-07T00:00:00Z",
+   "2026-01-16T00:00:00Z",
+   "2026-05-19T00:00:00Z",
+   "2026-11-23T00:00:00Z"
+  ]
+ },
+ "CID_226_Athena_Commando_F_Octoberfest": {
+  "id": "CID_226_Athena_Commando_F_Octoberfest",
+  "name": "Heidi",
+  "description": "Celebra con la mejor.",
+  "type": {
+   "value": "outfit",
+   "displayValue": "Atuendo",
+   "backendValue": "AthenaCharacter"
+  },
+  "rarity": {
+   "value": "epic",
+   "displayValue": "Épico",
+   "backendValue": "EFortRarity::Epic"
+  },
+  "set": {
+   "value": "Oktoberfest",
+   "text": "Pieza del conjunto Oktoberfest.",
+   "backendValue": "Octoberfest"
+  },
+  "introduction": {
+   "chapter": "1",
+   "season": "6",
+   "text": "Introducido en Capítulo 1, Temporada 6.",
+   "backendValue": 6
+  },
+  "images": {
+   "smallIcon": "https://fortnite-api.com/images/cosmetics/br/cid_226_athena_commando_f_octoberfest/smallicon.png",
+   "icon": "https://fortnite-api.com/images/cosmetics/br/cid_226_athena_commando_f_octoberfest/icon.png",
+   "featured": "https://fortnite-api.com/images/cosmetics/br/cid_226_athena_commando_f_octoberfest/featured.png",
+   "lego": {
+    "small": "https://fortnite-api.com/images/cosmetics/lego/cid_226_athena_commando_f_octoberfest/small.png",
+    "large": "https://fortnite-api.com/images/cosmetics/lego/cid_226_athena_commando_f_octoberfest/large.png",
+    "wide": "https://fortnite-api.com/images/cosmetics/lego/cid_226_athena_commando_f_octoberfest/wide.png"
+   },
+   "bean": {
+    "small": "https://fortnite-api.com/images/cosmetics/beans/bean_octoberfestb/small.png",
+    "large": "https://fortnite-api.com/images/cosmetics/beans/bean_octoberfestb/large.png"
+   }
+  },
+  "metaTags": [
+   "Cosmetics.Emote.CharacterGroup.Skirts"
+  ],
+  "showcaseVideo": "1Ybop02gRjo",
+  "added": "2019-11-20T12:50:16Z",
+  "shopHistory": [
+   "2018-09-28T00:00:00Z",
+   "2018-09-29T00:00:00Z",
+   "2018-10-30T00:00:00Z",
+   "2019-09-25T00:00:00Z",
+   "2020-09-21T00:00:00Z",
+   "2020-10-21T00:00:00Z",
+   "2021-09-23T00:00:00Z",
+   "2023-09-30T00:00:00Z",
+   "2023-10-01T00:00:00Z",
+   "2023-10-02T00:00:00Z",
+   "2024-06-18T00:00:00Z",
+   "2024-07-26T00:00:00Z",
+   "2025-02-01T00:00:00Z",
+   "2025-02-02T00:00:00Z",
+   "2025-02-03T00:00:00Z",
+   "2025-02-14T00:00:00Z",
+   "2025-10-27T00:00:00Z",
+   "2025-10-28T00:00:00Z",
+   "2025-10-29T00:00:00Z",
+   "2025-11-05T00:00:00Z",
+   "2026-06-23T00:00:00Z",
+   "2026-11-23T00:00:00Z"
+  ]
+ },
+ "Character_CeleryStitch": {
+  "id": "Character_CeleryStitch",
+  "name": "Monkey D. Luffy",
+  "description": "¡Será el nuevo rey de los piratas!",
+  "type": {
+   "value": "outfit",
+   "displayValue": "Atuendo",
+   "backendValue": "AthenaCharacter"
+  },
+  "rarity": {
+   "value": "epic",
+   "displayValue": "Épico",
+   "backendValue": "EFortRarity::Epic"
+  },
+  "set": {
+   "value": "One Piece",
+   "text": "Pieza del conjunto One Piece.",
+   "backendValue": "FrailShark"
+  },
+  "introduction": {
+   "chapter": "7",
+   "season": "5",
+   "text": "Introducido en Capítulo 7, Temporada 5.",
+   "backendValue": 43
+  },
+  "images": {
+   "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_celerystitch/smallicon.png",
+   "icon": "https://fortnite-api.com/images/cosmetics/br/character_celerystitch/icon.png",
+   "featured": "https://fortnite-api.com/images/cosmetics/br/character_celerystitch/featured.png",
+   "lego": {
+    "small": "https://fortnite-api.com/images/cosmetics/lego/character_celerystitch/small.png",
+    "large": "https://fortnite-api.com/images/cosmetics/lego/character_celerystitch/large.png",
+    "wide": "https://fortnite-api.com/images/cosmetics/lego/character_celerystitch/wide.png"
+   }
+  },
+  "showcaseVideo": "U4dZqudChDw",
+  "added": "2026-11-01T05:00:00Z",
+  "shopHistory": [
+   "2026-11-01T00:00:00Z",
+   "2026-11-02T00:00:00Z",
+   "2026-11-03T00:00:00Z",
+   "2026-11-04T00:00:00Z",
+   "2026-11-05T00:00:00Z",
+   "2026-11-06T00:00:00Z",
+   "2026-11-07T00:00:00Z",
+   "2026-11-08T00:00:00Z",
+   "2026-11-09T00:00:00Z",
+   "2026-11-10T00:00:00Z",
+   "2026-11-11T00:00:00Z",
+   "2026-11-12T00:00:00Z",
+   "2026-11-13T00:00:00Z",
+   "2026-11-14T00:00:00Z",
+   "2026-11-15T00:00:00Z",
+   "2026-11-16T00:00:00Z",
+   "2026-11-17T00:00:00Z",
+   "2026-11-18T00:00:00Z",
+   "2026-11-19T00:00:00Z",
+   "2026-11-20T00:00:00Z",
+   "2026-11-21T00:00:00Z",
+   "2026-11-22T00:00:00Z",
+   "2026-11-23T00:00:00Z"
+  ]
+ },
+ "Character_BoastJoint": {
+  "id": "Character_BoastJoint",
+  "name": "Nami",
+  "description": "Ladrona, navegante y cartógrafa.",
+  "type": {
+   "value": "outfit",
+   "displayValue": "Atuendo",
+   "backendValue": "AthenaCharacter"
+  },
+  "rarity": {
+   "value": "epic",
+   "displayValue": "Épico",
+   "backendValue": "EFortRarity::Epic"
+  },
+  "set": {
+   "value": "One Piece",
+   "text": "Pieza del conjunto One Piece.",
+   "backendValue": "FrailShark"
+  },
+  "introduction": {
+   "chapter": "7",
+   "season": "5",
+   "text": "Introducido en Capítulo 7, Temporada 5.",
+   "backendValue": 43
+  },
+  "images": {
+   "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_boastjoint/smallicon.png",
+   "icon": "https://fortnite-api.com/images/cosmetics/br/character_boastjoint/icon.png",
+   "featured": "https://fortnite-api.com/images/cosmetics/br/character_boastjoint/featured.png",
+   "lego": {
+    "small": "https://fortnite-api.com/images/cosmetics/lego/character_boastjoint/small.png",
+    "large": "https://fortnite-api.com/images/cosmetics/lego/character_boastjoint/large.png",
+    "wide": "https://fortnite-api.com/images/cosmetics/lego/character_boastjoint/wide.png"
+   }
+  },
+  "metaTags": [
+   "Cosmetics.Emote.CharacterGroup.Skirts"
+  ],
+  "showcaseVideo": "M37HpMEFGR0",
+  "added": "2026-11-01T05:00:00Z",
+  "shopHistory": [
+   "2026-11-01T00:00:00Z",
+   "2026-11-02T00:00:00Z",
+   "2026-11-03T00:00:00Z",
+   "2026-11-04T00:00:00Z",
+   "2026-11-05T00:00:00Z",
+   "2026-11-06T00:00:00Z",
+   "2026-11-07T00:00:00Z",
+   "2026-11-08T00:00:00Z",
+   "2026-11-09T00:00:00Z",
+   "2026-11-10T00:00:00Z",
+   "2026-11-11T00:00:00Z",
+   "2026-11-12T00:00:00Z",
+   "2026-11-13T00:00:00Z",
+   "2026-11-14T00:00:00Z",
+   "2026-11-15T00:00:00Z",
+   "2026-11-16T00:00:00Z",
+   "2026-11-17T00:00:00Z",
+   "2026-11-18T00:00:00Z",
+   "2026-11-19T00:00:00Z",
+   "2026-11-20T00:00:00Z",
+   "2026-11-21T00:00:00Z",
+   "2026-11-22T00:00:00Z",
+   "2026-11-23T00:00:00Z"
+  ]
+ },
+ "Character_SunBurst": {
+  "id": "Character_SunBurst",
+  "name": "The Kid LAROI",
+  "description": "Hizo realidad sus sueños.",
+  "type": {
+   "value": "outfit",
+   "displayValue": "Atuendo",
+   "backendValue": "AthenaCharacter"
+  },
+  "rarity": {
+   "value": "icon",
+   "displayValue": "Serie de ídolos",
+   "backendValue": "EFortRarity::Epic"
+  },
+  "series": {
+   "value": "Serie de ídolos",
+   "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+   "colors": [
+    "5cf2f3ff",
+    "2bc9caff",
+    "004c71ff",
+    "025253ff",
+    "000f2bff"
+   ],
+   "backendValue": "CreatorCollabSeries"
+  },
+  "set": {
+   "value": "The Kid LAROI",
+   "text": "Pieza del conjunto The Kid LAROI.",
+   "backendValue": "TruthTenant"
+  },
+  "introduction": {
+   "chapter": "4",
+   "season": "1",
+   "text": "Introducido en Capítulo 4, Temporada 1.",
+   "backendValue": 23
+  },
+  "images": {
+   "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_sunburst/smallicon.png",
+   "icon": "https://fortnite-api.com/images/cosmetics/br/character_sunburst/icon.png",
+   "featured": "https://fortnite-api.com/images/cosmetics/br/character_sunburst/featured.png"
+  },
+  "variants": [
+   {
+    "channel": "Parts",
+    "type": "Sombrero",
+    "options": [
+     {
+      "tag": "Stage1",
+      "name": "Cabello",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_sunburst/variants/parts/stage1.png"
+     },
+     {
+      "tag": "Stage2",
+      "name": "Accesorio",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_sunburst/variants/parts/stage2.png"
+     }
+    ]
+   },
+   {
+    "channel": "Material",
+    "type": "Gafas",
+    "options": [
+     {
+      "tag": "Stage1",
+      "name": "Sí",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_sunburst/variants/material/stage1.png"
+     },
+     {
+      "tag": "Stage2",
+      "name": "No",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_sunburst/variants/material/stage2.png"
+     }
+    ]
+   },
+   {
+    "channel": "Particle",
+    "type": "estilo",
+    "options": [
+     {
+      "tag": "Particle1",
+      "name": "The Kid LAROI",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_sunburst/variants/particle/particle1.png"
+     },
+     {
+      "tag": "Particle2",
+      "name": "Electrificado",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_sunburst/variants/particle/particle2.png"
+     }
+    ]
+   }
+  ],
+  "showcaseVideo": "k6x2NZupolw",
+  "added": "2023-01-23T23:50:35Z",
+  "shopHistory": [
+   "2023-01-27T00:00:00Z",
+   "2023-01-28T00:00:00Z",
+   "2023-01-29T00:00:00Z",
+   "2023-01-30T00:00:00Z",
+   "2023-01-31T00:00:00Z",
+   "2023-02-01T00:00:00Z",
+   "2023-02-02T00:00:00Z",
+   "2023-02-03T00:00:00Z",
+   "2023-02-04T00:00:00Z",
+   "2023-02-05T00:00:00Z",
+   "2023-02-06T00:00:00Z",
+   "2023-02-07T00:00:00Z",
+   "2023-02-08T00:00:00Z",
+   "2023-02-09T00:00:00Z",
+   "2023-02-10T00:00:00Z",
+   "2023-02-11T00:00:00Z",
+   "2023-02-12T00:00:00Z",
+   "2023-02-13T00:00:00Z",
+   "2023-02-14T00:00:00Z",
+   "2023-02-15T00:00:00Z",
+   "2023-02-16T00:00:00Z",
+   "2023-03-14T00:00:00Z",
+   "2023-03-15T00:00:00Z",
+   "2023-03-16T00:00:00Z",
+   "2023-03-17T00:00:00Z",
+   "2023-03-18T00:00:00Z",
+   "2023-03-19T00:00:00Z",
+   "2023-03-20T00:00:00Z",
+   "2023-04-14T00:00:00Z",
+   "2023-04-15T00:00:00Z",
+   "2023-04-16T00:00:00Z",
+   "2023-04-17T00:00:00Z",
+   "2023-04-18T00:00:00Z",
+   "2023-04-19T00:00:00Z",
+   "2023-04-20T00:00:00Z",
+   "2023-04-21T00:00:00Z",
+   "2023-04-22T00:00:00Z",
+   "2023-04-23T00:00:00Z",
+   "2023-04-24T00:00:00Z",
+   "2023-04-25T00:00:00Z",
+   "2023-04-26T00:00:00Z",
+   "2023-04-27T00:00:00Z",
+   "2023-08-03T00:00:00Z",
+   "2023-08-04T00:00:00Z",
+   "2023-08-05T00:00:00Z",
+   "2023-08-06T00:00:00Z",
+   "2023-08-07T00:00:00Z",
+   "2023-08-08T00:00:00Z",
+   "2023-08-09T00:00:00Z",
+   "2023-10-22T00:00:00Z",
+   "2023-10-23T00:00:00Z",
+   "2023-10-24T00:00:00Z",
+   "2023-11-29T00:00:00Z",
+   "2026-11-20T00:00:00Z",
+   "2026-11-21T00:00:00Z",
+   "2026-11-22T00:00:00Z",
+   "2026-11-23T00:00:00Z"
+  ]
+ },
+ "CID_958_Athena_Commando_M_PieMan": {
+  "id": "CID_958_Athena_Commando_M_PieMan",
+  "name": "Hojaldre hendido",
+  "description": "Hecho con amor. Y chocolate.",
+  "type": {
+   "value": "outfit",
+   "displayValue": "Atuendo",
+   "backendValue": "AthenaCharacter"
+  },
+  "rarity": {
+   "value": "epic",
+   "displayValue": "Épico",
+   "backendValue": "EFortRarity::Epic"
+  },
+  "set": {
+   "value": "Pesadilla pastelera",
+   "text": "Pieza del conjunto Pesadilla pastelera.",
+   "backendValue": "CooksDream"
+  },
+  "introduction": {
+   "chapter": "2",
+   "season": "4",
+   "text": "Introducido en Capítulo 2, Temporada 4.",
+   "backendValue": 14
+  },
+  "images": {
+   "smallIcon": "https://fortnite-api.com/images/cosmetics/br/cid_958_athena_commando_m_pieman/smallicon.png",
+   "icon": "https://fortnite-api.com/images/cosmetics/br/cid_958_athena_commando_m_pieman/icon.png",
+   "featured": "https://fortnite-api.com/images/cosmetics/br/cid_958_athena_commando_m_pieman/featured.png",
+   "lego": {
+    "small": "https://fortnite-api.com/images/cosmetics/lego/cid_958_athena_commando_m_pieman/small.png",
+    "large": "https://fortnite-api.com/images/cosmetics/lego/cid_958_athena_commando_m_pieman/large.png",
+    "wide": "https://fortnite-api.com/images/cosmetics/lego/cid_958_athena_commando_m_pieman/wide.png"
+   },
+   "bean": {
+    "small": "https://fortnite-api.com/images/cosmetics/beans/bean_pieman/small.png",
+    "large": "https://fortnite-api.com/images/cosmetics/beans/bean_pieman/large.png"
+   }
+  },
+  "showcaseVideo": "6vSqxQlKgAc",
+  "added": "2020-11-25T00:00:00Z",
+  "shopHistory": [
+   "2020-11-25T00:00:00Z",
+   "2020-11-26T00:00:00Z",
+   "2021-03-14T00:00:00Z",
+   "2021-11-25T00:00:00Z",
+   "2021-11-26T00:00:00Z",
+   "2022-03-14T00:00:00Z",
+   "2022-09-22T00:00:00Z",
+   "2022-11-24T00:00:00Z",
+   "2022-11-25T00:00:00Z",
+   "2022-11-26T00:00:00Z",
+   "2023-03-14T00:00:00Z",
+   "2023-04-18T00:00:00Z",
+   "2023-05-26T00:00:00Z",
+   "2023-06-30T00:00:00Z",
+   "2023-07-01T00:00:00Z",
+   "2023-07-02T00:00:00Z",
+   "2023-07-03T00:00:00Z",
+   "2023-07-04T00:00:00Z",
+   "2023-07-05T00:00:00Z",
+   "2023-09-30T00:00:00Z",
+   "2023-10-01T00:00:00Z",
+   "2023-10-02T00:00:00Z",
+   "2023-10-03T00:00:00Z",
+   "2024-05-09T00:00:00Z",
+   "2024-11-27T00:00:00Z",
+   "2024-11-28T00:00:00Z",
+   "2024-11-29T00:00:00Z",
+   "2024-11-30T00:00:00Z",
+   "2024-12-01T00:00:00Z",
+   "2025-04-18T00:00:00Z",
+   "2025-06-05T00:00:00Z",
+   "2025-11-05T00:00:00Z",
+   "2025-11-06T00:00:00Z",
+   "2025-11-07T00:00:00Z",
+   "2026-10-20T00:00:00Z",
+   "2026-10-21T00:00:00Z",
+   "2026-10-22T00:00:00Z",
+   "2026-11-23T00:00:00Z"
+  ]
+ },
+ "Character_FlipperBalm": {
+  "id": "Character_FlipperBalm",
+  "name": "Buggy",
+  "description": "El extravagante presidente de Cross Guild.",
+  "type": {
+   "value": "outfit",
+   "displayValue": "Atuendo",
+   "backendValue": "AthenaCharacter"
+  },
+  "rarity": {
+   "value": "epic",
+   "displayValue": "Épico",
+   "backendValue": "EFortRarity::Epic"
+  },
+  "set": {
+   "value": "One Piece",
+   "text": "Pieza del conjunto One Piece.",
+   "backendValue": "FrailShark"
+  },
+  "introduction": {
+   "chapter": "7",
+   "season": "5",
+   "text": "Introducido en Capítulo 7, Temporada 5.",
+   "backendValue": 43
+  },
+  "images": {
+   "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_flipperbalm/smallicon.png",
+   "icon": "https://fortnite-api.com/images/cosmetics/br/character_flipperbalm/icon.png",
+   "featured": "https://fortnite-api.com/images/cosmetics/br/character_flipperbalm/featured.png",
+   "lego": {
+    "small": "https://fortnite-api.com/images/cosmetics/lego/character_flipperbalm/small.png",
+    "large": "https://fortnite-api.com/images/cosmetics/lego/character_flipperbalm/large.png",
+    "wide": "https://fortnite-api.com/images/cosmetics/lego/character_flipperbalm/wide.png"
+   }
+  },
+  "variants": [
+   {
+    "channel": "Parts",
+    "type": "Sombrero",
+    "options": [
+     {
+      "tag": "Stage1",
+      "name": "Sí",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_flipperbalm/variants/parts/stage1.png"
+     },
+     {
+      "tag": "Stage2",
+      "name": "No",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_flipperbalm/variants/parts/stage2.png"
+     }
+    ]
+   }
+  ],
+  "showcaseVideo": "7UNyvf-mtWw",
+  "added": "2026-11-01T23:10:43Z",
+  "shopHistory": [
+   "2026-11-14T00:00:00Z",
+   "2026-11-15T00:00:00Z",
+   "2026-11-16T00:00:00Z",
+   "2026-11-17T00:00:00Z",
+   "2026-11-18T00:00:00Z",
+   "2026-11-19T00:00:00Z",
+   "2026-11-20T00:00:00Z",
+   "2026-11-21T00:00:00Z",
+   "2026-11-22T00:00:00Z",
+   "2026-11-23T00:00:00Z"
+  ]
+ },
+ "Character_BerryTartBrunt": {
+  "id": "Character_BerryTartBrunt",
+  "name": "Ice Spice princesa del rap",
+  "description": "Viene por la corona.",
+  "type": {
+   "value": "outfit",
+   "displayValue": "Atuendo",
+   "backendValue": "AthenaCharacter"
+  },
+  "rarity": {
+   "value": "icon",
+   "displayValue": "Serie de ídolos",
+   "backendValue": "EFortRarity::Epic"
+  },
+  "series": {
+   "value": "Serie de ídolos",
+   "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+   "colors": [
+    "5cf2f3ff",
+    "2bc9caff",
+    "004c71ff",
+    "025253ff",
+    "000f2bff"
+   ],
+   "backendValue": "CreatorCollabSeries"
+  },
+  "set": {
+   "value": "Ice Spice",
+   "text": "Pieza del conjunto Ice Spice.",
+   "backendValue": "HomeSkeleton"
+  },
+  "introduction": {
+   "chapter": "2",
+   "season": "Remix",
+   "text": "Introducido en Capítulo 2, Temporada Remix.",
+   "backendValue": 32
+  },
+  "images": {
+   "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_berrytartbrunt/smallicon.png",
+   "icon": "https://fortnite-api.com/images/cosmetics/br/character_berrytartbrunt/icon.png",
+   "featured": "https://fortnite-api.com/images/cosmetics/br/character_berrytartbrunt/featured.png"
+  },
+  "variants": [
+   {
+    "channel": "Material",
+    "type": "tiara",
+    "options": [
+     {
+      "tag": "Mat1",
+      "name": "sí",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_berrytartbrunt/variants/material/mat1.png"
+     },
+     {
+      "tag": "Mat2",
+      "name": "no",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_berrytartbrunt/variants/material/mat2.png"
+     }
+    ]
+   },
+   {
+    "channel": "Particle",
+    "type": "Reactivo",
+    "options": [
+     {
+      "tag": "Particle1",
+      "name": "Sí",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_berrytartbrunt/variants/particle/particle1.png"
+     },
+     {
+      "tag": "Particle2",
+      "name": "No",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_berrytartbrunt/variants/particle/particle2.png"
+     }
+    ]
+   }
+  ],
+  "metaTags": [
+   "Cosmetics.MetaTags.Special.XLarge"
+  ],
+  "showcaseVideo": "Wjc1S4PUD_I",
+  "added": "2024-11-13T10:14:32Z",
+  "shopHistory": [
+   "2024-11-15T00:00:00Z",
+   "2024-11-16T00:00:00Z",
+   "2024-11-17T00:00:00Z",
+   "2024-11-18T00:00:00Z",
+   "2024-11-19T00:00:00Z",
+   "2024-11-20T00:00:00Z",
+   "2024-11-21T00:00:00Z",
+   "2024-11-22T00:00:00Z",
+   "2024-11-23T00:00:00Z",
+   "2024-11-24T00:00:00Z",
+   "2024-11-25T00:00:00Z",
+   "2024-11-26T00:00:00Z",
+   "2024-11-27T00:00:00Z",
+   "2024-11-28T00:00:00Z",
+   "2024-11-29T00:00:00Z",
+   "2024-11-30T00:00:00Z",
+   "2024-12-01T00:00:00Z",
+   "2024-12-02T00:00:00Z",
+   "2024-12-03T00:00:00Z",
+   "2024-12-04T00:00:00Z",
+   "2024-12-05T00:00:00Z",
+   "2025-01-26T00:00:00Z",
+   "2025-01-27T00:00:00Z",
+   "2025-01-28T00:00:00Z",
+   "2025-01-29T00:00:00Z",
+   "2025-03-30T00:00:00Z",
+   "2025-03-31T00:00:00Z",
+   "2025-04-01T00:00:00Z",
+   "2025-04-02T00:00:00Z",
+   "2025-04-20T00:00:00Z",
+   "2025-04-21T00:00:00Z",
+   "2025-04-22T00:00:00Z",
+   "2025-07-03T00:00:00Z",
+   "2025-07-04T00:00:00Z",
+   "2025-07-05T00:00:00Z",
+   "2025-07-06T00:00:00Z",
+   "2025-08-22T00:00:00Z",
+   "2025-08-23T00:00:00Z",
+   "2025-08-24T00:00:00Z",
+   "2025-08-25T00:00:00Z",
+   "2026-01-01T00:00:00Z",
+   "2026-01-02T00:00:00Z",
+   "2026-01-03T00:00:00Z",
+   "2026-01-04T00:00:00Z",
+   "2026-11-21T00:00:00Z",
+   "2026-11-22T00:00:00Z",
+   "2026-11-23T00:00:00Z"
+  ]
+ },
+ "CID_444_Athena_Commando_F_BannerC": {
+  "id": "CID_444_Athena_Commando_F_BannerC",
+  "name": "Brigada marcada",
+  "description": "Personaliza tu aspecto al elegir un estandarte y un color en el casillero.",
+  "type": {
+   "value": "outfit",
+   "displayValue": "Atuendo",
+   "backendValue": "AthenaCharacter"
+  },
+  "rarity": {
+   "value": "uncommon",
+   "displayValue": "Poco común",
+   "backendValue": "EFortRarity::Uncommon"
+  },
+  "set": {
+   "value": "Brigada de estandartes",
+   "text": "Pieza del conjunto Brigada de estandartes.",
+   "backendValue": "Banner"
+  },
+  "introduction": {
+   "chapter": "1",
+   "season": "9",
+   "text": "Introducido en Capítulo 1, Temporada 9.",
+   "backendValue": 9
+  },
+  "images": {
+   "smallIcon": "https://fortnite-api.com/images/cosmetics/br/cid_444_athena_commando_f_bannerc/smallicon.png",
+   "icon": "https://fortnite-api.com/images/cosmetics/br/cid_444_athena_commando_f_bannerc/icon.png",
+   "featured": "https://fortnite-api.com/images/cosmetics/br/cid_444_athena_commando_f_bannerc/featured.png",
+   "lego": {
+    "small": "https://fortnite-api.com/images/cosmetics/lego/cid_444_athena_commando_f_bannerc/small.png",
+    "large": "https://fortnite-api.com/images/cosmetics/lego/cid_444_athena_commando_f_bannerc/large.png",
+    "wide": "https://fortnite-api.com/images/cosmetics/lego/cid_444_athena_commando_f_bannerc/wide.png"
+   },
+   "bean": {
+    "small": "https://fortnite-api.com/images/cosmetics/beans/bean_bannercb/small.png",
+    "large": "https://fortnite-api.com/images/cosmetics/beans/bean_bannercb/large.png"
+   }
+  },
+  "showcaseVideo": "p9TR99g1y-I",
+  "added": "2019-11-20T12:49:57Z",
+  "shopHistory": [
+   "2019-07-18T00:00:00Z",
+   "2019-07-19T00:00:00Z",
+   "2019-07-20T00:00:00Z",
+   "2019-07-26T00:00:00Z",
+   "2019-07-27T00:00:00Z",
+   "2019-07-28T00:00:00Z",
+   "2019-10-17T00:00:00Z",
+   "2019-12-19T00:00:00Z",
+   "2020-02-03T00:00:00Z",
+   "2020-03-13T00:00:00Z",
+   "2020-05-03T00:00:00Z",
+   "2020-06-16T00:00:00Z",
+   "2020-08-07T00:00:00Z",
+   "2020-11-17T00:00:00Z",
+   "2021-01-11T00:00:00Z",
+   "2021-04-11T00:00:00Z",
+   "2021-05-11T00:00:00Z",
+   "2021-06-17T00:00:00Z",
+   "2021-07-20T00:00:00Z",
+   "2021-08-23T00:00:00Z",
+   "2021-09-25T00:00:00Z",
+   "2021-11-15T00:00:00Z",
+   "2021-12-16T00:00:00Z",
+   "2022-01-25T00:00:00Z",
+   "2022-02-24T00:00:00Z",
+   "2022-04-02T00:00:00Z",
+   "2022-05-02T00:00:00Z",
+   "2022-06-02T00:00:00Z",
+   "2022-07-01T00:00:00Z",
+   "2022-08-03T00:00:00Z",
+   "2022-09-07T00:00:00Z",
+   "2022-10-07T00:00:00Z",
+   "2022-11-05T00:00:00Z",
+   "2022-12-06T00:00:00Z",
+   "2023-01-12T00:00:00Z",
+   "2023-01-13T00:00:00Z",
+   "2023-02-15T00:00:00Z",
+   "2023-03-20T00:00:00Z",
+   "2023-04-23T00:00:00Z",
+   "2023-04-24T00:00:00Z",
+   "2023-04-25T00:00:00Z",
+   "2023-06-20T00:00:00Z",
+   "2023-06-21T00:00:00Z",
+   "2023-06-22T00:00:00Z",
+   "2023-09-09T00:00:00Z",
+   "2023-09-10T00:00:00Z",
+   "2023-09-26T00:00:00Z",
+   "2023-09-27T00:00:00Z",
+   "2023-09-28T00:00:00Z",
+   "2024-05-30T00:00:00Z",
+   "2024-05-31T00:00:00Z",
+   "2024-06-01T00:00:00Z",
+   "2024-06-02T00:00:00Z",
+   "2024-08-31T00:00:00Z",
+   "2024-09-01T00:00:00Z",
+   "2024-09-02T00:00:00Z",
+   "2024-09-03T00:00:00Z",
+   "2025-02-17T00:00:00Z",
+   "2025-02-18T00:00:00Z",
+   "2026-11-17T00:00:00Z",
+   "2026-11-18T00:00:00Z",
+   "2026-11-19T00:00:00Z",
+   "2026-11-20T00:00:00Z",
+   "2026-11-21T00:00:00Z",
+   "2026-11-22T00:00:00Z",
+   "2026-11-23T00:00:00Z"
+  ]
+ },
+ "Character_BrandCreed": {
+  "id": "Character_BrandCreed",
+  "name": "Roronoa Zoro",
+  "description": "Maestro espadachín de los Sombrero de paja.",
+  "type": {
+   "value": "outfit",
+   "displayValue": "Atuendo",
+   "backendValue": "AthenaCharacter"
+  },
+  "rarity": {
+   "value": "epic",
+   "displayValue": "Épico",
+   "backendValue": "EFortRarity::Epic"
+  },
+  "set": {
+   "value": "One Piece",
+   "text": "Pieza del conjunto One Piece.",
+   "backendValue": "FrailShark"
+  },
+  "introduction": {
+   "chapter": "7",
+   "season": "5",
+   "text": "Introducido en Capítulo 7, Temporada 5.",
+   "backendValue": 43
+  },
+  "images": {
+   "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_brandcreed/smallicon.png",
+   "icon": "https://fortnite-api.com/images/cosmetics/br/character_brandcreed/icon.png",
+   "featured": "https://fortnite-api.com/images/cosmetics/br/character_brandcreed/featured.png",
+   "lego": {
+    "small": "https://fortnite-api.com/images/cosmetics/lego/character_brandcreed/small.png",
+    "large": "https://fortnite-api.com/images/cosmetics/lego/character_brandcreed/large.png",
+    "wide": "https://fortnite-api.com/images/cosmetics/lego/character_brandcreed/wide.png"
+   }
+  },
+  "variants": [
+   {
+    "channel": "Parts",
+    "type": "Bandana",
+    "options": [
+     {
+      "tag": "Stage1",
+      "name": "No",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_brandcreed/variants/parts/stage1.png"
+     },
+     {
+      "tag": "Stage2",
+      "name": "Sí",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_brandcreed/variants/parts/stage2.png"
+     }
+    ]
+   }
+  ],
+  "metaTags": [
+   "Cosmetics.MetaTags.BrandCreed"
+  ],
+  "showcaseVideo": "cn8i4g7rASA",
+  "added": "2026-11-01T23:10:43Z",
+  "shopHistory": [
+   "2026-11-08T00:00:00Z",
+   "2026-11-09T00:00:00Z",
+   "2026-11-10T00:00:00Z",
+   "2026-11-11T00:00:00Z",
+   "2026-11-12T00:00:00Z",
+   "2026-11-13T00:00:00Z",
+   "2026-11-14T00:00:00Z",
+   "2026-11-15T00:00:00Z",
+   "2026-11-16T00:00:00Z",
+   "2026-11-17T00:00:00Z",
+   "2026-11-18T00:00:00Z",
+   "2026-11-19T00:00:00Z",
+   "2026-11-20T00:00:00Z",
+   "2026-11-21T00:00:00Z",
+   "2026-11-22T00:00:00Z",
+   "2026-11-23T00:00:00Z"
+  ]
+ },
+ "Character_InsightBawl": {
+  "id": "Character_InsightBawl",
+  "name": "Sanji",
+  "description": "Chef en busca del All Blue.",
+  "type": {
+   "value": "outfit",
+   "displayValue": "Atuendo",
+   "backendValue": "AthenaCharacter"
+  },
+  "rarity": {
+   "value": "epic",
+   "displayValue": "Épico",
+   "backendValue": "EFortRarity::Epic"
+  },
+  "set": {
+   "value": "One Piece",
+   "text": "Pieza del conjunto One Piece.",
+   "backendValue": "FrailShark"
+  },
+  "introduction": {
+   "chapter": "7",
+   "season": "5",
+   "text": "Introducido en Capítulo 7, Temporada 5.",
+   "backendValue": 43
+  },
+  "images": {
+   "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_insightbawl/smallicon.png",
+   "icon": "https://fortnite-api.com/images/cosmetics/br/character_insightbawl/icon.png",
+   "featured": "https://fortnite-api.com/images/cosmetics/br/character_insightbawl/featured.png",
+   "lego": {
+    "small": "https://fortnite-api.com/images/cosmetics/lego/character_insightbawl/small.png",
+    "large": "https://fortnite-api.com/images/cosmetics/lego/character_insightbawl/large.png",
+    "wide": "https://fortnite-api.com/images/cosmetics/lego/character_insightbawl/wide.png"
+   }
+  },
+  "showcaseVideo": "CtBK2RxgQRU",
+  "added": "2026-11-01T23:10:43Z",
+  "shopHistory": [
+   "2026-11-08T00:00:00Z",
+   "2026-11-09T00:00:00Z",
+   "2026-11-10T00:00:00Z",
+   "2026-11-11T00:00:00Z",
+   "2026-11-12T00:00:00Z",
+   "2026-11-13T00:00:00Z",
+   "2026-11-14T00:00:00Z",
+   "2026-11-15T00:00:00Z",
+   "2026-11-16T00:00:00Z",
+   "2026-11-17T00:00:00Z",
+   "2026-11-18T00:00:00Z",
+   "2026-11-19T00:00:00Z",
+   "2026-11-20T00:00:00Z",
+   "2026-11-21T00:00:00Z",
+   "2026-11-22T00:00:00Z",
+   "2026-11-23T00:00:00Z"
+  ]
+ },
+ "Character_DomeRoof": {
+  "id": "Character_DomeRoof",
+  "name": "Capitán Barbosa",
+  "description": "Maestro pirata y experto en motines.",
+  "type": {
+   "value": "outfit",
+   "displayValue": "Atuendo",
+   "backendValue": "AthenaCharacter"
+  },
+  "rarity": {
+   "value": "epic",
+   "displayValue": "Épico",
+   "backendValue": "EFortRarity::Epic"
+  },
+  "set": {
+   "value": "Piratas del Caribe",
+   "text": "Pieza del conjunto Piratas del Caribe.",
+   "backendValue": "GroanScheme"
+  },
+  "introduction": {
+   "chapter": "5",
+   "season": "3",
+   "text": "Introducido en Capítulo 5, Temporada 3.",
+   "backendValue": 30
+  },
+  "images": {
+   "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_domeroof/smallicon.png",
+   "icon": "https://fortnite-api.com/images/cosmetics/br/character_domeroof/icon.png",
+   "featured": "https://fortnite-api.com/images/cosmetics/br/character_domeroof/featured.png",
+   "lego": {
+    "small": "https://fortnite-api.com/images/cosmetics/lego/character_domeroof/small.png",
+    "large": "https://fortnite-api.com/images/cosmetics/lego/character_domeroof/large.png",
+    "wide": "https://fortnite-api.com/images/cosmetics/lego/character_domeroof/wide.png"
+   }
+  },
+  "showcaseVideo": "HB-zSMRZZlc",
+  "added": "2024-06-22T08:21:26Z",
+  "shopHistory": [
+   "2024-07-17T00:00:00Z",
+   "2024-07-18T00:00:00Z",
+   "2024-07-19T00:00:00Z",
+   "2024-07-20T00:00:00Z",
+   "2024-07-21T00:00:00Z",
+   "2024-07-22T00:00:00Z",
+   "2024-07-23T00:00:00Z",
+   "2024-07-24T00:00:00Z",
+   "2024-07-25T00:00:00Z",
+   "2024-07-26T00:00:00Z",
+   "2024-07-27T00:00:00Z",
+   "2024-07-28T00:00:00Z",
+   "2024-07-29T00:00:00Z",
+   "2024-07-30T00:00:00Z",
+   "2024-07-31T00:00:00Z",
+   "2024-08-01T00:00:00Z",
+   "2024-08-02T00:00:00Z",
+   "2024-08-03T00:00:00Z",
+   "2024-08-04T00:00:00Z",
+   "2024-08-05T00:00:00Z",
+   "2024-08-06T00:00:00Z",
+   "2025-01-29T00:00:00Z",
+   "2025-01-30T00:00:00Z",
+   "2025-01-31T00:00:00Z",
+   "2025-02-01T00:00:00Z",
+   "2025-04-28T00:00:00Z",
+   "2025-04-29T00:00:00Z",
+   "2025-04-30T00:00:00Z",
+   "2025-05-01T00:00:00Z",
+   "2025-08-20T00:00:00Z",
+   "2025-08-21T00:00:00Z",
+   "2025-08-22T00:00:00Z",
+   "2025-08-23T00:00:00Z",
+   "2026-01-26T00:00:00Z",
+   "2026-01-28T00:00:00Z",
+   "2026-01-29T00:00:00Z",
+   "2026-09-26T00:00:00Z",
+   "2026-09-27T00:00:00Z",
+   "2026-09-28T00:00:00Z",
+   "2026-09-29T00:00:00Z",
+   "2026-11-23T00:00:00Z"
+  ]
+ },
+ "Character_AccentWall": {
+  "id": "Character_AccentWall",
+  "name": "Davy Jones",
+  "description": "El infame capitán del Holandés Errante.",
+  "type": {
+   "value": "outfit",
+   "displayValue": "Atuendo",
+   "backendValue": "AthenaCharacter"
+  },
+  "rarity": {
+   "value": "epic",
+   "displayValue": "Épico",
+   "backendValue": "EFortRarity::Epic"
+  },
+  "set": {
+   "value": "Piratas del Caribe",
+   "text": "Pieza del conjunto Piratas del Caribe.",
+   "backendValue": "GroanScheme"
+  },
+  "introduction": {
+   "chapter": "5",
+   "season": "3",
+   "text": "Introducido en Capítulo 5, Temporada 3.",
+   "backendValue": 30
+  },
+  "images": {
+   "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_accentwall/smallicon.png",
+   "icon": "https://fortnite-api.com/images/cosmetics/br/character_accentwall/icon.png",
+   "featured": "https://fortnite-api.com/images/cosmetics/br/character_accentwall/featured.png",
+   "lego": {
+    "small": "https://fortnite-api.com/images/cosmetics/lego/character_accentwall/small.png",
+    "large": "https://fortnite-api.com/images/cosmetics/lego/character_accentwall/large.png",
+    "wide": "https://fortnite-api.com/images/cosmetics/lego/character_accentwall/wide.png"
+   }
+  },
+  "showcaseVideo": "V2MOlJ_gjY0",
+  "added": "2024-06-22T08:21:26Z",
+  "shopHistory": [
+   "2024-07-17T00:00:00Z",
+   "2024-07-18T00:00:00Z",
+   "2024-07-19T00:00:00Z",
+   "2024-07-20T00:00:00Z",
+   "2024-07-21T00:00:00Z",
+   "2024-07-22T00:00:00Z",
+   "2024-07-23T00:00:00Z",
+   "2024-07-24T00:00:00Z",
+   "2024-07-25T00:00:00Z",
+   "2024-07-26T00:00:00Z",
+   "2024-07-27T00:00:00Z",
+   "2024-07-28T00:00:00Z",
+   "2024-07-29T00:00:00Z",
+   "2024-07-30T00:00:00Z",
+   "2024-07-31T00:00:00Z",
+   "2024-08-01T00:00:00Z",
+   "2024-08-02T00:00:00Z",
+   "2024-08-03T00:00:00Z",
+   "2024-08-04T00:00:00Z",
+   "2024-08-05T00:00:00Z",
+   "2024-08-06T00:00:00Z",
+   "2025-01-29T00:00:00Z",
+   "2025-01-30T00:00:00Z",
+   "2025-01-31T00:00:00Z",
+   "2025-02-01T00:00:00Z",
+   "2025-04-28T00:00:00Z",
+   "2025-04-29T00:00:00Z",
+   "2025-04-30T00:00:00Z",
+   "2025-05-01T00:00:00Z",
+   "2025-08-20T00:00:00Z",
+   "2025-08-21T00:00:00Z",
+   "2025-08-22T00:00:00Z",
+   "2025-08-23T00:00:00Z",
+   "2026-01-26T00:00:00Z",
+   "2026-01-28T00:00:00Z",
+   "2026-01-29T00:00:00Z",
+   "2026-09-26T00:00:00Z",
+   "2026-09-27T00:00:00Z",
+   "2026-09-28T00:00:00Z",
+   "2026-09-29T00:00:00Z",
+   "2026-11-23T00:00:00Z"
+  ]
+ },
+ "Character_StoneLion": {
+  "id": "Character_StoneLion",
+  "name": "Elizabeth Swann",
+  "description": "Reina de los piratas y capitana de su flota.",
+  "type": {
+   "value": "outfit",
+   "displayValue": "Atuendo",
+   "backendValue": "AthenaCharacter"
+  },
+  "rarity": {
+   "value": "epic",
+   "displayValue": "Épico",
+   "backendValue": "EFortRarity::Epic"
+  },
+  "set": {
+   "value": "Piratas del Caribe",
+   "text": "Pieza del conjunto Piratas del Caribe.",
+   "backendValue": "GroanScheme"
+  },
+  "introduction": {
+   "chapter": "5",
+   "season": "3",
+   "text": "Introducido en Capítulo 5, Temporada 3.",
+   "backendValue": 30
+  },
+  "images": {
+   "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_stonelion/smallicon.png",
+   "icon": "https://fortnite-api.com/images/cosmetics/br/character_stonelion/icon.png",
+   "featured": "https://fortnite-api.com/images/cosmetics/br/character_stonelion/featured.png",
+   "lego": {
+    "small": "https://fortnite-api.com/images/cosmetics/lego/character_stonelion/small.png",
+    "large": "https://fortnite-api.com/images/cosmetics/lego/character_stonelion/large.png",
+    "wide": "https://fortnite-api.com/images/cosmetics/lego/character_stonelion/wide.png"
+   }
+  },
+  "variants": [
+   {
+    "channel": "Parts",
+    "type": "Accesorio",
+    "options": [
+     {
+      "tag": "Stage1",
+      "name": "Sí",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_stonelion/variants/parts/stage1.png"
+     },
+     {
+      "tag": "Stage2",
+      "name": "No",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_stonelion/variants/parts/stage2.png"
+     }
+    ]
+   }
+  ],
+  "showcaseVideo": "cMpWjqVPhI8",
+  "added": "2024-06-22T08:21:26Z",
+  "shopHistory": [
+   "2024-07-17T00:00:00Z",
+   "2024-07-18T00:00:00Z",
+   "2024-07-19T00:00:00Z",
+   "2024-07-20T00:00:00Z",
+   "2024-07-21T00:00:00Z",
+   "2024-07-22T00:00:00Z",
+   "2024-07-23T00:00:00Z",
+   "2024-07-24T00:00:00Z",
+   "2024-07-25T00:00:00Z",
+   "2024-07-26T00:00:00Z",
+   "2024-07-27T00:00:00Z",
+   "2024-07-28T00:00:00Z",
+   "2024-07-29T00:00:00Z",
+   "2024-07-30T00:00:00Z",
+   "2024-07-31T00:00:00Z",
+   "2024-08-01T00:00:00Z",
+   "2024-08-02T00:00:00Z",
+   "2024-08-03T00:00:00Z",
+   "2024-08-04T00:00:00Z",
+   "2024-08-05T00:00:00Z",
+   "2024-08-06T00:00:00Z",
+   "2025-01-29T00:00:00Z",
+   "2025-01-30T00:00:00Z",
+   "2025-01-31T00:00:00Z",
+   "2025-02-01T00:00:00Z",
+   "2025-04-28T00:00:00Z",
+   "2025-04-29T00:00:00Z",
+   "2025-04-30T00:00:00Z",
+   "2025-05-01T00:00:00Z",
+   "2025-08-20T00:00:00Z",
+   "2025-08-21T00:00:00Z",
+   "2025-08-22T00:00:00Z",
+   "2025-08-23T00:00:00Z",
+   "2026-01-26T00:00:00Z",
+   "2026-01-28T00:00:00Z",
+   "2026-01-29T00:00:00Z",
+   "2026-09-26T00:00:00Z",
+   "2026-09-27T00:00:00Z",
+   "2026-09-28T00:00:00Z",
+   "2026-09-29T00:00:00Z",
+   "2026-11-23T00:00:00Z"
+  ]
+ },
+ "Character_TerrierCure": {
+  "id": "Character_TerrierCure",
+  "name": "Russel",
+  "description": "Baterista de Gorillaz. Lo atormentan espíritus musicales.",
+  "type": {
+   "value": "outfit",
+   "displayValue": "Atuendo",
+   "backendValue": "AthenaCharacter"
+  },
+  "rarity": {
+   "value": "icon",
+   "displayValue": "Serie de ídolos",
+   "backendValue": "EFortRarity::Epic"
+  },
+  "series": {
+   "value": "Serie de ídolos",
+   "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+   "colors": [
+    "5cf2f3ff",
+    "2bc9caff",
+    "004c71ff",
+    "025253ff",
+    "000f2bff"
+   ],
+   "backendValue": "CreatorCollabSeries"
+  },
+  "set": {
+   "value": "Gorillaz",
+   "text": "Pieza del conjunto Gorillaz.",
+   "backendValue": "NightSwitch"
+  },
+  "introduction": {
+   "chapter": "6",
+   "season": "5",
+   "text": "Introducido en Capítulo 6, Temporada 5.",
+   "backendValue": 37
+  },
+  "images": {
+   "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_terriercure/smallicon.png",
+   "icon": "https://fortnite-api.com/images/cosmetics/br/character_terriercure/icon.png",
+   "featured": "https://fortnite-api.com/images/cosmetics/br/character_terriercure/featured.png",
+   "lego": {
+    "small": "https://fortnite-api.com/images/cosmetics/lego/character_terriercure/small.png",
+    "large": "https://fortnite-api.com/images/cosmetics/lego/character_terriercure/large.png",
+    "wide": "https://fortnite-api.com/images/cosmetics/lego/character_terriercure/wide.png"
+   }
+  },
+  "variants": [
+   {
+    "channel": "Parts",
+    "type": "gorro",
+    "options": [
+     {
+      "tag": "Stage1",
+      "name": "No",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_terriercure/variants/parts/stage1.png"
+     },
+     {
+      "tag": "Stage2",
+      "name": "Sí",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_terriercure/variants/parts/stage2.png"
+     }
+    ]
+   }
+  ],
+  "showcaseVideo": "8GJUZDYuet4",
+  "added": "2025-08-26T08:18:15Z",
+  "shopHistory": [
+   "2026-03-06T00:00:00Z",
+   "2026-03-07T00:00:00Z",
+   "2026-03-08T00:00:00Z",
+   "2026-03-09T00:00:00Z",
+   "2026-03-10T00:00:00Z",
+   "2026-03-11T00:00:00Z",
+   "2026-03-12T00:00:00Z",
+   "2026-07-22T00:00:00Z",
+   "2026-07-23T00:00:00Z",
+   "2026-07-24T00:00:00Z",
+   "2026-07-25T00:00:00Z",
+   "2026-07-26T00:00:00Z",
+   "2026-11-22T00:00:00Z",
+   "2026-11-23T00:00:00Z"
+  ]
+ },
+ "CID_A_172_Athena_Commando_F_Stands_E": {
+  "id": "CID_A_172_Athena_Commando_F_Stands_E",
+  "name": "Prodigio del pop",
+  "description": "La cantante del verano.",
+  "type": {
+   "value": "outfit",
+   "displayValue": "Atuendo",
+   "backendValue": "AthenaCharacter"
+  },
+  "rarity": {
+   "value": "rare",
+   "displayValue": "Raro",
+   "backendValue": "EFortRarity::Rare"
+  },
+  "set": {
+   "value": "Dale a reproducir",
+   "text": "Pieza del conjunto Dale a reproducir.",
+   "backendValue": "HitStart"
+  },
+  "introduction": {
+   "chapter": "2",
+   "season": "7",
+   "text": "Introducido en Capítulo 2, Temporada 7.",
+   "backendValue": 17
+  },
+  "images": {
+   "smallIcon": "https://fortnite-api.com/images/cosmetics/br/cid_a_172_athena_commando_f_stands_e/smallicon.png",
+   "icon": "https://fortnite-api.com/images/cosmetics/br/cid_a_172_athena_commando_f_stands_e/icon.png",
+   "featured": "https://fortnite-api.com/images/cosmetics/br/cid_a_172_athena_commando_f_stands_e/featured.png",
+   "lego": {
+    "small": "https://fortnite-api.com/images/cosmetics/lego/cid_a_172_athena_commando_f_stands_e/small.png",
+    "large": "https://fortnite-api.com/images/cosmetics/lego/cid_a_172_athena_commando_f_stands_e/large.png",
+    "wide": "https://fortnite-api.com/images/cosmetics/lego/cid_a_172_athena_commando_f_stands_e/wide.png"
+   },
+   "bean": {
+    "small": "https://fortnite-api.com/images/cosmetics/beans/bean_standsbe/small.png",
+    "large": "https://fortnite-api.com/images/cosmetics/beans/bean_standsbe/large.png"
+   }
+  },
+  "variants": [
+   {
+    "channel": "Material",
+    "type": "color",
+    "options": [
+     {
+      "tag": "Mat1",
+      "name": "predeterminado",
+      "image": "https://fortnite-api.com/images/cosmetics/br/cid_a_172_athena_commando_f_stands_e/variants/material/mat1.png"
+     },
+     {
+      "tag": "Mat2",
+      "name": "blanco",
+      "image": "https://fortnite-api.com/images/cosmetics/br/cid_a_172_athena_commando_f_stands_e/variants/material/mat2.png"
+     }
+    ]
+   },
+   {
+    "channel": "Emissive",
+    "type": "luces",
+    "options": [
+     {
+      "tag": "Emissive2",
+      "name": "activado",
+      "image": "https://fortnite-api.com/images/cosmetics/br/cid_a_172_athena_commando_f_stands_e/variants/emissive/emissive2.png"
+     },
+     {
+      "tag": "Emissive1",
+      "name": "desactivado",
+      "image": "https://fortnite-api.com/images/cosmetics/br/cid_a_172_athena_commando_f_stands_e/variants/emissive/emissive1.png"
+     }
+    ]
+   }
+  ],
+  "showcaseVideo": "neKtmS6-TlQ",
+  "added": "2021-08-03T11:17:43Z",
+  "shopHistory": [
+   "2021-08-06T00:00:00Z",
+   "2021-08-07T00:00:00Z",
+   "2021-08-08T00:00:00Z",
+   "2021-08-09T00:00:00Z",
+   "2021-10-01T00:00:00Z",
+   "2021-10-02T00:00:00Z",
+   "2021-12-31T00:00:00Z",
+   "2022-01-01T00:00:00Z",
+   "2022-01-20T00:00:00Z",
+   "2022-01-21T00:00:00Z",
+   "2022-01-22T00:00:00Z",
+   "2022-04-02T00:00:00Z",
+   "2022-04-03T00:00:00Z",
+   "2022-04-04T00:00:00Z",
+   "2022-06-04T00:00:00Z",
+   "2022-06-05T00:00:00Z",
+   "2022-06-06T00:00:00Z",
+   "2022-06-07T00:00:00Z",
+   "2022-06-08T00:00:00Z",
+   "2022-06-09T00:00:00Z",
+   "2022-06-10T00:00:00Z",
+   "2022-06-11T00:00:00Z",
+   "2022-06-12T00:00:00Z",
+   "2022-09-09T00:00:00Z",
+   "2022-09-10T00:00:00Z",
+   "2022-10-06T00:00:00Z",
+   "2022-10-07T00:00:00Z",
+   "2022-10-08T00:00:00Z",
+   "2022-10-09T00:00:00Z",
+   "2022-10-10T00:00:00Z",
+   "2022-10-11T00:00:00Z",
+   "2022-10-12T00:00:00Z",
+   "2022-11-21T00:00:00Z",
+   "2022-11-22T00:00:00Z",
+   "2022-11-23T00:00:00Z",
+   "2022-12-26T00:00:00Z",
+   "2022-12-27T00:00:00Z",
+   "2023-01-27T00:00:00Z",
+   "2023-01-28T00:00:00Z",
+   "2023-01-29T00:00:00Z",
+   "2023-01-30T00:00:00Z",
+   "2023-01-31T00:00:00Z",
+   "2023-04-09T00:00:00Z",
+   "2023-04-10T00:00:00Z",
+   "2023-04-11T00:00:00Z",
+   "2023-04-12T00:00:00Z",
+   "2023-04-13T00:00:00Z",
+   "2023-04-14T00:00:00Z",
+   "2023-04-15T00:00:00Z",
+   "2023-04-16T00:00:00Z",
+   "2023-04-17T00:00:00Z",
+   "2023-06-04T00:00:00Z",
+   "2023-06-05T00:00:00Z",
+   "2023-06-06T00:00:00Z",
+   "2023-06-07T00:00:00Z",
+   "2023-06-08T00:00:00Z",
+   "2023-08-05T00:00:00Z",
+   "2023-08-06T00:00:00Z",
+   "2023-08-07T00:00:00Z",
+   "2023-08-08T00:00:00Z",
+   "2023-08-09T00:00:00Z",
+   "2023-09-15T00:00:00Z",
+   "2024-01-11T00:00:00Z",
+   "2024-01-12T00:00:00Z",
+   "2024-02-08T00:00:00Z",
+   "2024-04-06T00:00:00Z",
+   "2024-11-03T00:00:00Z",
+   "2025-04-14T00:00:00Z",
+   "2025-04-15T00:00:00Z",
+   "2026-11-17T00:00:00Z",
+   "2026-11-18T00:00:00Z",
+   "2026-11-19T00:00:00Z",
+   "2026-11-20T00:00:00Z",
+   "2026-11-21T00:00:00Z",
+   "2026-11-22T00:00:00Z",
+   "2026-11-23T00:00:00Z"
+  ]
+ },
+ "Character_KneeLens": {
+  "id": "Character_KneeLens",
+  "name": "Faye Valentine",
+  "description": "Una cazarrecompensas con un pasado olvidado que adora los juegos de azar.",
+  "type": {
+   "value": "outfit",
+   "displayValue": "Atuendo",
+   "backendValue": "AthenaCharacter"
+  },
+  "rarity": {
+   "value": "epic",
+   "displayValue": "Épico",
+   "backendValue": "EFortRarity::Epic"
+  },
+  "set": {
+   "value": "Cowboy Bebop",
+   "text": "Pieza del conjunto Cowboy Bebop.",
+   "backendValue": "AnotherMeeting"
+  },
+  "introduction": {
+   "chapter": "6",
+   "season": "2",
+   "text": "Introducido en Capítulo 6, Temporada 2.",
+   "backendValue": 34
+  },
+  "images": {
+   "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_kneelens/smallicon.png",
+   "icon": "https://fortnite-api.com/images/cosmetics/br/character_kneelens/icon.png",
+   "featured": "https://fortnite-api.com/images/cosmetics/br/character_kneelens/featured.png"
+  },
+  "variants": [
+   {
+    "channel": "Material",
+    "type": "gafas",
+    "options": [
+     {
+      "tag": "Mat1",
+      "name": "no",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_kneelens/variants/material/mat1.png"
+     },
+     {
+      "tag": "Mat2",
+      "name": "Sí",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_kneelens/variants/material/mat2.png"
+     }
+    ]
+   }
+  ],
+  "showcaseVideo": "gYa2KW0kOOg",
+  "added": "2025-02-27T00:00:00Z",
+  "shopHistory": [
+   "2025-02-27T00:00:00Z",
+   "2025-02-28T00:00:00Z",
+   "2025-03-01T00:00:00Z",
+   "2025-03-02T00:00:00Z",
+   "2025-03-03T00:00:00Z",
+   "2025-03-04T00:00:00Z",
+   "2025-03-05T00:00:00Z",
+   "2025-03-06T00:00:00Z",
+   "2025-03-07T00:00:00Z",
+   "2025-05-04T00:00:00Z",
+   "2025-05-05T00:00:00Z",
+   "2025-05-06T00:00:00Z",
+   "2025-10-01T00:00:00Z",
+   "2025-10-02T00:00:00Z",
+   "2025-10-03T00:00:00Z",
+   "2025-10-04T00:00:00Z",
+   "2026-05-03T00:00:00Z",
+   "2026-05-04T00:00:00Z",
+   "2026-05-05T00:00:00Z",
+   "2026-05-06T00:00:00Z",
+   "2026-11-20T00:00:00Z",
+   "2026-11-21T00:00:00Z",
+   "2026-11-22T00:00:00Z",
+   "2026-11-23T00:00:00Z"
+  ]
+ },
+ "Character_ShoneStays": {
+  "id": "Character_ShoneStays",
+  "name": "Widowmaker",
+  "description": "Una puntería devastadora.",
+  "type": {
+   "value": "outfit",
+   "displayValue": "Atuendo",
+   "backendValue": "AthenaCharacter"
+  },
+  "rarity": {
+   "value": "gaminglegends",
+   "displayValue": "Leyendas de videojuegos",
+   "backendValue": "EFortRarity::Epic"
+  },
+  "series": {
+   "value": "Leyendas de videojuegos",
+   "colors": [
+    "8078ffff",
+    "5328d6ff",
+    "3e1398ff",
+    "28085fff",
+    "0d0027ff"
+   ],
+   "backendValue": "PlatformSeries"
+  },
+  "set": {
+   "value": "Overwatch",
+   "text": "Pieza del conjunto Overwatch.",
+   "backendValue": "AlpineSaturn"
+  },
+  "introduction": {
+   "chapter": "7",
+   "season": "5",
+   "text": "Introducido en Capítulo 7, Temporada 5.",
+   "backendValue": 43
+  },
+  "images": {
+   "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_shonestays/smallicon.png",
+   "icon": "https://fortnite-api.com/images/cosmetics/br/character_shonestays/icon.png",
+   "featured": "https://fortnite-api.com/images/cosmetics/br/character_shonestays/featured.png",
+   "lego": {
+    "small": "https://fortnite-api.com/images/cosmetics/lego/character_shonestays/small.png",
+    "large": "https://fortnite-api.com/images/cosmetics/lego/character_shonestays/large.png",
+    "wide": "https://fortnite-api.com/images/cosmetics/lego/character_shonestays/wide.png"
+   }
+  },
+  "showcaseVideo": "aWMquVEHIp0",
+  "dynamicPakId": "1035",
+  "added": "2026-11-19T14:12:42Z",
+  "shopHistory": [
+   "2026-11-21T00:00:00Z",
+   "2026-11-22T00:00:00Z",
+   "2026-11-23T00:00:00Z"
+  ]
+ },
+ "Character_DanderClay": {
+  "id": "Character_DanderClay",
+  "name": "Kiriko",
+  "description": "Encontró su propio camino.",
+  "type": {
+   "value": "outfit",
+   "displayValue": "Atuendo",
+   "backendValue": "AthenaCharacter"
+  },
+  "rarity": {
+   "value": "gaminglegends",
+   "displayValue": "Leyendas de videojuegos",
+   "backendValue": "EFortRarity::Epic"
+  },
+  "series": {
+   "value": "Leyendas de videojuegos",
+   "colors": [
+    "8078ffff",
+    "5328d6ff",
+    "3e1398ff",
+    "28085fff",
+    "0d0027ff"
+   ],
+   "backendValue": "PlatformSeries"
+  },
+  "set": {
+   "value": "Overwatch",
+   "text": "Pieza del conjunto Overwatch.",
+   "backendValue": "AlpineSaturn"
+  },
+  "introduction": {
+   "chapter": "7",
+   "season": "5",
+   "text": "Introducido en Capítulo 7, Temporada 5.",
+   "backendValue": 43
+  },
+  "images": {
+   "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_danderclay/smallicon.png",
+   "icon": "https://fortnite-api.com/images/cosmetics/br/character_danderclay/icon.png",
+   "featured": "https://fortnite-api.com/images/cosmetics/br/character_danderclay/featured.png",
+   "lego": {
+    "small": "https://fortnite-api.com/images/cosmetics/lego/character_danderclay/small.png",
+    "large": "https://fortnite-api.com/images/cosmetics/lego/character_danderclay/large.png",
+    "wide": "https://fortnite-api.com/images/cosmetics/lego/character_danderclay/wide.png"
+   }
+  },
+  "showcaseVideo": "8FbMKH1OGV4",
+  "dynamicPakId": "1043",
+  "added": "2026-11-19T14:00:37Z",
+  "shopHistory": [
+   "2026-11-21T00:00:00Z",
+   "2026-11-22T00:00:00Z",
+   "2026-11-23T00:00:00Z"
+  ]
+ },
+ "Character_TonicMailYam": {
+  "id": "Character_TonicMailYam",
+  "name": "Rocky Rugahand",
+  "description": "De la mansión al yate.",
+  "type": {
+   "value": "outfit",
+   "displayValue": "Atuendo",
+   "backendValue": "AthenaCharacter"
+  },
+  "rarity": {
+   "value": "icon",
+   "displayValue": "Serie de ídolos",
+   "backendValue": "EFortRarity::Epic"
+  },
+  "series": {
+   "value": "Serie de ídolos",
+   "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+   "colors": [
+    "5cf2f3ff",
+    "2bc9caff",
+    "004c71ff",
+    "025253ff",
+    "000f2bff"
+   ],
+   "backendValue": "CreatorCollabSeries"
+  },
+  "set": {
+   "value": "A$AP Rocky",
+   "text": "Pieza del conjunto A$AP Rocky.",
+   "backendValue": "MutedVolunteer"
+  },
+  "introduction": {
+   "chapter": "7",
+   "season": "5",
+   "text": "Introducido en Capítulo 7, Temporada 5.",
+   "backendValue": 43
+  },
+  "images": {
+   "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_tonicmailyam/smallicon.png",
+   "icon": "https://fortnite-api.com/images/cosmetics/br/character_tonicmailyam/icon.png",
+   "featured": "https://fortnite-api.com/images/cosmetics/br/character_tonicmailyam/featured.png"
+  },
+  "variants": [
+   {
+    "channel": "Particle",
+    "type": "Reactividad",
+    "options": [
+     {
+      "tag": "Particle0",
+      "name": "Sí",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_tonicmailyam/variants/particle/particle0.png"
+     },
+     {
+      "tag": "Particle1",
+      "name": "No",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_tonicmailyam/variants/particle/particle1.png"
+     }
+    ]
+   }
+  ],
+  "showcaseVideo": "pgNNMVqTgy0",
+  "added": "2026-11-01T23:10:43Z",
+  "shopHistory": [
+   "2026-11-06T00:00:00Z",
+   "2026-11-07T00:00:00Z",
+   "2026-11-08T00:00:00Z",
+   "2026-11-09T00:00:00Z",
+   "2026-11-10T00:00:00Z",
+   "2026-11-11T00:00:00Z",
+   "2026-11-12T00:00:00Z",
+   "2026-11-13T00:00:00Z",
+   "2026-11-14T00:00:00Z",
+   "2026-11-15T00:00:00Z",
+   "2026-11-16T00:00:00Z",
+   "2026-11-17T00:00:00Z",
+   "2026-11-18T00:00:00Z",
+   "2026-11-19T00:00:00Z",
+   "2026-11-20T00:00:00Z",
+   "2026-11-21T00:00:00Z",
+   "2026-11-22T00:00:00Z",
+   "2026-11-23T00:00:00Z"
+  ]
+ },
+ "CID_919_Athena_Commando_F_BabaYaga": {
+  "id": "CID_919_Athena_Commando_F_BabaYaga",
+  "name": "Baba Yaga",
+  "description": "¿Escuchas el sonido de las patas de pollo...?",
+  "type": {
+   "value": "outfit",
+   "displayValue": "Atuendo",
+   "backendValue": "AthenaCharacter"
+  },
+  "rarity": {
+   "value": "rare",
+   "displayValue": "Raro",
+   "backendValue": "EFortRarity::Rare"
+  },
+  "set": {
+   "value": "Aquelarre original",
+   "text": "Pieza del conjunto Aquelarre original.",
+   "backendValue": "ClanNew"
+  },
+  "introduction": {
+   "chapter": "2",
+   "season": "4",
+   "text": "Introducido en Capítulo 2, Temporada 4.",
+   "backendValue": 14
+  },
+  "images": {
+   "smallIcon": "https://fortnite-api.com/images/cosmetics/br/cid_919_athena_commando_f_babayaga/smallicon.png",
+   "icon": "https://fortnite-api.com/images/cosmetics/br/cid_919_athena_commando_f_babayaga/icon.png",
+   "featured": "https://fortnite-api.com/images/cosmetics/br/cid_919_athena_commando_f_babayaga/featured.png",
+   "lego": {
+    "small": "https://fortnite-api.com/images/cosmetics/lego/cid_919_athena_commando_f_babayaga/small.png",
+    "large": "https://fortnite-api.com/images/cosmetics/lego/cid_919_athena_commando_f_babayaga/large.png",
+    "wide": "https://fortnite-api.com/images/cosmetics/lego/cid_919_athena_commando_f_babayaga/wide.png"
+   },
+   "bean": {
+    "small": "https://fortnite-api.com/images/cosmetics/beans/bean_babayaga/small.png",
+    "large": "https://fortnite-api.com/images/cosmetics/beans/bean_babayaga/large.png"
+   }
+  },
+  "metaTags": [
+   "Cosmetics.Emote.CharacterGroup.Skirts"
+  ],
+  "showcaseVideo": "_5OJ14qe8rw",
+  "added": "2020-10-26T00:00:00Z",
+  "shopHistory": [
+   "2020-10-26T00:00:00Z",
+   "2020-10-27T00:00:00Z",
+   "2020-10-28T00:00:00Z",
+   "2020-10-29T00:00:00Z",
+   "2021-10-26T00:00:00Z",
+   "2021-10-27T00:00:00Z",
+   "2021-10-28T00:00:00Z",
+   "2021-10-29T00:00:00Z",
+   "2021-10-31T00:00:00Z",
+   "2022-10-14T00:00:00Z",
+   "2022-10-15T00:00:00Z",
+   "2022-10-16T00:00:00Z",
+   "2022-10-18T00:00:00Z",
+   "2022-10-19T00:00:00Z",
+   "2022-10-20T00:00:00Z",
+   "2022-10-30T00:00:00Z",
+   "2023-10-17T00:00:00Z",
+   "2023-10-18T00:00:00Z",
+   "2023-10-19T00:00:00Z",
+   "2023-10-20T00:00:00Z",
+   "2023-10-21T00:00:00Z",
+   "2023-10-22T00:00:00Z",
+   "2023-10-23T00:00:00Z",
+   "2023-10-29T00:00:00Z",
+   "2023-10-30T00:00:00Z",
+   "2023-10-31T00:00:00Z",
+   "2023-11-01T00:00:00Z",
+   "2023-11-02T00:00:00Z",
+   "2024-10-13T00:00:00Z",
+   "2024-10-14T00:00:00Z",
+   "2024-10-15T00:00:00Z",
+   "2024-10-16T00:00:00Z",
+   "2025-10-11T00:00:00Z",
+   "2025-10-12T00:00:00Z",
+   "2025-10-13T00:00:00Z",
+   "2026-11-23T00:00:00Z"
+  ]
+ },
+ "Character_SpruceBark": {
+  "id": "Character_SpruceBark",
+  "name": "Crash Bandicoot",
+  "description": "¡Woah!",
+  "type": {
+   "value": "outfit",
+   "displayValue": "Atuendo",
+   "backendValue": "AthenaCharacter"
+  },
+  "rarity": {
+   "value": "gaminglegends",
+   "displayValue": "Leyendas de videojuegos",
+   "backendValue": "EFortRarity::Epic"
+  },
+  "series": {
+   "value": "Leyendas de videojuegos",
+   "colors": [
+    "8078ffff",
+    "5328d6ff",
+    "3e1398ff",
+    "28085fff",
+    "0d0027ff"
+   ],
+   "backendValue": "PlatformSeries"
+  },
+  "set": {
+   "value": "Crash Bandicoot",
+   "text": "Pieza del conjunto Crash Bandicoot.",
+   "backendValue": "ColdTake"
+  },
+  "introduction": {
+   "chapter": "7",
+   "season": "4",
+   "text": "Introducido en Capítulo 7, Temporada 4.",
+   "backendValue": 42
+  },
+  "images": {
+   "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_sprucebark/smallicon.png",
+   "icon": "https://fortnite-api.com/images/cosmetics/br/character_sprucebark/icon.png",
+   "featured": "https://fortnite-api.com/images/cosmetics/br/character_sprucebark/featured.png",
+   "lego": {
+    "small": "https://fortnite-api.com/images/cosmetics/lego/character_sprucebark/small.png",
+    "large": "https://fortnite-api.com/images/cosmetics/lego/character_sprucebark/large.png",
+    "wide": "https://fortnite-api.com/images/cosmetics/lego/character_sprucebark/wide.png"
+   }
+  },
+  "variants": [
+   {
+    "channel": "Parts",
+    "type": "Estilo",
+    "options": [
+     {
+      "tag": "Stage1",
+      "name": "Crash Bandicoot",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_sprucebark/variants/parts/stage1.png"
+     },
+     {
+      "tag": "Stage2",
+      "name": "Crash clásico",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_sprucebark/variants/parts/stage2.png"
+     }
+    ]
+   }
+  ],
+  "metaTags": [
+   "Cosmetics.MetaTags.Special.Large",
+   "Cosmetics.Emote.CharacterGroup.BigHead"
+  ],
+  "showcaseVideo": "YhgtFoM0N14",
+  "added": "2026-08-26T23:33:06Z",
+  "shopHistory": [
+   "2026-08-29T00:00:00Z",
+   "2026-08-30T00:00:00Z",
+   "2026-08-31T00:00:00Z",
+   "2026-09-01T00:00:00Z",
+   "2026-09-02T00:00:00Z",
+   "2026-09-03T00:00:00Z",
+   "2026-09-04T00:00:00Z",
+   "2026-09-05T00:00:00Z",
+   "2026-09-06T00:00:00Z",
+   "2026-09-07T00:00:00Z",
+   "2026-09-08T00:00:00Z",
+   "2026-09-09T00:00:00Z",
+   "2026-09-10T00:00:00Z",
+   "2026-09-11T00:00:00Z",
+   "2026-11-22T00:00:00Z",
+   "2026-11-23T00:00:00Z"
+  ]
+ },
+ "Character_VouchTrig": {
+  "id": "Character_VouchTrig",
+  "name": "Mordecai",
+  "description": "¡Amigo!",
+  "type": {
+   "value": "outfit",
+   "displayValue": "Atuendo",
+   "backendValue": "AthenaCharacter"
+  },
+  "rarity": {
+   "value": "epic",
+   "displayValue": "Épico",
+   "backendValue": "EFortRarity::Epic"
+  },
+  "set": {
+   "value": "Un show más",
+   "text": "Pieza del conjunto Un show más.",
+   "backendValue": "CenterCard"
+  },
+  "introduction": {
+   "chapter": "7",
+   "season": "1",
+   "text": "Introducido en Capítulo 7, Temporada 1.",
+   "backendValue": 39
+  },
+  "images": {
+   "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_vouchtrig/smallicon.png",
+   "icon": "https://fortnite-api.com/images/cosmetics/br/character_vouchtrig/icon.png",
+   "featured": "https://fortnite-api.com/images/cosmetics/br/character_vouchtrig/featured.png",
+   "lego": {
+    "small": "https://fortnite-api.com/images/cosmetics/lego/character_vouchtrig/small.png",
+    "large": "https://fortnite-api.com/images/cosmetics/lego/character_vouchtrig/large.png",
+    "wide": "https://fortnite-api.com/images/cosmetics/lego/character_vouchtrig/wide.png"
+   }
+  },
+  "metaTags": [
+   "Cosmetics.MetaTags.Special.Medium",
+   "Cosmetics.MetaTags.Special.BigHeadHelm"
+  ],
+  "showcaseVideo": "ow9QTpj_HIs",
+  "added": "2026-01-31T00:00:00Z",
+  "shopHistory": [
+   "2026-01-31T00:00:00Z",
+   "2026-02-01T00:00:00Z",
+   "2026-02-02T00:00:00Z",
+   "2026-02-03T00:00:00Z",
+   "2026-02-04T00:00:00Z",
+   "2026-02-05T00:00:00Z",
+   "2026-02-06T00:00:00Z",
+   "2026-05-17T00:00:00Z",
+   "2026-05-18T00:00:00Z",
+   "2026-05-19T00:00:00Z",
+   "2026-05-20T00:00:00Z",
+   "2026-05-21T00:00:00Z",
+   "2026-08-09T00:00:00Z",
+   "2026-08-10T00:00:00Z",
+   "2026-08-11T00:00:00Z",
+   "2026-08-12T00:00:00Z",
+   "2026-08-13T00:00:00Z",
+   "2026-11-19T00:00:00Z",
+   "2026-11-20T00:00:00Z",
+   "2026-11-21T00:00:00Z",
+   "2026-11-22T00:00:00Z",
+   "2026-11-23T00:00:00Z"
+  ]
+ },
+ "Character_FacetBlom": {
+  "id": "Character_FacetBlom",
+  "name": "Genji",
+  "description": "Un ciberninja legendario.",
+  "type": {
+   "value": "outfit",
+   "displayValue": "Atuendo",
+   "backendValue": "AthenaCharacter"
+  },
+  "rarity": {
+   "value": "gaminglegends",
+   "displayValue": "Leyendas de videojuegos",
+   "backendValue": "EFortRarity::Epic"
+  },
+  "series": {
+   "value": "Leyendas de videojuegos",
+   "colors": [
+    "8078ffff",
+    "5328d6ff",
+    "3e1398ff",
+    "28085fff",
+    "0d0027ff"
+   ],
+   "backendValue": "PlatformSeries"
+  },
+  "set": {
+   "value": "Overwatch",
+   "text": "Pieza del conjunto Overwatch.",
+   "backendValue": "AlpineSaturn"
+  },
+  "introduction": {
+   "chapter": "7",
+   "season": "2",
+   "text": "Introducido en Capítulo 7, Temporada 2.",
+   "backendValue": 40
+  },
+  "images": {
+   "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_facetblom/smallicon.png",
+   "icon": "https://fortnite-api.com/images/cosmetics/br/character_facetblom/icon.png",
+   "featured": "https://fortnite-api.com/images/cosmetics/br/character_facetblom/featured.png",
+   "lego": {
+    "small": "https://fortnite-api.com/images/cosmetics/lego/character_facetblom/small.png",
+    "large": "https://fortnite-api.com/images/cosmetics/lego/character_facetblom/large.png",
+    "wide": "https://fortnite-api.com/images/cosmetics/lego/character_facetblom/wide.png"
+   }
+  },
+  "showcaseVideo": "TLsJdBZqP_U",
+  "added": "2026-05-14T09:00:00Z",
+  "shopHistory": [
+   "2026-05-14T00:00:00Z",
+   "2026-05-15T00:00:00Z",
+   "2026-05-16T00:00:00Z",
+   "2026-05-17T00:00:00Z",
+   "2026-05-18T00:00:00Z",
+   "2026-05-19T00:00:00Z",
+   "2026-05-20T00:00:00Z",
+   "2026-05-21T00:00:00Z",
+   "2026-05-22T00:00:00Z",
+   "2026-05-23T00:00:00Z",
+   "2026-05-24T00:00:00Z",
+   "2026-05-25T00:00:00Z",
+   "2026-05-26T00:00:00Z",
+   "2026-05-27T00:00:00Z",
+   "2026-05-28T00:00:00Z",
+   "2026-05-29T00:00:00Z",
+   "2026-05-30T00:00:00Z",
+   "2026-05-31T00:00:00Z",
+   "2026-06-01T00:00:00Z",
+   "2026-06-02T00:00:00Z",
+   "2026-06-03T00:00:00Z",
+   "2026-06-04T00:00:00Z",
+   "2026-06-05T00:00:00Z",
+   "2026-06-06T00:00:00Z",
+   "2026-06-07T00:00:00Z",
+   "2026-06-08T00:00:00Z",
+   "2026-09-12T00:00:00Z",
+   "2026-09-13T00:00:00Z",
+   "2026-09-14T00:00:00Z",
+   "2026-09-15T00:00:00Z",
+   "2026-09-16T00:00:00Z",
+   "2026-11-22T00:00:00Z",
+   "2026-11-23T00:00:00Z"
+  ]
+ },
+ "Character_SkiffGrind": {
+  "id": "Character_SkiffGrind",
+  "name": "D.Va",
+  "description": "La estrella fugaz del escuadrón MEKA.",
+  "type": {
+   "value": "outfit",
+   "displayValue": "Atuendo",
+   "backendValue": "AthenaCharacter"
+  },
+  "rarity": {
+   "value": "gaminglegends",
+   "displayValue": "Leyendas de videojuegos",
+   "backendValue": "EFortRarity::Epic"
+  },
+  "series": {
+   "value": "Leyendas de videojuegos",
+   "colors": [
+    "8078ffff",
+    "5328d6ff",
+    "3e1398ff",
+    "28085fff",
+    "0d0027ff"
+   ],
+   "backendValue": "PlatformSeries"
+  },
+  "set": {
+   "value": "Overwatch",
+   "text": "Pieza del conjunto Overwatch.",
+   "backendValue": "AlpineSaturn"
+  },
+  "introduction": {
+   "chapter": "7",
+   "season": "2",
+   "text": "Introducido en Capítulo 7, Temporada 2.",
+   "backendValue": 40
+  },
+  "images": {
+   "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_skiffgrind/smallicon.png",
+   "icon": "https://fortnite-api.com/images/cosmetics/br/character_skiffgrind/icon.png",
+   "featured": "https://fortnite-api.com/images/cosmetics/br/character_skiffgrind/featured.png",
+   "lego": {
+    "small": "https://fortnite-api.com/images/cosmetics/lego/character_skiffgrind/small.png",
+    "large": "https://fortnite-api.com/images/cosmetics/lego/character_skiffgrind/large.png",
+    "wide": "https://fortnite-api.com/images/cosmetics/lego/character_skiffgrind/wide.png"
+   }
+  },
+  "showcaseVideo": "28QSPdVX87E",
+  "added": "2026-05-14T09:00:00Z",
+  "shopHistory": [
+   "2026-05-14T00:00:00Z",
+   "2026-05-15T00:00:00Z",
+   "2026-05-16T00:00:00Z",
+   "2026-05-17T00:00:00Z",
+   "2026-05-18T00:00:00Z",
+   "2026-05-19T00:00:00Z",
+   "2026-05-20T00:00:00Z",
+   "2026-05-21T00:00:00Z",
+   "2026-05-22T00:00:00Z",
+   "2026-05-23T00:00:00Z",
+   "2026-05-24T00:00:00Z",
+   "2026-05-25T00:00:00Z",
+   "2026-05-26T00:00:00Z",
+   "2026-05-27T00:00:00Z",
+   "2026-05-28T00:00:00Z",
+   "2026-05-29T00:00:00Z",
+   "2026-05-30T00:00:00Z",
+   "2026-05-31T00:00:00Z",
+   "2026-06-01T00:00:00Z",
+   "2026-06-02T00:00:00Z",
+   "2026-06-03T00:00:00Z",
+   "2026-06-04T00:00:00Z",
+   "2026-06-05T00:00:00Z",
+   "2026-06-06T00:00:00Z",
+   "2026-06-07T00:00:00Z",
+   "2026-06-08T00:00:00Z",
+   "2026-09-12T00:00:00Z",
+   "2026-09-13T00:00:00Z",
+   "2026-09-14T00:00:00Z",
+   "2026-09-15T00:00:00Z",
+   "2026-09-16T00:00:00Z",
+   "2026-11-22T00:00:00Z",
+   "2026-11-23T00:00:00Z"
+  ]
+ },
+ "Character_TonicMailWeb": {
+  "id": "Character_TonicMailWeb",
+  "name": "Flacko Helicopter",
+  "description": "N/A: Variante",
+  "type": {
+   "value": "outfit",
+   "displayValue": "Atuendo",
+   "backendValue": "AthenaCharacter"
+  },
+  "rarity": {
+   "value": "icon",
+   "displayValue": "Serie de ídolos",
+   "backendValue": "EFortRarity::Epic"
+  },
+  "series": {
+   "value": "Serie de ídolos",
+   "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+   "colors": [
+    "5cf2f3ff",
+    "2bc9caff",
+    "004c71ff",
+    "025253ff",
+    "000f2bff"
+   ],
+   "backendValue": "CreatorCollabSeries"
+  },
+  "set": {
+   "value": "A$AP Rocky",
+   "text": "Pieza del conjunto A$AP Rocky.",
+   "backendValue": "MutedVolunteer"
+  },
+  "introduction": {
+   "chapter": "7",
+   "season": "5",
+   "text": "Introducido en Capítulo 7, Temporada 5.",
+   "backendValue": 43
+  },
+  "images": {
+   "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_tonicmailweb/smallicon.png",
+   "icon": "https://fortnite-api.com/images/cosmetics/br/character_tonicmailweb/icon.png",
+   "featured": "https://fortnite-api.com/images/cosmetics/br/character_tonicmailweb/featured.png"
+  },
+  "variants": [
+   {
+    "channel": "Parts",
+    "type": "estilo",
+    "options": [
+     {
+      "tag": "Stage1",
+      "name": "A$AP Rocky Shirthead",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_tonicmailweb/variants/parts/stage1.png"
+     },
+     {
+      "tag": "Stage2",
+      "name": "A$AP Rocky Helicopter",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_tonicmailweb/variants/parts/stage2.png"
+     }
+    ]
+   }
+  ],
+  "showcaseVideo": "pRHfsfVMufI",
+  "added": "2026-11-05T14:00:58Z",
+  "shopHistory": [
+   "2026-11-06T00:00:00Z",
+   "2026-11-07T00:00:00Z",
+   "2026-11-08T00:00:00Z",
+   "2026-11-09T00:00:00Z",
+   "2026-11-10T00:00:00Z",
+   "2026-11-11T00:00:00Z",
+   "2026-11-12T00:00:00Z",
+   "2026-11-13T00:00:00Z",
+   "2026-11-14T00:00:00Z",
+   "2026-11-15T00:00:00Z",
+   "2026-11-16T00:00:00Z",
+   "2026-11-17T00:00:00Z",
+   "2026-11-18T00:00:00Z",
+   "2026-11-19T00:00:00Z",
+   "2026-11-20T00:00:00Z",
+   "2026-11-21T00:00:00Z",
+   "2026-11-22T00:00:00Z",
+   "2026-11-23T00:00:00Z"
+  ]
+ },
+ "Character_GatorCeladon": {
+  "id": "Character_GatorCeladon",
+  "name": "Murdoc",
+  "description": "Bajista de Gorillaz. Le vendió su alma al diablo.",
+  "type": {
+   "value": "outfit",
+   "displayValue": "Atuendo",
+   "backendValue": "AthenaCharacter"
+  },
+  "rarity": {
+   "value": "icon",
+   "displayValue": "Serie de ídolos",
+   "backendValue": "EFortRarity::Epic"
+  },
+  "series": {
+   "value": "Serie de ídolos",
+   "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+   "colors": [
+    "5cf2f3ff",
+    "2bc9caff",
+    "004c71ff",
+    "025253ff",
+    "000f2bff"
+   ],
+   "backendValue": "CreatorCollabSeries"
+  },
+  "set": {
+   "value": "Gorillaz",
+   "text": "Pieza del conjunto Gorillaz.",
+   "backendValue": "NightSwitch"
+  },
+  "introduction": {
+   "chapter": "6",
+   "season": "5",
+   "text": "Introducido en Capítulo 6, Temporada 5.",
+   "backendValue": 37
+  },
+  "images": {
+   "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_gatorceladon/smallicon.png",
+   "icon": "https://fortnite-api.com/images/cosmetics/br/character_gatorceladon/icon.png",
+   "featured": "https://fortnite-api.com/images/cosmetics/br/character_gatorceladon/featured.png",
+   "lego": {
+    "small": "https://fortnite-api.com/images/cosmetics/lego/character_gatorceladon/small.png",
+    "large": "https://fortnite-api.com/images/cosmetics/lego/character_gatorceladon/large.png",
+    "wide": "https://fortnite-api.com/images/cosmetics/lego/character_gatorceladon/wide.png"
+   }
+  },
+  "variants": [
+   {
+    "channel": "Progressive",
+    "type": "gorro",
+    "options": [
+     {
+      "tag": "Stage1",
+      "name": "No",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_gatorceladon/variants/progressive/stage1.png"
+     },
+     {
+      "tag": "Stage2",
+      "name": "Sí",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_gatorceladon/variants/progressive/stage2.png"
+     }
+    ]
+   }
+  ],
+  "showcaseVideo": "zhn5EoWlZ2A",
+  "added": "2025-08-26T08:18:15Z",
+  "shopHistory": [
+   "2026-03-06T00:00:00Z",
+   "2026-03-07T00:00:00Z",
+   "2026-03-08T00:00:00Z",
+   "2026-03-09T00:00:00Z",
+   "2026-03-10T00:00:00Z",
+   "2026-03-11T00:00:00Z",
+   "2026-03-12T00:00:00Z",
+   "2026-07-22T00:00:00Z",
+   "2026-07-23T00:00:00Z",
+   "2026-07-24T00:00:00Z",
+   "2026-07-25T00:00:00Z",
+   "2026-07-26T00:00:00Z",
+   "2026-11-22T00:00:00Z",
+   "2026-11-23T00:00:00Z"
+  ]
+ },
+ "Character_BerryTartRiver": {
+  "id": "Character_BerryTartRiver",
+  "name": "Ice Spice",
+  "description": "La princesa promesa del rap.",
+  "type": {
+   "value": "outfit",
+   "displayValue": "Atuendo",
+   "backendValue": "AthenaCharacter"
+  },
+  "rarity": {
+   "value": "icon",
+   "displayValue": "Serie de ídolos",
+   "backendValue": "EFortRarity::Epic"
+  },
+  "series": {
+   "value": "Serie de ídolos",
+   "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+   "colors": [
+    "5cf2f3ff",
+    "2bc9caff",
+    "004c71ff",
+    "025253ff",
+    "000f2bff"
+   ],
+   "backendValue": "CreatorCollabSeries"
+  },
+  "set": {
+   "value": "Ice Spice",
+   "text": "Pieza del conjunto Ice Spice.",
+   "backendValue": "HomeSkeleton"
+  },
+  "introduction": {
+   "chapter": "2",
+   "season": "Remix",
+   "text": "Introducido en Capítulo 2, Temporada Remix.",
+   "backendValue": 32
+  },
+  "images": {
+   "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_berrytartriver/smallicon.png",
+   "icon": "https://fortnite-api.com/images/cosmetics/br/character_berrytartriver/icon.png",
+   "featured": "https://fortnite-api.com/images/cosmetics/br/character_berrytartriver/featured.png"
+  },
+  "variants": [
+   {
+    "channel": "Material",
+    "type": "gafas",
+    "options": [
+     {
+      "tag": "Mat1",
+      "name": "sí",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_berrytartriver/variants/material/mat1.png"
+     },
+     {
+      "tag": "Mat2",
+      "name": "no",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_berrytartriver/variants/material/mat2.png"
+     }
+    ]
+   }
+  ],
+  "showcaseVideo": "2MFxIgnV-eU",
+  "added": "2024-11-13T10:14:32Z",
+  "shopHistory": [
+   "2024-11-15T00:00:00Z",
+   "2024-11-16T00:00:00Z",
+   "2024-11-17T00:00:00Z",
+   "2024-11-18T00:00:00Z",
+   "2024-11-19T00:00:00Z",
+   "2024-11-20T00:00:00Z",
+   "2024-11-21T00:00:00Z",
+   "2024-11-22T00:00:00Z",
+   "2024-11-23T00:00:00Z",
+   "2024-11-24T00:00:00Z",
+   "2024-11-25T00:00:00Z",
+   "2024-11-26T00:00:00Z",
+   "2024-11-27T00:00:00Z",
+   "2024-11-28T00:00:00Z",
+   "2024-11-29T00:00:00Z",
+   "2024-11-30T00:00:00Z",
+   "2024-12-01T00:00:00Z",
+   "2024-12-02T00:00:00Z",
+   "2024-12-03T00:00:00Z",
+   "2024-12-04T00:00:00Z",
+   "2024-12-05T00:00:00Z",
+   "2025-01-26T00:00:00Z",
+   "2025-01-27T00:00:00Z",
+   "2025-01-28T00:00:00Z",
+   "2025-01-29T00:00:00Z",
+   "2025-03-30T00:00:00Z",
+   "2025-03-31T00:00:00Z",
+   "2025-04-01T00:00:00Z",
+   "2025-04-02T00:00:00Z",
+   "2025-04-20T00:00:00Z",
+   "2025-04-21T00:00:00Z",
+   "2025-04-22T00:00:00Z",
+   "2025-07-03T00:00:00Z",
+   "2025-07-04T00:00:00Z",
+   "2025-07-05T00:00:00Z",
+   "2025-07-06T00:00:00Z",
+   "2025-08-22T00:00:00Z",
+   "2025-08-23T00:00:00Z",
+   "2025-08-24T00:00:00Z",
+   "2025-08-25T00:00:00Z",
+   "2026-01-01T00:00:00Z",
+   "2026-01-02T00:00:00Z",
+   "2026-01-03T00:00:00Z",
+   "2026-01-04T00:00:00Z",
+   "2026-11-21T00:00:00Z",
+   "2026-11-22T00:00:00Z",
+   "2026-11-23T00:00:00Z"
+  ]
+ },
+ "CID_070_Athena_Commando_M_Cupid": {
+  "id": "CID_070_Athena_Commando_M_Cupid",
+  "name": "Comando del amor",
+  "description": "Apunta al corazón.",
+  "type": {
+   "value": "outfit",
+   "displayValue": "Atuendo",
+   "backendValue": "AthenaCharacter"
+  },
+  "rarity": {
+   "value": "legendary",
+   "displayValue": "Legendario",
+   "backendValue": "EFortRarity::Legendary"
+  },
+  "set": {
+   "value": "Corazones campales",
+   "text": "Pieza del conjunto Corazones campales.",
+   "backendValue": "RoyaleHearts"
+  },
+  "introduction": {
+   "chapter": "1",
+   "season": "2",
+   "text": "Introducido en Capítulo 1, Temporada 2.",
+   "backendValue": 2
+  },
+  "images": {
+   "smallIcon": "https://fortnite-api.com/images/cosmetics/br/cid_070_athena_commando_m_cupid/smallicon.png",
+   "icon": "https://fortnite-api.com/images/cosmetics/br/cid_070_athena_commando_m_cupid/icon.png",
+   "featured": "https://fortnite-api.com/images/cosmetics/br/cid_070_athena_commando_m_cupid/featured.png",
+   "lego": {
+    "small": "https://fortnite-api.com/images/cosmetics/lego/cid_070_athena_commando_m_cupid/small.png",
+    "large": "https://fortnite-api.com/images/cosmetics/lego/cid_070_athena_commando_m_cupid/large.png",
+    "wide": "https://fortnite-api.com/images/cosmetics/lego/cid_070_athena_commando_m_cupid/wide.png"
+   },
+   "bean": {
+    "small": "https://fortnite-api.com/images/cosmetics/beans/bean_cupida/small.png",
+    "large": "https://fortnite-api.com/images/cosmetics/beans/bean_cupida/large.png"
+   }
+  },
+  "showcaseVideo": "7rPI4_WheJY",
+  "added": "2019-11-20T12:50:28Z",
+  "shopHistory": [
+   "2018-02-13T00:00:00Z",
+   "2018-02-14T00:00:00Z",
+   "2018-02-15T00:00:00Z",
+   "2018-02-16T00:00:00Z",
+   "2018-02-17T00:00:00Z",
+   "2018-03-11T00:00:00Z",
+   "2018-03-12T00:00:00Z",
+   "2018-03-13T00:00:00Z",
+   "2018-04-11T00:00:00Z",
+   "2018-04-13T00:00:00Z",
+   "2018-04-14T00:00:00Z",
+   "2018-05-17T00:00:00Z",
+   "2018-06-19T00:00:00Z",
+   "2018-07-25T00:00:00Z",
+   "2018-08-29T00:00:00Z",
+   "2018-10-16T00:00:00Z",
+   "2018-11-27T00:00:00Z",
+   "2019-06-12T00:00:00Z",
+   "2019-09-05T00:00:00Z",
+   "2020-02-08T00:00:00Z",
+   "2020-02-09T00:00:00Z",
+   "2020-02-14T00:00:00Z",
+   "2020-06-26T00:00:00Z",
+   "2020-08-13T00:00:00Z",
+   "2020-09-26T00:00:00Z",
+   "2020-11-14T00:00:00Z",
+   "2021-02-08T00:00:00Z",
+   "2021-02-09T00:00:00Z",
+   "2021-02-10T00:00:00Z",
+   "2021-02-11T00:00:00Z",
+   "2021-02-12T00:00:00Z",
+   "2021-02-13T00:00:00Z",
+   "2021-02-14T00:00:00Z",
+   "2021-02-15T00:00:00Z",
+   "2021-02-16T00:00:00Z",
+   "2021-05-17T00:00:00Z",
+   "2021-06-25T00:00:00Z",
+   "2021-12-05T00:00:00Z",
+   "2022-01-06T00:00:00Z",
+   "2022-02-08T00:00:00Z",
+   "2022-02-09T00:00:00Z",
+   "2022-02-10T00:00:00Z",
+   "2022-02-11T00:00:00Z",
+   "2022-02-12T00:00:00Z",
+   "2022-02-13T00:00:00Z",
+   "2022-02-14T00:00:00Z",
+   "2022-02-15T00:00:00Z",
+   "2022-02-16T00:00:00Z",
+   "2023-02-13T00:00:00Z",
+   "2023-02-14T00:00:00Z",
+   "2023-02-15T00:00:00Z",
+   "2023-02-16T00:00:00Z",
+   "2025-02-09T00:00:00Z",
+   "2025-02-10T00:00:00Z",
+   "2025-02-11T00:00:00Z",
+   "2025-02-12T00:00:00Z",
+   "2025-02-13T00:00:00Z",
+   "2026-02-15T00:00:00Z",
+   "2026-02-16T00:00:00Z",
+   "2026-02-17T00:00:00Z",
+   "2026-02-18T00:00:00Z",
+   "2026-11-20T00:00:00Z",
+   "2026-11-21T00:00:00Z"
+  ]
+ },
+ "CID_726_Athena_Commando_M_TargetPractice": {
+  "id": "CID_726_Athena_Commando_M_TargetPractice",
+  "name": "Hombre diana",
+  "description": "¿Vestido para el trabajo soñado?",
+  "type": {
+   "value": "outfit",
+   "displayValue": "Atuendo",
+   "backendValue": "AthenaCharacter"
+  },
+  "rarity": {
+   "value": "epic",
+   "displayValue": "Épico",
+   "backendValue": "EFortRarity::Epic"
+  },
+  "set": {
+   "value": "¡Prepárense, apunten y disparen!",
+   "text": "Pieza del conjunto ¡Prepárense, apunten y disparen!.",
+   "backendValue": "GetSetGo"
+  },
+  "introduction": {
+   "chapter": "2",
+   "season": "2",
+   "text": "Introducido en Capítulo 2, Temporada 2.",
+   "backendValue": 12
+  },
+  "images": {
+   "smallIcon": "https://fortnite-api.com/images/cosmetics/br/cid_726_athena_commando_m_targetpractice/smallicon.png",
+   "icon": "https://fortnite-api.com/images/cosmetics/br/cid_726_athena_commando_m_targetpractice/icon.png",
+   "featured": "https://fortnite-api.com/images/cosmetics/br/cid_726_athena_commando_m_targetpractice/featured.png",
+   "lego": {
+    "small": "https://fortnite-api.com/images/cosmetics/lego/cid_726_athena_commando_m_targetpractice/small.png",
+    "large": "https://fortnite-api.com/images/cosmetics/lego/cid_726_athena_commando_m_targetpractice/large.png",
+    "wide": "https://fortnite-api.com/images/cosmetics/lego/cid_726_athena_commando_m_targetpractice/wide.png"
+   },
+   "bean": {
+    "small": "https://fortnite-api.com/images/cosmetics/beans/bean_targetpractice/small.png",
+    "large": "https://fortnite-api.com/images/cosmetics/beans/bean_targetpractice/large.png"
+   }
+  },
+  "metaTags": [
+   "Cosmetics.MetaTags.Special.BodySwap.Medium"
+  ],
+  "showcaseVideo": "MyNLt2__nKQ",
+  "added": "2020-03-31T06:11:29Z",
+  "shopHistory": [
+   "2020-05-15T00:00:00Z",
+   "2020-06-29T00:00:00Z",
+   "2020-08-22T00:00:00Z",
+   "2020-11-22T00:00:00Z",
+   "2020-12-24T00:00:00Z",
+   "2021-04-18T00:00:00Z",
+   "2021-04-29T00:00:00Z",
+   "2021-04-30T00:00:00Z",
+   "2021-05-01T00:00:00Z",
+   "2021-05-02T00:00:00Z",
+   "2022-12-27T00:00:00Z",
+   "2022-12-28T00:00:00Z",
+   "2022-12-29T00:00:00Z",
+   "2024-04-09T00:00:00Z",
+   "2024-05-16T00:00:00Z",
+   "2024-05-24T00:00:00Z",
+   "2024-06-22T00:00:00Z",
+   "2024-07-22T00:00:00Z",
+   "2024-09-25T00:00:00Z",
+   "2024-10-14T00:00:00Z",
+   "2026-11-17T00:00:00Z"
+  ]
+ }
+}
