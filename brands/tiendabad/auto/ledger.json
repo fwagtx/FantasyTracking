@@ -619,6 +619,26 @@
    "format": "Tienda Pirata diaria (cuenta)",
    "topic": "Quedan 12 días · dato: no incluye",
    "folder": "video/auto/2026-11-23-pirata-cuenta"
+  },
+  {
+   "date": "2026-11-24",
+   "slot": "13:00",
+   "format": "Noticia del juego",
+   "topic": "Semana dorada + Día de la comunidad (desde el 28 nov los bienes dorados de cada Capitán vuelven a los cofres, con doble polvo de espíritu y PE; Día de la comunidad el 5 dic, el último día de la búsqueda) + cualquier cofre puede dar la Tienda Pirata",
+   "folder": "video/auto/2026-11-24-noticia-semana-dorada"
+  },
+  {
+   "date": "2026-12-01",
+   "slot": "20:30",
+   "format": "Adivina la temporada",
+   "topic": "Genos (C6 T5), Hermano Bao (C2 T1), Kim Kardashian icónica (C7 T1)",
+   "folder": "video/auto/2026-12-01-adivina-temporada",
+   "ids": [
+    "Character_ArmyFlour",
+    "CID_338_Athena_Commando_M_DumplingMan",
+    "Character_QuicheLorraineLime"
+   ],
+   "note": "Every map place has had its '¿Dónde está?', so this 8:30 PM slot got the other evergreen format again; whether to repeat places instead is still a question for the owner."
   }
  ]
 }

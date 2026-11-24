@@ -1,0 +1,76 @@
+{
+ "duration": 25.7,
+ "caption": "#EpicPartner Adivina la temporada 👀 Solo los verdaderos OG aciertan las 3\n¿Cuántas acertaste? 👇\nUsa el código BAD en la tienda de objetos 💛\n#fortnite #fortniteog #adivinalatemporada",
+ "claims": [
+  {
+   "text": "Genos: Capítulo 6, Temporada 5",
+   "source": "Character_ArmyFlour.json",
+   "match": [
+    "Genos",
+    "\"chapter\": \"6\"",
+    "\"season\": \"5\""
+   ]
+  },
+  {
+   "text": "Hermano Bao: Capítulo 2, Temporada 1",
+   "source": "CID_338_Athena_Commando_M_DumplingMan.json",
+   "match": [
+    "Hermano Bao",
+    "\"chapter\": \"2\"",
+    "\"season\": \"1\""
+   ]
+  },
+  {
+   "text": "Kim Kardashian icónica: Capítulo 7, Temporada 1",
+   "source": "Character_QuicheLorraineLime.json",
+   "match": [
+    "Kim Kardashian icónica",
+    "\"chapter\": \"7\"",
+    "\"season\": \"1\""
+   ]
+  }
+ ],
+ "text": [
+  "GENOS",
+  "HERMANO BAO",
+  "KIM KARDASHIAN ICÓNICA",
+  "?",
+  "ADIVINA LA TEMPORADA / 3 SKINS · SIN TRAMPA",
+  "1 / 3",
+  "CUENTA",
+  "CAPÍTULO 6 · TEMPORADA 5",
+  "¿QUÉ TEMPORADA?",
+  "2 / 3",
+  "CAPÍTULO 2 · TEMPORADA 1",
+  "3 / 3",
+  "CAPÍTULO 7 · TEMPORADA 1",
+  "¿CUÁNTAS / ACERTASTE?",
+  "¡ADIVINA LA TEMPORADA!",
+  "SOLO LOS VERDADEROS",
+  "OG ACIERTAN LAS",
+  "TRES.",
+  "GENOS.",
+  "¡CAPÍTULO 6,",
+  "TEMPORADA 5!",
+  "HERMANO BAO.",
+  "¡CAPÍTULO 2,",
+  "TEMPORADA 1!",
+  "KIM KARDASHIAN ICÓNICA.",
+  "¡CAPÍTULO 7,",
+  "¿CUÁNTAS ACERTASTE?",
+  "DÍMELO EN LOS",
+  "COMENTARIOS.",
+  "USA EL CÓDIGO",
+  "BAD EN LA",
+  "TIENDA DE OBJETOS.",
+  "LE AYUDA MUCHÍSIMO",
+  "AL CANAL.",
+  "¡GRACIAS POR VER!",
+  "SÍGUENOS PARA MÁS",
+  "CONTENIDO DIARIO.",
+  "#EPICPARTNER",
+  "LA TIENDITA BAD",
+  "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+  "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO"
+ ]
+}

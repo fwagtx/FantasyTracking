@@ -1,0 +1,72 @@
+{
+  "video": "latienditabad-2026-11-24-noticia-semana-dorada.mp4",
+  "checked_utc": "2026-11-24T17:29:29Z",
+  "verdict": "READY TO POST",
+  "results": [
+    {
+      "check": "1. Facts",
+      "status": "PASS",
+      "detail": "3/3 claims verified against saved official data",
+      "items": [
+        {
+          "claim": "Noticia del juego: «Semana dorada + Día de la comunidad» (cita textual)",
+          "result": "PASS",
+          "why": "matched in news.json"
+        },
+        {
+          "claim": "La búsqueda del tesoro (la temporada) termina el 5 de diciembre",
+          "result": "PASS",
+          "why": "matched in vgc-guide.json"
+        },
+        {
+          "claim": "Cualquier cofre (en Battle Royale o Cero construcción) puede dar la Tienda Pirata",
+          "result": "PASS",
+          "why": "matched in vgc-guide.json"
+        }
+      ]
+    },
+    {
+      "check": "2. Spelling and grammar",
+      "status": "PASS",
+      "detail": "42 distinct words checked; code written as BAD in all 2 mentions",
+      "items": []
+    },
+    {
+      "check": "3. Frames",
+      "status": "PASS",
+      "detail": "No black frames, no frozen stretches over 1.5 s. Contact sheet (1 frame/s) reviewed by eye: contact-sheet.png",
+      "items": []
+    },
+    {
+      "check": "4. Audio",
+      "status": "PASS",
+      "detail": "Integrated -14.1 LUFS, true peak -2.7 dBTP, no clipping, no silence gaps. All sound is original synthesis (no game rips, no copyrighted music). No voiceover in this cut.",
+      "items": []
+    },
+    {
+      "check": "5. Specs and safe zones",
+      "status": "PASS",
+      "detail": "1080x1920 h264 60 fps, aac 48000 Hz, 41.7s. Fits TikTok, Reels, Shorts, X, Facebook, Threads. Every on-screen text box sampled 4x/s stays out of the top bar, bottom caption area and button column.",
+      "items": []
+    },
+    {
+      "check": "6. Disclosure and wording",
+      "status": "PASS",
+      "detail": "#EpicPartner is the first hashtag in caption line 1 and on screen in every sampled frame from 0.0s. No discount, giveaway, endorsement or filler-CTA wording.",
+      "items": []
+    },
+    {
+      "check": "7. Would a fan stop scrolling? Made by a person?",
+      "status": "PASS",
+      "detail": "1:00 PM noticia del juego, 41.7 s: the in-game tile 'Semana dorada + Día de la comunidad' (new in today's fetch, first seen 03:00 UTC Nov 24, never before in the news history), quoted word for word in three lines as the voice reads them (the voice says 'veintiocho de noviembre' / 'cinco de diciembre' for 28/11 and 5/12, and 'pe e' for PE), then explained: from Nov 28, in the Semana dorada, each Captain's golden goods return to chests with double spirit dust and XP; Dec 5, the last day of the treasure hunt (VGC guide: the season is set to end on December 5), Día de la comunidad; any chest in Battle Royale or Zero Build can give the Pirate Shop (VGC guide). Checked twelve stills over the whole video plus two at full size: frame 1 hook '¡SEMANA DORADA EN FORTNITE!' inside the panel's empty lower part, the panel with the tile title and the quote lines lighting up one by one, the three takeaway toasts (28 DE NOVIEMBRE · Bienes dorados de vuelta en los cofres; DOBLE · Polvo de espíritu y PE; 5 DE DICIEMBRE · Día de la comunidad), the code card and ¡GRACIAS POR VER!. Everything readable on a phone; captions below the panel without touching its text. No free wording (TikTok rule). First build ran 45.2 s and the checklist refused it (shorts stay under 45 s): two explanation lines were shortened ('desde el 28 de noviembre, los bienes dorados de cada Capitán vuelven a los cofres'; 'cualquier cofre puede darte la Tienda Pirata'), rebuilt and checked again over its whole length.",
+      "items": []
+    },
+    {
+      "check": "8. Owner approval",
+      "status": "PASS",
+      "detail": "Standing approval for autopilot (owner, 2026-10-28): posts when checks 1-7 all PASS.",
+      "items": []
+    }
+  ],
+  "caption": "#EpicPartner Noticia nueva en Fortnite: ¡la Semana dorada empieza el 28 de noviembre! ✨ Los bienes dorados de cada Capitán vuelven a los cofres, con doble polvo de espíritu y PE. Y el 5 de diciembre, Día de la comunidad\n¿Lo vas a aprovechar? 👇\nUsa el código BAD en la tienda de objetos 💛\n#fortnite #noticiasfortnite #fortniteespañol"
+}

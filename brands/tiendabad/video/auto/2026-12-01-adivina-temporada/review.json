@@ -1,0 +1,4 @@
+{
+ "status": "PASS",
+ "notes": "Adivina la temporada for Dec 1, 8:30 PM: Genos (Capítulo 6, Temporada 5), Hermano Bao (Capítulo 2, Temporada 1), Kim Kardashian icónica (Capítulo 7, Temporada 1), picked by new_guess.py auto from today's shop and checked against Epic's cosmetics data in sources/. 25.4 s, 1080x1920. Frame 1 stops the scroll: 'ADIVINA LA TEMPORADA / 3 SKINS · SIN TRAMPA' with the three tiles hidden behind '?'. Each round: tile 1/3, 2/3, 3/3 with the name and '¿QUÉ TEMPORADA?', the countdown, then the yellow 'CAPÍTULO X · TEMPORADA Y' banner as the voice says it. Ends on the code card with ¡GRACIAS POR VER!. Names and banners readable on a phone, nothing cut off or overlapping. None of the three had its season said in recent shop or long videos, and no season repeats the last two quizzes. The voice says 'Yénos' (auto/say.py; it read 'Jénos' with a jota)."
+}

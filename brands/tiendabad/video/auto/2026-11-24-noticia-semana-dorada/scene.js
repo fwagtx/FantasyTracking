@@ -57,7 +57,7 @@ window.SCENE = TPL.news({
    ]
   },
   {
-   "text": "Cualquier cofre en Battle Royale o Cero construcción puede dar la Tienda Pirata",
+   "text": "Cualquier cofre (en Battle Royale o Cero construcción) puede dar la Tienda Pirata",
    "source": "vgc-guide.json",
    "match": [
     "To find one, you have to open chests during Battle Royale and Zero Build modes. This can be any type of chest",

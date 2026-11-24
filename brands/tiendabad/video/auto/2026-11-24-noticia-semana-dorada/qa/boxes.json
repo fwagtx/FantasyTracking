@@ -1,0 +1,7218 @@
+{
+ "duration": 42,
+ "samples": [
+  {
+   "t": 0,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+     "x": 71.77003479003906,
+     "y": 350.4878845214844,
+     "w": 816.4599609375,
+     "h": 782.336669921875
+    },
+    {
+     "text": "¡SEMANA DORADA / EN FORTNITE!",
+     "x": 112.79998779296875,
+     "y": 829.545654296875,
+     "w": 774.4000244140625,
+     "h": 140.00250244140625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 0.25,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+     "x": 46.257057189941406,
+     "y": 326.07818603515625,
+     "w": 867.48583984375,
+     "h": 831.1561889648438
+    },
+    {
+     "text": "¡SEMANA DORADA / EN FORTNITE!",
+     "x": 60.24444580078125,
+     "y": 820.044189453125,
+     "w": 879.5111083984375,
+     "h": 159.00537109375
+    },
+    {
+     "text": "¡NOTICIA NUEVA EN",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 0.5,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+     "x": 46.54383850097656,
+     "y": 326.38848876953125,
+     "w": 866.912353515625,
+     "h": 830.5354614257812
+    },
+    {
+     "text": "¡SEMANA DORADA / EN FORTNITE!",
+     "x": 60,
+     "y": 820,
+     "w": 880,
+     "h": 159.09375
+    },
+    {
+     "text": "¡NOTICIA NUEVA EN",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 0.75,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+     "x": 46.918365478515625,
+     "y": 326.7799987792969,
+     "w": 866.163330078125,
+     "h": 829.75244140625
+    },
+    {
+     "text": "¡SEMANA DORADA / EN FORTNITE!",
+     "x": 60,
+     "y": 820,
+     "w": 880,
+     "h": 159.09375
+    },
+    {
+     "text": "¡NOTICIA NUEVA EN",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 1,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+     "x": 47.24507141113281,
+     "y": 327.1214599609375,
+     "w": 865.5098876953125,
+     "h": 829.069580078125
+    },
+    {
+     "text": "¡SEMANA DORADA / EN FORTNITE!",
+     "x": 60,
+     "y": 820,
+     "w": 880,
+     "h": 159.09375
+    },
+    {
+     "text": "FORTNITE!",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 1.25,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+     "x": 47.51080322265625,
+     "y": 327.3992004394531,
+     "w": 864.9783935546875,
+     "h": 828.51416015625
+    },
+    {
+     "text": "¡SEMANA DORADA / EN FORTNITE!",
+     "x": 60,
+     "y": 820,
+     "w": 880,
+     "h": 159.09375
+    },
+    {
+     "text": "FORTNITE!",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 1.5,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+     "x": 47.7048225402832,
+     "y": 327.6019592285156,
+     "w": 864.59033203125,
+     "h": 828.108642578125
+    },
+    {
+     "text": "¡SEMANA DORADA / EN FORTNITE!",
+     "x": 60,
+     "y": 820,
+     "w": 880,
+     "h": 159.09375
+    },
+    {
+     "text": "ESTO DICE EL",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 1.75,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+     "x": 47.81929016113281,
+     "y": 327.7215881347656,
+     "w": 864.3614501953125,
+     "h": 827.869384765625
+    },
+    {
+     "text": "¡SEMANA DORADA / EN FORTNITE!",
+     "x": 60,
+     "y": 820,
+     "w": 880,
+     "h": 159.09375
+    },
+    {
+     "text": "ESTO DICE EL",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 2,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+     "x": 47.84956359863281,
+     "y": 327.75323486328125,
+     "w": 864.3009033203125,
+     "h": 827.8060913085938
+    },
+    {
+     "text": "¡SEMANA DORADA / EN FORTNITE!",
+     "x": 60,
+     "y": 820,
+     "w": 880,
+     "h": 159.09375
+    },
+    {
+     "text": "ESTO DICE EL",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 2.25,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+     "x": 47.7944221496582,
+     "y": 327.6955871582031,
+     "w": 864.4111328125,
+     "h": 827.92138671875
+    },
+    {
+     "text": "¡SEMANA DORADA / EN FORTNITE!",
+     "x": 60,
+     "y": 820,
+     "w": 880,
+     "h": 159.09375
+    },
+    {
+     "text": "JUEGO:",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 2.5,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+     "x": 47.65609359741211,
+     "y": 327.551025390625,
+     "w": 864.6878662109375,
+     "h": 828.21044921875
+    },
+    {
+     "text": "A PARTIR DEL 28/11, EL BOTÍN ACTUALIZADO SE UNE AL TESORO DESENTERRADO DURANTE LA SEMANA DORADA,",
+     "x": 89.15918731689453,
+     "y": 591.0877075195312,
+     "w": 781.1294555664062,
+     "h": 204.451171875
+    },
+    {
+     "text": "JUEGO:",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 2.75,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+     "x": 47.440185546875,
+     "y": 327.32537841796875,
+     "w": 865.11962890625,
+     "h": 828.6616821289062
+    },
+    {
+     "text": "A PARTIR DEL 28/11, EL BOTÍN ACTUALIZADO SE UNE AL TESORO DESENTERRADO DURANTE LA SEMANA DORADA,",
+     "x": 89.08212280273438,
+     "y": 590.88232421875,
+     "w": 781.2325439453125,
+     "h": 204.86224365234375
+    },
+    {
+     "text": "A PARTIR DEL",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 3,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+     "x": 47.15542221069336,
+     "y": 327.02777099609375,
+     "w": 865.689208984375,
+     "h": 829.2570190429688
+    },
+    {
+     "text": "A PARTIR DEL 28/11, EL BOTÍN ACTUALIZADO SE UNE AL TESORO DESENTERRADO DURANTE LA SEMANA DORADA,",
+     "x": 88.98058319091797,
+     "y": 590.611328125,
+     "w": 781.3682861328125,
+     "h": 205.4046630859375
+    },
+    {
+     "text": "A PARTIR DEL",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 3.25,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+     "x": 46.81329345703125,
+     "y": 326.670166015625,
+     "w": 866.3734130859375,
+     "h": 829.97216796875
+    },
+    {
+     "text": "A PARTIR DEL 28/11, EL BOTÍN ACTUALIZADO SE UNE AL TESORO DESENTERRADO DURANTE LA SEMANA DORADA,",
+     "x": 88.8587417602539,
+     "y": 590.2855834960938,
+     "w": 781.5309448242188,
+     "h": 206.05670166015625
+    },
+    {
+     "text": "28/11,",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 3.5,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+     "x": 46.427574157714844,
+     "y": 326.2669677734375,
+     "w": 867.1448974609375,
+     "h": 830.778564453125
+    },
+    {
+     "text": "A PARTIR DEL 28/11, EL BOTÍN ACTUALIZADO SE UNE AL TESORO DESENTERRADO DURANTE LA SEMANA DORADA,",
+     "x": 88.7215805053711,
+     "y": 589.9181518554688,
+     "w": 781.7139282226562,
+     "h": 206.7923583984375
+    },
+    {
+     "text": "28/11,",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 3.75,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+     "x": 46.01375198364258,
+     "y": 325.8343505859375,
+     "w": 867.9725341796875,
+     "h": 831.643798828125
+    },
+    {
+     "text": "A PARTIR DEL 28/11, EL BOTÍN ACTUALIZADO SE UNE AL TESORO DESENTERRADO DURANTE LA SEMANA DORADA,",
+     "x": 88.57465362548828,
+     "y": 589.523681640625,
+     "w": 781.90966796875,
+     "h": 207.58221435546875
+    },
+    {
+     "text": "28/11,",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 4,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+     "x": 45.588382720947266,
+     "y": 325.3896179199219,
+     "w": 868.8232421875,
+     "h": 832.533203125
+    },
+    {
+     "text": "A PARTIR DEL 28/11, EL BOTÍN ACTUALIZADO SE UNE AL TESORO DESENTERRADO DURANTE LA SEMANA DORADA,",
+     "x": 88.42388916015625,
+     "y": 589.117919921875,
+     "w": 782.1101684570312,
+     "h": 208.394775390625
+    },
+    {
+     "text": "28/11,",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 4.25,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+     "x": 45.1684455871582,
+     "y": 324.9505310058594,
+     "w": 869.6630859375,
+     "h": 833.411376953125
+    },
+    {
+     "text": "A PARTIR DEL 28/11, EL BOTÍN ACTUALIZADO SE UNE AL TESORO DESENTERRADO DURANTE LA SEMANA DORADA,",
+     "x": 88.27529907226562,
+     "y": 588.717041015625,
+     "w": 782.3074951171875,
+     "h": 209.1976318359375
+    },
+    {
+     "text": "28/11,",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 4.5,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+     "x": 44.770633697509766,
+     "y": 324.5345458984375,
+     "w": 870.458740234375,
+     "h": 834.243408203125
+    },
+    {
+     "text": "A PARTIR DEL 28/11, EL BOTÍN ACTUALIZADO SE UNE AL TESORO DESENTERRADO DURANTE LA SEMANA DORADA,",
+     "x": 88.13477325439453,
+     "y": 588.3370361328125,
+     "w": 782.4939575195312,
+     "h": 209.95880126953125
+    },
+    {
+     "text": "EL BOTÍN ACTUALIZADO",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 159.8125
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 4.75,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+     "x": 44.41071701049805,
+     "y": 324.15814208984375,
+     "w": 871.1785888671875,
+     "h": 834.9961547851562
+    },
+    {
+     "text": "A PARTIR DEL 28/11, EL BOTÍN ACTUALIZADO SE UNE AL TESORO DESENTERRADO DURANTE LA SEMANA DORADA,",
+     "x": 88.0078353881836,
+     "y": 587.9930419921875,
+     "w": 782.662109375,
+     "h": 210.64794921875
+    },
+    {
+     "text": "EL BOTÍN ACTUALIZADO",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 159.8125
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 5,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+     "x": 44.1029167175293,
+     "y": 323.83624267578125,
+     "w": 871.794189453125,
+     "h": 835.6400756835938
+    },
+    {
+     "text": "A PARTIR DEL 28/11, EL BOTÍN ACTUALIZADO SE UNE AL TESORO DESENTERRADO DURANTE LA SEMANA DORADA,",
+     "x": 87.89942169189453,
+     "y": 587.6986694335938,
+     "w": 782.8055419921875,
+     "h": 211.23773193359375
+    },
+    {
+     "text": "EL BOTÍN ACTUALIZADO",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 159.8125
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 5.25,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+     "x": 43.8593635559082,
+     "y": 323.58148193359375,
+     "w": 872.28125,
+     "h": 836.1494750976562
+    },
+    {
+     "text": "A PARTIR DEL 28/11, EL BOTÍN ACTUALIZADO SE UNE AL TESORO DESENTERRADO DURANTE LA SEMANA DORADA,",
+     "x": 87.81373596191406,
+     "y": 587.4656372070312,
+     "w": 782.9188232421875,
+     "h": 211.70465087890625
+    },
+    {
+     "text": "EL BOTÍN ACTUALIZADO",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 159.8125
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 5.5,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+     "x": 43.689640045166016,
+     "y": 323.4039611816406,
+     "w": 872.6207275390625,
+     "h": 836.504638671875
+    },
+    {
+     "text": "A PARTIR DEL 28/11, EL BOTÍN ACTUALIZADO SE UNE AL TESORO DESENTERRADO DURANTE LA SEMANA DORADA,",
+     "x": 87.75408172607422,
+     "y": 587.3031616210938,
+     "w": 782.9976196289062,
+     "h": 212.03021240234375
+    },
+    {
+     "text": "EL BOTÍN ACTUALIZADO",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 159.8125
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 5.75,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+     "x": 43.600406646728516,
+     "y": 323.3106384277344,
+     "w": 872.7991943359375,
+     "h": 836.691162109375
+    },
+    {
+     "text": "A PARTIR DEL 28/11, EL BOTÍN ACTUALIZADO SE UNE AL TESORO DESENTERRADO DURANTE LA SEMANA DORADA,",
+     "x": 87.72272491455078,
+     "y": 587.2177734375,
+     "w": 783.0390625,
+     "h": 212.20135498046875
+    },
+    {
+     "text": "SE UNE AL",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 6,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+     "x": 43.59516143798828,
+     "y": 323.3051452636719,
+     "w": 872.8096923828125,
+     "h": 836.7021484375
+    },
+    {
+     "text": "A PARTIR DEL 28/11, EL BOTÍN ACTUALIZADO SE UNE AL TESORO DESENTERRADO DURANTE LA SEMANA DORADA,",
+     "x": 87.72088623046875,
+     "y": 587.2127075195312,
+     "w": 783.0414428710938,
+     "h": 212.21148681640625
+    },
+    {
+     "text": "TESORO DESENTERRADO DURANTE",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 239.71875
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 6.25,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+     "x": 43.67411422729492,
+     "y": 323.3877258300781,
+     "w": 872.6517333984375,
+     "h": 836.537109375
+    },
+    {
+     "text": "A PARTIR DEL 28/11, EL BOTÍN ACTUALIZADO SE UNE AL TESORO DESENTERRADO DURANTE LA SEMANA DORADA,",
+     "x": 87.74862670898438,
+     "y": 587.288330078125,
+     "w": 783.0048828125,
+     "h": 212.0599365234375
+    },
+    {
+     "text": "TESORO DESENTERRADO DURANTE",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 239.71875
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 6.5,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+     "x": 43.83416748046875,
+     "y": 323.5551452636719,
+     "w": 872.3316650390625,
+     "h": 836.2021484375
+    },
+    {
+     "text": "A PARTIR DEL 28/11, EL BOTÍN ACTUALIZADO SE UNE AL TESORO DESENTERRADO DURANTE LA SEMANA DORADA,",
+     "x": 87.80487823486328,
+     "y": 587.4415283203125,
+     "w": 782.9305419921875,
+     "h": 211.75299072265625
+    },
+    {
+     "text": "TESORO DESENTERRADO DURANTE",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 239.71875
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 6.75,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+     "x": 44.069034576416016,
+     "y": 323.80078125,
+     "w": 871.8619384765625,
+     "h": 835.7109375
+    },
+    {
+     "text": "A PARTIR DEL 28/11, EL BOTÍN ACTUALIZADO SE UNE AL TESORO DESENTERRADO DURANTE LA SEMANA DORADA,",
+     "x": 87.88749694824219,
+     "y": 587.666259765625,
+     "w": 782.8212890625,
+     "h": 211.30267333984375
+    },
+    {
+     "text": "TESORO DESENTERRADO DURANTE",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 239.71875
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 7,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+     "x": 44.369483947753906,
+     "y": 324.1150207519531,
+     "w": 871.260986328125,
+     "h": 835.08251953125
+    },
+    {
+     "text": "A PARTIR DEL 28/11, EL BOTÍN ACTUALIZADO SE UNE AL TESORO DESENTERRADO DURANTE LA SEMANA DORADA,",
+     "x": 87.99330139160156,
+     "y": 587.95361328125,
+     "w": 782.6813354492188,
+     "h": 210.7269287109375
+    },
+    {
+     "text": "TESORO DESENTERRADO DURANTE",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 239.71875
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 7.25,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+     "x": 44.72367858886719,
+     "y": 324.4854431152344,
+     "w": 870.5526123046875,
+     "h": 834.341552734375
+    },
+    {
+     "text": "A PARTIR DEL 28/11, EL BOTÍN ACTUALIZADO SE UNE AL TESORO DESENTERRADO DURANTE LA SEMANA DORADA,",
+     "x": 88.11820220947266,
+     "y": 588.2921752929688,
+     "w": 782.515869140625,
+     "h": 210.0487060546875
+    },
+    {
+     "text": "TESORO DESENTERRADO DURANTE",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 239.71875
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 7.5,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+     "x": 45.11762619018555,
+     "y": 324.89739990234375,
+     "w": 869.7647705078125,
+     "h": 833.5177612304688
+    },
+    {
+     "text": "A PARTIR DEL 28/11, EL BOTÍN ACTUALIZADO SE UNE AL TESORO DESENTERRADO DURANTE LA SEMANA DORADA,",
+     "x": 88.25733947753906,
+     "y": 588.6685180664062,
+     "w": 782.3314208984375,
+     "h": 209.29486083984375
+    },
+    {
+     "text": "LA SEMANA DORADA,",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 7.75,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+     "x": 45.53571701049805,
+     "y": 325.3345642089844,
+     "w": 868.9285888671875,
+     "h": 832.643310546875
+    },
+    {
+     "text": "A PARTIR DEL 28/11, EL BOTÍN ACTUALIZADO SE UNE AL TESORO DESENTERRADO DURANTE LA SEMANA DORADA,",
+     "x": 88.40524291992188,
+     "y": 589.0676879882812,
+     "w": 782.135009765625,
+     "h": 208.49542236328125
+    },
+    {
+     "text": "LA SEMANA DORADA,",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 8,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+     "x": 45.961334228515625,
+     "y": 325.779541015625,
+     "w": 868.0772705078125,
+     "h": 831.75341796875
+    },
+    {
+     "text": "A PARTIR DEL 28/11, EL BOTÍN ACTUALIZADO SE UNE AL TESORO DESENTERRADO DURANTE LA SEMANA DORADA,",
+     "x": 88.55606079101562,
+     "y": 589.4736938476562,
+     "w": 781.934326171875,
+     "h": 207.68231201171875
+    },
+    {
+     "text": "LA SEMANA DORADA,",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 8.25,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+     "x": 46.37750244140625,
+     "y": 326.214599609375,
+     "w": 867.2449951171875,
+     "h": 830.88330078125
+    },
+    {
+     "text": "A PARTIR DEL 28/11, EL BOTÍN ACTUALIZADO SE UNE AL TESORO DESENTERRADO DURANTE LA SEMANA DORADA,",
+     "x": 88.70378875732422,
+     "y": 589.8704223632812,
+     "w": 781.7376098632812,
+     "h": 206.88787841796875
+    },
+    {
+     "text": "LA SEMANA DORADA,",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 8.5,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+     "x": 46.76757049560547,
+     "y": 326.62237548828125,
+     "w": 866.46484375,
+     "h": 830.0678100585938
+    },
+    {
+     "text": "A PARTIR DEL 28/11, EL BOTÍN ACTUALIZADO SE UNE AL TESORO DESENTERRADO DURANTE LA SEMANA DORADA,",
+     "x": 88.84247589111328,
+     "y": 590.2420654296875,
+     "w": 781.5526733398438,
+     "h": 206.14385986328125
+    },
+    {
+     "text": "LA SEMANA DORADA,",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 8.75,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+     "x": 47.11588668823242,
+     "y": 326.9864501953125,
+     "w": 865.7681884765625,
+     "h": 829.339599609375
+    },
+    {
+     "text": "A PARTIR DEL 28/11, EL BOTÍN ACTUALIZADO SE UNE AL TESORO DESENTERRADO DURANTE LA SEMANA DORADA,",
+     "x": 88.96649932861328,
+     "y": 590.57373046875,
+     "w": 781.3870849609375,
+     "h": 205.47998046875
+    },
+    {
+     "text": "DONDE LOS BIENES DORADOS DE CADA CAPITÁN VUELVEN A ESTAR EN COFRES JUNTO CON EL DOBLE DE POLVO DE ESPÍRITU Y PE.",
+     "x": 90.44320678710938,
+     "y": 800.5685424804688,
+     "w": 781.3870849609375,
+     "h": 205.47991943359375
+    },
+    {
+     "text": "DONDE LOS BIENES",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 9,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+     "x": 47.4084358215332,
+     "y": 327.2922058105469,
+     "w": 865.18310546875,
+     "h": 828.72802734375
+    },
+    {
+     "text": "A PARTIR DEL 28/11, EL BOTÍN ACTUALIZADO SE UNE AL TESORO DESENTERRADO DURANTE LA SEMANA DORADA,",
+     "x": 89.07079315185547,
+     "y": 590.8521118164062,
+     "w": 781.2476806640625,
+     "h": 204.9227294921875
+    },
+    {
+     "text": "DONDE LOS BIENES DORADOS DE CADA CAPITÁN VUELVEN A ESTAR EN COFRES JUNTO CON EL DOBLE DE POLVO DE ESPÍRITU Y PE.",
+     "x": 90.397216796875,
+     "y": 800.847900390625,
+     "w": 781.2476806640625,
+     "h": 204.9227294921875
+    },
+    {
+     "text": "DONDE LOS BIENES",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 9.25,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+     "x": 47.63340759277344,
+     "y": 327.5273132324219,
+     "w": 864.733154296875,
+     "h": 828.2578125
+    },
+    {
+     "text": "A PARTIR DEL 28/11, EL BOTÍN ACTUALIZADO SE UNE AL TESORO DESENTERRADO DURANTE LA SEMANA DORADA,",
+     "x": 89.15108489990234,
+     "y": 591.0661010742188,
+     "w": 781.1403198242188,
+     "h": 204.494384765625
+    },
+    {
+     "text": "DONDE LOS BIENES DORADOS DE CADA CAPITÁN VUELVEN A ESTAR EN COFRES JUNTO CON EL DOBLE DE POLVO DE ESPÍRITU Y PE.",
+     "x": 90.36201477050781,
+     "y": 801.0626220703125,
+     "w": 781.1403198242188,
+     "h": 204.494384765625
+    },
+    {
+     "text": "DONDE LOS BIENES",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 9.5,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+     "x": 47.781715393066406,
+     "y": 327.68231201171875,
+     "w": 864.4365234375,
+     "h": 827.9478149414062
+    },
+    {
+     "text": "A PARTIR DEL 28/11, EL BOTÍN ACTUALIZADO SE UNE AL TESORO DESENTERRADO DURANTE LA SEMANA DORADA,",
+     "x": 89.20405578613281,
+     "y": 591.2071533203125,
+     "w": 781.0693969726562,
+     "h": 204.21209716796875
+    },
+    {
+     "text": "DONDE LOS BIENES DORADOS DE CADA CAPITÁN VUELVEN A ESTAR EN COFRES JUNTO CON EL DOBLE DE POLVO DE ESPÍRITU Y PE.",
+     "x": 90.33888244628906,
+     "y": 801.2040405273438,
+     "w": 781.0693969726562,
+     "h": 204.212158203125
+    },
+    {
+     "text": "DORADOS DE CADA",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 9.75,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+     "x": 47.847354888916016,
+     "y": 327.75091552734375,
+     "w": 864.3052978515625,
+     "h": 827.8107299804688
+    },
+    {
+     "text": "A PARTIR DEL 28/11, EL BOTÍN ACTUALIZADO SE UNE AL TESORO DESENTERRADO DURANTE LA SEMANA DORADA,",
+     "x": 89.22750854492188,
+     "y": 591.26953125,
+     "w": 781.0379638671875,
+     "h": 204.0872802734375
+    },
+    {
+     "text": "DONDE LOS BIENES DORADOS DE CADA CAPITÁN VUELVEN A ESTAR EN COFRES JUNTO CON EL DOBLE DE POLVO DE ESPÍRITU Y PE.",
+     "x": 90.32865905761719,
+     "y": 801.2666625976562,
+     "w": 781.0379638671875,
+     "h": 204.08721923828125
+    },
+    {
+     "text": "DORADOS DE CADA",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 10,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+     "x": 47.827667236328125,
+     "y": 327.7303466796875,
+     "w": 864.3447265625,
+     "h": 827.851806640625
+    },
+    {
+     "text": "A PARTIR DEL 28/11, EL BOTÍN ACTUALIZADO SE UNE AL TESORO DESENTERRADO DURANTE LA SEMANA DORADA,",
+     "x": 89.22047424316406,
+     "y": 591.2507934570312,
+     "w": 781.0474243164062,
+     "h": 204.124755859375
+    },
+    {
+     "text": "DONDE LOS BIENES DORADOS DE CADA CAPITÁN VUELVEN A ESTAR EN COFRES JUNTO CON EL DOBLE DE POLVO DE ESPÍRITU Y PE.",
+     "x": 90.33172607421875,
+     "y": 801.2478637695312,
+     "w": 781.0474243164062,
+     "h": 204.124755859375
+    },
+    {
+     "text": "DORADOS DE CADA",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 10.25,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+     "x": 47.723445892333984,
+     "y": 327.6214294433594,
+     "w": 864.5531005859375,
+     "h": 828.069580078125
+    },
+    {
+     "text": "A PARTIR DEL 28/11, EL BOTÍN ACTUALIZADO SE UNE AL TESORO DESENTERRADO DURANTE LA SEMANA DORADA,",
+     "x": 89.18324279785156,
+     "y": 591.1517333984375,
+     "w": 781.0972900390625,
+     "h": 204.322998046875
+    },
+    {
+     "text": "DONDE LOS BIENES DORADOS DE CADA CAPITÁN VUELVEN A ESTAR EN COFRES JUNTO CON EL DOBLE DE POLVO DE ESPÍRITU Y PE.",
+     "x": 90.34796142578125,
+     "y": 801.1484985351562,
+     "w": 781.0972900390625,
+     "h": 204.32305908203125
+    },
+    {
+     "text": "CAPITÁN VUELVEN A",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 10.5,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+     "x": 47.538917541503906,
+     "y": 327.4285888671875,
+     "w": 864.922119140625,
+     "h": 828.455322265625
+    },
+    {
+     "text": "A PARTIR DEL 28/11, EL BOTÍN ACTUALIZADO SE UNE AL TESORO DESENTERRADO DURANTE LA SEMANA DORADA,",
+     "x": 89.11735534667969,
+     "y": 590.9762573242188,
+     "w": 781.1854248046875,
+     "h": 204.67425537109375
+    },
+    {
+     "text": "DONDE LOS BIENES DORADOS DE CADA CAPITÁN VUELVEN A ESTAR EN COFRES JUNTO CON EL DOBLE DE POLVO DE ESPÍRITU Y PE.",
+     "x": 90.37678527832031,
+     "y": 800.9724731445312,
+     "w": 781.1854248046875,
+     "h": 204.67425537109375
+    },
+    {
+     "text": "CAPITÁN VUELVEN A",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 10.75,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+     "x": 47.28154754638672,
+     "y": 327.1595764160156,
+     "w": 865.4368896484375,
+     "h": 828.993408203125
+    },
+    {
+     "text": "A PARTIR DEL 28/11, EL BOTÍN ACTUALIZADO SE UNE AL TESORO DESENTERRADO DURANTE LA SEMANA DORADA,",
+     "x": 89.02554321289062,
+     "y": 590.7313842773438,
+     "w": 781.3082275390625,
+     "h": 205.16436767578125
+    },
+    {
+     "text": "DONDE LOS BIENES DORADOS DE CADA CAPITÁN VUELVEN A ESTAR EN COFRES JUNTO CON EL DOBLE DE POLVO DE ESPÍRITU Y PE.",
+     "x": 90.4171371459961,
+     "y": 800.7267456054688,
+     "w": 781.3082275390625,
+     "h": 205.16436767578125
+    },
+    {
+     "text": "CAPITÁN VUELVEN A",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 11,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+     "x": 46.96172332763672,
+     "y": 326.8253173828125,
+     "w": 866.0765380859375,
+     "h": 829.661865234375
+    },
+    {
+     "text": "A PARTIR DEL 28/11, EL BOTÍN ACTUALIZADO SE UNE AL TESORO DESENTERRADO DURANTE LA SEMANA DORADA,",
+     "x": 88.91158294677734,
+     "y": 590.4269409179688,
+     "w": 781.46044921875,
+     "h": 205.77374267578125
+    },
+    {
+     "text": "DONDE LOS BIENES DORADOS DE CADA CAPITÁN VUELVEN A ESTAR EN COFRES JUNTO CON EL DOBLE DE POLVO DE ESPÍRITU Y PE.",
+     "x": 90.46753692626953,
+     "y": 800.4212036132812,
+     "w": 781.46044921875,
+     "h": 205.77374267578125
+    },
+    {
+     "text": "ESTAR EN COFRES",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 11.25,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+     "x": 46.59233856201172,
+     "y": 326.439208984375,
+     "w": 866.8153076171875,
+     "h": 830.43408203125
+    },
+    {
+     "text": "A PARTIR DEL 28/11, EL BOTÍN ACTUALIZADO SE UNE AL TESORO DESENTERRADO DURANTE LA SEMANA DORADA,",
+     "x": 88.78014373779297,
+     "y": 590.0751342773438,
+     "w": 781.6358642578125,
+     "h": 206.47802734375
+    },
+    {
+     "text": "DONDE LOS BIENES DORADOS DE CADA CAPITÁN VUELVEN A ESTAR EN COFRES JUNTO CON EL DOBLE DE POLVO DE ESPÍRITU Y PE.",
+     "x": 90.52609252929688,
+     "y": 800.06787109375,
+     "w": 781.6358642578125,
+     "h": 206.47808837890625
+    },
+    {
+     "text": "ESTAR EN COFRES",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 11.5,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+     "x": 46.18824005126953,
+     "y": 326.0167541503906,
+     "w": 867.62353515625,
+     "h": 831.279052734375
+    },
+    {
+     "text": "A PARTIR DEL 28/11, EL BOTÍN ACTUALIZADO SE UNE AL TESORO DESENTERRADO DURANTE LA SEMANA DORADA,",
+     "x": 88.6365737915039,
+     "y": 589.6900634765625,
+     "w": 781.8271484375,
+     "h": 207.24908447265625
+    },
+    {
+     "text": "DONDE LOS BIENES DORADOS DE CADA CAPITÁN VUELVEN A ESTAR EN COFRES JUNTO CON EL DOBLE DE POLVO DE ESPÍRITU Y PE.",
+     "x": 90.59058380126953,
+     "y": 799.6809692382812,
+     "w": 781.8272094726562,
+     "h": 207.24908447265625
+    },
+    {
+     "text": "ESTAR EN COFRES",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 11.75,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+     "x": 45.765621185302734,
+     "y": 325.5749206542969,
+     "w": 868.46875,
+     "h": 832.16259765625
+    },
+    {
+     "text": "A PARTIR DEL 28/11, EL BOTÍN ACTUALIZADO SE UNE AL TESORO DESENTERRADO DURANTE LA SEMANA DORADA,",
+     "x": 88.48667907714844,
+     "y": 589.2870483398438,
+     "w": 782.0266723632812,
+     "h": 208.05609130859375
+    },
+    {
+     "text": "DONDE LOS BIENES DORADOS DE CADA CAPITÁN VUELVEN A ESTAR EN COFRES JUNTO CON EL DOBLE DE POLVO DE ESPÍRITU Y PE.",
+     "x": 90.65850830078125,
+     "y": 799.2758178710938,
+     "w": 782.0266723632812,
+     "h": 208.05609130859375
+    },
+    {
+     "text": "JUNTO CON EL",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 12,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+     "x": 45.341365814208984,
+     "y": 325.13134765625,
+     "w": 869.3172607421875,
+     "h": 833.0498046875
+    },
+    {
+     "text": "A PARTIR DEL 28/11, EL BOTÍN ACTUALIZADO SE UNE AL TESORO DESENTERRADO DURANTE LA SEMANA DORADA,",
+     "x": 88.33645629882812,
+     "y": 588.8821411132812,
+     "w": 782.226318359375,
+     "h": 208.866943359375
+    },
+    {
+     "text": "DONDE LOS BIENES DORADOS DE CADA CAPITÁN VUELVEN A ESTAR EN COFRES JUNTO CON EL DOBLE DE POLVO DE ESPÍRITU Y PE.",
+     "x": 90.72720336914062,
+     "y": 798.8685302734375,
+     "w": 782.226318359375,
+     "h": 208.866943359375
+    },
+    {
+     "text": "JUNTO CON EL",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 12.25,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+     "x": 44.93236541748047,
+     "y": 324.70367431640625,
+     "w": 870.13525390625,
+     "h": 833.9052124023438
+    },
+    {
+     "text": "A PARTIR DEL 28/11, EL BOTÍN ACTUALIZADO SE UNE AL TESORO DESENTERRADO DURANTE LA SEMANA DORADA,",
+     "x": 88.19187927246094,
+     "y": 588.4915771484375,
+     "w": 782.418212890625,
+     "h": 209.6492919921875
+    },
+    {
+     "text": "DONDE LOS BIENES DORADOS DE CADA CAPITÁN VUELVEN A ESTAR EN COFRES JUNTO CON EL DOBLE DE POLVO DE ESPÍRITU Y PE.",
+     "x": 90.79389190673828,
+     "y": 798.4754638671875,
+     "w": 782.418212890625,
+     "h": 209.64923095703125
+    },
+    {
+     "text": "DOBLE DE POLVO",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 12.5,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+     "x": 44.55485916137695,
+     "y": 324.30889892578125,
+     "w": 870.8902587890625,
+     "h": 834.6947631835938
+    },
+    {
+     "text": "A PARTIR DEL 28/11, EL BOTÍN ACTUALIZADO SE UNE AL TESORO DESENTERRADO DURANTE LA SEMANA DORADA,",
+     "x": 88.05864715576172,
+     "y": 588.130859375,
+     "w": 782.5947875976562,
+     "h": 210.37188720703125
+    },
+    {
+     "text": "DONDE LOS BIENES DORADOS DE CADA CAPITÁN VUELVEN A ESTAR EN COFRES JUNTO CON EL DOBLE DE POLVO DE ESPÍRITU Y PE.",
+     "x": 90.85586547851562,
+     "y": 798.1121826171875,
+     "w": 782.5948486328125,
+     "h": 210.3719482421875
+    },
+    {
+     "text": "DOBLE DE POLVO",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 12.75,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+     "x": 44.223777770996094,
+     "y": 323.962646484375,
+     "w": 871.552490234375,
+     "h": 835.38720703125
+    },
+    {
+     "text": "A PARTIR DEL 28/11, EL BOTÍN ACTUALIZADO SE UNE AL TESORO DESENTERRADO DURANTE LA SEMANA DORADA,",
+     "x": 87.94197845458984,
+     "y": 587.8142700195312,
+     "w": 782.749267578125,
+     "h": 211.006103515625
+    },
+    {
+     "text": "DONDE LOS BIENES DORADOS DE CADA CAPITÁN VUELVEN A ESTAR EN COFRES JUNTO CON EL DOBLE DE POLVO DE ESPÍRITU Y PE.",
+     "x": 90.9105453491211,
+     "y": 797.7932739257812,
+     "w": 782.749267578125,
+     "h": 211.00616455078125
+    },
+    {
+     "text": "DOBLE DE POLVO",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 13,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+     "x": 43.95218276977539,
+     "y": 323.6785888671875,
+     "w": 872.0955810546875,
+     "h": 835.955322265625
+    },
+    {
+     "text": "A PARTIR DEL 28/11, EL BOTÍN ACTUALIZADO SE UNE AL TESORO DESENTERRADO DURANTE LA SEMANA DORADA,",
+     "x": 87.84638214111328,
+     "y": 587.554443359375,
+     "w": 782.8756713867188,
+     "h": 211.5267333984375
+    },
+    {
+     "text": "DONDE LOS BIENES DORADOS DE CADA CAPITÁN VUELVEN A ESTAR EN COFRES JUNTO CON EL DOBLE DE POLVO DE ESPÍRITU Y PE.",
+     "x": 90.95562744140625,
+     "y": 797.5314331054688,
+     "w": 782.8756713867188,
+     "h": 211.52667236328125
+    },
+    {
+     "text": "DE ESPÍRITU Y",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 13.25,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+     "x": 43.750770568847656,
+     "y": 323.4678955078125,
+     "w": 872.4984130859375,
+     "h": 836.376708984375
+    },
+    {
+     "text": "A PARTIR DEL 28/11, EL BOTÍN ACTUALIZADO SE UNE AL TESORO DESENTERRADO DURANTE LA SEMANA DORADA,",
+     "x": 87.77555847167969,
+     "y": 587.3616943359375,
+     "w": 782.96923828125,
+     "h": 211.9129638671875
+    },
+    {
+     "text": "DONDE LOS BIENES DORADOS DE CADA CAPITÁN VUELVEN A ESTAR EN COFRES JUNTO CON EL DOBLE DE POLVO DE ESPÍRITU Y PE.",
+     "x": 90.98919677734375,
+     "y": 797.3370971679688,
+     "w": 782.96923828125,
+     "h": 211.9129638671875
+    },
+    {
+     "text": "DE ESPÍRITU Y",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 13.5,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+     "x": 43.627445220947266,
+     "y": 323.3388977050781,
+     "w": 872.7451171875,
+     "h": 836.634765625
+    },
+    {
+     "text": "A PARTIR DEL 28/11, EL BOTÍN ACTUALIZADO SE UNE AL TESORO DESENTERRADO DURANTE LA SEMANA DORADA,",
+     "x": 87.73222351074219,
+     "y": 587.24365234375,
+     "w": 783.0264892578125,
+     "h": 212.14947509765625
+    },
+    {
+     "text": "DONDE LOS BIENES DORADOS DE CADA CAPITÁN VUELVEN A ESTAR EN COFRES JUNTO CON EL DOBLE DE POLVO DE ESPÍRITU Y PE.",
+     "x": 91.00980377197266,
+     "y": 797.2180786132812,
+     "w": 783.0264892578125,
+     "h": 212.14947509765625
+    },
+    {
+     "text": "DE ESPÍRITU Y",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 13.75,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+     "x": 43.58705520629883,
+     "y": 323.2966613769531,
+     "w": 872.825927734375,
+     "h": 836.71923828125
+    },
+    {
+     "text": "A PARTIR DEL 28/11, EL BOTÍN ACTUALIZADO SE UNE AL TESORO DESENTERRADO DURANTE LA SEMANA DORADA,",
+     "x": 87.7180404663086,
+     "y": 587.2049560546875,
+     "w": 783.0452270507812,
+     "h": 212.22698974609375
+    },
+    {
+     "text": "DONDE LOS BIENES DORADOS DE CADA CAPITÁN VUELVEN A ESTAR EN COFRES JUNTO CON EL DOBLE DE POLVO DE ESPÍRITU Y PE.",
+     "x": 91.01656341552734,
+     "y": 797.1790771484375,
+     "w": 783.0452270507812,
+     "h": 212.22698974609375
+    },
+    {
+     "text": "PE.",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 14,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+     "x": 43.63117599487305,
+     "y": 323.3428039550781,
+     "w": 872.7376708984375,
+     "h": 836.626953125
+    },
+    {
+     "text": "A PARTIR DEL 28/11, EL BOTÍN ACTUALIZADO SE UNE AL TESORO DESENTERRADO DURANTE LA SEMANA DORADA,",
+     "x": 87.73353576660156,
+     "y": 587.2471923828125,
+     "w": 783.0247802734375,
+     "h": 212.142333984375
+    },
+    {
+     "text": "DONDE LOS BIENES DORADOS DE CADA CAPITÁN VUELVEN A ESTAR EN COFRES JUNTO CON EL DOBLE DE POLVO DE ESPÍRITU Y PE.",
+     "x": 91.0091781616211,
+     "y": 797.2216796875,
+     "w": 783.0247802734375,
+     "h": 212.142333984375
+    },
+    {
+     "text": "PE.",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 14.25,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+     "x": 43.758079528808594,
+     "y": 323.4755554199219,
+     "w": 872.48388671875,
+     "h": 836.361328125
+    },
+    {
+     "text": "A PARTIR DEL 28/11, EL BOTÍN ACTUALIZADO SE UNE AL TESORO DESENTERRADO DURANTE LA SEMANA DORADA,",
+     "x": 87.77812957763672,
+     "y": 587.3687133789062,
+     "w": 782.9658813476562,
+     "h": 211.89886474609375
+    },
+    {
+     "text": "DONDE LOS BIENES DORADOS DE CADA CAPITÁN VUELVEN A ESTAR EN COFRES JUNTO CON EL DOBLE DE POLVO DE ESPÍRITU Y PE.",
+     "x": 90.98797607421875,
+     "y": 797.3441772460938,
+     "w": 782.9658813476562,
+     "h": 211.89886474609375
+    },
+    {
+     "text": "LUEGO, SÚBETE A BORDO PARA EL DÍA DE LA COMUNIDAD EL 5/12.",
+     "x": 94.19782257080078,
+     "y": 1007.3196411132812,
+     "w": 781.4373779296875,
+     "h": 111.91058349609375
+    },
+    {
+     "text": "LUEGO,",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 14.5,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+     "x": 43.96278762817383,
+     "y": 323.6896667480469,
+     "w": 872.074462890625,
+     "h": 835.93310546875
+    },
+    {
+     "text": "A PARTIR DEL 28/11, EL BOTÍN ACTUALIZADO SE UNE AL TESORO DESENTERRADO DURANTE LA SEMANA DORADA,",
+     "x": 87.85011291503906,
+     "y": 587.5645751953125,
+     "w": 782.8707885742188,
+     "h": 211.50640869140625
+    },
+    {
+     "text": "DONDE LOS BIENES DORADOS DE CADA CAPITÁN VUELVEN A ESTAR EN COFRES JUNTO CON EL DOBLE DE POLVO DE ESPÍRITU Y PE.",
+     "x": 90.95386505126953,
+     "y": 797.5416870117188,
+     "w": 782.8707885742188,
+     "h": 211.50634765625
+    },
+    {
+     "text": "LUEGO, SÚBETE A BORDO PARA EL DÍA DE LA COMUNIDAD EL 5/12.",
+     "x": 94.05760955810547,
+     "y": 1007.5187377929688,
+     "w": 781.3927612304688,
+     "h": 111.51727294921875
+    },
+    {
+     "text": "SÚBETE A BORDO",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 14.75,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+     "x": 44.23725891113281,
+     "y": 323.97674560546875,
+     "w": 871.5255126953125,
+     "h": 835.3590698242188
+    },
+    {
+     "text": "A PARTIR DEL 28/11, EL BOTÍN ACTUALIZADO SE UNE AL TESORO DESENTERRADO DURANTE LA SEMANA DORADA,",
+     "x": 87.94672393798828,
+     "y": 587.8271484375,
+     "w": 782.7429809570312,
+     "h": 210.98028564453125
+    },
+    {
+     "text": "DONDE LOS BIENES DORADOS DE CADA CAPITÁN VUELVEN A ESTAR EN COFRES JUNTO CON EL DOBLE DE POLVO DE ESPÍRITU Y PE.",
+     "x": 90.90830993652344,
+     "y": 797.8062744140625,
+     "w": 782.7429809570312,
+     "h": 210.98028564453125
+    },
+    {
+     "text": "LUEGO, SÚBETE A BORDO PARA EL DÍA DE LA COMUNIDAD EL 5/12.",
+     "x": 93.8698959350586,
+     "y": 1007.785400390625,
+     "w": 781.332763671875,
+     "h": 110.990234375
+    },
+    {
+     "text": "SÚBETE A BORDO",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 15,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+     "x": 44.57068634033203,
+     "y": 324.325439453125,
+     "w": 870.858642578125,
+     "h": 834.66162109375
+    },
+    {
+     "text": "A PARTIR DEL 28/11, EL BOTÍN ACTUALIZADO SE UNE AL TESORO DESENTERRADO DURANTE LA SEMANA DORADA,",
+     "x": 88.0642318725586,
+     "y": 588.1459350585938,
+     "w": 782.5874633789062,
+     "h": 210.34161376953125
+    },
+    {
+     "text": "DONDE LOS BIENES DORADOS DE CADA CAPITÁN VUELVEN A ESTAR EN COFRES JUNTO CON EL DOBLE DE POLVO DE ESPÍRITU Y PE.",
+     "x": 90.85325622558594,
+     "y": 798.12744140625,
+     "w": 782.58740234375,
+     "h": 210.34161376953125
+    },
+    {
+     "text": "LUEGO, SÚBETE A BORDO PARA EL DÍA DE LA COMUNIDAD EL 5/12.",
+     "x": 93.64228057861328,
+     "y": 1008.1089477539062,
+     "w": 781.2593383789062,
+     "h": 110.35040283203125
+    },
+    {
+     "text": "SÚBETE A BORDO",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 15.25,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+     "x": 44.94991683959961,
+     "y": 324.7220153808594,
+     "w": 870.1002197265625,
+     "h": 833.868408203125
+    },
+    {
+     "text": "A PARTIR DEL 28/11, EL BOTÍN ACTUALIZADO SE UNE AL TESORO DESENTERRADO DURANTE LA SEMANA DORADA,",
+     "x": 88.19808197021484,
+     "y": 588.5083618164062,
+     "w": 782.4100341796875,
+     "h": 209.61566162109375
+    },
+    {
+     "text": "DONDE LOS BIENES DORADOS DE CADA CAPITÁN VUELVEN A ESTAR EN COFRES JUNTO CON EL DOBLE DE POLVO DE ESPÍRITU Y PE.",
+     "x": 90.79102325439453,
+     "y": 798.4923095703125,
+     "w": 782.4100341796875,
+     "h": 209.61572265625
+    },
+    {
+     "text": "LUEGO, SÚBETE A BORDO PARA EL DÍA DE LA COMUNIDAD EL 5/12.",
+     "x": 93.38396453857422,
+     "y": 1008.476318359375,
+     "w": 781.17529296875,
+     "h": 109.623291015625
+    },
+    {
+     "text": "PARA EL DÍA",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 15.5,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+     "x": 45.35993957519531,
+     "y": 325.1507568359375,
+     "w": 869.2801513671875,
+     "h": 833.010986328125
+    },
+    {
+     "text": "A PARTIR DEL 28/11, EL BOTÍN ACTUALIZADO SE UNE AL TESORO DESENTERRADO DURANTE LA SEMANA DORADA,",
+     "x": 88.34302520751953,
+     "y": 588.89990234375,
+     "w": 782.2176513671875,
+     "h": 208.8314208984375
+    },
+    {
+     "text": "DONDE LOS BIENES DORADOS DE CADA CAPITÁN VUELVEN A ESTAR EN COFRES JUNTO CON EL DOBLE DE POLVO DE ESPÍRITU Y PE.",
+     "x": 90.72418212890625,
+     "y": 798.8864135742188,
+     "w": 782.2176513671875,
+     "h": 208.8314208984375
+    },
+    {
+     "text": "LUEGO, SÚBETE A BORDO PARA EL DÍA DE LA COMUNIDAD EL 5/12.",
+     "x": 93.10533905029297,
+     "y": 1008.8728637695312,
+     "w": 781.083740234375,
+     "h": 108.83782958984375
+    },
+    {
+     "text": "DE LA COMUNIDAD",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 15.75,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+     "x": 45.78448486328125,
+     "y": 325.5946350097656,
+     "w": 868.4310302734375,
+     "h": 832.123291015625
+    },
+    {
+     "text": "A PARTIR DEL 28/11, EL BOTÍN ACTUALIZADO SE UNE AL TESORO DESENTERRADO DURANTE LA SEMANA DORADA,",
+     "x": 88.49336242675781,
+     "y": 589.3049926757812,
+     "w": 782.017822265625,
+     "h": 208.02008056640625
+    },
+    {
+     "text": "DONDE LOS BIENES DORADOS DE CADA CAPITÁN VUELVEN A ESTAR EN COFRES JUNTO CON EL DOBLE DE POLVO DE ESPÍRITU Y PE.",
+     "x": 90.65546417236328,
+     "y": 799.2938842773438,
+     "w": 782.017822265625,
+     "h": 208.02008056640625
+    },
+    {
+     "text": "LUEGO, SÚBETE A BORDO PARA EL DÍA DE LA COMUNIDAD EL 5/12.",
+     "x": 92.81757354736328,
+     "y": 1009.2827758789062,
+     "w": 780.9882202148438,
+     "h": 108.02532958984375
+    },
+    {
+     "text": "DE LA COMUNIDAD",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 16,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+     "x": 46.20663833618164,
+     "y": 326.0359802246094,
+     "w": 867.586669921875,
+     "h": 831.240478515625
+    },
+    {
+     "text": "A PARTIR DEL 28/11, EL BOTÍN ACTUALIZADO SE UNE AL TESORO DESENTERRADO DURANTE LA SEMANA DORADA,",
+     "x": 88.64310455322266,
+     "y": 589.7075805664062,
+     "w": 781.8184814453125,
+     "h": 207.2139892578125
+    },
+    {
+     "text": "DONDE LOS BIENES DORADOS DE CADA CAPITÁN VUELVEN A ESTAR EN COFRES JUNTO CON EL DOBLE DE POLVO DE ESPÍRITU Y PE.",
+     "x": 90.58763885498047,
+     "y": 799.6986083984375,
+     "w": 781.8184814453125,
+     "h": 207.21392822265625
+    },
+    {
+     "text": "LUEGO, SÚBETE A BORDO PARA EL DÍA DE LA COMUNIDAD EL 5/12.",
+     "x": 92.53216552734375,
+     "y": 1009.6895751953125,
+     "w": 780.8925170898438,
+     "h": 107.21826171875
+    },
+    {
+     "text": "DE LA COMUNIDAD",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 16.25,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+     "x": 46.609535217285156,
+     "y": 326.4571838378906,
+     "w": 866.7808837890625,
+     "h": 830.398193359375
+    },
+    {
+     "text": "A PARTIR DEL 28/11, EL BOTÍN ACTUALIZADO SE UNE AL TESORO DESENTERRADO DURANTE LA SEMANA DORADA,",
+     "x": 88.78626251220703,
+     "y": 590.091552734375,
+     "w": 781.627685546875,
+     "h": 206.4451904296875
+    },
+    {
+     "text": "DONDE LOS BIENES DORADOS DE CADA CAPITÁN VUELVEN A ESTAR EN COFRES JUNTO CON EL DOBLE DE POLVO DE ESPÍRITU Y PE.",
+     "x": 90.52335357666016,
+     "y": 800.0843505859375,
+     "w": 781.627685546875,
+     "h": 206.44525146484375
+    },
+    {
+     "text": "LUEGO, SÚBETE A BORDO PARA EL DÍA DE LA COMUNIDAD EL 5/12.",
+     "x": 92.26045227050781,
+     "y": 1010.0771484375,
+     "w": 780.800537109375,
+     "h": 106.44873046875
+    },
+    {
+     "text": "EL 5/12.",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 16.5,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+     "x": 46.977027893066406,
+     "y": 326.84130859375,
+     "w": 866.0458984375,
+     "h": 829.6298828125
+    },
+    {
+     "text": "A PARTIR DEL 28/11, EL BOTÍN ACTUALIZADO SE UNE AL TESORO DESENTERRADO DURANTE LA SEMANA DORADA,",
+     "x": 88.91703033447266,
+     "y": 590.4415283203125,
+     "w": 781.453125,
+     "h": 205.74456787109375
+    },
+    {
+     "text": "DONDE LOS BIENES DORADOS DE CADA CAPITÁN VUELVEN A ESTAR EN COFRES JUNTO CON EL DOBLE DE POLVO DE ESPÍRITU Y PE.",
+     "x": 90.46511840820312,
+     "y": 800.435791015625,
+     "w": 781.453125,
+     "h": 205.74462890625
+    },
+    {
+     "text": "LUEGO, SÚBETE A BORDO PARA EL DÍA DE LA COMUNIDAD EL 5/12.",
+     "x": 92.01319885253906,
+     "y": 1010.4301147460938,
+     "w": 780.7160034179688,
+     "h": 105.74725341796875
+    },
+    {
+     "text": "EL 5/12.",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 16.75,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+     "x": 47.29434585571289,
+     "y": 327.1729736328125,
+     "w": 865.4112548828125,
+     "h": 828.966552734375
+    },
+    {
+     "text": "A PARTIR DEL 28/11, EL BOTÍN ACTUALIZADO SE UNE AL TESORO DESENTERRADO DURANTE LA SEMANA DORADA,",
+     "x": 89.03010559082031,
+     "y": 590.7435302734375,
+     "w": 781.3021240234375,
+     "h": 205.1400146484375
+    },
+    {
+     "text": "DONDE LOS BIENES DORADOS DE CADA CAPITÁN VUELVEN A ESTAR EN COFRES JUNTO CON EL DOBLE DE POLVO DE ESPÍRITU Y PE.",
+     "x": 90.41512298583984,
+     "y": 800.7389526367188,
+     "w": 781.3021240234375,
+     "h": 205.1400146484375
+    },
+    {
+     "text": "LUEGO, SÚBETE A BORDO PARA EL DÍA DE LA COMUNIDAD EL 5/12.",
+     "x": 91.8001480102539,
+     "y": 1010.7344360351562,
+     "w": 780.6425170898438,
+     "h": 105.14215087890625
+    },
+    {
+     "text": "EL 5/12.",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 17,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+     "x": 47.54869079589844,
+     "y": 327.43878173828125,
+     "w": 864.902587890625,
+     "h": 828.4348754882812
+    },
+    {
+     "text": "A PARTIR DEL 28/11, EL BOTÍN ACTUALIZADO SE UNE AL TESORO DESENTERRADO DURANTE LA SEMANA DORADA,",
+     "x": 89.12084197998047,
+     "y": 590.9855346679688,
+     "w": 781.1807250976562,
+     "h": 204.6556396484375
+    },
+    {
+     "text": "DONDE LOS BIENES DORADOS DE CADA CAPITÁN VUELVEN A ESTAR EN COFRES JUNTO CON EL DOBLE DE POLVO DE ESPÍRITU Y PE.",
+     "x": 90.37525177001953,
+     "y": 800.9818115234375,
+     "w": 781.1807861328125,
+     "h": 204.6556396484375
+    },
+    {
+     "text": "LUEGO, SÚBETE A BORDO PARA EL DÍA DE LA COMUNIDAD EL 5/12.",
+     "x": 91.6296615600586,
+     "y": 1010.97802734375,
+     "w": 780.5834350585938,
+     "h": 104.657470703125
+    },
+    {
+     "text": "EL 5/12.",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 17.25,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+     "x": 47.729801177978516,
+     "y": 327.6280517578125,
+     "w": 864.5404052734375,
+     "h": 828.056396484375
+    },
+    {
+     "text": "A PARTIR DEL 28/11, EL BOTÍN ACTUALIZADO SE UNE AL TESORO DESENTERRADO DURANTE LA SEMANA DORADA,",
+     "x": 89.18550872802734,
+     "y": 591.1577758789062,
+     "w": 781.09423828125,
+     "h": 204.3109130859375
+    },
+    {
+     "text": "DONDE LOS BIENES DORADOS DE CADA CAPITÁN VUELVEN A ESTAR EN COFRES JUNTO CON EL DOBLE DE POLVO DE ESPÍRITU Y PE.",
+     "x": 90.34696960449219,
+     "y": 801.154541015625,
+     "w": 781.09423828125,
+     "h": 204.31097412109375
+    },
+    {
+     "text": "LUEGO, SÚBETE A BORDO PARA EL DÍA DE LA COMUNIDAD EL 5/12.",
+     "x": 91.50843048095703,
+     "y": 1011.1513671875,
+     "w": 780.5411376953125,
+     "h": 104.3125
+    },
+    {
+     "text": "EL 5/12.",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 17.5,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+     "x": 47.830345153808594,
+     "y": 327.7331237792969,
+     "w": 864.33935546875,
+     "h": 827.84619140625
+    },
+    {
+     "text": "A PARTIR DEL 28/11, EL BOTÍN ACTUALIZADO SE UNE AL TESORO DESENTERRADO DURANTE LA SEMANA DORADA,",
+     "x": 89.22142791748047,
+     "y": 591.2533569335938,
+     "w": 781.046142578125,
+     "h": 204.11962890625
+    },
+    {
+     "text": "DONDE LOS BIENES DORADOS DE CADA CAPITÁN VUELVEN A ESTAR EN COFRES JUNTO CON EL DOBLE DE POLVO DE ESPÍRITU Y PE.",
+     "x": 90.33130645751953,
+     "y": 801.2504272460938,
+     "w": 781.046142578125,
+     "h": 204.11962890625
+    },
+    {
+     "text": "LUEGO, SÚBETE A BORDO PARA EL DÍA DE LA COMUNIDAD EL 5/12.",
+     "x": 91.44119262695312,
+     "y": 1011.2474975585938,
+     "w": 780.517578125,
+     "h": 104.12103271484375
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 17.75,
+   "boxes": [
+    {
+     "text": "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+     "x": 47.846248626708984,
+     "y": 327.749755859375,
+     "w": 864.3074951171875,
+     "h": 827.81298828125
+    },
+    {
+     "text": "A PARTIR DEL 28/11, EL BOTÍN ACTUALIZADO SE UNE AL TESORO DESENTERRADO DURANTE LA SEMANA DORADA,",
+     "x": 89.22711181640625,
+     "y": 591.2684936523438,
+     "w": 781.0385131835938,
+     "h": 204.08935546875
+    },
+    {
+     "text": "DONDE LOS BIENES DORADOS DE CADA CAPITÁN VUELVEN A ESTAR EN COFRES JUNTO CON EL DOBLE DE POLVO DE ESPÍRITU Y PE.",
+     "x": 90.3288345336914,
+     "y": 801.265625,
+     "w": 781.0385131835938,
+     "h": 204.08935546875
+    },
+    {
+     "text": "LUEGO, SÚBETE A BORDO PARA EL DÍA DE LA COMUNIDAD EL 5/12.",
+     "x": 91.43055725097656,
+     "y": 1011.2626953125,
+     "w": 780.513916015625,
+     "h": 104.0906982421875
+    },
+    {
+     "text": "28 DE NOVIEMBRE / BIENES DORADOS DE VUELTA EN LOS COFRES",
+     "x": 139.13262939453125,
+     "y": 480,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "O SEA: DESDE",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 18,
+   "boxes": [
+    {
+     "text": "28 DE NOVIEMBRE / BIENES DORADOS DE VUELTA EN LOS COFRES",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "O SEA: DESDE",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 18.25,
+   "boxes": [
+    {
+     "text": "28 DE NOVIEMBRE / BIENES DORADOS DE VUELTA EN LOS COFRES",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "EL 28 DE",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 18.5,
+   "boxes": [
+    {
+     "text": "28 DE NOVIEMBRE / BIENES DORADOS DE VUELTA EN LOS COFRES",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "EL 28 DE",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 18.75,
+   "boxes": [
+    {
+     "text": "28 DE NOVIEMBRE / BIENES DORADOS DE VUELTA EN LOS COFRES",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "EL 28 DE",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 19,
+   "boxes": [
+    {
+     "text": "28 DE NOVIEMBRE / BIENES DORADOS DE VUELTA EN LOS COFRES",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "NOVIEMBRE,",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 19.25,
+   "boxes": [
+    {
+     "text": "28 DE NOVIEMBRE / BIENES DORADOS DE VUELTA EN LOS COFRES",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "NOVIEMBRE,",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 19.5,
+   "boxes": [
+    {
+     "text": "28 DE NOVIEMBRE / BIENES DORADOS DE VUELTA EN LOS COFRES",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "LOS BIENES DORADOS",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 159.8125
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 19.75,
+   "boxes": [
+    {
+     "text": "28 DE NOVIEMBRE / BIENES DORADOS DE VUELTA EN LOS COFRES",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "LOS BIENES DORADOS",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 159.8125
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 20,
+   "boxes": [
+    {
+     "text": "28 DE NOVIEMBRE / BIENES DORADOS DE VUELTA EN LOS COFRES",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "LOS BIENES DORADOS",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 159.8125
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 20.25,
+   "boxes": [
+    {
+     "text": "28 DE NOVIEMBRE / BIENES DORADOS DE VUELTA EN LOS COFRES",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "DE CADA CAPITÁN",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 20.5,
+   "boxes": [
+    {
+     "text": "28 DE NOVIEMBRE / BIENES DORADOS DE VUELTA EN LOS COFRES",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "DE CADA CAPITÁN",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 20.75,
+   "boxes": [
+    {
+     "text": "28 DE NOVIEMBRE / BIENES DORADOS DE VUELTA EN LOS COFRES",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "DE CADA CAPITÁN",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 21,
+   "boxes": [
+    {
+     "text": "28 DE NOVIEMBRE / BIENES DORADOS DE VUELTA EN LOS COFRES",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "VUELVEN A LOS",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 21.25,
+   "boxes": [
+    {
+     "text": "28 DE NOVIEMBRE / BIENES DORADOS DE VUELTA EN LOS COFRES",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "VUELVEN A LOS",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 21.5,
+   "boxes": [
+    {
+     "text": "28 DE NOVIEMBRE / BIENES DORADOS DE VUELTA EN LOS COFRES",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "VUELVEN A LOS",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 21.75,
+   "boxes": [
+    {
+     "text": "28 DE NOVIEMBRE / BIENES DORADOS DE VUELTA EN LOS COFRES",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "COFRES.",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 22,
+   "boxes": [
+    {
+     "text": "28 DE NOVIEMBRE / BIENES DORADOS DE VUELTA EN LOS COFRES",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "COFRES.",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 22.25,
+   "boxes": [
+    {
+     "text": "28 DE NOVIEMBRE / BIENES DORADOS DE VUELTA EN LOS COFRES",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 22.5,
+   "boxes": [
+    {
+     "text": "28 DE NOVIEMBRE / BIENES DORADOS DE VUELTA EN LOS COFRES",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "Y GANAS EL",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 22.75,
+   "boxes": [
+    {
+     "text": "28 DE NOVIEMBRE / BIENES DORADOS DE VUELTA EN LOS COFRES",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITU Y PE",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "Y GANAS EL",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 23,
+   "boxes": [
+    {
+     "text": "28 DE NOVIEMBRE / BIENES DORADOS DE VUELTA EN LOS COFRES",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITU Y PE",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "DOBLE DE POLVO",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 23.25,
+   "boxes": [
+    {
+     "text": "28 DE NOVIEMBRE / BIENES DORADOS DE VUELTA EN LOS COFRES",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITU Y PE",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "DOBLE DE POLVO",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 23.5,
+   "boxes": [
+    {
+     "text": "28 DE NOVIEMBRE / BIENES DORADOS DE VUELTA EN LOS COFRES",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITU Y PE",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "DOBLE DE POLVO",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 23.75,
+   "boxes": [
+    {
+     "text": "28 DE NOVIEMBRE / BIENES DORADOS DE VUELTA EN LOS COFRES",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITU Y PE",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "DE ESPÍRITU Y",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 24,
+   "boxes": [
+    {
+     "text": "28 DE NOVIEMBRE / BIENES DORADOS DE VUELTA EN LOS COFRES",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITU Y PE",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "DE ESPÍRITU Y",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 24.25,
+   "boxes": [
+    {
+     "text": "28 DE NOVIEMBRE / BIENES DORADOS DE VUELTA EN LOS COFRES",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITU Y PE",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "EL DOBLE DE",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 24.5,
+   "boxes": [
+    {
+     "text": "28 DE NOVIEMBRE / BIENES DORADOS DE VUELTA EN LOS COFRES",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITU Y PE",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "EL DOBLE DE",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 24.75,
+   "boxes": [
+    {
+     "text": "28 DE NOVIEMBRE / BIENES DORADOS DE VUELTA EN LOS COFRES",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITU Y PE",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "PE.",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 25,
+   "boxes": [
+    {
+     "text": "28 DE NOVIEMBRE / BIENES DORADOS DE VUELTA EN LOS COFRES",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITU Y PE",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "PE.",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 25.25,
+   "boxes": [
+    {
+     "text": "28 DE NOVIEMBRE / BIENES DORADOS DE VUELTA EN LOS COFRES",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITU Y PE",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "Y EL 5",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 25.5,
+   "boxes": [
+    {
+     "text": "28 DE NOVIEMBRE / BIENES DORADOS DE VUELTA EN LOS COFRES",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITU Y PE",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "5 DE DICIEMBRE / DÍA DE LA COMUNIDAD",
+     "x": 140,
+     "y": 860,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "Y EL 5",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 25.75,
+   "boxes": [
+    {
+     "text": "28 DE NOVIEMBRE / BIENES DORADOS DE VUELTA EN LOS COFRES",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITU Y PE",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "5 DE DICIEMBRE / DÍA DE LA COMUNIDAD",
+     "x": 140,
+     "y": 860,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "DE DICIEMBRE,",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 26,
+   "boxes": [
+    {
+     "text": "28 DE NOVIEMBRE / BIENES DORADOS DE VUELTA EN LOS COFRES",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITU Y PE",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "5 DE DICIEMBRE / DÍA DE LA COMUNIDAD",
+     "x": 140,
+     "y": 860,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "DE DICIEMBRE,",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 26.25,
+   "boxes": [
+    {
+     "text": "28 DE NOVIEMBRE / BIENES DORADOS DE VUELTA EN LOS COFRES",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITU Y PE",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "5 DE DICIEMBRE / DÍA DE LA COMUNIDAD",
+     "x": 140,
+     "y": 860,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "DE DICIEMBRE,",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 26.5,
+   "boxes": [
+    {
+     "text": "28 DE NOVIEMBRE / BIENES DORADOS DE VUELTA EN LOS COFRES",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITU Y PE",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "5 DE DICIEMBRE / DÍA DE LA COMUNIDAD",
+     "x": 140,
+     "y": 860,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "EL ÚLTIMO DÍA",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 26.75,
+   "boxes": [
+    {
+     "text": "28 DE NOVIEMBRE / BIENES DORADOS DE VUELTA EN LOS COFRES",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITU Y PE",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "5 DE DICIEMBRE / DÍA DE LA COMUNIDAD",
+     "x": 140,
+     "y": 860,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "EL ÚLTIMO DÍA",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 27,
+   "boxes": [
+    {
+     "text": "28 DE NOVIEMBRE / BIENES DORADOS DE VUELTA EN LOS COFRES",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITU Y PE",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "5 DE DICIEMBRE / DÍA DE LA COMUNIDAD",
+     "x": 140,
+     "y": 860,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "DE LA BÚSQUEDA",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 27.25,
+   "boxes": [
+    {
+     "text": "28 DE NOVIEMBRE / BIENES DORADOS DE VUELTA EN LOS COFRES",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITU Y PE",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "5 DE DICIEMBRE / DÍA DE LA COMUNIDAD",
+     "x": 140,
+     "y": 860,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "DE LA BÚSQUEDA",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 27.5,
+   "boxes": [
+    {
+     "text": "28 DE NOVIEMBRE / BIENES DORADOS DE VUELTA EN LOS COFRES",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITU Y PE",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "5 DE DICIEMBRE / DÍA DE LA COMUNIDAD",
+     "x": 140,
+     "y": 860,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "DEL TESORO,",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 27.75,
+   "boxes": [
+    {
+     "text": "28 DE NOVIEMBRE / BIENES DORADOS DE VUELTA EN LOS COFRES",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITU Y PE",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "5 DE DICIEMBRE / DÍA DE LA COMUNIDAD",
+     "x": 140,
+     "y": 860,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "DEL TESORO,",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 28,
+   "boxes": [
+    {
+     "text": "28 DE NOVIEMBRE / BIENES DORADOS DE VUELTA EN LOS COFRES",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITU Y PE",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "5 DE DICIEMBRE / DÍA DE LA COMUNIDAD",
+     "x": 140,
+     "y": 860,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "LLEGA EL DÍA",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 28.25,
+   "boxes": [
+    {
+     "text": "28 DE NOVIEMBRE / BIENES DORADOS DE VUELTA EN LOS COFRES",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITU Y PE",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "5 DE DICIEMBRE / DÍA DE LA COMUNIDAD",
+     "x": 140,
+     "y": 860,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "LLEGA EL DÍA",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 28.5,
+   "boxes": [
+    {
+     "text": "28 DE NOVIEMBRE / BIENES DORADOS DE VUELTA EN LOS COFRES",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITU Y PE",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "5 DE DICIEMBRE / DÍA DE LA COMUNIDAD",
+     "x": 140,
+     "y": 860,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "DE LA COMUNIDAD.",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 28.75,
+   "boxes": [
+    {
+     "text": "28 DE NOVIEMBRE / BIENES DORADOS DE VUELTA EN LOS COFRES",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITU Y PE",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "5 DE DICIEMBRE / DÍA DE LA COMUNIDAD",
+     "x": 140,
+     "y": 860,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "DE LA COMUNIDAD.",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 29,
+   "boxes": [
+    {
+     "text": "28 DE NOVIEMBRE / BIENES DORADOS DE VUELTA EN LOS COFRES",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITU Y PE",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "5 DE DICIEMBRE / DÍA DE LA COMUNIDAD",
+     "x": 140,
+     "y": 860,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "DE LA COMUNIDAD.",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 29.25,
+   "boxes": [
+    {
+     "text": "28 DE NOVIEMBRE / BIENES DORADOS DE VUELTA EN LOS COFRES",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITU Y PE",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "5 DE DICIEMBRE / DÍA DE LA COMUNIDAD",
+     "x": 140,
+     "y": 860,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "DE LA COMUNIDAD.",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 29.5,
+   "boxes": [
+    {
+     "text": "28 DE NOVIEMBRE / BIENES DORADOS DE VUELTA EN LOS COFRES",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITU Y PE",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "5 DE DICIEMBRE / DÍA DE LA COMUNIDAD",
+     "x": 140,
+     "y": 860,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "DE LA COMUNIDAD.",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 29.75,
+   "boxes": [
+    {
+     "text": "28 DE NOVIEMBRE / BIENES DORADOS DE VUELTA EN LOS COFRES",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITU Y PE",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "5 DE DICIEMBRE / DÍA DE LA COMUNIDAD",
+     "x": 140,
+     "y": 860,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "Y RECUERDA: CUALQUIER",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 159.8125
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 30,
+   "boxes": [
+    {
+     "text": "28 DE NOVIEMBRE / BIENES DORADOS DE VUELTA EN LOS COFRES",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITU Y PE",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "5 DE DICIEMBRE / DÍA DE LA COMUNIDAD",
+     "x": 140,
+     "y": 860,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "Y RECUERDA: CUALQUIER",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 159.8125
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 30.25,
+   "boxes": [
+    {
+     "text": "28 DE NOVIEMBRE / BIENES DORADOS DE VUELTA EN LOS COFRES",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITU Y PE",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "5 DE DICIEMBRE / DÍA DE LA COMUNIDAD",
+     "x": 140,
+     "y": 860,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "Y RECUERDA: CUALQUIER",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 159.8125
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 30.5,
+   "boxes": [
+    {
+     "text": "28 DE NOVIEMBRE / BIENES DORADOS DE VUELTA EN LOS COFRES",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITU Y PE",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "5 DE DICIEMBRE / DÍA DE LA COMUNIDAD",
+     "x": 140,
+     "y": 860,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "Y RECUERDA: CUALQUIER",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 159.8125
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 30.75,
+   "boxes": [
+    {
+     "text": "28 DE NOVIEMBRE / BIENES DORADOS DE VUELTA EN LOS COFRES",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITU Y PE",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "5 DE DICIEMBRE / DÍA DE LA COMUNIDAD",
+     "x": 140,
+     "y": 860,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "COFRE PUEDE DARTE",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 31,
+   "boxes": [
+    {
+     "text": "28 DE NOVIEMBRE / BIENES DORADOS DE VUELTA EN LOS COFRES",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITU Y PE",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "5 DE DICIEMBRE / DÍA DE LA COMUNIDAD",
+     "x": 140,
+     "y": 860,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "COFRE PUEDE DARTE",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 31.25,
+   "boxes": [
+    {
+     "text": "28 DE NOVIEMBRE / BIENES DORADOS DE VUELTA EN LOS COFRES",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITU Y PE",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "5 DE DICIEMBRE / DÍA DE LA COMUNIDAD",
+     "x": 140,
+     "y": 860,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "COFRE PUEDE DARTE",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 31.5,
+   "boxes": [
+    {
+     "text": "28 DE NOVIEMBRE / BIENES DORADOS DE VUELTA EN LOS COFRES",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITU Y PE",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "5 DE DICIEMBRE / DÍA DE LA COMUNIDAD",
+     "x": 140,
+     "y": 860,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "LA TIENDA PIRATA.",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 31.75,
+   "boxes": [
+    {
+     "text": "28 DE NOVIEMBRE / BIENES DORADOS DE VUELTA EN LOS COFRES",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITU Y PE",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "5 DE DICIEMBRE / DÍA DE LA COMUNIDAD",
+     "x": 140,
+     "y": 860,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "LA TIENDA PIRATA.",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 32,
+   "boxes": [
+    {
+     "text": "28 DE NOVIEMBRE / BIENES DORADOS DE VUELTA EN LOS COFRES",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITU Y PE",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "5 DE DICIEMBRE / DÍA DE LA COMUNIDAD",
+     "x": 140,
+     "y": 860,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "LA TIENDA PIRATA.",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 32.25,
+   "boxes": [
+    {
+     "text": "28 DE NOVIEMBRE / BIENES DORADOS DE VUELTA EN LOS COFRES",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITU Y PE",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "5 DE DICIEMBRE / DÍA DE LA COMUNIDAD",
+     "x": 140,
+     "y": 860,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "LA TIENDA PIRATA.",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 32.5,
+   "boxes": [
+    {
+     "text": "28 DE NOVIEMBRE / BIENES DORADOS DE VUELTA EN LOS COFRES",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITU Y PE",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "5 DE DICIEMBRE / DÍA DE LA COMUNIDAD",
+     "x": 140,
+     "y": 860,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "¿LO VAS A",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 32.75,
+   "boxes": [
+    {
+     "text": "28 DE NOVIEMBRE / BIENES DORADOS DE VUELTA EN LOS COFRES",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITU Y PE",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "5 DE DICIEMBRE / DÍA DE LA COMUNIDAD",
+     "x": 140,
+     "y": 860,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "¿LO VAS A",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 33,
+   "boxes": [
+    {
+     "text": "28 DE NOVIEMBRE / BIENES DORADOS DE VUELTA EN LOS COFRES",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITU Y PE",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "5 DE DICIEMBRE / DÍA DE LA COMUNIDAD",
+     "x": 140,
+     "y": 860,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "APROVECHAR?",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 33.25,
+   "boxes": [
+    {
+     "text": "28 DE NOVIEMBRE / BIENES DORADOS DE VUELTA EN LOS COFRES",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITU Y PE",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "5 DE DICIEMBRE / DÍA DE LA COMUNIDAD",
+     "x": 140,
+     "y": 860,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "APROVECHAR?",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 33.5,
+   "boxes": [
+    {
+     "text": "28 DE NOVIEMBRE / BIENES DORADOS DE VUELTA EN LOS COFRES",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITU Y PE",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "5 DE DICIEMBRE / DÍA DE LA COMUNIDAD",
+     "x": 140,
+     "y": 860,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "¡CUÉNTAME EN LOS",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 33.75,
+   "boxes": [
+    {
+     "text": "28 DE NOVIEMBRE / BIENES DORADOS DE VUELTA EN LOS COFRES",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITU Y PE",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "5 DE DICIEMBRE / DÍA DE LA COMUNIDAD",
+     "x": 140,
+     "y": 860,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "¡CUÉNTAME EN LOS",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 34,
+   "boxes": [
+    {
+     "text": "28 DE NOVIEMBRE / BIENES DORADOS DE VUELTA EN LOS COFRES",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITU Y PE",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "5 DE DICIEMBRE / DÍA DE LA COMUNIDAD",
+     "x": 140,
+     "y": 860,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "¡CUÉNTAME EN LOS",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 34.25,
+   "boxes": [
+    {
+     "text": "28 DE NOVIEMBRE / BIENES DORADOS DE VUELTA EN LOS COFRES",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITU Y PE",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "5 DE DICIEMBRE / DÍA DE LA COMUNIDAD",
+     "x": 140,
+     "y": 860,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "COMENTARIOS!",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 34.5,
+   "boxes": [
+    {
+     "text": "28 DE NOVIEMBRE / BIENES DORADOS DE VUELTA EN LOS COFRES",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITU Y PE",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "5 DE DICIEMBRE / DÍA DE LA COMUNIDAD",
+     "x": 140,
+     "y": 860,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "COMENTARIOS!",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 34.75,
+   "boxes": [
+    {
+     "text": "28 DE NOVIEMBRE / BIENES DORADOS DE VUELTA EN LOS COFRES",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITU Y PE",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "5 DE DICIEMBRE / DÍA DE LA COMUNIDAD",
+     "x": 140,
+     "y": 860,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "COMENTARIOS!",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 35,
+   "boxes": [
+    {
+     "text": "28 DE NOVIEMBRE / BIENES DORADOS DE VUELTA EN LOS COFRES",
+     "x": 140,
+     "y": 480,
+     "w": 800,
+     "h": 169.375
+    },
+    {
+     "text": "DOBLE / POLVO DE ESPÍRITU Y PE",
+     "x": 140,
+     "y": 670,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "5 DE DICIEMBRE / DÍA DE LA COMUNIDAD",
+     "x": 140,
+     "y": 860,
+     "w": 800,
+     "h": 123.1875
+    },
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 211.346435546875,
+     "y": 394.4931945800781,
+     "w": 657.30712890625,
+     "h": 548.357421875
+    },
+    {
+     "text": "USA EL CÓDIGO",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 35.25,
+   "boxes": [
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 166.85757446289062,
+     "y": 357.37841796875,
+     "w": 746.284912109375,
+     "h": 622.5869140625
+    },
+    {
+     "text": "USA EL CÓDIGO",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 35.5,
+   "boxes": [
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "USA EL CÓDIGO",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 35.75,
+   "boxes": [
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "BAD EN LA",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 36,
+   "boxes": [
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "BAD EN LA",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 36.25,
+   "boxes": [
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "TIENDA DE OBJETOS.",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 36.5,
+   "boxes": [
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "TIENDA DE OBJETOS.",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 36.75,
+   "boxes": [
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "TIENDA DE OBJETOS.",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 37,
+   "boxes": [
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "LE AYUDA MUCHÍSIMO",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 159.8125
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 37.25,
+   "boxes": [
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "LE AYUDA MUCHÍSIMO",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 159.8125
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 37.5,
+   "boxes": [
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "LE AYUDA MUCHÍSIMO",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 159.8125
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 37.75,
+   "boxes": [
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "LE AYUDA MUCHÍSIMO",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 159.8125
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 38,
+   "boxes": [
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "AL CANAL.",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 38.25,
+   "boxes": [
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "AL CANAL.",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 38.5,
+   "boxes": [
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "AL CANAL.",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 38.75,
+   "boxes": [
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+     "x": 193.38137817382812,
+     "y": 1013.760009765625,
+     "w": 693.2373046875,
+     "h": 111.47998046875
+    },
+    {
+     "text": "¡GRACIAS POR VER!",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 39,
+   "boxes": [
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+     "x": 168.3189697265625,
+     "y": 1009.7296752929688,
+     "w": 743.362060546875,
+     "h": 119.54058837890625
+    },
+    {
+     "text": "¡GRACIAS POR VER!",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 39.25,
+   "boxes": [
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+     "x": 170,
+     "y": 1010,
+     "w": 740,
+     "h": 119
+    },
+    {
+     "text": "¡GRACIAS POR VER!",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 39.5,
+   "boxes": [
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+     "x": 170,
+     "y": 1010,
+     "w": 740,
+     "h": 119
+    },
+    {
+     "text": "SÍGUENOS PARA MÁS",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 39.75,
+   "boxes": [
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+     "x": 170,
+     "y": 1010,
+     "w": 740,
+     "h": 119
+    },
+    {
+     "text": "SÍGUENOS PARA MÁS",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 40,
+   "boxes": [
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+     "x": 170,
+     "y": 1010,
+     "w": 740,
+     "h": 119
+    },
+    {
+     "text": "SÍGUENOS PARA MÁS",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 40.25,
+   "boxes": [
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+     "x": 170,
+     "y": 1010,
+     "w": 740,
+     "h": 119
+    },
+    {
+     "text": "SÍGUENOS PARA MÁS",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 40.5,
+   "boxes": [
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+     "x": 170,
+     "y": 1010,
+     "w": 740,
+     "h": 119
+    },
+    {
+     "text": "CONTENIDO DIARIO.",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 40.75,
+   "boxes": [
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+     "x": 170,
+     "y": 1010,
+     "w": 740,
+     "h": 119
+    },
+    {
+     "text": "CONTENIDO DIARIO.",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 41,
+   "boxes": [
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+     "x": 170,
+     "y": 1010,
+     "w": 740,
+     "h": 119
+    },
+    {
+     "text": "CONTENIDO DIARIO.",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 41.25,
+   "boxes": [
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+     "x": 170,
+     "y": 1010,
+     "w": 740,
+     "h": 119
+    },
+    {
+     "text": "CONTENIDO DIARIO.",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 41.5,
+   "boxes": [
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+     "x": 170,
+     "y": 1010,
+     "w": 740,
+     "h": 119
+    },
+    {
+     "text": "CONTENIDO DIARIO.",
+     "x": 60,
+     "y": 1150,
+     "w": 880,
+     "h": 79.90625
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 41.75,
+   "boxes": [
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+     "x": 170,
+     "y": 1010,
+     "w": 740,
+     "h": 119
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  },
+  {
+   "t": 42,
+   "boxes": [
+    {
+     "text": "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+     "x": 170,
+     "y": 360,
+     "w": 740,
+     "h": 617.34375
+    },
+    {
+     "text": "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+     "x": 170,
+     "y": 1010,
+     "w": 740,
+     "h": 119
+    },
+    {
+     "text": "#EPICPARTNER",
+     "x": 44,
+     "y": 166,
+     "w": 205.34375,
+     "h": 45
+    },
+    {
+     "text": "LA TIENDITA BAD",
+     "x": 836,
+     "y": 154,
+     "w": 200,
+     "h": 82.765625
+    }
+   ]
+  }
+ ],
+ "text": [
+  "NOTICIAS DEL JUEGO / SEMANA DORADA + DÍA DE LA COMUNIDAD",
+  "A PARTIR DEL 28/11, EL BOTÍN ACTUALIZADO SE UNE AL TESORO DESENTERRADO DURANTE LA SEMANA DORADA,",
+  "DONDE LOS BIENES DORADOS DE CADA CAPITÁN VUELVEN A ESTAR EN COFRES JUNTO CON EL DOBLE DE POLVO DE ESPÍRITU Y PE.",
+  "LUEGO, SÚBETE A BORDO PARA EL DÍA DE LA COMUNIDAD EL 5/12.",
+  "¡SEMANA DORADA / EN FORTNITE!",
+  "28 DE NOVIEMBRE / BIENES DORADOS DE VUELTA EN LOS COFRES",
+  "DOBLE / POLVO DE ESPÍRITU Y PE",
+  "5 DE DICIEMBRE / DÍA DE LA COMUNIDAD",
+  "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+  "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+  "¡NOTICIA NUEVA EN",
+  "FORTNITE!",
+  "ESTO DICE EL",
+  "JUEGO:",
+  "A PARTIR DEL",
+  "28/11,",
+  "EL BOTÍN ACTUALIZADO",
+  "SE UNE AL",
+  "TESORO DESENTERRADO DURANTE",
+  "LA SEMANA DORADA,",
+  "DONDE LOS BIENES",
+  "DORADOS DE CADA",
+  "CAPITÁN VUELVEN A",
+  "ESTAR EN COFRES",
+  "JUNTO CON EL",
+  "DOBLE DE POLVO",
+  "DE ESPÍRITU Y",
+  "PE.",
+  "LUEGO,",
+  "SÚBETE A BORDO",
+  "PARA EL DÍA",
+  "DE LA COMUNIDAD",
+  "EL 5/12.",
+  "O SEA: DESDE",
+  "EL 28 DE",
+  "NOVIEMBRE,",
+  "LOS BIENES DORADOS",
+  "DE CADA CAPITÁN",
+  "VUELVEN A LOS",
+  "COFRES.",
+  "Y GANAS EL",
+  "EL DOBLE DE",
+  "Y EL 5",
+  "DE DICIEMBRE,",
+  "EL ÚLTIMO DÍA",
+  "DE LA BÚSQUEDA",
+  "DEL TESORO,",
+  "LLEGA EL DÍA",
+  "DE LA COMUNIDAD.",
+  "Y RECUERDA: CUALQUIER",
+  "COFRE PUEDE DARTE",
+  "LA TIENDA PIRATA.",
+  "¿LO VAS A",
+  "APROVECHAR?",
+  "¡CUÉNTAME EN LOS",
+  "COMENTARIOS!",
+  "USA EL CÓDIGO",
+  "BAD EN LA",
+  "TIENDA DE OBJETOS.",
+  "LE AYUDA MUCHÍSIMO",
+  "AL CANAL.",
+  "¡GRACIAS POR VER!",
+  "SÍGUENOS PARA MÁS",
+  "CONTENIDO DIARIO.",
+  "#EPICPARTNER",
+  "LA TIENDITA BAD"
+ ]
+}
