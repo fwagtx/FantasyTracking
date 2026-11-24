@@ -1,0 +1,118 @@
+{
+ "duration": 38.1,
+ "caption": "#EpicPartner Lo nuevo más caro de la tienda de hoy 💸 El #1: Lote One Punch Man, 3800 pavos… y con la Tienda Pirata te lo llevarías sin gastar ni un pavo 🏴‍☠️\n¿Cuál te llevarías? 👇\nUsa el código BAD en la tienda de objetos 💛\n#fortnite #tiendapirata #tiendafortnite",
+ "claims": [
+  {
+   "text": "Lote Libre albedrío: 1600 pavos en la tienda de hoy (2026-11-24), nuevo hoy",
+   "source": "shop-entries.json",
+   "match": [
+    "Lote Libre albedrío",
+    "\"finalPrice\": 1600",
+    "\"date\": \"2026-11-24T00:00:00Z\"",
+    "\"inDate\": \"2026-11-24T00:00:00Z\""
+   ]
+  },
+  {
+   "text": "Lote Pájaros parejos: 2600 pavos en la tienda de hoy (2026-11-24), nuevo hoy",
+   "source": "shop-entries.json",
+   "match": [
+    "Lote Pájaros parejos",
+    "\"finalPrice\": 2600",
+    "\"date\": \"2026-11-24T00:00:00Z\"",
+    "\"inDate\": \"2026-11-24T00:00:00Z\""
+   ]
+  },
+  {
+   "text": "Ferrari F40: 2800 pavos en la tienda de hoy (2026-11-24), nuevo hoy",
+   "source": "shop-entries.json",
+   "match": [
+    "Ferrari F40",
+    "\"finalPrice\": 2800",
+    "\"date\": \"2026-11-24T00:00:00Z\"",
+    "\"inDate\": \"2026-11-24T00:00:00Z\""
+   ]
+  },
+  {
+   "text": "Lote Bandada: 2800 pavos en la tienda de hoy (2026-11-24), nuevo hoy",
+   "source": "shop-entries.json",
+   "match": [
+    "Lote Bandada",
+    "\"finalPrice\": 2800",
+    "\"date\": \"2026-11-24T00:00:00Z\"",
+    "\"inDate\": \"2026-11-24T00:00:00Z\""
+   ]
+  },
+  {
+   "text": "Lote One Punch Man: precio normal 11900 pavos",
+   "source": "shop-entries.json",
+   "match": [
+    "Lote One Punch Man",
+    "\"regularPrice\": 11900"
+   ]
+  },
+  {
+   "text": "Lote One Punch Man: 3800 pavos en la tienda de hoy (2026-11-24), nuevo hoy",
+   "source": "shop-entries.json",
+   "match": [
+    "Lote One Punch Man",
+    "\"finalPrice\": 3800",
+    "\"date\": \"2026-11-24T00:00:00Z\"",
+    "\"inDate\": \"2026-11-24T00:00:00Z\""
+   ]
+  },
+  {
+   "text": "Con la Tienda Pirata, todo lo que cuesta pavos es gratis por 14 días",
+   "source": "vgc-odds-confirmed.json",
+   "match": [
+    "every single item in the Fortnite Shop which costs V-Bucks",
+    "becomes entirely free to that player for the next 14 days"
+   ]
+  }
+ ],
+ "text": [
+  "LO NUEVO DE HOY:",
+  "LO MÁS CARO 💸",
+  "¿CUÁNTO CUESTA? 👀",
+  "¿Y CON LA TIENDA PIRATA? 🏴‍☠️",
+  "#5",
+  "LOTE LIBRE ALBEDRÍO",
+  "CUESTA",
+  "???? PAVOS",
+  "400 PAVOS",
+  "1100 PAVOS",
+  "1600 PAVOS",
+  "#4",
+  "LOTE PÁJAROS PAREJOS",
+  "700 PAVOS",
+  "1800 PAVOS",
+  "2600 PAVOS",
+  "#3",
+  "FERRARI F40",
+  "800 PAVOS",
+  "1900 PAVOS",
+  "2800 PAVOS",
+  "#2",
+  "LOTE BANDADA",
+  "#1",
+  "LOTE ONE PUNCH MAN",
+  "PRECIO NORMAL: 11900",
+  "3800 PAVOS",
+  "CON LA TIENDA PIRATA: 0 PAVOS 🏴‍☠️",
+  "Y EL #1 ES… 🥁",
+  "LO NUEVO MÁS CARO 💸",
+  "¿CUÁL TE LLEVARÍAS? 👇",
+  "#2 · 2800",
+  "#1 · 3800",
+  "#3 · 2800",
+  "#4 · 2600",
+  "#5 · 1600",
+  "USA EL CÓDIGO BAD EN LA TIENDA DE OBJETOS 🛒",
+  "APOYA A UN CREADOR",
+  "#EPICPARTNER",
+  "ACEPTAR",
+  "✓ APOYANDO A: BAD",
+  "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+  "LA TIENDITA BAD",
+  "USA EL CÓDIGO: BAD"
+ ]
+}

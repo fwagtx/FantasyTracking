@@ -639,6 +639,27 @@
     "Character_QuicheLorraineLime"
    ],
    "note": "Every map place has had its '¿Dónde está?', so this 8:30 PM slot got the other evergreen format again; whether to repeat places instead is still a question for the owner."
+  },
+  {
+   "date": "2026-11-24",
+   "slot": "15:45",
+   "format": "Tienda Pirata diaria (sevan)",
+   "topic": "Se va hoy (2026-11-24): Lote Noodle y 2D, 2600 pavos (normalmente 7300)",
+   "folder": "video/auto/2026-11-24-pirata-sevan"
+  },
+  {
+   "date": "2026-11-24",
+   "slot": "17:15",
+   "format": "Tienda Pirata diaria (caros)",
+   "topic": "Lo nuevo más caro de hoy (2026-11-24): Lote One Punch Man 3800, Lote Bandada 2800, Ferrari F40 2800, Lote Pájaros parejos 2600, Lote Libre albedrío 1600",
+   "folder": "video/auto/2026-11-24-pirata-caros"
+  },
+  {
+   "date": "2026-11-24",
+   "slot": "19:30",
+   "format": "Tienda Pirata diaria (cuenta)",
+   "topic": "Quedan 11 días · dato: no ha cambiado",
+   "folder": "video/auto/2026-11-24-pirata-cuenta"
   }
  ]
 }
