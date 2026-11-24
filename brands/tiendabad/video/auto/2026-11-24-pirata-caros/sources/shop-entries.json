@@ -1,0 +1,1893 @@
+{
+ "date": "2026-11-24T00:00:00Z",
+ "entries": [
+  {
+   "regularPrice": 11900,
+   "finalPrice": 3800,
+   "devName": "[VIRTUAL]1 x Saitama, 1 x Genos, 1 x Terrible Tornado, 1 x Centichoro, 1 x Mechanical Fist Hammer, 1 x Supermarket's Shopping Bag, 1 x Telekinetic Edge, 1 x Saitama's Routine, 1 x Ok, 1 x Psychokinesis, 1 x Genos' Core, 1 x Saitama's Alarm Clock, 1 x Tiny Terrible Tornado, 1 x One-Punch Man, 1 x One Punch Kit, 1 x Psychokinesis Mic, 1 x One Punch Kit, 1 x Psychokinesis Mic, 1 x One Punch Kit, 1 x Psychokinesis Mic for -1 MtxCurrency",
+   "offerId": "v2:/67bd0df622ccce9507580af09757e5cb7f628ea6bdfb819e0221a80d2aab6447",
+   "inDate": "2026-11-24T00:00:00Z",
+   "outDate": "2026-11-27T23:59:59.999Z",
+   "bundle": {
+    "name": "Lote One Punch Man",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/a4587aea2385f735/renderimage_0.png"
+   },
+   "banner": {
+    "value": "8100 monedas V de descuento",
+    "intensity": "Low",
+    "backendValue": "AmountOff"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -1,
+   "layoutId": "OnePunchNoBillboard.99",
+   "layout": {
+    "id": "OnePunchNoBillboard",
+    "name": "One-Punch Man",
+    "index": 25,
+    "rank": 197,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "aeccdfff",
+    "color3": "566370ff",
+    "textBackgroundColor": "333e48ff"
+   },
+   "tileBackgroundMaterial": "ShopTile_Pirates_Glass",
+   "tileSize": "Size_2_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_IgniteEgg_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S37/DAv2_Bundle_Featured_IgniteEgg",
+   "newDisplayAsset": {
+    "id": "DAv2_Bundle_Featured_IgniteEgg",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__a4587aea2385f735_7401ca14bb1bb0bc.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/a4587aea2385f735/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__a4587aea2385f735_234644e885d632ad.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/a4587aea2385f735/renderimage_1.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__a4587aea2385f735_e042df494eb0062b.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/a4587aea2385f735/renderimage_2.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__a4587aea2385f735_656af304e40734e0.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/a4587aea2385f735/renderimage_3.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Character_IgniteEgg",
+     "name": "Saitama",
+     "description": "Trabaja como héroe por diversión.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "One-Punch Man",
+      "text": "Pieza del conjunto One-Punch Man.",
+      "backendValue": "BaldFist"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "5",
+      "text": "Introducido en Capítulo 6, Temporada 5.",
+      "backendValue": 37
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_igniteegg/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_igniteegg/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_igniteegg/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_igniteegg/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_igniteegg/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_igniteegg/wide.png"
+      }
+     },
+     "variants": [
+      {
+       "channel": "Parts",
+       "type": "estilo",
+       "options": [
+        {
+         "tag": "Stage1",
+         "name": "Saitama",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_igniteegg/variants/parts/stage1.png"
+        },
+        {
+         "tag": "Stage2",
+         "name": "Serio",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_igniteegg/variants/parts/stage2.png"
+        }
+       ]
+      }
+     ],
+     "metaTags": [
+      "Cosmetics.MetaTags.IgniteEgg_Jab"
+     ],
+     "showcaseVideo": "4aCqD3V2u54",
+     "added": "2025-08-27T16:19:21Z"
+    },
+    {
+     "id": "Character_ArmyFlour",
+     "name": "Genos",
+     "description": "Joven cíborg y discípulo de Saitama.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "One-Punch Man",
+      "text": "Pieza del conjunto One-Punch Man.",
+      "backendValue": "BaldFist"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "5",
+      "text": "Introducido en Capítulo 6, Temporada 5.",
+      "backendValue": 37
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_armyflour/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_armyflour/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_armyflour/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_armyflour/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_armyflour/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_armyflour/wide.png"
+      }
+     },
+     "variants": [
+      {
+       "channel": "Material",
+       "type": "brillo",
+       "options": [
+        {
+         "tag": "Mat1",
+         "name": "no",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_armyflour/variants/material/mat1.png"
+        },
+        {
+         "tag": "Mat2",
+         "name": "sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_armyflour/variants/material/mat2.png"
+        }
+       ]
+      }
+     ],
+     "builtInEmoteIds": [
+      "EID_ArmyFlour"
+     ],
+     "showcaseVideo": "KSE6WF9v1Sw",
+     "added": "2025-08-27T16:19:21Z"
+    },
+    {
+     "id": "Character_IvyStub",
+     "name": "Tornado del Terror",
+     "description": "Una psíquica que acaba con monstruos con poderes sobrenaturales.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "One-Punch Man",
+      "text": "Pieza del conjunto One-Punch Man.",
+      "backendValue": "BaldFist"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "5",
+      "text": "Introducido en Capítulo 6, Temporada 5.",
+      "backendValue": 37
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_ivystub/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_ivystub/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_ivystub/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_ivystub/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_ivystub/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_ivystub/wide.png"
+      }
+     },
+     "showcaseVideo": "4vfTxgGtgWA",
+     "added": "2025-08-27T16:19:21Z"
+    },
+    {
+     "id": "Glider_IgniteEgg",
+     "name": "Centichoro",
+     "description": "Inspirado en Centichoro, miembro ejecutivo de la Asociación de Monstruos.",
+     "type": {
+      "value": "glider",
+      "displayValue": "Planeador",
+      "backendValue": "AthenaGlider"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "One-Punch Man",
+      "text": "Pieza del conjunto One-Punch Man.",
+      "backendValue": "BaldFist"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "5",
+      "text": "Introducido en Capítulo 6, Temporada 5.",
+      "backendValue": 37
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/glider_igniteegg/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/glider_igniteegg/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/glider_igniteegg/featured.png"
+     },
+     "added": "2025-08-27T16:19:21Z"
+    },
+    {
+     "id": "Pickaxe_ArmyFlour",
+     "name": "Puño martillo mecánico",
+     "description": "Martillo inspirado en Genos.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "One-Punch Man",
+      "text": "Pieza del conjunto One-Punch Man.",
+      "backendValue": "BaldFist"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "5",
+      "text": "Introducido en Capítulo 6, Temporada 5.",
+      "backendValue": 37
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_armyflour/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_armyflour/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_armyflour/featured.png"
+     },
+     "added": "2025-08-27T16:19:21Z"
+    },
+    {
+     "id": "Pickaxe_IgniteEgg",
+     "name": "Bolsa de supermercado",
+     "description": "No te olvides de los puerros.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "One-Punch Man",
+      "text": "Pieza del conjunto One-Punch Man.",
+      "backendValue": "BaldFist"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "5",
+      "text": "Introducido en Capítulo 6, Temporada 5.",
+      "backendValue": 37
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_igniteegg/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_igniteegg/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_igniteegg/featured.png"
+     },
+     "metaTags": [
+      "Cosmetics.HideBackPack"
+     ],
+     "added": "2025-08-27T16:19:21Z"
+    },
+    {
+     "id": "Pickaxe_IvyStub",
+     "name": "Filo telequinético",
+     "description": "Inspirado en los poderes de Tornado del Terror.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "One-Punch Man",
+      "text": "Pieza del conjunto One-Punch Man.",
+      "backendValue": "BaldFist"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "5",
+      "text": "Introducido en Capítulo 6, Temporada 5.",
+      "backendValue": 37
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_ivystub/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_ivystub/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_ivystub/featured.png"
+     },
+     "added": "2025-08-27T16:19:21Z"
+    },
+    {
+     "id": "EID_IgniteEgg",
+     "name": "Rutina de Saitama",
+     "description": "¡Todos los días!",
+     "type": {
+      "value": "emote",
+      "displayValue": "Gesto",
+      "backendValue": "AthenaDance"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "One-Punch Man",
+      "text": "Pieza del conjunto One-Punch Man.",
+      "backendValue": "BaldFist"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "5",
+      "text": "Introducido en Capítulo 6, Temporada 5.",
+      "backendValue": 37
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/eid_igniteegg/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/eid_igniteegg/icon.png"
+     },
+     "showcaseVideo": "19mCxO-LJoo",
+     "added": "2025-08-27T16:19:21Z"
+    },
+    {
+     "id": "EID_IgniteEgg_Jab",
+     "name": "Ok",
+     "description": "La expresión indiferente de Saitama.",
+     "type": {
+      "value": "emote",
+      "displayValue": "Gesto",
+      "backendValue": "AthenaDance"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "One-Punch Man",
+      "text": "Pieza del conjunto One-Punch Man.",
+      "backendValue": "BaldFist"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "5",
+      "text": "Introducido en Capítulo 6, Temporada 5.",
+      "backendValue": 37
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/eid_igniteegg_jab/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/eid_igniteegg_jab/icon.png"
+     },
+     "showcaseVideo": "BnAGVQhtGMs",
+     "added": "2025-08-27T16:19:21Z"
+    },
+    {
+     "id": "EID_IvyStub",
+     "name": "Psicoquinesis",
+     "description": "Desata los devastadores poderes psíquicos de Tornado del Terror.",
+     "type": {
+      "value": "emote",
+      "displayValue": "Gesto",
+      "backendValue": "AthenaDance"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "One-Punch Man",
+      "text": "Pieza del conjunto One-Punch Man.",
+      "backendValue": "BaldFist"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "5",
+      "text": "Introducido en Capítulo 6, Temporada 5.",
+      "backendValue": 37
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/eid_ivystub/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/eid_ivystub/icon.png"
+     },
+     "showcaseVideo": "uLgPRVaVxvE",
+     "added": "2025-08-27T16:19:21Z"
+    },
+    {
+     "id": "Backpack_ArmyFlour",
+     "name": "Núcleo de Genos",
+     "description": "Inspirada en el núcleo de Genos.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "One-Punch Man",
+      "text": "Pieza del conjunto One-Punch Man.",
+      "backendValue": "BaldFist"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "5",
+      "text": "Introducido en Capítulo 6, Temporada 5.",
+      "backendValue": 37
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_armyflour/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_armyflour/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_armyflour/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Parts",
+       "type": "reactivo",
+       "options": [
+        {
+         "tag": "Stage1",
+         "name": "sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/backpack_armyflour/variants/parts/stage1.png"
+        },
+        {
+         "tag": "Stage2",
+         "name": "no",
+         "image": "https://fortnite-api.com/images/cosmetics/br/backpack_armyflour/variants/parts/stage2.png"
+        }
+       ]
+      }
+     ],
+     "added": "2025-08-27T16:19:21Z"
+    },
+    {
+     "id": "Backpack_IgniteEgg",
+     "name": "Despertador de Saitama",
+     "description": "Un despertador plateado que usa Saitama.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "One-Punch Man",
+      "text": "Pieza del conjunto One-Punch Man.",
+      "backendValue": "BaldFist"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "5",
+      "text": "Introducido en Capítulo 6, Temporada 5.",
+      "backendValue": 37
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_igniteegg/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_igniteegg/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_igniteegg/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Parts",
+       "type": "reactivo",
+       "options": [
+        {
+         "tag": "Stage1",
+         "name": "sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/backpack_igniteegg/variants/parts/stage1.png"
+        },
+        {
+         "tag": "Stage2",
+         "name": "no",
+         "image": "https://fortnite-api.com/images/cosmetics/br/backpack_igniteegg/variants/parts/stage2.png"
+        }
+       ]
+      }
+     ],
+     "added": "2025-08-27T16:19:21Z"
+    },
+    {
+     "id": "Backpack_IvyStub",
+     "name": "Minitornado del Terror",
+     "description": "Inspirado en la mismísima Tornado del Terror.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "One-Punch Man",
+      "text": "Pieza del conjunto One-Punch Man.",
+      "backendValue": "BaldFist"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "5",
+      "text": "Introducido en Capítulo 6, Temporada 5.",
+      "backendValue": 37
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_ivystub/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_ivystub/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_ivystub/featured.png"
+     },
+     "added": "2025-08-27T16:19:21Z"
+    },
+    {
+     "id": "Wrap_IgniteEgg",
+     "name": "One Punch Man",
+     "description": "Muestra tu estilo.",
+     "type": {
+      "value": "wrap",
+      "displayValue": "Papel",
+      "backendValue": "AthenaItemWrap"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "One-Punch Man",
+      "text": "Pieza del conjunto One-Punch Man.",
+      "backendValue": "BaldFist"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "5",
+      "text": "Introducido en Capítulo 6, Temporada 5.",
+      "backendValue": 37
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/wrap_igniteegg/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/wrap_igniteegg/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/wrap_igniteegg/featured.png"
+     },
+     "added": "2025-08-27T16:19:21Z"
+    },
+    {
+     "id": "Backpack_IgniteEgg_DrumStick",
+     "name": "Kit de One-Punch Man",
+     "description": "Batería inspirada en One Punch Man.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "One-Punch Man",
+      "text": "Pieza del conjunto One-Punch Man.",
+      "backendValue": "BaldFist"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "5",
+      "text": "Introducido en Capítulo 6, Temporada 5.",
+      "backendValue": 37
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_igniteegg_drumstick/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_igniteegg_drumstick/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_igniteegg_drumstick/featured.png"
+     },
+     "added": "2025-08-27T16:19:21Z"
+    },
+    {
+     "id": "Backpack_IvyStub_Mic",
+     "name": "Voz psicoquinética",
+     "description": "Desata un tornado de sonido.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "One-Punch Man",
+      "text": "Pieza del conjunto One-Punch Man.",
+      "backendValue": "BaldFist"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "5",
+      "text": "Introducido en Capítulo 6, Temporada 5.",
+      "backendValue": 37
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_ivystub_mic/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_ivystub_mic/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_ivystub_mic/featured.png"
+     },
+     "added": "2025-08-27T16:19:21Z"
+    },
+    {
+     "id": "Pickaxe_IgniteEgg_DrumStick",
+     "name": "Kit de One-Punch Man",
+     "description": "Batería inspirada en One Punch Man.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "One-Punch Man",
+      "text": "Pieza del conjunto One-Punch Man.",
+      "backendValue": "BaldFist"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "5",
+      "text": "Introducido en Capítulo 6, Temporada 5.",
+      "backendValue": 37
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_igniteegg_drumstick/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_igniteegg_drumstick/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_igniteegg_drumstick/featured.png"
+     },
+     "added": "2025-08-27T16:19:21Z"
+    },
+    {
+     "id": "Pickaxe_IvyStub_Mic",
+     "name": "Voz psicoquinética",
+     "description": "Desata un tornado de sonido.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "One-Punch Man",
+      "text": "Pieza del conjunto One-Punch Man.",
+      "backendValue": "BaldFist"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "5",
+      "text": "Introducido en Capítulo 6, Temporada 5.",
+      "backendValue": 37
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_ivystub_mic/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_ivystub_mic/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_ivystub_mic/featured.png"
+     },
+     "added": "2025-08-27T16:19:21Z"
+    }
+   ],
+   "instruments": [
+    {
+     "id": "Sparks_IgniteEgg_DrumKit",
+     "name": "Kit de One-Punch Man",
+     "description": "Batería inspirada en One Punch Man.",
+     "type": {
+      "value": "drum",
+      "displayValue": "Baterías",
+      "backendValue": "SparksDrum"
+     },
+     "rarity": {
+      "value": "common",
+      "displayValue": "Común",
+      "backendValue": "EFortRarity::Common"
+     },
+     "images": {
+      "small": "https://fortnite-api.com/images/cosmetics/instruments/sparks_igniteegg_drumkit/small.png",
+      "large": "https://fortnite-api.com/images/cosmetics/instruments/sparks_igniteegg_drumkit/large.png"
+     },
+     "added": "2025-08-27T16:19:02Z"
+    },
+    {
+     "id": "Sparks_IvyStub_Mic",
+     "name": "Voz psicoquinética",
+     "description": "Desata un tornado de sonido.",
+     "type": {
+      "value": "mic",
+      "displayValue": "Micrófono",
+      "backendValue": "SparksMic"
+     },
+     "rarity": {
+      "value": "common",
+      "displayValue": "Común",
+      "backendValue": "EFortRarity::Common"
+     },
+     "images": {
+      "small": "https://fortnite-api.com/images/cosmetics/instruments/sparks_ivystub_mic/small.png",
+      "large": "https://fortnite-api.com/images/cosmetics/instruments/sparks_ivystub_mic/large.png"
+     },
+     "added": "2025-08-27T16:19:02Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 6500,
+   "finalPrice": 2800,
+   "devName": "[VIRTUAL]1 x Don Eggcracker, 1 x BarnDoor Point of Sale Machine, 1 x Roaster's Dozen, 1 x Ken Kestrel, 1 x Raptorstriker Bag, 1 x Fal-Corps Field Axe, 1 x Ural the Sage, 1 x The Pellet of Prophecy, 1 x Talon of Night, 1 x Curse of the Flock for -1 MtxCurrency",
+   "offerId": "v2:/53555c612abdd09d1452222ffa396c97ebbb096b239f1e5c72793f325bfeb117",
+   "inDate": "2026-11-24T00:00:00Z",
+   "outDate": "2026-11-26T23:59:59.999Z",
+   "bundle": {
+    "name": "Lote Bandada",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/d6dfaba2343c5ffa/renderimage_0.png"
+   },
+   "banner": {
+    "value": "3700 monedas V de descuento",
+    "intensity": "Low",
+    "backendValue": "AmountOff"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -1,
+   "layoutId": "FlockedBirds.99",
+   "layout": {
+    "id": "FlockedBirds",
+    "name": "Pájaros parejos",
+    "index": 27,
+    "rank": 192,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "8dfdccff",
+    "color3": "108fa2ff",
+    "textBackgroundColor": "108fa2ff"
+   },
+   "tileSize": "Size_2_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_WiseBarn_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S38/DAv2_Bundle_Featured_WiseBarn",
+   "newDisplayAsset": {
+    "id": "DAv2_Bundle_Featured_WiseBarn",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__d6dfaba2343c5ffa_8cd5495b8abc9e5e.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/d6dfaba2343c5ffa/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__d6dfaba2343c5ffa_307307af8da70504.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/d6dfaba2343c5ffa/renderimage_1.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Character_RoosterRoast",
+     "name": "Cacareador cafetero",
+     "description": "El espresso es su especialidad.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "Barista gallardo",
+      "text": "Pieza del conjunto Barista gallardo.",
+      "backendValue": "DrunkBird"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "6",
+      "text": "Introducido en Capítulo 6, Temporada 6.",
+      "backendValue": 38
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_roosterroast/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_roosterroast/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_roosterroast/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_roosterroast/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_roosterroast/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_roosterroast/wide.png"
+      },
+      "bean": {
+       "small": "https://fortnite-api.com/images/cosmetics/beans/bean_roosterroast/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/beans/bean_roosterroast/large.png"
+      }
+     },
+     "showcaseVideo": "bUg-MWGzv3I",
+     "added": "2025-11-11T09:37:13Z"
+    },
+    {
+     "id": "Backpack_RoosterRoast",
+     "name": "Desplumador 3000",
+     "description": "¿Quiquiriquieres dejar propina?",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Barista gallardo",
+      "text": "Pieza del conjunto Barista gallardo.",
+      "backendValue": "DrunkBird"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "6",
+      "text": "Introducido en Capítulo 6, Temporada 6.",
+      "backendValue": 38
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_roosterroast/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_roosterroast/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_roosterroast/featured.png"
+     },
+     "added": "2025-11-11T09:37:13Z"
+    },
+    {
+     "id": "Pickaxe_RoosterRoast",
+     "name": "Café para llevar",
+     "description": "Un brindis por el gallinero",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Barista gallardo",
+      "text": "Pieza del conjunto Barista gallardo.",
+      "backendValue": "DrunkBird"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "6",
+      "text": "Introducido en Capítulo 6, Temporada 6.",
+      "backendValue": 38
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_roosterroast/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_roosterroast/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_roosterroast/featured.png"
+     },
+     "added": "2025-11-11T09:37:13Z"
+    },
+    {
+     "id": "Character_SwiftKestrel",
+     "name": "Héctor Halcón",
+     "description": "Líder de la Patrulla Halcón.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "Patrulla Halcón",
+      "text": "Pieza del conjunto Patrulla Halcón.",
+      "backendValue": "CompanyMuzzle"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "6",
+      "text": "Introducido en Capítulo 6, Temporada 6.",
+      "backendValue": 38
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_swiftkestrel/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_swiftkestrel/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_swiftkestrel/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_swiftkestrel/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_swiftkestrel/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_swiftkestrel/wide.png"
+      },
+      "bean": {
+       "small": "https://fortnite-api.com/images/cosmetics/beans/bean_swiftkestrel/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/beans/bean_swiftkestrel/large.png"
+      }
+     },
+     "showcaseVideo": "j3U5hkSwQOY",
+     "added": "2025-11-11T09:37:13Z"
+    },
+    {
+     "id": "Backpack_SwiftKestrel",
+     "name": "Funda rapaz",
+     "description": "Bolso reglamentario de la Patrulla Halcón.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Patrulla Halcón",
+      "text": "Pieza del conjunto Patrulla Halcón.",
+      "backendValue": "CompanyMuzzle"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "6",
+      "text": "Introducido en Capítulo 6, Temporada 6.",
+      "backendValue": 38
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_swiftkestrel/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_swiftkestrel/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_swiftkestrel/featured.png"
+     },
+     "added": "2025-11-11T09:37:13Z"
+    },
+    {
+     "id": "Pickaxe_SwiftKestrel",
+     "name": "Hacha táctica de la Patrulla Halcón",
+     "description": "Siempre lleva una garra de repuesto, colega.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Patrulla Halcón",
+      "text": "Pieza del conjunto Patrulla Halcón.",
+      "backendValue": "CompanyMuzzle"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "6",
+      "text": "Introducido en Capítulo 6, Temporada 6.",
+      "backendValue": 38
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_swiftkestrel/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_swiftkestrel/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_swiftkestrel/featured.png"
+     },
+     "added": "2025-11-11T09:37:13Z"
+    },
+    {
+     "id": "Character_WiseBarn",
+     "name": "Ululato el Sabio",
+     "description": "Consultemos el buhonomicón…",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "Pluma encantada",
+      "text": "Pieza del conjunto Pluma encantada.",
+      "backendValue": "SteadySpell"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "6",
+      "text": "Introducido en Capítulo 6, Temporada 6.",
+      "backendValue": 38
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_wisebarn/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_wisebarn/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_wisebarn/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_wisebarn/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_wisebarn/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_wisebarn/wide.png"
+      },
+      "bean": {
+       "small": "https://fortnite-api.com/images/cosmetics/beans/bean_wisebarn/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/beans/bean_wisebarn/large.png"
+      }
+     },
+     "showcaseVideo": "da5bHaUxF94",
+     "added": "2025-11-11T09:37:13Z"
+    },
+    {
+     "id": "Backpack_WiseBarn",
+     "name": "Bola de cristal profética",
+     "description": "Los vientos del futuro. Los huesos del pasado.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Pluma encantada",
+      "text": "Pieza del conjunto Pluma encantada.",
+      "backendValue": "SteadySpell"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "6",
+      "text": "Introducido en Capítulo 6, Temporada 6.",
+      "backendValue": 38
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_wisebarn/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_wisebarn/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_wisebarn/featured.png"
+     },
+     "added": "2025-11-11T09:37:13Z"
+    },
+    {
+     "id": "Pickaxe_WiseBarn",
+     "name": "Garra nocturna",
+     "description": "Los roedores del mundo le temen.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Pluma encantada",
+      "text": "Pieza del conjunto Pluma encantada.",
+      "backendValue": "SteadySpell"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "6",
+      "text": "Introducido en Capítulo 6, Temporada 6.",
+      "backendValue": 38
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_wisebarn/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_wisebarn/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_wisebarn/featured.png"
+     },
+     "added": "2025-11-11T09:37:13Z"
+    },
+    {
+     "id": "Wrap_WiseBarn",
+     "name": "Maldición aviar",
+     "description": "Muestra tu estilo.",
+     "type": {
+      "value": "wrap",
+      "displayValue": "Papel",
+      "backendValue": "AthenaItemWrap"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Pluma encantada",
+      "text": "Pieza del conjunto Pluma encantada.",
+      "backendValue": "SteadySpell"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "6",
+      "text": "Introducido en Capítulo 6, Temporada 6.",
+      "backendValue": 38
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/wrap_wisebarn/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/wrap_wisebarn/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/wrap_wisebarn/featured.png"
+     },
+     "added": "2025-11-11T09:37:13Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 2800,
+   "finalPrice": 2800,
+   "devName": "[VIRTUAL]1 x Ferrari F40, 1 x Rosso Corsa, 1 x GT Solar, 1 x GT Go, 1 x GT Prototype, 1 x Ferrari F40 for -1 MtxCurrency",
+   "offerId": "v2:/c97159539c4bde7b145b6e1caab86114534c91ff1c14936a15900e2d52fd8350",
+   "inDate": "2026-11-24T00:00:00Z",
+   "outDate": "2026-11-28T23:59:59.999Z",
+   "bundle": {
+    "name": "Ferrari F40",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/0742f3b1df0ba8c9/renderimage_0.png"
+   },
+   "offerTag": {
+    "id": "garage",
+    "text": "Las calcomanías de este lote solo están disponibles para la carrocería Ferrari F40."
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -2,
+   "layoutId": "FerrariBRSet.98",
+   "layout": {
+    "id": "FerrariBRSet",
+    "name": "Ferrari",
+    "index": 22,
+    "rank": 195,
+    "showIneligibleOffers": "always",
+    "useWidePreview": true,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "81858dff",
+    "color2": "232426ff",
+    "color3": "52555aff",
+    "textBackgroundColor": "232426ff"
+   },
+   "tileSize": "Size_2_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_Garage_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S38/DAv2_Bundle_Featured_Garage",
+   "newDisplayAsset": {
+    "id": "DAv2_Bundle_Featured_Garage",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__0742f3b1df0ba8c9_71f81c46dcdcac7c.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/0742f3b1df0ba8c9/renderimage_0.png"
+     }
+    ]
+   },
+   "cars": [
+    {
+     "id": "CarBody_Garage",
+     "vehicleId": "VCID_Body_Garage",
+     "name": "Ferrari F40",
+     "description": "Rendimiento de primer nivel.",
+     "type": {
+      "value": "body",
+      "displayValue": "Carrocería",
+      "backendValue": "VehicleCosmetics_Body"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "images": {
+      "small": "https://fortnite-api.com/images/cosmetics/cars/carbody_garage/small.png",
+      "large": "https://fortnite-api.com/images/cosmetics/cars/carbody_garage/large.png"
+     },
+     "series": {
+      "value": "SERIE FERRARI",
+      "colors": [
+       "ffffffff",
+       "ff2800ff",
+       "ff2800ff",
+       "ff2800ff",
+       "ff2800ff"
+      ],
+      "backendValue": "Series_Ferrari"
+     },
+     "added": "2025-11-19T22:20:09Z"
+    },
+    {
+     "id": "CarSkin_Garage01",
+     "vehicleId": "VCID_Skin_Garage01",
+     "name": "Rosso Corsa",
+     "description": "El rojo de carreras original. Calcomanía personalizada de Ferrari F40.",
+     "type": {
+      "value": "skin",
+      "displayValue": "Aspecto",
+      "backendValue": "VehicleCosmetics_Skin"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "images": {
+      "small": "https://fortnite-api.com/images/cosmetics/cars/carskin_garage01/small.png",
+      "large": "https://fortnite-api.com/images/cosmetics/cars/carskin_garage01/large.png"
+     },
+     "series": {
+      "value": "SERIE FERRARI",
+      "colors": [
+       "ffffffff",
+       "ff2800ff",
+       "ff2800ff",
+       "ff2800ff",
+       "ff2800ff"
+      ],
+      "backendValue": "Series_Ferrari"
+     },
+     "added": "2025-11-19T22:20:09Z"
+    },
+    {
+     "id": "CarSkin_Garage02",
+     "vehicleId": "VCID_Skin_Garage02",
+     "name": "GT Solar",
+     "description": "La velocidad de la luz. Calcomanía personalizada de Ferrari F40.",
+     "type": {
+      "value": "skin",
+      "displayValue": "Aspecto",
+      "backendValue": "VehicleCosmetics_Skin"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "images": {
+      "small": "https://fortnite-api.com/images/cosmetics/cars/carskin_garage02/small.png",
+      "large": "https://fortnite-api.com/images/cosmetics/cars/carskin_garage02/large.png"
+     },
+     "series": {
+      "value": "SERIE FERRARI",
+      "colors": [
+       "ffffffff",
+       "ff2800ff",
+       "ff2800ff",
+       "ff2800ff",
+       "ff2800ff"
+      ],
+      "backendValue": "Series_Ferrari"
+     },
+     "added": "2025-11-19T22:20:09Z"
+    },
+    {
+     "id": "CarSkin_Garage03",
+     "vehicleId": "VCID_Skin_Garage03",
+     "name": "GT Go",
+     "description": "En sus marcas... listos... Calcomanía personalizada de Ferrari F40.",
+     "type": {
+      "value": "skin",
+      "displayValue": "Aspecto",
+      "backendValue": "VehicleCosmetics_Skin"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "images": {
+      "small": "https://fortnite-api.com/images/cosmetics/cars/carskin_garage03/small.png",
+      "large": "https://fortnite-api.com/images/cosmetics/cars/carskin_garage03/large.png"
+     },
+     "series": {
+      "value": "SERIE FERRARI",
+      "colors": [
+       "ffffffff",
+       "ff2800ff",
+       "ff2800ff",
+       "ff2800ff",
+       "ff2800ff"
+      ],
+      "backendValue": "Series_Ferrari"
+     },
+     "added": "2025-11-19T22:20:09Z"
+    },
+    {
+     "id": "CarSkin_Garage04",
+     "vehicleId": "VCID_Skin_Garage04",
+     "name": "GT Prototype",
+     "description": "Siempre en primer lugar. Calcomanía personalizada de Ferrari F40.",
+     "type": {
+      "value": "skin",
+      "displayValue": "Aspecto",
+      "backendValue": "VehicleCosmetics_Skin"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "images": {
+      "small": "https://fortnite-api.com/images/cosmetics/cars/carskin_garage04/small.png",
+      "large": "https://fortnite-api.com/images/cosmetics/cars/carskin_garage04/large.png"
+     },
+     "series": {
+      "value": "SERIE FERRARI",
+      "colors": [
+       "ffffffff",
+       "ff2800ff",
+       "ff2800ff",
+       "ff2800ff",
+       "ff2800ff"
+      ],
+      "backendValue": "Series_Ferrari"
+     },
+     "added": "2025-11-19T22:20:09Z"
+    },
+    {
+     "id": "Wheel_Garage01",
+     "vehicleId": "VCID_Wheel_Garage01",
+     "name": "Ferrari F40",
+     "description": "Si puedes imaginarlo, puedes hacerlo.",
+     "type": {
+      "value": "wheel",
+      "displayValue": "Rueda",
+      "backendValue": "VehicleCosmetics_Wheel"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "images": {
+      "small": "https://fortnite-api.com/images/cosmetics/cars/wheel_garage01/small.png",
+      "large": "https://fortnite-api.com/images/cosmetics/cars/wheel_garage01/large.png"
+     },
+     "series": {
+      "value": "SERIE FERRARI",
+      "colors": [
+       "ffffffff",
+       "ff2800ff",
+       "ff2800ff",
+       "ff2800ff",
+       "ff2800ff"
+      ],
+      "backendValue": "Series_Ferrari"
+     },
+     "added": "2025-11-02T20:02:48Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 4400,
+   "finalPrice": 2600,
+   "devName": "[VIRTUAL]1 x Tex Flamingo, 1 x Flambago, 1 x Sgt. Drake, 1 x Duck Duffle, 1 x Budge, 1 x Squawk Sack, 1 x Cosmic Peck Axe for -1 MtxCurrency",
+   "offerId": "v2:/62f4d55a5ff0ca5e6f2dcbc979cdfd4d955239c35c1968bfbe05452e836f7151",
+   "inDate": "2026-11-24T00:00:00Z",
+   "outDate": "2026-11-26T23:59:59.999Z",
+   "bundle": {
+    "name": "Lote Pájaros parejos",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/536a0a53a918ec8c/renderimage_0.png"
+   },
+   "banner": {
+    "value": "1800 monedas V de descuento",
+    "intensity": "Low",
+    "backendValue": "AmountOff"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -2,
+   "layoutId": "FlockedBirds.99",
+   "layout": {
+    "id": "FlockedBirds",
+    "name": "Pájaros parejos",
+    "index": 27,
+    "rank": 192,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "8dfdccff",
+    "color3": "108fa2ff",
+    "textBackgroundColor": "108fa2ff"
+   },
+   "tileSize": "Size_2_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_CosmicSquatter_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S28/DAv2_Bundle_Featured_CosmicSquatter",
+   "newDisplayAsset": {
+    "id": "DAv2_Bundle_Featured_CosmicSquatter",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__536a0a53a918ec8c_9d55359aaf121efb.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/536a0a53a918ec8c/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__536a0a53a918ec8c_6436ace683b96457.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/536a0a53a918ec8c/renderimage_1.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Character_FlamingoCountry",
+     "name": "Sheriff Flamenco",
+     "description": "El ala larga de la ley.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Emplumado Oeste",
+      "text": "Pieza del conjunto Emplumado Oeste.",
+      "backendValue": "QuilledDirection"
+     },
+     "introduction": {
+      "chapter": "5",
+      "season": "1",
+      "text": "Introducido en Capítulo 5, Temporada 1.",
+      "backendValue": 28
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_flamingocountry/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_flamingocountry/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_flamingocountry/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_flamingocountry/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_flamingocountry/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_flamingocountry/wide.png"
+      },
+      "bean": {
+       "small": "https://fortnite-api.com/images/cosmetics/beans/bean_flamingocountry/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/beans/bean_flamingocountry/large.png"
+      }
+     },
+     "metaTags": [
+      "Cosmetics.MetaTags.Special.Large",
+      "Cosmetics.MetaTags.Special.BodySwap.Medium"
+     ],
+     "showcaseVideo": "f5Ecr_xdjBE",
+     "added": "2024-01-23T13:34:48Z"
+    },
+    {
+     "id": "Backpack_FlamingoCountry",
+     "name": "Flamencochila",
+     "description": "Llena de camarones para el camino.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Emplumado Oeste",
+      "text": "Pieza del conjunto Emplumado Oeste.",
+      "backendValue": "QuilledDirection"
+     },
+     "introduction": {
+      "chapter": "5",
+      "season": "1",
+      "text": "Introducido en Capítulo 5, Temporada 1.",
+      "backendValue": 28
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_flamingocountry/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_flamingocountry/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_flamingocountry/featured.png"
+     },
+     "added": "2024-01-23T13:34:48Z"
+    },
+    {
+     "id": "Character_MallardVantage",
+     "name": "Sargento Pato",
+     "description": "Orgulloso soldado de la eterna escaramuza aviar.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Sargento Cuac",
+      "text": "Pieza del conjunto Sargento Cuac.",
+      "backendValue": "HootinLeader"
+     },
+     "introduction": {
+      "chapter": "5",
+      "season": "1",
+      "text": "Introducido en Capítulo 5, Temporada 1.",
+      "backendValue": 28
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_mallardvantage/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_mallardvantage/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_mallardvantage/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_mallardvantage/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_mallardvantage/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_mallardvantage/wide.png"
+      },
+      "bean": {
+       "small": "https://fortnite-api.com/images/cosmetics/beans/bean_mallardvantage/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/beans/bean_mallardvantage/large.png"
+      }
+     },
+     "metaTags": [
+      "Cosmetics.MetaTags.Special.Large",
+      "Cosmetics.MetaTags.Special.BodySwap.Medium",
+      "Cosmetics.MetaTags.Special.BigHeadHelm",
+      "Cosmetics.MetaTags.Special.AbnormalHead"
+     ],
+     "showcaseVideo": "H6NavdOX-zk",
+     "added": "2024-01-23T13:34:48Z"
+    },
+    {
+     "id": "Backpack_MallardVantage",
+     "name": "Patochila",
+     "description": "Tiene algo de alpiste. Bueno, mucho alpiste.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Sargento Cuac",
+      "text": "Pieza del conjunto Sargento Cuac.",
+      "backendValue": "HootinLeader"
+     },
+     "introduction": {
+      "chapter": "5",
+      "season": "1",
+      "text": "Introducido en Capítulo 5, Temporada 1.",
+      "backendValue": 28
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_mallardvantage/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_mallardvantage/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_mallardvantage/featured.png"
+     },
+     "added": "2024-01-23T13:34:48Z"
+    },
+    {
+     "id": "Character_CosmicSquatter",
+     "name": "Pollito",
+     "description": "Este periquito nunca abandonará su búsqueda de justicia.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Rompejaulas",
+      "text": "Pieza del conjunto Rompejaulas.",
+      "backendValue": "BrokenMetal"
+     },
+     "introduction": {
+      "chapter": "5",
+      "season": "1",
+      "text": "Introducido en Capítulo 5, Temporada 1.",
+      "backendValue": 28
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_cosmicsquatter/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_cosmicsquatter/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_cosmicsquatter/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_cosmicsquatter/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_cosmicsquatter/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_cosmicsquatter/wide.png"
+      },
+      "bean": {
+       "small": "https://fortnite-api.com/images/cosmetics/beans/bean_cosmicsquatter/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/beans/bean_cosmicsquatter/large.png"
+      }
+     },
+     "metaTags": [
+      "Cosmetics.MetaTags.Special.Large",
+      "Cosmetics.MetaTags.Special.AbnormalHead"
+     ],
+     "showcaseVideo": "DkWna9HJQaY",
+     "added": "2024-01-23T13:34:48Z"
+    },
+    {
+     "id": "Backpack_CosmicSquatter",
+     "name": "Píochila",
+     "description": "Un pájaro mochila muy bonito.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Rompejaulas",
+      "text": "Pieza del conjunto Rompejaulas.",
+      "backendValue": "BrokenMetal"
+     },
+     "introduction": {
+      "chapter": "5",
+      "season": "1",
+      "text": "Introducido en Capítulo 5, Temporada 1.",
+      "backendValue": 28
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_cosmicsquatter/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_cosmicsquatter/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_cosmicsquatter/featured.png"
+     },
+     "added": "2024-01-23T13:34:48Z"
+    },
+    {
+     "id": "Pickaxe_CosmicSquatter",
+     "name": "Hacha picósmica",
+     "description": "Agita esas plumas.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Rompejaulas",
+      "text": "Pieza del conjunto Rompejaulas.",
+      "backendValue": "BrokenMetal"
+     },
+     "introduction": {
+      "chapter": "5",
+      "season": "1",
+      "text": "Introducido en Capítulo 5, Temporada 1.",
+      "backendValue": 28
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_cosmicsquatter/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_cosmicsquatter/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_cosmicsquatter/featured.png"
+     },
+     "showcaseVideo": "VGGu87qSvNQ",
+     "added": "2024-01-23T13:34:48Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 1800,
+   "finalPrice": 1600,
+   "devName": "[VIRTUAL]1 x Hensey, 1 x Chicken Chonkers for -1 MtxCurrency",
+   "offerId": "v2:/82fc8816ef779fec54eee926d909f1f6be1282672b72f6082ebf021e32010899",
+   "inDate": "2026-11-24T00:00:00Z",
+   "outDate": "2026-11-25T23:59:59.999Z",
+   "bundle": {
+    "name": "Lote Libre albedrío",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/ca2ca145a14d93d5/renderimage_0.png"
+   },
+   "banner": {
+    "value": "200 monedas V de descuento",
+    "intensity": "Low",
+    "backendValue": "AmountOff"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -1,
+   "layoutId": "BR112426.99",
+   "layout": {
+    "id": "BR112426",
+    "name": "Energía de protagonista ",
+    "index": 35,
+    "rank": 179,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "290f07ff",
+    "color3": "824100ff",
+    "textBackgroundColor": "824100ff"
+   },
+   "tileSize": "Size_2_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_BarnCourt_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S39/DAv2_Bundle_Featured_BarnCourt",
+   "newDisplayAsset": {
+    "id": "DAv2_Bundle_Featured_BarnCourt",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__ca2ca145a14d93d5_b3c8c8edb9b10b91.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/ca2ca145a14d93d5/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__ca2ca145a14d93d5_c46381fa4154817e.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/ca2ca145a14d93d5/renderimage_1.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Character_OmelettePop",
+     "name": "Pía",
+     "description": "¿A quién llamaste gallina?",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "Maestra del gallinero",
+      "text": "Pieza del conjunto Maestra del gallinero.",
+      "backendValue": "AdventureTogether"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "4",
+      "text": "Introducido en Capítulo 6, Temporada 4.",
+      "backendValue": 36
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_omelettepop/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_omelettepop/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_omelettepop/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_omelettepop/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_omelettepop/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_omelettepop/wide.png"
+      },
+      "bean": {
+       "small": "https://fortnite-api.com/images/cosmetics/beans/bean_omelettepop/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/beans/bean_omelettepop/large.png"
+      }
+     },
+     "showcaseVideo": "F0rkrhsevQE",
+     "added": "2025-07-15T08:18:07Z"
+    },
+    {
+     "id": "Shoes_BarnCourt",
+     "name": "Gallinas gorditas",
+     "description": "Presume tu estilo.",
+     "type": {
+      "value": "shoe",
+      "displayValue": "Calzado",
+      "backendValue": "CosmeticShoes"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "4",
+      "text": "Introducido en Capítulo 6, Temporada 4.",
+      "backendValue": 36
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/shoes_barncourt/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/shoes_barncourt/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/shoes_barncourt/featured.png"
+     },
+     "added": "2025-06-08T00:19:13Z"
+    }
+   ]
+  }
+ ]
+}

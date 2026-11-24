@@ -1,0 +1,730 @@
+{
+ "date": "2026-11-24T00:00:00Z",
+ "entries": [
+  {
+   "regularPrice": 7300,
+   "finalPrice": 2600,
+   "devName": "[VIRTUAL]1 x Noodle, 1 x 2D, 1 x DARE, 1 x Noodle's Case, 1 x Noodle's Axe, 1 x Noodle's Axe, 1 x Noodle's Axe, 1 x 2D's Megaphone, 1 x Bonesy Balloons, 1 x 2D's Mic, 1 x 2D's Mic, 1 x 2D's Mic, 1 x TBD (SID_Placeholder_636), 1 x Gorillaz Camo for -1 MtxCurrency",
+   "offerId": "v2:/9bf519ccae9b56b83193347ba283316f06e39041966676b841dba8068e604720",
+   "inDate": "2026-11-22T00:00:00Z",
+   "outDate": "2026-11-24T23:59:59.999Z",
+   "bundle": {
+    "name": "Lote Noodle y 2D",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/74917a599ff53ba6/renderimage_0.png"
+   },
+   "banner": {
+    "value": "4700 monedas V de descuento",
+    "intensity": "Low",
+    "backendValue": "AmountOff"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -5,
+   "layoutId": "Gorillaz1.98",
+   "layout": {
+    "id": "Gorillaz1",
+    "name": "Gorillaz",
+    "category": "Íconos",
+    "index": 16,
+    "rank": 174,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "bcaf95ff",
+    "color3": "c55434ff",
+    "textBackgroundColor": "c55434ff"
+   },
+   "tileSize": "Size_1_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_PajamaSoar_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S37/DAv2_Bundle_Featured_PajamaSoar",
+   "newDisplayAsset": {
+    "id": "DAv2_Bundle_Featured_PajamaSoar",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__74917a599ff53ba6_bc621cc63b8ad109.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/74917a599ff53ba6/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__74917a599ff53ba6_6ff89d4a88313036.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/74917a599ff53ba6/renderimage_1.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__74917a599ff53ba6_7d93abc5847f382a.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/74917a599ff53ba6/renderimage_2.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__74917a599ff53ba6_92146f456c604475.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/74917a599ff53ba6/renderimage_3.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Character_DegreeProper",
+     "name": "Noodle",
+     "description": "Guitarrista de Gorillaz. Asesina profesional. Posiblemente una cíborg.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Gorillaz",
+      "text": "Pieza del conjunto Gorillaz.",
+      "backendValue": "NightSwitch"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "5",
+      "text": "Introducido en Capítulo 6, Temporada 5.",
+      "backendValue": 37
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_degreeproper/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_degreeproper/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_degreeproper/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_degreeproper/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_degreeproper/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_degreeproper/wide.png"
+      }
+     },
+     "variants": [
+      {
+       "channel": "Progressive",
+       "type": "Máscara",
+       "options": [
+        {
+         "tag": "Mat1",
+         "name": "No",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_degreeproper/variants/progressive/mat1.png"
+        },
+        {
+         "tag": "Mat2",
+         "name": "Sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_degreeproper/variants/progressive/mat2.png"
+        }
+       ]
+      }
+     ],
+     "showcaseVideo": "oNS7r5s35AM",
+     "added": "2025-08-26T08:00:00Z"
+    },
+    {
+     "id": "Character_PajamaSoar",
+     "name": "2D",
+     "description": "Cantante de Gorillaz. No le gusta el conflicto. Prefiere las satsumas.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Gorillaz",
+      "text": "Pieza del conjunto Gorillaz.",
+      "backendValue": "NightSwitch"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "5",
+      "text": "Introducido en Capítulo 6, Temporada 5.",
+      "backendValue": 37
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_pajamasoar/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_pajamasoar/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_pajamasoar/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_pajamasoar/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_pajamasoar/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_pajamasoar/wide.png"
+      }
+     },
+     "variants": [
+      {
+       "channel": "Material",
+       "type": "Gafas",
+       "options": [
+        {
+         "tag": "Mat1",
+         "name": "No",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_pajamasoar/variants/material/mat1.png"
+        },
+        {
+         "tag": "Mat2",
+         "name": "Sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_pajamasoar/variants/material/mat2.png"
+        }
+       ]
+      }
+     ],
+     "showcaseVideo": "TFIDHzd_2FY",
+     "added": "2025-08-26T08:00:00Z"
+    },
+    {
+     "id": "EID_DegreeProper",
+     "name": "DARE",
+     "description": "Atrévete a moverte como Noodle.",
+     "type": {
+      "value": "emote",
+      "displayValue": "Gesto",
+      "backendValue": "AthenaDance"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Gorillaz",
+      "text": "Pieza del conjunto Gorillaz.",
+      "backendValue": "NightSwitch"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "5",
+      "text": "Introducido en Capítulo 6, Temporada 5.",
+      "backendValue": 37
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/eid_degreeproper/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/eid_degreeproper/icon.png"
+     },
+     "showcaseVideo": "yCGAcAZs_lA",
+     "added": "2025-08-26T08:00:00Z"
+    },
+    {
+     "id": "Backpack_DegreeProper",
+     "name": "Funda de Noodle",
+     "description": "Un complemento imprescindible para cualquier asesina sónica.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Gorillaz",
+      "text": "Pieza del conjunto Gorillaz.",
+      "backendValue": "NightSwitch"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "5",
+      "text": "Introducido en Capítulo 6, Temporada 5.",
+      "backendValue": 37
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_degreeproper/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_degreeproper/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_degreeproper/featured.png"
+     },
+     "showcaseVideo": "C4Z7IYk_QCc",
+     "added": "2025-08-26T08:00:00Z"
+    },
+    {
+     "id": "Backpack_DegreeProper_Guitar",
+     "name": "Armonía de Noodle",
+     "description": "Recomendamos protegerse los oídos.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Gorillaz",
+      "text": "Pieza del conjunto Gorillaz.",
+      "backendValue": "NightSwitch"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "5",
+      "text": "Introducido en Capítulo 6, Temporada 5.",
+      "backendValue": 37
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_degreeproper_guitar/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_degreeproper_guitar/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_degreeproper_guitar/featured.png"
+     },
+     "added": "2025-08-26T08:00:00Z"
+    },
+    {
+     "id": "Pickaxe_DegreeProper_Guitar",
+     "name": "Armonía de Noodle",
+     "description": "Recomendamos protegerse los oídos.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Gorillaz",
+      "text": "Pieza del conjunto Gorillaz.",
+      "backendValue": "NightSwitch"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "5",
+      "text": "Introducido en Capítulo 6, Temporada 5.",
+      "backendValue": 37
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_degreeproper_guitar/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_degreeproper_guitar/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_degreeproper_guitar/featured.png"
+     },
+     "showcaseVideo": "9GJt5bqtSXA",
+     "added": "2025-08-26T08:00:00Z"
+    },
+    {
+     "id": "Backpack_PajamaSoar",
+     "name": "Megáfono de 2D",
+     "description": "Haz escuchar tu voz o grita al vacío.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Gorillaz",
+      "text": "Pieza del conjunto Gorillaz.",
+      "backendValue": "NightSwitch"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "5",
+      "text": "Introducido en Capítulo 6, Temporada 5.",
+      "backendValue": 37
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_pajamasoar/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_pajamasoar/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_pajamasoar/featured.png"
+     },
+     "added": "2025-08-26T08:00:00Z"
+    },
+    {
+     "id": "Contrail_PajamaSoar",
+     "name": "Globos de Bonesy",
+     "description": "Una buena caída.",
+     "type": {
+      "value": "contrail",
+      "displayValue": "Estela",
+      "backendValue": "AthenaSkyDiveContrail"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Gorillaz",
+      "text": "Pieza del conjunto Gorillaz.",
+      "backendValue": "NightSwitch"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "5",
+      "text": "Introducido en Capítulo 6, Temporada 5.",
+      "backendValue": 37
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/contrail_pajamasoar/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/contrail_pajamasoar/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/contrail_pajamasoar/featured.png"
+     },
+     "added": "2025-08-26T08:00:00Z"
+    },
+    {
+     "id": "Backpack_PajamaSoar_Mic",
+     "name": "Melodía de 2D",
+     "description": "Probando. ¿1, mmm, eh, 3?",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Gorillaz",
+      "text": "Pieza del conjunto Gorillaz.",
+      "backendValue": "NightSwitch"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "5",
+      "text": "Introducido en Capítulo 6, Temporada 5.",
+      "backendValue": 37
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_pajamasoar_mic/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_pajamasoar_mic/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_pajamasoar_mic/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Particle",
+       "type": "Estilo",
+       "options": [
+        {
+         "tag": "Particle1",
+         "name": "Predeterminado",
+         "image": "https://fortnite-api.com/images/cosmetics/br/backpack_pajamasoar_mic/variants/particle/particle1.png"
+        },
+        {
+         "tag": "Particle2",
+         "name": "Efectos desactivados",
+         "image": "https://fortnite-api.com/images/cosmetics/br/backpack_pajamasoar_mic/variants/particle/particle2.png"
+        }
+       ]
+      }
+     ],
+     "added": "2025-08-26T08:00:00Z"
+    },
+    {
+     "id": "Pickaxe_PajamaSoar_Mic",
+     "name": "Melodía de 2D",
+     "description": "Probando. ¿1, mmm, eh, 3?",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Gorillaz",
+      "text": "Pieza del conjunto Gorillaz.",
+      "backendValue": "NightSwitch"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "5",
+      "text": "Introducido en Capítulo 6, Temporada 5.",
+      "backendValue": 37
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_pajamasoar_mic/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_pajamasoar_mic/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_pajamasoar_mic/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Particle",
+       "type": "Estilo",
+       "options": [
+        {
+         "tag": "Particle1",
+         "name": "Predeterminado",
+         "image": "https://fortnite-api.com/images/cosmetics/br/pickaxe_pajamasoar_mic/variants/particle/particle1.png"
+        },
+        {
+         "tag": "Particle2",
+         "name": "Efectos desactivados",
+         "image": "https://fortnite-api.com/images/cosmetics/br/pickaxe_pajamasoar_mic/variants/particle/particle2.png"
+        }
+       ]
+      }
+     ],
+     "added": "2025-08-26T08:00:00Z"
+    },
+    {
+     "id": "Wrap_PajamaSoar",
+     "name": "Camuflaje de Gorillaz",
+     "description": "Muestra tu estilo.",
+     "type": {
+      "value": "wrap",
+      "displayValue": "Papel",
+      "backendValue": "AthenaItemWrap"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Gorillaz",
+      "text": "Pieza del conjunto Gorillaz.",
+      "backendValue": "NightSwitch"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "5",
+      "text": "Introducido en Capítulo 6, Temporada 5.",
+      "backendValue": 37
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/wrap_pajamasoar/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/wrap_pajamasoar/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/wrap_pajamasoar/featured.png"
+     },
+     "added": "2025-08-26T08:00:00Z"
+    }
+   ],
+   "tracks": [
+    {
+     "id": "sid_placeholder_636",
+     "devName": "dare",
+     "title": "DARE",
+     "artist": "Gorillaz ft. Shaun Ryder & Roses Gabor",
+     "releaseYear": 2005,
+     "bpm": 120,
+     "duration": 248,
+     "difficulty": {
+      "vocals": 2,
+      "guitar": 2,
+      "bass": 0,
+      "plasticBass": 0,
+      "drums": 2,
+      "plasticDrums": 2
+     },
+     "albumArt": "https://cdn.fortnite-api.com/tracks/7072547ef4eb8d43.jpg",
+     "added": "2025-08-26T08:00:00Z"
+    }
+   ],
+   "instruments": [
+    {
+     "id": "Sparks_DegreeProper_Guitar",
+     "name": "Armonía de Noodle",
+     "description": "Recomendamos protegerse los oídos.",
+     "type": {
+      "value": "guitar",
+      "displayValue": "Guitarra",
+      "backendValue": "SparksGuitar"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Common"
+     },
+     "images": {
+      "small": "https://fortnite-api.com/images/cosmetics/instruments/sparks_degreeproper_guitar/small.png",
+      "large": "https://fortnite-api.com/images/cosmetics/instruments/sparks_degreeproper_guitar/large.png"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "added": "2025-08-26T08:00:00Z"
+    },
+    {
+     "id": "Sparks_PajamaSoar_Mic",
+     "name": "Melodía de 2D",
+     "description": "Probando. ¿1, mmm, eh, 3?",
+     "type": {
+      "value": "mic",
+      "displayValue": "Micrófono",
+      "backendValue": "SparksMic"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Common"
+     },
+     "images": {
+      "small": "https://fortnite-api.com/images/cosmetics/instruments/sparks_pajamasoar_mic/small.png",
+      "large": "https://fortnite-api.com/images/cosmetics/instruments/sparks_pajamasoar_mic/large.png"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "added": "2025-08-26T08:00:00Z"
+    }
+   ]
+  }
+ ]
+}
