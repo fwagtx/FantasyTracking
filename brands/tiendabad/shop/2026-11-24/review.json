@@ -1,0 +1,4 @@
+{
+ "status": "PASS",
+ "notes": "Tienda 24 nov, 28.5 s. Frame 1 shows 'TIENDA DE HOY 24 NOV' and three items at once (OFERTA Saitama, OG Soldado de asalto, ÚLTIMO DÍA Kim Kardashian icónica). 1 · Mejor oferta: Lote One Punch Man tiles (Saitama, Genos, Tornado del Terror), 3800 with 11 900 struck through, '-68% · ahorras 8100', se va el 27 nov. 2 · Regreso OG: Soldado de asalto 800, 'CAPÍTULO 1 · TEMPORADA 1' (265 días). 3 · Último día: Kim Kardashian icónica 1800, 2D, Ice Spice, Ice Spice princesa del rap, Kim Kardashian, Lachlan (1500 each) and '+8 más', 'Se van el 24 nov, 6 PM'. Code card, then ¡GRACIAS POR VER!. Real items on every tile, names and prices readable, nothing cut off or overlapping. Voice lines make sense; the first is 'Esta es la tienda de objetos de hoy, 24 de noviembre.'; rebuilt once so the voice says 'Uan Panch Man' instead of 'Óne Púnch Man' (auto/say.py)."
+}

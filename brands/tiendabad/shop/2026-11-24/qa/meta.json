@@ -1,0 +1,106 @@
+{
+ "duration": 28.5,
+ "caption": "#EpicPartner Tienda de objetos de Fortnite, 24 de noviembre: el Lote One Punch Man cuesta 3800 V-Bucks en vez de 11 900 (ahorras 8100), Soldado de asalto está en la tienda (Capítulo 1, Temporada 1, 265 días sin salir) y 14 skins se van el 24 de noviembre a las 6 PM (CDMX).\n¿Vas a comprar hoy? Usa el código BAD en la tienda de objetos.\n#Fortnite #TiendaFortnite #FortniteTienda",
+ "claims": [
+  {
+   "text": "Lote One Punch Man: 3800 V-Bucks, regular 11900",
+   "source": "shop.json",
+   "match": [
+    "Lote One Punch Man",
+    "\"finalPrice\": 3800",
+    "\"regularPrice\": 11900"
+   ]
+  },
+  {
+   "text": "Soldado de asalto: Capítulo 1, Temporada 1",
+   "source": "history.json",
+   "match": [
+    "Soldado de asalto",
+    "\"chapter\": 1",
+    "\"season\": 1"
+   ]
+  },
+  {
+   "text": "265 days since last in the shop",
+   "source": "history.json",
+   "match": [
+    "\"gapDays\": 265"
+   ]
+  },
+  {
+   "text": "14 outfits leave at the next reset",
+   "source": "plan.json",
+   "match": [
+    "\"count\": 14"
+   ]
+  }
+ ],
+ "text": [
+  "SAITAMA",
+  "SOLDADO DE ASALTO",
+  "KIM KARDASHIAN ICÓNICA",
+  "OFERTA",
+  "OG",
+  "ÚLTIMO DÍA",
+  "TIENDA DE HOY / 24 NOV",
+  "1 · MEJOR OFERTA",
+  "GENOS",
+  "TORNADO DEL TERROR",
+  "3800",
+  "11 900",
+  "LOTE ONE PUNCH MAN · SE VA EL 27 NOV",
+  "-68% / AHORRAS 8100",
+  "2 · REGRESO OG",
+  "CAPÍTULO 1 · TEMPORADA 1",
+  "¡265 DÍAS SIN SALIR!",
+  "3 · ÚLTIMO DÍA",
+  "2D",
+  "ICE SPICE",
+  "ICE SPICE PRINCESA DEL RAP",
+  "KIM KARDASHIAN",
+  "LACHLAN",
+  "+8 MÁS",
+  "SE VAN EL 24 NOV, 6 PM",
+  "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+  "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+  "ESTA ES LA",
+  "TIENDA DE OBJETOS",
+  "DE HOY,",
+  "24 DE NOVIEMBRE.",
+  "¡TRES COSAS ANTES",
+  "DE GASTAR UN",
+  "SOLO PAVO!",
+  "EL LOTE ONE",
+  "PUNCH MAN:",
+  "3800 PAVOS,",
+  "EN VEZ DE",
+  "11 900.",
+  "¡TE AHORRAS 8100!",
+  "ESTÁ EN LA",
+  "TIENDA.",
+  "ES DEL CAPÍTULO",
+  "1,",
+  "TEMPORADA 1,",
+  "Y NO SALÍA",
+  "DESDE HACE 265",
+  "DÍAS.",
+  "Y 14 SKINS",
+  "ESTÁN EN SU",
+  "ÚLTIMO DÍA,",
+  "DIEZ DE ELLAS",
+  "DE SERIE DE",
+  "ÍDOLOS.",
+  "¿VAS A COMPRAR",
+  "ALGO HOY?",
+  "USA EL CÓDIGO",
+  "BAD EN LA",
+  "TIENDA DE OBJETOS.",
+  "LE AYUDA MUCHÍSIMO",
+  "AL CANAL.",
+  "¡GRACIAS POR VER!",
+  "SÍGUENOS PARA MÁS",
+  "CONTENIDO DIARIO.",
+  "#EPICPARTNER",
+  "LA TIENDITA BAD"
+ ]
+}
