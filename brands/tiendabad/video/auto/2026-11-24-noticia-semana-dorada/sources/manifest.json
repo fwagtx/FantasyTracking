@@ -1,0 +1,17 @@
+{
+ "via": "fortnite-api.com (mirror of Epic's in-game news, es-419), fetched by fetch_sources.py on 2026-11-24; VGC's Pirate Shop Token guide, fetched live with Firecrawl on 2026-11-23 19:24 UTC and checked passage by passage (video/auto/pirata-sources-2026-11-23).",
+ "files": [
+  {
+   "file": "news.json",
+   "source": "In-game news feed, Battle Royale (es-419)",
+   "url": "https://fortnite-api.com/v2/news/br?language=es-419",
+   "fetched_utc": "2026-11-24T17:10:19Z"
+  },
+  {
+   "file": "vgc-guide.json",
+   "source": "VGC: Fortnite Pirate Shop Token guide (published Nov 5, 2026, updated Nov 8 with Epic's confirmed odds)",
+   "url": "https://www.videogameschronicle.com/news/fortnite-pirate-shop-access-token-guide/",
+   "fetched_utc": "2026-11-23T19:24:00Z"
+  }
+ ]
+}

@@ -1,0 +1,23 @@
+{
+ "via": "fortnite-api.com (mirror of Epic's cosmetics data, es-419)",
+ "files": [
+  {
+   "file": "Character_ArmyFlour.json",
+   "source": "Epic cosmetics data for Genos (es-419)",
+   "url": "https://fortnite-api.com/v2/cosmetics/br/Character_ArmyFlour?language=es-419",
+   "fetched_utc": "2026-11-24T17:13:28Z"
+  },
+  {
+   "file": "CID_338_Athena_Commando_M_DumplingMan.json",
+   "source": "Epic cosmetics data for Hermano Bao (es-419)",
+   "url": "https://fortnite-api.com/v2/cosmetics/br/CID_338_Athena_Commando_M_DumplingMan?language=es-419",
+   "fetched_utc": "2026-11-24T17:13:28Z"
+  },
+  {
+   "file": "Character_QuicheLorraineLime.json",
+   "source": "Epic cosmetics data for Kim Kardashian icónica (es-419)",
+   "url": "https://fortnite-api.com/v2/cosmetics/br/Character_QuicheLorraineLime?language=es-419",
+   "fetched_utc": "2026-11-24T17:13:28Z"
+  }
+ ]
+}
