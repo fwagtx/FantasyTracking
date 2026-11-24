@@ -1,0 +1,160 @@
+{
+ "date": "2026-11-24",
+ "dateLabel": "24 NOV",
+ "dateLong": "24 de noviembre",
+ "resetLabel": "6 PM",
+ "resetZone": "CDMX",
+ "dealOutLabel": "27 NOV",
+ "dealOutTime": "6 PM",
+ "deal": {
+  "name": "Lote One Punch Man",
+  "final": 3800,
+  "regular": 11900,
+  "out": "2026-11-27T23:59:59.999Z",
+  "outfits": [
+   {
+    "id": "Character_IgniteEgg",
+    "name": "Saitama",
+    "rarity": "Épico",
+    "rarityKey": "epic",
+    "series": null,
+    "img": "https://fortnite-api.com/images/cosmetics/br/character_igniteegg/featured.png",
+    "price": 1500,
+    "out": "2026-11-27"
+   },
+   {
+    "id": "Character_ArmyFlour",
+    "name": "Genos",
+    "rarity": "Épico",
+    "rarityKey": "epic",
+    "series": null,
+    "img": "https://fortnite-api.com/images/cosmetics/br/character_armyflour/featured.png",
+    "price": null,
+    "out": null
+   },
+   {
+    "id": "Character_IvyStub",
+    "name": "Tornado del Terror",
+    "rarity": "Épico",
+    "rarityKey": "epic",
+    "series": null,
+    "img": "https://fortnite-api.com/images/cosmetics/br/character_ivystub/featured.png",
+    "price": 1500,
+    "out": "2026-11-27"
+   }
+  ],
+  "saving": 8100,
+  "pct": 68
+ },
+ "dealBest": true,
+ "og": {
+  "chapter": 1,
+  "season": 1,
+  "gapDays": 265,
+  "gapName": null,
+  "outfits": [
+   {
+    "id": "CID_015_Athena_Commando_F",
+    "name": "Soldado de asalto",
+    "rarity": "Poco común",
+    "rarityKey": "uncommon",
+    "series": null,
+    "img": "https://fortnite-api.com/images/cosmetics/br/cid_015_athena_commando_f/featured.png",
+    "price": 800,
+    "out": "2026-11-30",
+    "gapDays": 265
+   }
+  ]
+ },
+ "last": {
+  "count": 14,
+  "outfits": [
+   {
+    "id": "Character_QuicheLorraineLime",
+    "name": "Kim Kardashian icónica",
+    "rarity": "Serie de ídolos",
+    "rarityKey": "icon",
+    "series": "Serie de ídolos",
+    "img": "https://fortnite-api.com/images/cosmetics/br/character_quichelorrainelime/featured.png",
+    "price": 1800,
+    "out": null
+   },
+   {
+    "id": "Character_PajamaSoar",
+    "name": "2D",
+    "rarity": "Serie de ídolos",
+    "rarityKey": "icon",
+    "series": "Serie de ídolos",
+    "img": "https://fortnite-api.com/images/cosmetics/br/character_pajamasoar/featured.png",
+    "price": 1500,
+    "out": "2026-11-24"
+   },
+   {
+    "id": "Character_BerryTartRiver",
+    "name": "Ice Spice",
+    "rarity": "Serie de ídolos",
+    "rarityKey": "icon",
+    "series": "Serie de ídolos",
+    "img": "https://fortnite-api.com/images/cosmetics/br/character_berrytartriver/featured.png",
+    "price": 1500,
+    "out": "2026-11-24"
+   },
+   {
+    "id": "Character_BerryTartBrunt",
+    "name": "Ice Spice princesa del rap",
+    "rarity": "Serie de ídolos",
+    "rarityKey": "icon",
+    "series": "Serie de ídolos",
+    "img": "https://fortnite-api.com/images/cosmetics/br/character_berrytartbrunt/featured.png",
+    "price": 1500,
+    "out": "2026-11-24"
+   },
+   {
+    "id": "Character_QuicheLorraineCrisp",
+    "name": "Kim Kardashian",
+    "rarity": "Serie de ídolos",
+    "rarityKey": "icon",
+    "series": "Serie de ídolos",
+    "img": "https://fortnite-api.com/images/cosmetics/br/character_quichelorrainecrisp/featured.png",
+    "price": 1500,
+    "out": null
+   },
+   {
+    "id": "CID_891_Athena_Commando_M_LunchBox",
+    "name": "Lachlan",
+    "rarity": "Serie de ídolos",
+    "rarityKey": "icon",
+    "series": "Serie de ídolos",
+    "img": "https://fortnite-api.com/images/cosmetics/br/cid_891_athena_commando_m_lunchbox/featured.png",
+    "price": 1500,
+    "out": "2026-11-24"
+   }
+  ]
+ },
+ "roles": [
+  "intro",
+  "hook",
+  "deal_name",
+  "deal_price",
+  "saving",
+  "og_name",
+  "og_era",
+  "last",
+  "ask",
+  "code",
+  "thanks"
+ ],
+ "phrases": [
+  "Esta es la tienda de objetos de hoy, 24 de noviembre.",
+  "¡Tres cosas antes de gastar un solo pavo!",
+  "El Lote One Punch Man:",
+  "3800 pavos, en vez de 11 900.",
+  "¡Te ahorras 8100!",
+  "Soldado de asalto está en la tienda.",
+  "Es del Capítulo 1, Temporada 1, y no salía desde hace 265 días.",
+  "Y 14 skins están en su último día, diez de ellas de Serie de ídolos.",
+  "¿Vas a comprar algo hoy?",
+  "Usa el código BAD en la tienda de objetos. Le ayuda muchísimo al canal.",
+  "¡Gracias por ver! Síguenos para más contenido diario."
+ ]
+}

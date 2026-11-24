@@ -21,7 +21,8 @@ SAY = {"A$AP Rocky": "Éisap Róqui",            # before "$": the voice read "A
        "Overwatch": "Óverguach", "D.Va": "Di Va", "Tracer": "Tréiser", "Genji": "Yen yi", "Widowmaker": "Uídou Méiker",
        "Ice Spice": "Ais Spais", "The Kid LAROI": "De Kid La Rói", "The Rogue LAROI": "De Róug La Rói",
        "Cowboy Bebop": "Cáuboi Bíbop", "Faye Valentine": "Féi Válentain", "Spike Spiegel": "Spáik Spíguel", "Mordecai": "Mórdecai",
-       "Heidi": "Jáidi", "Ludwig": "Lúdvig", "One Piece": "Uan Pis", "Sanji": "San yi"}
+       "Heidi": "Jáidi", "Ludwig": "Lúdvig", "One Piece": "Uan Pis", "Sanji": "San yi",
+       "One Punch Man": "Uan Panch Man"}       # 2026-11-23: Lote One Punch Man would have been "Óne Púnch Man"
 
 
 def say_names(s):
