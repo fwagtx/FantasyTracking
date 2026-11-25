@@ -75,10 +75,82 @@
    ]
   },
   {
+   "text": "Cuando esa tripulación se separó, Buggy siguió como pirata en el East Blue",
+   "source": "onepiece-wiki-buggy.json",
+   "match": [
+    "Buggy succeeded his disbanded mentors as a career pirate in the East Blue"
+   ]
+  },
+  {
+   "text": "Por venganza, se alió con Alvida y se fue tras ellos hasta el Grand Line",
+   "source": "onepiece-wiki-buggy.json",
+   "match": [
+    "revenge drove him to an alliance with \"Iron Mace\" Alvida and pursuit into the Grand Line"
+   ]
+  },
+  {
+   "text": "Buggy fue el protagonista de la primera mini historia de portadas del manga",
+   "source": "onepiece-wiki-buggy.json",
+   "match": [
+    "as well as the central protagonist of the Buggy's Crew Adventure Chronicles cover arc (the manga's first)"
+   ]
+  },
+  {
    "text": "Buggy: 1600 pavos, hasta el 5 dic",
    "source": "shop.json",
    "match": [
     "\"regularPrice\": 1600, \"finalPrice\": 1600, \"devName\": \"[VIRTUAL]1 x Buggy, 1 x Buggy's Coat, 1 x Buggy Knives for -1 MtxCurrency\", \"offerId\": \"v2:/4431d4a16bd18c613e3ed16fe0c7f5485adb651a7545d313c8d36fae43ab2963\", \"inDate\": \"2026-11-14T00:00:00Z\", \"outDate\": \""
+   ]
+  },
+  {
+   "text": "El Baratie tiene cañones a los lados para pelear, y la cabeza de pez se separa para atacar",
+   "source": "onepiece-wiki-baratie.json",
+   "match": [
+    "A small array of cannons are lined on the sides, which can be used for battle.",
+    "the fish head of the ship can be detached to make the mobile attack unit Sabagashira I"
+   ]
+  },
+  {
+   "text": "Dos años después, el Baratie creció: varios pisos más y al menos dos barcos hermanos",
+   "source": "onepiece-wiki-baratie.json",
+   "match": [
+    "After two years, the Baratie has expanded after undergoing major renovations, with several floors added and at least two other sister ships."
+   ]
+  },
+  {
+   "text": "Arlong Park estaba en la costa, al este de la aldea Cocoyasi, en las islas Conomi",
+   "source": "onepiece-wiki-arlong-park.json",
+   "match": [
+    "Arlong Park was constructed along the coastline, east of Cocoyasi Village",
+    "It was located on the Conomi Islands."
+   ]
+  },
+  {
+   "text": "Noticia del juego: o la fruta Fuego Fuego para arrasar como Ace… solo mantente lejos del agua",
+   "source": "news.json",
+   "match": [
+    "o la fruta Fuego Fuego para arrasar como Ace… solo mantente lejos del agua."
+   ]
+  },
+  {
+   "text": "Bell-mère las quería muchísimo y les daba todo lo que podía, muchas veces a costa de ella misma",
+   "source": "onepiece-wiki-bell-mere.json",
+   "match": [
+    "She cared about her daughters deeply, she would give them as much as she could afford, often at her own expense"
+   ]
+  },
+  {
+   "text": "Loguetown es una ciudad que ocupa casi toda su isla",
+   "source": "onepiece-wiki-loguetown.json",
+   "match": [
+    "Spanning nearly the entire island it occupies"
+   ]
+  },
+  {
+   "text": "En Loguetown, Nami se probó ropa nueva",
+   "source": "onepiece-wiki-loguetown.json",
+   "match": [
+    "Nami tried on some new clothes"
    ]
   },
   {
@@ -346,9 +418,9 @@
   {
    "type": "map",
    "p": 4,
-   "x": 1022.9,
-   "y": 1205.9,
-   "z": 1.0,
+   "x": 900.0,
+   "y": 1300.0,
+   "z": 0.9,
    "name": "La ruta",
    "sub": "Siguiendo el viaje de Luffy",
    "pins": [
@@ -381,7 +453,7 @@
   },
   {
    "type": "map",
-   "p": 5,
+   "p": 6,
    "x": 1031.1,
    "y": 850.9,
    "z": 2.0,
@@ -398,7 +470,7 @@
   },
   {
    "type": "items",
-   "p": 6,
+   "p": 7,
    "title": "Buggy · capitán de los Piratas de Buggy",
    "items": [
     {
@@ -410,25 +482,37 @@
   },
   {
    "type": "stat",
-   "p": 7,
+   "p": 8,
    "big": "Aprendiz",
    "label": "en la tripulación de Gol D. Roger, junto a Shanks"
   },
   {
    "type": "stat",
-   "p": 8,
+   "p": 10,
    "big": "Orange Town",
    "label": "Buggy es el villano principal de ese arco"
   },
   {
    "type": "stat",
-   "p": 9,
+   "p": 11,
+   "big": "Venganza",
+   "label": "con Alvida, tras los Sombreros de Paja"
+  },
+  {
+   "type": "stat",
+   "p": 12,
    "big": "Emperador",
    "label": "uno de los cuatro del Nuevo Mundo"
   },
   {
+   "type": "stat",
+   "p": 13,
+   "big": "Portadas",
+   "label": "la primera mini historia de portadas del manga"
+  },
+  {
    "type": "items",
-   "p": 10,
+   "p": 14,
    "title": "En la tienda hasta el 5 dic",
    "items": [
     {
@@ -441,7 +525,7 @@
   },
   {
    "type": "map",
-   "p": 11,
+   "p": 15,
    "x": 1411.1,
    "y": 1476.8,
    "z": 2.0,
@@ -451,26 +535,34 @@
     {
      "x": 1411.1,
      "y": 1476.8,
-     "label": ""
+     "label": "BARATIE",
+     "lx": -330,
+     "ly": 70
     }
    ],
    "chapter": "Baratie"
   },
   {
    "type": "stat",
-   "p": 12,
+   "p": 16,
    "big": "Restaurante",
    "label": "en el mar: un barco grande con cabeza de pez"
   },
   {
    "type": "stat",
-   "p": 13,
+   "p": 17,
+   "big": "Cañones",
+   "label": "y una cabeza de pez que se separa para atacar"
+  },
+  {
+   "type": "stat",
+   "p": 18,
    "big": "Zeff",
    "label": "ex capitán pirata y jefe de cocina"
   },
   {
    "type": "items",
-   "p": 14,
+   "p": 19,
    "title": "Sanji · el joven subchef",
    "items": [
     {
@@ -482,19 +574,25 @@
   },
   {
    "type": "stat",
-   "p": 15,
+   "p": 20,
    "big": "1 año",
    "label": "el contrato de Luffy para pagar los daños"
   },
   {
    "type": "stat",
-   "p": 17,
+   "p": 22,
    "big": "Cocoyasi",
    "label": "de ahí, Sanji zarpa con Luffy"
   },
   {
+   "type": "stat",
+   "p": 23,
+   "big": "Más pisos",
+   "label": "y al menos dos barcos hermanos"
+  },
+  {
    "type": "items",
-   "p": 18,
+   "p": 24,
    "title": "En la tienda hasta el 5 dic",
    "items": [
     {
@@ -507,7 +605,7 @@
   },
   {
    "type": "map",
-   "p": 19,
+   "p": 25,
    "x": 634.8,
    "y": 1123.2,
    "z": 2.0,
@@ -524,31 +622,31 @@
   },
   {
    "type": "stat",
-   "p": 20,
+   "p": 26,
    "big": "Base pirata",
    "label": "de los Piratas de Arlong"
   },
   {
    "type": "stat",
-   "p": 21,
+   "p": 28,
    "big": "10 años antes",
    "label": "Arlong llega a la aldea Cocoyasi"
   },
   {
    "type": "stat",
-   "p": 22,
+   "p": 29,
    "big": "8 pisos",
    "label": "hecho con las piezas de su galeón"
   },
   {
    "type": "stat",
-   "p": 23,
+   "p": 30,
    "big": "Sin miedo",
    "label": "en plena costa, con su bandera pirata arriba"
   },
   {
    "type": "items",
-   "p": 24,
+   "p": 31,
    "title": "Luffy · Gomu Gomu no Ono",
    "items": [
     {
@@ -560,31 +658,35 @@
   },
   {
    "type": "stat",
-   "p": 25,
+   "p": 32,
    "big": "5 pisos",
    "label": "Arlong, directo para abajo"
   },
   {
    "type": "quote",
-   "p": 26,
+   "p": 33,
    "kicker": "NOTICIAS DEL JUEGO",
    "title": "Frutas del diablo por toda la isla",
    "lines": [
     {
-     "p": 27,
+     "p": 34,
      "text": "Come la fruta Goma Goma para estirar tus habilidades como Luffy"
+    },
+    {
+     "p": 35,
+     "text": "o la fruta Fuego Fuego para arrasar como Ace… solo mantente lejos del agua."
     }
    ]
   },
   {
    "type": "code",
-   "p": 28,
+   "p": 36,
    "chapter": "Código BAD",
    "wide": true
   },
   {
    "type": "map",
-   "p": 29,
+   "p": 37,
    "x": 710.1,
    "y": 1560.9,
    "z": 2.0,
@@ -594,14 +696,14 @@
     {
      "x": 710.1,
      "y": 1560.9,
-     "label": ""
+     "label": "BOSQUE MANDARINA"
     }
    ],
    "chapter": "Bosque Mandarina de Nami"
   },
   {
    "type": "items",
-   "p": 30,
+   "p": 38,
    "title": "Nami · creció en un huerto de mandarinas",
    "items": [
     {
@@ -613,31 +715,31 @@
   },
   {
    "type": "stat",
-   "p": 31,
+   "p": 39,
    "big": "Bell-mère",
    "label": "ex oficial de la Marina, su mamá adoptiva"
   },
   {
    "type": "stat",
-   "p": 32,
+   "p": 41,
    "big": "Solo fruta",
    "label": "lo que comía Bell-mère cuando no alcanzaba"
   },
   {
    "type": "stat",
-   "p": 34,
+   "p": 43,
    "big": "9 años",
    "label": "Bell-mère crió a Nami y a Nojiko"
   },
   {
    "type": "stat",
-   "p": 35,
+   "p": 44,
    "big": "Mapas",
    "label": "Nami tuvo que dibujarlos para Arlong"
   },
   {
    "type": "items",
-   "p": 36,
+   "p": 45,
    "title": "En la tienda hasta el 5 dic",
    "items": [
     {
@@ -650,7 +752,7 @@
   },
   {
    "type": "map",
-   "p": 37,
+   "p": 46,
    "x": 988.7,
    "y": 1382.2,
    "z": 2.0,
@@ -667,7 +769,7 @@
   },
   {
    "type": "title",
-   "p": 38,
+   "p": 47,
    "kicker": "LOGUETOWN",
    "lines": [
     "La ciudad del",
@@ -676,19 +778,19 @@
   },
   {
    "type": "stat",
-   "p": 39,
+   "p": 48,
    "big": "Gol D. Roger",
    "label": "ahí nació, y ahí lo ejecutaron"
   },
   {
    "type": "stat",
-   "p": 40,
+   "p": 49,
    "big": "Parada obligada",
    "label": "para casi todos los barcos del East Blue"
   },
   {
    "type": "items",
-   "p": 41,
+   "p": 51,
    "title": "Zoro · espadas nuevas",
    "items": [
     {
@@ -700,13 +802,25 @@
   },
   {
    "type": "stat",
-   "p": 42,
+   "p": 52,
    "big": "Yubashiri",
    "label": "la espada más valiosa de Ipponmatsu"
   },
   {
    "type": "items",
-   "p": 43,
+   "p": 53,
+   "title": "Nami · de compras",
+   "items": [
+    {
+     "img": "../../tiendabad/video/long/2026-11-25-lugares-one-piece/img/Character_BoastJoint.png",
+     "name": "Nami",
+     "rarity": "epic"
+    }
+   ]
+  },
+  {
+   "type": "items",
+   "p": 54,
    "title": "Luffy y Buggy, en la plataforma",
    "items": [
     {
@@ -723,13 +837,13 @@
   },
   {
    "type": "stat",
-   "p": 45,
+   "p": 56,
    "big": "¡Un rayo!",
    "label": "y la plataforma quedó destruida"
   },
   {
    "type": "items",
-   "p": 46,
+   "p": 57,
    "title": "Lote Sombrero de paja: 3200",
    "items": [
     {
@@ -748,11 +862,11 @@
   },
   {
    "type": "map",
-   "p": 47,
+   "p": 58,
    "chapter": "La ruta completa",
-   "x": 1022.9,
-   "y": 1205.9,
-   "z": 1.0,
+   "x": 900.0,
+   "y": 1300.0,
+   "z": 0.9,
    "name": "La ruta completa",
    "sub": "5 lugares de One Piece",
    "pins": [
@@ -785,7 +899,7 @@
   },
   {
    "type": "items",
-   "p": 48,
+   "p": 60,
    "title": "Los Sombreros de Paja en la tienda",
    "items": [
     {
@@ -810,19 +924,19 @@
   },
   {
    "type": "stat",
-   "p": 49,
+   "p": 61,
    "big": "4000 pavos",
    "label": "Lote One Piece: Luffy, Nami y Usopp, en vez de 8200"
   },
   {
    "type": "stat",
-   "p": 50,
+   "p": 62,
    "big": "Hasta el 5 dic",
    "label": "todo lo de One Piece en la tienda"
   },
   {
    "type": "title",
-   "p": 51,
+   "p": 63,
    "chapter": "Final",
    "kicker": "TU TURNO",
    "lines": [
@@ -832,7 +946,7 @@
   },
   {
    "type": "code",
-   "p": 52
+   "p": 64
   }
  ]
 }

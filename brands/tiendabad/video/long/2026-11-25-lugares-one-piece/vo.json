@@ -25,6 +25,11 @@
    "say": "Hoy los recorremos todos, siguiendo el viaje de Lufi en el anime. ¿Listo? ¡Zarpamos!"
   },
   {
+   "text": "En cada parada te digo dónde está en el mapa… y qué pasó ahí en One Piece.",
+   "pause": 0.4,
+   "say": "En cada parada te digo dónde está en el mapa… y qué pasó ahí en Uan Pis."
+  },
+  {
    "text": "Primera parada: Playa de Buggy, en el norte de la isla, cerca de Frontera Farol.",
    "pause": 0.4,
    "say": "Primera parada: Playa de Bugui, en el norte de la isla, cerca de Frontera Farol."
@@ -40,13 +45,28 @@
    "say": "De joven fue aprendiz en la tripulación de Gol Di Róyer, junto a Shanks."
   },
   {
+   "text": "Cuando esa tripulación se separó, Buggy siguió como pirata en el East Blue.",
+   "pause": 0.4,
+   "say": "Cuando esa tripulación se separó, Bugui siguió como pirata en el Ist Blu."
+  },
+  {
    "text": "Fue uno de los primeros enemigos que derrotaron Luffy y los Sombreros de Paja: es el villano principal del arco de Orange Town.",
    "pause": 0.4,
    "say": "Fue uno de los primeros enemigos que derrotaron Lufi y los Sombreros de Paja: es el villano principal del arco de Óranch Taun."
   },
   {
+   "text": "Por venganza, se alió con Alvida, y se fue tras ellos hasta el Grand Line.",
+   "pause": 0.4,
+   "say": "Por venganza, se alió con Alvida, y se fue tras ellos hasta el Grand Láin."
+  },
+  {
    "text": "Y hoy es uno de los cuatro Emperadores del Nuevo Mundo… ¡y dice que va a ser el Rey de los Piratas!",
    "pause": 0.4
+  },
+  {
+   "text": "Dato extra: Buggy fue el protagonista de la primera mini historia de portadas del manga.",
+   "pause": 0.4,
+   "say": "Dato extra: Bugui fue el protagonista de la primera mini historia de portadas del manga."
   },
   {
    "text": "En la tienda de Fortnite, Buggy cuesta 1600 pavos, hasta el 5 de diciembre.",
@@ -61,6 +81,10 @@
    "text": "En One Piece, el Baratie es un restaurante en el mar: un barco bastante grande, con cabeza de pez.",
    "pause": 0.4,
    "say": "En Uan Pis, el Baratie es un restaurante en el mar: un barco bastante grande, con cabeza de pez."
+  },
+  {
+   "text": "Tiene cañones a los lados para pelear… ¡y la cabeza de pez se puede separar para atacar!",
+   "pause": 0.4
   },
   {
    "text": "Lo dirige Zeff, un famoso ex capitán pirata, que es el jefe de cocina.",
@@ -88,6 +112,10 @@
    "say": "Y de ahí, San yi zarpó con Lufi rumbo a la aldea Cocoyasi."
   },
   {
+   "text": "Y dos años después, el Baratie creció: le agregaron varios pisos, y al menos dos barcos hermanos.",
+   "pause": 0.4
+  },
+  {
    "text": "En Fortnite, Sanji cuesta 1600 pavos.",
    "pause": 0.4,
    "say": "En Fortnite, San yi cuesta 1600 pavos."
@@ -100,6 +128,10 @@
    "text": "En One Piece, Arlong Park era la base de los Piratas de Arlong.",
    "pause": 0.4,
    "say": "En Uan Pis, Arlong Park era la base de los Piratas de Arlong."
+  },
+  {
+   "text": "Estaba en la costa, al este de la aldea Cocoyasi, en las islas Conomi.",
+   "pause": 0.4
   },
   {
    "text": "Arlong llegó al East Blue diez años antes, a la aldea Cocoyasi, con un plan: conquistar y gobernar a los humanos.",
@@ -128,9 +160,14 @@
    "pause": 0.4
   },
   {
-   "text": "Come la fruta Goma Goma para estirar tus habilidades como Luffy.",
+   "text": "Come la fruta Goma Goma para estirar tus habilidades como Luffy…",
    "pause": 0.4,
-   "say": "Come la fruta Goma Goma para estirar tus habilidades como Lufi."
+   "say": "Come la fruta Goma Goma para estirar tus habilidades como Lufi…"
+  },
+  {
+   "text": "o la fruta Fuego Fuego para arrasar como Ace… solo mantente lejos del agua.",
+   "pause": 0.4,
+   "say": "o la fruta Fuego Fuego para arrasar como Eis… solo mantente lejos del agua."
   },
   {
    "text": "Usa el código BAD en la tienda de objetos. Le ayuda muchísimo al canal.",
@@ -150,6 +187,10 @@
    "text": "El huerto era de Bell-mère, una ex oficial de la Marina que adoptó a Nami y a su hermana Nojiko.",
    "pause": 0.4,
    "say": "El huerto era de Belmer, una ex oficial de la Marina que adoptó a Nami y a su hermana Noyíko."
+  },
+  {
+   "text": "Las quería muchísimo, y les daba todo lo que podía, muchas veces a costa de ella misma.",
+   "pause": 0.4
   },
   {
    "text": "Cuando los tiempos eran difíciles, Bell-mère comía solo la fruta de su huerto, para ahorrar y que a sus hijas no les faltara comida.",
@@ -193,12 +234,20 @@
    "say": "Está muy cerca de Rivérs Máuntein, así que casi todos los barcos del Ist Blu paran ahí a abastecerse."
   },
   {
+   "text": "Y es una ciudad tan grande que ocupa casi toda su isla.",
+   "pause": 0.4
+  },
+  {
    "text": "Ahí, Zoro buscó espadas nuevas, porque Mihawk le había roto dos.",
    "pause": 0.4,
    "say": "Ahí, Zoro buscó espadas nuevas, porque Míjok le había roto dos."
   },
   {
    "text": "La espada más valiosa de la tienda de Ipponmatsu era la Yubashiri… hasta que llegó Zoro.",
+   "pause": 0.4
+  },
+  {
+   "text": "Mientras, Nami se fue de compras y se probó ropa nueva.",
    "pause": 0.4
   },
   {
@@ -224,6 +273,11 @@
    "text": "Esa es la ruta completa: Playa de Buggy, el Baratie, Arlong Park, el Bosque Mandarina de Nami y Loguetown.",
    "pause": 0.4,
    "say": "Esa es la ruta completa: Playa de Bugui, el Baratie, Arlong Park, el Bosque Mandarina de Nami y Lóguetaun."
+  },
+  {
+   "text": "Cinco paradas, y cada una con su historia en One Piece.",
+   "pause": 0.4,
+   "say": "Cinco paradas, y cada una con su historia en Uan Pis."
   },
   {
    "text": "¿Quieres jugar como los Sombreros de Paja? Luffy cuesta 1800 pavos, y Nami y Usopp, 1600 cada uno.",
