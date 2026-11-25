@@ -1,0 +1,131 @@
+{
+ "date": "2026-11-25T00:00:00Z",
+ "entries": [
+  {
+   "regularPrice": 1800,
+   "finalPrice": 1600,
+   "devName": "[VIRTUAL]1 x Hensey, 1 x Chicken Chonkers for -1 MtxCurrency",
+   "offerId": "v2:/82fc8816ef779fec54eee926d909f1f6be1282672b72f6082ebf021e32010899",
+   "inDate": "2026-11-24T00:00:00Z",
+   "outDate": "2026-11-25T23:59:59.999Z",
+   "bundle": {
+    "name": "Lote Libre albedrío",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/ca2ca145a14d93d5/renderimage_0.png"
+   },
+   "banner": {
+    "value": "200 monedas V de descuento",
+    "intensity": "Low",
+    "backendValue": "AmountOff"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -1,
+   "layoutId": "BR112526.95",
+   "layout": {
+    "id": "BR112526",
+    "name": "Energía de protagonista ",
+    "index": 28,
+    "rank": 176,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "290f07ff",
+    "color3": "824100ff",
+    "textBackgroundColor": "824100ff"
+   },
+   "tileSize": "Size_2_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_BarnCourt_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S39/DAv2_Bundle_Featured_BarnCourt",
+   "newDisplayAsset": {
+    "id": "DAv2_Bundle_Featured_BarnCourt",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__ca2ca145a14d93d5_b3c8c8edb9b10b91.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/ca2ca145a14d93d5/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__ca2ca145a14d93d5_c46381fa4154817e.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/ca2ca145a14d93d5/renderimage_1.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Character_OmelettePop",
+     "name": "Pía",
+     "description": "¿A quién llamaste gallina?",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "Maestra del gallinero",
+      "text": "Pieza del conjunto Maestra del gallinero.",
+      "backendValue": "AdventureTogether"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "4",
+      "text": "Introducido en Capítulo 6, Temporada 4.",
+      "backendValue": 36
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_omelettepop/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_omelettepop/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_omelettepop/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_omelettepop/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_omelettepop/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_omelettepop/wide.png"
+      },
+      "bean": {
+       "small": "https://fortnite-api.com/images/cosmetics/beans/bean_omelettepop/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/beans/bean_omelettepop/large.png"
+      }
+     },
+     "showcaseVideo": "F0rkrhsevQE",
+     "added": "2025-07-15T08:18:07Z"
+    },
+    {
+     "id": "Shoes_BarnCourt",
+     "name": "Gallinas gorditas",
+     "description": "Presume tu estilo.",
+     "type": {
+      "value": "shoe",
+      "displayValue": "Calzado",
+      "backendValue": "CosmeticShoes"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "4",
+      "text": "Introducido en Capítulo 6, Temporada 4.",
+      "backendValue": 36
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/shoes_barncourt/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/shoes_barncourt/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/shoes_barncourt/featured.png"
+     },
+     "added": "2025-06-08T00:19:13Z"
+    }
+   ]
+  }
+ ]
+}

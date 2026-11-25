@@ -1,0 +1,2846 @@
+{
+ "date": "2026-11-25T00:00:00Z",
+ "entries": [
+  {
+   "regularPrice": 9600,
+   "finalPrice": 3800,
+   "devName": "[VIRTUAL]1 x Joker (P5R), 1 x Shujin Academy Backpack, 1 x Silver Dagger, 1 x Panther (P5R), 1 x Carmen's Heart, 1 x Carmen's Heart Flail, 1 x Morgana (P5R), 1 x Morgana Slippers, 1 x Panther's Showtime, 1 x Carmen's Microphone, 1 x Carmen's Microphone, 1 x Carmen's Microphone, 1 x Phantom Thieves Guitar, 1 x Phantom Thieves Guitar, 1 x Phantom Thieves Guitar, 1 x TBD (SID_Placeholder_930), 1 x Panther's Eyes, 1 x Joker's Eyes for -1 MtxCurrency",
+   "offerId": "v2:/2d371ce5a745334f33757ecce7da10d0269b4e8e5ce49af6178dda3d4b9f6c29",
+   "inDate": "2026-11-25T00:00:00Z",
+   "outDate": "2026-11-29T23:59:59.999Z",
+   "bundle": {
+    "name": "Lote Persona 5 Royal",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/6c84a21503112671/renderimage_0.png"
+   },
+   "banner": {
+    "value": "5800 monedas V de descuento",
+    "intensity": "Low",
+    "backendValue": "AmountOff"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -1,
+   "layoutId": "Persona5.99",
+   "layout": {
+    "id": "Persona5",
+    "name": "Persona 5 Royal",
+    "index": 45,
+    "rank": 195,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "ff5d5dff",
+    "color2": "ffd1f7ff",
+    "color3": "f8afcfff",
+    "textBackgroundColor": "ff5d5dff"
+   },
+   "tileBackgroundMaterial": "ShopTile_Pirates_Brush",
+   "tileSize": "Size_2_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_Cosmictrellis_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S42/DAv2_Bundle_Featured_Cosmictrellis",
+   "newDisplayAsset": {
+    "id": "DAv2_Bundle_Featured_CosmicTrellis",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__6c84a21503112671_29c0c4191e61fb71.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/6c84a21503112671/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__6c84a21503112671_d2e71b6320aa32c2.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/6c84a21503112671/renderimage_1.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__6c84a21503112671_e0559e464b07edd9.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/6c84a21503112671/renderimage_2.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__6c84a21503112671_1289a263ea7b677a.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/6c84a21503112671/renderimage_3.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Character_CosmicTrellis",
+     "name": "Joker (P5R)",
+     "description": "Líder de los Ladrones Fantasma de Corazones.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "gaminglegends",
+      "displayValue": "Leyendas de videojuegos",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "Leyendas de videojuegos",
+      "colors": [
+       "8078ffff",
+       "5328d6ff",
+       "3e1398ff",
+       "28085fff",
+       "0d0027ff"
+      ],
+      "backendValue": "PlatformSeries"
+     },
+     "set": {
+      "value": "Persona 5 Royal",
+      "text": "Pieza del conjunto Persona 5 Royal.",
+      "backendValue": "LatePebble"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_cosmictrellis/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_cosmictrellis/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_cosmictrellis/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Parts",
+       "type": "Estilo",
+       "options": [
+        {
+         "tag": "Stage1",
+         "name": "Joker (P5R)",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_cosmictrellis/variants/parts/stage1.png"
+        },
+        {
+         "tag": "Stage2",
+         "name": "Ren Amamiya",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_cosmictrellis/variants/parts/stage2.png"
+        }
+       ]
+      },
+      {
+       "channel": "Material",
+       "type": "Accesorio",
+       "options": [
+        {
+         "tag": "Mat1",
+         "name": "Sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_cosmictrellis/variants/material/mat1.png"
+        },
+        {
+         "tag": "Mat2",
+         "name": "No",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_cosmictrellis/variants/material/mat2.png"
+        }
+       ]
+      }
+     ],
+     "builtInEmoteIds": [
+      "EID_CosmicTrellis"
+     ],
+     "showcaseVideo": "-U54paLgz7g",
+     "added": "2026-09-24T16:00:38Z"
+    },
+    {
+     "id": "Backpack_CosmicTrellis",
+     "name": "Bolso del Instituto Shujin",
+     "description": "¡Calma el corazón de los adultos corruptos!",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "gaminglegends",
+      "displayValue": "Leyendas de videojuegos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Leyendas de videojuegos",
+      "colors": [
+       "8078ffff",
+       "5328d6ff",
+       "3e1398ff",
+       "28085fff",
+       "0d0027ff"
+      ],
+      "backendValue": "PlatformSeries"
+     },
+     "set": {
+      "value": "Persona 5 Royal",
+      "text": "Pieza del conjunto Persona 5 Royal.",
+      "backendValue": "LatePebble"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_cosmictrellis/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_cosmictrellis/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_cosmictrellis/featured.png"
+     },
+     "added": "2026-09-24T16:00:38Z"
+    },
+    {
+     "id": "Pickaxe_CosmicTrellis",
+     "name": "Daga de plata",
+     "description": "Lista para cortar.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "gaminglegends",
+      "displayValue": "Leyendas de videojuegos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Leyendas de videojuegos",
+      "colors": [
+       "8078ffff",
+       "5328d6ff",
+       "3e1398ff",
+       "28085fff",
+       "0d0027ff"
+      ],
+      "backendValue": "PlatformSeries"
+     },
+     "set": {
+      "value": "Persona 5 Royal",
+      "text": "Pieza del conjunto Persona 5 Royal.",
+      "backendValue": "LatePebble"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_cosmictrellis/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_cosmictrellis/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_cosmictrellis/featured.png"
+     },
+     "added": "2026-09-24T16:00:38Z"
+    },
+    {
+     "id": "Character_DebitScent",
+     "name": "Panther (P5R)",
+     "description": "La \"talentosa\" actriz de los Ladrones Fantasma.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "gaminglegends",
+      "displayValue": "Leyendas de videojuegos",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "Leyendas de videojuegos",
+      "colors": [
+       "8078ffff",
+       "5328d6ff",
+       "3e1398ff",
+       "28085fff",
+       "0d0027ff"
+      ],
+      "backendValue": "PlatformSeries"
+     },
+     "set": {
+      "value": "Persona 5 Royal",
+      "text": "Pieza del conjunto Persona 5 Royal.",
+      "backendValue": "LatePebble"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_debitscent/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_debitscent/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_debitscent/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Parts",
+       "type": "Estilo ",
+       "options": [
+        {
+         "tag": "Stage1",
+         "name": "Panther (P5R)",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_debitscent/variants/parts/stage1.png"
+        },
+        {
+         "tag": "Stage2",
+         "name": "Panther (P5R) sin máscara",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_debitscent/variants/parts/stage2.png"
+        },
+        {
+         "tag": "Stage3",
+         "name": "Ann Takamaki",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_debitscent/variants/parts/stage3.png"
+        }
+       ]
+      }
+     ],
+     "showcaseVideo": "wj88sByszTY",
+     "added": "2026-09-25T13:00:42Z"
+    },
+    {
+     "id": "Backpack_DebitScent",
+     "name": "Corazón de Carmen",
+     "description": "¡Baila, Carmen!",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "gaminglegends",
+      "displayValue": "Leyendas de videojuegos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Leyendas de videojuegos",
+      "colors": [
+       "8078ffff",
+       "5328d6ff",
+       "3e1398ff",
+       "28085fff",
+       "0d0027ff"
+      ],
+      "backendValue": "PlatformSeries"
+     },
+     "set": {
+      "value": "Persona 5 Royal",
+      "text": "Pieza del conjunto Persona 5 Royal.",
+      "backendValue": "LatePebble"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_debitscent/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_debitscent/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_debitscent/featured.png"
+     },
+     "added": "2026-09-25T13:00:42Z"
+    },
+    {
+     "id": "Pickaxe_DebitScent",
+     "name": "Mangual del corazón de Carmen",
+     "description": "Escucha tu corazón.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "gaminglegends",
+      "displayValue": "Leyendas de videojuegos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Leyendas de videojuegos",
+      "colors": [
+       "8078ffff",
+       "5328d6ff",
+       "3e1398ff",
+       "28085fff",
+       "0d0027ff"
+      ],
+      "backendValue": "PlatformSeries"
+     },
+     "set": {
+      "value": "Persona 5 Royal",
+      "text": "Pieza del conjunto Persona 5 Royal.",
+      "backendValue": "LatePebble"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_debitscent/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_debitscent/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_debitscent/featured.png"
+     },
+     "added": "2026-09-25T13:00:42Z"
+    },
+    {
+     "id": "Companion_ListDizzy",
+     "name": "Morgana (P5R)",
+     "description": "Guía de los Ladrones Fantasma de Corazones.",
+     "type": {
+      "value": "sidekick",
+      "displayValue": "Compañero",
+      "backendValue": "CosmeticCompanion"
+     },
+     "rarity": {
+      "value": "gaminglegends",
+      "displayValue": "Leyendas de videojuegos",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "series": {
+      "value": "Leyendas de videojuegos",
+      "colors": [
+       "8078ffff",
+       "5328d6ff",
+       "3e1398ff",
+       "28085fff",
+       "0d0027ff"
+      ],
+      "backendValue": "PlatformSeries"
+     },
+     "set": {
+      "value": "Persona 5 Royal",
+      "text": "Pieza del conjunto Persona 5 Royal.",
+      "backendValue": "LatePebble"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/companion_listdizzy/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/companion_listdizzy/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/companion_listdizzy/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Emote",
+       "type": "Gesto de compañero",
+       "options": [
+        {
+         "tag": "CompanionEmote0",
+         "name": "¡Transformación... de Morgana!",
+         "image": "https://fortnite-api.com/images/cosmetics/br/companion_listdizzy/variants/emote/companionemote0.png"
+        }
+       ]
+      },
+      {
+       "channel": "Outfit",
+       "type": "estilo",
+       "options": [
+        {
+         "tag": "Stage1",
+         "name": "Morgana (P5R)",
+         "image": "https://fortnite-api.com/images/cosmetics/br/companion_listdizzy/variants/outfit/stage1.png"
+        },
+        {
+         "tag": "Stage2",
+         "name": "Morgana (P5D)",
+         "image": "https://fortnite-api.com/images/cosmetics/br/companion_listdizzy/variants/outfit/stage2.png"
+        }
+       ]
+      }
+     ],
+     "added": "2026-09-25T13:00:42Z"
+    },
+    {
+     "id": "Shoes_Cosmictrelliswand",
+     "name": "Pantuflas de Morgana",
+     "description": "Presume tu estilo.",
+     "type": {
+      "value": "shoe",
+      "displayValue": "Calzado",
+      "backendValue": "CosmeticShoes"
+     },
+     "rarity": {
+      "value": "gaminglegends",
+      "displayValue": "Leyendas de videojuegos",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "series": {
+      "value": "Leyendas de videojuegos",
+      "colors": [
+       "8078ffff",
+       "5328d6ff",
+       "3e1398ff",
+       "28085fff",
+       "0d0027ff"
+      ],
+      "backendValue": "PlatformSeries"
+     },
+     "set": {
+      "value": "Persona 5 Royal",
+      "text": "Pieza del conjunto Persona 5 Royal.",
+      "backendValue": "LatePebble"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/shoes_cosmictrelliswand/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/shoes_cosmictrelliswand/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/shoes_cosmictrelliswand/featured.png"
+     },
+     "added": "2026-09-17T16:17:14Z"
+    },
+    {
+     "id": "EID_DebitScent",
+     "name": "Espectáculo de Panther",
+     "description": "Combate con un toque de gracia.",
+     "type": {
+      "value": "emote",
+      "displayValue": "Gesto",
+      "backendValue": "AthenaDance"
+     },
+     "rarity": {
+      "value": "gaminglegends",
+      "displayValue": "Leyendas de videojuegos",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "series": {
+      "value": "Leyendas de videojuegos",
+      "colors": [
+       "8078ffff",
+       "5328d6ff",
+       "3e1398ff",
+       "28085fff",
+       "0d0027ff"
+      ],
+      "backendValue": "PlatformSeries"
+     },
+     "set": {
+      "value": "Persona 5 Royal",
+      "text": "Pieza del conjunto Persona 5 Royal.",
+      "backendValue": "LatePebble"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/eid_debitscent/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/eid_debitscent/icon.png"
+     },
+     "showcaseVideo": "N2wKpklw4dU",
+     "added": "2026-09-25T13:00:42Z"
+    },
+    {
+     "id": "Backpack_DebitScent_Mic",
+     "name": "Voz de Carmen",
+     "description": "¡Ya no te guardes nada!",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "gaminglegends",
+      "displayValue": "Leyendas de videojuegos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Leyendas de videojuegos",
+      "colors": [
+       "8078ffff",
+       "5328d6ff",
+       "3e1398ff",
+       "28085fff",
+       "0d0027ff"
+      ],
+      "backendValue": "PlatformSeries"
+     },
+     "set": {
+      "value": "Persona 5 Royal",
+      "text": "Pieza del conjunto Persona 5 Royal.",
+      "backendValue": "LatePebble"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_debitscent_mic/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_debitscent_mic/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_debitscent_mic/featured.png"
+     },
+     "added": "2026-09-25T13:00:42Z"
+    },
+    {
+     "id": "Pickaxe_DebitScent_Mic",
+     "name": "Voz de Carmen",
+     "description": "¡Ya no te guardes nada!",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "gaminglegends",
+      "displayValue": "Leyendas de videojuegos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Leyendas de videojuegos",
+      "colors": [
+       "8078ffff",
+       "5328d6ff",
+       "3e1398ff",
+       "28085fff",
+       "0d0027ff"
+      ],
+      "backendValue": "PlatformSeries"
+     },
+     "set": {
+      "value": "Persona 5 Royal",
+      "text": "Pieza del conjunto Persona 5 Royal.",
+      "backendValue": "LatePebble"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_debitscent_mic/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_debitscent_mic/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_debitscent_mic/featured.png"
+     },
+     "added": "2026-09-25T13:00:42Z"
+    },
+    {
+     "id": "Backpack_CosmicTrellis_Guitar",
+     "name": "Cuerdas de los Ladrones Fantasma",
+     "description": "¡Toma tu corazón!",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "gaminglegends",
+      "displayValue": "Leyendas de videojuegos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Leyendas de videojuegos",
+      "colors": [
+       "8078ffff",
+       "5328d6ff",
+       "3e1398ff",
+       "28085fff",
+       "0d0027ff"
+      ],
+      "backendValue": "PlatformSeries"
+     },
+     "set": {
+      "value": "Persona 5 Royal",
+      "text": "Pieza del conjunto Persona 5 Royal.",
+      "backendValue": "LatePebble"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_cosmictrellis_guitar/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_cosmictrellis_guitar/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_cosmictrellis_guitar/featured.png"
+     },
+     "added": "2026-09-24T16:00:38Z"
+    },
+    {
+     "id": "Pickaxe_CosmicTrellis_Guitar",
+     "name": "Cuerdas de los Ladrones Fantasma",
+     "description": "¡Toma tu corazón!",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "gaminglegends",
+      "displayValue": "Leyendas de videojuegos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Leyendas de videojuegos",
+      "colors": [
+       "8078ffff",
+       "5328d6ff",
+       "3e1398ff",
+       "28085fff",
+       "0d0027ff"
+      ],
+      "backendValue": "PlatformSeries"
+     },
+     "set": {
+      "value": "Persona 5 Royal",
+      "text": "Pieza del conjunto Persona 5 Royal.",
+      "backendValue": "LatePebble"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_cosmictrellis_guitar/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_cosmictrellis_guitar/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_cosmictrellis_guitar/featured.png"
+     },
+     "added": "2026-09-24T16:00:38Z"
+    },
+    {
+     "id": "Wrap_DebitScent",
+     "name": "Ojos de Panther",
+     "description": "Muestra tu estilo.",
+     "type": {
+      "value": "wrap",
+      "displayValue": "Papel",
+      "backendValue": "AthenaItemWrap"
+     },
+     "rarity": {
+      "value": "gaminglegends",
+      "displayValue": "Leyendas de videojuegos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Leyendas de videojuegos",
+      "colors": [
+       "8078ffff",
+       "5328d6ff",
+       "3e1398ff",
+       "28085fff",
+       "0d0027ff"
+      ],
+      "backendValue": "PlatformSeries"
+     },
+     "set": {
+      "value": "Persona 5 Royal",
+      "text": "Pieza del conjunto Persona 5 Royal.",
+      "backendValue": "LatePebble"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/wrap_debitscent/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/wrap_debitscent/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/wrap_debitscent/featured.png"
+     },
+     "added": "2026-09-25T13:00:42Z"
+    },
+    {
+     "id": "Wrap_CosmicTrellis",
+     "name": "Ojos de Joker",
+     "description": "Muestra tu estilo.",
+     "type": {
+      "value": "wrap",
+      "displayValue": "Papel",
+      "backendValue": "AthenaItemWrap"
+     },
+     "rarity": {
+      "value": "gaminglegends",
+      "displayValue": "Leyendas de videojuegos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Leyendas de videojuegos",
+      "colors": [
+       "8078ffff",
+       "5328d6ff",
+       "3e1398ff",
+       "28085fff",
+       "0d0027ff"
+      ],
+      "backendValue": "PlatformSeries"
+     },
+     "set": {
+      "value": "Persona 5 Royal",
+      "text": "Pieza del conjunto Persona 5 Royal.",
+      "backendValue": "LatePebble"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/wrap_cosmictrellis/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/wrap_cosmictrellis/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/wrap_cosmictrellis/featured.png"
+     },
+     "added": "2026-09-25T13:00:42Z"
+    }
+   ],
+   "tracks": [
+    {
+     "id": "sid_placeholder_930",
+     "devName": "lifewillchange",
+     "title": "Life Will Change",
+     "artist": "Lyn, ATLUS Sound Team, ATLUS GAME MUSIC",
+     "releaseYear": 2016,
+     "bpm": 132,
+     "duration": 254,
+     "difficulty": {
+      "vocals": 2,
+      "guitar": 3,
+      "bass": 5,
+      "plasticBass": 5,
+      "drums": 3,
+      "plasticDrums": 3
+     },
+     "albumArt": "https://cdn.fortnite-api.com/tracks/5d8e262c1f111f3d.jpg",
+     "added": "2026-09-25T13:01:49Z"
+    }
+   ],
+   "instruments": [
+    {
+     "id": "Sparks_DebitScent_Mic",
+     "name": "Voz de Carmen",
+     "description": "¡Ya no te guardes nada!",
+     "type": {
+      "value": "mic",
+      "displayValue": "Micrófono",
+      "backendValue": "SparksMic"
+     },
+     "rarity": {
+      "value": "gaminglegends",
+      "displayValue": "Leyendas de videojuegos",
+      "backendValue": "EFortRarity::Common"
+     },
+     "images": {
+      "small": "https://fortnite-api.com/images/cosmetics/instruments/sparks_debitscent_mic/small.png",
+      "large": "https://fortnite-api.com/images/cosmetics/instruments/sparks_debitscent_mic/large.png"
+     },
+     "series": {
+      "value": "Leyendas de videojuegos",
+      "colors": [
+       "8078ffff",
+       "5328d6ff",
+       "3e1398ff",
+       "28085fff",
+       "0d0027ff"
+      ],
+      "backendValue": "PlatformSeries"
+     },
+     "added": "2026-09-25T13:00:42Z"
+    },
+    {
+     "id": "Sparks_CosmicTrellis_Guitar",
+     "name": "Cuerdas de los Ladrones Fantasma",
+     "description": "¡Toma tu corazón!",
+     "type": {
+      "value": "guitar",
+      "displayValue": "Guitarra",
+      "backendValue": "SparksGuitar"
+     },
+     "rarity": {
+      "value": "gaminglegends",
+      "displayValue": "Leyendas de videojuegos",
+      "backendValue": "EFortRarity::Common"
+     },
+     "images": {
+      "small": "https://fortnite-api.com/images/cosmetics/instruments/sparks_cosmictrellis_guitar/small.png",
+      "large": "https://fortnite-api.com/images/cosmetics/instruments/sparks_cosmictrellis_guitar/large.png"
+     },
+     "series": {
+      "value": "Leyendas de videojuegos",
+      "colors": [
+       "8078ffff",
+       "5328d6ff",
+       "3e1398ff",
+       "28085fff",
+       "0d0027ff"
+      ],
+      "backendValue": "PlatformSeries"
+     },
+     "added": "2026-09-24T16:00:38Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 7600,
+   "finalPrice": 3600,
+   "devName": "[VIRTUAL]1 x Famous Addison Rae, 1 x Fame Scepter, 1 x Addison Rae, 1 x Aquamarine the Turtle, 1 x Addison's Sundae, 1 x Addison's Mic, 1 x Addison's Mic, 1 x Addison's Mic, 1 x Diet Pepsi, 1 x Fame is a Gun, 1 x Addison's Biggest Fan, 1 x Addison, 1 x It's Addison, 1 x TBD (SID_Placeholder_780), 1 x TBD (SID_Placeholder_851) for -1 MtxCurrency",
+   "offerId": "v2:/9fbb555722b35c01b3182e870ab3459d9fa5b7beb2d70cad319c71068a49cf5d",
+   "inDate": "2026-11-25T00:00:00Z",
+   "outDate": "2026-11-28T23:59:59.999Z",
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -1,
+   "layoutId": "AddisonRae.99",
+   "layout": {
+    "id": "AddisonRae",
+    "name": "Addison Rae",
+    "index": 22,
+    "rank": 194,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "c8803eff",
+    "color2": "ff91c2ff",
+    "color3": "e9c088ff",
+    "textBackgroundColor": "c8803eff"
+   },
+   "tileBackgroundMaterial": "ShopTile_GlowLine",
+   "tileSize": "Size_3_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_Sprintluck_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S41/DAv2_Bundle_Featured_Sprintluck",
+   "brItems": [
+    {
+     "id": "Character_SprintLuckSlaw",
+     "name": "Addison Rae famosa",
+     "description": "Vas a quedar en la historia.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Addison Rae",
+      "text": "Pieza del conjunto Addison Rae.",
+      "backendValue": "GlacierPepper"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "3",
+      "text": "Introducido en Capítulo 7, Temporada 3.",
+      "backendValue": 41
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_sprintluckslaw/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_sprintluckslaw/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_sprintluckslaw/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_sprintluckslaw/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_sprintluckslaw/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_sprintluckslaw/wide.png"
+      }
+     },
+     "variants": [
+      {
+       "channel": "Material",
+       "type": "Estilo",
+       "options": [
+        {
+         "tag": "Mat1",
+         "name": "Addison Rae famosa",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_sprintluckslaw/variants/material/mat1.png"
+        },
+        {
+         "tag": "Mat2",
+         "name": "Fama oscura ",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_sprintluckslaw/variants/material/mat2.png"
+        },
+        {
+         "tag": "Mat3",
+         "name": "Fama radiante",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_sprintluckslaw/variants/material/mat3.png"
+        }
+       ]
+      },
+      {
+       "channel": "Parts",
+       "type": "Accesorio",
+       "options": [
+        {
+         "tag": "Stage1",
+         "name": "No",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_sprintluckslaw/variants/parts/stage1.png"
+        },
+        {
+         "tag": "Stage2",
+         "name": "Sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_sprintluckslaw/variants/parts/stage2.png"
+        }
+       ]
+      },
+      {
+       "channel": "Emissive",
+       "type": "reactividad",
+       "options": [
+        {
+         "tag": "Emissive1",
+         "name": "sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_sprintluckslaw/variants/emissive/emissive1.png"
+        },
+        {
+         "tag": "Emissive2",
+         "name": "No",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_sprintluckslaw/variants/emissive/emissive2.png"
+        }
+       ]
+      }
+     ],
+     "showcaseVideo": "JqVKjKmlBac",
+     "added": "2026-08-06T15:01:08Z"
+    },
+    {
+     "id": "Pickaxe_SprintLuckSweat",
+     "name": "Cetro de diva",
+     "description": "La fama es un arma.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Addison Rae",
+      "text": "Pieza del conjunto Addison Rae.",
+      "backendValue": "GlacierPepper"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "3",
+      "text": "Introducido en Capítulo 7, Temporada 3.",
+      "backendValue": 41
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_sprintlucksweat/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_sprintlucksweat/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_sprintlucksweat/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Particle",
+       "type": "Boa",
+       "options": [
+        {
+         "tag": "Mat1",
+         "name": "Sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/pickaxe_sprintlucksweat/variants/particle/mat1.png"
+        },
+        {
+         "tag": "Mat2",
+         "name": "No",
+         "image": "https://fortnite-api.com/images/cosmetics/br/pickaxe_sprintlucksweat/variants/particle/mat2.png"
+        }
+       ]
+      }
+     ],
+     "added": "2026-08-06T15:01:08Z"
+    },
+    {
+     "id": "Character_SprintLuckSweat",
+     "name": "Addison Rae",
+     "description": "La chica de tus sueños.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Addison Rae",
+      "text": "Pieza del conjunto Addison Rae.",
+      "backendValue": "GlacierPepper"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "3",
+      "text": "Introducido en Capítulo 7, Temporada 3.",
+      "backendValue": 41
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_sprintlucksweat/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_sprintlucksweat/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_sprintlucksweat/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_sprintlucksweat/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_sprintlucksweat/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_sprintlucksweat/wide.png"
+      }
+     },
+     "variants": [
+      {
+       "channel": "Parts",
+       "type": "Gafas",
+       "options": [
+        {
+         "tag": "Stage1",
+         "name": "Sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_sprintlucksweat/variants/parts/stage1.png"
+        },
+        {
+         "tag": "Stage2",
+         "name": "No",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_sprintlucksweat/variants/parts/stage2.png"
+        }
+       ]
+      }
+     ],
+     "showcaseVideo": "3SJszR4fmKE",
+     "added": "2026-08-06T15:01:08Z"
+    },
+    {
+     "id": "Backpack_SprintLuckSweat",
+     "name": "Aquamarine la tortuga",
+     "description": "Su fama llega hasta la luna.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Addison Rae",
+      "text": "Pieza del conjunto Addison Rae.",
+      "backendValue": "GlacierPepper"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "3",
+      "text": "Introducido en Capítulo 7, Temporada 3.",
+      "backendValue": 41
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_sprintlucksweat/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_sprintlucksweat/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_sprintlucksweat/featured.png"
+     },
+     "added": "2026-08-06T15:01:08Z"
+    },
+    {
+     "id": "Backpack_SprintLuckSlaw",
+     "name": "Helado de Addison",
+     "description": "¿Quieres compartirlo?",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Addison Rae",
+      "text": "Pieza del conjunto Addison Rae.",
+      "backendValue": "GlacierPepper"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "3",
+      "text": "Introducido en Capítulo 7, Temporada 3.",
+      "backendValue": 41
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_sprintluckslaw/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_sprintluckslaw/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_sprintluckslaw/featured.png"
+     },
+     "added": "2026-08-06T15:01:08Z"
+    },
+    {
+     "id": "Backpack_SprintLuckSweat_Mic",
+     "name": "Voz de Addison",
+     "description": "¡Díselo en la cara!",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Addison Rae",
+      "text": "Pieza del conjunto Addison Rae.",
+      "backendValue": "GlacierPepper"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "3",
+      "text": "Introducido en Capítulo 7, Temporada 3.",
+      "backendValue": 41
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_sprintlucksweat_mic/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_sprintlucksweat_mic/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_sprintlucksweat_mic/featured.png"
+     },
+     "added": "2026-08-06T15:01:08Z"
+    },
+    {
+     "id": "Pickaxe_SprintLuckSweat_Mic",
+     "name": "Voz de Addison",
+     "description": "¡Díselo en la cara!",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Addison Rae",
+      "text": "Pieza del conjunto Addison Rae.",
+      "backendValue": "GlacierPepper"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "3",
+      "text": "Introducido en Capítulo 7, Temporada 3.",
+      "backendValue": 41
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_sprintlucksweat_mic/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_sprintlucksweat_mic/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_sprintlucksweat_mic/featured.png"
+     },
+     "added": "2026-08-06T15:01:08Z"
+    },
+    {
+     "id": "EID_SodaPop",
+     "name": "Diet Pepsi",
+     "description": "¿Quieres dar una vuelta?",
+     "type": {
+      "value": "emote",
+      "displayValue": "Gesto",
+      "backendValue": "AthenaDance"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Addison Rae",
+      "text": "Pieza del conjunto Addison Rae.",
+      "backendValue": "GlacierPepper"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "3",
+      "text": "Introducido en Capítulo 7, Temporada 3.",
+      "backendValue": 41
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/eid_sodapop/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/eid_sodapop/icon.png"
+     },
+     "showcaseVideo": "Ilsj0f_V66U",
+     "added": "2026-08-06T15:01:08Z"
+    },
+    {
+     "id": "EID_SprintLuckSlaw",
+     "name": "Fame is a Gun",
+     "description": "Prueba el glamur.",
+     "type": {
+      "value": "emote",
+      "displayValue": "Gesto",
+      "backendValue": "AthenaDance"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Addison Rae",
+      "text": "Pieza del conjunto Addison Rae.",
+      "backendValue": "GlacierPepper"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "3",
+      "text": "Introducido en Capítulo 7, Temporada 3.",
+      "backendValue": 41
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/eid_sprintluckslaw/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/eid_sprintluckslaw/icon.png"
+     },
+     "showcaseVideo": "eUb1Oac65sw",
+     "added": "2026-08-06T15:01:08Z"
+    },
+    {
+     "id": "Pickaxe_SprintLuckSlaw",
+     "name": "Abanicos de Addison",
+     "description": "Para abanicar tu fama.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Addison Rae",
+      "text": "Pieza del conjunto Addison Rae.",
+      "backendValue": "GlacierPepper"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "3",
+      "text": "Introducido en Capítulo 7, Temporada 3.",
+      "backendValue": 41
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_sprintluckslaw/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_sprintluckslaw/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_sprintluckslaw/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Particle",
+       "type": "Estilo",
+       "options": [
+        {
+         "tag": "Particle1",
+         "name": "Abanicos de Addison",
+         "image": "https://fortnite-api.com/images/cosmetics/br/pickaxe_sprintluckslaw/variants/particle/particle1.png"
+        },
+        {
+         "tag": "Particle2",
+         "name": "Fama oscura ",
+         "image": "https://fortnite-api.com/images/cosmetics/br/pickaxe_sprintluckslaw/variants/particle/particle2.png"
+        },
+        {
+         "tag": "Particle3",
+         "name": "Fama radiante",
+         "image": "https://fortnite-api.com/images/cosmetics/br/pickaxe_sprintluckslaw/variants/particle/particle3.png"
+        }
+       ]
+      }
+     ],
+     "added": "2026-08-06T15:01:08Z"
+    },
+    {
+     "id": "Wrap_SprintLuckSweat",
+     "name": "Addison",
+     "description": "Muestra tu estilo.",
+     "type": {
+      "value": "wrap",
+      "displayValue": "Papel",
+      "backendValue": "AthenaItemWrap"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Addison Rae",
+      "text": "Pieza del conjunto Addison Rae.",
+      "backendValue": "GlacierPepper"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "3",
+      "text": "Introducido en Capítulo 7, Temporada 3.",
+      "backendValue": 41
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/wrap_sprintlucksweat/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/wrap_sprintlucksweat/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/wrap_sprintlucksweat/featured.png"
+     },
+     "added": "2026-08-06T15:01:08Z"
+    },
+    {
+     "id": "LoadingScreen_SprintLuckKeyArt",
+     "name": "Es Addison",
+     "description": "Más famosa que nunca.",
+     "type": {
+      "value": "loadingscreen",
+      "displayValue": "Pantalla de carga",
+      "backendValue": "AthenaLoadingScreen"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "Addison Rae",
+      "text": "Pieza del conjunto Addison Rae.",
+      "backendValue": "GlacierPepper"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "3",
+      "text": "Introducido en Capítulo 7, Temporada 3.",
+      "backendValue": 41
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/loadingscreen_sprintluckkeyart/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/loadingscreen_sprintluckkeyart/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/loadingscreen_sprintluckkeyart/featured.png",
+      "other": {
+       "background": "https://fortnite-api.com/images/cosmetics/br/loadingscreen_sprintluckkeyart/background.png"
+      }
+     },
+     "added": "2026-08-06T15:01:08Z"
+    }
+   ],
+   "tracks": [
+    {
+     "id": "sid_placeholder_780",
+     "devName": "dietpepsi",
+     "title": "Diet Pepsi",
+     "artist": "Addison Rae",
+     "releaseYear": 2025,
+     "bpm": 150,
+     "duration": 167,
+     "difficulty": {
+      "vocals": 3,
+      "guitar": 1,
+      "bass": 0,
+      "plasticBass": 0,
+      "drums": 2,
+      "plasticDrums": 2
+     },
+     "albumArt": "https://cdn.fortnite-api.com/tracks/65fb56d561152bf8.jpg",
+     "added": "2026-08-06T14:01:16Z"
+    },
+    {
+     "id": "sid_placeholder_851",
+     "devName": "fameisagun",
+     "title": "Fame is a Gun",
+     "artist": "Addison Rae",
+     "releaseYear": 2025,
+     "bpm": 138,
+     "duration": 186,
+     "difficulty": {
+      "vocals": 3,
+      "guitar": 1,
+      "bass": 1,
+      "plasticBass": 1,
+      "drums": 2,
+      "plasticDrums": 1
+     },
+     "albumArt": "https://cdn.fortnite-api.com/tracks/38061ca5e4a4cf76.jpg",
+     "added": "2026-08-06T14:01:16Z"
+    }
+   ],
+   "instruments": [
+    {
+     "id": "Sparks_SprintLuckSweat_Mic",
+     "name": "Voz de Addison",
+     "description": "¡Díselo en la cara!",
+     "type": {
+      "value": "mic",
+      "displayValue": "Micrófono",
+      "backendValue": "SparksMic"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Common"
+     },
+     "images": {
+      "small": "https://fortnite-api.com/images/cosmetics/instruments/sparks_sprintlucksweat_mic/small.png",
+      "large": "https://fortnite-api.com/images/cosmetics/instruments/sparks_sprintlucksweat_mic/large.png"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "added": "2026-08-06T15:01:08Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 7100,
+   "finalPrice": 3400,
+   "devName": "[VIRTUAL]1 x Pomni, 1 x Your Best Friend Gummigoo, 1 x Jax, 1 x Ribbit Plush, 1 x Abstraction, 1 x Bubble's Smackin' Wackin, 1 x Zooble-Ke-Bab, 1 x The Jester Jammer, 1 x The Jester Jammer, 1 x The Jester Jammer, 1 x Jax-Maxxing, 1 x Jax-Maxxing, 1 x Jax-Maxxing, 1 x Abstracted for -1 MtxCurrency",
+   "offerId": "v2:/1e5d8fe4c40fc981160b7b7450d377621e5ef59e88f10be8d4b14398c55ccec4",
+   "inDate": "2026-11-25T00:00:00Z",
+   "outDate": "2026-11-28T23:59:59.999Z",
+   "bundle": {
+    "name": "Lote El asombroso circo digital",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/fe44218ebfc7c370/renderimage_0.png"
+   },
+   "banner": {
+    "value": "3700 monedas V de descuento",
+    "intensity": "Low",
+    "backendValue": "AmountOff"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -1,
+   "layoutId": "ADCircus.99",
+   "layout": {
+    "id": "ADCircus",
+    "name": "El asombroso circo digital",
+    "index": 1,
+    "rank": 193,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "44464aff",
+    "color2": "0c0c0dff",
+    "color3": "2f3033ff",
+    "textBackgroundColor": "0c0c0dff"
+   },
+   "tileSize": "Size_2_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_AgarBelly_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S41/DAv2_Bundle_Featured_AgarBelly",
+   "newDisplayAsset": {
+    "id": "DAv2_Bundle_Featured_AgarBelly",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__fe44218ebfc7c370_72f53e7e45f5f5e1.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/fe44218ebfc7c370/renderimage_0.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Character_AgarBelly",
+     "name": "Pomni",
+     "description": "Ugh, es la bufona de largas extremidades a la que todo el mundo ama.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "El asombroso circo digital",
+      "text": "Pieza del conjunto El asombroso circo digital.",
+      "backendValue": "CrossTable"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "3",
+      "text": "Introducido en Capítulo 7, Temporada 3.",
+      "backendValue": 41
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_agarbelly/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_agarbelly/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_agarbelly/featured.png"
+     },
+     "metaTags": [
+      "Cosmetics.Emote.CharacterGroup.BigHead"
+     ],
+     "showcaseVideo": "njF3bVqeDJQ",
+     "added": "2026-06-12T13:01:03Z"
+    },
+    {
+     "id": "Backpack_AgarBelly",
+     "name": "Gummigoo, tu mejor amigo",
+     "description": "El caramelo está muy bueno y Gummigoo ta... Sonaba mejor en mi cabeza...",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "El asombroso circo digital",
+      "text": "Pieza del conjunto El asombroso circo digital.",
+      "backendValue": "CrossTable"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "3",
+      "text": "Introducido en Capítulo 7, Temporada 3.",
+      "backendValue": 41
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_agarbelly/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_agarbelly/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_agarbelly/featured.png"
+     },
+     "added": "2026-06-12T13:01:03Z"
+    },
+    {
+     "id": "Character_RecipeWhole",
+     "name": "Jax",
+     "description": "¿Y a este quién lo invitó?",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "El asombroso circo digital",
+      "text": "Pieza del conjunto El asombroso circo digital.",
+      "backendValue": "CrossTable"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "3",
+      "text": "Introducido en Capítulo 7, Temporada 3.",
+      "backendValue": 41
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_recipewhole/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_recipewhole/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_recipewhole/featured.png"
+     },
+     "showcaseVideo": "gq48RpmkHj0",
+     "added": "2026-06-12T13:01:03Z"
+    },
+    {
+     "id": "Backpack_RecipeWhole",
+     "name": "Peluche de Ribbit",
+     "description": "¿Has hecho alguna cosa de la que te arrepientes?",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "El asombroso circo digital",
+      "text": "Pieza del conjunto El asombroso circo digital.",
+      "backendValue": "CrossTable"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "3",
+      "text": "Introducido en Capítulo 7, Temporada 3.",
+      "backendValue": 41
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_recipewhole/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_recipewhole/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_recipewhole/featured.png"
+     },
+     "added": "2026-06-12T13:01:03Z"
+    },
+    {
+     "id": "EID_AgarBelly",
+     "name": "Abstracción",
+     "description": "Ay. ¡Eso sí que duele!",
+     "type": {
+      "value": "emote",
+      "displayValue": "Gesto",
+      "backendValue": "AthenaDance"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "El asombroso circo digital",
+      "text": "Pieza del conjunto El asombroso circo digital.",
+      "backendValue": "CrossTable"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "3",
+      "text": "Introducido en Capítulo 7, Temporada 3.",
+      "backendValue": 41
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/eid_agarbelly/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/eid_agarbelly/icon.png"
+     },
+     "showcaseVideo": "faqYyHh1-L4",
+     "added": "2026-06-12T13:01:03Z"
+    },
+    {
+     "id": "Pickaxe_AgarBelly",
+     "name": "Bubble de combate",
+     "description": "¿Con esa boquita besas a tu mamá?",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "El asombroso circo digital",
+      "text": "Pieza del conjunto El asombroso circo digital.",
+      "backendValue": "CrossTable"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "3",
+      "text": "Introducido en Capítulo 7, Temporada 3.",
+      "backendValue": 41
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_agarbelly/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_agarbelly/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_agarbelly/featured.png"
+     },
+     "added": "2026-06-12T13:01:03Z"
+    },
+    {
+     "id": "Pickaxe_RecipeWhole",
+     "name": "Zooble-Ke-Bab",
+     "description": "¡No, pues gracias! Me encanta ser un pico.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "El asombroso circo digital",
+      "text": "Pieza del conjunto El asombroso circo digital.",
+      "backendValue": "CrossTable"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "3",
+      "text": "Introducido en Capítulo 7, Temporada 3.",
+      "backendValue": 41
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_recipewhole/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_recipewhole/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_recipewhole/featured.png"
+     },
+     "added": "2026-06-12T13:01:03Z"
+    },
+    {
+     "id": "Pickaxe_AgarBelly_Guitar",
+     "name": "Bufonada musical",
+     "description": "¡El Pomni es el nuevo rock!",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "El asombroso circo digital",
+      "text": "Pieza del conjunto El asombroso circo digital.",
+      "backendValue": "CrossTable"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "3",
+      "text": "Introducido en Capítulo 7, Temporada 3.",
+      "backendValue": 41
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_agarbelly_guitar/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_agarbelly_guitar/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_agarbelly_guitar/featured.png"
+     },
+     "added": "2026-06-12T13:01:03Z"
+    },
+    {
+     "id": "Backpack_AgarBelly_Guitar",
+     "name": "Bufonada musical",
+     "description": "¡El Pomni es el nuevo rock!",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "El asombroso circo digital",
+      "text": "Pieza del conjunto El asombroso circo digital.",
+      "backendValue": "CrossTable"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "3",
+      "text": "Introducido en Capítulo 7, Temporada 3.",
+      "backendValue": 41
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_agarbelly_guitar/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_agarbelly_guitar/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_agarbelly_guitar/featured.png"
+     },
+     "added": "2026-06-12T13:01:03Z"
+    },
+    {
+     "id": "Pickaxe_RecipeWhole_Bass",
+     "name": "Jax-Maxxing",
+     "description": "¡Oh, no, convirtieron a Jax en un instrumento musical!",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "El asombroso circo digital",
+      "text": "Pieza del conjunto El asombroso circo digital.",
+      "backendValue": "CrossTable"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "3",
+      "text": "Introducido en Capítulo 7, Temporada 3.",
+      "backendValue": 41
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_recipewhole_bass/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_recipewhole_bass/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_recipewhole_bass/featured.png"
+     },
+     "added": "2026-06-12T13:01:03Z"
+    },
+    {
+     "id": "Backpack_RecipeWhole_Bass",
+     "name": "Jax-Maxxing",
+     "description": "¡Oh, no, convirtieron a Jax en un instrumento musical!",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "El asombroso circo digital",
+      "text": "Pieza del conjunto El asombroso circo digital.",
+      "backendValue": "CrossTable"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "3",
+      "text": "Introducido en Capítulo 7, Temporada 3.",
+      "backendValue": 41
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_recipewhole_bass/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_recipewhole_bass/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_recipewhole_bass/featured.png"
+     },
+     "added": "2026-06-12T13:01:03Z"
+    },
+    {
+     "id": "Wrap_AgarBelly",
+     "name": "Abstraído",
+     "description": "Muestra tu estilo.",
+     "type": {
+      "value": "wrap",
+      "displayValue": "Papel",
+      "backendValue": "AthenaItemWrap"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "El asombroso circo digital",
+      "text": "Pieza del conjunto El asombroso circo digital.",
+      "backendValue": "CrossTable"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "3",
+      "text": "Introducido en Capítulo 7, Temporada 3.",
+      "backendValue": 41
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/wrap_agarbelly/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/wrap_agarbelly/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/wrap_agarbelly/featured.png"
+     },
+     "added": "2026-06-12T13:01:03Z"
+    }
+   ],
+   "instruments": [
+    {
+     "id": "Sparks_AgarBelly_Guitar",
+     "name": "Bufonada musical",
+     "description": "¡El Pomni es el nuevo rock!",
+     "type": {
+      "value": "guitar",
+      "displayValue": "Guitarra",
+      "backendValue": "SparksGuitar"
+     },
+     "rarity": {
+      "value": "common",
+      "displayValue": "Común",
+      "backendValue": "EFortRarity::Common"
+     },
+     "images": {
+      "small": "https://fortnite-api.com/images/cosmetics/instruments/sparks_agarbelly_guitar/small.png",
+      "large": "https://fortnite-api.com/images/cosmetics/instruments/sparks_agarbelly_guitar/large.png"
+     },
+     "added": "2026-06-12T13:01:03Z"
+    },
+    {
+     "id": "Sparks_RecipeWhole_Bass",
+     "name": "Jax-Maxxing",
+     "description": "¡Oh, no, convirtieron a Jax en un instrumento musical!",
+     "type": {
+      "value": "bass",
+      "displayValue": "Bajo",
+      "backendValue": "SparksBass"
+     },
+     "rarity": {
+      "value": "common",
+      "displayValue": "Común",
+      "backendValue": "EFortRarity::Common"
+     },
+     "images": {
+      "small": "https://fortnite-api.com/images/cosmetics/instruments/sparks_recipewhole_bass/small.png",
+      "large": "https://fortnite-api.com/images/cosmetics/instruments/sparks_recipewhole_bass/large.png"
+     },
+     "added": "2026-06-12T13:01:03Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 5400,
+   "finalPrice": 2800,
+   "devName": "[VIRTUAL]1 x MrSavage, 1 x Savage Siren, 1 x 200 IQ, 1 x Siren Legacy, 1 x Savage's Striker, 1 x Siren's Slicer, 1 x Skill Scanner, 1 x Get Cooked, 1 x Savage's Style for -1 MtxCurrency",
+   "offerId": "v2:/6cce1c1e71963082d7cc7d59d74e6189b4195107f0f936177d4f4ff7fc84df9b",
+   "inDate": "2026-11-25T00:00:00Z",
+   "outDate": "2026-11-27T23:59:59.999Z",
+   "bundle": {
+    "name": "Lote MrSavage",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/d5e42808566d510d/renderimage_0.png"
+   },
+   "banner": {
+    "value": "2600 monedas V de descuento",
+    "intensity": "Low",
+    "backendValue": "AmountOff"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -1,
+   "layoutId": "MrSavage.99",
+   "layout": {
+    "id": "MrSavage",
+    "name": "MrSavage",
+    "category": "Íconos",
+    "index": 13,
+    "rank": 173,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "ffca12ff",
+    "color3": "9f1e1eff",
+    "textBackgroundColor": "9f1e1eff"
+   },
+   "tileSize": "Size_2_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_PineTrim_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S37/DAv2_Bundle_Featured_PineTrim",
+   "newDisplayAsset": {
+    "id": "DAv2_Bundle_Featured_PineTrim",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__d5e42808566d510d_8865cdb3a8fb661b.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/d5e42808566d510d/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__d5e42808566d510d_b000ae5f05e430c9.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/d5e42808566d510d/renderimage_1.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__d5e42808566d510d_ecde32631b66b3cc.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/d5e42808566d510d/renderimage_2.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__d5e42808566d510d_42342d0e5c10f30d.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/d5e42808566d510d/renderimage_3.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__d5e42808566d510d_1cc710ecb464a368.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/d5e42808566d510d/renderimage_4.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Character_PineTrimPack",
+     "name": "MrSavage",
+     "description": "Domina el juego. ",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "MrSavage",
+      "text": "Pieza del conjunto MrSavage.",
+      "backendValue": "HardFight"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "5",
+      "text": "Introducido en Capítulo 6, Temporada 5.",
+      "backendValue": 37
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_pinetrimpack/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_pinetrimpack/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_pinetrimpack/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_pinetrimpack/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_pinetrimpack/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_pinetrimpack/wide.png"
+      }
+     },
+     "variants": [
+      {
+       "channel": "Parts",
+       "type": "Estilo",
+       "options": [
+        {
+         "tag": "Stage1",
+         "name": "MrSavage",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_pinetrimpack/variants/parts/stage1.png"
+        },
+        {
+         "tag": "Stage2",
+         "name": "Savage informal",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_pinetrimpack/variants/parts/stage2.png"
+        }
+       ]
+      },
+      {
+       "channel": "Material",
+       "type": "Accesorio",
+       "options": [
+        {
+         "tag": "Mat1",
+         "name": "No",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_pinetrimpack/variants/material/mat1.png"
+        },
+        {
+         "tag": "Mat2",
+         "name": "Sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_pinetrimpack/variants/material/mat2.png"
+        }
+       ]
+      },
+      {
+       "channel": "Particle",
+       "type": "Reactivo",
+       "options": [
+        {
+         "tag": "Particle1",
+         "name": "Sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_pinetrimpack/variants/particle/particle1.png"
+        },
+        {
+         "tag": "Particle2",
+         "name": "No",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_pinetrimpack/variants/particle/particle2.png"
+        }
+       ]
+      }
+     ],
+     "showcaseVideo": "yk0_oZ-Xk_8",
+     "added": "2025-09-23T15:31:36Z"
+    },
+    {
+     "id": "Character_PineTrimSurge",
+     "name": "Sirena Savage",
+     "description": "Inolvidablemente salvaje. ",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "MrSavage",
+      "text": "Pieza del conjunto MrSavage.",
+      "backendValue": "HardFight"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "5",
+      "text": "Introducido en Capítulo 6, Temporada 5.",
+      "backendValue": 37
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_pinetrimsurge/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_pinetrimsurge/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_pinetrimsurge/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_pinetrimsurge/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_pinetrimsurge/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_pinetrimsurge/wide.png"
+      }
+     },
+     "variants": [
+      {
+       "channel": "Progressive",
+       "type": "máscara",
+       "options": [
+        {
+         "tag": "Stage1",
+         "name": "Sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_pinetrimsurge/variants/progressive/stage1.png"
+        },
+        {
+         "tag": "Stage2",
+         "name": "No",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_pinetrimsurge/variants/progressive/stage2.png"
+        }
+       ]
+      }
+     ],
+     "showcaseVideo": "LiSn5f6Kbfo",
+     "added": "2025-09-23T15:31:36Z"
+    },
+    {
+     "id": "Backpack_PineTrimPack",
+     "name": "200 de CI",
+     "description": "Piensa antes de jugar. ",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "MrSavage",
+      "text": "Pieza del conjunto MrSavage.",
+      "backendValue": "HardFight"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "5",
+      "text": "Introducido en Capítulo 6, Temporada 5.",
+      "backendValue": 37
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_pinetrimpack/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_pinetrimpack/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_pinetrimpack/featured.png"
+     },
+     "added": "2025-09-23T15:31:36Z"
+    },
+    {
+     "id": "Backpack_PineTrimSurge",
+     "name": "Legado de sirena",
+     "description": "El honor se forja en las batallas. ",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "MrSavage",
+      "text": "Pieza del conjunto MrSavage.",
+      "backendValue": "HardFight"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "5",
+      "text": "Introducido en Capítulo 6, Temporada 5.",
+      "backendValue": 37
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_pinetrimsurge/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_pinetrimsurge/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_pinetrimsurge/featured.png"
+     },
+     "added": "2025-09-23T15:31:36Z"
+    },
+    {
+     "id": "Pickaxe_PineTrimPack",
+     "name": "Alabarda de Savage",
+     "description": "Brutal y audaz. ",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "MrSavage",
+      "text": "Pieza del conjunto MrSavage.",
+      "backendValue": "HardFight"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "5",
+      "text": "Introducido en Capítulo 6, Temporada 5.",
+      "backendValue": 37
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_pinetrimpack/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_pinetrimpack/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_pinetrimpack/featured.png"
+     },
+     "added": "2025-09-23T15:31:36Z"
+    },
+    {
+     "id": "Pickaxe_PineTrimSurge",
+     "name": "Dagas de Sirena",
+     "description": "Intrincadas e intimidantes. ",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "MrSavage",
+      "text": "Pieza del conjunto MrSavage.",
+      "backendValue": "HardFight"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "5",
+      "text": "Introducido en Capítulo 6, Temporada 5.",
+      "backendValue": 37
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_pinetrimsurge/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_pinetrimsurge/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_pinetrimsurge/featured.png"
+     },
+     "added": "2025-09-23T15:31:36Z"
+    },
+    {
+     "id": "EID_PineTrim_Crisp",
+     "name": "Escáner de habilidad",
+     "description": "Sin competencia a la vista.",
+     "type": {
+      "value": "emote",
+      "displayValue": "Gesto",
+      "backendValue": "AthenaDance"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "MrSavage",
+      "text": "Pieza del conjunto MrSavage.",
+      "backendValue": "HardFight"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "5",
+      "text": "Introducido en Capítulo 6, Temporada 5.",
+      "backendValue": 37
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/eid_pinetrim_crisp/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/eid_pinetrim_crisp/icon.png"
+     },
+     "showcaseVideo": "fndmLMVU-Fo",
+     "added": "2025-09-23T15:31:36Z"
+    },
+    {
+     "id": "EID_PineTrimPack",
+     "name": "A cocinar",
+     "description": "*beso de chef*",
+     "type": {
+      "value": "emote",
+      "displayValue": "Gesto",
+      "backendValue": "AthenaDance"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "MrSavage",
+      "text": "Pieza del conjunto MrSavage.",
+      "backendValue": "HardFight"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "5",
+      "text": "Introducido en Capítulo 6, Temporada 5.",
+      "backendValue": 37
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/eid_pinetrimpack/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/eid_pinetrimpack/icon.png"
+     },
+     "showcaseVideo": "mvdxQ5k5Tc0",
+     "added": "2025-09-23T15:31:36Z"
+    },
+    {
+     "id": "Wrap_PineTrim",
+     "name": "Estilo de Savage",
+     "description": "Muestra tu estilo.",
+     "type": {
+      "value": "wrap",
+      "displayValue": "Papel",
+      "backendValue": "AthenaItemWrap"
+     },
+     "rarity": {
+      "value": "icon",
+      "displayValue": "Serie de ídolos",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "series": {
+      "value": "Serie de ídolos",
+      "image": "https://fortnite-api.com/images/cosmetics/series/creatorcollabseries.png",
+      "colors": [
+       "5cf2f3ff",
+       "2bc9caff",
+       "004c71ff",
+       "025253ff",
+       "000f2bff"
+      ],
+      "backendValue": "CreatorCollabSeries"
+     },
+     "set": {
+      "value": "MrSavage",
+      "text": "Pieza del conjunto MrSavage.",
+      "backendValue": "HardFight"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "5",
+      "text": "Introducido en Capítulo 6, Temporada 5.",
+      "backendValue": 37
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/wrap_pinetrim/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/wrap_pinetrim/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/wrap_pinetrim/featured.png"
+     },
+     "added": "2025-09-23T15:31:36Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 2400,
+   "finalPrice": 2400,
+   "devName": "[VIRTUAL]1 x Mona Car, 1 x Mona Car, 1 x Joker (P5R), 1 x Panther (P5R), 1 x Mona Car for -1 MtxCurrency",
+   "offerId": "v2:/41f348edf53f6a633273d6faacca8be32d614309566032b5ca6d85f04bffe804",
+   "inDate": "2026-11-25T00:00:00Z",
+   "outDate": "2026-11-29T23:59:59.999Z",
+   "bundle": {
+    "name": "Monamóvil",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/47704401e719a72d/renderimage_0.png"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -2,
+   "layoutId": "Persona5.95",
+   "layout": {
+    "id": "Persona5",
+    "name": "Persona 5 Royal",
+    "index": 45,
+    "rank": 195,
+    "showIneligibleOffers": "always",
+    "useWidePreview": true,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "ff5d5dff",
+    "color2": "ffd1f7ff",
+    "color3": "f8afcfff",
+    "textBackgroundColor": "ff5d5dff"
+   },
+   "tileBackgroundMaterial": "ShopTile_Pirates_Brush",
+   "tileSize": "Size_2_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_Umbragenesis_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S42/DAv2_Bundle_Featured_Umbragenesis",
+   "newDisplayAsset": {
+    "id": "DAv2_Bundle_Featured_UmbraGenesis",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__47704401e719a72d_d25bb06f57697dbf.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/47704401e719a72d/renderimage_0.png"
+     }
+    ]
+   },
+   "cars": [
+    {
+     "id": "CarBody_UmbraGenesis",
+     "vehicleId": "VCID_Body_UmbraGenesis",
+     "name": "Monamóvil",
+     "description": "Una forma de pensar muy extendida.",
+     "type": {
+      "value": "body",
+      "displayValue": "Carrocería",
+      "backendValue": "VehicleCosmetics_Body"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "images": {
+      "small": "https://fortnite-api.com/images/cosmetics/cars/carbody_umbragenesis/small.png",
+      "large": "https://fortnite-api.com/images/cosmetics/cars/carbody_umbragenesis/large.png"
+     },
+     "added": "2026-09-25T13:00:42Z"
+    },
+    {
+     "id": "CarSkin_UmbraGenesis01",
+     "vehicleId": "VCID_Skin_UmbraGenesis01",
+     "name": "Mona Car",
+     "description": "Mona Car custom decal.",
+     "type": {
+      "value": "skin",
+      "displayValue": "Aspecto",
+      "backendValue": "VehicleCosmetics_Skin"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "images": {
+      "small": "https://fortnite-api.com/images/cosmetics/cars/carskin_umbragenesis01/small.png",
+      "large": "https://fortnite-api.com/images/cosmetics/cars/carskin_umbragenesis01/large.png"
+     },
+     "added": "2026-09-25T13:00:42Z"
+    },
+    {
+     "id": "CarSkin_Umbragenesis02",
+     "vehicleId": "VCID_Skin_Umbragenesis02",
+     "name": "Joker (P5R)",
+     "description": "Mona Car custom decal.",
+     "type": {
+      "value": "skin",
+      "displayValue": "Aspecto",
+      "backendValue": "VehicleCosmetics_Skin"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "images": {
+      "small": "https://fortnite-api.com/images/cosmetics/cars/carskin_umbragenesis02/small.png",
+      "large": "https://fortnite-api.com/images/cosmetics/cars/carskin_umbragenesis02/large.png"
+     },
+     "added": "2026-09-25T13:00:42Z"
+    },
+    {
+     "id": "CarSkin_UmbraGenesis03",
+     "vehicleId": "VCID_Skin_UmbraGenesis03",
+     "name": "Panther (P5R)",
+     "description": "Mona Car custom decal.",
+     "type": {
+      "value": "skin",
+      "displayValue": "Aspecto",
+      "backendValue": "VehicleCosmetics_Skin"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "images": {
+      "small": "https://fortnite-api.com/images/cosmetics/cars/carskin_umbragenesis03/small.png",
+      "large": "https://fortnite-api.com/images/cosmetics/cars/carskin_umbragenesis03/large.png"
+     },
+     "added": "2026-09-25T13:00:42Z"
+    },
+    {
+     "id": "Wheel_UmbraGenesis01",
+     "vehicleId": "VCID_Wheel_UmbraGenesis01",
+     "name": "Monamóvil",
+     "description": "Una forma de pensar muy extendida.",
+     "type": {
+      "value": "wheel",
+      "displayValue": "Rueda",
+      "backendValue": "VehicleCosmetics_Wheel"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "images": {
+      "small": "https://fortnite-api.com/images/cosmetics/cars/wheel_umbragenesis01/small.png",
+      "large": "https://fortnite-api.com/images/cosmetics/cars/wheel_umbragenesis01/large.png"
+     },
+     "added": "2026-09-25T13:00:42Z"
+    }
+   ]
+  }
+ ]
+}
