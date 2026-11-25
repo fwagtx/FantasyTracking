@@ -680,6 +680,27 @@
     "Character_DebitScent"
    ],
    "note": "Every map place has had its '¿Dónde está?', so this 8:30 PM slot got the other evergreen format again; whether to repeat places instead is still a question for the owner."
+  },
+  {
+   "date": "2026-11-25",
+   "slot": "15:45",
+   "format": "Tienda Pirata diaria (sevan)",
+   "topic": "Se va hoy (2026-11-25): Lote Libre albedrío, 1600 pavos (normalmente 1800)",
+   "folder": "video/auto/2026-11-25-pirata-sevan"
+  },
+  {
+   "date": "2026-11-25",
+   "slot": "17:15",
+   "format": "Tienda Pirata diaria (caros)",
+   "topic": "Lo nuevo más caro de hoy (2026-11-25): Lote Persona 5 Royal 3800, Addison Rae famosa y Addison Rae 3600, Lote El asombroso circo digital 3400, Lote MrSavage 2800, Monamóvil 2400",
+   "folder": "video/auto/2026-11-25-pirata-caros"
+  },
+  {
+   "date": "2026-11-25",
+   "slot": "19:30",
+   "format": "Tienda Pirata diaria (cuenta)",
+   "topic": "Quedan 10 días · dato: hasta ×2",
+   "folder": "video/auto/2026-11-25-pirata-cuenta"
   }
  ]
 }

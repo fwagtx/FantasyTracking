@@ -59,7 +59,7 @@ POOL = [
      {"source": "vgc-guide.json", "match": ["you can’t claim Battle Pass levels", "you can’t get bundles that cost real money", "you can’t gift items to other players", "you can only claim one free sidekick"]}),
     ("NO HA CAMBIADO", "Misma probabilidad desde el inicio", ["Epic dice que la probabilidad no ha cambiado desde que empezó la temporada."],
      {"source": "vice-treasure-hours.json", "match": ["the normal chest drop rates have stayed the same since Fortnite Treasure Hunters launched"]}),
-    ("HASTA ×2", "Una vez subió al doble", ["En unas Horas del Tesoro, la probabilidad llegó a subir al doble."],
+    ("HASTA ×2", "Una vez subió al\u00a0doble", ["En unas Horas del Tesoro, la probabilidad llegó a subir al doble."],
      {"source": "vgc-odds-confirmed.json", "match": ["during a recent Treasure Hour, Pirate Shop Access was boosted to 2x"]}),
     ("14 DÍAS", "Todo lo que cuesta pavos, gratis", ["Cuando la activas, todo lo que cuesta pavos es gratis para ti por 14 días."],
      {"source": "vgc-odds-confirmed.json", "match": ["becomes entirely free to that player for the next 14 days"]}),

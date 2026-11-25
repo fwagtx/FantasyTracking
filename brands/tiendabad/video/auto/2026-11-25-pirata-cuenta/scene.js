@@ -23,7 +23,7 @@ window.SCENE = TPL.guide({
   {
    "p": 3,
    "label": "HASTA ×2",
-   "text": "Una vez subió al doble"
+   "text": "Una vez subió al doble"
   }
  ],
  "caption": "#EpicPartner ¡Quedan 10 días para encontrar la Tienda Pirata! 🏴‍☠️ La búsqueda termina el 5 de diciembre\nEn unas Horas del Tesoro, la probabilidad llegó a subir al doble.\n¿Ya te salió? 👇\nUsa el código BAD en la tienda de objetos 💛\n#fortnite #tiendapirata #fortniteespañol",
@@ -44,7 +44,7 @@ window.SCENE = TPL.guide({
    ]
   },
   {
-   "text": "Dato del día: Una vez subió al doble",
+   "text": "Dato del día: Una vez subió al doble",
    "source": "vgc-odds-confirmed.json",
    "match": [
     "during a recent Treasure Hour, Pirate Shop Access was boosted to 2x"
