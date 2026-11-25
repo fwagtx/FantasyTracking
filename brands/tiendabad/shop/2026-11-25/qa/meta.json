@@ -1,0 +1,110 @@
+{
+ "duration": 26.8,
+ "caption": "#EpicPartner Tienda de objetos de Fortnite, 25 de noviembre: el Lote Persona 5 Royal cuesta 3800 V-Bucks en vez de 9600 (ahorras 5800), Gremio y Mirasol están en la tienda (Capítulo 1, Temporada 8) y 6 skins se van el 25 de noviembre a las 6 PM (CDMX).\n¿Vas a comprar hoy? Usa el código BAD en la tienda de objetos.\n#Fortnite #TiendaFortnite #FortniteTienda",
+ "claims": [
+  {
+   "text": "Lote Persona 5 Royal: 3800 V-Bucks, regular 9600",
+   "source": "shop.json",
+   "match": [
+    "Lote Persona 5 Royal",
+    "\"finalPrice\": 3800",
+    "\"regularPrice\": 9600"
+   ]
+  },
+  {
+   "text": "Gremio: Capítulo 1, Temporada 8",
+   "source": "history.json",
+   "match": [
+    "Gremio",
+    "\"chapter\": 1",
+    "\"season\": 8"
+   ]
+  },
+  {
+   "text": "Mirasol: Capítulo 1, Temporada 8",
+   "source": "history.json",
+   "match": [
+    "Mirasol",
+    "\"chapter\": 1",
+    "\"season\": 8"
+   ]
+  },
+  {
+   "text": "1 days since last in the shop",
+   "source": "history.json",
+   "match": [
+    "\"gapDays\": 1"
+   ]
+  },
+  {
+   "text": "6 outfits leave at the next reset",
+   "source": "plan.json",
+   "match": [
+    "\"count\": 6"
+   ]
+  }
+ ],
+ "text": [
+  "JOKER (P5R)",
+  "MIRASOL",
+  "PÍA",
+  "OFERTA",
+  "OG",
+  "ÚLTIMO DÍA",
+  "TIENDA DE HOY / 25 NOV",
+  "1 · OFERTA",
+  "PANTHER (P5R)",
+  "3800",
+  "9600",
+  "LOTE PERSONA 5 ROYAL · SE VA EL 29 NOV",
+  "-60% / AHORRAS 5800",
+  "2 · SKINS OG",
+  "GREMIO",
+  "CAPÍTULO 1 · TEMPORADA 8",
+  "3 · ÚLTIMO DÍA",
+  "BOLA 10",
+  "BOLA 2",
+  "BOLA 7",
+  "RETORNO",
+  "REVERBERACIÓN",
+  "SE VAN EL 25 NOV, 6 PM",
+  "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+  "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+  "ESTA ES LA",
+  "TIENDA DE OBJETOS",
+  "DE HOY,",
+  "25 DE NOVIEMBRE.",
+  "¡TRES COSAS ANTES",
+  "DE GASTAR UN",
+  "SOLO PAVO!",
+  "EL LOTE PERSONA",
+  "5 ROYAL:",
+  "3800 PAVOS,",
+  "EN VEZ DE",
+  "9600.",
+  "¡TE AHORRAS 5800!",
+  "GREMIO Y MIRASOL",
+  "ESTÁN EN LA",
+  "TIENDA.",
+  "LAS DOS SON",
+  "DEL CAPÍTULO 1,",
+  "TEMPORADA 8.",
+  "Y SEIS SKINS",
+  "ESTÁN EN SU",
+  "ÚLTIMO DÍA,",
+  "CUATRO DE ELLAS",
+  "ÉPICAS.",
+  "¿VAS A COMPRAR",
+  "ALGO HOY?",
+  "USA EL CÓDIGO",
+  "BAD EN LA",
+  "TIENDA DE OBJETOS.",
+  "LE AYUDA MUCHÍSIMO",
+  "AL CANAL.",
+  "¡GRACIAS POR VER!",
+  "SÍGUENOS PARA MÁS",
+  "CONTENIDO DIARIO.",
+  "#EPICPARTNER",
+  "LA TIENDITA BAD"
+ ]
+}

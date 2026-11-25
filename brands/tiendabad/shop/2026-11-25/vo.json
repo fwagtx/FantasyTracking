@@ -1,0 +1,57 @@
+{
+ "voice": "ef_dora",
+ "speed": 1.2,
+ "lang": "es-419",
+ "lead": 0.2,
+ "mode": "flow",
+ "phrases": [
+  {
+   "text": "Esta es la tienda de objetos de hoy, 25 de noviembre.",
+   "pause": 0.08
+  },
+  {
+   "text": "¡Tres cosas antes de gastar un solo pavo!",
+   "pause": 0.22
+  },
+  {
+   "text": "El Lote Persona 5 Royal:",
+   "pause": 0.06,
+   "say": "El Lote Persona 5 Róial:"
+  },
+  {
+   "text": "3800 pavos, en vez de 9600.",
+   "pause": 0.1,
+   "say": "3800 pavos, en vez de 9600."
+  },
+  {
+   "text": "¡Te ahorras 5800!",
+   "pause": 0.26,
+   "say": "¡Te ahorras 5800!"
+  },
+  {
+   "text": "Gremio y Mirasol están en la tienda.",
+   "pause": 0.06
+  },
+  {
+   "text": "Las dos son del Capítulo 1, Temporada 8.",
+   "pause": 0.26
+  },
+  {
+   "text": "Y seis skins están en su último día, cuatro de ellas épicas.",
+   "pause": 0.3
+  },
+  {
+   "text": "¿Vas a comprar algo hoy?",
+   "pause": 0.06
+  },
+  {
+   "text": "Usa el código BAD en la tienda de objetos. Le ayuda muchísimo al canal.",
+   "pause": 0.25,
+   "say": "Usa el código bad, en la tienda de objetos. Le ayuda muchísimo al canal."
+  },
+  {
+   "text": "¡Gracias por ver! Síguenos para más contenido diario.",
+   "pause": 0.3
+  }
+ ]
+}
