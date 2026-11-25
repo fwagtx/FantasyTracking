@@ -1,0 +1,23 @@
+{
+ "via": "fortnite-api.com (mirror of Epic's cosmetics data, es-419)",
+ "files": [
+  {
+   "file": "Character_PatronPoppet.json",
+   "source": "Epic cosmetics data for Lexa Maldeojo (es-419)",
+   "url": "https://fortnite-api.com/v2/cosmetics/br/Character_PatronPoppet?language=es-419",
+   "fetched_utc": "2026-11-25T17:11:09Z"
+  },
+  {
+   "file": "CID_723_Athena_Commando_F_SpyTech.json",
+   "source": "Epic cosmetics data for Corredora de bloqueo (es-419)",
+   "url": "https://fortnite-api.com/v2/cosmetics/br/CID_723_Athena_Commando_F_SpyTech?language=es-419",
+   "fetched_utc": "2026-11-25T17:11:09Z"
+  },
+  {
+   "file": "Character_DebitScent.json",
+   "source": "Epic cosmetics data for Panther (P5R) (es-419)",
+   "url": "https://fortnite-api.com/v2/cosmetics/br/Character_DebitScent?language=es-419",
+   "fetched_utc": "2026-11-25T17:11:09Z"
+  }
+ ]
+}
