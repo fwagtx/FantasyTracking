@@ -418,9 +418,9 @@
   {
    "type": "map",
    "p": 4,
-   "x": 900.0,
-   "y": 1300.0,
-   "z": 0.9,
+   "x": 950.0,
+   "y": 1400.0,
+   "z": 0.8,
    "name": "La ruta",
    "sub": "Siguiendo el viaje de Luffy",
    "pins": [
@@ -484,31 +484,31 @@
    "type": "stat",
    "p": 8,
    "big": "Aprendiz",
-   "label": "en la tripulación de Gol D. Roger, junto a Shanks"
+   "label": "en la tripulación de Gol D. Roger, junto a Shanks"
   },
   {
    "type": "stat",
    "p": 10,
    "big": "Orange Town",
-   "label": "Buggy es el villano principal de ese arco"
+   "label": "Buggy es el villano principal de ese arco"
   },
   {
    "type": "stat",
    "p": 11,
    "big": "Venganza",
-   "label": "con Alvida, tras los Sombreros de Paja"
+   "label": "con Alvida, tras los Sombreros de Paja"
   },
   {
    "type": "stat",
    "p": 12,
    "big": "Emperador",
-   "label": "uno de los cuatro del Nuevo Mundo"
+   "label": "uno de los cuatro del Nuevo Mundo"
   },
   {
    "type": "stat",
    "p": 13,
    "big": "Portadas",
-   "label": "la primera mini historia de portadas del manga"
+   "label": "la primera mini historia de portadas del manga"
   },
   {
    "type": "items",
@@ -546,19 +546,19 @@
    "type": "stat",
    "p": 16,
    "big": "Restaurante",
-   "label": "en el mar: un barco grande con cabeza de pez"
+   "label": "en el mar: un barco grande con cabeza de pez"
   },
   {
    "type": "stat",
    "p": 17,
    "big": "Cañones",
-   "label": "y una cabeza de pez que se separa para atacar"
+   "label": "y una cabeza de pez que se separa para atacar"
   },
   {
    "type": "stat",
    "p": 18,
    "big": "Zeff",
-   "label": "ex capitán pirata y jefe de cocina"
+   "label": "ex capitán pirata y jefe de cocina"
   },
   {
    "type": "items",
@@ -576,19 +576,19 @@
    "type": "stat",
    "p": 20,
    "big": "1 año",
-   "label": "el contrato de Luffy para pagar los daños"
+   "label": "el contrato de Luffy para pagar los daños"
   },
   {
    "type": "stat",
    "p": 22,
    "big": "Cocoyasi",
-   "label": "de ahí, Sanji zarpa con Luffy"
+   "label": "de ahí, Sanji zarpa con Luffy"
   },
   {
    "type": "stat",
    "p": 23,
    "big": "Más pisos",
-   "label": "y al menos dos barcos hermanos"
+   "label": "y al menos dos barcos hermanos"
   },
   {
    "type": "items",
@@ -624,25 +624,25 @@
    "type": "stat",
    "p": 26,
    "big": "Base pirata",
-   "label": "de los Piratas de Arlong"
+   "label": "de los Piratas de Arlong"
   },
   {
    "type": "stat",
    "p": 28,
    "big": "10 años antes",
-   "label": "Arlong llega a la aldea Cocoyasi"
+   "label": "Arlong llega a la aldea Cocoyasi"
   },
   {
    "type": "stat",
    "p": 29,
    "big": "8 pisos",
-   "label": "hecho con las piezas de su galeón"
+   "label": "hecho con las piezas de su galeón"
   },
   {
    "type": "stat",
    "p": 30,
    "big": "Sin miedo",
-   "label": "en plena costa, con su bandera pirata arriba"
+   "label": "en plena costa, con su bandera pirata arriba"
   },
   {
    "type": "items",
@@ -660,13 +660,13 @@
    "type": "stat",
    "p": 32,
    "big": "5 pisos",
-   "label": "Arlong, directo para abajo"
+   "label": "Arlong, directo para abajo"
   },
   {
    "type": "quote",
    "p": 33,
    "kicker": "NOTICIAS DEL JUEGO",
-   "title": "Frutas del diablo por toda la isla",
+   "title": "Frutas del diablo por toda la isla",
    "lines": [
     {
      "p": 34,
@@ -704,7 +704,7 @@
   {
    "type": "items",
    "p": 38,
-   "title": "Nami · creció en un huerto de mandarinas",
+   "title": "Nami · huerto de mandarinas",
    "items": [
     {
      "img": "../../tiendabad/video/long/2026-11-25-lugares-one-piece/img/Character_BoastJoint.png",
@@ -717,25 +717,25 @@
    "type": "stat",
    "p": 39,
    "big": "Bell-mère",
-   "label": "ex oficial de la Marina, su mamá adoptiva"
+   "label": "ex oficial de la Marina, su mamá adoptiva"
   },
   {
    "type": "stat",
    "p": 41,
    "big": "Solo fruta",
-   "label": "lo que comía Bell-mère cuando no alcanzaba"
+   "label": "lo que comía Bell-mère cuando no alcanzaba"
   },
   {
    "type": "stat",
    "p": 43,
    "big": "9 años",
-   "label": "Bell-mère crió a Nami y a Nojiko"
+   "label": "Bell-mère crió a Nami y a Nojiko"
   },
   {
    "type": "stat",
    "p": 44,
    "big": "Mapas",
-   "label": "Nami tuvo que dibujarlos para Arlong"
+   "label": "Nami tuvo que dibujarlos para Arlong"
   },
   {
    "type": "items",
@@ -780,13 +780,13 @@
    "type": "stat",
    "p": 48,
    "big": "Gol D. Roger",
-   "label": "ahí nació, y ahí lo ejecutaron"
+   "label": "ahí nació, y ahí lo ejecutaron"
   },
   {
    "type": "stat",
    "p": 49,
    "big": "Parada obligada",
-   "label": "para casi todos los barcos del East Blue"
+   "label": "para casi todos los barcos del East Blue"
   },
   {
    "type": "items",
@@ -804,7 +804,7 @@
    "type": "stat",
    "p": 52,
    "big": "Yubashiri",
-   "label": "la espada más valiosa de Ipponmatsu"
+   "label": "la espada más valiosa de Ipponmatsu"
   },
   {
    "type": "items",
@@ -839,7 +839,7 @@
    "type": "stat",
    "p": 56,
    "big": "¡Un rayo!",
-   "label": "y la plataforma quedó destruida"
+   "label": "y la plataforma quedó destruida"
   },
   {
    "type": "items",
@@ -864,9 +864,9 @@
    "type": "map",
    "p": 58,
    "chapter": "La ruta completa",
-   "x": 900.0,
-   "y": 1300.0,
-   "z": 0.9,
+   "x": 950.0,
+   "y": 1400.0,
+   "z": 0.8,
    "name": "La ruta completa",
    "sub": "5 lugares de One Piece",
    "pins": [
@@ -926,13 +926,13 @@
    "type": "stat",
    "p": 61,
    "big": "4000 pavos",
-   "label": "Lote One Piece: Luffy, Nami y Usopp, en vez de 8200"
+   "label": "Lote One Piece: Luffy, Nami y Usopp, en vez de 8200"
   },
   {
    "type": "stat",
    "p": 62,
    "big": "Hasta el 5 dic",
-   "label": "todo lo de One Piece en la tienda"
+   "label": "todo lo de One Piece en la tienda"
   },
   {
    "type": "title",
