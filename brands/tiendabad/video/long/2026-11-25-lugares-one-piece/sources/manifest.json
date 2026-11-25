@@ -1,0 +1,59 @@
+{
+ "via": "fortnite-api.com (mirror of Epic's own data, es-419) for the official map and its named places, the in-game news and the six One Piece outfits shown, fetched today; the Item Shop of 2026-11-25 (shop_daily.py's fetch) for prices and dates, keeping only its One Piece entries, copied verbatim; the One Piece Wiki for each place's story, fetched live today with Firecrawl (maxAge 0) in directQuote mode, quoted verbatim (link markup removed). Map positions use the same pixel maths as the '¿Dónde está?' shorts (new_where.py).",
+ "files": [
+  {
+   "file": "map.json",
+   "source": "Official map and named places (es-419)",
+   "url": "https://fortnite-api.com/v1/map?language=es-419",
+   "fetched_utc": "2026-11-25T11:20:00Z"
+  },
+  {
+   "file": "news.json",
+   "source": "In-game news feed, Battle Royale (es-419)",
+   "url": "https://fortnite-api.com/v2/news/br?language=es-419",
+   "fetched_utc": "2026-11-25T11:23:00Z"
+  },
+  {
+   "file": "cosmetics.json",
+   "source": "The six One Piece outfits shown (es-419)",
+   "url": "https://fortnite-api.com/v2/cosmetics/br/<id>?language=es-419",
+   "fetched_utc": "2026-11-25T11:23:00Z"
+  },
+  {
+   "file": "shop.json",
+   "source": "Item Shop for 2026-11-25 (subset: its One Piece offers)",
+   "url": "https://fortnite-api.com/v2/shop?language=es-419",
+   "fetched_utc": "2026-11-25T00:13:24Z"
+  },
+  {
+   "file": "onepiece-wiki-buggy.json",
+   "source": "One Piece Wiki: Buggy",
+   "url": "https://onepiece.fandom.com/wiki/Buggy",
+   "fetched_utc": "2026-11-25T11:19:58Z"
+  },
+  {
+   "file": "onepiece-wiki-baratie.json",
+   "source": "One Piece Wiki: Baratie",
+   "url": "https://onepiece.fandom.com/wiki/Baratie",
+   "fetched_utc": "2026-11-25T11:19:06Z"
+  },
+  {
+   "file": "onepiece-wiki-arlong-park.json",
+   "source": "One Piece Wiki: Arlong Park",
+   "url": "https://onepiece.fandom.com/wiki/Arlong_Park",
+   "fetched_utc": "2026-11-25T11:19:51Z"
+  },
+  {
+   "file": "onepiece-wiki-bell-mere.json",
+   "source": "One Piece Wiki: Bell-mère",
+   "url": "https://onepiece.fandom.com/wiki/Bell-m%C3%A8re",
+   "fetched_utc": "2026-11-25T11:19:54Z"
+  },
+  {
+   "file": "onepiece-wiki-loguetown.json",
+   "source": "One Piece Wiki: Loguetown",
+   "url": "https://onepiece.fandom.com/wiki/Loguetown",
+   "fetched_utc": "2026-11-25T11:19:56Z"
+  }
+ ]
+}

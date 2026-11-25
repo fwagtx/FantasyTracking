@@ -1,0 +1,274 @@
+{
+ "data": {
+  "Character_CeleryStitch": {
+   "id": "Character_CeleryStitch",
+   "name": "Monkey D. Luffy",
+   "description": "¡Será el nuevo rey de los piratas!",
+   "type": {
+    "value": "outfit",
+    "displayValue": "Atuendo",
+    "backendValue": "AthenaCharacter"
+   },
+   "rarity": {
+    "value": "epic",
+    "displayValue": "Épico",
+    "backendValue": "EFortRarity::Epic"
+   },
+   "set": {
+    "value": "One Piece",
+    "text": "Pieza del conjunto One Piece.",
+    "backendValue": "FrailShark"
+   },
+   "introduction": {
+    "chapter": "7",
+    "season": "5",
+    "text": "Introducido en Capítulo 7, Temporada 5.",
+    "backendValue": 43
+   },
+   "images": {
+    "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_celerystitch/smallicon.png",
+    "icon": "https://fortnite-api.com/images/cosmetics/br/character_celerystitch/icon.png",
+    "featured": "https://fortnite-api.com/images/cosmetics/br/character_celerystitch/featured.png",
+    "lego": {
+     "small": "https://fortnite-api.com/images/cosmetics/lego/character_celerystitch/small.png",
+     "large": "https://fortnite-api.com/images/cosmetics/lego/character_celerystitch/large.png",
+     "wide": "https://fortnite-api.com/images/cosmetics/lego/character_celerystitch/wide.png"
+    }
+   },
+   "showcaseVideo": "U4dZqudChDw",
+   "added": "2026-11-01T05:00:00Z"
+  },
+  "Character_BoastJoint": {
+   "id": "Character_BoastJoint",
+   "name": "Nami",
+   "description": "Ladrona, navegante y cartógrafa.",
+   "type": {
+    "value": "outfit",
+    "displayValue": "Atuendo",
+    "backendValue": "AthenaCharacter"
+   },
+   "rarity": {
+    "value": "epic",
+    "displayValue": "Épico",
+    "backendValue": "EFortRarity::Epic"
+   },
+   "set": {
+    "value": "One Piece",
+    "text": "Pieza del conjunto One Piece.",
+    "backendValue": "FrailShark"
+   },
+   "introduction": {
+    "chapter": "7",
+    "season": "5",
+    "text": "Introducido en Capítulo 7, Temporada 5.",
+    "backendValue": 43
+   },
+   "images": {
+    "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_boastjoint/smallicon.png",
+    "icon": "https://fortnite-api.com/images/cosmetics/br/character_boastjoint/icon.png",
+    "featured": "https://fortnite-api.com/images/cosmetics/br/character_boastjoint/featured.png",
+    "lego": {
+     "small": "https://fortnite-api.com/images/cosmetics/lego/character_boastjoint/small.png",
+     "large": "https://fortnite-api.com/images/cosmetics/lego/character_boastjoint/large.png",
+     "wide": "https://fortnite-api.com/images/cosmetics/lego/character_boastjoint/wide.png"
+    }
+   },
+   "metaTags": [
+    "Cosmetics.Emote.CharacterGroup.Skirts"
+   ],
+   "showcaseVideo": "M37HpMEFGR0",
+   "added": "2026-11-01T05:00:00Z"
+  },
+  "Character_LoomRise": {
+   "id": "Character_LoomRise",
+   "name": "Usopp",
+   "description": "Francotirador y mitómano.",
+   "type": {
+    "value": "outfit",
+    "displayValue": "Atuendo",
+    "backendValue": "AthenaCharacter"
+   },
+   "rarity": {
+    "value": "epic",
+    "displayValue": "Épico",
+    "backendValue": "EFortRarity::Epic"
+   },
+   "set": {
+    "value": "One Piece",
+    "text": "Pieza del conjunto One Piece.",
+    "backendValue": "FrailShark"
+   },
+   "introduction": {
+    "chapter": "7",
+    "season": "5",
+    "text": "Introducido en Capítulo 7, Temporada 5.",
+    "backendValue": 43
+   },
+   "images": {
+    "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_loomrise/smallicon.png",
+    "icon": "https://fortnite-api.com/images/cosmetics/br/character_loomrise/icon.png",
+    "featured": "https://fortnite-api.com/images/cosmetics/br/character_loomrise/featured.png",
+    "lego": {
+     "small": "https://fortnite-api.com/images/cosmetics/lego/character_loomrise/small.png",
+     "large": "https://fortnite-api.com/images/cosmetics/lego/character_loomrise/large.png",
+     "wide": "https://fortnite-api.com/images/cosmetics/lego/character_loomrise/wide.png"
+    }
+   },
+   "showcaseVideo": "tTSfkTgvsio",
+   "added": "2026-11-01T05:00:00Z"
+  },
+  "Character_FlipperBalm": {
+   "id": "Character_FlipperBalm",
+   "name": "Buggy",
+   "description": "El extravagante presidente de Cross Guild.",
+   "type": {
+    "value": "outfit",
+    "displayValue": "Atuendo",
+    "backendValue": "AthenaCharacter"
+   },
+   "rarity": {
+    "value": "epic",
+    "displayValue": "Épico",
+    "backendValue": "EFortRarity::Epic"
+   },
+   "set": {
+    "value": "One Piece",
+    "text": "Pieza del conjunto One Piece.",
+    "backendValue": "FrailShark"
+   },
+   "introduction": {
+    "chapter": "7",
+    "season": "5",
+    "text": "Introducido en Capítulo 7, Temporada 5.",
+    "backendValue": 43
+   },
+   "images": {
+    "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_flipperbalm/smallicon.png",
+    "icon": "https://fortnite-api.com/images/cosmetics/br/character_flipperbalm/icon.png",
+    "featured": "https://fortnite-api.com/images/cosmetics/br/character_flipperbalm/featured.png",
+    "lego": {
+     "small": "https://fortnite-api.com/images/cosmetics/lego/character_flipperbalm/small.png",
+     "large": "https://fortnite-api.com/images/cosmetics/lego/character_flipperbalm/large.png",
+     "wide": "https://fortnite-api.com/images/cosmetics/lego/character_flipperbalm/wide.png"
+    }
+   },
+   "variants": [
+    {
+     "channel": "Parts",
+     "type": "Sombrero",
+     "options": [
+      {
+       "tag": "Stage1",
+       "name": "Sí",
+       "image": "https://fortnite-api.com/images/cosmetics/br/character_flipperbalm/variants/parts/stage1.png"
+      },
+      {
+       "tag": "Stage2",
+       "name": "No",
+       "image": "https://fortnite-api.com/images/cosmetics/br/character_flipperbalm/variants/parts/stage2.png"
+      }
+     ]
+    }
+   ],
+   "showcaseVideo": "7UNyvf-mtWw",
+   "added": "2026-11-01T23:10:43Z"
+  },
+  "Character_BrandCreed": {
+   "id": "Character_BrandCreed",
+   "name": "Roronoa Zoro",
+   "description": "Maestro espadachín de los Sombrero de paja.",
+   "type": {
+    "value": "outfit",
+    "displayValue": "Atuendo",
+    "backendValue": "AthenaCharacter"
+   },
+   "rarity": {
+    "value": "epic",
+    "displayValue": "Épico",
+    "backendValue": "EFortRarity::Epic"
+   },
+   "set": {
+    "value": "One Piece",
+    "text": "Pieza del conjunto One Piece.",
+    "backendValue": "FrailShark"
+   },
+   "introduction": {
+    "chapter": "7",
+    "season": "5",
+    "text": "Introducido en Capítulo 7, Temporada 5.",
+    "backendValue": 43
+   },
+   "images": {
+    "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_brandcreed/smallicon.png",
+    "icon": "https://fortnite-api.com/images/cosmetics/br/character_brandcreed/icon.png",
+    "featured": "https://fortnite-api.com/images/cosmetics/br/character_brandcreed/featured.png",
+    "lego": {
+     "small": "https://fortnite-api.com/images/cosmetics/lego/character_brandcreed/small.png",
+     "large": "https://fortnite-api.com/images/cosmetics/lego/character_brandcreed/large.png",
+     "wide": "https://fortnite-api.com/images/cosmetics/lego/character_brandcreed/wide.png"
+    }
+   },
+   "variants": [
+    {
+     "channel": "Parts",
+     "type": "Bandana",
+     "options": [
+      {
+       "tag": "Stage1",
+       "name": "No",
+       "image": "https://fortnite-api.com/images/cosmetics/br/character_brandcreed/variants/parts/stage1.png"
+      },
+      {
+       "tag": "Stage2",
+       "name": "Sí",
+       "image": "https://fortnite-api.com/images/cosmetics/br/character_brandcreed/variants/parts/stage2.png"
+      }
+     ]
+    }
+   ],
+   "metaTags": [
+    "Cosmetics.MetaTags.BrandCreed"
+   ],
+   "showcaseVideo": "cn8i4g7rASA",
+   "added": "2026-11-01T23:10:43Z"
+  },
+  "Character_InsightBawl": {
+   "id": "Character_InsightBawl",
+   "name": "Sanji",
+   "description": "Chef en busca del All Blue.",
+   "type": {
+    "value": "outfit",
+    "displayValue": "Atuendo",
+    "backendValue": "AthenaCharacter"
+   },
+   "rarity": {
+    "value": "epic",
+    "displayValue": "Épico",
+    "backendValue": "EFortRarity::Epic"
+   },
+   "set": {
+    "value": "One Piece",
+    "text": "Pieza del conjunto One Piece.",
+    "backendValue": "FrailShark"
+   },
+   "introduction": {
+    "chapter": "7",
+    "season": "5",
+    "text": "Introducido en Capítulo 7, Temporada 5.",
+    "backendValue": 43
+   },
+   "images": {
+    "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_insightbawl/smallicon.png",
+    "icon": "https://fortnite-api.com/images/cosmetics/br/character_insightbawl/icon.png",
+    "featured": "https://fortnite-api.com/images/cosmetics/br/character_insightbawl/featured.png",
+    "lego": {
+     "small": "https://fortnite-api.com/images/cosmetics/lego/character_insightbawl/small.png",
+     "large": "https://fortnite-api.com/images/cosmetics/lego/character_insightbawl/large.png",
+     "wide": "https://fortnite-api.com/images/cosmetics/lego/character_insightbawl/wide.png"
+    }
+   },
+   "showcaseVideo": "CtBK2RxgQRU",
+   "added": "2026-11-01T23:10:43Z"
+  }
+ }
+}

@@ -1,0 +1,838 @@
+{
+ "title": "Los lugares de One Piece en el mapa",
+ "caption": "#EpicPartner Los lugares de One Piece en el mapa de Fortnite 🏴‍☠️ Playa de Buggy, el Baratie, Arlong Park, el Bosque Mandarina de Nami y Loguetown: dónde está cada uno y su historia en el anime.\n¿Cuál es tu favorito? 👇\nUsa el código BAD en la tienda de objetos 💛\n#Fortnite #OnePiece #FortniteEspañol",
+ "claims": [
+  {
+   "text": "Noticia del juego: Atuendos Monkey D. Luffy, Nami y Usopp ('Cuando la aventura llama, ¡los Sombreros de Paja responden!')",
+   "source": "news.json",
+   "match": [
+    "Atuendos Monkey D. Luffy, Nami y Usopp",
+    "Cuando la aventura llama, ¡los Sombreros de Paja responden!"
+   ]
+  },
+  {
+   "text": "5 lugares del mapa con nombres de One Piece: Playa de Buggy, Baratie, Arlong Park, Bosque Mandarina de Nami y Loguetown",
+   "source": "map.json",
+   "match": [
+    "Playa de Buggy",
+    "Baratie",
+    "Arlong Park",
+    "Bosque Mandarina de Nami",
+    "Loguetown"
+   ],
+   "visual": "each of the five names carries a One Piece name (Buggy, Baratie, Arlong Park, Nami, Loguetown; the One Piece Wiki pages in sources/ describe each); the other 11 places on the map (Bahía Bulliciosa, Campo de batalla del gigante, Caverna Condenada, El cofre, Frontera Farol, Henry, La calavera salada, Puerto Pirata, Resort relajado, The $.$. Rocky, Villa Molino) carry no One Piece name"
+  },
+  {
+   "text": "Dónde está cada uno: Playa de Buggy: Norte · cerca de Frontera Farol; Baratie: Sureste · cerca de Bahía Bulliciosa; Arlong Park: Oeste · cerca de Frontera Farol; Bosque Mandarina de Nami: Suroeste · cerca de Villa Molino; Loguetown: Sur · cerca de Villa Molino",
+   "source": "map.json",
+   "match": [
+    "Playa de Buggy",
+    "Baratie",
+    "Arlong Park",
+    "Bosque Mandarina de Nami",
+    "Loguetown"
+   ],
+   "visual": "map pixels (px() of new_where.py) Playa de Buggy (1031, 851), Baratie (1411, 1477), Arlong Park (635, 1123), Bosque Mandarina de Nami (710, 1561), Loguetown (989, 1382); direction from the centre of the named places and nearest named place by coordinates, as the '¿Dónde está?' shorts"
+  },
+  {
+   "text": "La ruta sigue el viaje de Luffy: Buggy (uno de sus primeros enemigos), el Baratie (de ahí zarpan a Cocoyasi), Arlong Park y el huerto de Bell-mère en Cocoyasi, Loguetown (después de Mihawk)",
+   "source": "onepiece-wiki-buggy.json",
+   "match": [
+    "One of the earliest enemies defeated by Monkey D. Luffy and the Straw Hat Pirates",
+    "He is the main antagonist of the Orange Town Arc and a secondary antagonist in the Loguetown Arc"
+   ],
+   "visual": "order also from onepiece-wiki-baratie.json ('so he, Monkey D. Luffy and Yosaku could sail to Cocoyasi Village'), onepiece-wiki-bell-mere.json ('her mikan grove in Cocoyasi Village') and onepiece-wiki-loguetown.json (Zoro replaces the swords Mihawk shattered, a fight told in the Baratie arc)"
+  },
+  {
+   "text": "Buggy: pirata payaso, capitán de los Piratas de Buggy",
+   "source": "onepiece-wiki-buggy.json",
+   "match": [
+    "Buggy the Star Clown",
+    "in time becoming captain of the Buggy Pirates"
+   ]
+  },
+  {
+   "text": "Buggy fue aprendiz en la tripulación de Gol D. Roger, junto a Shanks",
+   "source": "onepiece-wiki-buggy.json",
+   "match": [
+    "Initially a Roger Pirates apprentice alongside Shanks"
+   ]
+  },
+  {
+   "text": "Uno de los primeros enemigos que derrotaron Luffy y los Sombreros de Paja; villano principal del arco de Orange Town",
+   "source": "onepiece-wiki-buggy.json",
+   "match": [
+    "One of the earliest enemies defeated by Monkey D. Luffy and the Straw Hat Pirates",
+    "He is the main antagonist of the Orange Town Arc"
+   ]
+  },
+  {
+   "text": "Hoy es uno de los cuatro Emperadores del Nuevo Mundo y dice que va a ser el Rey de los Piratas",
+   "source": "onepiece-wiki-buggy.json",
+   "match": [
+    "one of the current Four Emperors dominating the New World",
+    "Buggy has declared his intent to become the Pirate King"
+   ]
+  },
+  {
+   "text": "Buggy: 1600 pavos, hasta el 5 dic",
+   "source": "shop.json",
+   "match": [
+    "\"regularPrice\": 1600, \"finalPrice\": 1600, \"devName\": \"[VIRTUAL]1 x Buggy, 1 x Buggy's Coat, 1 x Buggy Knives for -1 MtxCurrency\", \"offerId\": \"v2:/4431d4a16bd18c613e3ed16fe0c7f5485adb651a7545d313c8d36fae43ab2963\", \"inDate\": \"2026-11-14T00:00:00Z\", \"outDate\": \""
+   ]
+  },
+  {
+   "text": "El Baratie: restaurante en el mar, un barco bastante grande con cabeza de pez",
+   "source": "onepiece-wiki-baratie.json",
+   "match": [
+    "The Baratie is an ocean-going restaurant run by Zeff.",
+    "The Baratie is a fairly large ship.",
+    "has a fish as a front-piece/head"
+   ]
+  },
+  {
+   "text": "Lo dirige Zeff, famoso ex capitán pirata y jefe de cocina",
+   "source": "onepiece-wiki-baratie.json",
+   "match": [
+    "The Baratie is owned and headed by Zeff",
+    "Its owner is a renowned former pirate captain",
+    "Zeff assumed the position of head chef"
+   ]
+  },
+  {
+   "text": "Zeff lo fundó con la ayuda de Sanji, de 10 años; Sanji fue su joven subchef",
+   "source": "onepiece-wiki-baratie.json",
+   "match": [
+    "who founded it 11 years ago with the help of a 10-year-old Sanji",
+    "with Sanji becoming the young sous chef"
+   ]
+  },
+  {
+   "text": "Luffy dañó el restaurante: contrato de un año; deuda saldada al salvar el Baratie de Don Krieg",
+   "source": "onepiece-wiki-baratie.json",
+   "match": [
+    "Luffy was made into a temporary chore boy under this system after damaging the restaurant, and was contracted for a year of employment, though his debts were ultimately cleared after he saved the restaurant from Don Krieg."
+   ]
+  },
+  {
+   "text": "De ahí, Sanji zarpó con Luffy rumbo a la aldea Cocoyasi",
+   "source": "onepiece-wiki-baratie.json",
+   "match": [
+    "was given to Sanji, so he, Monkey D. Luffy and Yosaku could sail to Cocoyasi Village."
+   ]
+  },
+  {
+   "text": "Sanji: 1600 pavos, hasta el 5 dic",
+   "source": "shop.json",
+   "match": [
+    "\"regularPrice\": 1600, \"finalPrice\": 1600, \"devName\": \"[VIRTUAL]1 x Sanji, 1 x Sanji's Utensils, 1 x Sanji's Utensils for -1 MtxCurrency\", \"offerId\": \"v2:/258c82518cff648c6989eb3d14a1c144ed27d7553882c5ca61979afa959cdc0b\", \"inDate\": \"2026-11-08T00:00:00Z\", \"outDate\": \""
+   ]
+  },
+  {
+   "text": "Arlong Park: la base de los Piratas de Arlong",
+   "source": "onepiece-wiki-arlong-park.json",
+   "match": [
+    "Arlong Park was the Arlong Pirates' base of operations."
+   ]
+  },
+  {
+   "text": "Arlong llegó al East Blue diez años antes, a la aldea Cocoyasi, con un plan para conquistar y gobernar a los humanos",
+   "source": "onepiece-wiki-arlong-park.json",
+   "match": [
+    "A decade before the Arlong Park arc, Arlong led his pirate crew to the East Blue on an island called Cocoyasi Village, where he initiated his plan to conquer and rule over humans."
+   ]
+  },
+  {
+   "text": "Desarmó su galeón y con esas piezas construyó Arlong Park, un edificio de ocho pisos",
+   "source": "onepiece-wiki-arlong-park.json",
+   "match": [
+    "He dismantled his original galleon and repurposed the materials to build Arlong Park, an eight-story building that served as his headquarters."
+   ]
+  },
+  {
+   "text": "En plena costa, con su bandera pirata arriba, para mostrar que no le tenían miedo a la ley",
+   "source": "onepiece-wiki-arlong-park.json",
+   "match": [
+    "their Jolly Roger at the top, was conspicuously placed at the coast to show that they had no fear of the law"
+   ]
+  },
+  {
+   "text": "Luffy lo destruyó con su Gomu Gomu no Ono, Arlong cayó cinco pisos; quedó hecho escombros",
+   "source": "onepiece-wiki-arlong-park.json",
+   "match": [
+    "The entire building was destroyed by Luffy's Gomu Gomu no Ono, smashing Arlong through five stories downwards.",
+    "The destruction extended to Arlong Park itself, which was reduced to rubble."
+   ]
+  },
+  {
+   "text": "Noticia del juego: Come la fruta Goma Goma para estirar tus habilidades como Luffy",
+   "source": "news.json",
+   "match": [
+    "Frutas del diablo por toda la isla",
+    "Come la fruta Goma Goma para estirar tus habilidades como Luffy"
+   ]
+  },
+  {
+   "text": "Nami creció en un huerto de mandarinas (mikan), en la aldea Cocoyasi",
+   "source": "onepiece-wiki-bell-mere.json",
+   "match": [
+    "Bell-mère lived with the girls on her mikan grove in Cocoyasi Village."
+   ],
+   "visual": "mikan is a mandarin orange (mandarina); the Fortnite place is the Bosque Mandarina de Nami"
+  },
+  {
+   "text": "Bell-mère: ex oficial de la Marina, dueña del huerto, madre adoptiva de Nami y de su hermana Nojiko",
+   "source": "onepiece-wiki-bell-mere.json",
+   "match": [
+    "Bell-mère was a former Marine officer, the owner of a mikan farm in Cocoyasi Village, and the adoptive mother of Nami and Nojiko."
+   ]
+  },
+  {
+   "text": "Cuando los tiempos eran difíciles, comía solo la fruta de su huerto para que a sus hijas no les faltara comida, y decía que estaba a dieta",
+   "source": "onepiece-wiki-bell-mere.json",
+   "match": [
+    "when times were harsh, she ate only the fruit she grew in her grove, thus saving enough money to keep feeding her daughters on suitable meals, and would lie about being on a \"diet\" to hide it."
+   ]
+  },
+  {
+   "text": "Las crió unos nueve años, hasta que Arlong le quitó la vida",
+   "source": "onepiece-wiki-bell-mere.json",
+   "match": [
+    "She raised the two girls in her hometown for approximately nine years until she was murdered by Arlong."
+   ]
+  },
+  {
+   "text": "Después, Nami tuvo que unirse a la tripulación de Arlong para dibujar mapas del mar",
+   "source": "onepiece-wiki-bell-mere.json",
+   "match": [
+    "Nami was forced to join Arlong's crew for her cartography skills, which they planned to use to create sea charts"
+   ]
+  },
+  {
+   "text": "Nami: 1600 pavos, hasta el 5 dic",
+   "source": "shop.json",
+   "match": [
+    "\"regularPrice\": 1600, \"finalPrice\": 1600, \"devName\": \"[VIRTUAL]1 x Nami, 1 x Nami's Tangerines, 1 x Climate Baton for -1 MtxCurrency\", \"offerId\": \"v2:/26b85553542f54a4b77f1c41979b7fb8450b6fe7a67c96f218e4340b2629e8da\", \"inDate\": \"2026-11-01T00:00:00Z\", \"outDate\": \""
+   ]
+  },
+  {
+   "text": "Loguetown, la ciudad del principio y del fin: ahí nació y fue ejecutado Gol D. Roger, el antiguo Rey de los Piratas",
+   "source": "onepiece-wiki-loguetown.json",
+   "match": [
+    "The town is famed as both the birthplace and the execution site of the former Pirate King, Gol D. Roger.",
+    "Town of the Beginning and the End"
+   ]
+  },
+  {
+   "text": "Muy cerca de Reverse Mountain; casi todos los barcos del East Blue paran ahí a abastecerse",
+   "source": "onepiece-wiki-loguetown.json",
+   "match": [
+    "lying in close proximity to the Reverse Mountain",
+    "makes it an essential stop for almost all East Blue ships, especially pirate ships, seeking to resupply"
+   ]
+  },
+  {
+   "text": "Zoro buscó espadas nuevas porque Mihawk le había roto dos",
+   "source": "onepiece-wiki-loguetown.json",
+   "match": [
+    "It was here that Zoro sought replacements for two of his swords after Dracule Mihawk shattered them."
+   ]
+  },
+  {
+   "text": "La Yubashiri era la espada más valiosa de la tienda de Ipponmatsu, hasta que llegó Zoro",
+   "source": "onepiece-wiki-loguetown.json",
+   "match": [
+    "Until Roronoa Zoro's visit, the most prized possession in Ipponmatsu's collection was the esteemed sword Yubashiri."
+   ]
+  },
+  {
+   "text": "Luffy se subió a la plataforma donde ejecutaron a Roger; Buggy y Alvida lo atraparon ahí",
+   "source": "onepiece-wiki-loguetown.json",
+   "match": [
+    "Luffy visited the Roger's execution platform, eventually climbing on it, eager to take in the view.",
+    "While standing atop the platform, Luffy was suddenly ambushed by Buggy and Alvida"
+   ]
+  },
+  {
+   "text": "Buggy intentó ejecutar a Luffy (arco de Loguetown)",
+   "source": "onepiece-wiki-buggy.json",
+   "match": [
+    "Buggy attempts to execute Luffy for revenge.",
+    "a secondary antagonist in the Loguetown Arc"
+   ]
+  },
+  {
+   "text": "Un rayo de una tormenta muy extraña cayó sobre la plataforma y la destruyó",
+   "source": "onepiece-wiki-loguetown.json",
+   "match": [
+    "the platform was struck by a freak lightning storm and obliterated"
+   ]
+  },
+  {
+   "text": "Zoro 1800; con Sanji, Lote Sombrero de paja 3200 en vez de 4900; hasta el 5 dic",
+   "source": "shop.json",
+   "match": [
+    "\"regularPrice\": 1800, \"finalPrice\": 1800, \"devName\": \"[VIRTUAL]1 x Roronoa Zoro, 1 x Zoro's Swords, 1 x Zoro's Training Gear, 1 x Test of Will for -1 MtxCurrency\", \"offerId\": \"v2:/ef25b8d30b44047dc179ca96cbe1bda3f75b04eda2571788e635479e725c6d25\", \"inDate\": \"2026-11-08T00:00:00Z\", \"outDate\": \"",
+    "\"regularPrice\": 4900, \"finalPrice\": 3200, \"devName\": \"[VIRTUAL]1 x Roronoa Zoro, 1 x Zoro's Swords, 1 x Zoro's Training Gear, 1 x Test of Will, 1 x Sanji, 1 x Sanji's Utensils, 1 x Sanji's Utensils, 1 x Tony Tony Chopper for -1 MtxCurrency\", \"offerId\": \"v2:/f3aab314d09d6a4f2b25b377f8f4115ee6e066098dc43be5063be21f193757fe\", \"inDate\": \"2026-11-08T00:00:00Z\", \"outDate\": \""
+   ]
+  },
+  {
+   "text": "Luffy 1800, Nami y Usopp 1600 cada uno; Lote One Piece (los tres) 4000 en vez de 8200",
+   "source": "shop.json",
+   "match": [
+    "\"regularPrice\": 1800, \"finalPrice\": 1800, \"devName\": \"[VIRTUAL]1 x Monkey D. Luffy, 1 x Luffy's Straw Hat, 1 x Gum-Gum Pistol, 1 x Multi-Punches Flex for -1 MtxCurrency\", \"offerId\": \"v2:/caccb6ef5e08efaf83a8c744abc3bbed1f22bddc5c7f99027b04b1d2c7024f8d\", \"inDate\": \"2026-11-01T00:00:00Z\", \"outDate\": \"",
+    "\"regularPrice\": 1600, \"finalPrice\": 1600, \"devName\": \"[VIRTUAL]1 x Nami, 1 x Nami's Tangerines, 1 x Climate Baton for -1 MtxCurrency\", \"offerId\": \"v2:/26b85553542f54a4b77f1c41979b7fb8450b6fe7a67c96f218e4340b2629e8da\", \"inDate\": \"2026-11-01T00:00:00Z\", \"outDate\": \"",
+    "\"regularPrice\": 1600, \"finalPrice\": 1600, \"devName\": \"[VIRTUAL]1 x Usopp, 1 x Usopp's Kit, 1 x 5 Ton Hammer for -1 MtxCurrency\", \"offerId\": \"v2:/e3fae283d6d7a1c43fe04f919bb5f0f404517bfdf266fba2b0adfd86fd713589\", \"inDate\": \"2026-11-01T00:00:00Z\", \"outDate\": \"",
+    "\"regularPrice\": 8200, \"finalPrice\": 4000, \"devName\": \"[VIRTUAL]1 x Monkey D. Luffy, 1 x Luffy's Straw Hat, 1 x Gum-Gum Pistol, 1 x Multi-Punches Flex, 1 x Nami, 1 x Nami's Tangerines, 1 x Climate Baton, 1 x Usopp, 1 x Usopp's Kit, 1 x 5 Ton Hammer, 1 x Going Merry, 1 x Roasted Meat, 1 x Giant Meat on the Bone, 1 x Straw Hat Guitar, 1 x Straw Hat Guitar, 1 x Straw Hat Guitar for -1 MtxCurrency\", \"offerId\": \"v2:/8c57975e9814357c059acb6102b3af63c1f7ceec628657d40cbcde2a89738443\", \"inDate\": \"2026-11-01T00:00:00Z\", \"outDate\": \""
+   ]
+  },
+  {
+   "text": "Todo lo de One Piece se queda en la tienda hasta el 5 de diciembre",
+   "source": "shop.json",
+   "match": [
+    "\"regularPrice\": 1600, \"finalPrice\": 1600, \"devName\": \"[VIRTUAL]1 x Usopp, 1 x Usopp's Kit, 1 x 5 Ton Hammer for -1 MtxCurrency\", \"offerId\": \"v2:/e3fae283d6d7a1c43fe04f919bb5f0f404517bfdf266fba2b0adfd86fd713589\", \"inDate\": \"2026-11-01T00:00:00Z\", \"outDate\": \"",
+    "\"regularPrice\": 8200, \"finalPrice\": 4000, \"devName\": \"[VIRTUAL]1 x Monkey D. Luffy, 1 x Luffy's Straw Hat, 1 x Gum-Gum Pistol, 1 x Multi-Punches Flex, 1 x Nami, 1 x Nami's Tangerines, 1 x Climate Baton, 1 x Usopp, 1 x Usopp's Kit, 1 x 5 Ton Hammer, 1 x Going Merry, 1 x Roasted Meat, 1 x Giant Meat on the Bone, 1 x Straw Hat Guitar, 1 x Straw Hat Guitar, 1 x Straw Hat Guitar for -1 MtxCurrency\", \"offerId\": \"v2:/8c57975e9814357c059acb6102b3af63c1f7ceec628657d40cbcde2a89738443\", \"inDate\": \"2026-11-01T00:00:00Z\", \"outDate\": \"",
+    "\"regularPrice\": 1600, \"finalPrice\": 1600, \"devName\": \"[VIRTUAL]1 x Buggy, 1 x Buggy's Coat, 1 x Buggy Knives for -1 MtxCurrency\", \"offerId\": \"v2:/4431d4a16bd18c613e3ed16fe0c7f5485adb651a7545d313c8d36fae43ab2963\", \"inDate\": \"2026-11-14T00:00:00Z\", \"outDate\": \"",
+    "\"regularPrice\": 4900, \"finalPrice\": 3200, \"devName\": \"[VIRTUAL]1 x Roronoa Zoro, 1 x Zoro's Swords, 1 x Zoro's Training Gear, 1 x Test of Will, 1 x Sanji, 1 x Sanji's Utensils, 1 x Sanji's Utensils, 1 x Tony Tony Chopper for -1 MtxCurrency\", \"offerId\": \"v2:/f3aab314d09d6a4f2b25b377f8f4115ee6e066098dc43be5063be21f193757fe\", \"inDate\": \"2026-11-08T00:00:00Z\", \"outDate\": \"",
+    "\"regularPrice\": 1800, \"finalPrice\": 1800, \"devName\": \"[VIRTUAL]1 x Monkey D. Luffy, 1 x Luffy's Straw Hat, 1 x Gum-Gum Pistol, 1 x Multi-Punches Flex for -1 MtxCurrency\", \"offerId\": \"v2:/caccb6ef5e08efaf83a8c744abc3bbed1f22bddc5c7f99027b04b1d2c7024f8d\", \"inDate\": \"2026-11-01T00:00:00Z\", \"outDate\": \"",
+    "\"regularPrice\": 1600, \"finalPrice\": 1600, \"devName\": \"[VIRTUAL]1 x Sanji, 1 x Sanji's Utensils, 1 x Sanji's Utensils for -1 MtxCurrency\", \"offerId\": \"v2:/258c82518cff648c6989eb3d14a1c144ed27d7553882c5ca61979afa959cdc0b\", \"inDate\": \"2026-11-08T00:00:00Z\", \"outDate\": \"",
+    "\"regularPrice\": 1600, \"finalPrice\": 1600, \"devName\": \"[VIRTUAL]1 x Nami, 1 x Nami's Tangerines, 1 x Climate Baton for -1 MtxCurrency\", \"offerId\": \"v2:/26b85553542f54a4b77f1c41979b7fb8450b6fe7a67c96f218e4340b2629e8da\", \"inDate\": \"2026-11-01T00:00:00Z\", \"outDate\": \"",
+    "\"regularPrice\": 1800, \"finalPrice\": 1800, \"devName\": \"[VIRTUAL]1 x Roronoa Zoro, 1 x Zoro's Swords, 1 x Zoro's Training Gear, 1 x Test of Will for -1 MtxCurrency\", \"offerId\": \"v2:/ef25b8d30b44047dc179ca96cbe1bda3f75b04eda2571788e635479e725c6d25\", \"inDate\": \"2026-11-08T00:00:00Z\", \"outDate\": \""
+   ],
+   "visual": "every One Piece offer in today's shop leaves 2026-12-05T23:59:59.999Z (5:59 PM CDMX on Dec 5)"
+  },
+  {
+   "text": "Los atuendos que salen son los de Fortnite: Buggy, Sanji, Monkey D. Luffy, Nami, Roronoa Zoro y Usopp",
+   "source": "cosmetics.json",
+   "match": [
+    "\"name\": \"Buggy\"",
+    "\"name\": \"Sanji\"",
+    "\"name\": \"Monkey D. Luffy\"",
+    "\"name\": \"Nami\"",
+    "\"name\": \"Roronoa Zoro\"",
+    "\"name\": \"Usopp\""
+   ]
+  }
+ ],
+ "segments": [
+  {
+   "type": "title",
+   "p": 0,
+   "chapter": "Intro",
+   "kicker": "ONE PIECE EN FORTNITE",
+   "lines": [
+    "Los lugares de",
+    "One Piece"
+   ]
+  },
+  {
+   "type": "quote",
+   "p": 1,
+   "kicker": "NOTICIAS DEL JUEGO",
+   "title": "Atuendos Monkey D. Luffy, Nami y Usopp",
+   "lines": [
+    {
+     "p": 2,
+     "text": "Cuando la aventura llama, ¡los Sombreros de Paja responden!"
+    }
+   ]
+  },
+  {
+   "type": "stat",
+   "p": 3,
+   "big": "5 lugares",
+   "label": "con nombres de One Piece en el mapa"
+  },
+  {
+   "type": "map",
+   "p": 4,
+   "x": 1022.9,
+   "y": 1205.9,
+   "z": 1.0,
+   "name": "La ruta",
+   "sub": "Siguiendo el viaje de Luffy",
+   "pins": [
+    {
+     "x": 1031.1,
+     "y": 850.9,
+     "label": "1"
+    },
+    {
+     "x": 1411.1,
+     "y": 1476.8,
+     "label": "2"
+    },
+    {
+     "x": 634.8,
+     "y": 1123.2,
+     "label": "3"
+    },
+    {
+     "x": 710.1,
+     "y": 1560.9,
+     "label": "4"
+    },
+    {
+     "x": 988.7,
+     "y": 1382.2,
+     "label": "5"
+    }
+   ]
+  },
+  {
+   "type": "map",
+   "p": 5,
+   "x": 1031.1,
+   "y": 850.9,
+   "z": 2.0,
+   "name": "Playa de Buggy",
+   "sub": "Norte · cerca de Frontera Farol",
+   "pins": [
+    {
+     "x": 1031.1,
+     "y": 850.9,
+     "label": ""
+    }
+   ],
+   "chapter": "Playa de Buggy"
+  },
+  {
+   "type": "items",
+   "p": 6,
+   "title": "Buggy · capitán de los Piratas de Buggy",
+   "items": [
+    {
+     "img": "../../tiendabad/video/long/2026-11-25-lugares-one-piece/img/Character_FlipperBalm.png",
+     "name": "Buggy",
+     "rarity": "epic"
+    }
+   ]
+  },
+  {
+   "type": "stat",
+   "p": 7,
+   "big": "Aprendiz",
+   "label": "en la tripulación de Gol D. Roger, junto a Shanks"
+  },
+  {
+   "type": "stat",
+   "p": 8,
+   "big": "Orange Town",
+   "label": "Buggy es el villano principal de ese arco"
+  },
+  {
+   "type": "stat",
+   "p": 9,
+   "big": "Emperador",
+   "label": "uno de los cuatro del Nuevo Mundo"
+  },
+  {
+   "type": "items",
+   "p": 10,
+   "title": "En la tienda hasta el 5 dic",
+   "items": [
+    {
+     "img": "../../tiendabad/video/long/2026-11-25-lugares-one-piece/img/Character_FlipperBalm.png",
+     "name": "Buggy",
+     "rarity": "epic",
+     "price": 1600
+    }
+   ]
+  },
+  {
+   "type": "map",
+   "p": 11,
+   "x": 1411.1,
+   "y": 1476.8,
+   "z": 2.0,
+   "name": "Baratie",
+   "sub": "Sureste · cerca de Bahía Bulliciosa",
+   "pins": [
+    {
+     "x": 1411.1,
+     "y": 1476.8,
+     "label": ""
+    }
+   ],
+   "chapter": "Baratie"
+  },
+  {
+   "type": "stat",
+   "p": 12,
+   "big": "Restaurante",
+   "label": "en el mar: un barco grande con cabeza de pez"
+  },
+  {
+   "type": "stat",
+   "p": 13,
+   "big": "Zeff",
+   "label": "ex capitán pirata y jefe de cocina"
+  },
+  {
+   "type": "items",
+   "p": 14,
+   "title": "Sanji · el joven subchef",
+   "items": [
+    {
+     "img": "../../tiendabad/video/long/2026-11-25-lugares-one-piece/img/Character_InsightBawl.png",
+     "name": "Sanji",
+     "rarity": "epic"
+    }
+   ]
+  },
+  {
+   "type": "stat",
+   "p": 15,
+   "big": "1 año",
+   "label": "el contrato de Luffy para pagar los daños"
+  },
+  {
+   "type": "stat",
+   "p": 17,
+   "big": "Cocoyasi",
+   "label": "de ahí, Sanji zarpa con Luffy"
+  },
+  {
+   "type": "items",
+   "p": 18,
+   "title": "En la tienda hasta el 5 dic",
+   "items": [
+    {
+     "img": "../../tiendabad/video/long/2026-11-25-lugares-one-piece/img/Character_InsightBawl.png",
+     "name": "Sanji",
+     "rarity": "epic",
+     "price": 1600
+    }
+   ]
+  },
+  {
+   "type": "map",
+   "p": 19,
+   "x": 634.8,
+   "y": 1123.2,
+   "z": 2.0,
+   "name": "Arlong Park",
+   "sub": "Oeste · cerca de Frontera Farol",
+   "pins": [
+    {
+     "x": 634.8,
+     "y": 1123.2,
+     "label": ""
+    }
+   ],
+   "chapter": "Arlong Park"
+  },
+  {
+   "type": "stat",
+   "p": 20,
+   "big": "Base pirata",
+   "label": "de los Piratas de Arlong"
+  },
+  {
+   "type": "stat",
+   "p": 21,
+   "big": "10 años antes",
+   "label": "Arlong llega a la aldea Cocoyasi"
+  },
+  {
+   "type": "stat",
+   "p": 22,
+   "big": "8 pisos",
+   "label": "hecho con las piezas de su galeón"
+  },
+  {
+   "type": "stat",
+   "p": 23,
+   "big": "Sin miedo",
+   "label": "en plena costa, con su bandera pirata arriba"
+  },
+  {
+   "type": "items",
+   "p": 24,
+   "title": "Luffy · Gomu Gomu no Ono",
+   "items": [
+    {
+     "img": "../../tiendabad/video/long/2026-11-25-lugares-one-piece/img/Character_CeleryStitch.png",
+     "name": "Monkey D. Luffy",
+     "rarity": "epic"
+    }
+   ]
+  },
+  {
+   "type": "stat",
+   "p": 25,
+   "big": "5 pisos",
+   "label": "Arlong, directo para abajo"
+  },
+  {
+   "type": "quote",
+   "p": 26,
+   "kicker": "NOTICIAS DEL JUEGO",
+   "title": "Frutas del diablo por toda la isla",
+   "lines": [
+    {
+     "p": 27,
+     "text": "Come la fruta Goma Goma para estirar tus habilidades como Luffy"
+    }
+   ]
+  },
+  {
+   "type": "code",
+   "p": 28,
+   "chapter": "Código BAD",
+   "wide": true
+  },
+  {
+   "type": "map",
+   "p": 29,
+   "x": 710.1,
+   "y": 1560.9,
+   "z": 2.0,
+   "name": "Bosque Mandarina de Nami",
+   "sub": "Suroeste · cerca de Villa Molino",
+   "pins": [
+    {
+     "x": 710.1,
+     "y": 1560.9,
+     "label": ""
+    }
+   ],
+   "chapter": "Bosque Mandarina de Nami"
+  },
+  {
+   "type": "items",
+   "p": 30,
+   "title": "Nami · creció en un huerto de mandarinas",
+   "items": [
+    {
+     "img": "../../tiendabad/video/long/2026-11-25-lugares-one-piece/img/Character_BoastJoint.png",
+     "name": "Nami",
+     "rarity": "epic"
+    }
+   ]
+  },
+  {
+   "type": "stat",
+   "p": 31,
+   "big": "Bell-mère",
+   "label": "ex oficial de la Marina, su mamá adoptiva"
+  },
+  {
+   "type": "stat",
+   "p": 32,
+   "big": "Solo fruta",
+   "label": "lo que comía Bell-mère cuando no alcanzaba"
+  },
+  {
+   "type": "stat",
+   "p": 34,
+   "big": "9 años",
+   "label": "Bell-mère crió a Nami y a Nojiko"
+  },
+  {
+   "type": "stat",
+   "p": 35,
+   "big": "Mapas",
+   "label": "Nami tuvo que dibujarlos para Arlong"
+  },
+  {
+   "type": "items",
+   "p": 36,
+   "title": "En la tienda hasta el 5 dic",
+   "items": [
+    {
+     "img": "../../tiendabad/video/long/2026-11-25-lugares-one-piece/img/Character_BoastJoint.png",
+     "name": "Nami",
+     "rarity": "epic",
+     "price": 1600
+    }
+   ]
+  },
+  {
+   "type": "map",
+   "p": 37,
+   "x": 988.7,
+   "y": 1382.2,
+   "z": 2.0,
+   "name": "Loguetown",
+   "sub": "Sur · cerca de Villa Molino",
+   "pins": [
+    {
+     "x": 988.7,
+     "y": 1382.2,
+     "label": ""
+    }
+   ],
+   "chapter": "Loguetown"
+  },
+  {
+   "type": "title",
+   "p": 38,
+   "kicker": "LOGUETOWN",
+   "lines": [
+    "La ciudad del",
+    "principio y del fin"
+   ]
+  },
+  {
+   "type": "stat",
+   "p": 39,
+   "big": "Gol D. Roger",
+   "label": "ahí nació, y ahí lo ejecutaron"
+  },
+  {
+   "type": "stat",
+   "p": 40,
+   "big": "Parada obligada",
+   "label": "para casi todos los barcos del East Blue"
+  },
+  {
+   "type": "items",
+   "p": 41,
+   "title": "Zoro · espadas nuevas",
+   "items": [
+    {
+     "img": "../../tiendabad/video/long/2026-11-25-lugares-one-piece/img/Character_BrandCreed.png",
+     "name": "Roronoa Zoro",
+     "rarity": "epic"
+    }
+   ]
+  },
+  {
+   "type": "stat",
+   "p": 42,
+   "big": "Yubashiri",
+   "label": "la espada más valiosa de Ipponmatsu"
+  },
+  {
+   "type": "items",
+   "p": 43,
+   "title": "Luffy y Buggy, en la plataforma",
+   "items": [
+    {
+     "img": "../../tiendabad/video/long/2026-11-25-lugares-one-piece/img/Character_CeleryStitch.png",
+     "name": "Monkey D. Luffy",
+     "rarity": "epic"
+    },
+    {
+     "img": "../../tiendabad/video/long/2026-11-25-lugares-one-piece/img/Character_FlipperBalm.png",
+     "name": "Buggy",
+     "rarity": "epic"
+    }
+   ]
+  },
+  {
+   "type": "stat",
+   "p": 45,
+   "big": "¡Un rayo!",
+   "label": "y la plataforma quedó destruida"
+  },
+  {
+   "type": "items",
+   "p": 46,
+   "title": "Lote Sombrero de paja: 3200",
+   "items": [
+    {
+     "img": "../../tiendabad/video/long/2026-11-25-lugares-one-piece/img/Character_BrandCreed.png",
+     "name": "Roronoa Zoro",
+     "rarity": "epic",
+     "price": 1800
+    },
+    {
+     "img": "../../tiendabad/video/long/2026-11-25-lugares-one-piece/img/Character_InsightBawl.png",
+     "name": "Sanji",
+     "rarity": "epic",
+     "price": 1600
+    }
+   ]
+  },
+  {
+   "type": "map",
+   "p": 47,
+   "chapter": "La ruta completa",
+   "x": 1022.9,
+   "y": 1205.9,
+   "z": 1.0,
+   "name": "La ruta completa",
+   "sub": "5 lugares de One Piece",
+   "pins": [
+    {
+     "x": 1031.1,
+     "y": 850.9,
+     "label": "1"
+    },
+    {
+     "x": 1411.1,
+     "y": 1476.8,
+     "label": "2"
+    },
+    {
+     "x": 634.8,
+     "y": 1123.2,
+     "label": "3"
+    },
+    {
+     "x": 710.1,
+     "y": 1560.9,
+     "label": "4"
+    },
+    {
+     "x": 988.7,
+     "y": 1382.2,
+     "label": "5"
+    }
+   ]
+  },
+  {
+   "type": "items",
+   "p": 48,
+   "title": "Los Sombreros de Paja en la tienda",
+   "items": [
+    {
+     "img": "../../tiendabad/video/long/2026-11-25-lugares-one-piece/img/Character_CeleryStitch.png",
+     "name": "Monkey D. Luffy",
+     "rarity": "epic",
+     "price": 1800
+    },
+    {
+     "img": "../../tiendabad/video/long/2026-11-25-lugares-one-piece/img/Character_BoastJoint.png",
+     "name": "Nami",
+     "rarity": "epic",
+     "price": 1600
+    },
+    {
+     "img": "../../tiendabad/video/long/2026-11-25-lugares-one-piece/img/Character_LoomRise.png",
+     "name": "Usopp",
+     "rarity": "epic",
+     "price": 1600
+    }
+   ]
+  },
+  {
+   "type": "stat",
+   "p": 49,
+   "big": "4000 pavos",
+   "label": "Lote One Piece: Luffy, Nami y Usopp, en vez de 8200"
+  },
+  {
+   "type": "stat",
+   "p": 50,
+   "big": "Hasta el 5 dic",
+   "label": "todo lo de One Piece en la tienda"
+  },
+  {
+   "type": "title",
+   "p": 51,
+   "chapter": "Final",
+   "kicker": "TU TURNO",
+   "lines": [
+    "¿Cuál es",
+    "tu favorito?"
+   ]
+  },
+  {
+   "type": "code",
+   "p": 52
+  }
+ ]
+}
