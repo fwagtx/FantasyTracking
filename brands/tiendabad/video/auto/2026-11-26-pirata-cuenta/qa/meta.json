@@ -1,0 +1,65 @@
+{
+ "duration": 21.4,
+ "caption": "#EpicPartner ¡Quedan 9 días para encontrar la Tienda Pirata! 🏴‍☠️ La búsqueda termina el 5 de diciembre\nCuando la activas, todo lo que cuesta pavos es gratis para ti por 14 días.\n¿Ya te salió? 👇\nUsa el código BAD en la tienda de objetos 💛\n#fortnite #tiendapirata #fortniteespañol",
+ "claims": [
+  {
+   "text": "La búsqueda termina el 5 de diciembre (hoy 2026-11-26: quedan 9 días)",
+   "source": "vgc-odds-confirmed.json",
+   "match": [
+    "is set to end on December 5"
+   ],
+   "visual": "2026-11-26 to 2026-12-05 is 9 days"
+  },
+  {
+   "text": "1 en 137 500 por cofre",
+   "source": "vgc-odds-confirmed.json",
+   "match": [
+    "Pirate Shop Access – 1 in 137,500"
+   ]
+  },
+  {
+   "text": "Dato del día: Todo lo que cuesta pavos, gratis",
+   "source": "vgc-odds-confirmed.json",
+   "match": [
+    "becomes entirely free to that player for the next 14 days"
+   ]
+  }
+ ],
+ "text": [
+  "TIENDA PIRATA",
+  "¡QUEDAN 9 DÍAS! / PARA ENCONTRARLA 🏴‍☠️",
+  "TERMINA / 5 DE DICIEMBRE",
+  "PROBABILIDAD / 1 EN 137 500 POR COFRE",
+  "14 DÍAS / TODO LO QUE CUESTA PAVOS, GRATIS",
+  "QUEDAN / 9 DÍAS",
+  "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+  "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+  "¡QUEDAN 9 DÍAS",
+  "PARA ENCONTRAR LA",
+  "TIENDA PIRATA!",
+  "LA BÚSQUEDA DEL",
+  "TESORO TERMINA EL",
+  "5 DE DICIEMBRE.",
+  "Y RECUERDA: SALE",
+  "EN 1 DE",
+  "CADA 137 500",
+  "COFRES.",
+  "DATO DEL DÍA:",
+  "CUANDO LA ACTIVAS,",
+  "TODO LO QUE",
+  "CUESTA PAVOS ES",
+  "GRATIS PARA TI",
+  "POR 14 DÍAS.",
+  "¿YA TE SALIÓ?",
+  "DÍMELO EN LOS",
+  "COMENTARIOS.",
+  "USA EL CÓDIGO",
+  "BAD EN LA",
+  "TIENDA DE OBJETOS.",
+  "¡GRACIAS POR VER!",
+  "SÍGUENOS PARA MÁS",
+  "CONTENIDO DIARIO.",
+  "#EPICPARTNER",
+  "LA TIENDITA BAD"
+ ]
+}

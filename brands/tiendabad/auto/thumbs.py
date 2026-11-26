@@ -157,7 +157,10 @@ def short_spec(folder):
         hook = [clean(l) for l in c["hook"]["lines"]]
         src = os.path.join(folder, "sources", "shop-entries.json")
         e = next((x for x in shop_entries(src) if entry_name(x) == one["label"]), None) if os.path.exists(src) else None
-        lines = ["LO MÁS CARO", "DE HOY"] if "más caro" in " ".join(hook).lower() else [hook[-1].upper()]
+        said = " ".join(hook).lower()
+        # 2026-11-26: the pick is usually today's NEW listings ("lo NUEVO de hoy:"), and older bundles still in the shop can
+        # cost more (Lote Overwatch 4200 vs the new #1 at 3500), so only an overall top 5 may say "LO MÁS CARO DE HOY"
+        lines = (["LO NUEVO", "MÁS CARO"] if "nuevo" in said else ["LO MÁS CARO", "DE HOY"]) if "más caro" in said else [hook[-1].upper()]
         spec = {"kind": "top", "lines": lines, "name": one["label"], "vbuck": vbuck()}
         if e and tile(e, folder):
             spec.update(hero=tile(e, folder), colors=e["colors"])
