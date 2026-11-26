@@ -104,7 +104,10 @@ def spoken(s):
     """How a shop name is said: $ is S, Spider-Man is "Spáider Man", and all-caps words are read as words, not letters."""
     for a, b in SAY.items():
         s = s.replace(a, b)
-    return " ".join(w.capitalize() if w.isupper() and len(w) > 2 else w for w in s.split(" "))
+    s = " ".join(w.capitalize() if w.isupper() and len(w) > 2 else w for w in s.split(" "))
+    for a, b in SAY.items():          # 2026-11-26: again once all-caps words are capitalized ("BIANCA BELAIR" -> "Bianca Belair")
+        s = s.replace(a, b)
+    return s
 
 
 def names_of(e):

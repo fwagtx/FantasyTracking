@@ -1,0 +1,412 @@
+{
+ "date": "2026-11-26T00:00:00Z",
+ "entries": [
+  {
+   "regularPrice": 6500,
+   "finalPrice": 2800,
+   "devName": "[VIRTUAL]1 x Don Eggcracker, 1 x BarnDoor Point of Sale Machine, 1 x Roaster's Dozen, 1 x Ken Kestrel, 1 x Raptorstriker Bag, 1 x Fal-Corps Field Axe, 1 x Ural the Sage, 1 x The Pellet of Prophecy, 1 x Talon of Night, 1 x Curse of the Flock for -1 MtxCurrency",
+   "offerId": "v2:/53555c612abdd09d1452222ffa396c97ebbb096b239f1e5c72793f325bfeb117",
+   "inDate": "2026-11-24T00:00:00Z",
+   "outDate": "2026-11-26T23:59:59.999Z",
+   "bundle": {
+    "name": "Lote Bandada",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/d6dfaba2343c5ffa/renderimage_0.png"
+   },
+   "banner": {
+    "value": "3700 monedas V de descuento",
+    "intensity": "Low",
+    "backendValue": "AmountOff"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -1,
+   "layoutId": "FlockedBirds.99",
+   "layout": {
+    "id": "FlockedBirds",
+    "name": "Pájaros parejos",
+    "index": 44,
+    "rank": 175,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "8dfdccff",
+    "color3": "108fa2ff",
+    "textBackgroundColor": "108fa2ff"
+   },
+   "tileSize": "Size_2_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_WiseBarn_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S38/DAv2_Bundle_Featured_WiseBarn",
+   "newDisplayAsset": {
+    "id": "DAv2_Bundle_Featured_WiseBarn",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__d6dfaba2343c5ffa_8cd5495b8abc9e5e.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/d6dfaba2343c5ffa/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__d6dfaba2343c5ffa_307307af8da70504.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/d6dfaba2343c5ffa/renderimage_1.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Character_RoosterRoast",
+     "name": "Cacareador cafetero",
+     "description": "El espresso es su especialidad.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "Barista gallardo",
+      "text": "Pieza del conjunto Barista gallardo.",
+      "backendValue": "DrunkBird"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "6",
+      "text": "Introducido en Capítulo 6, Temporada 6.",
+      "backendValue": 38
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_roosterroast/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_roosterroast/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_roosterroast/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_roosterroast/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_roosterroast/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_roosterroast/wide.png"
+      },
+      "bean": {
+       "small": "https://fortnite-api.com/images/cosmetics/beans/bean_roosterroast/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/beans/bean_roosterroast/large.png"
+      }
+     },
+     "showcaseVideo": "bUg-MWGzv3I",
+     "added": "2025-11-11T09:37:13Z"
+    },
+    {
+     "id": "Backpack_RoosterRoast",
+     "name": "Desplumador 3000",
+     "description": "¿Quiquiriquieres dejar propina?",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Barista gallardo",
+      "text": "Pieza del conjunto Barista gallardo.",
+      "backendValue": "DrunkBird"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "6",
+      "text": "Introducido en Capítulo 6, Temporada 6.",
+      "backendValue": 38
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_roosterroast/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_roosterroast/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_roosterroast/featured.png"
+     },
+     "added": "2025-11-11T09:37:13Z"
+    },
+    {
+     "id": "Pickaxe_RoosterRoast",
+     "name": "Café para llevar",
+     "description": "Un brindis por el gallinero",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Barista gallardo",
+      "text": "Pieza del conjunto Barista gallardo.",
+      "backendValue": "DrunkBird"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "6",
+      "text": "Introducido en Capítulo 6, Temporada 6.",
+      "backendValue": 38
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_roosterroast/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_roosterroast/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_roosterroast/featured.png"
+     },
+     "added": "2025-11-11T09:37:13Z"
+    },
+    {
+     "id": "Character_SwiftKestrel",
+     "name": "Héctor Halcón",
+     "description": "Líder de la Patrulla Halcón.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "Patrulla Halcón",
+      "text": "Pieza del conjunto Patrulla Halcón.",
+      "backendValue": "CompanyMuzzle"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "6",
+      "text": "Introducido en Capítulo 6, Temporada 6.",
+      "backendValue": 38
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_swiftkestrel/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_swiftkestrel/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_swiftkestrel/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_swiftkestrel/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_swiftkestrel/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_swiftkestrel/wide.png"
+      },
+      "bean": {
+       "small": "https://fortnite-api.com/images/cosmetics/beans/bean_swiftkestrel/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/beans/bean_swiftkestrel/large.png"
+      }
+     },
+     "showcaseVideo": "j3U5hkSwQOY",
+     "added": "2025-11-11T09:37:13Z"
+    },
+    {
+     "id": "Backpack_SwiftKestrel",
+     "name": "Funda rapaz",
+     "description": "Bolso reglamentario de la Patrulla Halcón.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Patrulla Halcón",
+      "text": "Pieza del conjunto Patrulla Halcón.",
+      "backendValue": "CompanyMuzzle"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "6",
+      "text": "Introducido en Capítulo 6, Temporada 6.",
+      "backendValue": 38
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_swiftkestrel/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_swiftkestrel/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_swiftkestrel/featured.png"
+     },
+     "added": "2025-11-11T09:37:13Z"
+    },
+    {
+     "id": "Pickaxe_SwiftKestrel",
+     "name": "Hacha táctica de la Patrulla Halcón",
+     "description": "Siempre lleva una garra de repuesto, colega.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Patrulla Halcón",
+      "text": "Pieza del conjunto Patrulla Halcón.",
+      "backendValue": "CompanyMuzzle"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "6",
+      "text": "Introducido en Capítulo 6, Temporada 6.",
+      "backendValue": 38
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_swiftkestrel/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_swiftkestrel/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_swiftkestrel/featured.png"
+     },
+     "added": "2025-11-11T09:37:13Z"
+    },
+    {
+     "id": "Character_WiseBarn",
+     "name": "Ululato el Sabio",
+     "description": "Consultemos el buhonomicón…",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "Pluma encantada",
+      "text": "Pieza del conjunto Pluma encantada.",
+      "backendValue": "SteadySpell"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "6",
+      "text": "Introducido en Capítulo 6, Temporada 6.",
+      "backendValue": 38
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_wisebarn/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_wisebarn/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_wisebarn/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_wisebarn/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_wisebarn/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_wisebarn/wide.png"
+      },
+      "bean": {
+       "small": "https://fortnite-api.com/images/cosmetics/beans/bean_wisebarn/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/beans/bean_wisebarn/large.png"
+      }
+     },
+     "showcaseVideo": "da5bHaUxF94",
+     "added": "2025-11-11T09:37:13Z"
+    },
+    {
+     "id": "Backpack_WiseBarn",
+     "name": "Bola de cristal profética",
+     "description": "Los vientos del futuro. Los huesos del pasado.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Pluma encantada",
+      "text": "Pieza del conjunto Pluma encantada.",
+      "backendValue": "SteadySpell"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "6",
+      "text": "Introducido en Capítulo 6, Temporada 6.",
+      "backendValue": 38
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_wisebarn/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_wisebarn/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_wisebarn/featured.png"
+     },
+     "added": "2025-11-11T09:37:13Z"
+    },
+    {
+     "id": "Pickaxe_WiseBarn",
+     "name": "Garra nocturna",
+     "description": "Los roedores del mundo le temen.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Pluma encantada",
+      "text": "Pieza del conjunto Pluma encantada.",
+      "backendValue": "SteadySpell"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "6",
+      "text": "Introducido en Capítulo 6, Temporada 6.",
+      "backendValue": 38
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_wisebarn/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_wisebarn/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_wisebarn/featured.png"
+     },
+     "added": "2025-11-11T09:37:13Z"
+    },
+    {
+     "id": "Wrap_WiseBarn",
+     "name": "Maldición aviar",
+     "description": "Muestra tu estilo.",
+     "type": {
+      "value": "wrap",
+      "displayValue": "Papel",
+      "backendValue": "AthenaItemWrap"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Pluma encantada",
+      "text": "Pieza del conjunto Pluma encantada.",
+      "backendValue": "SteadySpell"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "6",
+      "text": "Introducido en Capítulo 6, Temporada 6.",
+      "backendValue": 38
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/wrap_wisebarn/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/wrap_wisebarn/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/wrap_wisebarn/featured.png"
+     },
+     "added": "2025-11-11T09:37:13Z"
+    }
+   ]
+  }
+ ]
+}

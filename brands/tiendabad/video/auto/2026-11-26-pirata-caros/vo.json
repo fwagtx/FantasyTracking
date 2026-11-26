@@ -1,0 +1,101 @@
+{
+ "phrases": [
+  {
+   "text": "Lo nuevo más caro de la tienda de hoy… ¡y con la Tienda Pirata te lo llevarías sin gastar ni un pavo!",
+   "pause": 0.15
+  },
+  {
+   "text": "Número cinco: Lote de Equipo de arbitraje.",
+   "pause": 0.15
+  },
+  {
+   "text": "Cuesta…",
+   "pause": 0.5
+  },
+  {
+   "text": "¡2000 pavos!",
+   "pause": 0.2
+  },
+  {
+   "text": "Y empatado: Lote de Árbitro renegado.",
+   "pause": 0.15
+  },
+  {
+   "text": "Número cuatro: LOTE BECKY LYNCH Y BIANCA BELAIR.",
+   "pause": 0.15,
+   "say": "Número cuatro: Lote Becky Lynch Y Bianca Belér."
+  },
+  {
+   "text": "Cuesta…",
+   "pause": 0.5
+  },
+  {
+   "text": "¡2400 pavos!",
+   "pause": 0.2
+  },
+  {
+   "text": "Número tres: Lote KizunaAI.",
+   "pause": 0.15,
+   "say": "Número tres: Lote Kizuna Ai."
+  },
+  {
+   "text": "Cuesta…",
+   "pause": 0.5
+  },
+  {
+   "text": "¡3200 pavos!",
+   "pause": 0.2
+  },
+  {
+   "text": "Número dos: LOTE PUNTO EXTRA.",
+   "pause": 0.15,
+   "say": "Número dos: Lote Punto Extra."
+  },
+  {
+   "text": "Cuesta…",
+   "pause": 0.5
+  },
+  {
+   "text": "¡3500 pavos!",
+   "pause": 0.2
+  },
+  {
+   "text": "¿Y el número uno?",
+   "pause": 0.6
+  },
+  {
+   "text": "¡LOTE CARRERA DEFINITIVA!",
+   "pause": 0.15,
+   "say": "¡Lote Carrera Definitiva!"
+  },
+  {
+   "text": "Cuesta…",
+   "pause": 0.5
+  },
+  {
+   "text": "¡También 3500 pavos!",
+   "pause": 0.2
+  },
+  {
+   "text": "Y su precio normal es de 7500.",
+   "pause": 0.15
+  },
+  {
+   "text": "¡Con la Tienda Pirata: cero pavos!",
+   "pause": 0.65
+  },
+  {
+   "text": "Con la Tienda Pirata, todo lo que cuesta pavos es gratis por 14 días. ¿Cuál te llevarías?",
+   "pause": 0.2
+  },
+  {
+   "text": "Usa el código BAD en la tienda de objetos.",
+   "pause": 0.25,
+   "say": "Usa el código bad, en la tienda de objetos."
+  },
+  {
+   "text": "¡Gracias por ver! Síguenos para más contenido diario.",
+   "pause": 0.3
+  }
+ ]
+}

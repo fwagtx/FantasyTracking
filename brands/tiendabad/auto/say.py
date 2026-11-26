@@ -28,7 +28,9 @@ SAY = {"A$AP Rocky": "Éisap Róqui",            # before "$": the voice read "A
        "Panther (P5R)": "Pánter, de Persona 5 Róial",   # 2026-11-25: "(P5R)" was read "pe cinco erre"
        "Addison Rae": "Ádison Réi",            # 2026-11-25: was "ad-dí-son rá-e"
        "MrSavage": "Míster Sávich",            # 2026-11-25: was "eme-erre sa-vá-je"
-       "Killian": "Kílian"}                    # 2026-11-26: the "ll" was read as a y ("Ki-yian")
+       "Killian": "Kílian",                    # 2026-11-26: the "ll" was read as a y ("Ki-yian")
+       "KizunaAI": "Kizuna Ai",                # 2026-11-26: "AI" was read "a-í" (like "ahí"); the name is "Kizuna Ai"
+       "Bianca Belair": "Bianca Belér"}        # 2026-11-26: "Belair" was read "be-láir"; it rhymes with "air"
 
 
 def say_names(s):
