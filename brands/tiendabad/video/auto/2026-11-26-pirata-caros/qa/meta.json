@@ -1,0 +1,128 @@
+{
+ "duration": 42.5,
+ "caption": "#EpicPartner Lo nuevo más caro de la tienda de hoy 💸 El #1: LOTE CARRERA DEFINITIVA, 3500 pavos… y con la Tienda Pirata te lo llevarías sin gastar ni un pavo 🏴‍☠️\n¿Cuál te llevarías? 👇\nUsa el código BAD en la tienda de objetos 💛\n#fortnite #tiendapirata #tiendafortnite",
+ "claims": [
+  {
+   "text": "Lote de Árbitro renegado también cuesta 2000 pavos hoy",
+   "source": "shop-entries.json",
+   "match": [
+    "Lote de Árbitro renegado",
+    "\"finalPrice\": 2000"
+   ]
+  },
+  {
+   "text": "Lote de Equipo de arbitraje: 2000 pavos en la tienda de hoy (2026-11-26), nuevo hoy",
+   "source": "shop-entries.json",
+   "match": [
+    "Lote de Equipo de arbitraje",
+    "\"finalPrice\": 2000",
+    "\"date\": \"2026-11-26T00:00:00Z\"",
+    "\"inDate\": \"2026-11-26T00:00:00Z\""
+   ]
+  },
+  {
+   "text": "LOTE BECKY LYNCH Y BIANCA BELAIR: 2400 pavos en la tienda de hoy (2026-11-26), nuevo hoy",
+   "source": "shop-entries.json",
+   "match": [
+    "LOTE BECKY LYNCH Y BIANCA BELAIR",
+    "\"finalPrice\": 2400",
+    "\"date\": \"2026-11-26T00:00:00Z\"",
+    "\"inDate\": \"2026-11-26T00:00:00Z\""
+   ]
+  },
+  {
+   "text": "Lote KizunaAI: 3200 pavos en la tienda de hoy (2026-11-26), nuevo hoy",
+   "source": "shop-entries.json",
+   "match": [
+    "Lote KizunaAI",
+    "\"finalPrice\": 3200",
+    "\"date\": \"2026-11-26T00:00:00Z\"",
+    "\"inDate\": \"2026-11-26T00:00:00Z\""
+   ]
+  },
+  {
+   "text": "LOTE PUNTO EXTRA: 3500 pavos en la tienda de hoy (2026-11-26), nuevo hoy",
+   "source": "shop-entries.json",
+   "match": [
+    "LOTE PUNTO EXTRA",
+    "\"finalPrice\": 3500",
+    "\"date\": \"2026-11-26T00:00:00Z\"",
+    "\"inDate\": \"2026-11-26T00:00:00Z\""
+   ]
+  },
+  {
+   "text": "LOTE CARRERA DEFINITIVA: precio normal 7500 pavos",
+   "source": "shop-entries.json",
+   "match": [
+    "LOTE CARRERA DEFINITIVA",
+    "\"regularPrice\": 7500"
+   ]
+  },
+  {
+   "text": "LOTE CARRERA DEFINITIVA: 3500 pavos en la tienda de hoy (2026-11-26), nuevo hoy",
+   "source": "shop-entries.json",
+   "match": [
+    "LOTE CARRERA DEFINITIVA",
+    "\"finalPrice\": 3500",
+    "\"date\": \"2026-11-26T00:00:00Z\"",
+    "\"inDate\": \"2026-11-26T00:00:00Z\""
+   ]
+  },
+  {
+   "text": "Con la Tienda Pirata, todo lo que cuesta pavos es gratis por 14 días",
+   "source": "vgc-odds-confirmed.json",
+   "match": [
+    "every single item in the Fortnite Shop which costs V-Bucks",
+    "becomes entirely free to that player for the next 14 days"
+   ]
+  }
+ ],
+ "text": [
+  "LO NUEVO DE HOY:",
+  "LO MÁS CARO 💸",
+  "¿CUÁNTO CUESTA? 👀",
+  "¿Y CON LA TIENDA PIRATA? 🏴‍☠️",
+  "#5",
+  "LOTE DE EQUIPO DE ARBITRAJE",
+  "CUESTA",
+  "EMPATA CON LOTE DE ÁRBITRO RENEGADO",
+  "???? PAVOS",
+  "600 PAVOS",
+  "1400 PAVOS",
+  "2000 PAVOS",
+  "#4",
+  "LOTE BECKY LYNCH Y BIANCA BELAIR",
+  "700 PAVOS",
+  "1600 PAVOS",
+  "2400 PAVOS",
+  "#3",
+  "LOTE KIZUNAAI",
+  "900 PAVOS",
+  "2200 PAVOS",
+  "3200 PAVOS",
+  "#2",
+  "LOTE PUNTO EXTRA",
+  "1000 PAVOS",
+  "3500 PAVOS",
+  "#1",
+  "LOTE CARRERA DEFINITIVA",
+  "PRECIO NORMAL: 7500",
+  "CON LA TIENDA PIRATA: 0 PAVOS 🏴‍☠️",
+  "Y EL #1 ES… 🥁",
+  "LO NUEVO MÁS CARO 💸",
+  "¿CUÁL TE LLEVARÍAS? 👇",
+  "#2 · 3500",
+  "#1 · 3500",
+  "#3 · 3200",
+  "#4 · 2400",
+  "#5 · 2000",
+  "USA EL CÓDIGO BAD EN LA TIENDA DE OBJETOS 🛒",
+  "APOYA A UN CREADOR",
+  "#EPICPARTNER",
+  "ACEPTAR",
+  "✓ APOYANDO A: BAD",
+  "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+  "LA TIENDITA BAD",
+  "USA EL CÓDIGO: BAD"
+ ]
+}
