@@ -27,7 +27,8 @@ SAY = {"A$AP Rocky": "Éisap Róqui",            # before "$": the voice read "A
        "Persona 5 Royal": "Persona 5 Róial",   # 2026-11-25: "Royal" was read "ro-yál"; whole name keyed so "Battle Royale" stays as is
        "Panther (P5R)": "Pánter, de Persona 5 Róial",   # 2026-11-25: "(P5R)" was read "pe cinco erre"
        "Addison Rae": "Ádison Réi",            # 2026-11-25: was "ad-dí-son rá-e"
-       "MrSavage": "Míster Sávich"}            # 2026-11-25: was "eme-erre sa-vá-je"
+       "MrSavage": "Míster Sávich",            # 2026-11-25: was "eme-erre sa-vá-je"
+       "Killian": "Kílian"}                    # 2026-11-26: the "ll" was read as a y ("Ki-yian")
 
 
 def say_names(s):

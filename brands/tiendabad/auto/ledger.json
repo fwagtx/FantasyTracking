@@ -701,6 +701,19 @@
    "format": "Tienda Pirata diaria (cuenta)",
    "topic": "Quedan 10 días · dato: hasta ×2",
    "folder": "video/auto/2026-11-25-pirata-cuenta"
+  },
+  {
+   "date": "2026-12-03",
+   "slot": "20:30",
+   "format": "Adivina la temporada",
+   "topic": "Killian (C5 T1), Salpicaderella (C2 T3), Addison Rae (C7 T3)",
+   "folder": "video/auto/2026-12-03-adivina-temporada",
+   "ids": [
+    "Character_StrontiumSpark",
+    "CID_832_Athena_Commando_F_AntiLlama",
+    "Character_SprintLuckSweat"
+   ],
+   "note": "Every map place has had its '¿Dónde está?', so this 8:30 PM slot got the other evergreen format again; whether to repeat places instead is still a question for the owner."
   }
  ]
 }
