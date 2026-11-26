@@ -1,6 +1,6 @@
 # Pre-post check: latienditabad-2026-11-26-pirata-caros.mp4
 
-Checked 2026-11-26T19:41:12Z · **READY TO POST**
+Checked 2026-11-26T19:47:28Z · **READY TO POST**
 
 ## 1. Facts: PASS
 8/8 claims verified against saved official data
