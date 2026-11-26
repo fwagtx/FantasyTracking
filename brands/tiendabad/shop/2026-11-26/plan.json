@@ -1,0 +1,161 @@
+{
+ "date": "2026-11-26",
+ "dateLabel": "26 NOV",
+ "dateLong": "26 de noviembre",
+ "resetLabel": "6 PM",
+ "resetZone": "CDMX",
+ "dealOutLabel": "6 DIC",
+ "dealOutTime": "6 PM",
+ "deal": {
+  "name": "Lote A$AP Rocky",
+  "final": 3200,
+  "regular": 8800,
+  "out": "2026-12-06T23:59:59.999Z",
+  "outfits": [
+   {
+    "id": "Character_TonicMailWeb",
+    "name": "Flacko Helicopter",
+    "rarity": "Serie de ídolos",
+    "rarityKey": "icon",
+    "series": "Serie de ídolos",
+    "img": "https://fortnite-api.com/images/cosmetics/br/character_tonicmailweb/featured.png",
+    "price": null,
+    "out": null
+   },
+   {
+    "id": "Character_TonicMailYam",
+    "name": "Rocky Rugahand",
+    "rarity": "Serie de ídolos",
+    "rarityKey": "icon",
+    "series": "Serie de ídolos",
+    "img": "https://fortnite-api.com/images/cosmetics/br/character_tonicmailyam/featured.png",
+    "price": 1500,
+    "out": "2026-12-06"
+   }
+  ],
+  "saving": 5600,
+  "pct": 64
+ },
+ "dealBest": false,
+ "og": {
+  "chapter": 1,
+  "season": 6,
+  "gapDays": 290,
+  "gapName": null,
+  "outfits": [
+   {
+    "id": "CID_215_Athena_Commando_M_FootballReferee",
+    "name": "Recluta rayado",
+    "rarity": "Poco común",
+    "rarityKey": "uncommon",
+    "series": null,
+    "img": "https://fortnite-api.com/images/cosmetics/br/cid_215_athena_commando_m_footballreferee/featured.png",
+    "price": 800,
+    "out": "2026-11-29",
+    "gapDays": 290
+   },
+   {
+    "id": "CID_214_Athena_Commando_F_FootballReferee",
+    "name": "Soldado del silbato",
+    "rarity": "Poco común",
+    "rarityKey": "uncommon",
+    "series": null,
+    "img": "https://fortnite-api.com/images/cosmetics/br/cid_214_athena_commando_f_footballreferee/featured.png",
+    "price": 800,
+    "out": "2026-11-29",
+    "gapDays": 290
+   }
+  ]
+ },
+ "last": {
+  "count": 26,
+  "outfits": [
+   {
+    "id": "Character_AccentWall",
+    "name": "Davy Jones",
+    "rarity": "Épico",
+    "rarityKey": "epic",
+    "series": null,
+    "img": "https://fortnite-api.com/images/cosmetics/br/character_accentwall/featured.png",
+    "price": 1600,
+    "out": null
+   },
+   {
+    "id": "Character_StoneLion",
+    "name": "Elizabeth Swann",
+    "rarity": "Épico",
+    "rarityKey": "epic",
+    "series": null,
+    "img": "https://fortnite-api.com/images/cosmetics/br/character_stonelion/featured.png",
+    "price": 1600,
+    "out": null
+   },
+   {
+    "id": "Character_DomeRoof",
+    "name": "Capitán Barbosa",
+    "rarity": "Épico",
+    "rarityKey": "epic",
+    "series": null,
+    "img": "https://fortnite-api.com/images/cosmetics/br/character_domeroof/featured.png",
+    "price": 1500,
+    "out": null
+   },
+   {
+    "id": "Character_PeaceScarf",
+    "name": "Dr. Doofenshmirtz",
+    "rarity": "Épico",
+    "rarityKey": "epic",
+    "series": null,
+    "img": "https://fortnite-api.com/images/cosmetics/br/character_peacescarf/featured.png",
+    "price": 1500,
+    "out": null
+   },
+   {
+    "id": "CID_682_Athena_Commando_M_VirtualShadow",
+    "name": "Dragón de humo",
+    "rarity": "Épico",
+    "rarityKey": "epic",
+    "series": null,
+    "img": "https://fortnite-api.com/images/cosmetics/br/cid_682_athena_commando_m_virtualshadow/featured.png",
+    "price": 1500,
+    "out": "2026-11-26"
+   },
+   {
+    "id": "Character_SpringBreak",
+    "name": "Jack Sparrow",
+    "rarity": "Épico",
+    "rarityKey": "epic",
+    "series": null,
+    "img": "https://fortnite-api.com/images/cosmetics/br/character_springbreak/featured.png",
+    "price": 1500,
+    "out": "2026-11-26"
+   }
+  ]
+ },
+ "roles": [
+  "intro",
+  "hook",
+  "deal_name",
+  "deal_price",
+  "saving",
+  "og_name",
+  "og_era",
+  "last",
+  "ask",
+  "code",
+  "thanks"
+ ],
+ "phrases": [
+  "Esta es la tienda de objetos de hoy, 26 de noviembre.",
+  "¡Tres cosas antes de gastar un solo pavo!",
+  "El Lote A$AP Rocky:",
+  "3200 pavos, en vez de 8800.",
+  "¡Te ahorras 5600!",
+  "Recluta rayado y Soldado del silbato están en la tienda.",
+  "Las dos son del Capítulo 1, Temporada 6, y no salían desde hace 290 días.",
+  "Y 26 skins están en su último día, 15 de ellas épicas.",
+  "¿Vas a comprar algo hoy?",
+  "Usa el código BAD en la tienda de objetos. Le ayuda muchísimo al canal.",
+  "¡Gracias por ver! Síguenos para más contenido diario."
+ ]
+}

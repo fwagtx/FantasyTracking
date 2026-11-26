@@ -1,0 +1,115 @@
+{
+ "duration": 29.7,
+ "caption": "#EpicPartner Tienda de objetos de Fortnite, 26 de noviembre: el Lote A$AP Rocky cuesta 3200 V-Bucks en vez de 8800 (ahorras 5600), Recluta rayado y Soldado del silbato están en la tienda (Capítulo 1, Temporada 6, 290 días sin salir) y 26 skins se van el 26 de noviembre a las 6 PM (CDMX).\n¿Vas a comprar hoy? Usa el código BAD en la tienda de objetos.\n#Fortnite #TiendaFortnite #FortniteTienda",
+ "claims": [
+  {
+   "text": "Lote A$AP Rocky: 3200 V-Bucks, regular 8800",
+   "source": "shop.json",
+   "match": [
+    "Lote A$AP Rocky",
+    "\"finalPrice\": 3200",
+    "\"regularPrice\": 8800"
+   ]
+  },
+  {
+   "text": "Recluta rayado: Capítulo 1, Temporada 6",
+   "source": "history.json",
+   "match": [
+    "Recluta rayado",
+    "\"chapter\": 1",
+    "\"season\": 6"
+   ]
+  },
+  {
+   "text": "Soldado del silbato: Capítulo 1, Temporada 6",
+   "source": "history.json",
+   "match": [
+    "Soldado del silbato",
+    "\"chapter\": 1",
+    "\"season\": 6"
+   ]
+  },
+  {
+   "text": "290 days since last in the shop",
+   "source": "history.json",
+   "match": [
+    "\"gapDays\": 290"
+   ]
+  },
+  {
+   "text": "26 outfits leave at the next reset",
+   "source": "plan.json",
+   "match": [
+    "\"count\": 26"
+   ]
+  }
+ ],
+ "text": [
+  "FLACKO HELICOPTER",
+  "SOLDADO DEL SILBATO",
+  "DAVY JONES",
+  "OFERTA",
+  "OG",
+  "ÚLTIMO DÍA",
+  "TIENDA DE HOY / 26 NOV",
+  "1 · OFERTA",
+  "ROCKY RUGAHAND",
+  "3200",
+  "8800",
+  "LOTE A$AP ROCKY · SE VA EL 6 DIC",
+  "-64% / AHORRAS 5600",
+  "2 · REGRESO OG",
+  "RECLUTA RAYADO",
+  "CAPÍTULO 1 · TEMPORADA 6",
+  "¡290 DÍAS SIN SALIR!",
+  "3 · ÚLTIMO DÍA",
+  "ELIZABETH SWANN",
+  "CAPITÁN BARBOSA",
+  "DR. DOOFENSHMIRTZ",
+  "DRAGÓN DE HUMO",
+  "JACK SPARROW",
+  "+20 MÁS",
+  "SE VAN EL 26 NOV, 6 PM",
+  "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+  "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+  "ESTA ES LA",
+  "TIENDA DE OBJETOS",
+  "DE HOY,",
+  "26 DE NOVIEMBRE.",
+  "¡TRES COSAS ANTES",
+  "DE GASTAR UN",
+  "SOLO PAVO!",
+  "EL LOTE A$AP",
+  "ROCKY:",
+  "3200 PAVOS,",
+  "EN VEZ DE",
+  "8800.",
+  "¡TE AHORRAS 5600!",
+  "RECLUTA RAYADO Y",
+  "ESTÁN EN LA",
+  "TIENDA.",
+  "LAS DOS SON",
+  "DEL CAPÍTULO 1,",
+  "TEMPORADA 6,",
+  "Y NO SALÍAN",
+  "DESDE HACE 290",
+  "DÍAS.",
+  "Y 26 SKINS",
+  "ESTÁN EN SU",
+  "ÚLTIMO DÍA,",
+  "15 DE ELLAS",
+  "ÉPICAS.",
+  "¿VAS A COMPRAR",
+  "ALGO HOY?",
+  "USA EL CÓDIGO",
+  "BAD EN LA",
+  "TIENDA DE OBJETOS.",
+  "LE AYUDA MUCHÍSIMO",
+  "AL CANAL.",
+  "¡GRACIAS POR VER!",
+  "SÍGUENOS PARA MÁS",
+  "CONTENIDO DIARIO.",
+  "#EPICPARTNER",
+  "LA TIENDITA BAD"
+ ]
+}
