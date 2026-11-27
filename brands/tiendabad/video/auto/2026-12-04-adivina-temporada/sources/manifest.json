@@ -1,0 +1,23 @@
+{
+ "via": "fortnite-api.com (mirror of Epic's cosmetics data, es-419)",
+ "files": [
+  {
+   "file": "CID_959_Athena_Commando_M_Corny.json",
+   "source": "Epic cosmetics data for Mazorquín (es-419)",
+   "url": "https://fortnite-api.com/v2/cosmetics/br/CID_959_Athena_Commando_M_Corny?language=es-419",
+   "fetched_utc": "2026-11-27T17:09:38Z"
+  },
+  {
+   "file": "CID_330_Athena_Commando_F_IceQueen.json",
+   "source": "Epic cosmetics data for La reina del hielo (es-419)",
+   "url": "https://fortnite-api.com/v2/cosmetics/br/CID_330_Athena_Commando_F_IceQueen?language=es-419",
+   "fetched_utc": "2026-11-27T17:09:38Z"
+  },
+  {
+   "file": "Character_SkiffGrind.json",
+   "source": "Epic cosmetics data for D.Va (es-419)",
+   "url": "https://fortnite-api.com/v2/cosmetics/br/Character_SkiffGrind?language=es-419",
+   "fetched_utc": "2026-11-27T17:09:38Z"
+  }
+ ]
+}
