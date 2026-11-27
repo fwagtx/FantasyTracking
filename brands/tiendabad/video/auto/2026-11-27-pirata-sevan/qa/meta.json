@@ -1,0 +1,105 @@
+{
+ "duration": 25,
+ "caption": "#EpicPartner Se va HOY de la tienda ⏰ Lote One Punch Man: 3800 pavos (normalmente 11900)… y con la Tienda Pirata, 0 pavos 🏴‍☠️\n¿Te lo llevarías? 👇\nUsa el código BAD en la tienda de objetos 💛\n#fortnite #tiendapirata #tiendafortnite",
+ "claims": [
+  {
+   "text": "Lote One Punch Man: 3800 pavos (normalmente 11900) en la tienda de hoy (2026-11-27)",
+   "source": "shop-entry.json",
+   "match": [
+    "Lote One Punch Man",
+    "\"finalPrice\": 3800",
+    "\"regularPrice\": 11900",
+    "\"date\": \"2026-11-27T00:00:00Z\""
+   ]
+  },
+  {
+   "text": "Se va hoy a las 6 PM (CDMX): outDate 2026-11-27T23:59:59.999Z",
+   "source": "shop-entry.json",
+   "match": [
+    "\"outDate\": \"2026-11-27T23:59:59.999Z\""
+   ],
+   "visual": "23:59 UTC is 5:59 PM in Mexico City (UTC-6): it leaves at the 6 PM reset"
+  },
+  {
+   "text": "Trae 3 skins, 5 mochilas, 5 picos, un planeador, 3 gestos y un envoltorio",
+   "source": "shop-entry.json",
+   "match": [
+    "Saitama",
+    "Genos",
+    "Tornado del Terror",
+    "Centichoro",
+    "Puño martillo mecánico",
+    "Bolsa de supermercado",
+    "Filo telequinético",
+    "Rutina de Saitama",
+    "Ok",
+    "Psicoquinesis",
+    "Núcleo de Genos",
+    "Despertador de Saitama",
+    "Minitornado del Terror",
+    "One Punch Man",
+    "Kit de One-Punch Man",
+    "Voz psicoquinética",
+    "Kit de One-Punch Man",
+    "Voz psicoquinética"
+   ]
+  },
+  {
+   "text": "Con la Tienda Pirata, todo lo que cuesta pavos es gratis por 14 días",
+   "source": "vgc-odds-confirmed.json",
+   "match": [
+    "every single item in the Fortnite Shop which costs V-Bucks",
+    "becomes entirely free to that player for the next 14 days"
+   ]
+  }
+ ],
+ "text": [
+  "¡SE VA HOY! ⏰ / ¿Y LA TIENDA PIRATA? 🏴‍☠️",
+  "GENOS",
+  "SAITAMA",
+  "TORNADO DEL TERROR",
+  "LOTE ONE PUNCH MAN",
+  "3 SKINS, 5 MOCHILAS, 5 PICOS, UN PLANEADOR, 3 GESTOS Y UN ENVOLTORIO",
+  "3800 PAVOS",
+  "SE VA HOY · 6 PM (CDMX)",
+  "¿Y SI HOY",
+  "TE SALE LA",
+  "TIENDA PIRATA?",
+  "ESTO SE VA",
+  "HOY DE LA",
+  "TIENDA.",
+  "EL LOTE ONE",
+  "PUNCH MAN.",
+  "TRAE 3 SKINS,",
+  "5 MOCHILAS,",
+  "5 PICOS,",
+  "UN PLANEADOR,",
+  "3 GESTOS Y",
+  "UN ENVOLTORIO.",
+  "CUESTA 3800 PAVOS,",
+  "Y NORMALMENTE 11900.",
+  "Y SE VA",
+  "HOY A LAS",
+  "6 DE LA",
+  "TARDE,",
+  "HORA DE LA",
+  "CIUDAD DE MÉXICO.",
+  "CON LA TIENDA",
+  "PIRATA,",
+  "TE LO LLEVARÍAS",
+  "SIN GASTAR NI",
+  "UN PAVO.",
+  "¿TE LO LLEVARÍAS?",
+  "USA EL CÓDIGO",
+  "BAD EN LA",
+  "TIENDA DE OBJETOS.",
+  "¡GRACIAS POR VER!",
+  "SÍGUENOS PARA MÁS",
+  "CONTENIDO DIARIO.",
+  "#EPICPARTNER",
+  "LA TIENDITA BAD",
+  "¿TE LO / LLEVARÍAS?",
+  "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+  "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO"
+ ]
+}
