@@ -1,0 +1,4 @@
+{
+ "status": "PASS",
+ "notes": "Adivina la temporada for Dec 4, 8:30 PM: Mazorquín (Capítulo 2, Temporada 4), La reina del hielo (Capítulo 1, Temporada 7), D.Va (Capítulo 7, Temporada 2), picked by new_guess.py auto from today's shop and checked against Epic's cosmetics data in sources/. 25.1 s, 1080x1920. Frame 1 stops the scroll: 'ADIVINA LA TEMPORADA / 3 SKINS · SIN TRAMPA' with the three tiles behind '?'. Each round: tile 1/3, 2/3, 3/3 with the name, the 3-2-1 countdown and '¿QUÉ TEMPORADA?', then the yellow 'CAPÍTULO X · TEMPORADA Y' banner as the voice says it. Ends on the code card with ¡GRACIAS POR VER!. Checked twelve stills from 0.4 to 24.8 s: names and banners readable on a phone, nothing cut off or overlapping, #EpicPartner and logo in the corners. None of the three had its season said in today's shop video or the long videos (Mazorquín and D.Va appeared in the Nov 23 long video with their bundle prices only). The voice says 'Di Va' (auto/say.py)."
+}

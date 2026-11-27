@@ -735,6 +735,19 @@
    "format": "Tienda Pirata diaria (cuenta)",
    "topic": "Quedan 9 días · dato: 14 días",
    "folder": "video/auto/2026-11-26-pirata-cuenta"
+  },
+  {
+   "date": "2026-12-04",
+   "slot": "20:30",
+   "format": "Adivina la temporada",
+   "topic": "Mazorquín (C2 T4), La reina del hielo (C1 T7), D.Va (C7 T2)",
+   "folder": "video/auto/2026-12-04-adivina-temporada",
+   "ids": [
+    "CID_959_Athena_Commando_M_Corny",
+    "CID_330_Athena_Commando_F_IceQueen",
+    "Character_SkiffGrind"
+   ],
+   "note": "Every map place has had its '¿Dónde está?', so this 8:30 PM slot got the other evergreen format again; whether to repeat places instead is still a question for the owner."
   }
  ]
 }

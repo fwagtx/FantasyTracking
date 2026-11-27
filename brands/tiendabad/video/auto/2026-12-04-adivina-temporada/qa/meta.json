@@ -1,0 +1,78 @@
+{
+ "duration": 25.5,
+ "caption": "#EpicPartner Adivina la temporada 👀 Solo los verdaderos OG aciertan las 3\n¿Cuántas acertaste? 👇\nUsa el código BAD en la tienda de objetos 💛\n#fortnite #fortniteog #adivinalatemporada",
+ "claims": [
+  {
+   "text": "Mazorquín: Capítulo 2, Temporada 4",
+   "source": "CID_959_Athena_Commando_M_Corny.json",
+   "match": [
+    "Mazorquín",
+    "\"chapter\": \"2\"",
+    "\"season\": \"4\""
+   ]
+  },
+  {
+   "text": "La reina del hielo: Capítulo 1, Temporada 7",
+   "source": "CID_330_Athena_Commando_F_IceQueen.json",
+   "match": [
+    "La reina del hielo",
+    "\"chapter\": \"1\"",
+    "\"season\": \"7\""
+   ]
+  },
+  {
+   "text": "D.Va: Capítulo 7, Temporada 2",
+   "source": "Character_SkiffGrind.json",
+   "match": [
+    "D.Va",
+    "\"chapter\": \"7\"",
+    "\"season\": \"2\""
+   ]
+  }
+ ],
+ "text": [
+  "MAZORQUÍN",
+  "LA REINA DEL HIELO",
+  "D.VA",
+  "?",
+  "ADIVINA LA TEMPORADA / 3 SKINS · SIN TRAMPA",
+  "1 / 3",
+  "CUENTA",
+  "CAPÍTULO 2 · TEMPORADA 4",
+  "¿QUÉ TEMPORADA?",
+  "2 / 3",
+  "CAPÍTULO 1 · TEMPORADA 7",
+  "3 / 3",
+  "CAPÍTULO 7 · TEMPORADA 2",
+  "¿CUÁNTAS / ACERTASTE?",
+  "¡ADIVINA LA TEMPORADA!",
+  "SOLO LOS VERDADEROS",
+  "OG ACIERTAN LAS",
+  "TRES.",
+  "MAZORQUÍN.",
+  "¡CAPÍTULO 2,",
+  "TEMPORADA 4!",
+  "LA REINA DEL",
+  "HIELO.",
+  "¡CAPÍTULO 1,",
+  "TEMPORADA 7!",
+  "D.VA.",
+  "¡CAPÍTULO 7,",
+  "TEMPORADA 2!",
+  "¿CUÁNTAS ACERTASTE?",
+  "DÍMELO EN LOS",
+  "COMENTARIOS.",
+  "USA EL CÓDIGO",
+  "BAD EN LA",
+  "TIENDA DE OBJETOS.",
+  "LE AYUDA MUCHÍSIMO",
+  "AL CANAL.",
+  "¡GRACIAS POR VER!",
+  "SÍGUENOS PARA MÁS",
+  "CONTENIDO DIARIO.",
+  "#EPICPARTNER",
+  "LA TIENDITA BAD",
+  "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+  "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO"
+ ]
+}
