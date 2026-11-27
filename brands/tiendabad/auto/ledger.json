@@ -748,6 +748,27 @@
     "Character_SkiffGrind"
    ],
    "note": "Every map place has had its '¿Dónde está?', so this 8:30 PM slot got the other evergreen format again; whether to repeat places instead is still a question for the owner."
+  },
+  {
+   "date": "2026-11-27",
+   "slot": "15:45",
+   "format": "Tienda Pirata diaria (sevan)",
+   "topic": "Se va hoy (2026-11-27): Lote One Punch Man, 3800 pavos (normalmente 11900)",
+   "folder": "video/auto/2026-11-27-pirata-sevan"
+  },
+  {
+   "date": "2026-11-27",
+   "slot": "17:15",
+   "format": "Tienda Pirata diaria (caros)",
+   "topic": "Lo nuevo más caro de hoy (2026-11-27): Paquete Leyendas del hielo negro 2500, Ford F-150 2500, Lote Apocalipsis del amanecer 2400, Lote de El gato con botas 2400, Lote Hermanas del corazón 2300",
+   "folder": "video/auto/2026-11-27-pirata-caros"
+  },
+  {
+   "date": "2026-11-27",
+   "slot": "19:30",
+   "format": "Tienda Pirata diaria (cuenta)",
+   "topic": "Quedan 8 días · dato: Horas del Tesoro 2026-11-28",
+   "folder": "video/auto/2026-11-27-pirata-cuenta"
   }
  ]
 }
