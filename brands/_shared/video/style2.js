@@ -40,12 +40,16 @@
   // groups words into 1-3 word chunks, breaking at phrase ends and punctuation
   function captions(stage, words, o = {}) {
     const { y = 1150, size = 74, max = 3 } = o;
+    // 2026-11-27: a chunk also ends before it outgrows one line of the 880 px box ("LA PROBABILIDAD SUBE" wrapped onto two
+    // lines; Montserrat Black capitals run about 0.67 em a letter, so 0.7 em keeps a little room)
+    const fit = Math.floor(880 / (size * 0.7));
     const chunks = [];
     let cur = [];
     words.forEach((w, i) => {
       cur.push(w);
       const next = words[i + 1];
-      const end = !next || next.p !== w.p || /[.,?!]$/.test(w.w) || cur.length >= max;
+      const long = !!next && (cur.map((x) => x.w).join(" ") + " " + next.w).length > fit;
+      const end = !next || next.p !== w.p || /[.,?!]$/.test(w.w) || cur.length >= max || long;
       if (end) { chunks.push(cur); cur = []; }
     });
     const box = mk(stage, `left:60px;width:880px;top:${y}px;text-align:center;line-height:1.08`);
