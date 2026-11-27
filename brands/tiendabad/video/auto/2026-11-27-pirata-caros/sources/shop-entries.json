@@ -1,0 +1,2598 @@
+{
+ "date": "2026-11-27T00:00:00Z",
+ "entries": [
+  {
+   "regularPrice": 7400,
+   "finalPrice": 2500,
+   "devName": "[VIRTUAL]1 x Icebound Midas, 1 x Permafrost Raider, 1 x Ice Crystal, 1 x Cold Dagger Pack, 1 x Frozebud, 1 x Glacial Backplate, 1 x Cold'en Touch, 1 x Glacial Slasher, 1 x Ice Carver, 1 x Icebound Wing for -1 MtxCurrency",
+   "offerId": "v2:/d3a5a0a33faa69e6e76fc838dd2849209626efe53b787dcd1de742d30e936e86",
+   "inDate": "2026-11-27T00:00:00Z",
+   "outDate": "2026-11-29T23:59:59.999Z",
+   "bundle": {
+    "name": "Paquete Leyendas del hielo negro",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/08689a9d9404fdc9/renderimage_0.png"
+   },
+   "banner": {
+    "value": "4900 monedas V de descuento",
+    "intensity": "Low",
+    "backendValue": "AmountOff"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -1,
+   "layoutId": "WinterTH112726.99",
+   "layout": {
+    "id": "WinterTH112726",
+    "name": "Leyendas invernales",
+    "index": 16,
+    "rank": 194,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "5bd6e6ff",
+    "color2": "ffffffff",
+    "color3": "2987a7ff",
+    "textBackgroundColor": "2591b2ff"
+   },
+   "tileBackgroundMaterial": "ShopTile_GlowLine",
+   "tileSize": "Size_2_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_catburglarwinter",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S41/DAv2_Bundle_Featured_CatBurglarWinter",
+   "newDisplayAsset": {
+    "id": "DAv2_Bundle_Featured_CatBurglarWinter",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__08689a9d9404fdc9_29c0c4191e61fb71.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/08689a9d9404fdc9/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__08689a9d9404fdc9_d2e71b6320aa32c2.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/08689a9d9404fdc9/renderimage_1.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__08689a9d9404fdc9_71e578208f570b02.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/08689a9d9404fdc9/renderimage_2.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__08689a9d9404fdc9_c87b2239ea7b1fc6.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/08689a9d9404fdc9/renderimage_3.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "CID_A_320_Athena_Commando_M_CatburglarWinter",
+     "name": "Midas congelado",
+     "description": "Toque dorado y frío al tacto.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "frozen",
+      "displayValue": "Serie congelada",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "Serie congelada",
+      "image": "https://fortnite-api.com/images/cosmetics/series/frozenseries.png",
+      "colors": [
+       "d8edffff",
+       "0059edff",
+       "009bd4ff",
+       "0059edff",
+       "86ddffff"
+      ],
+      "backendValue": "FrozenSeries"
+     },
+     "set": {
+      "value": "Hielo negro",
+      "text": "Pieza del conjunto Hielo negro.",
+      "backendValue": "FrozenForward"
+     },
+     "introduction": {
+      "chapter": "3",
+      "season": "1",
+      "text": "Introducido en Capítulo 3, Temporada 1.",
+      "backendValue": 19
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/cid_a_320_athena_commando_m_catburglarwinter/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/cid_a_320_athena_commando_m_catburglarwinter/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/cid_a_320_athena_commando_m_catburglarwinter/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/cid_a_320_athena_commando_m_catburglarwinter/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/cid_a_320_athena_commando_m_catburglarwinter/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/cid_a_320_athena_commando_m_catburglarwinter/wide.png"
+      },
+      "bean": {
+       "small": "https://fortnite-api.com/images/cosmetics/beans/bean_catburglarwinter/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/beans/bean_catburglarwinter/large.png"
+      }
+     },
+     "added": "2021-12-14T09:10:43Z"
+    },
+    {
+     "id": "CID_A_322_Athena_Commando_F_RenegadeRaiderIce",
+     "name": "Saqueadora hielo eterno",
+     "description": "¿Qué podría congelar a un corazón que arde?",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "frozen",
+      "displayValue": "Serie congelada",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "Serie congelada",
+      "image": "https://fortnite-api.com/images/cosmetics/series/frozenseries.png",
+      "colors": [
+       "d8edffff",
+       "0059edff",
+       "009bd4ff",
+       "0059edff",
+       "86ddffff"
+      ],
+      "backendValue": "FrozenSeries"
+     },
+     "set": {
+      "value": "Hielo negro",
+      "text": "Pieza del conjunto Hielo negro.",
+      "backendValue": "FrozenForward"
+     },
+     "introduction": {
+      "chapter": "3",
+      "season": "1",
+      "text": "Introducido en Capítulo 3, Temporada 1.",
+      "backendValue": 19
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/cid_a_322_athena_commando_f_renegaderaiderice/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/cid_a_322_athena_commando_f_renegaderaiderice/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/cid_a_322_athena_commando_f_renegaderaiderice/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/cid_a_322_athena_commando_f_renegaderaiderice/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/cid_a_322_athena_commando_f_renegaderaiderice/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/cid_a_322_athena_commando_f_renegaderaiderice/wide.png"
+      },
+      "bean": {
+       "small": "https://fortnite-api.com/images/cosmetics/beans/bean_renegaderaiderice/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/beans/bean_renegaderaiderice/large.png"
+      }
+     },
+     "added": "2021-12-14T09:10:43Z"
+    },
+    {
+     "id": "CID_A_321_Athena_Commando_F_JurassicArchaeologyWinter",
+     "name": "Crystal congelada",
+     "description": "¿Alguna vez oíste hablar de la Era del Hielo?",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "frozen",
+      "displayValue": "Serie congelada",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "Serie congelada",
+      "image": "https://fortnite-api.com/images/cosmetics/series/frozenseries.png",
+      "colors": [
+       "d8edffff",
+       "0059edff",
+       "009bd4ff",
+       "0059edff",
+       "86ddffff"
+      ],
+      "backendValue": "FrozenSeries"
+     },
+     "set": {
+      "value": "Hielo negro",
+      "text": "Pieza del conjunto Hielo negro.",
+      "backendValue": "FrozenForward"
+     },
+     "introduction": {
+      "chapter": "3",
+      "season": "1",
+      "text": "Introducido en Capítulo 3, Temporada 1.",
+      "backendValue": 19
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/cid_a_321_athena_commando_f_jurassicarchaeologywinter/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/cid_a_321_athena_commando_f_jurassicarchaeologywinter/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/cid_a_321_athena_commando_f_jurassicarchaeologywinter/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/cid_a_321_athena_commando_f_jurassicarchaeologywinter/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/cid_a_321_athena_commando_f_jurassicarchaeologywinter/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/cid_a_321_athena_commando_f_jurassicarchaeologywinter/wide.png"
+      },
+      "bean": {
+       "small": "https://fortnite-api.com/images/cosmetics/beans/bean_jurassicarchaeologywinter/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/beans/bean_jurassicarchaeologywinter/large.png"
+      }
+     },
+     "added": "2021-12-14T09:10:43Z"
+    },
+    {
+     "id": "BID_933_CatBurglarWinter",
+     "name": "Mochila con daga helada",
+     "description": "Para las aventuras más gélidas.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "frozen",
+      "displayValue": "Serie congelada",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "Serie congelada",
+      "image": "https://fortnite-api.com/images/cosmetics/series/frozenseries.png",
+      "colors": [
+       "d8edffff",
+       "0059edff",
+       "009bd4ff",
+       "0059edff",
+       "86ddffff"
+      ],
+      "backendValue": "FrozenSeries"
+     },
+     "set": {
+      "value": "Hielo negro",
+      "text": "Pieza del conjunto Hielo negro.",
+      "backendValue": "FrozenForward"
+     },
+     "introduction": {
+      "chapter": "3",
+      "season": "1",
+      "text": "Introducido en Capítulo 3, Temporada 1.",
+      "backendValue": 19
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/bid_933_catburglarwinter/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/bid_933_catburglarwinter/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/bid_933_catburglarwinter/featured.png"
+     },
+     "added": "2021-12-14T09:10:43Z"
+    },
+    {
+     "id": "BID_935_RenegadeRaiderIce",
+     "name": "Rosa congelada",
+     "description": "Congelada, floral y moderna. ",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "frozen",
+      "displayValue": "Serie congelada",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "Serie congelada",
+      "image": "https://fortnite-api.com/images/cosmetics/series/frozenseries.png",
+      "colors": [
+       "d8edffff",
+       "0059edff",
+       "009bd4ff",
+       "0059edff",
+       "86ddffff"
+      ],
+      "backendValue": "FrozenSeries"
+     },
+     "set": {
+      "value": "Hielo negro",
+      "text": "Pieza del conjunto Hielo negro.",
+      "backendValue": "FrozenForward"
+     },
+     "introduction": {
+      "chapter": "3",
+      "season": "1",
+      "text": "Introducido en Capítulo 3, Temporada 1.",
+      "backendValue": 19
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/bid_935_renegaderaiderice/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/bid_935_renegaderaiderice/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/bid_935_renegaderaiderice/featured.png"
+     },
+     "added": "2021-12-14T09:10:43Z"
+    },
+    {
+     "id": "BID_934_JurassicArchaeologyWinter",
+     "name": "Piedra glacial",
+     "description": "Protégete con un pequeño trozo de un enorme glaciar.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "frozen",
+      "displayValue": "Serie congelada",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "Serie congelada",
+      "image": "https://fortnite-api.com/images/cosmetics/series/frozenseries.png",
+      "colors": [
+       "d8edffff",
+       "0059edff",
+       "009bd4ff",
+       "0059edff",
+       "86ddffff"
+      ],
+      "backendValue": "FrozenSeries"
+     },
+     "set": {
+      "value": "Hielo negro",
+      "text": "Pieza del conjunto Hielo negro.",
+      "backendValue": "FrozenForward"
+     },
+     "introduction": {
+      "chapter": "3",
+      "season": "1",
+      "text": "Introducido en Capítulo 3, Temporada 1.",
+      "backendValue": 19
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/bid_934_jurassicarchaeologywinter/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/bid_934_jurassicarchaeologywinter/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/bid_934_jurassicarchaeologywinter/featured.png"
+     },
+     "added": "2021-12-14T09:10:43Z"
+    },
+    {
+     "id": "Pickaxe_ID_723_CatBurglarWinterMale",
+     "name": "Escarchador",
+     "description": "Te hiela la sangre, ¿verdad?",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "frozen",
+      "displayValue": "Serie congelada",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "Serie congelada",
+      "image": "https://fortnite-api.com/images/cosmetics/series/frozenseries.png",
+      "colors": [
+       "d8edffff",
+       "0059edff",
+       "009bd4ff",
+       "0059edff",
+       "86ddffff"
+      ],
+      "backendValue": "FrozenSeries"
+     },
+     "set": {
+      "value": "Hielo negro",
+      "text": "Pieza del conjunto Hielo negro.",
+      "backendValue": "FrozenForward"
+     },
+     "introduction": {
+      "chapter": "3",
+      "season": "1",
+      "text": "Introducido en Capítulo 3, Temporada 1.",
+      "backendValue": 19
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_id_723_catburglarwintermale/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_id_723_catburglarwintermale/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_id_723_catburglarwintermale/featured.png"
+     },
+     "added": "2021-12-14T09:10:43Z"
+    },
+    {
+     "id": "Pickaxe_ID_730_RenegadeRaiderIceFemale",
+     "name": "Cuchilla glacial",
+     "description": "Congelada en medio de una ventisca.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "frozen",
+      "displayValue": "Serie congelada",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "Serie congelada",
+      "image": "https://fortnite-api.com/images/cosmetics/series/frozenseries.png",
+      "colors": [
+       "d8edffff",
+       "0059edff",
+       "009bd4ff",
+       "0059edff",
+       "86ddffff"
+      ],
+      "backendValue": "FrozenSeries"
+     },
+     "set": {
+      "value": "Hielo negro",
+      "text": "Pieza del conjunto Hielo negro.",
+      "backendValue": "FrozenForward"
+     },
+     "introduction": {
+      "chapter": "3",
+      "season": "1",
+      "text": "Introducido en Capítulo 3, Temporada 1.",
+      "backendValue": 19
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_id_730_renegaderaidericefemale/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_id_730_renegaderaidericefemale/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_id_730_renegaderaidericefemale/featured.png"
+     },
+     "added": "2021-12-14T09:10:43Z"
+    },
+    {
+     "id": "Pickaxe_ID_725_JurassicArchaeologyWinterFemale",
+     "name": "Piolet gélido",
+     "description": "Exhuma el helado pasado.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "frozen",
+      "displayValue": "Serie congelada",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "Serie congelada",
+      "image": "https://fortnite-api.com/images/cosmetics/series/frozenseries.png",
+      "colors": [
+       "d8edffff",
+       "0059edff",
+       "009bd4ff",
+       "0059edff",
+       "86ddffff"
+      ],
+      "backendValue": "FrozenSeries"
+     },
+     "set": {
+      "value": "Hielo negro",
+      "text": "Pieza del conjunto Hielo negro.",
+      "backendValue": "FrozenForward"
+     },
+     "introduction": {
+      "chapter": "3",
+      "season": "1",
+      "text": "Introducido en Capítulo 3, Temporada 1.",
+      "backendValue": 19
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_id_725_jurassicarchaeologywinterfemale/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_id_725_jurassicarchaeologywinterfemale/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_id_725_jurassicarchaeologywinterfemale/featured.png"
+     },
+     "added": "2021-12-14T09:10:43Z"
+    },
+    {
+     "id": "Glider_ID_334_DarkIceMale",
+     "name": "Ala congelada",
+     "description": "Ideal para aterrizar en una tundra helada.",
+     "type": {
+      "value": "glider",
+      "displayValue": "Planeador",
+      "backendValue": "AthenaGlider"
+     },
+     "rarity": {
+      "value": "frozen",
+      "displayValue": "Serie congelada",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "series": {
+      "value": "Serie congelada",
+      "image": "https://fortnite-api.com/images/cosmetics/series/frozenseries.png",
+      "colors": [
+       "d8edffff",
+       "0059edff",
+       "009bd4ff",
+       "0059edff",
+       "86ddffff"
+      ],
+      "backendValue": "FrozenSeries"
+     },
+     "set": {
+      "value": "Hielo negro",
+      "text": "Pieza del conjunto Hielo negro.",
+      "backendValue": "FrozenForward"
+     },
+     "introduction": {
+      "chapter": "3",
+      "season": "1",
+      "text": "Introducido en Capítulo 3, Temporada 1.",
+      "backendValue": 19
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/glider_id_334_darkicemale/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/glider_id_334_darkicemale/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/glider_id_334_darkicemale/featured.png"
+     },
+     "added": "2021-12-14T09:10:43Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 2500,
+   "finalPrice": 2500,
+   "devName": "[VIRTUAL]1 x Ford F-150, 1 x Ford Racing, 1 x Formation BFT, 1 x Slightly Stock, 1 x Chairman, 1 x Chairman, 1 x Chairman, 1 x Chairman, 1 x Chairman, 1 x Chairman, 1 x Chairman, 1 x Chairman, 1 x Chairman, 1 x Chairman, 1 x Chairman, 1 x Chairman, 1 x Chairman, 1 x Chairman, 1 x Ford F-150, 1 x Ford F-150, 1 x Ford F-150, 1 x Ford F-150, 1 x Ford F-150, 1 x Ford F-150, 1 x Ford F-150, 1 x Ford F-150, 1 x Ford F-150, 1 x Ford F-150, 1 x Ford F-150, 1 x Ford F-150, 1 x Ford F-150, 1 x Ford F-150 SE, 1 x Ford F-150 SE, 1 x Ford F-150 SE, 1 x Ford F-150 SE, 1 x Ford F-150 SE, 1 x Ford F-150 SE, 1 x Ford F-150 SE, 1 x Ford F-150 SE, 1 x Ford F-150 SE, 1 x Ford F-150 SE, 1 x Ford F-150 SE, 1 x Ford F-150 SE, 1 x Ford F-150 SE for -1 MtxCurrency",
+   "offerId": "v2:/ae0c8fe4a0a7ca8a3fb4496e128cc8907a12ea278e00cd3be6028463ca1abd55",
+   "inDate": "2026-11-27T00:00:00Z",
+   "outDate": "2026-12-03T23:59:59.999Z",
+   "bundle": {
+    "name": "Ford F-150",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/80d34e00d2d41a79/renderimage_0.png"
+   },
+   "offerTag": {
+    "id": "drof",
+    "text": "Las calcomanías de este lote solo están disponibles para la carrocería Ford F-150 RLE."
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -1,
+   "layoutId": "F150.99",
+   "layout": {
+    "id": "F150",
+    "name": "Ford F-150",
+    "category": "Calienta los motores",
+    "index": 8,
+    "rank": 168,
+    "showIneligibleOffers": "always",
+    "useWidePreview": true,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "3b8897ff",
+    "color3": "1b4980ff",
+    "textBackgroundColor": "060f48ff"
+   },
+   "tileSize": "Size_3_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_Drof_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S39/DAv2_Bundle_Featured_Drof",
+   "newDisplayAsset": {
+    "id": "DAv2_Bundle_Featured_Drof",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__80d34e00d2d41a79_811cd6dbba5ee23c.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/80d34e00d2d41a79/renderimage_0.png"
+     }
+    ]
+   },
+   "cars": [
+    {
+     "id": "CarBody_Drof",
+     "vehicleId": "VCID_Body_Drof",
+     "name": "Ford F-150",
+     "description": "Alto rendimiento dentro y fuera del campo.",
+     "type": {
+      "value": "body",
+      "displayValue": "Carrocería",
+      "backendValue": "VehicleCosmetics_Body"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "images": {
+      "small": "https://fortnite-api.com/images/cosmetics/cars/carbody_drof/small.png",
+      "large": "https://fortnite-api.com/images/cosmetics/cars/carbody_drof/large.png"
+     },
+     "series": {
+      "value": "SERIE FORD",
+      "colors": [
+       "ffffffff",
+       "00095bff",
+       "00095bff",
+       "00095bff",
+       "00095bff"
+      ],
+      "backendValue": "Series_Ford"
+     },
+     "added": "2026-01-30T00:00:00Z"
+    },
+    {
+     "id": "CarSkin_DrofLivery01",
+     "vehicleId": "VCID_Skin_DrofLivery01",
+     "name": "Ford Racing",
+     "description": "Calcomanía personalizada de Ford F-150.",
+     "type": {
+      "value": "skin",
+      "displayValue": "Aspecto",
+      "backendValue": "VehicleCosmetics_Skin"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "images": {
+      "small": "https://fortnite-api.com/images/cosmetics/cars/carskin_droflivery01/small.png",
+      "large": "https://fortnite-api.com/images/cosmetics/cars/carskin_droflivery01/large.png"
+     },
+     "series": {
+      "value": "SERIE FORD",
+      "colors": [
+       "ffffffff",
+       "00095bff",
+       "00095bff",
+       "00095bff",
+       "00095bff"
+      ],
+      "backendValue": "Series_Ford"
+     },
+     "added": "2026-01-30T00:00:00Z"
+    },
+    {
+     "id": "CarSkin_DrofD",
+     "vehicleId": "VCID_Skin_DrofD",
+     "name": "Formación BFT",
+     "description": "Calcomanía personalizada de Ford F-150.",
+     "type": {
+      "value": "skin",
+      "displayValue": "Aspecto",
+      "backendValue": "VehicleCosmetics_Skin"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "images": {
+      "small": "https://fortnite-api.com/images/cosmetics/cars/carskin_drofd/small.png",
+      "large": "https://fortnite-api.com/images/cosmetics/cars/carskin_drofd/large.png"
+     },
+     "series": {
+      "value": "SERIE FORD",
+      "colors": [
+       "ffffffff",
+       "00095bff",
+       "00095bff",
+       "00095bff",
+       "00095bff"
+      ],
+      "backendValue": "Series_Ford"
+     },
+     "added": "2026-01-30T00:00:00Z"
+    },
+    {
+     "id": "CarSkin_DrofDefault",
+     "vehicleId": "VCID_CarSkin_DrofDefault",
+     "name": "Algo típico",
+     "description": "Ponte en el asiento del conductor. Calcomanía personalizada de Ford F-150. ",
+     "type": {
+      "value": "skin",
+      "displayValue": "Aspecto",
+      "backendValue": "VehicleCosmetics_Skin"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "images": {
+      "small": "https://fortnite-api.com/images/cosmetics/cars/carskin_drofdefault/small.png",
+      "large": "https://fortnite-api.com/images/cosmetics/cars/carskin_drofdefault/large.png"
+     },
+     "series": {
+      "value": "SERIE FORD",
+      "colors": [
+       "ffffffff",
+       "00095bff",
+       "00095bff",
+       "00095bff",
+       "00095bff"
+      ],
+      "backendValue": "Series_Ford"
+     },
+     "added": "2026-01-30T00:00:00Z"
+    },
+    {
+     "id": "CarSkin_Drof",
+     "vehicleId": "VCID_Skin_Drof",
+     "name": "Chairman",
+     "description": "Ponte en el asiento del conductor. Calcomanía personalizada de Ford F-150.",
+     "type": {
+      "value": "skin",
+      "displayValue": "Aspecto",
+      "backendValue": "VehicleCosmetics_Skin"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "images": {
+      "small": "https://fortnite-api.com/images/cosmetics/cars/carskin_drof/small.png",
+      "large": "https://fortnite-api.com/images/cosmetics/cars/carskin_drof/large.png"
+     },
+     "series": {
+      "value": "SERIE FORD",
+      "colors": [
+       "ffffffff",
+       "00095bff",
+       "00095bff",
+       "00095bff",
+       "00095bff"
+      ],
+      "backendValue": "Series_Ford"
+     },
+     "added": "2026-01-30T00:00:00Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 7300,
+   "finalPrice": 2400,
+   "devName": "[VIRTUAL]1 x Thana the Pale, 1 x Scythe of the Pale, 1 x Areta the Vengeful, 1 x Areta's War Cape, 1 x Wings of Loss, 1 x Apocalyptic Slips, 1 x The Flame of Siege, 1 x Osric the Conqueror, 1 x Royalty's Mantle, 1 x Bow of the Vanquisher, 1 x Fallow the Fallen, 1 x Hunger & Haste, 1 x Hunger & Haste, 1 x Horse of the End for -1 MtxCurrency",
+   "offerId": "v2:/1d021406379464ea648d271e5525e56856538319883cf5e7962f7a251177f22b",
+   "inDate": "2026-11-27T00:00:00Z",
+   "outDate": "2026-11-29T23:59:59.999Z",
+   "bundle": {
+    "name": "Lote Apocalipsis del amanecer",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/35e0a3c9e190ee49/renderimage_0.png"
+   },
+   "banner": {
+    "value": "4900 monedas V de descuento",
+    "intensity": "Low",
+    "backendValue": "AmountOff"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -1,
+   "layoutId": "BoC71.99",
+   "layout": {
+    "id": "BoC71",
+    "name": "Lo mejor del Capítulo 7",
+    "index": 28,
+    "rank": 196,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "441703ff",
+    "color2": "ffe08aff",
+    "color3": "9c6711ff",
+    "textBackgroundColor": "6e400dff"
+   },
+   "tileBackgroundMaterial": "ShopTile_Snowfall",
+   "tileSize": "Size_3_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_Grizzlydemise_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S42/DAv2_Bundle_Featured_Grizzlydemise",
+   "newDisplayAsset": {
+    "id": "DAv2_Bundle_Featured_GrizzlyDemise",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__35e0a3c9e190ee49_29c0c4191e61fb71.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/35e0a3c9e190ee49/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__35e0a3c9e190ee49_d2e71b6320aa32c2.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/35e0a3c9e190ee49/renderimage_1.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__35e0a3c9e190ee49_71e578208f570b02.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/35e0a3c9e190ee49/renderimage_2.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Character_GrizzlyDemise",
+     "name": "Thana la Espectral",
+     "description": "Nadie escapará de su yugo.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "Apocalipsis del amanecer",
+      "text": "Pieza del conjunto Apocalipsis del amanecer.",
+      "backendValue": "AridUnicorn"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_grizzlydemise/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_grizzlydemise/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_grizzlydemise/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_grizzlydemise/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_grizzlydemise/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_grizzlydemise/wide.png"
+      }
+     },
+     "variants": [
+      {
+       "channel": "Particle",
+       "type": "Corona",
+       "options": [
+        {
+         "tag": "Particle1",
+         "name": "Sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_grizzlydemise/variants/particle/particle1.png"
+        },
+        {
+         "tag": "Particle2",
+         "name": "No",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_grizzlydemise/variants/particle/particle2.png"
+        }
+       ]
+      }
+     ],
+     "showcaseVideo": "_r4d-L1FKCk",
+     "added": "2026-09-17T16:17:14Z"
+    },
+    {
+     "id": "Pickaxe_GrizzlyDemise",
+     "name": "Guadaña espectral",
+     "description": "Envía a tus oponentes al más allá.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Apocalipsis del amanecer",
+      "text": "Pieza del conjunto Apocalipsis del amanecer.",
+      "backendValue": "AridUnicorn"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_grizzlydemise/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_grizzlydemise/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_grizzlydemise/featured.png"
+     },
+     "added": "2026-09-17T16:17:14Z"
+    },
+    {
+     "id": "Character_GulchTruce",
+     "name": "Areta la Vengativa",
+     "description": "Nada quedará sin castigo.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "Apocalipsis del amanecer",
+      "text": "Pieza del conjunto Apocalipsis del amanecer.",
+      "backendValue": "AridUnicorn"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_gulchtruce/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_gulchtruce/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_gulchtruce/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_gulchtruce/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_gulchtruce/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_gulchtruce/wide.png"
+      }
+     },
+     "variants": [
+      {
+       "channel": "Material",
+       "type": "yelmo",
+       "options": [
+        {
+         "tag": "Mat1",
+         "name": "Sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_gulchtruce/variants/material/mat1.png"
+        },
+        {
+         "tag": "Mat2",
+         "name": "No",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_gulchtruce/variants/material/mat2.png"
+        }
+       ]
+      }
+     ],
+     "showcaseVideo": "H1HAtf3COEs",
+     "added": "2026-09-17T16:17:14Z"
+    },
+    {
+     "id": "Backpack_GulchTruce",
+     "name": "Capa de guerra de Areta",
+     "description": "El campo de batalla te pertenece.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Apocalipsis del amanecer",
+      "text": "Pieza del conjunto Apocalipsis del amanecer.",
+      "backendValue": "AridUnicorn"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_gulchtruce/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_gulchtruce/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_gulchtruce/featured.png"
+     },
+     "added": "2026-09-17T16:17:14Z"
+    },
+    {
+     "id": "Backpack_GrizzlyDemise",
+     "name": "Alas espectrales",
+     "description": "Si quieres ganar, otros deben caer.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Apocalipsis del amanecer",
+      "text": "Pieza del conjunto Apocalipsis del amanecer.",
+      "backendValue": "AridUnicorn"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_grizzlydemise/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_grizzlydemise/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_grizzlydemise/featured.png"
+     },
+     "added": "2026-09-17T16:17:14Z"
+    },
+    {
+     "id": "Shoes_PhantomStride",
+     "name": "Pantuflas apocalípticas",
+     "description": "Presume tu estilo.",
+     "type": {
+      "value": "shoe",
+      "displayValue": "Calzado",
+      "backendValue": "CosmeticShoes"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "Apocalipsis del amanecer",
+      "text": "Pieza del conjunto Apocalipsis del amanecer.",
+      "backendValue": "AridUnicorn"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/shoes_phantomstride/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/shoes_phantomstride/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/shoes_phantomstride/featured.png"
+     },
+     "added": "2026-09-17T16:17:14Z"
+    },
+    {
+     "id": "Pickaxe_GulchTruce",
+     "name": "La llama del asedio",
+     "description": "Arde con un fuego difícil de apagar.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Apocalipsis del amanecer",
+      "text": "Pieza del conjunto Apocalipsis del amanecer.",
+      "backendValue": "AridUnicorn"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_gulchtruce/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_gulchtruce/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_gulchtruce/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Material",
+       "type": "Efectos especiales",
+       "options": [
+        {
+         "tag": "Mat1",
+         "name": "Sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/pickaxe_gulchtruce/variants/material/mat1.png"
+        },
+        {
+         "tag": "Mat2",
+         "name": "No",
+         "image": "https://fortnite-api.com/images/cosmetics/br/pickaxe_gulchtruce/variants/material/mat2.png"
+        }
+       ]
+      }
+     ],
+     "added": "2026-09-17T16:17:14Z"
+    },
+    {
+     "id": "Character_RoutPinch",
+     "name": "Osric el Conquistador",
+     "description": "Para el vencedor, todo.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "Apocalipsis del amanecer",
+      "text": "Pieza del conjunto Apocalipsis del amanecer.",
+      "backendValue": "AridUnicorn"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_routpinch/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_routpinch/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_routpinch/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_routpinch/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_routpinch/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_routpinch/wide.png"
+      }
+     },
+     "showcaseVideo": "0wgp6s1MxBk",
+     "added": "2026-09-21T00:00:00Z"
+    },
+    {
+     "id": "Backpack_RoutPinch",
+     "name": "Manto real",
+     "description": "Domina todos los reinos.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Apocalipsis del amanecer",
+      "text": "Pieza del conjunto Apocalipsis del amanecer.",
+      "backendValue": "AridUnicorn"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_routpinch/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_routpinch/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_routpinch/featured.png"
+     },
+     "added": "2026-09-21T00:00:00Z"
+    },
+    {
+     "id": "Pickaxe_RoutPinch",
+     "name": "Arco de conquista",
+     "description": "Inclínate ante su poder.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Apocalipsis del amanecer",
+      "text": "Pieza del conjunto Apocalipsis del amanecer.",
+      "backendValue": "AridUnicorn"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_routpinch/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_routpinch/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_routpinch/featured.png"
+     },
+     "added": "2026-09-21T00:00:00Z"
+    },
+    {
+     "id": "Character_SharpCrave",
+     "name": "Fallow el Feroz",
+     "description": "Portador del infortunio.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "Apocalipsis del amanecer",
+      "text": "Pieza del conjunto Apocalipsis del amanecer.",
+      "backendValue": "AridUnicorn"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_sharpcrave/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_sharpcrave/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_sharpcrave/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_sharpcrave/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_sharpcrave/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_sharpcrave/wide.png"
+      }
+     },
+     "variants": [
+      {
+       "channel": "Parts",
+       "type": "Mascarilla",
+       "options": [
+        {
+         "tag": "Stage1",
+         "name": "No",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_sharpcrave/variants/parts/stage1.png"
+        },
+        {
+         "tag": "Stage2",
+         "name": "Sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_sharpcrave/variants/parts/stage2.png"
+        }
+       ]
+      }
+     ],
+     "showcaseVideo": "MCB881kZVBk",
+     "added": "2026-09-17T16:17:14Z"
+    },
+    {
+     "id": "Pickaxe_SharpCrave",
+     "name": "Gula y Guerra",
+     "description": "Hojas insaciables de filo eterno.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Apocalipsis del amanecer",
+      "text": "Pieza del conjunto Apocalipsis del amanecer.",
+      "backendValue": "AridUnicorn"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_sharpcrave/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_sharpcrave/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_sharpcrave/featured.png"
+     },
+     "metaTags": [
+      "Cosmetics.MetaTags.SharpCrave"
+     ],
+     "added": "2026-09-17T16:17:14Z"
+    },
+    {
+     "id": "Backpack_SharpCrave",
+     "name": "Gula y Guerra",
+     "description": "Hojas insaciables de filo eterno.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Apocalipsis del amanecer",
+      "text": "Pieza del conjunto Apocalipsis del amanecer.",
+      "backendValue": "AridUnicorn"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_sharpcrave/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_sharpcrave/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_sharpcrave/featured.png"
+     },
+     "added": "2026-09-17T16:17:14Z"
+    },
+    {
+     "id": "EID_GrizzlyDemise",
+     "name": "Jinete del fin",
+     "description": "Esta sala no tiene salvación.",
+     "type": {
+      "value": "emote",
+      "displayValue": "Gesto",
+      "backendValue": "AthenaDance"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "Apocalipsis del amanecer",
+      "text": "Pieza del conjunto Apocalipsis del amanecer.",
+      "backendValue": "AridUnicorn"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/eid_grizzlydemise/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/eid_grizzlydemise/icon.png"
+     },
+     "showcaseVideo": "fPpJv2zYH8g",
+     "added": "2026-09-17T16:17:14Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 4700,
+   "finalPrice": 2400,
+   "devName": "[VIRTUAL]1 x Puss in Boots, 1 x Death (Puss in Boots), 1 x Death's Sickles, 1 x Puss in Slippers, 1 x Stalking Death, 1 x Bounty in Boots for -1 MtxCurrency",
+   "offerId": "v2:/ef6e98b4bf73d9b6bd442a2b213b8bc941c0d899b17c15ea09ebb1abab6e709a",
+   "inDate": "2026-11-27T00:00:00Z",
+   "outDate": "2026-12-03T23:59:59.999Z",
+   "bundle": {
+    "name": "Lote de El gato con botas",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/f7722d9eb0634d14/renderimage_0.png"
+   },
+   "banner": {
+    "value": "2300 monedas V de descuento",
+    "intensity": "High",
+    "backendValue": "AmountOff"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -1,
+   "layoutId": "ToteBoots1.99",
+   "layout": {
+    "id": "ToteBoots1",
+    "name": "El gato con botas ",
+    "index": 15,
+    "rank": 198,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "billboard",
+    "textureMetadata": [
+     {
+      "key": "background",
+      "value": "https://cdn2.unrealengine.com/sk-Billboard_MarlinYeast_BG-cbc0946d.png"
+     },
+     {
+      "key": "foreground",
+      "value": "https://cdn2.unrealengine.com/sk-Billboard_MarlinYeast_Characters-c37ebe12.png"
+     },
+     {
+      "key": "foreground_juno",
+      "value": "https://cdn2.unrealengine.com/sk-Billboard_MarlinYeast_Figure-c56d3d9f.png"
+     },
+     {
+      "key": "bodyImage",
+      "value": "https://cdn2.unrealengine.com/sk-Billboard_MarlinYeast_ItemStack-df2301db.png"
+     }
+    ],
+    "stringMetadata": [
+     {
+      "key": "alignment",
+      "value": "left"
+     },
+     {
+      "key": "highlightEnabled",
+      "value": "true"
+     },
+     {
+      "key": "parallaxEnabled",
+      "value": "true"
+     },
+     {
+      "key": "titleColorA",
+      "value": "FFFFFF"
+     },
+     {
+      "key": "titleColorB",
+      "value": "FFFFFF"
+     },
+     {
+      "key": "displayMode",
+      "value": "billboard"
+     }
+    ],
+    "textMetadata": [
+     {
+      "key": "cta",
+      "value": "Ver oferta"
+     },
+     {
+      "key": "subtitle",
+      "value": "Lote de 6 objetos"
+     },
+     {
+      "key": "title",
+      "value": "El gato con botas "
+     }
+    ]
+   },
+   "colors": {
+    "color1": "571d0aff",
+    "color2": "d39b60ff",
+    "color3": "b56936ff",
+    "textBackgroundColor": "b56936ff"
+   },
+   "tileBackgroundMaterial": "ShopTile_Pirates_Brush",
+   "tileSize": "Size_4_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_Marlinyeast_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S43/DAv2_Bundle_Featured_Marlinyeast",
+   "newDisplayAsset": {
+    "id": "DAv2_Bundle_Featured_MarlinYeast",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__f7722d9eb0634d14_29c0c4191e61fb71.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/f7722d9eb0634d14/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__f7722d9eb0634d14_d2e71b6320aa32c2.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/f7722d9eb0634d14/renderimage_1.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__f7722d9eb0634d14_e0559e464b07edd9.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/f7722d9eb0634d14/renderimage_2.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__f7722d9eb0634d14_1289a263ea7b677a.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/f7722d9eb0634d14/renderimage_3.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__f7722d9eb0634d14_1c39458533e1ba48.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/f7722d9eb0634d14/renderimage_4.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Companion_MarlinYeast",
+     "name": "El gato con botas",
+     "description": "¡Témele, si te atreves!",
+     "type": {
+      "value": "sidekick",
+      "displayValue": "Compañero",
+      "backendValue": "CosmeticCompanion"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "El gato con botas",
+      "text": "Pieza del conjunto El gato con botas.",
+      "backendValue": "InfiniteMaple"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/companion_marlinyeast/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/companion_marlinyeast/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/companion_marlinyeast/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Emote",
+       "type": "Gesto de compañero",
+       "options": [
+        {
+         "tag": "CompanionEmote0",
+         "name": "Ojitos tiernos",
+         "image": "https://fortnite-api.com/images/cosmetics/br/companion_marlinyeast/variants/emote/companionemote0.png"
+        }
+       ]
+      },
+      {
+       "channel": "Emissive",
+       "type": "Sombrero",
+       "options": [
+        {
+         "tag": "Stage1",
+         "name": "Sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/companion_marlinyeast/variants/emissive/stage1.png"
+        },
+        {
+         "tag": "Stage2",
+         "name": "No",
+         "image": "https://fortnite-api.com/images/cosmetics/br/companion_marlinyeast/variants/emissive/stage2.png"
+        }
+       ]
+      },
+      {
+       "channel": "Outfit",
+       "type": "Barba",
+       "options": [
+        {
+         "tag": "Stage1",
+         "name": "No",
+         "image": "https://fortnite-api.com/images/cosmetics/br/companion_marlinyeast/variants/outfit/stage1.png"
+        },
+        {
+         "tag": "Stage2",
+         "name": "Sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/companion_marlinyeast/variants/outfit/stage2.png"
+        }
+       ]
+      },
+      {
+       "channel": "Pattern",
+       "type": "Espada",
+       "options": [
+        {
+         "tag": "Stage6",
+         "name": "Sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/companion_marlinyeast/variants/pattern/stage6.png"
+        },
+        {
+         "tag": "Stage5",
+         "name": "No",
+         "image": "https://fortnite-api.com/images/cosmetics/br/companion_marlinyeast/variants/pattern/stage5.png"
+        }
+       ]
+      }
+     ],
+     "dynamicPakId": "1029",
+     "added": "2026-11-25T14:00:36Z"
+    },
+    {
+     "id": "Character_ToteYurt",
+     "name": "La muerte (El gato con botas)",
+     "description": "Si lo oyes silbar, mejor huye.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "El gato con botas",
+      "text": "Pieza del conjunto El gato con botas.",
+      "backendValue": "InfiniteMaple"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_toteyurt/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_toteyurt/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_toteyurt/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_toteyurt/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_toteyurt/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_toteyurt/wide.png"
+      }
+     },
+     "showcaseVideo": "OWm-wRUgw2Y",
+     "dynamicPakId": "1029",
+     "added": "2026-11-25T14:00:36Z"
+    },
+    {
+     "id": "Pickaxe_ToteYurt",
+     "name": "Hoces de La muerte",
+     "description": "Cosecha lo que siembras.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_toteyurt/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_toteyurt/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_toteyurt/featured.png"
+     },
+     "dynamicPakId": "1029",
+     "added": "2026-11-25T14:00:36Z"
+    },
+    {
+     "id": "Shoes_MarlinYeast",
+     "name": "El gato con pantuflas",
+     "description": "Presume tu estilo.",
+     "type": {
+      "value": "shoe",
+      "displayValue": "Calzado",
+      "backendValue": "CosmeticShoes"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "El gato con botas",
+      "text": "Pieza del conjunto El gato con botas.",
+      "backendValue": "InfiniteMaple"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/shoes_marlinyeast/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/shoes_marlinyeast/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/shoes_marlinyeast/featured.png"
+     },
+     "dynamicPakId": "1029",
+     "added": "2026-11-25T14:00:36Z"
+    },
+    {
+     "id": "EID_ToteYurt",
+     "name": "Muerte al acecho",
+     "description": "Ya te pondrás a la par. Tarde o temprano.",
+     "type": {
+      "value": "emote",
+      "displayValue": "Gesto",
+      "backendValue": "AthenaDance"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "El gato con botas",
+      "text": "Pieza del conjunto El gato con botas.",
+      "backendValue": "InfiniteMaple"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/eid_toteyurt/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/eid_toteyurt/icon.png"
+     },
+     "showcaseVideo": "jeMSihoy00M",
+     "dynamicPakId": "1029",
+     "added": "2026-11-25T14:00:36Z"
+    },
+    {
+     "id": "Backpack_ToteYurt",
+     "name": "Recompensa con botas",
+     "description": "Ocho menos. Me queda una.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "El gato con botas",
+      "text": "Pieza del conjunto El gato con botas.",
+      "backendValue": "InfiniteMaple"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "5",
+      "text": "Introducido en Capítulo 7, Temporada 5.",
+      "backendValue": 43
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_toteyurt/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_toteyurt/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_toteyurt/featured.png"
+     },
+     "dynamicPakId": "1029",
+     "added": "2026-11-25T14:00:36Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 5500,
+   "finalPrice": 2300,
+   "devName": "[VIRTUAL]1 x Esme, 1 x Tough Targetbunny, 1 x Healed Heartshield, 1 x Esme's Heartstruck, 1 x Ennui, 1 x Soft Targetbunny, 1 x Hurt Heartshield, 1 x Ennui's Heartbeat, 1 x Love Flare, 1 x Heartstompers for -1 MtxCurrency",
+   "offerId": "v2:/5fbfa6617d97ad501ea5301d2e996be1f6bd8ab2a3710456d0dcb02944fd98f6",
+   "inDate": "2026-11-27T00:00:00Z",
+   "outDate": "2026-11-29T23:59:59.999Z",
+   "bundle": {
+    "name": "Lote Hermanas del corazón",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/4d10eb200ece1781/renderimage_0.png"
+   },
+   "banner": {
+    "value": "3200 monedas V de descuento",
+    "intensity": "Low",
+    "backendValue": "AmountOff"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -1,
+   "layoutId": "BoC71.92",
+   "layout": {
+    "id": "BoC71",
+    "name": "Lo mejor del Capítulo 7",
+    "index": 28,
+    "rank": 196,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "441703ff",
+    "color2": "ffe08aff",
+    "color3": "9c6711ff",
+    "textBackgroundColor": "6e400dff"
+   },
+   "tileBackgroundMaterial": "ShopTile_Snowfall",
+   "tileSize": "Size_2_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_FondAimBreak_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S39/DAv2_Bundle_Featured_FondAimBreak",
+   "newDisplayAsset": {
+    "id": "DAv2_Bundle_Featured_FondAimBreak",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__4d10eb200ece1781_ac2441c813ac835a.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/4d10eb200ece1781/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__4d10eb200ece1781_bbb4d27db24e325e.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/4d10eb200ece1781/renderimage_1.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Character_FondAim",
+     "name": "Encanto",
+     "description": "Tiene una chispa especial.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "Hermanas del corazón",
+      "text": "Pieza del conjunto Hermanas del corazón.",
+      "backendValue": "SoulSibling"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "1",
+      "text": "Introducido en Capítulo 7, Temporada 1.",
+      "backendValue": 39
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_fondaim/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_fondaim/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_fondaim/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_fondaim/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_fondaim/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_fondaim/wide.png"
+      },
+      "bean": {
+       "small": "https://fortnite-api.com/images/cosmetics/beans/bean_fondaim/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/beans/bean_fondaim/large.png"
+      }
+     },
+     "added": "2026-02-05T15:01:36Z"
+    },
+    {
+     "id": "Backpack_FondAim",
+     "name": "Orejitas enfadadas",
+     "description": "Adelante. Prepara el tiro.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Hermanas del corazón",
+      "text": "Pieza del conjunto Hermanas del corazón.",
+      "backendValue": "SoulSibling"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "1",
+      "text": "Introducido en Capítulo 7, Temporada 1.",
+      "backendValue": 39
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_fondaim/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_fondaim/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_fondaim/featured.png"
+     },
+     "added": "2026-02-05T15:01:36Z"
+    },
+    {
+     "id": "Pickaxe_FondAim",
+     "name": "Corazón blindado",
+     "description": "Ni se te ocurra intentar romperlo.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Hermanas del corazón",
+      "text": "Pieza del conjunto Hermanas del corazón.",
+      "backendValue": "SoulSibling"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "1",
+      "text": "Introducido en Capítulo 7, Temporada 1.",
+      "backendValue": 39
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_fondaim/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_fondaim/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_fondaim/featured.png"
+     },
+     "added": "2026-02-05T15:01:36Z"
+    },
+    {
+     "id": "Wrap_FondAim",
+     "name": "Flechazo de Encanto",
+     "description": "Muestra tu estilo.",
+     "type": {
+      "value": "wrap",
+      "displayValue": "Papel",
+      "backendValue": "AthenaItemWrap"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Hermanas del corazón",
+      "text": "Pieza del conjunto Hermanas del corazón.",
+      "backendValue": "SoulSibling"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "1",
+      "text": "Introducido en Capítulo 7, Temporada 1.",
+      "backendValue": 39
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/wrap_fondaim/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/wrap_fondaim/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/wrap_fondaim/featured.png"
+     },
+     "added": "2026-02-05T15:01:36Z"
+    },
+    {
+     "id": "Character_FondBreak",
+     "name": "Dolores",
+     "description": "Sé gentil. Al menos lo intenta.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "Hermanas del corazón",
+      "text": "Pieza del conjunto Hermanas del corazón.",
+      "backendValue": "SoulSibling"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "1",
+      "text": "Introducido en Capítulo 7, Temporada 1.",
+      "backendValue": 39
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_fondbreak/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_fondbreak/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_fondbreak/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_fondbreak/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_fondbreak/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_fondbreak/wide.png"
+      },
+      "bean": {
+       "small": "https://fortnite-api.com/images/cosmetics/beans/bean_fondbreak/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/beans/bean_fondbreak/large.png"
+      }
+     },
+     "added": "2026-02-05T15:01:36Z"
+    },
+    {
+     "id": "Backpack_FondBreak",
+     "name": "Orejitas tristes",
+     "description": "¡No dispares, por favor!",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Hermanas del corazón",
+      "text": "Pieza del conjunto Hermanas del corazón.",
+      "backendValue": "SoulSibling"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "1",
+      "text": "Introducido en Capítulo 7, Temporada 1.",
+      "backendValue": 39
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_fondbreak/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_fondbreak/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_fondbreak/featured.png"
+     },
+     "added": "2026-02-05T15:01:36Z"
+    },
+    {
+     "id": "Pickaxe_FondBreak",
+     "name": "Corazón destrozado",
+     "description": "Necesita tiempo para sanar. ",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Hermanas del corazón",
+      "text": "Pieza del conjunto Hermanas del corazón.",
+      "backendValue": "SoulSibling"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "1",
+      "text": "Introducido en Capítulo 7, Temporada 1.",
+      "backendValue": 39
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_fondbreak/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_fondbreak/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_fondbreak/featured.png"
+     },
+     "added": "2026-02-05T15:01:36Z"
+    },
+    {
+     "id": "Wrap_FondBreak",
+     "name": "Latidos de Dolores",
+     "description": "Muestra tu estilo.",
+     "type": {
+      "value": "wrap",
+      "displayValue": "Papel",
+      "backendValue": "AthenaItemWrap"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Hermanas del corazón",
+      "text": "Pieza del conjunto Hermanas del corazón.",
+      "backendValue": "SoulSibling"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "1",
+      "text": "Introducido en Capítulo 7, Temporada 1.",
+      "backendValue": 39
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/wrap_fondbreak/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/wrap_fondbreak/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/wrap_fondbreak/featured.png"
+     },
+     "added": "2026-02-05T15:01:36Z"
+    },
+    {
+     "id": "EID_LoveAFlare",
+     "name": "Destello de amor",
+     "description": "Aquí está ese amor y cariño que pediste.",
+     "type": {
+      "value": "emote",
+      "displayValue": "Gesto",
+      "backendValue": "AthenaDance"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "1",
+      "text": "Introducido en Capítulo 7, Temporada 1.",
+      "backendValue": 39
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/eid_loveaflare/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/eid_loveaflare/icon.png"
+     },
+     "showcaseVideo": "UfWQpwm76To",
+     "added": "2026-02-05T15:01:36Z"
+    },
+    {
+     "id": "Shoes_HeartThrobs",
+     "name": "Calzacorazones",
+     "description": "Presume tu estilo.",
+     "type": {
+      "value": "shoe",
+      "displayValue": "Calzado",
+      "backendValue": "CosmeticShoes"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "Hermanas del corazón",
+      "text": "Pieza del conjunto Hermanas del corazón.",
+      "backendValue": "SoulSibling"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "1",
+      "text": "Introducido en Capítulo 7, Temporada 1.",
+      "backendValue": 39
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/shoes_heartthrobs/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/shoes_heartthrobs/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/shoes_heartthrobs/featured.png"
+     },
+     "added": "2026-02-07T00:00:02Z"
+    }
+   ]
+  },
+  {
+   "regularPrice": 5500,
+   "finalPrice": 2300,
+   "devName": "[VIRTUAL]1 x Mineko, 1 x Glowing Blossom, 1 x Dollie, 1 x Doll Eyes, 1 x Pippa Pinns, 1 x Baneful Blaster, 1 x Music Box Mannequin, 1 x Baneful Bunbun, 1 x Dollie's Dark Portrait, 1 x Sakura Shamisen, 1 x Sakura Shamisen, 1 x Sakura Shamisen for -1 MtxCurrency",
+   "offerId": "v2:/d5dd28b1283696a25b7721001824b3f76d7f0dd58bec733c1ddd12732da549b0",
+   "inDate": "2026-11-27T00:00:00Z",
+   "outDate": "2026-11-29T23:59:59.999Z",
+   "bundle": {
+    "name": "Lote Muñecas perdidas",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/f51eb934575c81c5/renderimage_0.png"
+   },
+   "banner": {
+    "value": "3200 monedas V de descuento",
+    "intensity": "Low",
+    "backendValue": "AmountOff"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -1,
+   "layoutId": "BoC71.95",
+   "layout": {
+    "id": "BoC71",
+    "name": "Lo mejor del Capítulo 7",
+    "index": 28,
+    "rank": 196,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "441703ff",
+    "color2": "ffe08aff",
+    "color3": "9c6711ff",
+    "textBackgroundColor": "6e400dff"
+   },
+   "tileBackgroundMaterial": "ShopTile_Snowfall",
+   "tileSize": "Size_1_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_Vaguehex_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S42/DAv2_Bundle_Featured_Vaguehex",
+   "newDisplayAsset": {
+    "id": "DAv2_Bundle_Featured_VagueHex",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__f51eb934575c81c5_29c0c4191e61fb71.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/f51eb934575c81c5/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__f51eb934575c81c5_5aff8d0c456b1e98.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/f51eb934575c81c5/renderimage_1.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Character_PaleMaiko",
+     "name": "Mineko maléfica",
+     "description": "Una muñeca con un propósito sangriento.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "Muñecas mortíferas",
+      "text": "Pieza del conjunto Muñecas mortíferas.",
+      "backendValue": "OddBird"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_palemaiko/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_palemaiko/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_palemaiko/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_palemaiko/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_palemaiko/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_palemaiko/wide.png"
+      }
+     },
+     "showcaseVideo": "n9ziLRBwQlA",
+     "added": "2026-10-01T18:37:28Z"
+    },
+    {
+     "id": "Wrap_PaleMaiko",
+     "name": "Flor radiante",
+     "description": "Muestra tu estilo.",
+     "type": {
+      "value": "wrap",
+      "displayValue": "Papel",
+      "backendValue": "AthenaItemWrap"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Muñecas mortíferas",
+      "text": "Pieza del conjunto Muñecas mortíferas.",
+      "backendValue": "OddBird"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/wrap_palemaiko/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/wrap_palemaiko/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/wrap_palemaiko/featured.png"
+     },
+     "added": "2026-10-01T18:37:28Z"
+    },
+    {
+     "id": "Character_QuaintToy",
+     "name": "Dama demoníaca",
+     "description": "Pliegues, moños y algo oscuro.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "Muñecas mortíferas",
+      "text": "Pieza del conjunto Muñecas mortíferas.",
+      "backendValue": "OddBird"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_quainttoy/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_quainttoy/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_quainttoy/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_quainttoy/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_quainttoy/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_quainttoy/wide.png"
+      }
+     },
+     "showcaseVideo": "7pEl3SQng0o",
+     "added": "2026-10-01T18:37:28Z"
+    },
+    {
+     "id": "Wrap_QuaintToy",
+     "name": "Ojos de muñeca",
+     "description": "Muestra tu estilo.",
+     "type": {
+      "value": "wrap",
+      "displayValue": "Papel",
+      "backendValue": "AthenaItemWrap"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Muñecas mortíferas",
+      "text": "Pieza del conjunto Muñecas mortíferas.",
+      "backendValue": "OddBird"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/wrap_quainttoy/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/wrap_quainttoy/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/wrap_quainttoy/featured.png"
+     },
+     "added": "2026-10-01T18:37:28Z"
+    },
+    {
+     "id": "Character_VagueHex",
+     "name": "Matilda Maldita",
+     "description": "Una muñeca con maliciosas maquinaciones.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "Muñecas mortíferas",
+      "text": "Pieza del conjunto Muñecas mortíferas.",
+      "backendValue": "OddBird"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_vaguehex/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_vaguehex/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_vaguehex/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_vaguehex/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_vaguehex/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_vaguehex/wide.png"
+      }
+     },
+     "added": "2026-10-01T18:37:28Z"
+    },
+    {
+     "id": "Wrap_VagueHex",
+     "name": "Puntadas malditas",
+     "description": "Muestra tu estilo.",
+     "type": {
+      "value": "wrap",
+      "displayValue": "Papel",
+      "backendValue": "AthenaItemWrap"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Muñecas mortíferas",
+      "text": "Pieza del conjunto Muñecas mortíferas.",
+      "backendValue": "OddBird"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/wrap_vaguehex/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/wrap_vaguehex/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/wrap_vaguehex/featured.png"
+     },
+     "added": "2026-10-01T18:37:28Z"
+    },
+    {
+     "id": "EID_VagueHex",
+     "name": "Maniquí musical",
+     "description": "En posición y listo para empezar...",
+     "type": {
+      "value": "emote",
+      "displayValue": "Gesto",
+      "backendValue": "AthenaDance"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "Muñecas mortíferas",
+      "text": "Pieza del conjunto Muñecas mortíferas.",
+      "backendValue": "OddBird"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/eid_vaguehex/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/eid_vaguehex/icon.png"
+     },
+     "showcaseVideo": "ssCvvL3YWFA",
+     "added": "2026-10-01T18:37:28Z"
+    },
+    {
+     "id": "Backpack_VagueHex",
+     "name": "Liebre lúgubre",
+     "description": "Temible y suavecito.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Muñecas mortíferas",
+      "text": "Pieza del conjunto Muñecas mortíferas.",
+      "backendValue": "OddBird"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_vaguehex/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_vaguehex/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_vaguehex/featured.png"
+     },
+     "added": "2026-10-01T18:37:28Z"
+    },
+    {
+     "id": "Backpack_QuaintToy",
+     "name": "Retrato sombrío de Dama demoníaca",
+     "description": "Un juguete con sus luces y sombras.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Muñecas mortíferas",
+      "text": "Pieza del conjunto Muñecas mortíferas.",
+      "backendValue": "OddBird"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_quainttoy/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_quainttoy/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_quainttoy/featured.png"
+     },
+     "added": "2026-10-01T18:37:28Z"
+    },
+    {
+     "id": "Backpack_PaleMaiko_Guitar",
+     "name": "Shamisen de cerezos",
+     "description": "Un sonido que busca la luz envuelto en la oscuridad.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Muñecas mortíferas",
+      "text": "Pieza del conjunto Muñecas mortíferas.",
+      "backendValue": "OddBird"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_palemaiko_guitar/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_palemaiko_guitar/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_palemaiko_guitar/featured.png"
+     },
+     "added": "2026-10-01T18:37:28Z"
+    },
+    {
+     "id": "Pickaxe_PaleMaiko_Guitar",
+     "name": "Shamisen de cerezos",
+     "description": "Un sonido que busca la luz envuelto en la oscuridad.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "Muñecas mortíferas",
+      "text": "Pieza del conjunto Muñecas mortíferas.",
+      "backendValue": "OddBird"
+     },
+     "introduction": {
+      "chapter": "7",
+      "season": "4",
+      "text": "Introducido en Capítulo 7, Temporada 4.",
+      "backendValue": 42
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_palemaiko_guitar/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_palemaiko_guitar/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_palemaiko_guitar/featured.png"
+     },
+     "added": "2026-10-01T18:37:28Z"
+    }
+   ],
+   "instruments": [
+    {
+     "id": "Sparks_PaleMaiko_Guitar",
+     "name": "Shamisen de cerezos",
+     "description": "Un sonido que busca la luz envuelto en la oscuridad.",
+     "type": {
+      "value": "guitar",
+      "displayValue": "Guitarra",
+      "backendValue": "SparksGuitar"
+     },
+     "rarity": {
+      "value": "common",
+      "displayValue": "Común",
+      "backendValue": "EFortRarity::Common"
+     },
+     "images": {
+      "small": "https://fortnite-api.com/images/cosmetics/instruments/sparks_palemaiko_guitar/small.png",
+      "large": "https://fortnite-api.com/images/cosmetics/instruments/sparks_palemaiko_guitar/large.png"
+     },
+     "added": "2026-10-01T17:02:01Z"
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,790 @@
+{
+ "date": "2026-11-27T00:00:00Z",
+ "entries": [
+  {
+   "regularPrice": 11900,
+   "finalPrice": 3800,
+   "devName": "[VIRTUAL]1 x Saitama, 1 x Genos, 1 x Terrible Tornado, 1 x Centichoro, 1 x Mechanical Fist Hammer, 1 x Supermarket's Shopping Bag, 1 x Telekinetic Edge, 1 x Saitama's Routine, 1 x Ok, 1 x Psychokinesis, 1 x Genos' Core, 1 x Saitama's Alarm Clock, 1 x Tiny Terrible Tornado, 1 x One-Punch Man, 1 x One Punch Kit, 1 x Psychokinesis Mic, 1 x One Punch Kit, 1 x Psychokinesis Mic, 1 x One Punch Kit, 1 x Psychokinesis Mic for -1 MtxCurrency",
+   "offerId": "v2:/67bd0df622ccce9507580af09757e5cb7f628ea6bdfb819e0221a80d2aab6447",
+   "inDate": "2026-11-24T00:00:00Z",
+   "outDate": "2026-11-27T23:59:59.999Z",
+   "bundle": {
+    "name": "Lote One Punch Man",
+    "info": "Bundle",
+    "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/a4587aea2385f735/renderimage_0.png"
+   },
+   "banner": {
+    "value": "8100 monedas V de descuento",
+    "intensity": "Low",
+    "backendValue": "AmountOff"
+   },
+   "giftable": true,
+   "refundable": false,
+   "sortPriority": -1,
+   "layoutId": "OnePunchNoBillboard.99",
+   "layout": {
+    "id": "OnePunchNoBillboard",
+    "name": "One-Punch Man",
+    "index": 37,
+    "rank": 187,
+    "showIneligibleOffers": "always",
+    "useWidePreview": false,
+    "displayType": "tileGrid"
+   },
+   "colors": {
+    "color1": "aeccdfff",
+    "color3": "566370ff",
+    "textBackgroundColor": "333e48ff"
+   },
+   "tileBackgroundMaterial": "ShopTile_Pirates_Glass",
+   "tileSize": "Size_2_x_1",
+   "displayAssetPath": "/OfferCatalog/DisplayAssets/DA_Featured_IgniteEgg_Bundle",
+   "newDisplayAssetPath": "/OfferCatalog/NewDisplayAssets/S37/DAv2_Bundle_Featured_IgniteEgg",
+   "newDisplayAsset": {
+    "id": "DAv2_Bundle_Featured_IgniteEgg",
+    "materialInstances": [],
+    "renderImages": [
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__a4587aea2385f735_7401ca14bb1bb0bc.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/a4587aea2385f735/renderimage_0.png"
+     },
+     {
+      "productTag": "Product.BR",
+      "fileName": "cosmo__a4587aea2385f735_234644e885d632ad.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/a4587aea2385f735/renderimage_1.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__a4587aea2385f735_e042df494eb0062b.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/a4587aea2385f735/renderimage_2.png"
+     },
+     {
+      "productTag": "Product.Juno",
+      "fileName": "cosmo__a4587aea2385f735_656af304e40734e0.png",
+      "image": "https://fortnite-api.com/images/cosmetics/br/newdisplayassets/a4587aea2385f735/renderimage_3.png"
+     }
+    ]
+   },
+   "brItems": [
+    {
+     "id": "Character_IgniteEgg",
+     "name": "Saitama",
+     "description": "Trabaja como héroe por diversión.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "One-Punch Man",
+      "text": "Pieza del conjunto One-Punch Man.",
+      "backendValue": "BaldFist"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "5",
+      "text": "Introducido en Capítulo 6, Temporada 5.",
+      "backendValue": 37
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_igniteegg/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_igniteegg/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_igniteegg/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_igniteegg/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_igniteegg/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_igniteegg/wide.png"
+      }
+     },
+     "variants": [
+      {
+       "channel": "Parts",
+       "type": "estilo",
+       "options": [
+        {
+         "tag": "Stage1",
+         "name": "Saitama",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_igniteegg/variants/parts/stage1.png"
+        },
+        {
+         "tag": "Stage2",
+         "name": "Serio",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_igniteegg/variants/parts/stage2.png"
+        }
+       ]
+      }
+     ],
+     "metaTags": [
+      "Cosmetics.MetaTags.IgniteEgg_Jab"
+     ],
+     "showcaseVideo": "4aCqD3V2u54",
+     "added": "2025-08-27T16:19:21Z"
+    },
+    {
+     "id": "Character_ArmyFlour",
+     "name": "Genos",
+     "description": "Joven cíborg y discípulo de Saitama.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "One-Punch Man",
+      "text": "Pieza del conjunto One-Punch Man.",
+      "backendValue": "BaldFist"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "5",
+      "text": "Introducido en Capítulo 6, Temporada 5.",
+      "backendValue": 37
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_armyflour/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_armyflour/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_armyflour/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_armyflour/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_armyflour/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_armyflour/wide.png"
+      }
+     },
+     "variants": [
+      {
+       "channel": "Material",
+       "type": "brillo",
+       "options": [
+        {
+         "tag": "Mat1",
+         "name": "no",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_armyflour/variants/material/mat1.png"
+        },
+        {
+         "tag": "Mat2",
+         "name": "sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/character_armyflour/variants/material/mat2.png"
+        }
+       ]
+      }
+     ],
+     "builtInEmoteIds": [
+      "EID_ArmyFlour"
+     ],
+     "showcaseVideo": "KSE6WF9v1Sw",
+     "added": "2025-08-27T16:19:21Z"
+    },
+    {
+     "id": "Character_IvyStub",
+     "name": "Tornado del Terror",
+     "description": "Una psíquica que acaba con monstruos con poderes sobrenaturales.",
+     "type": {
+      "value": "outfit",
+      "displayValue": "Atuendo",
+      "backendValue": "AthenaCharacter"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "One-Punch Man",
+      "text": "Pieza del conjunto One-Punch Man.",
+      "backendValue": "BaldFist"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "5",
+      "text": "Introducido en Capítulo 6, Temporada 5.",
+      "backendValue": 37
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_ivystub/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/character_ivystub/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/character_ivystub/featured.png",
+      "lego": {
+       "small": "https://fortnite-api.com/images/cosmetics/lego/character_ivystub/small.png",
+       "large": "https://fortnite-api.com/images/cosmetics/lego/character_ivystub/large.png",
+       "wide": "https://fortnite-api.com/images/cosmetics/lego/character_ivystub/wide.png"
+      }
+     },
+     "showcaseVideo": "4vfTxgGtgWA",
+     "added": "2025-08-27T16:19:21Z"
+    },
+    {
+     "id": "Glider_IgniteEgg",
+     "name": "Centichoro",
+     "description": "Inspirado en Centichoro, miembro ejecutivo de la Asociación de Monstruos.",
+     "type": {
+      "value": "glider",
+      "displayValue": "Planeador",
+      "backendValue": "AthenaGlider"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "One-Punch Man",
+      "text": "Pieza del conjunto One-Punch Man.",
+      "backendValue": "BaldFist"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "5",
+      "text": "Introducido en Capítulo 6, Temporada 5.",
+      "backendValue": 37
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/glider_igniteegg/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/glider_igniteegg/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/glider_igniteegg/featured.png"
+     },
+     "added": "2025-08-27T16:19:21Z"
+    },
+    {
+     "id": "Pickaxe_ArmyFlour",
+     "name": "Puño martillo mecánico",
+     "description": "Martillo inspirado en Genos.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "One-Punch Man",
+      "text": "Pieza del conjunto One-Punch Man.",
+      "backendValue": "BaldFist"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "5",
+      "text": "Introducido en Capítulo 6, Temporada 5.",
+      "backendValue": 37
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_armyflour/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_armyflour/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_armyflour/featured.png"
+     },
+     "added": "2025-08-27T16:19:21Z"
+    },
+    {
+     "id": "Pickaxe_IgniteEgg",
+     "name": "Bolsa de supermercado",
+     "description": "No te olvides de los puerros.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "epic",
+      "displayValue": "Épico",
+      "backendValue": "EFortRarity::Epic"
+     },
+     "set": {
+      "value": "One-Punch Man",
+      "text": "Pieza del conjunto One-Punch Man.",
+      "backendValue": "BaldFist"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "5",
+      "text": "Introducido en Capítulo 6, Temporada 5.",
+      "backendValue": 37
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_igniteegg/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_igniteegg/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_igniteegg/featured.png"
+     },
+     "metaTags": [
+      "Cosmetics.HideBackPack"
+     ],
+     "added": "2025-08-27T16:19:21Z"
+    },
+    {
+     "id": "Pickaxe_IvyStub",
+     "name": "Filo telequinético",
+     "description": "Inspirado en los poderes de Tornado del Terror.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "One-Punch Man",
+      "text": "Pieza del conjunto One-Punch Man.",
+      "backendValue": "BaldFist"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "5",
+      "text": "Introducido en Capítulo 6, Temporada 5.",
+      "backendValue": 37
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_ivystub/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_ivystub/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_ivystub/featured.png"
+     },
+     "added": "2025-08-27T16:19:21Z"
+    },
+    {
+     "id": "EID_IgniteEgg",
+     "name": "Rutina de Saitama",
+     "description": "¡Todos los días!",
+     "type": {
+      "value": "emote",
+      "displayValue": "Gesto",
+      "backendValue": "AthenaDance"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "One-Punch Man",
+      "text": "Pieza del conjunto One-Punch Man.",
+      "backendValue": "BaldFist"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "5",
+      "text": "Introducido en Capítulo 6, Temporada 5.",
+      "backendValue": 37
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/eid_igniteegg/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/eid_igniteegg/icon.png"
+     },
+     "showcaseVideo": "19mCxO-LJoo",
+     "added": "2025-08-27T16:19:21Z"
+    },
+    {
+     "id": "EID_IgniteEgg_Jab",
+     "name": "Ok",
+     "description": "La expresión indiferente de Saitama.",
+     "type": {
+      "value": "emote",
+      "displayValue": "Gesto",
+      "backendValue": "AthenaDance"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "One-Punch Man",
+      "text": "Pieza del conjunto One-Punch Man.",
+      "backendValue": "BaldFist"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "5",
+      "text": "Introducido en Capítulo 6, Temporada 5.",
+      "backendValue": 37
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/eid_igniteegg_jab/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/eid_igniteegg_jab/icon.png"
+     },
+     "showcaseVideo": "BnAGVQhtGMs",
+     "added": "2025-08-27T16:19:21Z"
+    },
+    {
+     "id": "EID_IvyStub",
+     "name": "Psicoquinesis",
+     "description": "Desata los devastadores poderes psíquicos de Tornado del Terror.",
+     "type": {
+      "value": "emote",
+      "displayValue": "Gesto",
+      "backendValue": "AthenaDance"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "One-Punch Man",
+      "text": "Pieza del conjunto One-Punch Man.",
+      "backendValue": "BaldFist"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "5",
+      "text": "Introducido en Capítulo 6, Temporada 5.",
+      "backendValue": 37
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/eid_ivystub/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/eid_ivystub/icon.png"
+     },
+     "showcaseVideo": "uLgPRVaVxvE",
+     "added": "2025-08-27T16:19:21Z"
+    },
+    {
+     "id": "Backpack_ArmyFlour",
+     "name": "Núcleo de Genos",
+     "description": "Inspirada en el núcleo de Genos.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "One-Punch Man",
+      "text": "Pieza del conjunto One-Punch Man.",
+      "backendValue": "BaldFist"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "5",
+      "text": "Introducido en Capítulo 6, Temporada 5.",
+      "backendValue": 37
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_armyflour/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_armyflour/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_armyflour/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Parts",
+       "type": "reactivo",
+       "options": [
+        {
+         "tag": "Stage1",
+         "name": "sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/backpack_armyflour/variants/parts/stage1.png"
+        },
+        {
+         "tag": "Stage2",
+         "name": "no",
+         "image": "https://fortnite-api.com/images/cosmetics/br/backpack_armyflour/variants/parts/stage2.png"
+        }
+       ]
+      }
+     ],
+     "added": "2025-08-27T16:19:21Z"
+    },
+    {
+     "id": "Backpack_IgniteEgg",
+     "name": "Despertador de Saitama",
+     "description": "Un despertador plateado que usa Saitama.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "One-Punch Man",
+      "text": "Pieza del conjunto One-Punch Man.",
+      "backendValue": "BaldFist"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "5",
+      "text": "Introducido en Capítulo 6, Temporada 5.",
+      "backendValue": 37
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_igniteegg/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_igniteegg/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_igniteegg/featured.png"
+     },
+     "variants": [
+      {
+       "channel": "Parts",
+       "type": "reactivo",
+       "options": [
+        {
+         "tag": "Stage1",
+         "name": "sí",
+         "image": "https://fortnite-api.com/images/cosmetics/br/backpack_igniteegg/variants/parts/stage1.png"
+        },
+        {
+         "tag": "Stage2",
+         "name": "no",
+         "image": "https://fortnite-api.com/images/cosmetics/br/backpack_igniteegg/variants/parts/stage2.png"
+        }
+       ]
+      }
+     ],
+     "added": "2025-08-27T16:19:21Z"
+    },
+    {
+     "id": "Backpack_IvyStub",
+     "name": "Minitornado del Terror",
+     "description": "Inspirado en la mismísima Tornado del Terror.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "One-Punch Man",
+      "text": "Pieza del conjunto One-Punch Man.",
+      "backendValue": "BaldFist"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "5",
+      "text": "Introducido en Capítulo 6, Temporada 5.",
+      "backendValue": 37
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_ivystub/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_ivystub/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_ivystub/featured.png"
+     },
+     "added": "2025-08-27T16:19:21Z"
+    },
+    {
+     "id": "Wrap_IgniteEgg",
+     "name": "One Punch Man",
+     "description": "Muestra tu estilo.",
+     "type": {
+      "value": "wrap",
+      "displayValue": "Papel",
+      "backendValue": "AthenaItemWrap"
+     },
+     "rarity": {
+      "value": "uncommon",
+      "displayValue": "Poco común",
+      "backendValue": "EFortRarity::Uncommon"
+     },
+     "set": {
+      "value": "One-Punch Man",
+      "text": "Pieza del conjunto One-Punch Man.",
+      "backendValue": "BaldFist"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "5",
+      "text": "Introducido en Capítulo 6, Temporada 5.",
+      "backendValue": 37
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/wrap_igniteegg/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/wrap_igniteegg/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/wrap_igniteegg/featured.png"
+     },
+     "added": "2025-08-27T16:19:21Z"
+    },
+    {
+     "id": "Backpack_IgniteEgg_DrumStick",
+     "name": "Kit de One-Punch Man",
+     "description": "Batería inspirada en One Punch Man.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "One-Punch Man",
+      "text": "Pieza del conjunto One-Punch Man.",
+      "backendValue": "BaldFist"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "5",
+      "text": "Introducido en Capítulo 6, Temporada 5.",
+      "backendValue": 37
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_igniteegg_drumstick/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_igniteegg_drumstick/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_igniteegg_drumstick/featured.png"
+     },
+     "added": "2025-08-27T16:19:21Z"
+    },
+    {
+     "id": "Backpack_IvyStub_Mic",
+     "name": "Voz psicoquinética",
+     "description": "Desata un tornado de sonido.",
+     "type": {
+      "value": "backpack",
+      "displayValue": "Mochila retro",
+      "backendValue": "AthenaBackpack"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "One-Punch Man",
+      "text": "Pieza del conjunto One-Punch Man.",
+      "backendValue": "BaldFist"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "5",
+      "text": "Introducido en Capítulo 6, Temporada 5.",
+      "backendValue": 37
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/backpack_ivystub_mic/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/backpack_ivystub_mic/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/backpack_ivystub_mic/featured.png"
+     },
+     "added": "2025-08-27T16:19:21Z"
+    },
+    {
+     "id": "Pickaxe_IgniteEgg_DrumStick",
+     "name": "Kit de One-Punch Man",
+     "description": "Batería inspirada en One Punch Man.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "One-Punch Man",
+      "text": "Pieza del conjunto One-Punch Man.",
+      "backendValue": "BaldFist"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "5",
+      "text": "Introducido en Capítulo 6, Temporada 5.",
+      "backendValue": 37
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_igniteegg_drumstick/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_igniteegg_drumstick/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_igniteegg_drumstick/featured.png"
+     },
+     "added": "2025-08-27T16:19:21Z"
+    },
+    {
+     "id": "Pickaxe_IvyStub_Mic",
+     "name": "Voz psicoquinética",
+     "description": "Desata un tornado de sonido.",
+     "type": {
+      "value": "pickaxe",
+      "displayValue": "Pico",
+      "backendValue": "AthenaPickaxe"
+     },
+     "rarity": {
+      "value": "rare",
+      "displayValue": "Raro",
+      "backendValue": "EFortRarity::Rare"
+     },
+     "set": {
+      "value": "One-Punch Man",
+      "text": "Pieza del conjunto One-Punch Man.",
+      "backendValue": "BaldFist"
+     },
+     "introduction": {
+      "chapter": "6",
+      "season": "5",
+      "text": "Introducido en Capítulo 6, Temporada 5.",
+      "backendValue": 37
+     },
+     "images": {
+      "smallIcon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_ivystub_mic/smallicon.png",
+      "icon": "https://fortnite-api.com/images/cosmetics/br/pickaxe_ivystub_mic/icon.png",
+      "featured": "https://fortnite-api.com/images/cosmetics/br/pickaxe_ivystub_mic/featured.png"
+     },
+     "added": "2025-08-27T16:19:21Z"
+    }
+   ],
+   "instruments": [
+    {
+     "id": "Sparks_IgniteEgg_DrumKit",
+     "name": "Kit de One-Punch Man",
+     "description": "Batería inspirada en One Punch Man.",
+     "type": {
+      "value": "drum",
+      "displayValue": "Baterías",
+      "backendValue": "SparksDrum"
+     },
+     "rarity": {
+      "value": "common",
+      "displayValue": "Común",
+      "backendValue": "EFortRarity::Common"
+     },
+     "images": {
+      "small": "https://fortnite-api.com/images/cosmetics/instruments/sparks_igniteegg_drumkit/small.png",
+      "large": "https://fortnite-api.com/images/cosmetics/instruments/sparks_igniteegg_drumkit/large.png"
+     },
+     "added": "2025-08-27T16:19:02Z"
+    },
+    {
+     "id": "Sparks_IvyStub_Mic",
+     "name": "Voz psicoquinética",
+     "description": "Desata un tornado de sonido.",
+     "type": {
+      "value": "mic",
+      "displayValue": "Micrófono",
+      "backendValue": "SparksMic"
+     },
+     "rarity": {
+      "value": "common",
+      "displayValue": "Común",
+      "backendValue": "EFortRarity::Common"
+     },
+     "images": {
+      "small": "https://fortnite-api.com/images/cosmetics/instruments/sparks_ivystub_mic/small.png",
+      "large": "https://fortnite-api.com/images/cosmetics/instruments/sparks_ivystub_mic/large.png"
+     },
+     "added": "2025-08-27T16:19:02Z"
+    }
+   ]
+  }
+ ]
+}
