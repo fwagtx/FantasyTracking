@@ -1,0 +1,116 @@
+{
+ "duration": 29.9,
+ "caption": "#EpicPartner Tienda de objetos de Fortnite, 27 de noviembre: el Paquete Leyendas del hielo negro cuesta 2500 V-Bucks en vez de 7400 (ahorras 4900), Cero absoluto y Asesina ártica están en la tienda (Capítulo 1, Temporada 1, 62 días sin salir) y 10 skins se van el 27 de noviembre a las 6 PM (CDMX).\n¿Vas a comprar hoy? Usa el código BAD en la tienda de objetos.\n#Fortnite #TiendaFortnite #FortniteTienda",
+ "claims": [
+  {
+   "text": "Paquete Leyendas del hielo negro: 2500 V-Bucks, regular 7400",
+   "source": "shop.json",
+   "match": [
+    "Paquete Leyendas del hielo negro",
+    "\"finalPrice\": 2500",
+    "\"regularPrice\": 7400"
+   ]
+  },
+  {
+   "text": "Cero absoluto: Capítulo 1, Temporada 1",
+   "source": "history.json",
+   "match": [
+    "Cero absoluto",
+    "\"chapter\": 1",
+    "\"season\": 1"
+   ]
+  },
+  {
+   "text": "Asesina ártica: Capítulo 1, Temporada 1",
+   "source": "history.json",
+   "match": [
+    "Asesina ártica",
+    "\"chapter\": 1",
+    "\"season\": 1"
+   ]
+  },
+  {
+   "text": "62 days since last in the shop",
+   "source": "history.json",
+   "match": [
+    "\"gapDays\": 62"
+   ]
+  },
+  {
+   "text": "10 outfits leave at the next reset",
+   "source": "plan.json",
+   "match": [
+    "\"count\": 10"
+   ]
+  }
+ ],
+ "text": [
+  "MIDAS CONGELADO",
+  "ASESINA ÁRTICA",
+  "CAMILLE",
+  "OFERTA",
+  "OG",
+  "ÚLTIMO DÍA",
+  "TIENDA DE HOY / 27 NOV",
+  "1 · OFERTA",
+  "SAQUEADORA HIELO ETERNO",
+  "CRYSTAL CONGELADA",
+  "2500",
+  "7400",
+  "PAQUETE LEYENDAS DEL HIELO NEGRO · SE VA EL 29 NOV",
+  "-66% / AHORRAS 4900",
+  "2 · REGRESO OG",
+  "CERO ABSOLUTO",
+  "CAPÍTULO 1 · TEMPORADA 1",
+  "¡CERO ABSOLUTO: 62 DÍAS!",
+  "3 · ÚLTIMO DÍA",
+  "GENOS",
+  "PULGOSO",
+  "SAITAMA",
+  "TORNADO DEL TERROR",
+  "ROEMENTE",
+  "+4 MÁS",
+  "SE VAN EL 27 NOV, 6 PM",
+  "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+  "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+  "ESTA ES LA",
+  "TIENDA DE OBJETOS",
+  "DE HOY,",
+  "27 DE NOVIEMBRE.",
+  "¡TRES COSAS ANTES",
+  "DE GASTAR UN",
+  "SOLO PAVO!",
+  "EL PAQUETE LEYENDAS",
+  "DEL HIELO NEGRO:",
+  "2500 PAVOS,",
+  "EN VEZ DE",
+  "7400.",
+  "¡TE AHORRAS 4900!",
+  "CERO ABSOLUTO Y",
+  "ASESINA ÁRTICA ESTÁN",
+  "EN LA TIENDA.",
+  "LAS DOS SON",
+  "DEL CAPÍTULO 1,",
+  "TEMPORADA 1,",
+  "Y CERO ABSOLUTO",
+  "NO SALÍA DESDE",
+  "HACE 62 DÍAS.",
+  "Y DIEZ SKINS",
+  "ESTÁN EN SU",
+  "ÚLTIMO DÍA,",
+  "SEIS DE ELLAS",
+  "ÉPICAS.",
+  "¿VAS A COMPRAR",
+  "ALGO HOY?",
+  "USA EL CÓDIGO",
+  "BAD EN LA",
+  "TIENDA DE OBJETOS.",
+  "LE AYUDA MUCHÍSIMO",
+  "AL CANAL.",
+  "¡GRACIAS POR VER!",
+  "SÍGUENOS PARA MÁS",
+  "CONTENIDO DIARIO.",
+  "#EPICPARTNER",
+  "LA TIENDITA BAD"
+ ]
+}
