@@ -269,6 +269,34 @@
    "label": "la búsqueda del tesoro termina el 5 dic"
   },
   {
+   "type": "stat",
+   "p": 2,
+   "big": "En este video",
+   "label": "lo nuevo · las Horas del Tesoro · el plan"
+  },
+  {
+   "type": "items",
+   "p": 3,
+   "title": "Y al final: la tienda de hoy",
+   "items": [
+    {
+     "img": "../../tiendabad/video/long/2026-11-28-ultima-semana-tesoro/img/Character_RampCanal.png",
+     "name": "Sung Jinwoo",
+     "rarity": "gaminglegends"
+    },
+    {
+     "img": "../../tiendabad/video/long/2026-11-28-ultima-semana-tesoro/img/Character_TrackWaver.png",
+     "name": "Mercy",
+     "rarity": "gaminglegends"
+    },
+    {
+     "img": "../../tiendabad/video/long/2026-11-28-ultima-semana-tesoro/img/Character_CeleryStitch.png",
+     "name": "Monkey D. Luffy",
+     "rarity": "epic"
+    }
+   ]
+  },
+  {
    "type": "quote",
    "p": 4,
    "chapter": "Semana dorada",
