@@ -1,0 +1,504 @@
+{
+ "Character_RampCanal": {
+  "id": "Character_RampCanal",
+  "name": "Sung Jinwoo",
+  "description": "Un jugador absoluto.",
+  "type": {
+   "value": "outfit",
+   "displayValue": "Atuendo",
+   "backendValue": "AthenaCharacter"
+  },
+  "rarity": {
+   "value": "gaminglegends",
+   "displayValue": "Leyendas de videojuegos",
+   "backendValue": "EFortRarity::Epic"
+  },
+  "series": {
+   "value": "Leyendas de videojuegos",
+   "colors": [
+    "8078ffff",
+    "5328d6ff",
+    "3e1398ff",
+    "28085fff",
+    "0d0027ff"
+   ],
+   "backendValue": "PlatformSeries"
+  },
+  "set": {
+   "value": "Solo Leveling: ARISE",
+   "text": "Pieza del conjunto Solo Leveling: ARISE.",
+   "backendValue": "PolarStorm"
+  },
+  "introduction": {
+   "chapter": "7",
+   "season": "1",
+   "text": "Introducido en Capítulo 7, Temporada 1.",
+   "backendValue": 39
+  },
+  "images": {
+   "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_rampcanal/smallicon.png",
+   "icon": "https://fortnite-api.com/images/cosmetics/br/character_rampcanal/icon.png",
+   "featured": "https://fortnite-api.com/images/cosmetics/br/character_rampcanal/featured.png"
+  },
+  "variants": [
+   {
+    "channel": "Parts",
+    "type": "estilo",
+    "options": [
+     {
+      "tag": "Stage1",
+      "name": "Sung Jinwoo",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_rampcanal/variants/parts/stage1.png"
+     },
+     {
+      "tag": "Stage2",
+      "name": "Listo para el combate",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_rampcanal/variants/parts/stage2.png"
+     }
+    ]
+   }
+  ],
+  "showcaseVideo": "D-UhXjNhdjc",
+  "added": "2026-02-19T09:26:27Z"
+ },
+ "Character_BirchPalace": {
+  "id": "Character_BirchPalace",
+  "name": "Igris Comandante Escarlata",
+  "description": "Honor sin piedad.",
+  "type": {
+   "value": "outfit",
+   "displayValue": "Atuendo",
+   "backendValue": "AthenaCharacter"
+  },
+  "rarity": {
+   "value": "gaminglegends",
+   "displayValue": "Leyendas de videojuegos",
+   "backendValue": "EFortRarity::Epic"
+  },
+  "series": {
+   "value": "Leyendas de videojuegos",
+   "colors": [
+    "8078ffff",
+    "5328d6ff",
+    "3e1398ff",
+    "28085fff",
+    "0d0027ff"
+   ],
+   "backendValue": "PlatformSeries"
+  },
+  "set": {
+   "value": "Solo Leveling: ARISE",
+   "text": "Pieza del conjunto Solo Leveling: ARISE.",
+   "backendValue": "PolarStorm"
+  },
+  "introduction": {
+   "chapter": "7",
+   "season": "1",
+   "text": "Introducido en Capítulo 7, Temporada 1.",
+   "backendValue": 39
+  },
+  "images": {
+   "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_birchpalace/smallicon.png",
+   "icon": "https://fortnite-api.com/images/cosmetics/br/character_birchpalace/icon.png",
+   "featured": "https://fortnite-api.com/images/cosmetics/br/character_birchpalace/featured.png"
+  },
+  "variants": [
+   {
+    "channel": "Material",
+    "type": "Estilo",
+    "options": [
+     {
+      "tag": "Mat1",
+      "name": "Igris Comandante Escarlata",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_birchpalace/variants/material/mat1.png"
+     },
+     {
+      "tag": "Mat2",
+      "name": "Sombra",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_birchpalace/variants/material/mat2.png"
+     }
+    ]
+   }
+  ],
+  "builtInEmoteIds": [
+   "EID_BirchPalace"
+  ],
+  "showcaseVideo": "hNmJ1ybbzOQ",
+  "added": "2026-02-19T10:00:25Z"
+ },
+ "Character_QuirkLuster": {
+  "id": "Character_QuirkLuster",
+  "name": "Cha Hae-In",
+  "description": "Absolutamente radiante.",
+  "type": {
+   "value": "outfit",
+   "displayValue": "Atuendo",
+   "backendValue": "AthenaCharacter"
+  },
+  "rarity": {
+   "value": "gaminglegends",
+   "displayValue": "Leyendas de videojuegos",
+   "backendValue": "EFortRarity::Epic"
+  },
+  "series": {
+   "value": "Leyendas de videojuegos",
+   "colors": [
+    "8078ffff",
+    "5328d6ff",
+    "3e1398ff",
+    "28085fff",
+    "0d0027ff"
+   ],
+   "backendValue": "PlatformSeries"
+  },
+  "set": {
+   "value": "Solo Leveling: ARISE",
+   "text": "Pieza del conjunto Solo Leveling: ARISE.",
+   "backendValue": "PolarStorm"
+  },
+  "introduction": {
+   "chapter": "7",
+   "season": "1",
+   "text": "Introducido en Capítulo 7, Temporada 1.",
+   "backendValue": 39
+  },
+  "images": {
+   "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_quirkluster/smallicon.png",
+   "icon": "https://fortnite-api.com/images/cosmetics/br/character_quirkluster/icon.png",
+   "featured": "https://fortnite-api.com/images/cosmetics/br/character_quirkluster/featured.png"
+  },
+  "showcaseVideo": "tIbgyi6UsXc",
+  "added": "2026-02-19T10:00:25Z"
+ },
+ "Character_TrackWaver": {
+  "id": "Character_TrackWaver",
+  "name": "Mercy",
+  "description": "El ángel de la guarda de Overwatch en el campo de batalla.",
+  "type": {
+   "value": "outfit",
+   "displayValue": "Atuendo",
+   "backendValue": "AthenaCharacter"
+  },
+  "rarity": {
+   "value": "gaminglegends",
+   "displayValue": "Leyendas de videojuegos",
+   "backendValue": "EFortRarity::Epic"
+  },
+  "series": {
+   "value": "Leyendas de videojuegos",
+   "colors": [
+    "8078ffff",
+    "5328d6ff",
+    "3e1398ff",
+    "28085fff",
+    "0d0027ff"
+   ],
+   "backendValue": "PlatformSeries"
+  },
+  "set": {
+   "value": "Overwatch",
+   "text": "Pieza del conjunto Overwatch.",
+   "backendValue": "AlpineSaturn"
+  },
+  "introduction": {
+   "chapter": "7",
+   "season": "2",
+   "text": "Introducido en Capítulo 7, Temporada 2.",
+   "backendValue": 40
+  },
+  "images": {
+   "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_trackwaver/smallicon.png",
+   "icon": "https://fortnite-api.com/images/cosmetics/br/character_trackwaver/icon.png",
+   "featured": "https://fortnite-api.com/images/cosmetics/br/character_trackwaver/featured.png",
+   "lego": {
+    "small": "https://fortnite-api.com/images/cosmetics/lego/character_trackwaver/small.png",
+    "large": "https://fortnite-api.com/images/cosmetics/lego/character_trackwaver/large.png",
+    "wide": "https://fortnite-api.com/images/cosmetics/lego/character_trackwaver/wide.png"
+   }
+  },
+  "variants": [
+   {
+    "channel": "Parts",
+    "type": "estilo",
+    "options": [
+     {
+      "tag": "Stage1",
+      "name": "Mercy",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_trackwaver/variants/parts/stage1.png"
+     },
+     {
+      "tag": "Stage2",
+      "name": "Diabla",
+      "image": "https://fortnite-api.com/images/cosmetics/br/character_trackwaver/variants/parts/stage2.png"
+     }
+    ]
+   }
+  ],
+  "showcaseVideo": "--mkpe1Tu9A",
+  "added": "2026-05-14T09:00:00Z"
+ },
+ "Character_SkiffGrind": {
+  "id": "Character_SkiffGrind",
+  "name": "D.Va",
+  "description": "La estrella fugaz del escuadrón MEKA.",
+  "type": {
+   "value": "outfit",
+   "displayValue": "Atuendo",
+   "backendValue": "AthenaCharacter"
+  },
+  "rarity": {
+   "value": "gaminglegends",
+   "displayValue": "Leyendas de videojuegos",
+   "backendValue": "EFortRarity::Epic"
+  },
+  "series": {
+   "value": "Leyendas de videojuegos",
+   "colors": [
+    "8078ffff",
+    "5328d6ff",
+    "3e1398ff",
+    "28085fff",
+    "0d0027ff"
+   ],
+   "backendValue": "PlatformSeries"
+  },
+  "set": {
+   "value": "Overwatch",
+   "text": "Pieza del conjunto Overwatch.",
+   "backendValue": "AlpineSaturn"
+  },
+  "introduction": {
+   "chapter": "7",
+   "season": "2",
+   "text": "Introducido en Capítulo 7, Temporada 2.",
+   "backendValue": 40
+  },
+  "images": {
+   "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_skiffgrind/smallicon.png",
+   "icon": "https://fortnite-api.com/images/cosmetics/br/character_skiffgrind/icon.png",
+   "featured": "https://fortnite-api.com/images/cosmetics/br/character_skiffgrind/featured.png",
+   "lego": {
+    "small": "https://fortnite-api.com/images/cosmetics/lego/character_skiffgrind/small.png",
+    "large": "https://fortnite-api.com/images/cosmetics/lego/character_skiffgrind/large.png",
+    "wide": "https://fortnite-api.com/images/cosmetics/lego/character_skiffgrind/wide.png"
+   }
+  },
+  "showcaseVideo": "28QSPdVX87E",
+  "added": "2026-05-14T09:00:00Z"
+ },
+ "Character_LooseCreep": {
+  "id": "Character_LooseCreep",
+  "name": "Tracer",
+  "description": "Si parpadeas, desaparece.",
+  "type": {
+   "value": "outfit",
+   "displayValue": "Atuendo",
+   "backendValue": "AthenaCharacter"
+  },
+  "rarity": {
+   "value": "gaminglegends",
+   "displayValue": "Leyendas de videojuegos",
+   "backendValue": "EFortRarity::Epic"
+  },
+  "series": {
+   "value": "Leyendas de videojuegos",
+   "colors": [
+    "8078ffff",
+    "5328d6ff",
+    "3e1398ff",
+    "28085fff",
+    "0d0027ff"
+   ],
+   "backendValue": "PlatformSeries"
+  },
+  "set": {
+   "value": "Overwatch",
+   "text": "Pieza del conjunto Overwatch.",
+   "backendValue": "AlpineSaturn"
+  },
+  "introduction": {
+   "chapter": "7",
+   "season": "2",
+   "text": "Introducido en Capítulo 7, Temporada 2.",
+   "backendValue": 40
+  },
+  "images": {
+   "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_loosecreep/smallicon.png",
+   "icon": "https://fortnite-api.com/images/cosmetics/br/character_loosecreep/icon.png",
+   "featured": "https://fortnite-api.com/images/cosmetics/br/character_loosecreep/featured.png",
+   "lego": {
+    "small": "https://fortnite-api.com/images/cosmetics/lego/character_loosecreep/small.png",
+    "large": "https://fortnite-api.com/images/cosmetics/lego/character_loosecreep/large.png",
+    "wide": "https://fortnite-api.com/images/cosmetics/lego/character_loosecreep/wide.png"
+   }
+  },
+  "showcaseVideo": "EUrmGELmQhw",
+  "added": "2026-05-14T09:00:00Z"
+ },
+ "Character_FacetBlom": {
+  "id": "Character_FacetBlom",
+  "name": "Genji",
+  "description": "Un ciberninja legendario.",
+  "type": {
+   "value": "outfit",
+   "displayValue": "Atuendo",
+   "backendValue": "AthenaCharacter"
+  },
+  "rarity": {
+   "value": "gaminglegends",
+   "displayValue": "Leyendas de videojuegos",
+   "backendValue": "EFortRarity::Epic"
+  },
+  "series": {
+   "value": "Leyendas de videojuegos",
+   "colors": [
+    "8078ffff",
+    "5328d6ff",
+    "3e1398ff",
+    "28085fff",
+    "0d0027ff"
+   ],
+   "backendValue": "PlatformSeries"
+  },
+  "set": {
+   "value": "Overwatch",
+   "text": "Pieza del conjunto Overwatch.",
+   "backendValue": "AlpineSaturn"
+  },
+  "introduction": {
+   "chapter": "7",
+   "season": "2",
+   "text": "Introducido en Capítulo 7, Temporada 2.",
+   "backendValue": 40
+  },
+  "images": {
+   "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_facetblom/smallicon.png",
+   "icon": "https://fortnite-api.com/images/cosmetics/br/character_facetblom/icon.png",
+   "featured": "https://fortnite-api.com/images/cosmetics/br/character_facetblom/featured.png",
+   "lego": {
+    "small": "https://fortnite-api.com/images/cosmetics/lego/character_facetblom/small.png",
+    "large": "https://fortnite-api.com/images/cosmetics/lego/character_facetblom/large.png",
+    "wide": "https://fortnite-api.com/images/cosmetics/lego/character_facetblom/wide.png"
+   }
+  },
+  "showcaseVideo": "TLsJdBZqP_U",
+  "added": "2026-05-14T09:00:00Z"
+ },
+ "Character_CeleryStitch": {
+  "id": "Character_CeleryStitch",
+  "name": "Monkey D. Luffy",
+  "description": "¡Será el nuevo rey de los piratas!",
+  "type": {
+   "value": "outfit",
+   "displayValue": "Atuendo",
+   "backendValue": "AthenaCharacter"
+  },
+  "rarity": {
+   "value": "epic",
+   "displayValue": "Épico",
+   "backendValue": "EFortRarity::Epic"
+  },
+  "set": {
+   "value": "One Piece",
+   "text": "Pieza del conjunto One Piece.",
+   "backendValue": "FrailShark"
+  },
+  "introduction": {
+   "chapter": "7",
+   "season": "5",
+   "text": "Introducido en Capítulo 7, Temporada 5.",
+   "backendValue": 43
+  },
+  "images": {
+   "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_celerystitch/smallicon.png",
+   "icon": "https://fortnite-api.com/images/cosmetics/br/character_celerystitch/icon.png",
+   "featured": "https://fortnite-api.com/images/cosmetics/br/character_celerystitch/featured.png",
+   "lego": {
+    "small": "https://fortnite-api.com/images/cosmetics/lego/character_celerystitch/small.png",
+    "large": "https://fortnite-api.com/images/cosmetics/lego/character_celerystitch/large.png",
+    "wide": "https://fortnite-api.com/images/cosmetics/lego/character_celerystitch/wide.png"
+   }
+  },
+  "showcaseVideo": "U4dZqudChDw",
+  "added": "2026-11-01T05:00:00Z"
+ },
+ "Character_BoastJoint": {
+  "id": "Character_BoastJoint",
+  "name": "Nami",
+  "description": "Ladrona, navegante y cartógrafa.",
+  "type": {
+   "value": "outfit",
+   "displayValue": "Atuendo",
+   "backendValue": "AthenaCharacter"
+  },
+  "rarity": {
+   "value": "epic",
+   "displayValue": "Épico",
+   "backendValue": "EFortRarity::Epic"
+  },
+  "set": {
+   "value": "One Piece",
+   "text": "Pieza del conjunto One Piece.",
+   "backendValue": "FrailShark"
+  },
+  "introduction": {
+   "chapter": "7",
+   "season": "5",
+   "text": "Introducido en Capítulo 7, Temporada 5.",
+   "backendValue": 43
+  },
+  "images": {
+   "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_boastjoint/smallicon.png",
+   "icon": "https://fortnite-api.com/images/cosmetics/br/character_boastjoint/icon.png",
+   "featured": "https://fortnite-api.com/images/cosmetics/br/character_boastjoint/featured.png",
+   "lego": {
+    "small": "https://fortnite-api.com/images/cosmetics/lego/character_boastjoint/small.png",
+    "large": "https://fortnite-api.com/images/cosmetics/lego/character_boastjoint/large.png",
+    "wide": "https://fortnite-api.com/images/cosmetics/lego/character_boastjoint/wide.png"
+   }
+  },
+  "metaTags": [
+   "Cosmetics.Emote.CharacterGroup.Skirts"
+  ],
+  "showcaseVideo": "M37HpMEFGR0",
+  "added": "2026-11-01T05:00:00Z"
+ },
+ "Character_LoomRise": {
+  "id": "Character_LoomRise",
+  "name": "Usopp",
+  "description": "Francotirador y mitómano.",
+  "type": {
+   "value": "outfit",
+   "displayValue": "Atuendo",
+   "backendValue": "AthenaCharacter"
+  },
+  "rarity": {
+   "value": "epic",
+   "displayValue": "Épico",
+   "backendValue": "EFortRarity::Epic"
+  },
+  "set": {
+   "value": "One Piece",
+   "text": "Pieza del conjunto One Piece.",
+   "backendValue": "FrailShark"
+  },
+  "introduction": {
+   "chapter": "7",
+   "season": "5",
+   "text": "Introducido en Capítulo 7, Temporada 5.",
+   "backendValue": 43
+  },
+  "images": {
+   "smallIcon": "https://fortnite-api.com/images/cosmetics/br/character_loomrise/smallicon.png",
+   "icon": "https://fortnite-api.com/images/cosmetics/br/character_loomrise/icon.png",
+   "featured": "https://fortnite-api.com/images/cosmetics/br/character_loomrise/featured.png",
+   "lego": {
+    "small": "https://fortnite-api.com/images/cosmetics/lego/character_loomrise/small.png",
+    "large": "https://fortnite-api.com/images/cosmetics/lego/character_loomrise/large.png",
+    "wide": "https://fortnite-api.com/images/cosmetics/lego/character_loomrise/wide.png"
+   }
+  },
+  "showcaseVideo": "tTSfkTgvsio",
+  "added": "2026-11-01T05:00:00Z"
+ }
+}

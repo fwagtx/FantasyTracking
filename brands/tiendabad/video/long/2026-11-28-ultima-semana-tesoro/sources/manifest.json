@@ -1,0 +1,41 @@
+{
+ "via": "fortnite-api.com (mirror of Epic's own data, es-419) for the in-game news (fetched today), today's Item Shop (shop_daily.py's fetch; the three most expensive offers kept, copied verbatim) and the ten outfits shown (fetched today). The Treasure Hunt rules, odds and Treasure Hours schedule come from press reports quoting Epic's Fortnite Status posts, fetched live yesterday at 19:23 UTC with Firecrawl (maxAge 0) for the PIRATA run; passages copied verbatim (link and bold markup removed). fortnite.com and x.com are not reachable from cloud sessions.",
+ "files": [
+  {
+   "file": "news.json",
+   "source": "In-game news feed, Battle Royale (es-419)",
+   "url": "https://fortnite-api.com/v2/news/br?language=es-419",
+   "fetched_utc": "2026-11-28T11:14:58Z"
+  },
+  {
+   "file": "vgc-odds-confirmed.json",
+   "source": "VGC: Fortnite officially confirms Pirate Shop Access Token drop rate (Nov 9, 2026), reporting Epic's Fortnite Status post",
+   "url": "https://www.videogameschronicle.com/news/fortnite-officially-confirms-pirate-shop-access-token-drop-rate-as-players-hunt-for-item-which-makes-entire-shop-free/",
+   "fetched_utc": "2026-11-27T19:23:00Z"
+  },
+  {
+   "file": "vgc-guide.json",
+   "source": "VGC: Fortnite Pirate Shop Token guide (published Nov 5, 2026, updated Nov 8 with Epic's confirmed odds)",
+   "url": "https://www.videogameschronicle.com/news/fortnite-pirate-shop-access-token-guide/",
+   "fetched_utc": "2026-11-27T19:23:00Z"
+  },
+  {
+   "file": "vice-treasure-hours.json",
+   "source": "VICE: Fortnite Pirate Token Drop Rate Revealed – Normal and Treasure Hour Odds (Nov 7, 2026), reporting Epic's Fortnite Status schedule",
+   "url": "https://www.vice.com/en/article/fortnite-pirate-token-drop-rate-confirmed/",
+   "fetched_utc": "2026-11-27T19:23:00Z"
+  },
+  {
+   "file": "shop.json",
+   "source": "Item Shop for 2026-11-28 (subset: its three most expensive offers)",
+   "url": "https://fortnite-api.com/v2/shop?language=es-419",
+   "fetched_utc": "2026-11-28T00:12:52Z"
+  },
+  {
+   "file": "cosmetics.json",
+   "source": "The ten outfits shown (es-419)",
+   "url": "https://fortnite-api.com/v2/cosmetics/br/<id>?language=es-419",
+   "fetched_utc": "2026-11-28T11:23:10Z"
+  }
+ ]
+}

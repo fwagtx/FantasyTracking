@@ -1,0 +1,277 @@
+{
+ "phrases": [
+  {
+   "text": "La búsqueda del tesoro de Fortnite entra en su última semana.",
+   "pause": 0.4
+  },
+  {
+   "text": "Termina el 5 de diciembre: o sea, te quedan 7 días para encontrar la Tienda Pirata.",
+   "pause": 0.4,
+   "say": "Termina el cinco de diciembre: o sea, te quedan siete días para encontrar la Tienda Pirata."
+  },
+  {
+   "text": "Hoy te cuento lo nuevo de esta semana, las Horas del Tesoro de hoy sábado, y el plan para que no se te escape.",
+   "pause": 0.4
+  },
+  {
+   "text": "Y al final, lo que te llevarías hoy de la tienda si te sale la ficha.",
+   "pause": 0.4
+  },
+  {
+   "text": "Primero, lo nuevo. Las noticias del juego dicen así:",
+   "pause": 0.4
+  },
+  {
+   "text": "A partir del 28/11, el botín actualizado se une al tesoro desenterrado durante la Semana dorada,",
+   "pause": 0.4,
+   "say": "A partir del veintiocho de noviembre, el botín actualizado se une al tesoro desenterrado durante la Semana dorada,"
+  },
+  {
+   "text": "donde los bienes dorados de cada Capitán vuelven a estar en cofres junto con el doble de polvo de espíritu y PE.",
+   "pause": 0.4,
+   "say": "donde los bienes dorados de cada Capitán vuelven a estar en cofres junto con el doble de polvo de espíritu y pe e."
+  },
+  {
+   "text": "Luego, súbete a bordo para el Día de la comunidad el 5/12.",
+   "pause": 0.4,
+   "say": "Luego, súbete a bordo para el Día de la comunidad el cinco de diciembre."
+  },
+  {
+   "text": "O sea: la Semana dorada empieza hoy, 28 de noviembre.",
+   "pause": 0.4,
+   "say": "O sea: la Semana dorada empieza hoy, veintiocho de noviembre."
+  },
+  {
+   "text": "Los bienes dorados de cada Capitán vuelven a estar en los cofres.",
+   "pause": 0.4
+  },
+  {
+   "text": "Y hay doble polvo de espíritu, y doble PE.",
+   "pause": 0.4,
+   "say": "Y hay doble polvo de espíritu, y doble pe e."
+  },
+  {
+   "text": "Y el 5 de diciembre llega el Día de la comunidad…",
+   "pause": 0.4,
+   "say": "Y el cinco de diciembre llega el Día de la comunidad…"
+  },
+  {
+   "text": "justo el último día de la búsqueda del tesoro.",
+   "pause": 0.4
+  },
+  {
+   "text": "Y hoy sábado hay Horas del Tesoro, en dos rondas.",
+   "pause": 0.4
+  },
+  {
+   "text": "La primera fue de 1 a 3 de la tarde, y la segunda es hoy, de 8 a 10 de la noche, hora de la Ciudad de México.",
+   "pause": 0.4,
+   "say": "La primera fue de una a tres de la tarde, y la segunda es hoy, de ocho a diez de la noche, hora de la Ciudad de México."
+  },
+  {
+   "text": "En las dos rondas, la probabilidad de la Tienda Pirata sube 1.5 veces.",
+   "pause": 0.4,
+   "say": "En las dos rondas, la probabilidad de la Tienda Pirata sube una vez y media."
+  },
+  {
+   "text": "Normalmente, la ficha sale en 1 de cada 137 500 cofres.",
+   "pause": 0.4,
+   "say": "Normalmente, la ficha sale en uno de cada ciento treinta y siete mil quinientos cofres."
+  },
+  {
+   "text": "En las Horas del Tesoro, más o menos en 1 de cada 91 667.",
+   "pause": 0.4,
+   "say": "En las Horas del Tesoro, más o menos en uno de cada noventa y un mil seiscientos sesenta y siete."
+  },
+  {
+   "text": "Y Epic dice que la probabilidad normal no ha cambiado desde que empezó la temporada.",
+   "pause": 0.4
+  },
+  {
+   "text": "Si apenas vas a empezar, así funciona.",
+   "pause": 0.4
+  },
+  {
+   "text": "Cada vez que abres o rompes un cofre en Battle Royale o en Cero Construcción, tienes una pequeña probabilidad de ganar un premio del tesoro.",
+   "pause": 0.4
+  },
+  {
+   "text": "Sirve cualquier tipo de cofre: normales, raros, enterrados y más.",
+   "pause": 0.4
+  },
+  {
+   "text": "El premio no sale del cofre como un arma: no tienes que recogerlo, solo te aparece un mensaje en la pantalla.",
+   "pause": 0.4
+  },
+  {
+   "text": "Si te sale la Tienda Pirata, te dan dos fichas: una para 2026, y otra para 2027.",
+   "pause": 0.4,
+   "say": "Si te sale la Tienda Pirata, te dan dos fichas: una para dos mil veintiséis, y otra para dos mil veintisiete."
+  },
+  {
+   "text": "Cuando activas una, todo lo que cuesta pavos en la tienda es gratis para ti durante 14 días.",
+   "pause": 0.4,
+   "say": "Cuando activas una, todo lo que cuesta pavos en la tienda es gratis para ti durante catorce días."
+  },
+  {
+   "text": "Menos cuatro cosas: los niveles del pase de batalla, los lotes que se pagan con dinero real, los regalos… y de compañeros, solo uno es gratis.",
+   "pause": 0.4
+  },
+  {
+   "text": "Ahora sí: el plan para esta última semana.",
+   "pause": 0.4
+  },
+  {
+   "text": "Uno: juega en escuadrón. Si alguien de tu escuadrón encuentra la ficha, la reciben todos.",
+   "pause": 0.4
+  },
+  {
+   "text": "Es como abrir cuatro veces más cofres en cada partida.",
+   "pause": 0.4
+  },
+  {
+   "text": "Y si no tienes con quién jugar, rellena tu escuadrón con otros jugadores.",
+   "pause": 0.4
+  },
+  {
+   "text": "Dos: según Epic, todos tienen la misma probabilidad. Lo único que cuenta es abrir cofres.",
+   "pause": 0.4
+  },
+  {
+   "text": "No existe ninguna brújula de fichas, y la skin que uses no cambia nada.",
+   "pause": 0.4
+  },
+  {
+   "text": "Y da igual si eres nuevo o si regresas después de mucho tiempo: la probabilidad es la misma.",
+   "pause": 0.4
+  },
+  {
+   "text": "Tres: aprovecha la segunda ronda de hoy, de 8 a 10 de la noche.",
+   "pause": 0.4,
+   "say": "Tres: aprovecha la segunda ronda de hoy, de ocho a diez de la noche."
+  },
+  {
+   "text": "Y el sábado 5 de diciembre vienen las últimas: otra vez de 1 a 3 de la tarde, y de 8 a 10 de la noche.",
+   "pause": 0.4,
+   "say": "Y el sábado cinco de diciembre vienen las últimas: otra vez de una a tres de la tarde, y de ocho a diez de la noche."
+  },
+  {
+   "text": "Y cuatro: si te sale, no tienes que activarla en ese momento. La ficha de 2026 se puede activar hasta el 15 de diciembre.",
+   "pause": 0.4,
+   "say": "Y cuatro: si te sale, no tienes que activarla en ese momento. La ficha de dos mil veintiséis se puede activar hasta el quince de diciembre."
+  },
+  {
+   "text": "Así que puedes esperar a que llegue a la tienda algo que de verdad quieras.",
+   "pause": 0.4
+  },
+  {
+   "text": "Y la otra ficha es para 2027: del 1 de enero al 31 de diciembre.",
+   "pause": 0.4,
+   "say": "Y la otra ficha es para dos mil veintisiete: del primero de enero al treinta y uno de diciembre."
+  },
+  {
+   "text": "Y antes de seguir: si te está sirviendo este video, usa el código BAD en la tienda de objetos. Le ayuda muchísimo al canal.",
+   "pause": 0.4,
+   "say": "Y antes de seguir: si te está sirviendo este video, usa el código bad, en la tienda de objetos. Le ayuda muchísimo al canal."
+  },
+  {
+   "text": "La Tienda Pirata no es lo único que puede salir de un cofre.",
+   "pause": 0.4
+  },
+  {
+   "text": "En una partida normal, estas son las probabilidades por cofre, según Epic:",
+   "pause": 0.4
+  },
+  {
+   "text": "Una pantalla de carga de la semana: 1 de cada 272 cofres.",
+   "pause": 0.4,
+   "say": "Una pantalla de carga de la semana: uno de cada doscientos setenta y dos cofres."
+  },
+  {
+   "text": "Una pista de improvisación: 1 de cada 391.",
+   "pause": 0.4,
+   "say": "Una pista de improvisación: uno de cada trescientos noventa y uno."
+  },
+  {
+   "text": "Un pico o una mochila: 1 de cada 568.",
+   "pause": 0.4,
+   "say": "Un pico o una mochila: uno de cada quinientos sesenta y ocho."
+  },
+  {
+   "text": "Un vehículo y una calcomanía: 1 de cada 7813.",
+   "pause": 0.4,
+   "say": "Un vehículo y una calcomanía: uno de cada siete mil ochocientos trece."
+  },
+  {
+   "text": "La Tienda Pirata: 1 de cada 137 500.",
+   "pause": 0.4,
+   "say": "La Tienda Pirata: uno de cada ciento treinta y siete mil quinientos."
+  },
+  {
+   "text": "Y lo más difícil: el atuendo dorado de la semana, 1 de cada 1 562 500 cofres.",
+   "pause": 0.4,
+   "say": "Y lo más difícil: el atuendo dorado de la semana, uno de cada un millón quinientos sesenta y dos mil quinientos cofres."
+  },
+  {
+   "text": "O sea, el atuendo dorado es más de 11 veces más difícil que la Tienda Pirata.",
+   "pause": 0.4,
+   "say": "O sea, el atuendo dorado es más de once veces más difícil que la Tienda Pirata."
+  },
+  {
+   "text": "Y si te sale la ficha hoy… estos son los tres lotes más caros de la tienda.",
+   "pause": 0.4
+  },
+  {
+   "text": "Nuevo hoy: el Lote Solo Leveling: ARISE, con Sung Jinwoo, Igris Comandante Escarlata y Cha Hae-In.",
+   "pause": 0.4,
+   "say": "Nuevo hoy: el Lote Sólo Lévelin: Aráis, con Sung Yin-Wu, Igris Comandante Escarlata y Cha Jeín."
+  },
+  {
+   "text": "Cuesta 4500 pavos en vez de 9500, y se va el 2 de diciembre.",
+   "pause": 0.4,
+   "say": "Cuesta cuatro mil quinientos pavos en vez de nueve mil quinientos, y se va el dos de diciembre."
+  },
+  {
+   "text": "Trae 13 objetos: las tres skins con sus mochilas y sus picos, dos gestos, el planeador Kaisel y un envoltorio.",
+   "pause": 0.4,
+   "say": "Trae trece objetos: las tres skins con sus mochilas y sus picos, dos gestos, el planeador Kaisel y un envoltorio."
+  },
+  {
+   "text": "El Lote Overwatch, con Mercy, D.Va, Tracer y Genji: 4200 en vez de 8800, hasta el 4 de diciembre.",
+   "pause": 0.4,
+   "say": "El Lote Óverguach, con Mercy, Di Va, Tréiser y Yen yi: cuatro mil doscientos en vez de ocho mil ochocientos, hasta el cuatro de diciembre."
+  },
+  {
+   "text": "Y el Lote One Piece, con Luffy, Nami y Usopp: 4000 en vez de 8200, hasta el 5 de diciembre, el último día del tesoro.",
+   "pause": 0.4,
+   "say": "Y el Lote Uan Pis, con Lufi, Nami y Usop: cuatro mil en vez de ocho mil doscientos, hasta el cinco de diciembre, el último día del tesoro."
+  },
+  {
+   "text": "Los tres juntos suman 12 700 pavos… y con la ficha, te los llevas sin gastar ni un pavo.",
+   "pause": 0.4,
+   "say": "Los tres juntos suman doce mil setecientos pavos… y con la ficha, te los llevas sin gastar ni un pavo."
+  },
+  {
+   "text": "¿Y tú? ¿Ya te salió la ficha? Cuéntame en los comentarios.",
+   "pause": 0.4
+  },
+  {
+   "text": "Y si te sale esta semana, ¿qué es lo primero que te llevas?",
+   "pause": 0.4
+  },
+  {
+   "text": "Usa el código BAD en la tienda de objetos. Le ayuda muchísimo al canal.",
+   "pause": 0.4,
+   "say": "Usa el código bad, en la tienda de objetos. Le ayuda muchísimo al canal."
+  },
+  {
+   "text": "¡Gracias por ver! Síguenos para más contenido diario.",
+   "pause": 0.4
+  }
+ ],
+ "voice": "ef_dora",
+ "speed": 1.2,
+ "lang": "es-419",
+ "lead": 0.2,
+ "mode": "flow"
+}

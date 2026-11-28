@@ -1,0 +1,650 @@
+{
+ "title": "La última semana del tesoro",
+ "caption": "#EpicPartner La última semana del tesoro en Fortnite 🏴‍☠️ La Semana dorada, las Horas del Tesoro de hoy, el plan para encontrar la Tienda Pirata antes del 5 de diciembre y los lotes más caros de hoy.\n¿Ya te salió la ficha? 👇\nUsa el código BAD en la tienda de objetos 💛\n#Fortnite #TiendaPirata #FortniteEspañol",
+ "claims": [
+  {
+   "text": "La búsqueda del tesoro termina el 5 de diciembre: desde hoy, 28 de noviembre, quedan 7 días",
+   "source": "vgc-odds-confirmed.json",
+   "match": [
+    "Fortnite Treasure Hunters, which started on November 1 and is set to end on December 5."
+   ],
+   "visual": "November 28 to December 5 is 7 days; vgc-guide.json says the same ('The season is set to end on December 5')"
+  },
+  {
+   "text": "Noticia del juego, palabra por palabra: Semana dorada + Día de la comunidad",
+   "source": "news.json",
+   "match": [
+    "Semana dorada + Día de la comunidad",
+    "A partir del 28/11, el botín actualizado se une al tesoro desenterrado durante la Semana dorada, donde los bienes dorados de cada Capitán vuelven a estar en cofres junto con el doble de polvo de espíritu y PE. Luego, súbete a bordo para el Día de la comunidad el 5/12."
+   ]
+  },
+  {
+   "text": "La Semana dorada empieza hoy, 28 de noviembre; los bienes dorados de cada Capitán vuelven a estar en los cofres; doble polvo de espíritu y doble PE",
+   "source": "news.json",
+   "match": [
+    "A partir del 28/11",
+    "durante la Semana dorada, donde los bienes dorados de cada Capitán vuelven a estar en cofres junto con el doble de polvo de espíritu y PE."
+   ],
+   "visual": "the tile says 'A partir del 28/11' (from Nov 28) for the Semana dorada; today is Saturday, November 28, 2026"
+  },
+  {
+   "text": "El 5 de diciembre llega el Día de la comunidad",
+   "source": "news.json",
+   "match": [
+    "súbete a bordo para el Día de la comunidad el 5/12."
+   ]
+  },
+  {
+   "text": "El 5 de diciembre es el último día de la búsqueda del tesoro",
+   "source": "vgc-guide.json",
+   "match": [
+    "The season is set to end on December 5"
+   ]
+  },
+  {
+   "text": "Hoy sábado hay Horas del Tesoro en dos rondas: la primera de 1 a 3 PM y la segunda de 8 a 10 PM (hora de la Ciudad de México); la Tienda Pirata sube 1.5 veces en las dos",
+   "source": "vice-treasure-hours.json",
+   "match": [
+    "| November 28 | 11 AM–1 PM PT / 2–4 PM ET | 6–8 PM PT / 9–11 PM ET | 1.5× both rounds |"
+   ],
+   "visual": "PT is UTC-8 and Mexico City UTC-6 in November: 11 AM-1 PM PT = 1-3 PM CDMX, 6-8 PM PT = 8-10 PM CDMX. The video goes live at 3 PM CDMX, as the first round ends"
+  },
+  {
+   "text": "Normalmente sale en 1 de cada 137 500 cofres; en las Horas del Tesoro, más o menos 1 de cada 91 667",
+   "source": "vice-treasure-hours.json",
+   "match": [
+    "The normal Fortnite Pirate Token drop rate is 1 in 137,500 per chest. A 1.5× boost brings it to about 1 in 91,667"
+   ]
+  },
+  {
+   "text": "Epic dice que la probabilidad normal no ha cambiado desde que empezó la temporada",
+   "source": "vice-treasure-hours.json",
+   "match": [
+    "the developer says the normal chest drop rates have stayed the same since Fortnite Treasure Hunters launched."
+   ]
+  },
+  {
+   "text": "Cada vez que abres o rompes un cofre en Battle Royale o Cero Construcción, hay una pequeña probabilidad de un premio del tesoro",
+   "source": "vgc-guide.json",
+   "match": [
+    "every time you open or break a chest, there's a small chance that you'll get a treasure reward",
+    "To find one, you have to open chests during Battle Royale and Zero Build modes."
+   ]
+  },
+  {
+   "text": "Sirve cualquier tipo de cofre: normales, raros, enterrados y más",
+   "source": "vgc-guide.json",
+   "match": [
+    "This can be any type of chest, including:",
+    "- Normal chests",
+    "- Rare chests",
+    "- Buried Chests"
+   ],
+   "visual": "the list also has Sprite Chests, Wanted Poster Chests and Relic Chests ('y más')"
+  },
+  {
+   "text": "El premio no sale del cofre: no tienes que recogerlo, solo aparece un mensaje en la pantalla",
+   "source": "vgc-guide.json",
+   "match": [
+    "This won't come out of the chest like the usual weapons and other items, so you won't have to pick it up – you'll just get a message on the screen telling you what you got."
+   ]
+  },
+  {
+   "text": "Te dan dos fichas: la de 2026 se activa hasta el 15 de diciembre, la de 2027 del 1 de enero al 31 de diciembre",
+   "source": "vgc-odds-confirmed.json",
+   "match": [
+    "Players who find it receive two tokens – one which can be activated at any point in 2026 between November 1 and December 15, and one which can be activated at any point in 2027 between January 1 and December 31."
+   ]
+  },
+  {
+   "text": "Al activar una, todo lo que cuesta pavos en la tienda es gratis durante 14 días",
+   "source": "vgc-guide.json",
+   "match": [
+    "When you activate a token, every single item in the Fortnite Shop which costs V-Bucks becomes entirely free for the next 14 days."
+   ]
+  },
+  {
+   "text": "Cuatro excepciones: niveles del pase de batalla, lotes con dinero real, regalos, y solo un compañero gratis",
+   "source": "vgc-guide.json",
+   "match": [
+    "The only catches are you can't claim Battle Pass levels, you can't get bundles that cost real money (instead of V-Bucks), you can't gift items to other players, and you can only claim one free sidekick."
+   ]
+  },
+  {
+   "text": "Si alguien de tu escuadrón encuentra la ficha, la reciben todos: es como abrir cuatro veces más cofres",
+   "source": "vgc-guide.json",
+   "match": [
+    "if anyone in your Squad finds the Pirate Shop Token in a chest, every member of the Squad gets it.",
+    "This technically means that in each round you're opening four times as many chests as usual."
+   ]
+  },
+  {
+   "text": "Si no tienes con quién jugar, rellena tu escuadrón con otros jugadores",
+   "source": "vgc-guide.json",
+   "match": [
+    "If you don't have friends to play with you, just choose the Fill option to add random players to your squad of four."
+   ]
+  },
+  {
+   "text": "Según Epic, todos tienen la misma probabilidad; no existe la brújula de fichas y la skin no cambia nada; lo que cuenta es abrir cofres",
+   "source": "vgc-guide.json",
+   "match": [
+    "according to Epic games, everyone has an equal chance of finding a Pirate Shop Token. There's no such thing as a Token Compass, and the skin you choose has no effect on your odds – just focus on opening chests."
+   ]
+  },
+  {
+   "text": "Da igual si eres nuevo o si regresas: la probabilidad es la misma",
+   "source": "vgc-odds-confirmed.json",
+   "match": [
+    "the rate does not change depending on the player, so the likelihood doesn't improve if you're a new or returning player."
+   ]
+  },
+  {
+   "text": "Las últimas Horas del Tesoro: sábado 5 de diciembre, otra vez de 1 a 3 PM y de 8 a 10 PM (hora de la Ciudad de México)",
+   "source": "vice-treasure-hours.json",
+   "match": [
+    "| December 5 | 11 AM–1 PM PT / 2–4 PM ET | 6–8 PM PT / 9–11 PM ET | 1.5× both rounds |"
+   ],
+   "visual": "December 5 is the last row of Epic's schedule and the day the season ends (vgc-guide.json); the same PT to CDMX conversion as today; Dec 5, 2026 is a Saturday"
+  },
+  {
+   "text": "Probabilidades por cofre en una partida normal, según Epic: pantalla de carga 1 en 272, pista 1 en 391, pico o mochila 1 en 568, vehículo y calcomanía 1 en 7813, Tienda Pirata 1 en 137 500, atuendo dorado 1 en 1 562 500",
+   "source": "vgc-guide.json",
+   "match": [
+    "Every time you open a chest during a normal match, these are your odds of getting one of the treasures:",
+    "- Weekly Gold Outfit – 1 in 1,562,500",
+    "- Pirate Shop Access – 1 in 137,500",
+    "- Weekly Vehicle & Decal – 1 in 7,813",
+    "- Weekly Pickaxe or Backbling – 1 in 568",
+    "- Weekly Jam Track – 1 in 391",
+    "- Weekly Loading Screen – 1 in 272"
+   ],
+   "visual": "'Every time you open a chest during a normal match' and vgc-odds-confirmed.json: 'According to Epic, the likelihood of finding each treasure type is as follows'"
+  },
+  {
+   "text": "El atuendo dorado es más de 11 veces más difícil que la Tienda Pirata",
+   "source": "vgc-guide.json",
+   "match": [
+    "- Weekly Gold Outfit – 1 in 1,562,500",
+    "- Pirate Shop Access – 1 in 137,500"
+   ],
+   "visual": "1,562,500 / 137,500 = 11.4"
+  },
+  {
+   "text": "Los tres lotes más caros de la tienda de hoy: Solo Leveling: ARISE 4500, Overwatch 4200, One Piece 4000",
+   "source": "shop.json",
+   "match": [
+    "\"regularPrice\": 9500, \"finalPrice\": 4500, \"devName\": \"[VIRTUAL]1 x Sung Jinwoo, 1 x Godly Statuette, 1 x Venom Fang & Knight Killer, 1 x Blood-Red Commander Igris, 1 x Igris' Cloak, 1 x Demon King's Longsword, 1 x Cha Hae-In, 1 x Wings of Light, 1 x Sword of Light, 1 x Shadow Summoner, 1 x S-Rank Scent, 1 x Kaisel, 1 x Kamish's Wrath for -1 MtxCurrency\", \"offerId\": \"v2:/e9e0581cab99bc5b3073ded858d9a36e9bc96b09d6ccd2e10afe842bb7e8da4d\", \"inDate\": \"2026-11-28T00:00:00Z\", \"outDate\": \"",
+    "\"regularPrice\": 8800, \"finalPrice\": 4200, \"devName\": \"[VIRTUAL]1 x Mercy, 1 x Mercy's Valkyrie Wings, 1 x Mercy's Valkyrie Wings, 1 x Caduceus Pickaxe, 1 x D.Va, 1 x Tokki's Slicer, 1 x Travel Tokki Model, 1 x Tracer, 1 x Tracer's Pulse Knives, 1 x Tracer's Pulse Bomb, 1 x Genji, 1 x Ryū Ichimonji, 1 x Ryū Ichimonji, 1 x Mercy's Reach, 1 x Lil' Tokki, 1 x Blinkin' Amazing, 1 x Mark of Mercy, 1 x Mercy's Medkit for -1 MtxCurrency\", \"offerId\": \"v2:/400a5de6888cb848fef7c6797a9ca721b93ef91ea7e866a0596743d17f7778cd\", \"inDate\": \"2026-11-22T00:00:00Z\", \"outDate\": \"",
+    "\"regularPrice\": 8200, \"finalPrice\": 4000, \"devName\": \"[VIRTUAL]1 x Monkey D. Luffy, 1 x Luffy's Straw Hat, 1 x Gum-Gum Pistol, 1 x Multi-Punches Flex, 1 x Nami, 1 x Nami's Tangerines, 1 x Climate Baton, 1 x Usopp, 1 x Usopp's Kit, 1 x 5 Ton Hammer, 1 x Going Merry, 1 x Roasted Meat, 1 x Giant Meat on the Bone, 1 x Straw Hat Guitar, 1 x Straw Hat Guitar, 1 x Straw Hat Guitar for -1 MtxCurrency\", \"offerId\": \"v2:/8c57975e9814357c059acb6102b3af63c1f7ceec628657d40cbcde2a89738443\", \"inDate\": \"2026-11-01T00:00:00Z\", \"outDate\": \""
+   ],
+   "visual": "sorted by finalPrice, today's whole shop (shop/2026-11-28/shop.json, 559 entries) runs 4500, 4200, 4000, then Lote Persona 5 Royal 3800; shop.json here keeps those three"
+  },
+  {
+   "text": "Nuevo hoy: Lote Solo Leveling: ARISE con Sung Jinwoo, Igris Comandante Escarlata y Cha Hae-In; 4500 pavos en vez de 9500; se va el 2 de diciembre",
+   "source": "shop.json",
+   "match": [
+    "\"regularPrice\": 9500, \"finalPrice\": 4500, \"devName\": \"[VIRTUAL]1 x Sung Jinwoo, 1 x Godly Statuette, 1 x Venom Fang & Knight Killer, 1 x Blood-Red Commander Igris, 1 x Igris' Cloak, 1 x Demon King's Longsword, 1 x Cha Hae-In, 1 x Wings of Light, 1 x Sword of Light, 1 x Shadow Summoner, 1 x S-Rank Scent, 1 x Kaisel, 1 x Kamish's Wrath for -1 MtxCurrency\", \"offerId\": \"v2:/e9e0581cab99bc5b3073ded858d9a36e9bc96b09d6ccd2e10afe842bb7e8da4d\", \"inDate\": \"2026-11-28T00:00:00Z\", \"outDate\": \"",
+    "\"name\": \"Lote Solo Leveling: ARISE\"",
+    "\"name\": \"Sung Jinwoo\"",
+    "\"name\": \"Igris Comandante Escarlata\"",
+    "\"name\": \"Cha Hae-In\""
+   ],
+   "visual": "inDate 2026-11-28T00:00:00Z (6 PM CDMX yesterday, the start of today's shop); outDate 2026-12-02T23:59:59.999Z"
+  },
+  {
+   "text": "Trae 13 objetos: 3 skins, 3 mochilas, 3 picos, 2 gestos, el planeador Kaisel y un envoltorio",
+   "source": "shop.json",
+   "match": [
+    "\"name\": \"Kaisel\"",
+    "\"name\": \"Ira de Kamish\"",
+    "\"name\": \"Invocador de sombras\"",
+    "\"name\": \"Esencia de rango S\""
+   ],
+   "visual": "the lote's brItems: Sung Jinwoo (outfit), Busto divino (backpack), Colmillo venenoso y Asesino de caballeros (pickaxe), Igris Comandante Escarlata (outfit), Capa de Igris (backpack), Espada larga del Rey Demonio (pickaxe), Cha Hae-In (outfit), Alas de luz (backpack), Espada de luz (pickaxe), Invocador de sombras (emote), Esencia de rango S (emote), Kaisel (glider), Ira de Kamish (wrap)"
+  },
+  {
+   "text": "Lote Overwatch con Mercy, D.Va, Tracer y Genji: 4200 en vez de 8800, hasta el 4 de diciembre",
+   "source": "shop.json",
+   "match": [
+    "\"regularPrice\": 8800, \"finalPrice\": 4200, \"devName\": \"[VIRTUAL]1 x Mercy, 1 x Mercy's Valkyrie Wings, 1 x Mercy's Valkyrie Wings, 1 x Caduceus Pickaxe, 1 x D.Va, 1 x Tokki's Slicer, 1 x Travel Tokki Model, 1 x Tracer, 1 x Tracer's Pulse Knives, 1 x Tracer's Pulse Bomb, 1 x Genji, 1 x Ryū Ichimonji, 1 x Ryū Ichimonji, 1 x Mercy's Reach, 1 x Lil' Tokki, 1 x Blinkin' Amazing, 1 x Mark of Mercy, 1 x Mercy's Medkit for -1 MtxCurrency\", \"offerId\": \"v2:/400a5de6888cb848fef7c6797a9ca721b93ef91ea7e866a0596743d17f7778cd\", \"inDate\": \"2026-11-22T00:00:00Z\", \"outDate\": \"",
+    "\"name\": \"Mercy\"",
+    "\"name\": \"D.Va\"",
+    "\"name\": \"Tracer\"",
+    "\"name\": \"Genji\""
+   ]
+  },
+  {
+   "text": "Lote One Piece con Luffy, Nami y Usopp: 4000 en vez de 8200, hasta el 5 de diciembre",
+   "source": "shop.json",
+   "match": [
+    "\"regularPrice\": 8200, \"finalPrice\": 4000, \"devName\": \"[VIRTUAL]1 x Monkey D. Luffy, 1 x Luffy's Straw Hat, 1 x Gum-Gum Pistol, 1 x Multi-Punches Flex, 1 x Nami, 1 x Nami's Tangerines, 1 x Climate Baton, 1 x Usopp, 1 x Usopp's Kit, 1 x 5 Ton Hammer, 1 x Going Merry, 1 x Roasted Meat, 1 x Giant Meat on the Bone, 1 x Straw Hat Guitar, 1 x Straw Hat Guitar, 1 x Straw Hat Guitar for -1 MtxCurrency\", \"offerId\": \"v2:/8c57975e9814357c059acb6102b3af63c1f7ceec628657d40cbcde2a89738443\", \"inDate\": \"2026-11-01T00:00:00Z\", \"outDate\": \"",
+    "\"name\": \"Monkey D. Luffy\"",
+    "\"name\": \"Nami\"",
+    "\"name\": \"Usopp\""
+   ]
+  },
+  {
+   "text": "Los tres juntos suman 12 700 pavos",
+   "source": "shop.json",
+   "match": [
+    "\"regularPrice\": 9500, \"finalPrice\": 4500, \"devName\": \"[VIRTUAL]1 x Sung Jinwoo, 1 x Godly Statuette, 1 x Venom Fang & Knight Killer, 1 x Blood-Red Commander Igris, 1 x Igris' Cloak, 1 x Demon King's Longsword, 1 x Cha Hae-In, 1 x Wings of Light, 1 x Sword of Light, 1 x Shadow Summoner, 1 x S-Rank Scent, 1 x Kaisel, 1 x Kamish's Wrath for -1 MtxCurrency\", \"offerId\": \"v2:/e9e0581cab99bc5b3073ded858d9a36e9bc96b09d6ccd2e10afe842bb7e8da4d\", \"inDate\": \"2026-11-28T00:00:00Z\", \"outDate\": \"",
+    "\"regularPrice\": 8800, \"finalPrice\": 4200, \"devName\": \"[VIRTUAL]1 x Mercy, 1 x Mercy's Valkyrie Wings, 1 x Mercy's Valkyrie Wings, 1 x Caduceus Pickaxe, 1 x D.Va, 1 x Tokki's Slicer, 1 x Travel Tokki Model, 1 x Tracer, 1 x Tracer's Pulse Knives, 1 x Tracer's Pulse Bomb, 1 x Genji, 1 x Ryū Ichimonji, 1 x Ryū Ichimonji, 1 x Mercy's Reach, 1 x Lil' Tokki, 1 x Blinkin' Amazing, 1 x Mark of Mercy, 1 x Mercy's Medkit for -1 MtxCurrency\", \"offerId\": \"v2:/400a5de6888cb848fef7c6797a9ca721b93ef91ea7e866a0596743d17f7778cd\", \"inDate\": \"2026-11-22T00:00:00Z\", \"outDate\": \"",
+    "\"regularPrice\": 8200, \"finalPrice\": 4000, \"devName\": \"[VIRTUAL]1 x Monkey D. Luffy, 1 x Luffy's Straw Hat, 1 x Gum-Gum Pistol, 1 x Multi-Punches Flex, 1 x Nami, 1 x Nami's Tangerines, 1 x Climate Baton, 1 x Usopp, 1 x Usopp's Kit, 1 x 5 Ton Hammer, 1 x Going Merry, 1 x Roasted Meat, 1 x Giant Meat on the Bone, 1 x Straw Hat Guitar, 1 x Straw Hat Guitar, 1 x Straw Hat Guitar for -1 MtxCurrency\", \"offerId\": \"v2:/8c57975e9814357c059acb6102b3af63c1f7ceec628657d40cbcde2a89738443\", \"inDate\": \"2026-11-01T00:00:00Z\", \"outDate\": \""
+   ],
+   "visual": "4500 + 4200 + 4000 = 12,700"
+  },
+  {
+   "text": "Los atuendos que salen son los de Fortnite: Sung Jinwoo, Igris Comandante Escarlata, Cha Hae-In, Mercy, D.Va, Tracer, Genji, Monkey D. Luffy, Nami, Usopp",
+   "source": "cosmetics.json",
+   "match": [
+    "\"name\": \"Sung Jinwoo\"",
+    "\"name\": \"Igris Comandante Escarlata\"",
+    "\"name\": \"Cha Hae-In\"",
+    "\"name\": \"Mercy\"",
+    "\"name\": \"D.Va\"",
+    "\"name\": \"Tracer\"",
+    "\"name\": \"Genji\"",
+    "\"name\": \"Monkey D. Luffy\"",
+    "\"name\": \"Nami\"",
+    "\"name\": \"Usopp\""
+   ]
+  }
+ ],
+ "segments": [
+  {
+   "type": "title",
+   "p": 0,
+   "chapter": "Intro",
+   "kicker": "SÁBADO 28 DE NOVIEMBRE",
+   "lines": [
+    "La última semana",
+    "del tesoro"
+   ]
+  },
+  {
+   "type": "stat",
+   "p": 1,
+   "big": "Quedan 7 días",
+   "label": "la búsqueda del tesoro termina el 5 dic"
+  },
+  {
+   "type": "quote",
+   "p": 4,
+   "chapter": "Semana dorada",
+   "kicker": "NOTICIAS DEL JUEGO",
+   "title": "Semana dorada + Día de la comunidad",
+   "lines": [
+    {
+     "p": 5,
+     "text": "A partir del 28/11, el botín actualizado se une al tesoro desenterrado durante la Semana dorada,"
+    },
+    {
+     "p": 6,
+     "text": "donde los bienes dorados de cada Capitán vuelven a estar en cofres junto con el doble de polvo de espíritu y PE."
+    },
+    {
+     "p": 7,
+     "text": "Luego, súbete a bordo para el Día de la comunidad el 5/12."
+    }
+   ]
+  },
+  {
+   "type": "stat",
+   "p": 8,
+   "big": "Desde hoy",
+   "label": "Semana dorada · 28 de noviembre"
+  },
+  {
+   "type": "stat",
+   "p": 9,
+   "big": "Bienes dorados",
+   "label": "de cada Capitán, otra vez en los cofres"
+  },
+  {
+   "type": "stat",
+   "p": 10,
+   "big": "×2",
+   "label": "polvo de espíritu y PE"
+  },
+  {
+   "type": "stat",
+   "p": 11,
+   "big": "5 dic",
+   "label": "Día de la comunidad, el último día del tesoro"
+  },
+  {
+   "type": "title",
+   "p": 13,
+   "chapter": "Horas del Tesoro de hoy",
+   "kicker": "HOY SÁBADO",
+   "lines": [
+    "Horas del",
+    "Tesoro"
+   ]
+  },
+  {
+   "type": "stat",
+   "p": 14,
+   "big": "1-3 PM · 8-10 PM",
+   "label": "hoy, hora de la Ciudad de México"
+  },
+  {
+   "type": "stat",
+   "p": 15,
+   "big": "×1.5",
+   "label": "Tienda Pirata, en las dos rondas"
+  },
+  {
+   "type": "stat",
+   "p": 16,
+   "big": "1 en 137 500",
+   "label": "por cofre, en una partida normal"
+  },
+  {
+   "type": "stat",
+   "p": 17,
+   "big": "1 en 91 667",
+   "label": "más o menos, en las Horas del Tesoro"
+  },
+  {
+   "type": "stat",
+   "p": 18,
+   "big": "Sin cambios",
+   "label": "la probabilidad normal, según Epic"
+  },
+  {
+   "type": "title",
+   "p": 19,
+   "chapter": "Cómo se consigue",
+   "kicker": "TIENDA PIRATA",
+   "lines": [
+    "Cómo se",
+    "consigue"
+   ]
+  },
+  {
+   "type": "stat",
+   "p": 20,
+   "big": "Abre cofres",
+   "label": "en Battle Royale y Cero Construcción"
+  },
+  {
+   "type": "stat",
+   "p": 21,
+   "big": "Cualquier cofre",
+   "label": "normales, raros, enterrados y más"
+  },
+  {
+   "type": "stat",
+   "p": 22,
+   "big": "Sin recogerla",
+   "label": "solo te sale un mensaje en la pantalla"
+  },
+  {
+   "type": "stat",
+   "p": 23,
+   "big": "2 fichas",
+   "label": "una para 2026 y otra para 2027"
+  },
+  {
+   "type": "stat",
+   "p": 24,
+   "big": "14 días",
+   "label": "todo lo que cuesta pavos, gratis para ti"
+  },
+  {
+   "type": "stat",
+   "p": 25,
+   "big": "4 excepciones",
+   "label": "pase de batalla · dinero real · regalos · 1 compañero"
+  },
+  {
+   "type": "title",
+   "p": 26,
+   "chapter": "El plan para la última semana",
+   "kicker": "LA ÚLTIMA SEMANA",
+   "lines": [
+    "El plan para",
+    "encontrarla"
+   ]
+  },
+  {
+   "type": "stat",
+   "p": 27,
+   "big": "1 · Escuadrón",
+   "label": "si uno la encuentra, la reciben todos"
+  },
+  {
+   "type": "stat",
+   "p": 28,
+   "big": "×4 cofres",
+   "label": "en cada partida, con tu escuadrón"
+  },
+  {
+   "type": "stat",
+   "p": 29,
+   "big": "¿Sin equipo?",
+   "label": "rellena tu escuadrón con otros jugadores"
+  },
+  {
+   "type": "stat",
+   "p": 30,
+   "big": "2 · Abre cofres",
+   "label": "todos tienen la misma probabilidad"
+  },
+  {
+   "type": "stat",
+   "p": 31,
+   "big": "Mitos",
+   "label": "no hay brújula de fichas, y la skin no importa"
+  },
+  {
+   "type": "stat",
+   "p": 32,
+   "big": "Nuevo o veterano",
+   "label": "la probabilidad es la misma"
+  },
+  {
+   "type": "stat",
+   "p": 33,
+   "big": "3 · Hoy 8-10 PM",
+   "label": "la segunda ronda de Horas del Tesoro (CDMX)"
+  },
+  {
+   "type": "stat",
+   "p": 34,
+   "big": "Sábado 5 dic",
+   "label": "las últimas: 1-3 PM y 8-10 PM"
+  },
+  {
+   "type": "stat",
+   "p": 35,
+   "big": "4 · Hasta el 15 dic",
+   "label": "para activar la ficha 2026"
+  },
+  {
+   "type": "stat",
+   "p": 36,
+   "big": "Tú decides",
+   "label": "actívala cuando llegue algo que quieras"
+  },
+  {
+   "type": "stat",
+   "p": 37,
+   "big": "2027",
+   "label": "la otra ficha: del 1 de enero al 31 de diciembre"
+  },
+  {
+   "type": "code",
+   "p": 38,
+   "chapter": "Código BAD",
+   "wide": true
+  },
+  {
+   "type": "title",
+   "p": 39,
+   "chapter": "Los premios del tesoro",
+   "kicker": "PREMIOS DEL TESORO",
+   "lines": [
+    "¿Qué más sale",
+    "de un cofre?"
+   ]
+  },
+  {
+   "type": "stat",
+   "p": 41,
+   "big": "1 en 272",
+   "label": "pantalla de carga de la semana"
+  },
+  {
+   "type": "stat",
+   "p": 42,
+   "big": "1 en 391",
+   "label": "pista de improvisación de la semana"
+  },
+  {
+   "type": "stat",
+   "p": 43,
+   "big": "1 en 568",
+   "label": "pico o mochila de la semana"
+  },
+  {
+   "type": "stat",
+   "p": 44,
+   "big": "1 en 7813",
+   "label": "vehículo y calcomanía de la semana"
+  },
+  {
+   "type": "stat",
+   "p": 45,
+   "big": "1 en 137 500",
+   "label": "la Tienda Pirata"
+  },
+  {
+   "type": "stat",
+   "p": 46,
+   "big": "1 en 1 562 500",
+   "label": "el atuendo dorado de la semana"
+  },
+  {
+   "type": "stat",
+   "p": 47,
+   "big": "11 veces",
+   "label": "más difícil que la Tienda Pirata"
+  },
+  {
+   "type": "title",
+   "p": 48,
+   "chapter": "Si te sale hoy",
+   "kicker": "LA TIENDA DE HOY",
+   "lines": [
+    "Si te sale",
+    "la ficha hoy"
+   ]
+  },
+  {
+   "type": "items",
+   "p": 49,
+   "title": "Nuevo hoy: Lote Solo Leveling: ARISE",
+   "items": [
+    {
+     "img": "../../tiendabad/video/long/2026-11-28-ultima-semana-tesoro/img/Character_RampCanal.png",
+     "name": "Sung Jinwoo",
+     "rarity": "gaminglegends"
+    },
+    {
+     "img": "../../tiendabad/video/long/2026-11-28-ultima-semana-tesoro/img/Character_BirchPalace.png",
+     "name": "Igris Comandante Escarlata",
+     "rarity": "gaminglegends"
+    },
+    {
+     "img": "../../tiendabad/video/long/2026-11-28-ultima-semana-tesoro/img/Character_QuirkLuster.png",
+     "name": "Cha Hae-In",
+     "rarity": "gaminglegends"
+    }
+   ]
+  },
+  {
+   "type": "stat",
+   "p": 50,
+   "big": "4500 pavos",
+   "label": "en vez de 9500 · se va el 2 dic"
+  },
+  {
+   "type": "stat",
+   "p": 51,
+   "big": "13 objetos",
+   "label": "3 skins, 3 mochilas, 3 picos, 2 gestos, planeador y envoltorio"
+  },
+  {
+   "type": "items",
+   "p": 52,
+   "title": "Lote Overwatch: 4200 · hasta el 4 dic",
+   "items": [
+    {
+     "img": "../../tiendabad/video/long/2026-11-28-ultima-semana-tesoro/img/Character_TrackWaver.png",
+     "name": "Mercy",
+     "rarity": "gaminglegends"
+    },
+    {
+     "img": "../../tiendabad/video/long/2026-11-28-ultima-semana-tesoro/img/Character_SkiffGrind.png",
+     "name": "D.Va",
+     "rarity": "gaminglegends"
+    },
+    {
+     "img": "../../tiendabad/video/long/2026-11-28-ultima-semana-tesoro/img/Character_LooseCreep.png",
+     "name": "Tracer",
+     "rarity": "gaminglegends"
+    },
+    {
+     "img": "../../tiendabad/video/long/2026-11-28-ultima-semana-tesoro/img/Character_FacetBlom.png",
+     "name": "Genji",
+     "rarity": "gaminglegends"
+    }
+   ]
+  },
+  {
+   "type": "items",
+   "p": 53,
+   "title": "Lote One Piece: 4000 · hasta el 5 dic",
+   "items": [
+    {
+     "img": "../../tiendabad/video/long/2026-11-28-ultima-semana-tesoro/img/Character_CeleryStitch.png",
+     "name": "Monkey D. Luffy",
+     "rarity": "epic"
+    },
+    {
+     "img": "../../tiendabad/video/long/2026-11-28-ultima-semana-tesoro/img/Character_BoastJoint.png",
+     "name": "Nami",
+     "rarity": "epic"
+    },
+    {
+     "img": "../../tiendabad/video/long/2026-11-28-ultima-semana-tesoro/img/Character_LoomRise.png",
+     "name": "Usopp",
+     "rarity": "epic"
+    }
+   ]
+  },
+  {
+   "type": "stat",
+   "p": 54,
+   "big": "12 700 pavos",
+   "label": "los tres lotes juntos"
+  },
+  {
+   "type": "title",
+   "p": 55,
+   "chapter": "Final",
+   "kicker": "TU TURNO",
+   "lines": [
+    "¿Ya te salió",
+    "la ficha?"
+   ]
+  },
+  {
+   "type": "code",
+   "p": 57
+  }
+ ]
+}
