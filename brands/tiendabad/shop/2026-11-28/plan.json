@@ -1,0 +1,160 @@
+{
+ "date": "2026-11-28",
+ "dateLabel": "28 NOV",
+ "dateLong": "28 de noviembre",
+ "resetLabel": "6 PM",
+ "resetZone": "CDMX",
+ "dealOutLabel": "2 DIC",
+ "dealOutTime": "6 PM",
+ "deal": {
+  "name": "Lote Solo Leveling: ARISE",
+  "final": 4500,
+  "regular": 9500,
+  "out": "2026-12-02T23:59:59.999Z",
+  "outfits": [
+   {
+    "id": "Character_RampCanal",
+    "name": "Sung Jinwoo",
+    "rarity": "Leyendas de videojuegos",
+    "rarityKey": "gaminglegends",
+    "series": "Leyendas de videojuegos",
+    "img": "https://fortnite-api.com/images/cosmetics/br/character_rampcanal/featured.png",
+    "price": 1800,
+    "out": "2026-12-02"
+   },
+   {
+    "id": "Character_BirchPalace",
+    "name": "Igris Comandante Escarlata",
+    "rarity": "Leyendas de videojuegos",
+    "rarityKey": "gaminglegends",
+    "series": "Leyendas de videojuegos",
+    "img": "https://fortnite-api.com/images/cosmetics/br/character_birchpalace/featured.png",
+    "price": 1800,
+    "out": "2026-12-02"
+   },
+   {
+    "id": "Character_QuirkLuster",
+    "name": "Cha Hae-In",
+    "rarity": "Leyendas de videojuegos",
+    "rarityKey": "gaminglegends",
+    "series": "Leyendas de videojuegos",
+    "img": "https://fortnite-api.com/images/cosmetics/br/character_quirkluster/featured.png",
+    "price": null,
+    "out": null
+   }
+  ],
+  "saving": 5000,
+  "pct": 53
+ },
+ "dealBest": false,
+ "og": {
+  "chapter": 1,
+  "season": 1,
+  "gapDays": 1,
+  "gapName": null,
+  "outfits": [
+   {
+    "id": "CID_015_Athena_Commando_F",
+    "name": "Soldado de asalto",
+    "rarity": "Poco común",
+    "rarityKey": "uncommon",
+    "series": null,
+    "img": "https://fortnite-api.com/images/cosmetics/br/cid_015_athena_commando_f/featured.png",
+    "price": 800,
+    "out": "2026-11-30",
+    "gapDays": 1
+   }
+  ]
+ },
+ "last": {
+  "count": 14,
+  "outfits": [
+   {
+    "id": "Character_RollerBlade",
+    "name": "Becky Lynch",
+    "rarity": "Épico",
+    "rarityKey": "epic",
+    "series": null,
+    "img": "https://fortnite-api.com/images/cosmetics/br/character_rollerblade/featured.png",
+    "price": 1600,
+    "out": null
+   },
+   {
+    "id": "Character_BrainMatter",
+    "name": "Bianca Belair",
+    "rarity": "Épico",
+    "rarityKey": "epic",
+    "series": null,
+    "img": "https://fortnite-api.com/images/cosmetics/br/character_brainmatter/featured.png",
+    "price": 1500,
+    "out": "2026-11-28"
+   },
+   {
+    "id": "Character_ChicleVeil",
+    "name": "Jamila",
+    "rarity": "Épico",
+    "rarityKey": "epic",
+    "series": null,
+    "img": "https://fortnite-api.com/images/cosmetics/br/character_chicleveil/featured.png",
+    "price": 1500,
+    "out": "2026-11-28"
+   },
+   {
+    "id": "Character_RecipeWhole",
+    "name": "Jax",
+    "rarity": "Épico",
+    "rarityKey": "epic",
+    "series": null,
+    "img": "https://fortnite-api.com/images/cosmetics/br/character_recipewhole/featured.png",
+    "price": 1500,
+    "out": null
+   },
+   {
+    "id": "CID_A_454_Athena_Commando_M_Ohana",
+    "name": "John Cena",
+    "rarity": "Épico",
+    "rarityKey": "epic",
+    "series": null,
+    "img": "https://fortnite-api.com/images/cosmetics/br/cid_a_454_athena_commando_m_ohana/featured.png",
+    "price": 1500,
+    "out": "2026-11-28"
+   },
+   {
+    "id": "Character_AgarBelly",
+    "name": "Pomni",
+    "rarity": "Épico",
+    "rarityKey": "epic",
+    "series": null,
+    "img": "https://fortnite-api.com/images/cosmetics/br/character_agarbelly/featured.png",
+    "price": 1500,
+    "out": null
+   }
+  ]
+ },
+ "roles": [
+  "intro",
+  "hook",
+  "deal_name",
+  "deal_price",
+  "saving",
+  "og_name",
+  "og_era",
+  "last",
+  "ask",
+  "code",
+  "thanks"
+ ],
+ "phrases": [
+  "Esta es la tienda de objetos de hoy, 28 de noviembre.",
+  "¡Tres cosas antes de gastar un solo pavo!",
+  "El Lote Solo Leveling: ARISE:",
+  "4500 pavos, en vez de 9500.",
+  "¡Te ahorras 5000!",
+  "Soldado de asalto está en la tienda.",
+  "Es del Capítulo 1, Temporada 1.",
+  "Y 14 skins están en su último día, nueve de ellas épicas.",
+  "¿Vas a comprar algo hoy?",
+  "Usa el código BAD en la tienda de objetos. Le ayuda muchísimo al canal.",
+  "¡Gracias por ver! Síguenos para más contenido diario."
+ ]
+}

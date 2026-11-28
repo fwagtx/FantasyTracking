@@ -1,0 +1,106 @@
+{
+ "duration": 25.8,
+ "caption": "#EpicPartner Tienda de objetos de Fortnite, 28 de noviembre: el Lote Solo Leveling: ARISE cuesta 4500 V-Bucks en vez de 9500 (ahorras 5000), Soldado de asalto está en la tienda (Capítulo 1, Temporada 1) y 14 skins se van el 28 de noviembre a las 6 PM (CDMX).\n¿Vas a comprar hoy? Usa el código BAD en la tienda de objetos.\n#Fortnite #TiendaFortnite #FortniteTienda",
+ "claims": [
+  {
+   "text": "Lote Solo Leveling: ARISE: 4500 V-Bucks, regular 9500",
+   "source": "shop.json",
+   "match": [
+    "Lote Solo Leveling: ARISE",
+    "\"finalPrice\": 4500",
+    "\"regularPrice\": 9500"
+   ]
+  },
+  {
+   "text": "Soldado de asalto: Capítulo 1, Temporada 1",
+   "source": "history.json",
+   "match": [
+    "Soldado de asalto",
+    "\"chapter\": 1",
+    "\"season\": 1"
+   ]
+  },
+  {
+   "text": "1 days since last in the shop",
+   "source": "history.json",
+   "match": [
+    "\"gapDays\": 1"
+   ]
+  },
+  {
+   "text": "14 outfits leave at the next reset",
+   "source": "plan.json",
+   "match": [
+    "\"count\": 14"
+   ]
+  }
+ ],
+ "text": [
+  "SUNG JINWOO",
+  "SOLDADO DE ASALTO",
+  "BECKY LYNCH",
+  "OFERTA",
+  "OG",
+  "ÚLTIMO DÍA",
+  "TIENDA DE HOY / 28 NOV",
+  "1 · OFERTA",
+  "IGRIS COMANDANTE ESCARLATA",
+  "CHA HAE-IN",
+  "4500",
+  "9500",
+  "LOTE SOLO LEVELING: ARISE · SE VA EL 2 DIC",
+  "-53% / AHORRAS 5000",
+  "2 · SKIN OG",
+  "CAPÍTULO 1 · TEMPORADA 1",
+  "3 · ÚLTIMO DÍA",
+  "BIANCA BELAIR",
+  "JAMILA",
+  "JAX",
+  "JOHN CENA",
+  "POMNI",
+  "+8 MÁS",
+  "SE VAN EL 28 NOV, 6 PM",
+  "CÓDIGO / BAD / TIENDA DE OBJETOS → APOYA A UN CREADOR / DURA 14 DÍAS · ¡RENUÉVALO! / #EPICPARTNER",
+  "¡GRACIAS POR VER! / SÍGUENOS PARA MÁS CONTENIDO DIARIO",
+  "ESTA ES LA",
+  "TIENDA DE",
+  "OBJETOS DE HOY,",
+  "28 DE NOVIEMBRE.",
+  "¡TRES COSAS",
+  "ANTES DE GASTAR",
+  "UN SOLO PAVO!",
+  "EL LOTE SOLO",
+  "LEVELING: ARISE:",
+  "4500 PAVOS,",
+  "EN VEZ DE",
+  "9500.",
+  "¡TE AHORRAS",
+  "5000!",
+  "SOLDADO DE",
+  "ASALTO ESTÁ EN",
+  "LA TIENDA.",
+  "ES DEL CAPÍTULO",
+  "1,",
+  "TEMPORADA 1.",
+  "Y 14 SKINS",
+  "ESTÁN EN SU",
+  "ÚLTIMO DÍA,",
+  "NUEVE DE ELLAS",
+  "ÉPICAS.",
+  "¿VAS A COMPRAR",
+  "ALGO HOY?",
+  "USA EL CÓDIGO",
+  "BAD EN LA",
+  "OBJETOS.",
+  "LE AYUDA",
+  "MUCHÍSIMO AL",
+  "CANAL.",
+  "¡GRACIAS POR",
+  "VER!",
+  "SÍGUENOS PARA",
+  "MÁS CONTENIDO",
+  "DIARIO.",
+  "#EPICPARTNER",
+  "LA TIENDITA BAD"
+ ]
+}

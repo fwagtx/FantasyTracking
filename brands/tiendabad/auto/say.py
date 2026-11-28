@@ -30,7 +30,9 @@ SAY = {"A$AP Rocky": "Éisap Róqui",            # before "$": the voice read "A
        "MrSavage": "Míster Sávich",            # 2026-11-25: was "eme-erre sa-vá-je"
        "Killian": "Kílian",                    # 2026-11-26: the "ll" was read as a y ("Ki-yian")
        "KizunaAI": "Kizuna Ai",                # 2026-11-26: "AI" was read "a-í" (like "ahí"); the name is "Kizuna Ai"
-       "Bianca Belair": "Bianca Belér"}        # 2026-11-26: "Belair" was read "be-láir"; it rhymes with "air"
+       "Bianca Belair": "Bianca Belér",        # 2026-11-26: "Belair" was read "be-láir"; it rhymes with "air"
+       "Solo Leveling: ARISE": "Sólo Lévelin: Aráis",   # 2026-11-28: was "le-bé-ling: a-rí-se"; keyed before the bare name
+       "Solo Leveling": "Sólo Lévelin"}        # 2026-11-28: the anime/game name on its own
 
 
 def say_names(s):
